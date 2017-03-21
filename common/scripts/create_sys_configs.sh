@@ -3,7 +3,7 @@
 __validating_system_configs() {
   __process_msg "Validating default system configs"
   local system_configs="$CONFIG_DIR/systemConfigs.json"
-  local system_configs_template="$USR_DIR/systemConfigs.json.template"
+  local system_configs_template="$SCRIPTS_DIR/config/systemConfigs.json.template"
 
   if [ ! -f "$system_configs" ]; then
     __process_msg "System configs not present, creating"
@@ -53,7 +53,7 @@ __generate_root_bucket_name() {
 __generate_system_config() {
   __process_msg "Generating systemConfigs default values from template"
 
-  local system_configs_template="$USR_DIR/system_configs.sql.template"
+  local system_configs_template="$SCRIPTS_DIR/configs/system_configs.sql.template"
   local system_configs_default="$CONFIG_DIR/systemConfigs.json"
   local system_configs_sql="$CONFIG_DIR/system_configs.sql"
 
@@ -316,6 +316,7 @@ __upsert_system_configs() {
     -f $system_config_location"
 
   __process_msg "Executing: $upsert_cmd"
+	eval "$upsert_cmd"
 }
 
 main() {
