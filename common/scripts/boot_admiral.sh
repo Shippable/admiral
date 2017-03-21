@@ -33,7 +33,7 @@ __boot_admiral() {
 			$mounts \
 			--publish 50003:50003 \
 			--net=bridge \
-			--name=shippable_admiral \
+			--name=admiral \
 			$admiral_image"
 
 		__process_msg "Executing: $boot_cmd"
