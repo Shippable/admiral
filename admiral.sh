@@ -53,10 +53,10 @@ main() {
   __check_dependencies
   __validate_runtime
   __print_runtime
-  ### Environment variables set, configure database ######
 
   source "$SCRIPTS_DIR/$OS_TYPE/installDb.sh"
   source "$SCRIPTS_DIR/create_sys_configs.sh"
+  source "$SCRIPTS_DIR/boot_admiral.sh"
 
   __process_msg "Installation successfully completed !!!"
 }
