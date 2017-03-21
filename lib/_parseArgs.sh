@@ -1,16 +1,34 @@
 #!/bin/bash -e
 
-__validate_runtime() {
-  __process_marker "Validating runtime"
-
+__bootstrap_admiral_env() {
   ################## load env file  ###########################
   if [ ! -f "$ADMIRAL_ENV" ]; then
     __process_msg "ADMIRAL_ENV does not exist, creating"
     mkdir -p $CONFIG_DIR
     cp -vr $USR_DIR/admiral.env.template $ADMIRAL_ENV
     __process_msg "Successfully created admiral env "
+  fi
+  source "$ADMIRAL_ENV"
+}
+
+__validate_runtime() {
+  __process_marker "Validating runtime"
+  ################## check release   #############################
+  if [ "$RELEASE" == "" ]; then
+    __process_error "No RELEASE env present, exiting"
+    exit 1
   else
-    __process_msg "ADMIRAL_ENV file exists"
+    __process_msg "Updating RELEASE in ADMIRAL_ENV file"
+    sed -i 's/.*RELEASE=.*/RELEASE="'$RELEASE'"/g' $ADMIRAL_ENV
+  fi
+
+  ################## check install mode ##########################
+  if [ "$INSTALL_MODE" == "" ]; then
+    __process_error "No INSTALL_MODE env present, exiting"
+    exit 1
+  else
+    __process_msg "Updating INSTALL_MODE in ADMIRAL_ENV file"
+    sed -i 's/.*INSTALL_MODE=.*/INSTALL_MODE="'$INSTALL_MODE'"/g' $ADMIRAL_ENV
   fi
 
   ################## check login token  ##########################
@@ -82,8 +100,13 @@ __parse_args_install() {
           export INSTALL_MODE="local"
           ;;
         -r|--release)
-          export RELEASE=$2
-          shift
+          if [ "$2" == "" ]; then
+            __process_error "'release' cannot be empty"
+            __print_help_install
+          else
+            export RELEASE=$2
+            shift
+          fi
           ;;
         -h|help)
           __print_help_install
@@ -105,8 +128,8 @@ __print_help_install() {
   usage: $0 install [flags]
   This script installs Shippable enterprise
   examples:
-    $0 install --release v5.2.1             //Install on cluster with 'v5.2.1' release
     $0 install --local                      //Install on localhost with 'master' release
+    $0 install --release v5.2.1             //Install on cluster with 'v5.2.1' release
     $0 install --local --release v5.2.1     //Install on localhost with 'v5.2.1' release
   Flags:
     --local                         Install on localhost
@@ -137,16 +160,13 @@ __show_status() {
 }
 
 __parse_args() {
-  if [ -f $ADMIRAL_ENV ]; then
-    source $ADMIRAL_ENV
-  fi
-
   if [[ $# -gt 0 ]]; then
     key="$1"
 
     case $key in
       install)
         shift
+        __bootstrap_admiral_env
         __parse_args_install "$@"
         ;;
       status)
@@ -163,4 +183,5 @@ __parse_args() {
   else
     __print_help
   fi
+
 }

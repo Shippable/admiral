@@ -57,6 +57,7 @@ __print_runtime() {
   __process_msg "DB_USER: $DB_USER"
   __process_msg "DB_PASSWORD: $DB_PASSWORD"
   __process_msg "DB_NAME: $DB_NAME"
+  __process_msg "Login Token: $LOGIN_TOKEN"
 }
 
 __generate_ssh_keys() {

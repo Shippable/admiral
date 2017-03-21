@@ -1,4 +1,5 @@
 {
+  "isBootstrapped": false,
   "awsAccountId": null,
   "jobConsoleBatchSize": 10,
   "jobConsoleBufferTimeInterval": 3000,
@@ -14,7 +15,6 @@
   "vaultToken": "",
   "defaultPipelineCount": 1,
   "autoSelectBuilderToken": true,
-  "amqpDefaultExchange": "shippableEx",
   "defaultPrivateJobQuota": 150,
   "noProxy": "",
   "httpsProxy": "",
@@ -37,11 +37,20 @@
   "hubspotShipTimeLimit": 10,
   "hubspotListId": 123,
   "hubspotShouldSimulate": "true",
-  "shippableAwsAccountId": "123456",
   "rootS3Bucket": "",
   "enforcePrivateJobQuota": false,
   "technicalSupportAvailable": false,
   "customNodesAdminOnly": false,
   "mktgPort": 50002,
-  "nodeScriptsLocation": "/home/shippable/scripts/node"
+  "nodeScriptsLocation": "/home/shippable/scripts/node",
+  "wwwPort": 50001,
+  "wwwUrl": "http://localhost:50001",
+  "apiUrl": "http://172.17.42.1:50000",
+  "amqpUrl": "amqp://SHIPPABLETESTUSER:SHIPPABLETESTPASS@172.17.42.1:5672/shippable",
+  "amqpUrlRoot": "amqp://SHIPPABLETESTUSER:SHIPPABLETESTPASS@172.17.42.1:5672/shippableRoot",
+  "amqpUrlAdmin": "http://SHIPPABLETESTUSER:SHIPPABLETESTPASS@172.17.42.1:15672",
+  "amqpDefaultExchange": "shippableEx",
+  "vaultUrl": "http://172.17.42.1:8200",
+  "apiPort": 50000,
+  "redisUrl": "172.17.42.1:6379"
 }
