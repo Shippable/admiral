@@ -5,7 +5,7 @@ __bootstrap_admiral_env() {
   if [ ! -f "$ADMIRAL_ENV" ]; then
     __process_msg "ADMIRAL_ENV does not exist, creating"
     mkdir -p $CONFIG_DIR
-    cp -vr $USR_DIR/admiral.env.template $ADMIRAL_ENV
+    cp -vr $SCRIPTS_DIR/configs/admiral.env.template $ADMIRAL_ENV
     __process_msg "Successfully created admiral env "
   fi
   source "$ADMIRAL_ENV"
