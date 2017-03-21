@@ -33,7 +33,6 @@ readonly SSH_USER="root"
 readonly LOCAL_BRIDGE_IP=172.17.42.1
 readonly DOCKER_VERSION=1.13.0
 readonly API_TIMEOUT=600
-readonly OS_TYPE="Ubuntu_14.04"
 export LC_ALL=C
 
 # Installation default values #############################
@@ -41,6 +40,7 @@ export LC_ALL=C
 export IS_UPGRADE=false
 export NO_PROMPT=false
 export KEYS_GENERATED=false
+export OS_TYPE="Ubuntu_14.04"
 ###########################################################
 
 source "$LIB_DIR/_logger.sh"
@@ -55,7 +55,9 @@ main() {
   __print_runtime
   ### Environment variables set, configure database ######
 
-  source "common"
+  source "$SCRIPTS_DIR/$OS_TYPE/installDb.sh"
+  source "$SCRIPTS_DIR/create_sys_configs.sh"
+
   __process_msg "Installation successfully completed !!!"
 }
 

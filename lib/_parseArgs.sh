@@ -13,6 +13,9 @@ __bootstrap_admiral_env() {
 
 __validate_runtime() {
   __process_marker "Validating runtime"
+
+  export OS_TYPE=docker
+
   ################## check release   #############################
   if [ "$RELEASE" == "" ]; then
     __process_error "No RELEASE env present, exiting"

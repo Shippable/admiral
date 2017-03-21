@@ -61,13 +61,13 @@ __print_runtime() {
 }
 
 __generate_ssh_keys() {
-  __process_marker "Generating SSH keys"
+  __process_msg "Generating SSH keys"
   local keygen_exec=$(ssh-keygen -t rsa -P "" -f $SSH_PRIVATE_KEY)
   __process_msg "SSH keys successfully generated"
 }
 
 __generate_login_token() {
-  __process_marker "Generating login token"
+  __process_msg "Generating login token"
   local uuid=$(cat /proc/sys/kernel/random/uuid)
   export LOGIN_TOKEN="$uuid"
   __process_msg "Successfully generated login token"

@@ -1,5 +1,28 @@
 #!/bin/bash -e
 
+__generate_serviceuser_token() {
+  __process_msg "Generating random token for serviceuser"
+  local token=$(cat /proc/sys/kernel/random/uuid)
+
+  __process_msg "Successfully generated service user token"
+}
+
+__generate_root_bucket_name() {
+  __process_msg "Generating root bucket name"
+  local root_bucket_name=$(cat $STATE_FILE | jq -r '.systemSettings.rootS3Bucket')
+
+  if [ "$root_bucket_name" == "" ] || [ "$root_bucket_name" == null ]; then
+    __process_msg "Root bucket name not set, setting it to random value"
+    local random_uuid=$(cat /proc/sys/kernel/random/uuid)
+    local install_mode=$(cat $STATE_FILE | jq -r '.installMode')
+    root_bucket_name="shippable-$install_mode-$random_uuid"
+    root_bucket_name=$(cat $STATE_FILE | jq '.systemSettings.rootS3Bucket="'$root_bucket_name'"')
+    _update_state "$root_bucket_name"
+  else
+    __process_msg "Root bucket name already set to: $root_bucket_name, skipping"
+  fi
+}
+
 __generate_system_config() {
   __process_msg "Generating systemConfigs default values from template"
 
@@ -102,11 +125,17 @@ __generate_system_config() {
   sed -i "s#{{UPDATED_AT}}#$created_at#g" $system_configs_sql
 
   __process_msg "Updating : systemNodePrivateKey"
-  local system_node_private_key=$(cat $SSH_PRIVATE_KEY)
+  local system_node_private_key=""
+  while read line; do
+    system_node_private_key=$system_node_private_key""$line"\n"
+  done <$SSH_PRIVATE_KEY
   sed -i "s#{{SYSTEM_NODE_PRIVATE_KEY}}#$system_node_private_key#g" $system_configs_sql
 
   __process_msg "Updating : systemNodePublicKey"
-  local system_node_public_key=$(cat $SSH_PUBLIC_KEY)
+  local system_node_public_key=""
+  while read line; do
+    system_node_public_key=$system_node_public_key""$line"\n"
+  done <$SSH_PUBLIC_KEY
   sed -i "s#{{SYSTEM_NODE_PUBLIC_KEY}}#$system_node_public_key#g" $system_configs_sql
 
   __process_msg "Updating : allowSystemNodes"
@@ -242,6 +271,7 @@ __generate_system_config() {
 }
 
 main() {
+  __process_marker "Generating system configs"
   __generate_system_config
 }
 
