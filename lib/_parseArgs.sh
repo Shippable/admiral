@@ -1,27 +1,5 @@
 #!/bin/bash -e
 
-__bootstrap_state() {
-  __process_msg "injecting empty machines array"
-  local machines=$(cat $STATE_FILE | \
-    jq '.machines=[]')
-  _update_state "$machines"
-
-  __process_msg "injecting empty master integrations"
-  local master_integrations=$(cat $STATE_FILE | \
-    jq '.masterIntegrations=[]')
-  _update_state "$master_integrations"
-
-  __process_msg "injecting empty system integrations"
-  local system_integrations=$(cat $STATE_FILE | \
-    jq '.systemIntegrations=[]')
-  _update_state "$system_integrations"
-
-  __process_msg "injecting empty services array"
-  local services=$(cat $STATE_FILE | \
-    jq '.services=[]')
-  _update_state "$services"
-}
-
 __validate_runtime() {
   __process_marker "Validating runtime"
 
@@ -92,51 +70,6 @@ __validate_runtime() {
   source $ADMIRAL_ENV
 }
 
-__parse_args_upgrade() {
-  export IS_UPGRADE=true
-
-  local upgrade_version=""
-  if [[ $# -gt 0 ]]; then
-    while [[ $# -gt 0 ]]; do
-      key="$1"
-
-      case $key in
-        -v|--version)
-          upgrade_version=$2
-          shift
-          ;;
-        -n|--no-prompt)
-          export NO_PROMPT=true
-          ;;
-        -h|help)
-          __print_help_upgrade
-          ;;
-        *)
-          echo "Invalid option: $key"
-          __print_help_upgrade
-          ;;
-      esac
-      shift
-    done
-  else
-    __process_msg "No arguments provided for 'upgrade' using defaults"
-  fi
-
-  if [ "$upgrade_version" == "" ]; then
-    __process_error "No version specified for upgrade, exiting"
-    exit 1
-  else
-    export SHIPPABLE_VERSION=$upgrade_version
-  fi
-
-  if [ "$INSTALL_MODE" == "" ]; then
-    __process_error "No install mode specified in ADMIRAL_ENV file, exiting"
-    exit 1
-  else
-    __process_msg "Setting install mode from ADMIRAL_ENV file"
-  fi
-}
-
 __parse_args_install() {
   export IS_UPGRADE=false
 
@@ -182,18 +115,6 @@ __print_help_install() {
   exit 0
 }
 
-__print_help_upgrade() {
-  echo "
-  usage: $0 upgrade [flags]
-  This script installs Shippable enterprise
-  examples:
-    $0 upgrade --release v5.2.1             //Install on cluster with 'v5.2.1' release
-  Flags:
-    --release <release>             Install a particular release
-  "
-  exit 0
-}
-
 __print_help() {
   echo "
   Usage:
@@ -202,15 +123,17 @@ __print_help() {
   Examples:
     $0 install --help
     $0 install --local
-    $0 upgrade --release v5.2.3
+    $0 install --local --release v5.2.1     //Install on localhost with 'v5.2.1' release
 
   Commmands:
     install         Run Shippable installation
-    upgrade         Run Shippable upgrade
-    status          Print status of current installation
     help            Print this message
   "
   exit 0
+}
+
+__show_status() {
+  __process_msg "All good !!!"
 }
 
 __parse_args() {
@@ -225,10 +148,6 @@ __parse_args() {
       install)
         shift
         __parse_args_install "$@"
-        ;;
-      upgrade)
-        shift
-        __parse_args_upgrade "$@"
         ;;
       status)
         __show_status

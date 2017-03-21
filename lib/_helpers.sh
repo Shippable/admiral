@@ -115,3 +115,131 @@ __set_db_ip() {
   sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
   __process_msg "Successfully set DB_IP as $db_ip"
 }
+
+__copy_script_remote() {
+  if [ "$#" -ne 3 ]; then
+    __process_msg "The number of arguments expected by _copy_script_remote is 3"
+    __process_msg "current arguments $@"
+    exit 1
+  fi
+
+  local user="$SSH_USER"
+  local key="$SSH_PRIVATE_KEY"
+  local port=22
+  local host="$1"
+  shift
+  local script_path_local="$1"
+  local script_name=$(basename $script_path_local)
+  shift
+  local script_dir_remote="$1"
+  local script_path_remote="$script_dir_remote/$script_name"
+
+  remove_key_cmd="ssh-keygen -q -f '$HOME/.ssh/known_hosts' -R $host > /dev/null 2>&1"
+  {
+    eval $remove_key_cmd
+  } || {
+    true
+  }
+
+  __process_msg "Copying $script_path_local to remote host: $script_path_remote"
+  _exec_remote_cmd $host "mkdir -p $script_dir_remote"
+  copy_cmd="rsync -avz -e \
+    'ssh \
+      -o StrictHostKeyChecking=no \
+      -o NumberOfPasswordPrompts=0 \
+      -p $port \
+      -i $SSH_PRIVATE_KEY \
+      -C -c blowfish' \
+      $script_path_local $user@$host:$script_path_remote"
+
+  copy_cmd_out=$(eval $copy_cmd)
+}
+
+__copy_script_local() {
+  local user="$SSH_USER"
+  local key="$SSH_PRIVATE_KEY"
+  local port=22
+  local host="$1"
+  shift
+  local script_path_remote="$@"
+
+  local script_dir_local="/tmp/shippable"
+
+  echo "copying from $script_path_remote to localhost: /tmp/shippable/"
+  remove_key_cmd="ssh-keygen -q -f '$HOME/.ssh/known_hosts' -R $host"
+  {
+    eval $remove_key_cmd
+  } || {
+    true
+  }
+
+  mkdir -p $script_dir_local
+  copy_cmd="rsync -avz -e \
+    'ssh \
+      -o StrictHostKeyChecking=no \
+      -o NumberOfPasswordPrompts=0 \
+      -p $port \
+      -i $SSH_PRIVATE_KEY \
+      -C -c blowfish' \
+      $user@$host:$script_path_remote $script_dir_local"
+
+  copy_cmd_out=$(eval $copy_cmd)
+  echo "$script_path_remote"
+}
+
+## syntax for calling this function
+## __exec_remote_cmd "user" "192.156.6.4" "key" "ls -al"
+__exec_remote_cmd() {
+  local user="$SSH_USER"
+  local key="$SSH_PRIVATE_KEY"
+  local timeout=10
+  local port=22
+
+  local host="$1"
+  shift
+  local cmd="$@"
+
+  local remote_cmd="ssh \
+    -o StrictHostKeyChecking=no \
+    -o NumberOfPasswordPrompts=0 \
+    -o ConnectTimeout=$timeout \
+    -p $port \
+    -i $key \
+    $user@$host \
+    $cmd"
+
+  {
+    __process_msg "Executing on host: $host ==> '$cmd'" && eval "sudo -E $remote_cmd"
+  } || {
+    __process_msg "ERROR: Command failed on host: $host ==> '$cmd'"
+    exit 1
+  }
+}
+
+_exec_remote_cmd_proxyless() {
+  local user="$SSH_USER"
+  local key="$SSH_PRIVATE_KEY"
+  local timeout=10
+  local port=22
+
+  local host="$1"
+  shift
+  local cmd="$@"
+  shift
+
+  local remote_cmd="ssh \
+    -o StrictHostKeyChecking=no \
+    -o NumberOfPasswordPrompts=0 \
+    -o ConnectTimeout=$timeout \
+    -p $port \
+    -i $key \
+    $user@$host \
+    $cmd"
+
+  {
+    __process_msg "Executing on host: $host ==> '$cmd'" && eval "sudo $remote_cmd"
+  } || {
+    __process_msg "ERROR: Command failed on host: $host ==> '$cmd'"
+    exit 1
+  }
+}
