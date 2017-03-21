@@ -1,23 +1,50 @@
 #!/bin/bash -e
 
+__validating_system_configs() {
+  __process_msg "Validating default system configs"
+  local system_configs="$CONFIG_DIR/systemConfigs.json"
+  local system_configs_template="$USR_DIR/systemConfigs.json.template"
+
+  if [ ! -f "$system_configs" ]; then
+    __process_msg "System configs not present, creating"
+    sudo cp -vr "$system_configs_template" "$system_configs"
+  else
+    __process_msg "System configs already created, skipping"
+  fi
+}
+
 __generate_serviceuser_token() {
   __process_msg "Generating random token for serviceuser"
-  local token=$(cat /proc/sys/kernel/random/uuid)
+  local system_configs="$CONFIG_DIR/systemConfigs.json"
+  local service_user_token=$(cat $system_configs \
+    | jq -r ".serviceUserToken")
 
-  __process_msg "Successfully generated service user token"
+  if [ "$service_user_token" == "" ]; then
+    __process_msg "No service user token present, generating one"
+    local token=$(cat /proc/sys/kernel/random/uuid)
+    __process_msg "Successfully generated service user token"
+    token=$(cat $system_configs \
+      | jq '.serviceUserToken="'$token'"')
+    echo $token > $system_configs
+  else
+    __process_msg "Service user token already present, skipping"
+  fi
 }
 
 __generate_root_bucket_name() {
   __process_msg "Generating root bucket name"
-  local root_bucket_name=$(cat $STATE_FILE | jq -r '.systemSettings.rootS3Bucket')
+
+  local system_configs="$CONFIG_DIR/systemConfigs.json"
+  local root_bucket_name=$(cat $system_configs \
+    | jq -r '.rootS3Bucket')
 
   if [ "$root_bucket_name" == "" ] || [ "$root_bucket_name" == null ]; then
     __process_msg "Root bucket name not set, setting it to random value"
     local random_uuid=$(cat /proc/sys/kernel/random/uuid)
-    local install_mode=$(cat $STATE_FILE | jq -r '.installMode')
-    root_bucket_name="shippable-$install_mode-$random_uuid"
-    root_bucket_name=$(cat $STATE_FILE | jq '.systemSettings.rootS3Bucket="'$root_bucket_name'"')
-    _update_state "$root_bucket_name"
+    root_bucket_name="shippable-$INSTALL_MODE-$random_uuid"
+    root_bucket_name=$(cat $system_configs \
+      | jq '.rootS3Bucket="'$root_bucket_name'"')
+    echo $root_bucket_name > $system_configs
   else
     __process_msg "Root bucket name already set to: $root_bucket_name, skipping"
   fi
@@ -27,7 +54,7 @@ __generate_system_config() {
   __process_msg "Generating systemConfigs default values from template"
 
   local system_configs_template="$USR_DIR/system_configs.sql.template"
-  local system_configs_default="$USR_DIR/systemConfigs.json"
+  local system_configs_default="$CONFIG_DIR/systemConfigs.json"
   local system_configs_sql="$CONFIG_DIR/system_configs.sql"
 
   # NOTE:
@@ -209,7 +236,7 @@ __generate_system_config() {
 
   __process_msg "Updating : truck"
   local truck=$(cat $system_configs_default \
-    | jq -r '.systemSettings.truck')
+    | jq -r '.truck')
   sed -i "s#{{TRUCK}}#$truck#g" $system_configs_sql
 
   __process_msg "Updating : hubspotTimeLimit"
@@ -270,9 +297,35 @@ __generate_system_config() {
   __process_msg "Successfully generated 'systemConfig' table data"
 }
 
+__copy_system_configs() {
+  __process_msg "Copying systemConfigs.sql to db container"
+  local system_config_host_location="$CONFIG_DIR/system_configs.sql"
+  local system_config_container_location="$CONFIG_DIR/db/system_configs.sql"
+  sudo cp -vr $system_config_host_location $system_config_container_location
+
+  __process_msg "Successfully copied systemConfigs.sql to db container"
+}
+
+__upsert_system_configs() {
+  __process_msg "Upserting system configs in db"
+
+  local system_config_location="/etc/postgresql/config/system_configs.sql"
+  local upsert_cmd="sudo docker exec db \
+    psql -U $DB_USER -d $DB_NAME \
+    -v ON_ERROR_STOP=1 \
+    -f $system_config_location"
+
+  __process_msg "Executing: $upsert_cmd"
+}
+
 main() {
   __process_marker "Generating system configs"
+  __validating_system_configs
+  __generate_serviceuser_token
+  __generate_root_bucket_name
   __generate_system_config
+  __copy_system_configs
+  __upsert_system_configs
 }
 
 main

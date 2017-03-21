@@ -42,14 +42,14 @@ __validate_db_envs() {
 __validate_db_mounts() {
   __process_msg "Validating db data mounts from host"
 
-  if [ ! -f "$DB_DATA_DIR" ]; then
+  if [ ! -d "$DB_DATA_DIR" ]; then
     __process_msg "Creating data directory $DB_DATA_DIR"
     sudo mkdir -p $DB_DATA_DIR
   else
     __process_msg "Data directory already present: $DB_DATA_DIR"
   fi
 
-  if [ ! -f "$DB_CONFIG_DIR" ]; then
+  if [ ! -d "$DB_CONFIG_DIR" ]; then
     __process_msg "Creating config directory $DB_CONFIG_DIR"
     sudo mkdir -p $DB_CONFIG_DIR
   else
