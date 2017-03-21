@@ -1,0 +1,78 @@
+#!/bin/bash -e
+
+export ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+export PORT=50003
+export ONEBOX_NAME="admiral_onebox"
+export LATEST_MICROBASE_TAG="master"
+export ADMIRAL_ENV="/etc/shippable/admiral.env"
+export CONFIG_DIR="/etc/shippable"
+export RUNTIME_DIR="/var/run/shippable"
+export MIGRATIONS_DIR="$ROOT_DIR/migrations"
+export VERSIONS_DIR="$ROOT_DIR/versions"
+
+stop_component() {
+  local onebox_info=$(sudo docker ps -a | grep $ONEBOX_NAME | awk '{print $1}')
+  if [ -z "$onebox_info" ]; then
+    echo "No admiral containers running in onebox mode"
+    sudo docker rm -f "$admiral" || true
+  else
+    echo "Admiral containers running in onebox mode"
+    sudo docker rm -f "$ONEBOX_NAME" || true
+  fi
+}
+
+build_image() {
+  echo "Building image..."
+  sed -i "s/{{%TAG%}}/$LATEST_MICROBASE_TAG/g" Dockerfile
+  sudo docker build -t shipimg/admiral:onebox .
+}
+
+run_component() {
+  echo "Starting admiral..."
+  source "$ADMIRAL_ENV"
+  local envs=" -e DBNAME=$DB_NAME \
+    -e DBUSERNAME=$DB_USER \
+    -e DBPASSWORD=$DB_PASSWORD \
+    -e DBDIALECT=$DB_DIALECT \
+    -e DBHOST=$DB_IP \
+    -e DBPORT=$DB_PORT \
+    -e RUN_MODE=$RUN_MODE \
+    -e LOGIN_TOKEN=$LOGIN_TOKEN \
+    -e ADMIRAL_IP=$ADMIRAL_IP \
+    -e RELEASE=$RELEASE \
+    -e INSTALL_MODE=$INSTALL_MODE \
+    -e CONFIG_DIR=$CONFIG_DIR \
+    -e RUNTIME_DIR=$RUNTIME_DIR \
+    -e MIGRATIONS_DIR=$MIGRATIONS_DIR \
+    -e VERSIONS_DIR=$VERSIONS_DIR"
+
+  run_cmd="sudo docker run -d --name=$ONEBOX_NAME --privileged=true --restart=always --net=host"
+  run_cmd="$run_cmd $envs"
+  run_cmd="$run_cmd -e RUN_MODE=dev"
+  run_cmd="$run_cmd -p $PORT:$PORT "
+  run_cmd="$run_cmd -v $(pwd):/home/shippable/admiral:rw "
+  run_cmd="$run_cmd -t shipimg/admiral:onebox"
+
+  echo $run_cmd
+  run_cmd_exc=$($run_cmd)
+  echo "$run_cmd_exc"
+}
+
+checkout_dockerfile() {
+  git checkout -- Dockerfile
+}
+
+run_npm_install() {
+  docker exec $ONEBOX_NAME bash -c "cd /home/shippable/admiral && npm install"
+}
+
+main() {
+  stop_component
+  build_image
+  run_component
+  checkout_dockerfile
+  run_npm_install
+}
+
+main

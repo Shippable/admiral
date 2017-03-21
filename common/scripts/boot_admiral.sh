@@ -19,8 +19,8 @@ __boot_admiral() {
 			-e INSTALL_MODE=$INSTALL_MODE \
 			-e CONFIG_DIR=$CONFIG_DIR \
 			-e RUNTIME_DIR=$RUNTIME_DIR \
-			-e MIGRATIONS_DIR=$CONFIG_DIR/migrations \
-			-e VERSIONS_DIR=$CONFIG_DIR/versions"
+			-e MIGRATIONS_DIR=$MIGRATIONS_DIR \
+			-e VERSIONS_DIR=$VERSIONS_DIR"
 
 		__process_msg "Generating admiral mounts"
 		local mounts=" -v $CONFIG_DIR:$CONFIG_DIR \
@@ -33,7 +33,7 @@ __boot_admiral() {
 			$mounts \
 			--publish 50003:50003 \
 			--net=bridge \
-			--name=shippable-admiral \
+			--name=shippable_admiral \
 			$admiral_image"
 
 		__process_msg "Executing: $boot_cmd"
