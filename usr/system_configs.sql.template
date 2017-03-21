@@ -1,0 +1,455 @@
+do $$
+  begin
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs') then
+    -- This is the base table, do not add any fields here. Add them below.
+      create table "systemConfigs" (
+        "id" INT PRIMARY KEY NOT NULL,
+        "defaultMinionCount" INT DEFAULT 1 NOT NULL,
+        "defaultPipelineCount" INT DEFAULT 1 NOT NULL,
+        "autoSelectBuilderToken" BOOLEAN DEFAULT false NOT NULL,
+        "buildTimeoutMS" INT DEFAULT 3600000 NOT NULL,
+        "defaultPrivateJobQuota" INT DEFAULT 150 NOT NULL,
+        "serviceUserToken" VARCHAR(36) NOT NULL,
+        "vaultUrl" VARCHAR(255) NOT NULL,
+        "vaultToken" VARCHAR(45) NOT NULL,
+        "amqpUrl" VARCHAR(255) NOT NULL,
+        "amqpUrlRoot" VARCHAR(255) NOT NULL,
+        "amqpUrlAdmin" VARCHAR(255) NOT NULL,
+        "amqpDefaultExchange" VARCHAR(255) NOT NULL,
+        "apiUrl" VARCHAR(255) NOT NULL,
+        "apiPort" INT NOT NULL,
+        "wwwUrl" VARCHAR(255) NOT NULL,
+        "runMode" VARCHAR(255) DEFAULT 'production' NOT NULL,
+        "rootQueueList" TEXT NOT NULL,
+        "createdAt" timestamp with time zone NOT NULL,
+        "updatedAt" timestamp with time zone NOT NULL
+      );
+    end if;
+
+    -- Drop fields here:
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'execImage') then
+      alter table "systemConfigs" drop column "execImage";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'dynamicNodesSystemIntegrationId') then
+      alter table "systemConfigs" drop column "dynamicNodesSystemIntegrationId";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'vaultRefreshTimeInSec') then
+      alter table "systemConfigs" drop column "vaultRefreshTimeInSec";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'serverEnabled') then
+      alter table "systemConfigs" drop column "serverEnabled";
+    end if;
+
+    -- Add new fields here:
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'systemNodePrivateKey') then
+      alter table "systemConfigs" add column "systemNodePrivateKey" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'systemNodePublicKey') then
+      alter table "systemConfigs" add column "systemNodePublicKey" VARCHAR(1020);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'allowSystemNodes') then
+      alter table "systemConfigs" add column "allowSystemNodes" BOOLEAN default false;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'allowDynamicNodes') then
+      alter table "systemConfigs" add column "allowDynamicNodes" BOOLEAN default false;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'allowCustomNodes') then
+      alter table "systemConfigs" add column "allowCustomNodes" BOOLEAN default false;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'consoleMaxLifespan') then
+      alter table "systemConfigs" add column "consoleMaxLifespan" INT default 0;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'consoleCleanupHour') then
+      alter table "systemConfigs" add column "consoleCleanupHour" INT default 0;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'customHostDockerVersion' and data_type = 'integer') then
+      alter table "systemConfigs" alter column "customHostDockerVersion" type VARCHAR(24);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'customHostDockerVersion') then
+      alter table "systemConfigs" add column "customHostDockerVersion" VARCHAR(24);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'wwwPort') then
+      alter table "systemConfigs" add column "wwwPort" INTEGER;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'redisUrl') then
+      alter table "systemConfigs" add column "redisUrl" varchar(255);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'awsAccountId') then
+      alter table "systemConfigs" add column "awsAccountId" varchar(12);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'jobConsoleBatchSize') then
+      alter table "systemConfigs" add column "jobConsoleBatchSize" INTEGER;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'jobConsoleBufferTimeInterval') then
+      alter table "systemConfigs" add column "jobConsoleBufferTimeInterval" INTEGER;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'defaultCronLoopHours') then
+      alter table "systemConfigs" add column "defaultCronLoopHours" INTEGER;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'apiRetryInterval') then
+      alter table "systemConfigs" add column "apiRetryInterval" INTEGER;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'vortexUrl') then
+      alter table "systemConfigs" add column "vortexUrl" varchar(255);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'truck') then
+      alter table "systemConfigs" add column "truck" BOOLEAN;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'hubspotShouldSimulate') then
+      alter table "systemConfigs" add column "hubspotShouldSimulate" BOOLEAN;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'hubspotTimeLimit') then
+      alter table "systemConfigs" add column "hubspotTimeLimit" INTEGER;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'hubspotListId') then
+      alter table "systemConfigs" add column "hubspotListId" INTEGER;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'rootS3Bucket') then
+      alter table "systemConfigs" add column "rootS3Bucket" varchar(64);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'nodeScriptsLocation') then
+      alter table "systemConfigs" add column "nodeScriptsLocation" varchar(255);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'enforcePrivateJobQuota') then
+      alter table "systemConfigs" add column "enforcePrivateJobQuota" BOOLEAN default false not null;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'technicalSupportAvailable') then
+      alter table "systemConfigs" add column "technicalSupportAvailable" BOOLEAN default false not null;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'customNodesAdminOnly') then
+      alter table "systemConfigs" add column "customNodesAdminOnly" BOOLEAN default false not null;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'mktgPort') then
+      alter table "systemConfigs" add column "mktgPort" INTEGER default 50002;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'mktgUrl') then
+      alter table "systemConfigs" add column "mktgUrl" varchar(255);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'segmentMktgKey') then
+      alter table "systemConfigs" add column "segmentMktgKey" varchar(255);
+    end if;
+
+    -- Alter any defaults here:
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'autoSelectBuilderToken') then
+      alter table "systemConfigs" alter column "autoSelectBuilderToken" set default false;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'apiPort') then
+      alter table "systemConfigs" alter column "apiPort" set default 50000;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'wwwPort') then
+      alter table "systemConfigs" alter column "wwwPort" set default 50001;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'jobConsoleBatchSize') then
+      alter table "systemConfigs" alter column "jobConsoleBatchSize" set default 10;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'jobConsoleBufferTimeInterval') then
+      alter table "systemConfigs" alter column "jobConsoleBufferTimeInterval" set default 3;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'truck') then
+      alter table "systemConfigs" alter column "truck" set default false;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'runMode') then
+      alter table "systemConfigs" alter column "runMode" set default 'production';
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'apiRetryInterval') then
+      alter table "systemConfigs" alter column "apiRetryInterval" set default 3;
+    end if;
+
+    alter table "systemConfigs" owner to "apiuser";
+  end
+$$;
+
+do $$
+  begin
+    --Update values in systemConfigs
+    if exists (select 1 from "systemConfigs" where "id" = 1) then
+        update "systemConfigs" SET
+            "defaultMinionCount"={{DEFAULT_MINION_COUNT}},
+            "defaultPipelineCount"={{DEFAULT_PIPELINE_COUNT}},
+            "autoSelectBuilderToken"={{AUTO_SELECT_BUILDER_TOKEN}},
+            "buildTimeoutMS"={{BUILD_TIMEOUT_MS}},
+            "defaultPrivateJobQuota"={{DEFAULT_PRIVATE_JOB_QUOTA}},
+            "serviceUserToken"='{{SERVICE_USER_TOKEN}}',
+            "vaultUrl"='{{VAULT_URL}}',
+            "vaultToken"='{{VAULT_TOKEN}}',
+            "amqpUrl"='{{AMQP_URL}}',
+            "amqpUrlRoot"='{{AMQP_URL_ROOT}}',
+            "amqpUrlAdmin"='{{AMQP_URL_ADMIN}}',
+            "amqpDefaultExchange"='{{AMQP_DEFAULT_EXCHANGE}}',
+            "apiUrl"='{{API_URL}}',
+            "apiPort"={{API_PORT}},
+            "wwwUrl"='{{WWW_URL}}',
+            "runMode"='{{RUN_MODE}}',
+            "rootQueueList"='{{ROOT_QUEUE_LIST}}',
+            "updatedAt"='{{UPDATED_AT}}',
+            "systemNodePrivateKey"='{{SYSTEM_NODE_PRIVATE_KEY}}',
+            "systemNodePublicKey"='{{SYSTEM_NODE_PUBLIC_KEY}}',
+            "allowSystemNodes"={{ALLOW_SYSTEM_NODES}},
+            "allowDynamicNodes"={{ALLOW_DYNAMIC_NODES}},
+            "allowCustomNodes"={{ALLOW_CUSTOM_NODES}},
+            "consoleMaxLifespan"={{CONSOLE_MAX_LIFESPAN}},
+            "consoleCleanupHour"={{CONSOLE_CLEANUP_HOUR}},
+            "customHostDockerVersion"='{{CUSTOM_HOST_DOCKER_VERSION}}',
+            "wwwPort"={{WWW_PORT}},
+            "redisUrl"='{{REDIS_URL}}',
+            "awsAccountId"='{{AWS_ACCOUNT_ID}}',
+            "jobConsoleBatchSize"={{JOB_CONSOLE_BATCH_SIZE}},
+            "jobConsoleBufferTimeInterval"={{JOB_CONSOLE_BUFFER_TIME_INTERVAL}},
+            "defaultCronLoopHours"={{DEFAULT_CRON_LOOP_HOURS}},
+            "apiRetryInterval"={{API_RETRY_INTERVAL}},
+            "vortexUrl"='{{VORTEX_URL}}',
+            "truck"={{TRUCK}},
+            "hubspotTimeLimit"={{HUBSPOT_TIME_LIMIT}},
+            "hubspotListId"={{HUBSPOT_LIST_ID}},
+            "hubspotShouldSimulate"={{HUBSPOT_SHOULD_SIMULATE}},
+            "rootS3Bucket"='{{ROOT_S3_BUCKET}}',
+            "nodeScriptsLocation"='{{NODE_SCRIPTS_LOCATION}}',
+            "enforcePrivateJobQuota"={{ENFORCE_PRIVATE_JOB_QUOTA}},
+            "technicalSupportAvailable"={{TECHNICAL_SUPPORT_AVAILABLE}},
+            "customNodesAdminOnly"={{CUSTOM_NODES_ADMIN_ONLY}},
+            "mktgPort"={{MKTG_PORT}},
+            "mktgUrl"='{{MKTG_URL}}',
+            "segmentMktgKey"='{{SEGMENT_MKTG_KEY}}'
+        where id=1;
+    end if;
+
+    -- Update token in accounts if serviceUser is already created
+    if exists (select 1 from information_schema.columns where table_name = 'accountTokens') then
+      if exists (select 1 from "accountTokens" where "name" = 'serviceUser' and "isInternal" = true) then
+        update "accountTokens" set "apiToken"='{{SERVICE_USER_TOKEN}}' where "name" = 'serviceUser' and "isInternal" = true;
+      end if;
+    end if;
+
+    if not exists (select 1 from "systemConfigs" where "id" = 1) then
+        insert into "systemConfigs"
+          (
+            "id",
+            "defaultMinionCount",
+            "defaultPipelineCount",
+            "autoSelectBuilderToken",
+            "buildTimeoutMS",
+            "defaultPrivateJobQuota",
+            "serviceUserToken",
+            "vaultUrl",
+            "vaultToken",
+            "amqpUrl",
+            "amqpUrlRoot",
+            "amqpUrlAdmin",
+            "amqpDefaultExchange",
+            "apiUrl",
+            "apiPort",
+            "wwwUrl",
+            "runMode",
+            "rootQueueList",
+            "createdAt",
+            "updatedAt",
+            "systemNodePrivateKey",
+            "systemNodePublicKey",
+            "allowSystemNodes",
+            "allowDynamicNodes",
+            "allowCustomNodes",
+            "consoleMaxLifespan",
+            "consoleCleanupHour",
+            "customHostDockerVersion",
+            "wwwPort",
+            "redisUrl",
+            "awsAccountId",
+            "jobConsoleBatchSize",
+            "jobConsoleBufferTimeInterval",
+            "defaultCronLoopHours",
+            "apiRetryInterval",
+            "vortexUrl",
+            "truck",
+            "hubspotTimeLimit",
+            "hubspotListId",
+            "hubspotShouldSimulate",
+            "rootS3Bucket",
+            "nodeScriptsLocation",
+            "enforcePrivateJobQuota",
+            "technicalSupportAvailable",
+            "customNodesAdminOnly",
+            "mktgPort",
+            "mktgUrl",
+            "segmentMktgKey"
+          )
+        values
+          (
+            1,
+            {{DEFAULT_MINION_COUNT}},
+            {{DEFAULT_PIPELINE_COUNT}},
+            {{AUTO_SELECT_BUILDER_TOKEN}},
+            {{BUILD_TIMEOUT_MS}},
+            {{DEFAULT_PRIVATE_JOB_QUOTA}},
+            '{{SERVICE_USER_TOKEN}}',
+            '{{VAULT_URL}}',
+            '{{VAULT_TOKEN}}',
+            '{{AMQP_URL}}',
+            '{{AMQP_URL_ROOT}}',
+            '{{AMQP_URL_ADMIN}}',
+            '{{AMQP_DEFAULT_EXCHANGE}}',
+            '{{API_URL}}',
+            {{API_PORT}},
+            '{{WWW_URL}}',
+            '{{RUN_MODE}}',
+            '{{ROOT_QUEUE_LIST}}',
+            '{{CREATED_AT}}',
+            '{{UPDATED_AT}}',
+            '{{SYSTEM_NODE_PRIVATE_KEY}}',
+            '{{SYSTEM_NODE_PUBLIC_KEY}}',
+            {{ALLOW_SYSTEM_NODES}},
+            {{ALLOW_DYNAMIC_NODES}},
+            {{ALLOW_CUSTOM_NODES}},
+            {{CONSOLE_MAX_LIFESPAN}},
+            {{CONSOLE_CLEANUP_HOUR}},
+            '{{CUSTOM_HOST_DOCKER_VERSION}}',
+            {{WWW_PORT}},
+            '{{REDIS_URL}}',
+            '{{AWS_ACCOUNT_ID}}',
+            {{JOB_CONSOLE_BATCH_SIZE}},
+            {{JOB_CONSOLE_BUFFER_TIME_INTERVAL}},
+            {{DEFAULT_CRON_LOOP_HOURS}},
+            {{API_RETRY_INTERVAL}},
+            '{{VORTEX_URL}}',
+            {{TRUCK}},
+            {{HUBSPOT_TIME_LIMIT}},
+            {{HUBSPOT_LIST_ID}},
+            {{HUBSPOT_SHOULD_SIMULATE}},
+            '{{ROOT_S3_BUCKET}}',
+            '{{NODE_SCRIPTS_LOCATION}}',
+            {{ENFORCE_PRIVATE_JOB_QUOTA}},
+            {{TECHNICAL_SUPPORT_AVAILABLE}},
+            {{CUSTOM_NODES_ADMIN_ONLY}},
+            {{MKTG_PORT}},
+            '{{MKTG_URL}}',
+            '{{SEGMENT_MKTG_KEY}}'
+          );
+    end if;
+  end
+$$;
+
+-- Alter table to set NOT NULL here:
+do $$
+  begin
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'vaultUrl') then
+      alter table "systemConfigs" alter column "vaultUrl" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'vaultToken') then
+      alter table "systemConfigs" alter column "vaultToken" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'amqpUrl') then
+      alter table "systemConfigs" alter column "amqpUrl" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'amqpUrlRoot') then
+      alter table "systemConfigs" alter column "amqpUrlRoot" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'amqpUrlAdmin') then
+      alter table "systemConfigs" alter column "amqpUrlAdmin" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'amqpDefaultExchange') then
+      alter table "systemConfigs" alter column "amqpDefaultExchange" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'apiUrl') then
+      alter table "systemConfigs" alter column "apiUrl" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'apiPort') then
+      alter table "systemConfigs" alter column "apiPort" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'wwwUrl') then
+      alter table "systemConfigs" alter column "wwwUrl" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'wwwPort') then
+      alter table "systemConfigs" alter column "wwwPort" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'customHostDockerVersion') then
+      alter table "systemConfigs" alter column "customHostDockerVersion" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'redisUrl') then
+      alter table "systemConfigs" alter column "redisUrl" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'jobConsoleBatchSize') then
+      alter table "systemConfigs" alter column "jobConsoleBatchSize" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'jobConsoleBufferTimeInterval') then
+      alter table "systemConfigs" alter column "jobConsoleBufferTimeInterval" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'defaultCronLoopHours') then
+      alter table "systemConfigs" alter column "defaultCronLoopHours" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'apiRetryInterval') then
+      alter table "systemConfigs" alter column "apiRetryInterval" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'rootQueueList') then
+      alter table "systemConfigs" alter column "rootQueueList" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'rootS3Bucket') then
+      alter table "systemConfigs" alter column "rootS3Bucket" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'vortexUrl') then
+      alter table "systemConfigs" alter column "vortexUrl" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'autoSelectBuilderToken') then
+      alter table "systemConfigs" alter column "autoSelectBuilderToken" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'truck') then
+      alter table "systemConfigs" alter column "truck" set not null;
+    end if;
+  end
+$$;
