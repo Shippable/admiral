@@ -85,7 +85,7 @@ __run_db() {
     "
 
     eval "$run_cmd"
-    __process_msg "Database container successfully booted"
+    __process_msg "Database container successfully running"
   fi
 }
 
