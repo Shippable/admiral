@@ -4,6 +4,7 @@ var self = getS;
 module.exports = self;
 
 var async = require('async');
+var pg = require('pg');
 
 function getS(req, res) {
   var bag = {
@@ -35,10 +36,16 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-// TODO: Update the function to return systemConfigs
 function _getS(bag, next) {
   var who = bag.who + '|' + _getS.name;
   logger.verbose(who, 'Inside');
 
-  return next();
+  global.config.client.query('SELECT * from "systemConfigs"',
+    function (err, systemConfigs) {
+      if (err)
+        return next(new ActErr(who, ActErr.DataNotFound, err));
+      bag.resBody = systemConfigs.rows;
+      return next();
+    }
+  );
 }

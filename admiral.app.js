@@ -13,6 +13,7 @@ require('./common/respondWithError.js');
 var glob = require('glob');
 var async = require('async');
 var express = require('express');
+var pg = require('pg');
 
 global.util = require('util');
 global.config = {};
@@ -35,12 +36,13 @@ function init() {
   bag.who = util.format('admiral.app|%s', init.name);
 
   async.series([
-    _createExpressApp.bind(null, bag),
-    _initializeDatabaseConfig.bind(null, bag),
-    _initializeRoutes.bind(null, bag),
-    _startListening.bind(null, bag),
-    _setLogLevel.bind(null, bag)
-  ],
+      _createExpressApp.bind(null, bag),
+      _initializeDatabaseConfig.bind(null, bag),
+      _createClient.bind(null, bag),
+      _initializeRoutes.bind(null, bag),
+      _startListening.bind(null, bag),
+      _setLogLevel.bind(null, bag)
+    ],
     function (err) {
       if (err) {
         logger.error('Could not initialize api app: ' +
@@ -126,10 +128,26 @@ function _initializeDatabaseConfig(bag, next) {
       'LOGIN_TOKEN is not defined'));
 
   if (configErrors.length)
-    next(configErrors);
+    return next(configErrors);
   else
     global.config = bag.config;
-  next();
+  return next();
+}
+
+function _createClient(bag, next) {
+  var who = bag.who + '|' + _createClient.name;
+  logger.debug(who, 'Inside');
+
+  var connectionString = util.format('%s://%s:%s@%s:%s/%s',
+    bag.config.dbDialect, bag.config.dbUsername, bag.config.dbPassword,
+    bag.config.dbHost, bag.config.dbPort, bag.config.dbName);
+
+  global.config.client = new pg.Client(connectionString);
+  global.config.client.connect(
+    function (err) {
+      return next(err);
+    }
+  );
 }
 
 function _initializeRoutes(bag, next) {
