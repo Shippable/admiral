@@ -3,7 +3,7 @@
 __validating_system_configs() {
   __process_msg "Validating default system configs"
   local system_configs="$CONFIG_DIR/systemConfigs.json"
-  local system_configs_template="$SCRIPTS_DIR/config/systemConfigs.json.template"
+  local system_configs_template="$SCRIPTS_DIR/configs/systemConfigs.json.template"
 
   if [ ! -f "$system_configs" ]; then
     __process_msg "System configs not present, creating"
