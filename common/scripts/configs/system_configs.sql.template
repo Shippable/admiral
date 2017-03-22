@@ -193,6 +193,10 @@ do $$
       alter table "systemConfigs" alter column "apiRetryInterval" set default 3;
     end if;
 
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'vault') then
+      alter table "systemConfigs" add column "vault" TEXT;
+    end if;
+
     alter table "systemConfigs" owner to "apiuser";
   end
 $$;
