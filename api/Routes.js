@@ -44,11 +44,5 @@ function initHelperRoutes(bag, next) {
     }
   );
 
-  bag.app.get('*',
-    function (req, res) {
-      res.redirect('/');
-    }
-  );
-
   return next();
 }
