@@ -40,14 +40,10 @@ function _getS(bag, next) {
   var who = bag.who + '|' + _getS.name;
   logger.verbose(who, 'Inside');
 
-  var client = new pg.Client(global.config.connectionString);
-
-  client.connect();
-  var query = client.query('SELECT * from "systemConfigs"');
-
-  query.on('end',
-    function(systemConfigs) {
-      client.end();
+  global.config.client.query('SELECT * from "systemConfigs"',
+    function (err, systemConfigs) {
+      if (err)
+        return next(new ActErr(who, ActErr.DataNotFound, err));
       bag.resBody = systemConfigs.rows;
       return next();
     }
