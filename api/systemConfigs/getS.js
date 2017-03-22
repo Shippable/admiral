@@ -15,9 +15,9 @@ function getS(req, res) {
   logger.info(bag.who, 'Starting');
 
   async.series([
-      _checkInputParams.bind(null, bag),
-      _getS.bind(null, bag)
-    ],
+    _checkInputParams.bind(null, bag),
+    _getS.bind(null, bag)
+  ],
     function (err) {
       logger.info(bag.who, 'Completed');
       if (err)
@@ -35,7 +35,7 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-//TODO: Update the function to return systemConfigs
+// TODO: Update the function to return systemConfigs
 function _getS(bag, next) {
   var who = bag.who + '|' + _getS.name;
   logger.verbose(who, 'Inside');

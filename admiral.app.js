@@ -35,12 +35,12 @@ function init() {
   bag.who = util.format('admiral.app|%s', init.name);
 
   async.series([
-      _createExpressApp.bind(null, bag),
-      _initializeDatabaseConfig.bind(null, bag),
-      _initializeRoutes.bind(null, bag),
-      _startListening.bind(null, bag),
-      _setLogLevel.bind(null, bag)
-    ],
+    _createExpressApp.bind(null, bag),
+    _initializeDatabaseConfig.bind(null, bag),
+    _initializeRoutes.bind(null, bag),
+    _startListening.bind(null, bag),
+    _setLogLevel.bind(null, bag)
+  ],
     function (err) {
       if (err) {
         logger.error('Could not initialize api app: ' +
@@ -136,11 +136,13 @@ function _initializeRoutes(bag, next) {
   var who = bag.who + '|' + _initializeRoutes.name;
   logger.debug(who, 'Inside');
 
-  glob.sync('./**/*Routes.js').forEach(
-    function(routeFile) {
+  glob.sync('./api/**/*Routes.js').forEach(
+    function (routeFile) {
       require(routeFile)(bag.app);
     }
   );
+  require('./Routes.js')(bag.app);
+
   return next();
 }
 
@@ -174,11 +176,11 @@ function _setLogLevel(bag, next) {
   var loggerConfig = {};
   loggerConfig.runMode = bag.config.runMode;
   /* jshint ignore:start */
-  logger.debug('----------------------------------------------------------------------------');
-  logger.debug('----------------------------------------------------------------------------');
-  logger.debug('--------------------- Admiral Successfully booted --------------------------');
-  logger.debug('----------------------------------------------------------------------------');
-  logger.debug('----------------------------------------------------------------------------');
+  logger.debug('------------------------------------------------------------');
+  logger.debug('------------------------------------------------------------');
+  logger.debug('------------- Admiral Successfully booted ------------------');
+  logger.debug('------------------------------------------------------------');
+  logger.debug('------------------------------------------------------------');
   /* jshint ignore:end*/
   logger.debug('Setting log level as ' + loggerConfig.runMode);
   logger.configLevel(loggerConfig);
@@ -203,6 +205,5 @@ function _logErrorAndExit(message, err) {
   );
 }
 
-if (require.main === module) {
+if (require.main === module)
   init();
-}
