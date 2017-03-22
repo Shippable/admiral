@@ -35,12 +35,13 @@ function init() {
   bag.who = util.format('admiral.app|%s', init.name);
 
   async.series([
-    _createExpressApp.bind(null, bag),
-    _initializeDatabaseConfig.bind(null, bag),
-    _initializeRoutes.bind(null, bag),
-    _startListening.bind(null, bag),
-    _setLogLevel.bind(null, bag)
-  ],
+      _createExpressApp.bind(null, bag),
+      _initializeDatabaseConfig.bind(null, bag),
+      _constructConnectionUrl.bind(null, bag),
+      _initializeRoutes.bind(null, bag),
+      _startListening.bind(null, bag),
+      _setLogLevel.bind(null, bag)
+    ],
     function (err) {
       if (err) {
         logger.error('Could not initialize api app: ' +
@@ -126,10 +127,21 @@ function _initializeDatabaseConfig(bag, next) {
       'LOGIN_TOKEN is not defined'));
 
   if (configErrors.length)
-    next(configErrors);
+    return next(configErrors);
   else
     global.config = bag.config;
-  next();
+  return next();
+}
+
+function _constructConnectionUrl(bag, next) {
+  var who = bag.who + '|' + _constructConnectionUrl.name;
+  logger.debug(who, 'Inside');
+
+  global.config.connectionString = util.format('%s://%s:%s@%s:%s/%s',
+    bag.config.dbDialect, bag.config.dbUsername, bag.config.dbPassword,
+    bag.config.dbHost, bag.config.dbPort, bag.config.dbName);
+
+  return next();
 }
 
 function _initializeRoutes(bag, next) {
