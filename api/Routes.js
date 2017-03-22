@@ -3,11 +3,7 @@
 var self = Routes;
 module.exports = self;
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var favicon = require('serve-favicon');
-var methodOverride = require('method-override');
-var shipError = require('./common/shipError.js');
+var shipError = require('../common/shipError.js');
 var path = require('path');
 
 // Utils
@@ -21,36 +17,12 @@ function Routes(app) {
   logger.verbose(bag.who, 'Starting');
 
   async.series([
-    initExpressMiddleware.bind(null, bag),
     initHelperRoutes.bind(null, bag)
   ],
     function () {
       logger.verbose(bag.who, 'Completed');
     }
   );
-}
-
-function initExpressMiddleware(bag, next) {
-  var who = bag.who + '|' + initExpressMiddleware.name;
-  logger.debug(who, 'Inside');
-
-  bag.app.use(favicon('./common/favicon.ico'));
-  bag.app.use(bodyParser.json({
-    limit: '10mb'
-  }));
-  bag.app.use(bodyParser.urlencoded({
-    extended: true
-  }));
-  bag.app.use(methodOverride());
-
-  // Views config
-  bag.app.engine('html', require('ejs').renderFile);
-  bag.app.set('view engine', 'html');
-
-  // Serve static files
-  bag.app.use(express.static(path.join(__dirname, '/static')));
-
-  return next();
 }
 
 function initHelperRoutes(bag, next) {

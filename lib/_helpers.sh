@@ -135,7 +135,7 @@ __set_access_key() {
     fi
   fi
 
-  sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$access_key'"/g' $ADMIRAL_ENV
+  sed -i 's#.*ACCESS_KEY=.*#ACCESS_KEY="'$access_key'"#g' $ADMIRAL_ENV
   __process_msg "Successfully set access key"
 }
 
@@ -157,7 +157,7 @@ __set_secret_key() {
     fi
   fi
 
-  sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$secret_key'"/g' $ADMIRAL_ENV
+  sed -i 's#.*SECRET_KEY=.*#SECRET_KEY="'$secret_key'"#g' $ADMIRAL_ENV
   __process_msg "Successfully set secret key"
 }
 
