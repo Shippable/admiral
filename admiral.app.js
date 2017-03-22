@@ -112,6 +112,11 @@ function _initializeDatabaseConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'DBDIALECT is not defined'));
 
+  if (bag.env.RUN_MODE)
+    bag.config.runMode = bag.env.RUN_MODE;
+  else
+    bag.config.runMode = 'production';
+
   if (configErrors.length)
     next(configErrors);
   else next();
@@ -161,7 +166,7 @@ function _setLogLevel(bag, next) {
   /* jshint ignore:start */
   logger.debug('----------------------------------------------------------------------------');
   logger.debug('----------------------------------------------------------------------------');
-  logger.debug('--------------------- Admiral Successfully booted ---------------------------');
+  logger.debug('--------------------- Admiral Successfully booted --------------------------');
   logger.debug('----------------------------------------------------------------------------');
   logger.debug('----------------------------------------------------------------------------');
   /* jshint ignore:end*/
