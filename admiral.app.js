@@ -9,11 +9,13 @@ require('./common/logger.js');
 require('./common/ActErr.js');
 require('./common/express/sendJSONResponse.js');
 require('./common/respondWithError.js');
+var favicon = require('serve-favicon');
 
 var glob = require('glob');
 var async = require('async');
 var express = require('express');
 var pg = require('pg');
+var path = require('path');
 
 global.util = require('util');
 global.config = {};
@@ -60,6 +62,7 @@ function _createExpressApp(bag, next) {
   try {
     var app = express();
 
+    app.use(favicon('./common/favicon.ico'));
     app.use(require('body-parser').json({limit: '10mb'}));
     app.use(require('body-parser').urlencoded({limit: '10mb', extended: true}));
     app.use(require('compression')());
@@ -67,6 +70,12 @@ function _createExpressApp(bag, next) {
     app.use(require('method-override')());
     app.use(require('./common/express/errorHandler.js'));
     app.use(require('./common/express/setCORSHeaders.js'));
+
+    // Views config
+    app.engine('html', require('ejs').renderFile);
+    app.set('view engine', 'html');
+
+    app.use(express.static(path.join(__dirname, './static')));
 
     bag.app = app;
     return next();
@@ -159,7 +168,6 @@ function _initializeRoutes(bag, next) {
       require(routeFile)(bag.app);
     }
   );
-  require('./Routes.js')(bag.app);
 
   return next();
 }
