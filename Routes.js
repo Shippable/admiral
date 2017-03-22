@@ -5,6 +5,7 @@ module.exports = self;
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var favicon = require('serve-favicon');
 var methodOverride = require('method-override');
 var shipError = require('./common/shipError.js');
 var path = require('path');
@@ -33,7 +34,7 @@ function initExpressMiddleware(bag, next) {
   var who = bag.who + '|' + initExpressMiddleware.name;
   logger.debug(who, 'Inside');
 
-  // bag.app.use(favicon('./common/favicon.ico'));
+  bag.app.use(favicon('./common/favicon.ico'));
   bag.app.use(bodyParser.json({
     limit: '10mb'
   }));
