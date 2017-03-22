@@ -88,6 +88,22 @@ __validate_runtime() {
     __process_msg "Versions: $versions_path"
   fi
 
+  ################## check access key ###############################
+  if [ "$ACCESS_KEY" == "" ]; then
+    __process_msg "ACCESS_KEY is not set"
+    __set_access_key
+  else
+    __process_msg "ACCESS_KEY already set, skipping"
+  fi
+
+  ################## check secret key ###############################
+  if [ "$SECRET_KEY" == "" ]; then
+    __process_msg "SECRET_KEY is not set"
+    __set_secret_key
+  else
+    __process_msg "SECRET_KEY already set, skipping"
+  fi
+
   source $ADMIRAL_ENV
 }
 

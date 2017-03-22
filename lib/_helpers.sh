@@ -117,6 +117,50 @@ __set_db_ip() {
   __process_msg "Successfully set DB_IP as $db_ip"
 }
 
+__set_access_key() {
+  __process_msg "Setting access key"
+  local access_key=""
+
+  __process_msg "Please enter value of access key"
+  read response
+
+  if [ "$response" != "" ]; then
+    __process_msg "Setting the access key  as: $response, press Y to confim"
+    read confirmation
+    if [[ "$confirmation" =~ "Y" ]]; then
+      access_key=$response
+    else
+      __process_error "Invalid response, please enter a valid access key and continue"
+      __set_access_key
+    fi
+  fi
+
+  sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$access_key'"/g' $ADMIRAL_ENV
+  __process_msg "Successfully set access key"
+}
+
+__set_secret_key() {
+  __process_msg "Setting secret key"
+  local secret_key=""
+
+  __process_msg "Please enter value of secret key"
+  read response
+
+  if [ "$response" != "" ]; then
+    __process_msg "Setting the secret key  as: $response, press Y to confim"
+    read confirmation
+    if [[ "$confirmation" =~ "Y" ]]; then
+      secret_key=$response
+    else
+      __process_error "Invalid response, please enter a valid secret key and continue"
+      __set_secret_key
+    fi
+  fi
+
+  sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$secret_key'"/g' $ADMIRAL_ENV
+  __process_msg "Successfully set secret key"
+}
+
 __copy_script_remote() {
   if [ "$#" -ne 3 ]; then
     __process_msg "The number of arguments expected by _copy_script_remote is 3"
@@ -217,7 +261,7 @@ __exec_remote_cmd() {
   }
 }
 
-_exec_remote_cmd_proxyless() {
+__exec_remote_cmd_proxyless() {
   local user="$SSH_USER"
   local key="$SSH_PRIVATE_KEY"
   local timeout=10
