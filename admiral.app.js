@@ -7,13 +7,15 @@ require('http').globalAgent.maxSockets = 10000;
 
 require('./common/logger.js');
 require('./common/ActErr.js');
+require('./common/express/sendJSONResponse.js');
+require('./common/respondWithError.js');
 
 var glob = require('glob');
 var async = require('async');
-var _ = require('underscore');
 var express = require('express');
 
 global.util = require('util');
+global.config = {};
 
 process.on('uncaughtException',
   function (err) {
@@ -117,9 +119,17 @@ function _initializeDatabaseConfig(bag, next) {
   else
     bag.config.runMode = 'production';
 
+  if (bag.env.LOGIN_TOKEN)
+    bag.config.loginToken = bag.env.LOGIN_TOKEN;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'LOGIN_TOKEN is not defined'));
+
   if (configErrors.length)
     next(configErrors);
-  else next();
+  else
+    global.config = bag.config;
+  next();
 }
 
 function _initializeRoutes(bag, next) {
