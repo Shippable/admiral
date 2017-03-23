@@ -81,7 +81,7 @@ __set_admiral_ip() {
   read response
 
   if [ "$response" != "D" ]; then
-    __process_msg "Setting the admiral IP address as: $response, press Y to confim"
+    __process_msg "Setting the admiral IP address as: $response, press Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       admiral_ip=$response
@@ -102,7 +102,7 @@ __set_db_ip() {
     read response
 
     if [ "$response" != "" ]; then
-      __process_msg "Setting the admiral IP address as: $response, press Y to confim"
+      __process_msg "Setting the admiral IP address as: $response, press Y to confirm"
       read confirmation
       if [[ "$confirmation" =~ "Y" ]]; then
         db_ip=$response
@@ -125,7 +125,7 @@ __set_access_key() {
   read response
 
   if [ "$response" != "" ]; then
-    __process_msg "Setting the access key  as: $response, press Y to confim"
+    __process_msg "Setting the access key  as: $response, press Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       access_key=$response
@@ -147,7 +147,7 @@ __set_secret_key() {
   read response
 
   if [ "$response" != "" ]; then
-    __process_msg "Setting the secret key  as: $response, press Y to confim"
+    __process_msg "Setting the secret key  as: $response, press Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       secret_key=$response

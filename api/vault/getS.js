@@ -10,7 +10,18 @@ function getS(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: [],
-    initializeDefault: false
+    initializeDefault: false,
+    defaultConfig: {
+      address: '127.0.0.1.foo',
+      rootToken: '',
+      unsealKey1: '',
+      unsealKey2: '',
+      unsealKey3: '',
+      unsealKey4: '',
+      unsealKey5: '',
+      isInstalled: false,
+      isInitialized: false
+    }
   };
 
   bag.who = util.format('vault|%s', self.name);
@@ -46,6 +57,7 @@ function _getS(bag, next) {
     function (err, systemConfigs) {
       if (err)
         return next(new ActErr(who, ActErr.DataNotFound, err));
+
       if (!_.isEmpty(systemConfigs.rows) &&
         !_.isEmpty(systemConfigs.rows[0].vault)) {
           logger.debug('Found vault configuration');
@@ -68,14 +80,7 @@ function _setDefault(bag, next) {
   var who = bag.who + '|' + _setDefault.name;
   logger.verbose(who, 'Inside');
 
-  var vaultDefault = {
-    address: '127.0.0.1.foo',
-    rootToken: '',
-    isInstalled: false,
-    isInitialized: false
-  };
-
-  vaultDefault = JSON.stringify(vaultDefault);
+  var vaultDefault = JSON.stringify(bag.defaultConfig);
   var query =
     util.format('UPDATE "systemConfigs" set "vault"=\'%s\';', vaultDefault);
 
