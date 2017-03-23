@@ -66,48 +66,50 @@ __run_vault() {
 __execute_vault_bootstrap() {
   __process_msg "Bootstrapping vault"
 
-    local bootstrap_cmd="sudo docker exec \
-      vault sh -c '/vault/config/scripts/bootstrap_vault.sh'"
-    __process_msg "Executing: $bootstrap_cmd"
-    eval "$bootstrap_cmd"
+  local bootstrap_cmd="sudo docker exec \
+    vault sh -c '/vault/config/scripts/bootstrap_vault.sh'"
+  __process_msg "Executing: $bootstrap_cmd"
+  eval "$bootstrap_cmd"
 
-    local vault_token_file="$VAULT_CONFIG_DIR/scripts/vaultToken.json"
-    if [ ! -f "$vault_token_file" ]; then
-      __process_error "No vault token file present, exiting"
-      exit 1
-    else
-      local vault_token=$(cat "$vault_token_file" \
-        | jq -r '.vaultToken')
-      __process_msg "Generated vault token: $vault_token"
-    fi
+  local vault_token_file="$VAULT_CONFIG_DIR/scripts/vaultToken.json"
+  if [ ! -f "$vault_token_file" ]; then
+    __process_error "No vault token file present, exiting"
+    exit 1
+  else
+    local vault_token=$(cat "$vault_token_file" \
+      | jq -r '.vaultToken')
+    __process_msg "Generated vault token: $vault_token"
+  fi
 
-    sudo docker exec db \
-      psql -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1 \
-      -c "UPDATE \"systemConfigs\" set \"vaultToken\"='$vault_token'"
+  sudo docker exec db \
+    psql -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1 \
+    -c "UPDATE \"systemConfigs\" set \"vaultToken\"='$vault_token'"
 
-    sudo docker exec db \
-      psql -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1 \
-      -c "UPDATE \"systemConfigs\" set \"vaultUrl\"='$VAULT_URL'"
+  sudo docker exec db \
+    psql -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1 \
+    -c "UPDATE \"systemConfigs\" set \"vaultUrl\"='$VAULT_URL'"
 
-    #local vault_url="http://172.17.42.1:8200"
-    #result=$(cat $STATE_FILE | jq -r '.systemSettings.vaultUrl = "'$vault_url'"')
-    #update=$(echo $result | jq '.' | tee $STATE_FILE)
-
-    #result=$(cat $STATE_FILE | jq -r '.systemSettings.vaultToken = "'$vault_token'"')
-    #update=$(echo $result | jq '.' | tee $STATE_FILE)
-
-    #local vault_url="http://172.17.42.1:8200"
-    #result=$(cat $STATE_FILE | jq -r '.systemSettings.vaultUrl = "'$vault_url'"')
-    #update=$(echo $result | jq '.' | tee $STATE_FILE)
+  __process_msg "Bootstrap vault complete"
 }
 
 main() {
   __process_marker "Booting Vault"
-  __validate_vault_envs
-  __validate_vault_mounts
-  __update_vault_config
-  __run_vault
-  __execute_vault_bootstrap
+  if [ "$IS_INSTALLED" == true ]; then
+    __process_msg "Vault already installed, skipping"
+  else
+    __process_msg "Vault not installed"
+    __validate_vault_envs
+    __validate_vault_mounts
+    __update_vault_config
+    __run_vault
+  fi
+
+  if [ "$IS_INITIALIZED" == true ]; then
+    __process_msg "Vault already initialized, skipping"
+  else
+    __process_msg "Vault not initialized"
+    __execute_vault_bootstrap
+  fi
   __process_msg "Vault container successfully running"
 }
 

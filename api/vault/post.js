@@ -131,7 +131,9 @@ function _initializeVault(bag, next) {
   var scriptEnvs = {
     'RUNTIME_DIR': '/var/run/shippable',
     'CONFIG_DIR': '/etc/shippable',
-    'SCRIPTS_DIR': '/home/shippable/admiral/common/scripts'
+    'SCRIPTS_DIR': '/home/shippable/admiral/common/scripts',
+    'IS_INITIALIZED': bag.vaultConfig.isInitialized,
+    'IS_INSTALLED': bag.vaultConfig.isInstalled
   };
 
   var exec = spawn('/bin/bash',
@@ -167,6 +169,7 @@ function _post(bag, next) {
 
   var update = bag.vaultConfig;
   bag.vaultConfig.isInstalled = true;
+  bag.vaultConfig.isInitialized = true;
 
   var query = util.format('UPDATE "systemConfigs" set vault=\'%s\';',
     JSON.stringify(update));
