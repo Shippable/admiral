@@ -51,6 +51,11 @@ run_component() {
   run_cmd="$run_cmd $envs"
   run_cmd="$run_cmd -e RUN_MODE=dev"
   run_cmd="$run_cmd -p $PORT:$PORT "
+  run_cmd="$run_cmd -v /usr/bin/docker:/usr/bin/docker:rw -v /var/run/docker.sock:/var/run/docker.sock:rw "
+  run_cmd="$run_cmd -v /usr/lib/x86_64-linux-gnu/libapparmor.so.1.1.0:/lib/x86_64-linux-gnu/libapparmor.so.1:rw "
+  run_cmd="$run_cmd -v /usr/lib/x86_64-linux-gnu/libltdl.so.7.3.0:/lib/x86_64-linux-gnu/libltdl.so.7:rw "
+  run_cmd="$run_cmd -v $CONFIG_DIR:$CONFIG_DIR:rw "
+  run_cmd="$run_cmd -v $RUNTIME_DIR:$RUNTIME_DIR:rw "
   run_cmd="$run_cmd -v $(pwd):/home/shippable/admiral:rw "
   run_cmd="$run_cmd -t shipimg/admiral:onebox"
 
