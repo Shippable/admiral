@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="admiral">
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <base href="/" target="_self">
+  <style>
+  [ng\:cloak],
+  [ng-cloak],
+  [data-ng-cloak],
+  [x-ng-cloak],
+  .ng-cloak,
+  .x-ng-cloak {
+    display: none !important;
+  }
+  </style>
+  <title ng-if="!_r.title">Shippable Admiral</title>
+  <meta name="title" content="Shippable Admiral">
+  <title ng-cloak>{{_r.title}}</title>
+  <!-- Mobile viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Meta description -->
+  <meta name="description" content="Continuous Integration and Deployment platform for Docker">
+  <meta name="author" content="Shippable, Inc.">
+  <!-- CSS -->
+  <link rel="stylesheet" href="app.cat.css" />
+  <link rel='stylesheet prefetch' href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css' />
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#" style="padding: 10px">
+            <img src="/images/shippable-logo-white.png" alt="Shippable white dark version">
+          </a>
+        </div>
+      </div>
+    </nav>
+    <!-- Horn -->
+    <div id="horn" class="ss-horn-bar">
+     <div ng-cloak class="alert {{hornMessageStyle(horn)}} ss-natural-word-break ss-page-container"
+       ng-repeat="horn in horns">
+       <a href="" class="fa fa-remove pull-right" ng-click="removeHornMessage(horn)"></a>
+       <div ng-bind-html="horn.message"></div>
+     </div>
+   </div>
+    <!-- Loading app -->
+    <div class="ship-center-loading ss-text-center" ng-if="!_r.appLoaded && _r.loadingMessage" style="z-index:1000;">
+      <i class="fa fa-life-ring fa-spin sf-200"></i>
+      <div class="seperator"></div>
+      <i class="sf-16" ng-if="!_r.loadingMessage">Loading...</i>
+      <i class="sf-16" ng-cloak>{{_r.loadingMessage}}</i>
+    </div>
+    <!-- View Body -->
+    <div ng-cloak ui-view ng-if="_r.appLoaded">
+    </div>
+
+  <!-- load script library -->
+  <script src="lib.min.js"></script>
+  <!-- ngApp Start -->
+  <script src="app.cat.js"></script>
+  <!---->
+</body>
+
+</html>

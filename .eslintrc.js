@@ -16,7 +16,7 @@ module.exports = {
     "respondWithError": true,
     "sendJSONResponse": true,
     "util": true,
-    "www": true
+    "admiral": true
   },
   "extends": "airbnb-base/legacy",
   "rules": {

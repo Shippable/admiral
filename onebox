@@ -69,7 +69,7 @@ checkout_dockerfile() {
 }
 
 run_npm_install() {
-  docker exec $ONEBOX_NAME bash -c "cd /home/shippable/admiral && npm install"
+  docker exec $ONEBOX_NAME bash -c "cd /home/shippable/admiral && npm install --unsafe-perm"
 }
 
 main() {
