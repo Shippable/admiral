@@ -15,3 +15,9 @@
     install         Run Shippable installation
     help            Print this message
 ```
+
+## Mounts
+
+All data and configuration folders are mounted from host inside the containers. The following diagram represents the mounts mapping
+
+![Mounts](static/mounts.jpeg)
