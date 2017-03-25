@@ -7,14 +7,20 @@
     "url": "git@github.com:Shippable/admiral.git"
   },
   "dependencies": {
+    "angular-ui-bootstrap": "2.5.0",
     "async": "2.0.0",
     "body-parser": "1.15.2",
+    "bower": "^1.7.7",
     "compression": "1.6.2",
     "cookie-parser": "1.4.3",
     "ejs": "^2.5.6",
     "express": "4.14.0",
     "fs-extra": "^0.30.0",
     "glob": "7.0.5",
+    "grunt": "1.0.1",
+    "grunt-contrib-concat": "1.0.1",
+    "grunt-contrib-uglify": "1.0.1",
+    "grunt-contrib-watch": "1.0.0",
     "js-yaml": "3.6.1",
     "method-override": "2.3.6",
     "mimelib": "0.2.19",
@@ -32,6 +38,12 @@
     "ursa": "0.9.4",
     "validator": "6.1.0",
     "winston": "2.2.0"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower --allow-root install",
+
+    "update-deps": "npm update",
+    "postupdate-deps": "bower update"
   },
   "jshintConfig": {
     "node": true,

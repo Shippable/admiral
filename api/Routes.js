@@ -30,9 +30,15 @@ function initHelperRoutes(bag, next) {
   logger.debug(who, 'Inside');
   // Base domain will authenticate and
   // send page based on cookie data
-  bag.app.get('/',
+
+  bag.app.get('*',
     function (req, res) {
-      res.render(path.resolve('static/login.html'), {},
+      var loginToken = req.cookies.loginToken;
+      if (!loginToken && req.path !== '/login')
+        return res.redirect('/login');
+
+      var opts = {};
+      res.render(path.resolve('static/app.html'), opts,
         function (err, html) {
           if (err) {
             shipError(err.stack);
