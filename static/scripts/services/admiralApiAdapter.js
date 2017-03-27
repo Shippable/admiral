@@ -15,6 +15,9 @@
       //  Auth Routes
       postAuth: function (body, callback) {
         return API.post('/api/auth', body, callback);
+      },
+      postLogout: function (body, callback) {
+        return API.post('/api/logout', body, callback);
       }
     };
   }

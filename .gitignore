@@ -4,3 +4,8 @@ node_modules/
 *.log
 *.swp
 *.swo
+static/app.cat.*
+static/app.min.*
+static/bower_components/
+static/lib.cat.js
+static/lib.min.js
