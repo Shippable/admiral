@@ -24,7 +24,8 @@
     $scope.dashboardCtrlPromise = dashboardCtrlDefer.promise;
 
     $scope.vm = {
-      isLoaded: false
+      isLoaded: false,
+      logOutOfAdmiral: logOutOfAdmiral
     };
 
     $scope._r.appPromise.then(initWorkflow);
@@ -57,6 +58,19 @@
       $scope._r.showCrumb = true;
       $scope._r.title = 'Admiral - Shippable';
       return next();
+    }
+
+    function logOutOfAdmiral(e) {
+      admiralApiAdapter.postLogout({},
+        function (err) {
+          if (err)
+            return horn.error(err);
+
+          e.preventDefault();
+          $state.go('login', $state.params);
+          window.scrollTo(0, 0);
+        }
+      );
     }
   }
 }());
