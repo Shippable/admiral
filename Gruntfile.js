@@ -51,6 +51,7 @@ module.exports = function (grunt) {
           'static/libs/ui-bootstrap-tpls-0.14.0.min.js',
           'static/bower_components/angular-moment/angular-moment.min.js',
           'static/bower_components/angular-sanitize/angular-sanitize.min.js',
+          'static/bower_components/angular-cookies/angular-cookies.min.js',
           'static/bower_components/angular-ui-router/release/angular-ui-router.min.js'
         ],
         dest: 'static/lib.cat.js'

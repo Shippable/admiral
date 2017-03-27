@@ -11,11 +11,11 @@
    *  is called when the request completes.
    */
 
-  admiral.service('admiralService', ['API_URL', '$http',
+  admiral.service('admiralService', ['ADMIRAL_URL', '$http', '$cookies',
     admiralService
   ]);
 
-  function admiralService(API_URL, $http) {
+  function admiralService(ADMIRAL_URL, $http, $cookies) {
     function handler(promise, callback) {
       if (callback)
         promise
@@ -29,20 +29,38 @@
       return promise;
     }
     return {
+      // We're getting the login token here because it's not set until login.
       get: function (path, callback) {
-        var promise = $http.get(API_URL + path);
+
+        var promise = $http.get(ADMIRAL_URL + path, {
+          headers: {
+            Authorization: 'apiToken ' + $cookies.loginToken
+          }
+        });
         return handler(promise, callback);
       },
       put: function (path, body, callback) {
-        var promise = $http.put(API_URL + path, body);
+        var promise = $http.put(ADMIRAL_URL + path, body, {
+          headers: {
+            Authorization: 'apiToken ' + $cookies.loginToken
+          }
+        });
         return handler(promise, callback);
       },
       post: function (path, body, callback) {
-        var promise = $http.post(API_URL + path, body);
+        var promise = $http.post(ADMIRAL_URL + path, body, {
+          headers: {
+            Authorization: 'apiToken ' + $cookies.loginToken
+          }
+        });
         return handler(promise, callback);
       },
       delete: function (path, callback) {
-        var promise = $http.delete(API_URL + path);
+        var promise = $http.delete(ADMIRAL_URL + path, {
+          headers: {
+            Authorization: 'apiToken ' + $cookies.loginToken
+          }
+        });
         return handler(promise, callback);
       }
     };
