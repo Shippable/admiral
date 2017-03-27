@@ -78,6 +78,6 @@ module.exports = function (grunt) {
   grunt.registerTask('libcat', ['concat:lib']);
   grunt.registerTask('libbit', ['uglify:lib']);
   grunt.registerTask('build',
-    ['concat:app', 'concat:lib', 'uglify:app', 'uglify:lib']);
+    ['cats', 'concat:app', 'concat:lib', 'uglify:app', 'uglify:lib']);
   grunt.registerTask('buildLocal', ['concat:app']);
 };
