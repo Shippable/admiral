@@ -96,7 +96,7 @@ __set_admiral_ip() {
 
 __set_db_ip() {
   __process_msg "Setting value of DB IP address"
-  local db_ip="127.0.0.1"
+  local db_ip="172.17.0.1"
   if [ "INSTALL_MODE" == "cluster" ]; then
     __process_msg "Please enter value of db IP address"
     read response
