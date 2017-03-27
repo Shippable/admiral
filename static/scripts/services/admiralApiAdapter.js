@@ -12,9 +12,9 @@
   function admiralApiAdapter(admiralService) {
     var API = admiralService;
     return {
-      //  systemCodes Routes
-      getSystemCodes: function (query, callback) {
-        return API.get('/systemCodes?' + query, callback);
+      //  Auth Routes
+      postAuth: function (body, callback) {
+        return API.post('/api/auth', body, callback);
       }
     };
   }

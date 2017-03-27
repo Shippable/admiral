@@ -31,10 +31,26 @@ function initHelperRoutes(bag, next) {
   // Base domain will authenticate and
   // send page based on cookie data
 
+  bag.app.get('/login',
+    function (req, res) {
+      res.cookie('admiralUrl', req.protocol + '://' + req.get('host'));
+
+      var opts = {};
+      res.render(path.resolve('static/app.html'), opts,
+        function (err, html) {
+          if (err) {
+            shipError(err.stack);
+            res.status(500).send('Internal Error. See logs');
+          }
+          res.send(html);
+        }
+      );
+    }
+  );
+
   bag.app.get('*',
     function (req, res) {
-      var loginToken = req.cookies.loginToken;
-      if (!loginToken && req.path !== '/login')
+      if (!req.cookies.loginToken)
         return res.redirect('/login');
 
       var opts = {};

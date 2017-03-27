@@ -16,7 +16,8 @@
   ]);
 
 
-  function loginCtrl($scope, $stateParams, $q, $state, admiralApiAdapter, horn) {
+  function loginCtrl($scope, $stateParams, $q, $state,
+    admiralApiAdapter, horn) {
     var loginCtrlDefer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -62,11 +63,19 @@
 
     function logInToAdmiral(e) {
       var loginToken = $scope.vm.loginToken;
-      $.cookie('loginToken', $scope.vm.loginToken);
 
-      e.preventDefault();
-      $state.go('dashboard', $state.params);
-      window.scrollTo(0, 0);
+      admiralApiAdapter.postAuth({
+          loginToken: loginToken
+        },
+        function (err) {
+          if (err)
+            return horn.error(err);
+
+          e.preventDefault();
+          $state.go('dashboard', $state.params);
+          window.scrollTo(0, 0);
+        }
+      );
     }
   }
 }());

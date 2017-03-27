@@ -1,16 +1,13 @@
 'use strict';
 
 var admiral = angular.module('admiral', ['ui.bootstrap',
-  'angularMoment', 'ngSanitize', 'ui.router'
+  'angularMoment', 'ngSanitize', 'ngCookies', 'ui.router'
 ]);
 
 admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
   '$urlRouterProvider', 'SRC_PATH', '$urlMatcherFactoryProvider',
   function ($stateProvider, $locationProvider, $httpProvider,
     $urlRouterProvider, SRC_PATH, $urlMatcherFactoryProvider) {
-    var token = $.cookie('loginToken');
-    if (token)
-      $httpProvider.defaults.headers.common.Authorization = 'apiToken ' + token;
 
     $urlRouterProvider.rule(
       function ($injector, $location) {
@@ -84,8 +81,7 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
   }
 })();
 
-admiral.constant('API_URL', $.cookie('apiUrl'));
-admiral.constant('API_TOKEN', $.cookie('loginToken'));
+admiral.constant('ADMIRAL_URL', $.cookie('admiralUrl'));
 admiral.constant('SRC_PATH', '/scripts/');
 
 $(document).ready(

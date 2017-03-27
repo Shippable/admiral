@@ -7,6 +7,7 @@ var async = require('async');
 
 function post(req, res) {
   var bag = {
+    reqBody: req.body,
     resBody: {}
   };
 
@@ -22,6 +23,7 @@ function post(req, res) {
       if (err)
         return respondWithError(res, err);
 
+      res.cookie('loginToken', bag.reqBody.loginToken);
       sendJSONResponse(res, bag.resBody);
     }
   );
@@ -30,6 +32,12 @@ function post(req, res) {
 function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
+
+  if (!bag.reqBody.loginToken ||
+    bag.reqBody.loginToken !== global.config.loginToken)
+    return next(
+      new ActErr(who, ActErr.Unauthorized, 'Unauthorized')
+    );
 
   return next();
 }
