@@ -22,6 +22,14 @@ __process_error() {
   echo -e "     $error"
 }
 
+__process_success() {
+  local message="$@"
+  local bold_green_text='\e[32m'
+  local reset_text='\033[0m'
+
+  echo -e "$bold_green_text|___ $message$reset_text"
+}
+
 __check_logsdir() {
   if [ ! -d "$LOGS_DIR" ]; then
     mkdir -p "$LOGS_DIR"
