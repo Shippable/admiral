@@ -1,15 +1,15 @@
 'use strict';
 
-var self = getS;
+var self = get;
 module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
 
-function getS(req, res) {
+function get(req, res) {
   var bag = {
     reqQuery: req.query,
-    resBody: [],
+    resBody: {},
     initializeDefault: false,
     defaultConfig: {
       address: '127.0.0.1.foo',
@@ -29,7 +29,7 @@ function getS(req, res) {
 
   async.series([
     _checkInputParams.bind(null, bag),
-    _getS.bind(null, bag),
+    _get.bind(null, bag),
     _setDefault.bind(null, bag)
   ],
     function (err) {
@@ -49,8 +49,8 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-function _getS(bag, next) {
-  var who = bag.who + '|' + _getS.name;
+function _get(bag, next) {
+  var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
   global.config.client.query('SELECT vault from "systemConfigs"',
@@ -63,7 +63,7 @@ function _getS(bag, next) {
           logger.debug('Found vault configuration');
 
           var vaultConfig = systemConfigs.rows[0].vault;
-          bag.resBody = [JSON.parse(vaultConfig)];
+          bag.resBody = JSON.parse(vaultConfig);
       } else {
         logger.debug('No vault configuration present in configs');
         bag.initializeDefault = true;
@@ -93,7 +93,7 @@ function _setDefault(bag, next) {
         logger.debug('Successfully added default value for vault server');
         bag.resBody = [JSON.parse(vaultDefault)];
       } else {
-        logger.warn('Failed to det default vault server value');
+        logger.warn('Failed to get default vault server value');
       }
 
       return next();
