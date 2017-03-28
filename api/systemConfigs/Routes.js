@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = systemCodeRoutes;
+module.exports = systemConfigRoutes;
 var validateAccount = require('../../common/auth/validateAccount.js');
 
-function systemCodeRoutes(app) {
+function systemConfigRoutes(app) {
   app.get('/api/systemConfigs', validateAccount, require('./getS.js'));
 }

@@ -165,9 +165,15 @@ function _initializeRoutes(bag, next) {
 
   glob.sync('./api/**/*Routes.js').forEach(
     function (routeFile) {
-      require(routeFile)(bag.app);
+      if (routeFile !== './api/Routes.js') {
+        require(routeFile)(bag.app);
+      }
     }
   );
+
+  // Require www routes last, so the api routes aren't
+  // overridden by the www redirect
+  require('./api/Routes.js')(bag.app);
 
   return next();
 }
