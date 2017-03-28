@@ -57,6 +57,29 @@ __validate_db_mounts() {
   fi
 }
 
+__check_db() {
+  local interval=3
+  local db_timeout=60
+  local counter=0
+  local db_booted=false
+
+  while [ $db_booted != true ] && [ $counter -lt $db_timeout ]; do
+    local db_container=$(sudo docker ps | grep $COMPONENT | awk '{print $1}')
+    if [ "$db_container" != "" ]; then
+      __process_msg "Database container found"
+      db_booted=true
+    else
+      __process_msg "Waiting for database container"
+      let "counter = $counter + $interval"
+      sleep $interval
+    fi
+  done
+  if [ $db_booted = false ]; then
+    __process_msg "Failed to boot database container"
+    exit 1
+  fi
+}
+
 __run_db() {
   __process_msg "Running database container"
 
@@ -85,7 +108,7 @@ __run_db() {
     "
 
     eval "$run_cmd"
-    __process_msg "Database container successfully running"
+    __check_db
   fi
 }
 

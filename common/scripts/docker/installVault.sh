@@ -60,7 +60,7 @@ __run_vault() {
   "
 
   eval "$run_cmd"
-  __process_msg "Database container successfully running"
+  __process_msg "Vault container successfully running"
 }
 
 __execute_vault_bootstrap() {
