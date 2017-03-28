@@ -64,11 +64,6 @@ __generate_system_config() {
     | jq -r '.defaultMinionCount')
   sed "s#{{DEFAULT_MINION_COUNT}}#$default_minion_count#g" $system_configs_template > $system_configs_sql
 
-  __process_msg "Updating : defaultPipelineCount"
-  local default_pipeline_count=$(cat $system_configs_default \
-    | jq -r '.defaultPipelineCount')
-  sed -i "s#{{DEFAULT_PIPELINE_COUNT}}#$default_pipeline_count#g" $system_configs_sql
-
  __process_msg "Updating : autoSelectBuilderToken"
   local auto_select_builder_token=$(cat $system_configs_default \
     | jq -r '.autoSelectBuilderToken')
@@ -289,10 +284,24 @@ __generate_system_config() {
     | jq -r '.mktgUrl')
   sed -i "s#{{MKTG_URL}}#$mktg_url#g" $system_configs_sql
 
-  __process_msg "Updating : segmentMktgKey"
-  local segment_mktg_key=$(cat $system_configs_default \
-    | jq -r '.segmentMktgKey')
-  sed -i "s#{{SEGMENT_MKTG_KEY}}#$segment_mktg_key#g" $system_configs_sql
+  __process_msg "Updating : allowedSystemImageFamily"
+  local allowed_system_image_family=$(cat $system_configs_default \
+    | jq -r '.allowedSystemImageFamily')
+  sed -i "s#{{ALLOWED_SYSTEM_IMAGE_FAMILY}}#$allowed_system_image_family#g" $system_configs_sql
+
+  __process_msg "Updating : isBootstrapped"
+  local is_bootstrapped=$(cat $system_configs_default \
+    | jq -r '.isBootstrapped')
+  sed -i "s#{{IS_BOOTSTRAPPED}}#$is_bootstrapped#g" $system_configs_sql
+
+  __process_msg "Updating : accessKey"
+  sed -i "s#{{ACCESS_KEY}}#$ACCESS_KEY#g" $system_configs_sql
+
+  __process_msg "Updating : secretKey"
+  sed -i "s#{{SECRET_KEY}}#$SECRET_KEY#g" $system_configs_sql
+
+  __process_msg "Updating : release"
+  sed -i "s#{{RELEASE}}#$RELEASE#g" $system_configs_sql
 
   __process_msg "Successfully generated 'systemConfig' table data"
 }
