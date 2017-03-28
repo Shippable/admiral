@@ -5,7 +5,6 @@ do $$
       create table "systemConfigs" (
         "id" INT PRIMARY KEY NOT NULL,
         "defaultMinionCount" INT DEFAULT 1 NOT NULL,
-        "defaultPipelineCount" INT DEFAULT 1 NOT NULL,
         "autoSelectBuilderToken" BOOLEAN DEFAULT false NOT NULL,
         "buildTimeoutMS" INT DEFAULT 3600000 NOT NULL,
         "defaultPrivateJobQuota" INT DEFAULT 150 NOT NULL,
@@ -41,6 +40,14 @@ do $$
 
     if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'serverEnabled') then
       alter table "systemConfigs" drop column "serverEnabled";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'defaultPipelineCount') then
+      alter table "systemConfigs" drop column "defaultPipelineCount";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'segmentMktgKey') then
+      alter table "systemConfigs" drop column "segmentMktgKey";
     end if;
 
     -- Add new fields here:
@@ -156,8 +163,56 @@ do $$
       alter table "systemConfigs" add column "mktgUrl" varchar(255);
     end if;
 
-    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'segmentMktgKey') then
-      alter table "systemConfigs" add column "segmentMktgKey" varchar(255);
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'allowedSystemImageFamily') then
+      alter table "systemConfigs" add column "allowedSystemImageFamily" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'isBootstrapped') then
+      alter table "systemConfigs" add column "isBootstrapped" BOOLEAN default false NOT NULL;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'accessKey') then
+      alter table "systemConfigs" add column "accessKey" VARCHAR(255);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'secretKey') then
+      alter table "systemConfigs" add column "secretKey" VARCHAR(255);
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'release') then
+      alter table "systemConfigs" add column "release" VARCHAR(24) default 'master' NOT NULL;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'services') then
+      alter table "systemConfigs" add column "services" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'db') then
+      alter table "systemConfigs" add column "db" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'msg') then
+      alter table "systemConfigs" add column "msg" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'state') then
+      alter table "systemConfigs" add column "state" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'secrets') then
+      alter table "systemConfigs" add column "secrets" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'redis') then
+      alter table "systemConfigs" add column "redis" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'master') then
+      alter table "systemConfigs" add column "master" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'workers') then
+      alter table "systemConfigs" add column "workers" TEXT;
     end if;
 
     -- Alter any defaults here:
@@ -207,7 +262,6 @@ do $$
     if exists (select 1 from "systemConfigs" where "id" = 1) then
         update "systemConfigs" SET
             "defaultMinionCount"={{DEFAULT_MINION_COUNT}},
-            "defaultPipelineCount"={{DEFAULT_PIPELINE_COUNT}},
             "autoSelectBuilderToken"={{AUTO_SELECT_BUILDER_TOKEN}},
             "buildTimeoutMS"={{BUILD_TIMEOUT_MS}},
             "defaultPrivateJobQuota"={{DEFAULT_PRIVATE_JOB_QUOTA}},
@@ -251,7 +305,12 @@ do $$
             "customNodesAdminOnly"={{CUSTOM_NODES_ADMIN_ONLY}},
             "mktgPort"={{MKTG_PORT}},
             "mktgUrl"='{{MKTG_URL}}',
-            "segmentMktgKey"='{{SEGMENT_MKTG_KEY}}'
+            "allowedSystemImageFamily"='{{ALLOWED_SYSTEM_IMAGE_FAMILY}}',
+            "isBootstrapped"='{{IS_BOOTSTRAPPED}}',
+            "accessKey"='{{ACCESS_KEY}}',
+            "secretKey"='{{SECRET_KEY}}',
+            "release"='{{RELEASE}}'
+
         where id=1;
     end if;
 
@@ -267,7 +326,6 @@ do $$
           (
             "id",
             "defaultMinionCount",
-            "defaultPipelineCount",
             "autoSelectBuilderToken",
             "buildTimeoutMS",
             "defaultPrivateJobQuota",
@@ -312,13 +370,16 @@ do $$
             "customNodesAdminOnly",
             "mktgPort",
             "mktgUrl",
-            "segmentMktgKey"
+            "allowedSystemImageFamily",
+            "isBootstrapped",
+            "accessKey",
+            "secretKey",
+            "release"
           )
         values
           (
             1,
             {{DEFAULT_MINION_COUNT}},
-            {{DEFAULT_PIPELINE_COUNT}},
             {{AUTO_SELECT_BUILDER_TOKEN}},
             {{BUILD_TIMEOUT_MS}},
             {{DEFAULT_PRIVATE_JOB_QUOTA}},
@@ -363,7 +424,11 @@ do $$
             {{CUSTOM_NODES_ADMIN_ONLY}},
             {{MKTG_PORT}},
             '{{MKTG_URL}}',
-            '{{SEGMENT_MKTG_KEY}}'
+            '{{ALLOWED_SYSTEM_IMAGE_FAMILY}}',
+            {{IS_BOOTSTRAPPED}},
+            '{{ACCESS_KEY}}',
+            '{{SECRET_KEY}}',
+            '{{RELEASE}}'
           );
     end if;
   end
@@ -454,6 +519,18 @@ do $$
 
     if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'truck') then
       alter table "systemConfigs" alter column "truck" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'allowedSystemImageFamily') then
+      alter table "systemConfigs" alter column "allowedSystemImageFamily" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'accessKey') then
+      alter table "systemConfigs" alter column "accessKey" set not null;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'secretKey') then
+      alter table "systemConfigs" alter column "secretKey" set not null;
     end if;
   end
 $$;
