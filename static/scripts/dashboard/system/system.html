@@ -1,0 +1,33 @@
+<div class="panel panel-content">
+  <div class="col-md-2 col-xs-3 well">
+    <ul class="nav nav-tabs nav-stacked">
+      <li ui-sref-active="active" class="active">
+        <a ui-sref="dashboard.system.database" ui-sref-opts="{reload: true}">Database</a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="dashboard.system.vault" ui-sref-opts="{reload: true}">Vault</a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="dashboard.system.queues" ui-sref-opts="{reload: true}">Message Queues</a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="dashboard.system.master" ui-sref-opts="{reload: true}">Swarm Master</a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="dashboard.system.workers" ui-sref-opts="{reload: true}">Swarm Workers</a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="dashboard.system.state" ui-sref-opts="{reload: true}">State Store</a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="dashboard.system.integrations" ui-sref-opts="{reload: true}">Integrations</a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="dashboard.system.services" ui-sref-opts="{reload: true}">Services</a>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-10 col-xs-9 panel panel-content">
+    <div ui-view></div>
+  </div>
+</div>
