@@ -39,9 +39,22 @@ __check_dependencies() {
       exit 1
     fi
   else
-    __process_error "Docker not installed, install docker using script \
-    https://raw.githubusercontent.com/Shippable/node/master/scripts/ubu_14.04_docker_1.13.sh"
-    exit 1
+    __process_msg "Docker not installed, installing Docker 1.13"
+    rm -f installDockerScript.sh
+    touch installDockerScript.sh
+    echo '#!/bin/bash' >> installDockerScript.sh
+    echo 'readonly MESSAGE_STORE_LOCATION="/tmp/cexec"' >> installDockerScript.sh
+    echo 'readonly KEY_STORE_LOCATION="/tmp/ssh"' >> installDockerScript.sh
+    echo 'readonly BUILD_LOCATION="/build"' >> installDockerScript.sh
+
+    # Fetch the installation script and headers
+    curl https://raw.githubusercontent.com/Shippable/node/master/lib/logger.sh >> installDockerScript.sh
+    curl https://raw.githubusercontent.com/Shippable/node/master/lib/headers.sh >> installDockerScript.sh
+    curl https://raw.githubusercontent.com/Shippable/node/master/scripts/Ubuntu_14.04_Docker_1.13.sh >> installDockerScript.sh
+    # Install Docker
+    chmod +x installDockerScript.sh
+    ./installDockerScript.sh
+    rm installDockerScript.sh
   fi
 }
 
@@ -86,7 +99,7 @@ __set_admiral_ip() {
   read response
 
   if [ "$response" != "D" ]; then
-    __process_msg "Setting the admiral IP address as: $response, press Y to confirm"
+    __process_msg "Setting the admiral IP address to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       admiral_ip=$response
@@ -96,7 +109,7 @@ __set_admiral_ip() {
     fi
   fi
   sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$admiral_ip'"/g' $ADMIRAL_ENV
-  __process_msg "Successfully set admiral IP as $admiral_ip"
+  __process_msg "Successfully set admiral IP to $admiral_ip"
 }
 
 __set_db_ip() {
@@ -107,7 +120,7 @@ __set_db_ip() {
     read response
 
     if [ "$response" != "" ]; then
-      __process_msg "Setting the admiral IP address as: $response, press Y to confirm"
+      __process_msg "Setting the database IP address to: $response, enter Y to confirm"
       read confirmation
       if [[ "$confirmation" =~ "Y" ]]; then
         db_ip=$response
@@ -119,7 +132,7 @@ __set_db_ip() {
   fi
 
   sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
-  __process_msg "Successfully set DB_IP as $db_ip"
+  __process_msg "Successfully set DB_IP to $db_ip"
 }
 
 __set_access_key() {
@@ -130,7 +143,7 @@ __set_access_key() {
   read response
 
   if [ "$response" != "" ]; then
-    __process_msg "Setting the access key  as: $response, press Y to confirm"
+    __process_msg "Setting the access key to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       access_key=$response
@@ -152,7 +165,7 @@ __set_secret_key() {
   read response
 
   if [ "$response" != "" ]; then
-    __process_msg "Setting the secret key  as: $response, press Y to confirm"
+    __process_msg "Setting the secret key to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       secret_key=$response
