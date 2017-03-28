@@ -5,24 +5,29 @@
 
 __check_dependencies() {
   __process_marker "Checking dependencies"
-  {
-    type rsync &> /dev/null && true
+
+  if type rsync &> /dev/null && true; then
     __process_msg "'rsync' already installed"
-  } || {
+  else
     __process_msg "Installing 'rsync'"
     apt-get install -y rsync
-  }
+  fi
 
-  {
-    type ssh &> /dev/null && true
+  if type ssh &> /dev/null && true; then
     __process_msg "'ssh' already installed"
-  } || {
+  else
     __process_msg "Installing 'ssh'"
     apt-get install -y ssh-client
-  }
+  fi
 
-  {
-    type docker &> /dev/null && true
+  if type jq &> /dev/null && true; then
+    __process_msg "'jq' already installed"
+  else
+    __process_msg "Installing 'jq'"
+    apt-get install -y jq
+  fi
+
+  if type docker &> /dev/null && true; then
     __process_msg "'docker' already installed, checking version"
     local docker_version=$(docker --version)
     if [[ "$docker_version" == *"$DOCKER_VERSION"* ]]; then
@@ -33,11 +38,11 @@ __check_dependencies() {
       https://raw.githubusercontent.com/Shippable/node/master/scripts/ubu_14.04_docker_1.13.sh"
       exit 1
     fi
-  } || {
+  else
     __process_error "Docker not installed, install docker using script \
     https://raw.githubusercontent.com/Shippable/node/master/scripts/ubu_14.04_docker_1.13.sh"
     exit 1
-  }
+  fi
 }
 
 __print_runtime() {
