@@ -8,8 +8,8 @@
 
   Examples:
     $0 install --help
-    $0 install --local
-    $0 install --local --release v5.2.1     //Install on localhost with 'v5.2.1' release
+    $0 install
+    $0 install --release v5.2.1     //Install on localhost with 'v5.2.1' release
 
   Commmands:
     install         Run Shippable installation
