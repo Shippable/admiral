@@ -104,6 +104,14 @@ __validate_runtime() {
     __process_msg "SECRET_KEY already set, skipping"
   fi
 
+  ################## check system image registry ###############################
+  if [ "$SYSTEM_IMAGE_REGISTRY" == "" ]; then
+    __process_msg "SYSTEM_IMAGE_REGISTRY is not set"
+    __set_system_image_registry
+  else
+    __process_msg "SYSTEM_IMAGE_REGISTRY already set, skipping"
+  fi
+
   source $ADMIRAL_ENV
 }
 

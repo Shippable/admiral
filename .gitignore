@@ -9,3 +9,4 @@ static/app.min.*
 static/bower_components/
 static/lib.cat.js
 static/lib.min.js
+common/scripts/remote/credentials
