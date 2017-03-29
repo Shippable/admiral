@@ -64,12 +64,13 @@ __check_db() {
   local db_booted=false
 
   while [ $db_booted != true ] && [ $counter -lt $db_timeout ]; do
-    local db_container=$(sudo docker ps | grep $COMPONENT | awk '{print $1}')
-    if [ "$db_container" != "" ]; then
-      __process_msg "Database container found"
+    local database_found=$(nmap -Pn --open -p $DB_PORT $DB_IP | \
+      grep "$DB_PORT/tcp");
+    if [ "$database_found" != "" ]; then
+      __process_msg "Database found"
       db_booted=true
     else
-      __process_msg "Waiting for database container"
+      __process_msg "Waiting for database to start"
       let "counter = $counter + $interval"
       sleep $interval
     fi

@@ -48,9 +48,9 @@ __check_dependencies() {
     echo 'readonly BUILD_LOCATION="/build"' >> installDockerScript.sh
 
     # Fetch the installation script and headers
-    curl https://raw.githubusercontent.com/Shippable/node/master/lib/logger.sh >> installDockerScript.sh
-    curl https://raw.githubusercontent.com/Shippable/node/master/lib/headers.sh >> installDockerScript.sh
-    curl https://raw.githubusercontent.com/Shippable/node/master/scripts/Ubuntu_14.04_Docker_1.13.sh >> installDockerScript.sh
+    curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/lib/logger.sh >> installDockerScript.sh
+    curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/lib/headers.sh >> installDockerScript.sh
+    curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/scripts/Ubuntu_14.04_Docker_1.13.sh >> installDockerScript.sh
     # Install Docker
     chmod +x installDockerScript.sh
     ./installDockerScript.sh
