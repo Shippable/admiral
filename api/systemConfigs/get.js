@@ -1,15 +1,14 @@
 'use strict';
 
-var self = getS;
+var self = get;
 module.exports = self;
 
 var async = require('async');
-var pg = require('pg');
 
-function getS(req, res) {
+function get(req, res) {
   var bag = {
     reqQuery: req.query,
-    resBody: []
+    resBody: {}
   };
 
   bag.who = util.format('systemConfigs|%s', self.name);
@@ -17,7 +16,7 @@ function getS(req, res) {
 
   async.series([
     _checkInputParams.bind(null, bag),
-    _getS.bind(null, bag)
+    _get.bind(null, bag)
   ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -36,15 +35,24 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-function _getS(bag, next) {
-  var who = bag.who + '|' + _getS.name;
+function _get(bag, next) {
+  var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
   global.config.client.query('SELECT * from "systemConfigs"',
     function (err, systemConfigs) {
       if (err)
-        return next(new ActErr(who, ActErr.DataNotFound, err));
-      bag.resBody = systemConfigs.rows;
+        return next(
+          new ActErr(who, ActErr.DataNotFound, err)
+        );
+
+      if (!systemConfigs.rows || !systemConfigs.rows[0])
+        return next(
+          new ActErr(who, ActErr.DataNotFound, 'System configs not found')
+        );
+
+      bag.resBody = systemConfigs.rows[0];
+
       return next();
     }
   );

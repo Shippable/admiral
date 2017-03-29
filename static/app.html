@@ -42,7 +42,7 @@
     <div id="horn" class="ss-horn-bar">
      <div ng-cloak class="alert {{hornMessageStyle(horn)}} ss-natural-word-break ss-page-container"
        ng-repeat="horn in horns">
-       <a href="" class="fa fa-remove pull-right" ng-click="removeHornMessage(horn)"></a>
+       <a href="" class="pull-right" ng-click="removeHornMessage(horn)">x</a>
        <div ng-bind-html="horn.message"></div>
      </div>
    </div>
