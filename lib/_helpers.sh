@@ -56,6 +56,15 @@ __check_dependencies() {
     ./installDockerScript.sh
     rm installDockerScript.sh
   fi
+
+  if type aws &> /dev/null && true; then
+    __process_msg "'awscli' already installed"
+  else
+    __process_msg "Installing 'awscli'"
+    apt-get -y install python-pip
+    pip install awscli==$AWSCLI_VERSION
+  fi
+
 }
 
 __print_runtime() {
@@ -177,6 +186,28 @@ __set_secret_key() {
 
   sed -i 's#.*SECRET_KEY=.*#SECRET_KEY="'$secret_key'"#g' $ADMIRAL_ENV
   __process_msg "Successfully set secret key"
+}
+
+__set_system_image_registry() {
+  __process_msg "Setting system image registry"
+  local system_image_registry=""
+
+  __process_msg "Please enter value of the Shippable system image registry"
+  read response
+
+  if [ "$response" != "" ]; then
+    __process_msg "Setting the system image registry to: $response, enter Y to confirm"
+    read confirmation
+    if [[ "$confirmation" =~ "Y" ]]; then
+      system_image_registry=$response
+    else
+      __process_error "Invalid response, please enter a valid system image registry and continue"
+      __set_system_image_registry
+    fi
+  fi
+
+  sed -i 's#.*SYSTEM_IMAGE_REGISTRY=.*#SYSTEM_IMAGE_REGISTRY="'$system_image_registry'"#g' $ADMIRAL_ENV
+  __process_msg "Successfully set system image registry"
 }
 
 __copy_script_remote() {
