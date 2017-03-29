@@ -20,7 +20,7 @@ __boot_admiral() {
       -e CONFIG_DIR=$CONFIG_DIR \
       -e RUNTIME_DIR=$RUNTIME_DIR \
       -e MIGRATIONS_DIR=$MIGRATIONS_DIR \
-      -e VERSIONS_DIR=$VERSIONS_DIR"
+      -e SERVICES_DIR=$SERVICES_DIR"
 
     __process_msg "Generating admiral mounts"
     local mounts=" -v $CONFIG_DIR:$CONFIG_DIR \

@@ -17,6 +17,16 @@ __validate_runtime() {
   export OS_TYPE=docker
 
   ################## check release   #############################
+  local git_ref=$(git symbolic-ref HEAD --short -q)
+
+  if [ -z $git_ref ]; then
+    export RELEASE=$(git describe --tags)
+  else
+    export RELEASE=$git_ref
+  fi
+
+  __process_msg "Using release: $RELEASE"
+
   if [ "$RELEASE" == "" ]; then
     __process_error "No RELEASE env present, exiting"
     exit 1
@@ -71,7 +81,7 @@ __validate_runtime() {
   fi
 
   ################## check migrations  #############################
-  local migrations_path=$MIGRATIONS_DIR/$RELEASE.sql
+  local migrations_path=$MIGRATIONS_DIR/migrations.sql
   if [ ! -f "$migrations_path" ]; then
     __process_error "Migrations file $migrations_path does not exist, exiting"
     exit 1
@@ -79,13 +89,13 @@ __validate_runtime() {
     __process_msg "Migrations file: $migrations_path"
   fi
 
-  ################## check version #################################
-  local versions_path=$VERSIONS_DIR/$RELEASE.json
-  if [ ! -f "$versions_path" ]; then
-    __process_error "Versions file $versions_path does not exist, exiting"
+  ################## check for services #################################
+  local services_path=$SERVICES_DIR/services.json
+  if [ ! -f "$services_path" ]; then
+    __process_error "Services file $services_path does not exist, exiting"
     exit 1
   else
-    __process_msg "Versions: $versions_path"
+    __process_msg "Services: $services_path"
   fi
 
   ################## check access key ###############################
@@ -115,16 +125,7 @@ __parse_args_install() {
       key="$1"
 
       case $key in
-        -r|--release)
-          if [ "$2" == "" ]; then
-            __process_error "'release' cannot be empty"
-            __print_help_install
-          else
-            export RELEASE=$2
-            shift
-          fi
-          ;;
-        -h|help)
+        -h|help|--help)
           __print_help_install
           ;;
         *)
@@ -134,8 +135,6 @@ __parse_args_install() {
       esac
       shift
     done
-  else
-    __process_msg "No arguments provided for 'install' using defaults"
   fi
 }
 
@@ -144,10 +143,7 @@ __print_help_install() {
   usage: $0 install [flags]
   This script installs Shippable enterprise
   examples:
-    $0 install                              //Install on localhost with 'master' release
-    $0 install --release v5.2.1             //Install on localhost with 'v5.2.1' release
-  Flags:
-    --version <version>             Install a particular version
+    $0 install
   "
   exit 0
 }
@@ -159,7 +155,6 @@ __print_help() {
 
   Examples:
     $0 install --help
-    $0 install --release v5.2.1             //Install on localhost with 'v5.2.1' release
 
   Commmands:
     install         Run Shippable installation
