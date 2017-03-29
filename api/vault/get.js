@@ -91,7 +91,7 @@ function _setDefault(bag, next) {
 
       if (response.rowCount === 1) {
         logger.debug('Successfully added default value for vault server');
-        bag.resBody = [JSON.parse(vaultDefault)];
+        bag.resBody = JSON.parse(vaultDefault);
       } else {
         logger.warn('Failed to get default vault server value');
       }
