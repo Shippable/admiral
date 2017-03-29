@@ -9,7 +9,7 @@ export ADMIRAL_ENV="/etc/shippable/admiral.env"
 export CONFIG_DIR="/etc/shippable"
 export RUNTIME_DIR="/var/run/shippable"
 export MIGRATIONS_DIR="$ROOT_DIR/migrations"
-export VERSIONS_DIR="$ROOT_DIR/versions"
+export SERVICES_DIR="$ROOT_DIR/services"
 
 stop_component() {
   local onebox_info=$(sudo docker ps -a | grep $ONEBOX_NAME | awk '{print $1}')
@@ -45,7 +45,7 @@ run_component() {
     -e CONFIG_DIR=$CONFIG_DIR \
     -e RUNTIME_DIR=$RUNTIME_DIR \
     -e MIGRATIONS_DIR=$MIGRATIONS_DIR \
-    -e VERSIONS_DIR=$VERSIONS_DIR"
+    -e SERVICES_DIR=$SERVICES_DIR"
 
   run_cmd="sudo docker run -d --name=$ONEBOX_NAME --privileged=true --restart=always --net=host"
   run_cmd="$run_cmd $envs"
