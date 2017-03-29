@@ -115,9 +115,6 @@ __parse_args_install() {
       key="$1"
 
       case $key in
-        -l|--local)
-          export INSTALL_MODE="local"
-          ;;
         -r|--release)
           if [ "$2" == "" ]; then
             __process_error "'release' cannot be empty"
@@ -147,11 +144,9 @@ __print_help_install() {
   usage: $0 install [flags]
   This script installs Shippable enterprise
   examples:
-    $0 install --local                      //Install on localhost with 'master' release
-    $0 install --release v5.2.1             //Install on cluster with 'v5.2.1' release
-    $0 install --local --release v5.2.1     //Install on localhost with 'v5.2.1' release
+    $0 install                              //Install on localhost with 'master' release
+    $0 install --release v5.2.1             //Install on localhost with 'v5.2.1' release
   Flags:
-    --local                         Install on localhost
     --version <version>             Install a particular version
   "
   exit 0
@@ -164,8 +159,7 @@ __print_help() {
 
   Examples:
     $0 install --help
-    $0 install --local
-    $0 install --local --release v5.2.1     //Install on localhost with 'v5.2.1' release
+    $0 install --release v5.2.1             //Install on localhost with 'v5.2.1' release
 
   Commmands:
     install         Run Shippable installation

@@ -40,6 +40,7 @@ export IS_UPGRADE=false
 export NO_PROMPT=false
 export KEYS_GENERATED=false
 export OS_TYPE="Ubuntu_14.04"
+export INSTALL_MODE="local"
 ###########################################################
 
 source "$LIB_DIR/_logger.sh"
