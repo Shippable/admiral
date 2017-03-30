@@ -1,3 +1,106 @@
 <div class="wrapper">
-  This is the database config page
+  <h3>Database Info:</h3>
+  <div ng-if="!vm.isLoaded">
+    Loading...
+  </div>
+  <div ng-if="vm.isLoaded && !vm.database">
+    Not found
+  </div>
+  <div ng-if="vm.isLoaded && vm.database" class="row">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10">
+      <table class="table table-condensed table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <b>IP Address:</b>
+            </td>
+            <td>
+              {{vm.database.ipAddress}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Port:</b>
+            </td>
+            <td>
+              {{vm.database.dbPort}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>DB Name:</b>
+            </td>
+            <td>
+              {{vm.database.dbName}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>DB User:</b>
+            </td>
+            <td>
+              {{vm.database.dbUser}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>DB Password:</b>
+            </td>
+            <td>
+              {{vm.database.dbPassword}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+
+  <h3 class="form-signin-heading">System Configs:</h3>
+  <div ng-if="!vm.isLoaded">
+    Loading...
+  </div>
+  <div ng-if="vm.isLoaded && !vm.systemConfigs">
+    Not found
+  </div>
+  <div ng-if="vm.isLoaded && vm.systemConfigs" class="row">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10">
+      <table class="table table-condensed table-striped" style="overflow:none">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(key, value) in vm.systemConfigs">
+            <td>
+              <b>{{key}}</b>
+            </td>
+            <td style="word-wrap:break-word">
+              <span ng-if="value.length > 100" data-toggle="tooltip" data-trigger="focus" data-placement="bottom" title="{{value}}">
+                {{value.substring(0, 100)}}...
+              </span>
+              <span ng-if="value.length <= 100">
+                {{value}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
 </div>

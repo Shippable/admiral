@@ -18,6 +18,14 @@
       },
       postLogout: function (body, callback) {
         return API.post('/api/logout', body, callback);
+      },
+      // System Config Routes
+      getSystemConfigs: function (callback) {
+        return API.get('/api/systemConfigs', callback);
+      },
+      // Service Routes
+      getDatabase: function (callback) {
+        return API.get('/api/db', callback);
       }
     };
   }

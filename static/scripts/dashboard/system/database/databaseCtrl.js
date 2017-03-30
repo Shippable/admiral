@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  admiral.controller('dashboard.databaseCtrl', ['$scope', '$stateParams', '$q', '$state',
-    'admiralApiAdapter', 'horn',
+  admiral.controller('dashboard.databaseCtrl', ['$scope', '$stateParams', '$q',
+    '$state', 'admiralApiAdapter', 'horn',
     databaseCtrl
   ])
   .config(['$stateProvider', 'SRC_PATH',
@@ -26,12 +26,41 @@
     $scope._r.appPromise.then(initWorkflow);
 
     function initWorkflow() {
+      var bag = {};
       async.series([
-      ],
+          getDatabaseInfo.bind(null, bag),
+          getSystemConfigs.bind(null, bag)
+        ],
         function (err) {
           $scope.vm.isLoaded = true;
           if (err)
             return horn.error(err);
+          $scope.vm.database = bag.database;
+          $scope.vm.systemConfigs = bag.systemConfigs;
+        }
+      );
+    }
+
+    function getDatabaseInfo(bag, next) {
+      admiralApiAdapter.getDatabase(
+        function (err, database) {
+          if (err)
+            return next(err);
+
+          bag.database = database;
+          return next();
+        }
+      );
+    }
+
+    function getSystemConfigs(bag, next) {
+      admiralApiAdapter.getSystemConfigs(
+        function (err, systemConfigs) {
+          if (err)
+            return next(err);
+
+          bag.systemConfigs = systemConfigs;
+          return next();
         }
       );
     }
