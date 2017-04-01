@@ -3,7 +3,7 @@
 export COMPONENT="db"
 export DB_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export DB_CONFIG_DIR="$CONFIG_DIR/$COMPONENT/"
-export DB_IMAGE="library/postgres:9.5"
+export DB_IMAGE="drydock/postgres:$RELEASE"
 export DB_MOUNTS=""
 
 __validate_db_envs() {
