@@ -41,8 +41,11 @@ __boot_admiral() {
       -e SERVICES_DIR=$SERVICES_DIR"
 
     __process_msg "Generating admiral mounts"
+    local docker_location=$(which docker)
     local mounts=" -v $CONFIG_DIR:$CONFIG_DIR \
-      -v $RUNTIME_DIR:$RUNTIME_DIR "
+      -v $RUNTIME_DIR:$RUNTIME_DIR \
+      -v $docker_location:/usr/bin/docker \
+      -v /var/run/docker.sock:/var/run/docker.sock"
 
     local admiral_image="$SYSTEM_IMAGE_REGISTRY/admiral:$RELEASE"
 

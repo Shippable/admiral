@@ -26,7 +26,13 @@
       // Service Routes
       getDatabase: function (callback) {
         return API.get('/api/db', callback);
-      }
+      },
+      getVault: function (callback) {
+        return API.get('/api/vault', callback);
+      },
+      postVault: function (body, callback) {
+        return API.post('/api/vault', body, callback);
+      },
     };
   }
 }());
