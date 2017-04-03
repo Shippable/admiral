@@ -2,13 +2,13 @@
 
 export COMPONENT="vault"
 export VAULT_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
-export VAULT_CONFIG_DIR="$CONFIG_DIR/$COMPONENT/"
+export VAULT_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
 export VAULT_IMAGE="library/vault:0.6.0"
 export VAULT_MOUNTS="$VAULT_MOUNTS"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export DB_USER=apiuser
 export DB_NAME=shipdb
-export VAULT_URL="http://172.17.42.1:8200"
+export VAULT_URL="http://172.17.0.1:8200"
 
 __validate_vault_envs() {
   __process_msg "Initializing vault environment variables"

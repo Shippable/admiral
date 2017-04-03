@@ -21,14 +21,14 @@ function post(req, res) {
   logger.info(bag.who, 'Starting');
 
   async.series([
-    _checkInputParams.bind(null, bag),
-    _get.bind(null, bag),
-    _generateInitializeEnvs.bind(null, bag),
-    _generateInitializeScript.bind(null, bag),
-    _writeScriptToFile.bind(null, bag),
-    _initializeVault.bind(null, bag),
-    _post.bind(null, bag)
-  ],
+      _checkInputParams.bind(null, bag),
+      _get.bind(null, bag),
+      _generateInitializeEnvs.bind(null, bag),
+      _generateInitializeScript.bind(null, bag),
+      _writeScriptToFile.bind(null, bag),
+      _initializeVault.bind(null, bag),
+      _post.bind(null, bag)
+    ],
     function (err) {
       logger.info(bag.who, 'Completed');
       if (err)
@@ -54,21 +54,25 @@ function _get(bag, next) {
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  global.config.client.query('SELECT vault from "systemConfigs"',
+  global.config.client.query('SELECT secrets from "systemConfigs"',
     function (err, systemConfigs) {
       if (err)
-        return next(new ActErr(who, ActErr.DataNotFound, err));
+        return next(
+          new ActErr(who, ActErr.DataNotFound, err)
+        );
 
       if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].vault)) {
-          logger.debug('Found vault configuration');
+        !_.isEmpty(systemConfigs.rows[0].secrets)) {
+        logger.debug('Found vault configuration');
 
-          bag.vaultConfig = systemConfigs.rows[0].vault;
-          bag.vaultConfig = JSON.parse(bag.vaultConfig);
+        bag.vaultConfig = systemConfigs.rows[0].secrets;
+        bag.vaultConfig = JSON.parse(bag.vaultConfig);
 
       } else {
-        return next(new ActErr(who, ActErr.DataNotFound,
-          'No vault configuration in database'));
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No vault configuration in database')
+        );
       }
 
       return next();
@@ -113,8 +117,10 @@ function _writeScriptToFile(bag, next) {
     function (err) {
       if (err) {
         var msg = util.format('%s, Failed with err:%s', who, err);
-        return next(new ActErr(
-          who, ActErr.OperationFailed, msg));
+        return next(
+          new ActErr(
+            who, ActErr.OperationFailed, msg)
+        );
       }
       fs.chmodSync(bag.tmpScript, '755');
       return next();
@@ -171,19 +177,21 @@ function _post(bag, next) {
   bag.vaultConfig.isInstalled = true;
   bag.vaultConfig.isInitialized = true;
 
-  var query = util.format('UPDATE "systemConfigs" set vault=\'%s\';',
+  var query = util.format('UPDATE "systemConfigs" set secrets=\'%s\';',
     JSON.stringify(update));
 
   global.config.client.query(query,
     function (err, response) {
       if (err)
-        return next(new ActErr(who, ActErr.DataNotFound, err));
+        return next(
+          new ActErr(who, ActErr.DataNotFound, err)
+        );
 
       if (response.rowCount === 1) {
         logger.debug('Successfully added default value for vault server');
         bag.resBody = update;
       } else {
-        logger.warn('Failed to det default vault server value');
+        logger.warn('Failed to set default vault server value');
       }
 
       return next();

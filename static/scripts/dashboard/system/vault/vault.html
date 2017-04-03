@@ -1,3 +1,87 @@
-<div class="wrapper">
-  This is the Vault config page
+<div>
+  <h3>Vault</h3>
+  <div ng-if="!vm.isLoaded">
+    Loading...
+  </div>
+  <div ng-if="vm.isLoaded && !vm.vault.isInitialized">
+    <div class="radio">
+      <label>
+        <input type="radio" name="vaultOptionRadioButtons" value="initialize" checked>
+        Initialize vault
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="vaultOptionRadioButtons" value="connect" disabled>
+        Connect to existing vault
+     </label>
+    </div>
+    <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.initializingVault" ng-click="vm.initializeVault()">
+      Initialize
+    </button>
+  </div>
+  <div ng-if="vm.isLoaded && vm.vault.isInitialized" class="row">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10">
+      <table class="table table-condensed table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <b>Address:</b>
+            </td>
+            <td>
+              {{vm.vault.address}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Root Token:</b>
+            </td>
+            <td>
+              {{vm.vault.rootToken}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Unlock Keys:</b>
+            </td>
+            <td>
+              <span ng-if="vm.vault.unsealKey1">
+                {{vm.vault.unsealKey1}}
+                <br />
+              </span>
+              <span ng-if="vm.vault.unsealKey2">
+                {{vm.vault.unsealKey2}}
+                <br />
+              </span>
+              <span ng-if="vm.vault.unsealKey3">
+                {{vm.vault.unsealKey3}}
+                <br />
+              </span>
+              <span ng-if="vm.vault.unsealKey4">
+                {{vm.vault.unsealKey4}}
+                <br />
+              </span>
+              <span ng-if="vm.vault.unsealKey5">
+                {{vm.vault.unsealKey5}}
+                <br />
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+  <div>
+    &nbsp;
+  </div>
 </div>

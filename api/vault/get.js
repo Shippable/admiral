@@ -53,16 +53,18 @@ function _get(bag, next) {
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  global.config.client.query('SELECT vault from "systemConfigs"',
+  global.config.client.query('SELECT secrets from "systemConfigs"',
     function (err, systemConfigs) {
       if (err)
-        return next(new ActErr(who, ActErr.DataNotFound, err));
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed, 'Failed to get vault', err)
+        );
 
       if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].vault)) {
+        !_.isEmpty(systemConfigs.rows[0].secrets)) {
           logger.debug('Found vault configuration');
 
-          var vaultConfig = systemConfigs.rows[0].vault;
+          var vaultConfig = systemConfigs.rows[0].secrets;
           bag.resBody = JSON.parse(vaultConfig);
       } else {
         logger.debug('No vault configuration present in configs');
@@ -82,12 +84,14 @@ function _setDefault(bag, next) {
 
   var vaultDefault = JSON.stringify(bag.defaultConfig);
   var query =
-    util.format('UPDATE "systemConfigs" set "vault"=\'%s\';', vaultDefault);
+    util.format('UPDATE "systemConfigs" set "secrets"=\'%s\';', vaultDefault);
 
   global.config.client.query(query,
     function (err, response) {
       if (err)
-        return next(new ActErr(who, ActErr.DBOperationFailed, err));
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed, 'Failed to get vault', err)
+        );
 
       if (response.rowCount === 1) {
         logger.debug('Successfully added default value for vault server');
