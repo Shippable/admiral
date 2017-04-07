@@ -64,9 +64,7 @@ __check_db() {
   local db_booted=false
 
   while [ $db_booted != true ] && [ $counter -lt $db_timeout ]; do
-    local database_found=$(nmap -Pn --open -p $DB_PORT $DB_IP | \
-      grep "$DB_PORT/tcp");
-    if [ "$database_found" != "" ]; then
+    if nc -vz $DB_IP $DB_PORT &>/dev/null; then
       __process_msg "Database found"
       db_booted=true
     else
