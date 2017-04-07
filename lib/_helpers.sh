@@ -104,7 +104,7 @@ __set_admiral_ip() {
   __process_msg "Setting value of admiral IP address"
   local admiral_ip='127.0.0.1'
 
-  __process_msg "Please enter value of admiral IP address or type D to set default(127.0.0.1) value"
+  __process_msg "Please enter your current IP address. This will be the address at which you access the installer webpage. Type D to set default (127.0.0.1) value."
   read response
 
   if [ "$response" != "D" ]; then
@@ -122,10 +122,10 @@ __set_admiral_ip() {
 }
 
 __set_db_ip() {
-  __process_msg "Setting value of DB IP address"
+  __process_msg "Setting value of database IP address"
   local db_ip="172.17.0.1"
   if [ "INSTALL_MODE" == "cluster" ]; then
-    __process_msg "Please enter value of db IP address"
+    __process_msg "Please enter the IP address where you would like the database installed."
     read response
 
     if [ "$response" != "" ]; then
@@ -144,55 +144,33 @@ __set_db_ip() {
   __process_msg "Successfully set DB_IP to $db_ip"
 }
 
-__set_access_key() {
-  __process_msg "Setting access key"
-  local access_key=""
+__set_db_password() {
+  __process_msg "Setting database password"
+  local db_password=""
 
-  __process_msg "Please enter value of access key"
+  __process_msg "Please enter a password for your database."
   read response
 
   if [ "$response" != "" ]; then
-    __process_msg "Setting the access key to: $response, enter Y to confirm"
+    __process_msg "Setting the database password to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
-      access_key=$response
+      db_password=$response
     else
-      __process_error "Invalid response, please enter a valid access key and continue"
-      __set_access_key
+      __process_error "Invalid response, please enter a valid database password and continue"
+      __set_db_password
     fi
   fi
 
-  sed -i 's#.*ACCESS_KEY=.*#ACCESS_KEY="'$access_key'"#g' $ADMIRAL_ENV
-  __process_msg "Successfully set access key"
-}
-
-__set_secret_key() {
-  __process_msg "Setting secret key"
-  local secret_key=""
-
-  __process_msg "Please enter value of secret key"
-  read response
-
-  if [ "$response" != "" ]; then
-    __process_msg "Setting the secret key to: $response, enter Y to confirm"
-    read confirmation
-    if [[ "$confirmation" =~ "Y" ]]; then
-      secret_key=$response
-    else
-      __process_error "Invalid response, please enter a valid secret key and continue"
-      __set_secret_key
-    fi
-  fi
-
-  sed -i 's#.*SECRET_KEY=.*#SECRET_KEY="'$secret_key'"#g' $ADMIRAL_ENV
-  __process_msg "Successfully set secret key"
+  sed -i 's#.*DB_PASSWORD=.*#DB_PASSWORD="'$db_password'"#g' $ADMIRAL_ENV
+  __process_msg "Successfully set database password"
 }
 
 __set_system_image_registry() {
   __process_msg "Setting system image registry"
   local system_image_registry=""
 
-  __process_msg "Please enter value of the Shippable system image registry"
+  __process_msg "Please enter the value of the Shippable system image registry."
   read response
 
   if [ "$response" != "" ]; then
