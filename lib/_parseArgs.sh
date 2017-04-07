@@ -80,6 +80,14 @@ __validate_runtime() {
     __process_msg "DB_IP already set, skipping"
   fi
 
+  ################## check database password ###############################
+  if [ "$DB_PASSWORD" == "" ]; then
+    __process_msg "DB_PASSWORD is not set"
+    __set_db_password
+  else
+    __process_msg "DB_PASSWORD already set, skipping"
+  fi
+
   ################## check migrations  #############################
   local migrations_path=$MIGRATIONS_DIR/migrations.sql
   if [ ! -f "$migrations_path" ]; then
@@ -96,22 +104,6 @@ __validate_runtime() {
     exit 1
   else
     __process_msg "Services: $services_path"
-  fi
-
-  ################## check access key ###############################
-  if [ "$ACCESS_KEY" == "" ]; then
-    __process_msg "ACCESS_KEY is not set"
-    __set_access_key
-  else
-    __process_msg "ACCESS_KEY already set, skipping"
-  fi
-
-  ################## check secret key ###############################
-  if [ "$SECRET_KEY" == "" ]; then
-    __process_msg "SECRET_KEY is not set"
-    __set_secret_key
-  else
-    __process_msg "SECRET_KEY already set, skipping"
   fi
 
   ################## check system image registry ###############################
