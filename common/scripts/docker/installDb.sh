@@ -108,15 +108,20 @@ __run_db() {
 
     eval "$run_cmd"
     __check_db
+    sed -i 's/.*DB_INSTALLED=.*/DB_INSTALLED=true/g' $ADMIRAL_ENV
   fi
 }
 
 main() {
   __process_marker "Booting database"
-  __validate_db_envs
-  __validate_db_mounts
-  __run_db
-  __process_msg "Database container successfully running"
+  if [ "$DB_INSTALLED" == true ]; then
+    __process_msg "Database already installed, skipping"
+  else
+    __validate_db_envs
+    __validate_db_mounts
+    __run_db
+    __process_msg "Database container successfully running"
+  fi
 }
 
 main
