@@ -1,23 +1,5 @@
 #!/bin/bash -e
 
-__setup_credentials() {
-  __process_msg "Updating docker credentials to pull shippable images"
-
-  local credentials_template="$REMOTE_SCRIPTS_DIR/credentials.template"
-  local credentials_file="$REMOTE_SCRIPTS_DIR/credentials"
-
-  sed "s#{{aws_access_key}}#$ACCESS_KEY#g" $credentials_template > $credentials_file
-  sed -i "s#{{aws_secret_key}}#$SECRET_KEY#g" $credentials_file
-
-  mkdir -p ~/.aws
-  cp -v $credentials_file $HOME/.aws/
-  echo "aws ecr --region us-east-1 get-login" | sudo tee /tmp/docker_login.sh
-  sudo chmod +x /tmp/docker_login.sh
-  local docker_login_cmd=$(eval "/tmp/docker_login.sh")
-  __process_msg "Docker login generated, logging into ecr "
-  eval "$docker_login_cmd"
-}
-
 __boot_admiral() {
   local admiral_container=$(sudo docker ps | grep admiral | awk '{print $1}')
   if [ "$admiral_container" != "" ]; then
@@ -70,7 +52,6 @@ __boot_admiral() {
 
 main() {
   __process_marker "Booting Admiral UI"
-  __setup_credentials
   __boot_admiral
 }
 
