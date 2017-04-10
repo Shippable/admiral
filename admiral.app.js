@@ -39,7 +39,7 @@ function init() {
 
   async.series([
       _createExpressApp.bind(null, bag),
-      _initializeDatabaseConfig.bind(null, bag),
+      _initializeConfig.bind(null, bag),
       _createClient.bind(null, bag),
       _initializeRoutes.bind(null, bag),
       _startListening.bind(null, bag),
@@ -84,8 +84,8 @@ function _createExpressApp(bag, next) {
   }
 }
 
-function _initializeDatabaseConfig(bag, next) {
-  var who = bag.who + '|' + _initializeDatabaseConfig.name;
+function _initializeConfig(bag, next) {
+  var who = bag.who + '|' + _initializeConfig.name;
 
   var configErrors = [];
 
@@ -136,6 +136,31 @@ function _initializeDatabaseConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'LOGIN_TOKEN is not defined'));
 
+  if (bag.env.CONFIG_DIR)
+    bag.config.configDir = bag.env.CONFIG_DIR;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'CONFIG_DIR is not defined'));
+
+  if (bag.env.RUNTIME_DIR)
+    bag.config.runtimeDir = bag.env.RUNTIME_DIR;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'RUNTIME_DIR is not defined'));
+
+  if (bag.env.MIGRATIONS_DIR)
+    bag.config.migrationsDir = bag.env.MIGRATIONS_DIR;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'MIGRATIONS_DIR is not defined'));
+
+  if (bag.env.SERVICES_DIR)
+    bag.config.servicesDir = bag.env.SERVICES_DIR;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'SERVICES_DIR is not defined'));
+
+  bag.config.admiralEnv = util.format('%s/admiral.env', bag.config.configDir);
   if (configErrors.length)
     return next(configErrors);
   else
