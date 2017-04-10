@@ -49,6 +49,7 @@ source "$LIB_DIR/_helpers.sh"
 source "$LIB_DIR/_parseArgs.sh"
 
 main() {
+  __check_dirs
   __check_logsdir
   __parse_args "$@"
   __check_dependencies
