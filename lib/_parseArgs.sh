@@ -24,7 +24,6 @@ __validate_runtime() {
   else
     export RELEASE=$git_ref
   fi
-  export RELEASE=master
 
   __process_msg "Using release: $RELEASE"
 
