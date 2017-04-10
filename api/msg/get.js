@@ -11,21 +11,20 @@ function get(req, res) {
     reqQuery: req.query,
     resBody: {},
     initializeDefault: false,
-    component: 'secrets',
+    component: 'msg',
     defaultConfig: {
       address: global.config.admiralIP,
-      rootToken: '',
-      unsealKey1: '',
-      unsealKey2: '',
-      unsealKey3: '',
-      unsealKey4: '',
-      unsealKey5: '',
+      amqpPort: 5672,
+      adminPort: 15672,
+      username: '',
+      password: '',
+      isSecure: false,
       isInstalled: false,
       isInitialized: false
     }
   };
 
-  bag.who = util.format('vault|%s', self.name);
+  bag.who = util.format('msg|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
@@ -64,10 +63,10 @@ function _get(bag, next) {
         );
 
       if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].secrets)) {
+        !_.isEmpty(systemConfigs.rows[0].msg)) {
           logger.debug('Found configuration for ' + bag.component);
 
-          var config = systemConfigs.rows[0].secrets;
+          var config = systemConfigs.rows[0].msg;
           bag.resBody = JSON.parse(config);
       } else {
         logger.debug(
@@ -103,7 +102,7 @@ function _setDefault(bag, next) {
         logger.debug('Successfully added default value for ' + bag.component);
         bag.resBody = JSON.parse(defaultConfig);
       } else {
-        logger.warn('Failed to get default vault for ' + bag.component);
+        logger.warn('Failed to get default value for ' + bag.component);
       }
 
       return next();
