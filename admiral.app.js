@@ -160,6 +160,12 @@ function _initializeConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'SERVICES_DIR is not defined'));
 
+  if (bag.env.ADMIRAL_IP)
+    bag.config.admiralIP = bag.env.ADMIRAL_IP;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'ADMIRAL_IP is not defined'));
+
   bag.config.admiralEnv = util.format('%s/admiral.env', bag.config.configDir);
   if (configErrors.length)
     return next(configErrors);
