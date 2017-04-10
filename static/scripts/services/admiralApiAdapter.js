@@ -27,6 +27,9 @@
       getDatabase: function (callback) {
         return API.get('/api/db', callback);
       },
+      postDatabase: function (body, callback) {
+        return API.post('/api/db', body, callback);
+      },
       getVault: function (callback) {
         return API.get('/api/vault', callback);
       },
