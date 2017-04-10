@@ -64,7 +64,7 @@ function _get(bag, next) {
 
       if (!_.isEmpty(systemConfigs.rows) &&
         !_.isEmpty(systemConfigs.rows[0].msg)) {
-          logger.debug('Found configuration found for ' + bag.component);
+          logger.debug('Found configuration for ' + bag.component);
 
           var config = systemConfigs.rows[0].msg;
           bag.resBody = JSON.parse(config);
@@ -102,7 +102,7 @@ function _setDefault(bag, next) {
         logger.debug('Successfully added default value for ' + bag.component);
         bag.resBody = JSON.parse(defaultConfig);
       } else {
-        logger.warn('Failed to get default vault for ' + bag.component);
+        logger.warn('Failed to get default value for ' + bag.component);
       }
 
       return next();
