@@ -3,6 +3,23 @@
 # Helper methods ##########################################
 ###########################################################
 
+# TODO: break up this file into smaller, logically-grouped
+# files after we add release and re-install features
+
+__check_dirs() {
+  if [ -d $CONFIG_DIR ]; then
+    __process_msg "Removing previously created $CONFIG_DIR"
+    rm -rf $CONFIG_DIR
+  fi
+  mkdir -p $CONFIG_DIR
+
+  if [ -d $RUNTIME_DIR ]; then
+    __process_msg "Removing previously created $RUNTIME_DIR"
+    rm -rf $RUNTIME_DIR
+  fi
+  mkdir -p $RUNTIME_DIR
+}
+
 __check_dependencies() {
   __process_marker "Checking dependencies"
 
