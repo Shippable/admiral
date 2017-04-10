@@ -55,7 +55,6 @@ main() {
   __print_runtime
 
   source "$SCRIPTS_DIR/$OS_TYPE/installDb.sh"
-  source "$SCRIPTS_DIR/create_sys_configs.sh"
   source "$SCRIPTS_DIR/create_vault_table.sh"
   source "$SCRIPTS_DIR/boot_admiral.sh"
 

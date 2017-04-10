@@ -166,7 +166,14 @@ function _initializeConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'ADMIRAL_IP is not defined'));
 
+  if (bag.env.RELEASE)
+    bag.config.release = bag.env.RELEASE;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'RELEASE is not defined'));
+
   bag.config.admiralEnv = util.format('%s/admiral.env', bag.config.configDir);
+  bag.config.scriptsDir = '/home/shippable/admiral/common/scripts';
   if (configErrors.length)
     return next(configErrors);
   else
