@@ -135,12 +135,13 @@ __set_admiral_ip() {
     fi
   fi
   sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$admiral_ip'"/g' $ADMIRAL_ENV
+  export ADMIRAL_IP=$admiral_ip
   __process_msg "Successfully set admiral IP to $admiral_ip"
 }
 
 __set_db_ip() {
   __process_msg "Setting value of database IP address"
-  local db_ip="172.17.0.1"
+  local db_ip=$ADMIRAL_IP
   if [ "INSTALL_MODE" == "cluster" ]; then
     __process_msg "Please enter the IP address where you would like the database installed."
     read response
@@ -158,6 +159,7 @@ __set_db_ip() {
   fi
 
   sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
+  export DB_IP=$db_ip
   __process_msg "Successfully set DB_IP to $db_ip"
 }
 

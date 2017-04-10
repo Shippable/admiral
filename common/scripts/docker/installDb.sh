@@ -58,6 +58,7 @@ __validate_db_mounts() {
 }
 
 __check_db() {
+  __process_msg "Checking database container status on: $DB_IP:$DB_PORT"
   local interval=3
   local db_timeout=60
   local counter=0

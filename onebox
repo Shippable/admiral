@@ -3,6 +3,7 @@
 export ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export PORT=50003
+export COMPONENT_NAME="admiral"
 export ONEBOX_NAME="admiral_onebox"
 export LATEST_MICROBASE_TAG="master"
 export ADMIRAL_ENV="/etc/shippable/admiral.env"
@@ -15,7 +16,7 @@ stop_component() {
   local onebox_info=$(sudo docker ps -a | grep $ONEBOX_NAME | awk '{print $1}')
   if [ -z "$onebox_info" ]; then
     echo "No admiral containers running in onebox mode"
-    sudo docker rm -f "$admiral" || true
+    sudo docker rm -f "$COMPONENT_NAME" || true
   else
     echo "Admiral containers running in onebox mode"
     sudo docker rm -f "$ONEBOX_NAME" || true
