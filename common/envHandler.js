@@ -10,7 +10,7 @@ var spawn = require('child_process').spawn;
 
 function envHandler() {}
 
-envHandler.get = function(envName, cb) {
+envHandler.get = function (envName, cb) {
   var envValue = '';
   var filereader = readline.createInterface({
     input: fs.createReadStream(global.config.admiralEnv),
@@ -33,7 +33,7 @@ envHandler.get = function(envName, cb) {
   );
 };
 
-envHandler.put = function(envName, envValue, cb) {
+envHandler.put = function (envName, envValue, cb) {
   var updateCmd = util.format('sudo sed -i \'s#.*%s=.*#%s="%s"#g\' %s',
     envName, envName, envValue, global.config.admiralEnv);
 
