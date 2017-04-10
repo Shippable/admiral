@@ -7,6 +7,8 @@ __bootstrap_admiral_env() {
     mkdir -p $CONFIG_DIR
     cp -vr $SCRIPTS_DIR/configs/admiral.env.template $ADMIRAL_ENV
     __process_msg "Successfully created admiral env "
+  else
+    __process_msg "Loading ADMIRAL_ENV from $ADMIRAL_ENV"
   fi
   source "$ADMIRAL_ENV"
 }

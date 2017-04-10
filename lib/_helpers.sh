@@ -6,7 +6,7 @@
 # TODO: break up this file into smaller, logically-grouped
 # files after we add release and re-install features
 
-__check_dirs() {
+__cleanup() {
   if [ -d $CONFIG_DIR ]; then
     __process_msg "Removing previously created $CONFIG_DIR"
     rm -rf $CONFIG_DIR

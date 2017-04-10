@@ -37,7 +37,8 @@ __boot_admiral() {
       $envs \
       $mounts \
       --publish 50003:50003 \
-      --net=bridge \
+      --net=host \
+      --privileged=true \
       --name=admiral \
       $admiral_image"
 
