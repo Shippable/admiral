@@ -87,12 +87,11 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
-  var scriptsDir = '/home/shippable/admiral/common/scripts';
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
     'MSG_HOST': global.config.admiralIP,
-    'SCRIPTS_DIR': scriptsDir,
+    'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
     'MSG_UI_USER': 'shippable',
