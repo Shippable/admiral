@@ -5,11 +5,12 @@ export STATE_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export STATE_LOGS_DIR="$RUNTIME_DIR/$COMPONENT/logs"
 export STATE_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
-export STATE_IMAGE="gitlab/gitlab-ce:8.9.6-ce.0"
+export STATE_IMAGE="drydock/gitlab:$RELEASE"
 export STATE_PORT=80
 
 __validate_state_envs() {
   __process_msg "Initializing state environment variables"
+  __process_msg "STATE_IMAGE: $STATE_IMAGE"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "STATE_DATA_DIR: $STATE_DATA_DIR"
   __process_msg "STATE_CONFIG_DIR: $STATE_CONFIG_DIR"

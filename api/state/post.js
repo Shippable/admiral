@@ -90,6 +90,7 @@ function _generateInitializeEnvs(bag, next) {
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
+    'RELEASE': global.config.release,
     'STATE_HOST': global.config.admiralIP,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,

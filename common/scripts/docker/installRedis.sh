@@ -4,11 +4,12 @@ export COMPONENT="redis"
 export REDIS_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export REDIS_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
-export REDIS_IMAGE="shipimg/rdsbase:master.698"
+export REDIS_IMAGE="drydock/redis:$RELEASE"
 export REDIS_PORT=6379
 
 __validate_redis_envs() {
   __process_msg "Initializing redis environment variables"
+  __process_msg "REDIS_IMAGE: $REDIS_IMAGE"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "STATE_DATA_DIR: $STATE_DATA_DIR"
   __process_msg "STATE_CONFIG_DIR: $STATE_CONFIG_DIR"

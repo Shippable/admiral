@@ -3,12 +3,13 @@
 export COMPONENT="msg"
 export MSG_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export MSG_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
-export MSG_IMAGE="shipimg/msgbase:latest"
+export MSG_IMAGE="drydock/rabbitmq:$RELEASE"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export MSG_PORT=15672
 
 __validate_msg_envs() {
   __process_msg "Initializing vault environment variables"
+  __process_msg "MSG_IMAGE: $MSG_IMAGE"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "MSG_DATA_DIR: $MSG_DATA_DIR"
   __process_msg "MSG_CONFIG_DIR: $MSG_CONFIG_DIR"
