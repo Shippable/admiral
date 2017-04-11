@@ -161,8 +161,8 @@ do $$
       alter table "systemConfigs" add column "state" TEXT;
     end if;
 
-    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'vault') then
-      alter table "systemConfigs" add column "vault" TEXT;
+    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'secrets') then
+      alter table "systemConfigs" add column "secrets" TEXT;
     end if;
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'redis') then

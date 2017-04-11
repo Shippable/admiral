@@ -16,11 +16,11 @@ function post(req, res) {
     reqQuery: req.query,
     resBody: [],
     params: {},
-    component: 'vault',
-    tmpScript: '/tmp/vault.sh'
+    component: 'secrets',
+    tmpScript: '/tmp/secrets.sh'
   };
 
-  bag.who = util.format('vault|%s', self.name);
+  bag.who = util.format('secrets|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
@@ -66,16 +66,16 @@ function _get(bag, next) {
         );
 
       if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].vault)) {
-        logger.debug('Found vault configuration');
+        !_.isEmpty(systemConfigs.rows[0].secrets)) {
+        logger.debug('Found configuration for component ' + bag.secrets);
 
-        bag.config = systemConfigs.rows[0].vault;
+        bag.config = systemConfigs.rows[0].secrets;
         bag.config = JSON.parse(bag.config);
 
       } else {
         return next(
           new ActErr(who, ActErr.DataNotFound,
-            'No vault configuration in database')
+            'No configuration in database for ' + bag.component)
         );
       }
 
@@ -242,7 +242,7 @@ function _post(bag, next) {
   bag.config.isInstalled = true;
   bag.config.isInitialized = true;
 
-  var query = util.format('UPDATE "systemConfigs" set vault=\'%s\';',
+  var query = util.format('UPDATE "systemConfigs" set secrets=\'%s\';',
     JSON.stringify(update));
 
   global.config.client.query(query,
@@ -253,10 +253,10 @@ function _post(bag, next) {
         );
 
       if (response.rowCount === 1) {
-        logger.debug('Successfully added default value for vault server');
+        logger.debug('Successfully added default value for ' + bag.component);
         bag.resBody = update;
       } else {
-        logger.warn('Failed to set default vault server value');
+        logger.warn('Failed to set default value for ' + bag.component);
       }
 
       return next();
