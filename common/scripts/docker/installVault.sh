@@ -8,13 +8,19 @@ export VAULT_MOUNTS="$VAULT_MOUNTS"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export DB_USER=apiuser
 export DB_NAME=shipdb
-export VAULT_URL="http://172.17.0.1:8200"
 
 __validate_vault_envs() {
   __process_msg "Initializing vault environment variables"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "VAULT_DATA_DIR: $VAULT_DATA_DIR"
   __process_msg "VAULT_CONFIG_DIR: $VAULT_CONFIG_DIR"
+  __process_msg "VAULT_HOST: $VAULT_HOST"
+  __process_msg "VAULT_PORT: $VAULT_PORT"
+  __process_msg "DBHOST: $DBHOST"
+  __process_msg "DBPORT: $DBPORT"
+  __process_msg "DBNAME: $DBNAME"
+  __process_msg "DBUSERNAME: $DBUSERNAME"
+  __process_msg "DBPASSWORD: $DBPASSWORD"
 }
 
 __validate_vault_mounts() {
@@ -44,6 +50,25 @@ __update_vault_config() {
   cp -vr $SCRIPTS_DIR/docker/initializeVault.sh $VAULT_CONFIG_DIR/scripts/initializeVault.sh
 }
 
+__update_vault_creds() {
+  __process_msg "Updating vault to database connection credentials"
+
+  __process_msg "Updating db host"
+  sed -i 's#{{DBHOST}}#'$DBHOST'#g' $VAULT_CONFIG_DIR/config.hcl
+
+  __process_msg "Updating db port"
+  sed -i 's#{{DBPORT}}#'$DBPORT'#g' $VAULT_CONFIG_DIR/config.hcl
+
+  __process_msg "Updating db name"
+  sed -i 's#{{DBNAME}}#'$DBNAME'#g' $VAULT_CONFIG_DIR/config.hcl
+
+  __process_msg "Updating db password"
+  sed -i 's#{{DBPASSWORD}}#'$DBPASSWORD'#g' $VAULT_CONFIG_DIR/config.hcl
+
+  __process_msg "Updating db username"
+  sed -i 's#{{DBUSERNAME}}#'$DBUSERNAME'#g' $VAULT_CONFIG_DIR/config.hcl
+}
+
 __run_vault() {
   __process_msg "Running vault container"
   local data_dir_container="/var/run/vault"
@@ -55,6 +80,7 @@ __run_vault() {
     -v $VAULT_CONFIG_DIR:$config_dir_container \
     --publish 8200:8200 \
     --privileged=true \
+    --net=host \
     --name=$COMPONENT \
     $VAULT_IMAGE server
   "
@@ -81,13 +107,11 @@ __initialize_vault() {
     __process_msg "Generated vault token: $vault_token"
   fi
 
-  sudo docker exec db \
-    psql -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1 \
-    -c "UPDATE \"systemConfigs\" set \"vaultToken\"='$vault_token'"
+  #sudo docker exec db \ psql -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1 \ -c "UPDATE \"systemConfigs\" set \"vaultToken\"='$vault_token'"
 
-  sudo docker exec db \
-    psql -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1 \
-    -c "UPDATE \"systemConfigs\" set \"vaultUrl\"='$VAULT_URL'"
+  local admiral_env="$CONFIG_DIR/admiral.env"
+  __process_msg "Updating vault token in admiral env"
+  sed -i 's#.*VAULT_TOKEN=.*#VAULT_TOKEN="'$vault_token'"#g' $admiral_env
 
   __process_msg "Bootstrap vault complete"
 }
@@ -101,6 +125,7 @@ main() {
     __validate_vault_envs
     __validate_vault_mounts
     __update_vault_config
+    __update_vault_creds
     __run_vault
   fi
 

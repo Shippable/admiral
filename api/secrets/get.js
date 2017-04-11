@@ -14,6 +14,7 @@ function get(req, res) {
     component: 'secrets',
     defaultConfig: {
       address: global.config.admiralIP,
+      port: 8300,
       rootToken: '',
       unsealKey1: '',
       unsealKey2: '',
@@ -25,7 +26,7 @@ function get(req, res) {
     }
   };
 
-  bag.who = util.format('vault|%s', self.name);
+  bag.who = util.format('secrets|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
@@ -103,7 +104,7 @@ function _setDefault(bag, next) {
         logger.debug('Successfully added default value for ' + bag.component);
         bag.resBody = JSON.parse(defaultConfig);
       } else {
-        logger.warn('Failed to get default vault for ' + bag.component);
+        logger.warn('Failed to get default value for ' + bag.component);
       }
 
       return next();

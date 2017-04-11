@@ -7,17 +7,20 @@ var async = require('async');
 var _ = require('underscore');
 var path = require('path');
 var fs = require('fs');
+var readline = require('readline');
 var spawn = require('child_process').spawn;
+var envHandler = require('../../common/envHandler.js');
 
 function post(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: [],
     params: {},
-    tmpScript: '/tmp/vault.sh'
+    component: 'secrets',
+    tmpScript: '/tmp/secrets.sh'
   };
 
-  bag.who = util.format('vault|%s', self.name);
+  bag.who = util.format('secrets|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
@@ -27,7 +30,10 @@ function post(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeVault.bind(null, bag),
-      _post.bind(null, bag)
+      _getUnsealKeys.bind(null, bag),
+      _getVaultRootToken.bind(null, bag),
+      _post.bind(null, bag),
+      _updateVaultUrl.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -44,9 +50,6 @@ function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
 
-  //TODO:
-  //if ip exists, then just update value in db and dont run init
-  //if no object exists, initialize
   return next();
 }
 
@@ -54,7 +57,8 @@ function _get(bag, next) {
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  global.config.client.query('SELECT secrets from "systemConfigs"',
+  var query = util.format('SELECT %s from "systemConfigs"', bag.component);
+  global.config.client.query(query,
     function (err, systemConfigs) {
       if (err)
         return next(
@@ -63,15 +67,15 @@ function _get(bag, next) {
 
       if (!_.isEmpty(systemConfigs.rows) &&
         !_.isEmpty(systemConfigs.rows[0].secrets)) {
-        logger.debug('Found vault configuration');
+        logger.debug('Found configuration for component ' + bag.component);
 
-        bag.vaultConfig = systemConfigs.rows[0].secrets;
-        bag.vaultConfig = JSON.parse(bag.vaultConfig);
+        bag.config = systemConfigs.rows[0].secrets;
+        bag.config = JSON.parse(bag.config);
 
       } else {
         return next(
           new ActErr(who, ActErr.DataNotFound,
-            'No vault configuration in database')
+            'No configuration in database for ' + bag.component)
         );
       }
 
@@ -84,9 +88,20 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
-  //TODO:
-  //gather all the variables that will be injected in init script
-  //
+  bag.scriptEnvs = {
+    'RUNTIME_DIR': global.config.runtimeDir,
+    'CONFIG_DIR': global.config.configDir,
+    'SCRIPTS_DIR': global.config.scriptsDir,
+    'IS_INITIALIZED': bag.config.isInitialized,
+    'IS_INSTALLED': bag.config.isInstalled,
+    'DBUSERNAME': global.config.dbUsername,
+    'DBPASSWORD': global.config.dbPassword,
+    'DBHOST': global.config.dbHost,
+    'DBPORT': global.config.dbPort,
+    'DBNAME': global.config.dbName,
+    'VAULT_HOST': global.config.admiralIP,
+    'VAULT_PORT': bag.config.port
+  };
 
   return next();
 }
@@ -133,20 +148,10 @@ function _initializeVault(bag, next) {
   var who = bag.who + '|' + _initializeVault.name;
   logger.verbose(who, 'Inside');
 
-  //TODO: these should come from env values
-  var scriptEnvs = {
-    'RUNTIME_DIR': global.config.runtimeDir,
-    'CONFIG_DIR': global.config.configDir,
-    'SCRIPTS_DIR': '/home/shippable/admiral/common/scripts',
-    'IS_INITIALIZED': bag.vaultConfig.isInitialized,
-    'IS_INSTALLED': bag.vaultConfig.isInstalled
-  };
-
   var exec = spawn('/bin/bash',
     ['-c', bag.tmpScript],
     {
-      cwd: bag.buildRootDir,
-      env: scriptEnvs
+      env: bag.scriptEnvs
     }
   );
 
@@ -169,13 +174,73 @@ function _initializeVault(bag, next) {
   );
 }
 
+function _getUnsealKeys(bag, next) {
+  var who = bag.who + '|' + _getUnsealKeys.name;
+  logger.verbose(who, 'Inside');
+
+  var keyIndex = 1;
+  var unsealKeysFile = path.join(
+    global.config.configDir, '/vault/scripts/keys.txt');
+
+  var filereader = readline.createInterface({
+    input: fs.createReadStream(unsealKeysFile),
+    console: false
+  });
+
+  filereader.on('line',
+    function (line) {
+      // this is the format in which unseal keys are stored
+      var keyString = util.format('Unseal Key %s:', keyIndex);
+      if (!_.isEmpty(line) && line.indexOf(keyString) >= 0) {
+        var value = line.split(' ')[3];
+        var keyNameInConfig = 'unsealKey' + keyIndex;
+
+        // set the unseal key in config object
+        bag.config[keyNameInConfig] = value;
+
+        // parse next key
+        keyIndex ++;
+      }
+    }
+  );
+
+  filereader.on('close',
+    function () {
+      return next(null);
+    }
+  );
+}
+
+function _getVaultRootToken(bag, next) {
+  var who = bag.who + '|' + _getVaultRootToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('VAULT_TOKEN',
+    function (err, value) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+
+      if (_.isEmpty(value))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'empty VAULT_TOKEN in admiral.env')
+        );
+
+      bag.config.rootToken = value;
+      return next();
+    }
+  );
+}
+
 function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  var update = bag.vaultConfig;
-  bag.vaultConfig.isInstalled = true;
-  bag.vaultConfig.isInitialized = true;
+  var update = bag.config;
+  bag.config.isInstalled = true;
+  bag.config.isInitialized = true;
 
   var query = util.format('UPDATE "systemConfigs" set secrets=\'%s\';',
     JSON.stringify(update));
@@ -188,10 +253,35 @@ function _post(bag, next) {
         );
 
       if (response.rowCount === 1) {
-        logger.debug('Successfully added default value for vault server');
+        logger.debug('Successfully added default value for ' + bag.component);
         bag.resBody = update;
       } else {
-        logger.warn('Failed to set default vault server value');
+        logger.warn('Failed to set default value for ' + bag.component);
+      }
+
+      return next();
+    }
+  );
+}
+
+function _updateVaultUrl(bag, next) {
+  var who = bag.who + '|' +  _updateVaultUrl.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('UPDATE "systemConfigs" set "vaultUrl"=\'%s\';',
+    bag.config.address);
+
+  global.config.client.query(query,
+    function (err, response) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DataNotFound, err)
+        );
+
+      if (response.rowCount === 1) {
+        logger.debug('Successfully added default value for vault url');
+      } else {
+        logger.warn('Failed to set default vault url');
       }
 
       return next();
