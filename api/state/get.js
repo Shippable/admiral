@@ -14,7 +14,9 @@ function get(req, res) {
     component: 'state',
     defaultConfig: {
       address: global.config.admiralIP,
-      port: 8300,
+      port: 80,
+      sshPort: 22,
+      securePort: 443,
       rootPassword: '',
       isInstalled: false,
       isInitialized: false
