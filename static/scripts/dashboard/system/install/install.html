@@ -1,0 +1,86 @@
+<div>
+  <div class="col-md-offset-1 col-md-10">
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a data-toggle="collapse" href="#initpanel">1. Initialize</a>
+          </h3>
+        </div>
+        <div id="initpanel" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <div ng-if="!vm.isLoaded">
+              Loading...
+            </div>
+            <div class="col-md-offset-1 col-md-10">
+              <div ng-if="vm.isLoaded && !vm.dbInitialized && !vm.initializing" class="row">
+                <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.initializing" ng-click="vm.initialize()">
+                  Initialize
+                </button>
+              </div>
+              <div ng-if="vm.isLoaded && (vm.dbInitialized || vm.initializing)" class="row">
+                <table class="table table-condensed table-striped">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <b>Database:</b>
+                      </td>
+                      <td>
+                        {{vm.dbInitialized ? 'initialized' : 'checking status'}}
+                      </td>
+                      <td>
+                        <button class="btn btn-sm btn-default" ng-disabled="!vm.dbInitialized">config</button>
+                        <button class="btn btn-sm btn-default" ng-disabled="!vm.dbInitialized">logs</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan=3>
+                        <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.initializing" ng-click="vm.initialize()">
+                          <div ng-if="vm.initializing">
+                            initializing...
+                          </div>
+                          <div ng-if="!vm.initializing">
+                            Re-initialize
+                          </div>
+                        </button>
+                      </td>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a data-toggle="collapse" href="#installpanel">2. Install</a>
+          </h3>
+        </div>
+        <div id="installpanel" class="panel-collapse collapse">
+          <div class="panel-body">
+            test data
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a data-toggle="collapse" href="#addonpanel">3. Add-ons</a>
+          </h3>
+        </div>
+        <div id="addonpanel" class="panel-collapse collapse">
+          <div class="panel-body">
+            test data
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

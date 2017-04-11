@@ -1,6 +1,6 @@
 'use strict';
 
-var self = postInitialize;
+var self = post;
 module.exports = self;
 
 var async = require('async');
@@ -9,7 +9,7 @@ var uuid = require('node-uuid');
 
 var envHandler = require('../../common/envHandler.js');
 
-function postInitialize(req, res) {
+function post(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: {},
