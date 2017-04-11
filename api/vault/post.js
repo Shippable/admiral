@@ -14,6 +14,7 @@ function post(req, res) {
     reqQuery: req.query,
     resBody: [],
     params: {},
+    component: 'vault',
     tmpScript: '/tmp/vault.sh'
   };
 
@@ -27,7 +28,8 @@ function post(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeVault.bind(null, bag),
-      _post.bind(null, bag)
+      _post.bind(null, bag),
+      _updateVaultUrl.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -44,9 +46,6 @@ function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
 
-  //TODO:
-  //if ip exists, then just update value in db and dont run init
-  //if no object exists, initialize
   return next();
 }
 
@@ -54,7 +53,8 @@ function _get(bag, next) {
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  global.config.client.query('SELECT secrets from "systemConfigs"',
+  var query = util.format('SELECT %s from "systemConfigs"', bag.component);
+  global.config.client.query(query,
     function (err, systemConfigs) {
       if (err)
         return next(
@@ -62,11 +62,11 @@ function _get(bag, next) {
         );
 
       if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].secrets)) {
+        !_.isEmpty(systemConfigs.rows[0].vault)) {
         logger.debug('Found vault configuration');
 
-        bag.vaultConfig = systemConfigs.rows[0].secrets;
-        bag.vaultConfig = JSON.parse(bag.vaultConfig);
+        bag.config = systemConfigs.rows[0].vault;
+        bag.config = JSON.parse(bag.config);
 
       } else {
         return next(
@@ -84,9 +84,20 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
-  //TODO:
-  //gather all the variables that will be injected in init script
-  //
+  bag.scriptEnvs = {
+    'RUNTIME_DIR': global.config.runtimeDir,
+    'CONFIG_DIR': global.config.configDir,
+    'SCRIPTS_DIR': global.config.scriptsDir,
+    'IS_INITIALIZED': bag.config.isInitialized,
+    'IS_INSTALLED': bag.config.isInstalled,
+    'DBUSERNAME': global.config.dbUsername,
+    'DBPASSWORD': global.config.dbPassword,
+    'DBHOST': global.config.dbHost,
+    'DBPORT': global.config.dbPort,
+    'DBNAME': global.config.dbName,
+    'VAULT_HOST': global.config.admiralIP,
+    'VAULT_PORT': bag.config.port
+  };
 
   return next();
 }
@@ -133,20 +144,10 @@ function _initializeVault(bag, next) {
   var who = bag.who + '|' + _initializeVault.name;
   logger.verbose(who, 'Inside');
 
-  //TODO: these should come from env values
-  var scriptEnvs = {
-    'RUNTIME_DIR': global.config.runtimeDir,
-    'CONFIG_DIR': global.config.configDir,
-    'SCRIPTS_DIR': '/home/shippable/admiral/common/scripts',
-    'IS_INITIALIZED': bag.vaultConfig.isInitialized,
-    'IS_INSTALLED': bag.vaultConfig.isInstalled
-  };
-
   var exec = spawn('/bin/bash',
     ['-c', bag.tmpScript],
     {
-      cwd: bag.buildRootDir,
-      env: scriptEnvs
+      env: bag.scriptEnvs
     }
   );
 
@@ -173,11 +174,11 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  var update = bag.vaultConfig;
-  bag.vaultConfig.isInstalled = true;
-  bag.vaultConfig.isInitialized = true;
+  var update = bag.config;
+  bag.config.isInstalled = true;
+  bag.config.isInitialized = true;
 
-  var query = util.format('UPDATE "systemConfigs" set secrets=\'%s\';',
+  var query = util.format('UPDATE "systemConfigs" set vault=\'%s\';',
     JSON.stringify(update));
 
   global.config.client.query(query,
@@ -192,6 +193,31 @@ function _post(bag, next) {
         bag.resBody = update;
       } else {
         logger.warn('Failed to set default vault server value');
+      }
+
+      return next();
+    }
+  );
+}
+
+function _updateVaultUrl(bag, next) {
+  var who = bag.who + '|' +  _updateVaultUrl.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('UPDATE "systemConfigs" set "vaultUrl"=\'%s\';',
+    bag.config.address);
+
+  global.config.client.query(query,
+    function (err, response) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DataNotFound, err)
+        );
+
+      if (response.rowCount === 1) {
+        logger.debug('Successfully added default value for vault url');
+      } else {
+        logger.warn('Failed to set default vault url');
       }
 
       return next();

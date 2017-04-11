@@ -11,9 +11,10 @@ function get(req, res) {
     reqQuery: req.query,
     resBody: {},
     initializeDefault: false,
-    component: 'secrets',
+    component: 'vault',
     defaultConfig: {
       address: global.config.admiralIP,
+      port: 8300,
       rootToken: '',
       unsealKey1: '',
       unsealKey2: '',
@@ -64,10 +65,10 @@ function _get(bag, next) {
         );
 
       if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].secrets)) {
+        !_.isEmpty(systemConfigs.rows[0].vault)) {
           logger.debug('Found configuration for ' + bag.component);
 
-          var config = systemConfigs.rows[0].secrets;
+          var config = systemConfigs.rows[0].vault;
           bag.resBody = JSON.parse(config);
       } else {
         logger.debug(

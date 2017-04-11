@@ -1,5 +1,5 @@
 backend "postgresql" {
-  connection_url = "postgres://apiuser:testing1234@172.17.42.1:5432/shipdb?sslmode=disable"
+  connection_url = "postgres://{{DBUSERNAME}}:{{DBPASSWORD}}@{{DBHOST}}:{{DBPORT}}/{{DBNAME}}?sslmode=disable"
 }
 
 listener "tcp" {
