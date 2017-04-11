@@ -30,6 +30,13 @@ do $$
       create index "mIntNameTypeU" on "masterIntegrations" using btree("name", "type");
     end if;
 
+    -- Create foreign key constraints
+
+    -- Adds foreign key relationships for masterIntegrations
+      if not exists (select 1 from pg_constraint where conname = 'masterIntegrations_typeCode_fkey') then
+        alter table "masterIntegrations" add constraint "masterIntegrations_typeCode_fkey" foreign key ("typeCode") references "systemCodes"(code) on update restrict on delete restrict;
+      end if;
+
     -- Insert all masterIntegrations:
 
     -- Docker
