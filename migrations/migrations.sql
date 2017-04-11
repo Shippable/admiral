@@ -15,12 +15,6 @@ do $$
    delete from "masterIntegrationFields" where "masterIntegrationId"= (select id from "masterIntegrations" where "typeCode" = 5005 and
  "name" = 'amazons3');
 
-    -- Remove amazons3 masterIntegration
-    delete from "masterIntegrations" where "typeCode" = 5005 and "name" = 'amazons3';
-
-    -- Remove vault masterIntegration
-    delete from "masterIntegrations" where "typeCode" = 5006 and "name" = 'VAULT';
-
     -- Remove old masterIntegrationFields from github auth
     delete from "masterIntegrationFields" where id in (76, 77, 78);
 
@@ -588,13 +582,7 @@ do $$
       values ('webhookSecret', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a',  '2016-06-01', '2016-06-01');
     end if;
 
-    -- insert all masterIntegrations
-
-    -- Docker
-    if not exists (select 1 from "masterIntegrations" where "name" = 'Docker' and "typeCode" = 5001) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('5553a7ac3566980c00a3bf0e', 2, 'Docker', 'Docker', 'hub', true, 'account', 5001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
+    -- insert all masterIntegrationFields
 
     -- masterIntegrationFields for Docker
     if not exists (select 1 from "masterIntegrationFields" where "id" = 4) then
@@ -610,12 +598,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 6) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (6, '5553a7ac3566980c00a3bf0e', 'email', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- Private Docker Registry
-    if not exists (select 1 from "masterIntegrations" where "name" = 'Private Docker Registry' and "typeCode" = 5001) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('559e8f3e90252e0c00672376', 3, 'Private Docker Registry', 'Private Docker Registry', 'hub', true, 'account', 5001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for Private Docker Registry
@@ -639,22 +621,10 @@ do $$
       values (10, '559e8f3e90252e0c00672376', 'email', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- slack
-    if not exists (select 1 from "masterIntegrations" where "name" = 'Slack' and "typeCode" = 5003) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('55bba7932c6c780b00e4426c', 4, 'Slack', 'Slack', 'notification', true, 'account', 5003, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for Slack
     if not exists (select 1 from "masterIntegrationFields" where "id" = 11) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (11, '55bba7932c6c780b00e4426c', 'webhookUrl', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- webhook
-    if not exists (select 1 from "masterIntegrations" where "name" = 'webhook' and "typeCode" = 5003) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('573aab7c5419f10f00bef322', 5, 'webhook', 'Event Trigger', 'notification', true, 'account', 5003, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for webhook
@@ -673,22 +643,10 @@ do $$
       values (15, '573aab7c5419f10f00bef322', 'authorization', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- GCR
-    if not exists (select 1 from "masterIntegrations" where "name" = 'GCR' and "typeCode" = 5001) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('5553a8333566980c00a3bf1b', 6, 'GCR', 'GCR', 'hub', true, 'account', 5001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for GCR
     if not exists (select 1 from "masterIntegrationFields" where "id" = 16) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (16, '5553a8333566980c00a3bf1b', 'JSON_key', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- ECR
-    if not exists (select 1 from "masterIntegrations" where "name" = 'ECR' and "typeCode" = 5001) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('5673c6561895ca4474669507', 7, 'ECR', 'Amazon ECR', 'hub', true, 'account', 5001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for ECR
@@ -700,12 +658,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 18) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (18, '5673c6561895ca4474669507', 'aws_secret_access_key', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- AWS
-    if not exists (select 1 from "masterIntegrations" where "name" = 'AWS' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('55c8d2333399590c007982f8', 8, 'AWS', 'AWS', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for AWS
@@ -724,12 +676,6 @@ do $$
       values (22, '55c8d2333399590c007982f8', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- AWS_IAM
-    if not exists (select 1 from "masterIntegrations" where "name" = 'AWS_IAM' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('571032a897aadea0ee186900', 9, 'AWS_IAM', 'Amazon Web Services (IAM)', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-23', '2016-06-23');
-    end if;
-
     -- masterIntegrationFields for AWS_IAM
     if not exists (select 1 from "masterIntegrationFields" where "id" = 24) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -745,12 +691,6 @@ do $$
       values (27, '571032a897aadea0ee186900', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-23', '2016-06-23');
     end if;
 
-    -- GKE
-    if not exists (select 1 from "masterIntegrations" where "name" = 'GKE' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d417653270aa438861cf65', 11, 'GKE', 'Google Container Engine', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
      -- masterIntegrationFields for GKE
     if not exists (select 1 from "masterIntegrationFields" where "id" = 30) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -760,12 +700,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 31) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (31, '56d417653270aa438861cf65', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- DCL
-    if not exists (select 1 from "masterIntegrations" where "name" = 'DCL' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('570651b5f028a50b008bd955', 12, 'DCL', 'Docker Cloud', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
      -- masterIntegrationFields for DCL
@@ -784,12 +718,6 @@ do $$
       values (34, '570651b5f028a50b008bd955', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- ACS
-    if not exists (select 1 from "masterIntegrations" where "name" = 'ACS' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('5723561699ddf70c00be27ed', 13, 'ACS', 'Azure Container Service', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for ACS
     if not exists (select 1 from "masterIntegrationFields" where "id" = 35) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -799,12 +727,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 36) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (36, '5723561699ddf70c00be27ed', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- ghe
-    if not exists (select 1 from "masterIntegrations" where "name" = 'ghe' and "typeCode" = 5000) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('563347d6046d220c002a3474', 15, 'ghe', 'Github Enterprise', 'scm', true, 'account', 5000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for ghe
@@ -818,12 +740,6 @@ do $$
       values (40, '563347d6046d220c002a3474', 'token', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- bitbucket
-    if not exists (select 1 from "masterIntegrations" where "name" = 'bitbucket' and "typeCode" = 5000) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('562dc347b84b390c0083e72e', 16, 'bitbucket', 'BitBucket', 'scm', true, 'account', 5000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for bitbucket
     if not exists (select 1 from "masterIntegrationFields" where "id" = 41) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -835,22 +751,10 @@ do $$
       values (42, '562dc347b84b390c0083e72e', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- Email
-    if not exists (select 1 from "masterIntegrations" where "name" = 'Email' and "typeCode" = 5003) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('55816ffb4d96360c000ec6f3', 18, 'Email', 'Email', 'notification', true, 'account', 5003, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for Email
     if not exists (select 1 from "masterIntegrationFields" where "id" = 44) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (44, '55816ffb4d96360c000ec6f3', 'Email address', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- Quay.io
-    if not exists (select 1 from "masterIntegrations" where "name" = 'Quay.io' and "typeCode" = 5001) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('559eab320a31140d00a15d3a', 19, 'Quay.io', 'Quay.io', 'hub', true, 'account', 5001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for Quay.io
@@ -879,12 +783,6 @@ do $$
       values (49, '559eab320a31140d00a15d3a', 'accessToken', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- github
-    if not exists (select 1 from "masterIntegrations" where "name" = 'github' and "typeCode" = 5000) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('562dc2f048095b0d00ceebcd', 20, 'github', 'GitHub', 'scm', true, 'account', 5000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for github
     if not exists (select 1 from "masterIntegrationFields" where "id" = 50) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -896,12 +794,6 @@ do $$
       values (51, '562dc2f048095b0d00ceebcd', 'token', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- gitlab
-    if not exists (select 1 from "masterIntegrations" where "name" = 'gitlab' and "typeCode" = 5000) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('5728e13b3d93990c000fd8e4', 21, 'gitlab', 'GitLab', 'scm', true, 'account', 5000,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for gitlab
     if not exists (select 1 from "masterIntegrationFields" where "id" = 52) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -911,12 +803,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 53) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (53, '5728e13b3d93990c000fd8e4', 'token', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- bitbucketServer
-    if not exists (select 1 from "masterIntegrations" where "name" = 'bitbucketServer' and "typeCode" = 5000) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('572af430ead9631100f7f64d', 22, 'bitbucketServer', 'BitBucket Server', 'scm', true, 'account', 5000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for bitbucketServer
@@ -935,12 +821,6 @@ do $$
       values (56, '572af430ead9631100f7f64d', 'token', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- ssh-key
-    if not exists (select 1 from "masterIntegrations" where "name" = 'ssh-key' and "typeCode" = 5004) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('568aa7c3368a090c006da702', 23, 'ssh-key', 'SSH Key', 'key', true, 'account', 5004, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for ssh-key
     if not exists (select 1 from "masterIntegrationFields" where "id" = 57) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -952,34 +832,16 @@ do $$
       values (58, '568aa7c3368a090c006da702', 'privateKey', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- pem-key
-    if not exists (select 1 from "masterIntegrations" where "name" = 'pem-key' and "typeCode" = 5004) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('568aa74cd43b0d0c004fec91', 24, 'pem-key', 'PEM Key', 'key', true, 'account', 5004, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for pem-key
     if not exists (select 1 from "masterIntegrationFields" where "id" = 59) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (59, '568aa74cd43b0d0c004fec91', 'key', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- hipchat
-    if not exists (select 1 from "masterIntegrations" where "name" = 'hipchat' and "typeCode" = 5003) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56fb978f1cc7210f00bd5e72', 25, 'hipchat', 'HipChat', 'notification', true, 'account', 5003, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for hipchat
     if not exists (select 1 from "masterIntegrationFields" where "id" = 60) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (60, '56fb978f1cc7210f00bd5e72', 'token', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- Docker Trusted Registry
-    if not exists (select 1 from "masterIntegrations" where "name" = 'Docker Trusted Registry' and "typeCode" = 5001) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57110b987ed9d269c9d71ac1', 26, 'Docker Trusted Registry', 'Docker Trusted Registry', 'hub', true, 'account', 5001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for Docker Trusted Registry
@@ -1003,12 +865,6 @@ do $$
       values (64, '57110b987ed9d269c9d71ac1', 'email', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- DDC
-    if not exists (select 1 from "masterIntegrations" where "name" = 'DDC' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('571f081b37803a0d00455d25', 27, 'DDC', 'Docker DataCenter', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for DDC
     if not exists (select 1 from "masterIntegrationFields" where "id" = 65) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -1023,12 +879,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 67) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (67, '571f081b37803a0d00455d25', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- TRIPUB
-    if not exists (select 1 from "masterIntegrations" where "name" = 'TRIPUB' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('576ce63321333398d11a35ab', 28, 'TRIPUB', 'Joyent Triton Public Cloud ', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for TRIPUB
@@ -1074,12 +924,6 @@ do $$
       values (73, '576ce63321333398d11a35ab', 'certificates', 'string', false, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- JENKINS
-    if not exists (select 1 from "masterIntegrations" where "name" = 'Jenkins' and "typeCode" = 5009) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57dbab5d15c59206bf4fbb50', 37, 'Jenkins', 'Jenkins', 'externalci', true, 'account', 5009, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for JENKINS
     if not exists (select 1 from "masterIntegrationFields" where "id" = 112) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -1094,12 +938,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 114) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (114, '57dbab5d15c59206bf4fbb50', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- artifactory
-    if not exists (select 1 from "masterIntegrations" where "name" = 'artifactory' and "typeCode" = 5001) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57dbab5d15c59206bf4fbb51', 38, 'artifactory', 'JFrog Artifactory', 'hub', true, 'account', 5001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for artifactory
@@ -1118,12 +956,6 @@ do $$
       values (117, '57dbab5d15c59206bf4fbb51', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- CLUSTER
-    if not exists (select 1 from "masterIntegrations" where "name" = 'CLUSTER' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('576ce63321333398d11a35ac', 39, 'CLUSTER', 'Node Cluster', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for CLUSTER
     if not exists (select 1 from "masterIntegrationFields" where "id" = 118) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -1138,18 +970,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 120) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (120, '576ce63321333398d11a35ac', 'privateKey', 'string', false, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- irc
-    if not exists (select 1 from "masterIntegrations" where "name" = 'irc' and "typeCode" = 5003) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57e8ea9c14d3ef88e56fecb6', 44, 'irc', 'irc', 'notification', true, 'account', 5003, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- kubernetes
-    if not exists (select 1 from "masterIntegrations" where "name" = 'KUBERNETES' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('5811a2e9e73d22829eb0ab3d', 45, 'KUBERNETES', 'Kubernetes', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for kubernetes
@@ -1188,12 +1008,6 @@ do $$
       values (149, '5811a2e9e73d22829eb0ab3d', 'bastionPrivateKey', 'string', false, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- amazonKeys masterIntegration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'amazonKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57467326b3cbfc0c004f9111', 46, 'amazonKeys', 'Amazon Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for amazonKeys
     if not exists (select 1 from "masterIntegrationFields" where "id" = 150) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -1203,12 +1017,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 151) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (151, '57467326b3cbfc0c004f9111', 'secretKey', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- gitlabCreds masterIntegration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'gitlabCreds' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('574ee696d49b091400b71112', 47, 'gitlabCreds', 'GitLab Credentials', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for gitlabCreds
@@ -1225,12 +1033,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 154) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (154, '574ee696d49b091400b71112', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- mailgunCreds masterIntegration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'mailgunCreds' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57e8ea91424bff9c871d7113', 48, 'mailgunCreds', 'Mailgun Credentials', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for mailgunCreds
@@ -1254,12 +1056,6 @@ do $$
       values (158, '57e8ea91424bff9c871d7113', 'emailSender', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- gmailCreds masterIntegration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'gmailCreds' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57e8ea9c14d3ef88e56f1114', 49, 'gmailCreds', 'Gmail Credentials', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for gmailCreds
     if not exists (select 1 from "masterIntegrationFields" where "id" = 159) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -1279,12 +1075,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 162) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (162, '57e8ea9c14d3ef88e56f1114', 'emailSender', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- smtpCreds masterintegration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'smtpCreds' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57cea8056ce9c71800d31115', 50, 'smtpCreds', 'SMTP Credentials', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for SMTP
@@ -1328,12 +1118,6 @@ do $$
       values (170, '57cea8056ce9c71800d31115', 'proxy', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- braintreeKeys masterintegration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'braintreeKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57aafd0673ea26cb053f1116', 51, 'braintreeKeys', 'Braintree Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for braintreeKeys
     if not exists (select 1 from "masterIntegrationFields" where "id" = 171 and "name" = 'braintreeEnvironment') then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -1353,12 +1137,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 174 and "name" = 'braintreePublicKey') then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (174, '57aafd0673ea26cb053f1116', 'braintreePublicKey', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- githubKeys master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'githubKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('577de63321333398d11a1117', 52, 'githubKeys', 'Github Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- masterIntegrationFields for githubKeys
@@ -1382,12 +1160,6 @@ do $$
       values (178, '577de63321333398d11a1117', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- bitbucketKeys
-    if not exists (select 1 from "masterIntegrations" where "name" = 'bitbucketKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('577de63321333398d11a1118', 53, 'bitbucketKeys', 'Bitbucket Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for bitbucketKeys
     if not exists (select 1 from "masterIntegrationFields" where "id" = 179) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -1409,13 +1181,7 @@ do $$
       values (182, '577de63321333398d11a1118', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- bitbucketserverKeys master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'bitbucketserverKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('577de63321333398d11a1119', 54, 'bitbucketserverKeys', 'Bitbucket Server Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- bitbucketserverKeys master integration fields
+    -- bitbucketServerKeys master integration fields
     if not exists (select 1 from "masterIntegrationFields" where "id" = 183) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (183, '577de63321333398d11a1119', 'clientId', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
@@ -1436,13 +1202,7 @@ do $$
       values (186, '577de63321333398d11a1119', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- githubenterpriseKeys master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'githubenterpriseKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('507f1f77bcf86cd799431120', 55, 'githubenterpriseKeys', 'Github Enterprise Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- masterIntegrationFields for githubenterpriseKeys
+    -- masterIntegrationFields for githubEnterpriseKeys
     if not exists (select 1 from "masterIntegrationFields" where "id" = 187) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (187, '507f1f77bcf86cd799431120', 'clientId', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
@@ -1463,12 +1223,6 @@ do $$
       values (190, '507f1f77bcf86cd799431120', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- hubspotToken master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'hubspotToken' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('5811a2e9e73d22829eb01121', 56, 'hubspotToken', 'Hubspot Token', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- masterIntegrationFields for Hubspot
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 191) then
@@ -1479,30 +1233,6 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 192) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (192, '5811a2e9e73d22829eb01121', 'hubspotApiToken', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- segmentKeys master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'segmentKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58be812395141b7ad115b909', 57, 'segmentKeys', 'Segment Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-03-07', '2017-03-07');
-    end if;
-
-    -- masterIntegrationFields for segmentKeys
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 193) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (193, '58be812395141b7ad115b909', 'segmentApiToken', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-03-07', '2017-03-07');
-    end if;
-
-    -- clearbitKeys master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'clearbitKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58c78481e34468d32114e125', 58, 'clearbitKeys', 'Clearbit Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-03-14', '2017-03-14');
-    end if;
-
-    -- masterIntegrationFields for clearbitKeys
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 194) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (194, '58c78481e34468d32114e125', 'clearbitApiToken', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-03-14', '2017-03-14');
     end if;
 
     -- Removing redundant master integrations
@@ -1572,358 +1302,6 @@ do $$
 
     if exists (select 1 from information_schema.columns where table_name = 'providers' and column_name = 'masterIntegrationId') then
       alter table "providers" drop column "masterIntegrationId";
-    end if;
-
-    -- Add systemImages
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 1) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('565c404911614a47280079d8', 1, 'shippable/minv2', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 2) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4164e71e4ea0c00a87562', 2, 'drydock/u12nod', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 3) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4165571e4ea0c00a876ab', 3, 'drydock/u12pyt', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 4) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4165c71e4ea0c00a87815', 4, 'drydock/u12jav', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 5) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d416622d28670c0001d9e5', 5, 'drydock/u12sca', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 6) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4166821e3800d00186af0', 6, 'drydock/u12rub', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 7) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4166d2d28670c0001daf9', 7, 'drydock/u12php', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 8) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d416742d28670c0001de37', 8, 'drydock/u12gol', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 9) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4167a71e4ea0c00a87e97', 9, 'drydock/u12clo', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 10) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4167f21e3800d00186eb1', 10, 'drydock/u14nod', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 11) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4168421e3800d001871b9', 11, 'drydock/u14pyt', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 12) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d416882d28670c0001e5d4', 12, 'drydock/u14jav', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 13) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4168e8d5d8b0d003ba048', 13, 'drydock/u14sca', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 14) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d416922d28670c0001e9c1', 14, 'drydock/u14rub', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 15) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4169821e3800d001876c0', 15, 'drydock/u14php', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 16) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4169d2d28670c0001eecb', 16, 'drydock/u14gol', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 17) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d416a321e3800d00187afd', 17, 'drydock/u14clo', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 18) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d447d362e4000d0072fded', 18, 'drydock/u12nodpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 19) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d447e070def30c00cb9bd2', 19, 'drydock/u12nodall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 20) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d447ed70def30c00cba197', 20, 'drydock/u12pytpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 21) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d447f570def30c00cba434', 21, 'drydock/u12pytall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 22) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4480270def30c00cba8a1', 22, 'drydock/u12javpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 23) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4480b70def30c00cbaaf7', 23, 'drydock/u12javall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 24) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4481670def30c00cbad96', 24, 'drydock/u12scapls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 25) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4481d7ba0490c008571cd', 25, 'drydock/u12scaall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 26) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4482362e4000d00731976', 26, 'drydock/u12rubpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 27) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4482970def30c00cbb19b', 27, 'drydock/u12ruball', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 28) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4482f7ba0490c008575bb', 28, 'drydock/u12phppls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 29) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4483762e4000d00731e7d', 29, 'drydock/u12phpall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 30) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4483e62e4000d00731ff0', 30, 'drydock/u12golpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 31) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4484562e4000d00732325', 31, 'drydock/u12golall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 32) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448527ba0490c00857b1e', 32, 'drydock/u12clopls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 33) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4485b70def30c00cbbfbc', 33, 'drydock/u12cloall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 34) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4486562e4000d00732a3a', 34, 'drydock/u14nodpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 35) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4486c62e4000d00732c21', 35, 'drydock/u14nodall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 36) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4487870def30c00cbc5b1', 36, 'drydock/u14pytpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 37) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d44881805a410c003a5b6c', 37, 'drydock/u14pytall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 38) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4489b70def30c00cbd5b0', 38, 'drydock/u14javpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 39) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448a470def30c00cbda5f', 39, 'drydock/u14javall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 40) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448c070def30c00cbe87e', 40, 'drydock/u14scapls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 41) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448c970def30c00cbea2b', 41, 'drydock/u14scaall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 42) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448e070def30c00cc06e7', 42, 'drydock/u14rubpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 43) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448e870def30c00cc0f11', 43, 'drydock/u14ruball', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 44) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448ed70def30c00cc164e', 44, 'drydock/u14phppls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 45) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448f470def30c00cc1aca', 45, 'drydock/u14phpall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 46) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d448fc70def30c00cc235f', 46, 'drydock/u14golpls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 47) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4490470def30c00cc2d0d', 47, 'drydock/u14golall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 48) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4490b70def30c00cc32fe', 48, 'drydock/u14clopls', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 49) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('56d4491570def30c00cc3ae1', 49, 'drydock/u14cloall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 50) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('570631d5c72afc0c00c3cd54', 50, 'drydock/u14cpp', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 51) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('570631e08317100c00ef87b9', 51, 'drydock/u12cpp', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-        if not exists (select 1 from "systemImages" where "systemImageId" = 52) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41c26d73355c54c0728f2', 52, 'drydock/u16nod', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 53) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41d1eaf36cfa4e8fb5988', 53, 'drydock/u16pyt', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 54) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41d32af36cfa4e8fb5989', 54, 'drydock/u16jav', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 55) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41d43af36cfa4e8fb598a', 55, 'drydock/u16sca', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 56) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41d65af36cfa4e8fb598b', 56, 'drydock/u16rub', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 57) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41d72af36cfa4e8fb598c', 57, 'drydock/u16php', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 58) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41d7eaf36cfa4e8fb598d', 58, 'drydock/u16gol', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 59) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41d8caf36cfa4e8fb598e', 59, 'drydock/u16clo', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 60) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41da3af36cfa4e8fb5990', 60, 'drydock/u16nodall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 61) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41dbcaf36cfa4e8fb5992', 61, 'drydock/u16pytall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 62) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41de0af36cfa4e8fb5994', 62, 'drydock/u16javall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 63) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41df3af36cfa4e8fb5996', 63, 'drydock/u16scaall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 64) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41e0daf36cfa4e8fb5998', 64, 'drydock/u16ruball', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 65) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41e28c4317ba97eb1aadd', 65, 'drydock/u16phpall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 66) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41e458e318bc0fe5b0124', 66, 'drydock/u16golall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 67) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41e6a8e318bc0fe5b0126', 67, 'drydock/u16cloall', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 68) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41e7b8e318bc0fe5b0127', 68, 'drydock/u16cpp', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 69) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41e7b8e318bc0fe5b0128', 69, 'drydock/u16all', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "systemImages" where "systemImageId" = 70) then
-      insert into "systemImages" ("id", "systemImageId", "name", "isActive","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58b41e7b8e318bc0fe5b0129', 70, 'drydock/u14all', true, '540e7735399939140041d885', '540e7735399939140041d885', '2016-06-01', '2016-06-01');
     end if;
 
     -- Add sourceName to resources and migrate name to sourceName
@@ -2617,9 +1995,20 @@ do $$
       drop table "superUsers";
     end if;
 
+    -- Drop systemImages
+    if exists (select 1 from information_schema.columns where table_name = 'systemImages') then
+      drop table "systemImages";
+    end if;
+
+
     -- Adds proxyBuildJobPropertyBag column in jobs table
     if not exists (select 1 from information_schema.columns where table_name = 'jobs' and column_name = 'proxyBuildJobPropertyBag') then
       alter table "jobs" add column "proxyBuildJobPropertyBag" TEXT;
+    end if;
+
+    -- Add genericIntegrations column in jobs table
+    if not exists (select 1 from information_schema.columns where table_name = 'jobs' and column_name = 'genericIntegrations') then
+      alter table "jobs" add column "genericIntegrations" TEXT;
     end if;
 
     -- remove outdated routeRoles
@@ -2673,9 +2062,6 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'jobs' and column_name = 'isConsoleArchived') then
       alter table "jobs" add column "isConsoleArchived" boolean NOT NULL DEFAULT false;
     end if;
-
-    -- update Git Store integration type
-    update "masterIntegrations" set "level" = 'system' where "masterIntegrationId" = 1 and "name" = 'Git store' and type = 'scm';
 
     -- Add column subnetId in systemMachineImages table
     if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'subnetId') then
@@ -4091,6 +3477,18 @@ do $$
 
     perform set_route_role(
       routePattern := '/projects/:projectId/branchRunStatus',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/projects/:projectId/collaborators',
+      httpVerb := 'GET',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/projects/:projectId/collaborators',
       httpVerb := 'GET',
       roleCode := 6060
     );
@@ -5696,10 +5094,6 @@ do $$
       delete from "masterIntegrationFields" where id in (134, 135, 136);
     end if;
 
-    if exists (select 1 from information_schema.columns where table_name = 'masterIntegrations') then
-      delete from "masterIntegrations" where "typeCode" = 5010 and "name" = 'S3';
-    end if;
-
     -- Drop mailChimpId from accounts
     if exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'mailChimpId') then
       alter table "accounts" drop column "mailChimpId";
@@ -5725,10 +5119,9 @@ do $$
       alter table "accounts" drop column "isOpsUser";
     end if;
 
-    -- gitlabKeys master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'gitlabKeys' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58a160e8c2845c9d5fb82041', 61, 'gitlabKeys', 'GitLab Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
+    -- Add clearbitProfileId to accounts
+    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'clearbitProfileId') then
+      alter table "accounts" add column "clearbitProfileId" varchar(36);
     end if;
 
     -- masterIntegrationFields for gitlabKeys
@@ -5752,14 +5145,178 @@ do $$
       values (201, '58a160e8c2845c9d5fb82041', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
     end if;
 
+    -- masterIntegrationFields for keyValuePair
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 203) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (203, '58a160e8c2845c9d5fb82042', 'envs', 'object', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
+    end if;
+
     -- Add "defaultAccountViewId" to accounts
     if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'defaultViewId') then
       alter table "accounts" add column "defaultViewId" INTEGER;
     end if;
 
-    -- Add subProviderIdOrgNameI Index on subscriptions
-    if not exists (select 1 from pg_indexes where tablename = 'subscriptions' and indexname = 'subProviderIdOrgNameI') then
-      create index "subProviderIdOrgNameI" on "subscriptions" using btree("providerId", "orgName");
+    -- Add subProviderIdLowercaseOrgNameI Index on projects
+    if not exists (select 1 from pg_indexes where tablename = 'subscriptions' and indexname = 'subProviderIdLowercaseOrgNameI') then
+      create index "subProviderIdLowercaseOrgNameI" on "subscriptions" using btree("providerId", lower("orgName"::text));
+    end if;
+
+    -- Add projProviderIdLowercaseFullNameI Index on projects
+    if not exists (select 1 from pg_indexes where tablename = 'projects' and indexname = 'projProviderIdLowercaseFullNameI') then
+      create index "projProviderIdLowercaseFullNameI" on "projects" using btree("providerId", lower("fullName"::text));
+    end if;
+
+
+    -- Add projProviderIdLowercaseNameI Index on projects
+    if not exists (select 1 from pg_indexes where tablename = 'projects' and indexname = 'projProviderIdLowercaseNameI') then
+      create index "projProviderIdLowercaseNameI" on "projects" using btree("providerId", lower("name"::text));
+    end if;
+
+    -- Drop index projProviderIdFullNameI
+    if exists (select 1 from pg_indexes where tablename = 'projects' and indexname = 'projProviderIdFullNameI') then
+      drop index "projProviderIdFullNameI";
+    end if;
+
+    -- Drop index projProviderIdNameI
+    if exists (select 1 from pg_indexes where tablename = 'projects' and indexname = 'projProviderIdNameI') then
+      drop index "projProviderIdNameI";
+    end if;
+
+    -- Drop index subProviderIdOrgNameI
+    if exists (select 1 from pg_indexes where tablename = 'subscriptions' and indexname = 'subProviderIdOrgNameI') then
+      drop index "subProviderIdOrgNameI";
+    end if;
+
+    -- Add buildJobsSubscriptionIdI Index on buildJobs
+    if not exists (select 1 from pg_indexes where tablename = 'buildJobs' and indexname = 'buildJobsSubscriptionIdI') then
+      create index "buildJobsSubscriptionIdI" on "buildJobs" using btree("subscriptionId");
+    end if;
+
+    -- Add buildJobsProjectIdI Index on buildJobs
+    if not exists (select 1 from pg_indexes where tablename = 'buildJobs' and indexname = 'buildJobsProjectIdI') then
+      create index "buildJobsProjectIdI" on "buildJobs" using btree("projectId");
+    end if;
+
+    -- Add buildsSubscriptionIdI Index on builds
+    if not exists (select 1 from pg_indexes where tablename = 'builds' and indexname = 'buildsSubscriptionIdI') then
+      create index "buildsSubscriptionIdI" on "builds" using btree("subscriptionId");
+    end if;
+
+    -- Add buildsProjectIdI Index on builds
+    if not exists (select 1 from pg_indexes where tablename = 'builds' and indexname = 'buildsProjectIdI') then
+      create index "buildsProjectIdI" on "builds" using btree("projectId");
+    end if;
+
+    -- Add buildsStatusCodeI Index on builds
+    if not exists (select 1 from pg_indexes where tablename = 'builds' and indexname = 'buildsStatusCodeI') then
+      create index "buildsStatusCodeI" on "builds" using btree("statusCode");
+    end if;
+
+    -- Add jobDependenciesOpOpResIdI Index on jobDependencies
+    if not exists (select 1 from pg_indexes where tablename = 'jobDependencies' and indexname = 'jobDependenciesOpOpResIdI') then
+      create index "jobDependenciesOpOpResIdI" on "jobDependencies" using btree("operation", "operationResourceId");
+    end if;
+
+    -- Add resourceSubscriptionIdI Index on resources
+    if not exists (select 1 from pg_indexes where tablename = 'resources' and indexname = 'resourceSubscriptionIdI') then
+      create index "resourceSubscriptionIdI" on "resources" using btree("subscriptionId");
+    end if;
+
+    -- Add resourceProjectIdI Index on resources
+    if not exists (select 1 from pg_indexes where tablename = 'resources' and indexname = 'resourceProjectIdI') then
+      create index "resourceProjectIdI" on "resources" using btree("projectId");
+    end if;
+
+    -- Add resourceTypeCodeI Index on resources
+    if not exists (select 1 from pg_indexes where tablename = 'resources' and indexname = 'resourceTypeCodeI') then
+      create index "resourceTypeCodeI" on "resources" using btree("typeCode");
+    end if;
+
+    -- Add versionsSubscriptionIdI Index on versions
+    if not exists (select 1 from pg_indexes where tablename = 'versions' and indexname = 'versionsSubscriptionIdI') then
+      create index "versionsSubscriptionIdI" on "versions" using btree("subscriptionId");
+    end if;
+
+    -- Add versionsProjectIdI Index on versions
+    if not exists (select 1 from pg_indexes where tablename = 'versions' and indexname = 'versionsProjectIdI') then
+      create index "versionsProjectIdI" on "versions" using btree("projectId");
+    end if;
+
+    -- Remove systemCodes.propertyBag
+    if exists (select 1 from information_schema.columns where table_name = 'systemCodes' and column_name = 'propertyBag') then
+      alter table "systemCodes" drop column "propertyBag";
+    end if;
+
+    -- Drop cdmContainers column
+    if exists (select 1 from information_schema.columns where table_name = 'systemNodeStats' and column_name = 'cdmContainers') then
+      alter table "systemNodeStats" drop column "cdmContainers";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'clusterNodeStats' and column_name = 'cdmContainers') then
+      alter table "clusterNodeStats" drop column "cdmContainers";
+    end if;
+
+    -- Drop disks column
+    if exists (select 1 from information_schema.columns where table_name = 'systemNodeStats' and column_name = 'disks') then
+      alter table "systemNodeStats" drop column "disks";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'clusterNodeStats' and column_name = 'disks') then
+      alter table "clusterNodeStats" drop column "disks";
+    end if;
+
+    -- Drop memory column
+    if exists (select 1 from information_schema.columns where table_name = 'systemNodeStats' and column_name = 'memory') then
+      alter table "systemNodeStats" drop column "memory";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'clusterNodeStats' and column_name = 'memory') then
+      alter table "clusterNodeStats" drop column "memory";
+    end if;
+
+    -- Drop pipelineCount column
+    if exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'pipelineCount') then
+      alter table "subscriptions" drop column "pipelineCount";
+    end if;
+
+    -- Drop isAuthorized column
+    if exists (select 1 from information_schema.columns where table_name = 'accountProfiles' and column_name = 'isAuthorized') then
+      alter table "accountProfiles" drop column "isAuthorized";
+    end if;
+
+    -- Drop enforceScopes column
+    if exists (select 1 from information_schema.columns where table_name = 'accountProfiles' and column_name = 'enforceScopes') then
+      alter table "accountProfiles" drop column "enforceScopes";
+    end if;
+
+    -- Remove segmentApiToken from masterIntegrationFields
+    if exists (select 1 from "masterIntegrationFields" where "name" = 'segmentApiToken' and "masterIntegrationId" = '58be812395141b7ad115b909') then
+      delete from "masterIntegrationFields" where "name" = 'segmentApiToken' and "masterIntegrationId" = '58be812395141b7ad115b909';
+    end if;
+
+    -- remove masterIntegrationFields for clearbitKeys. Delete using objectId()
+    if exists (select 1 from "masterIntegrationFields" where "masterIntegrationId" = '58c78481e34468d32114e125' and name = 'clearbitApiToken') then
+      delete from "masterIntegrationFields" where "masterIntegrationId"= '58c78481e34468d32114e125';
+    end if;
+
+    -- updates providers with name `ghe` to `githubEnterprise`
+    if exists (select 1 from "providers" where "name" = 'ghe') then
+        update "providers" set "name" = 'githubEnterprise' where "name" = 'ghe';
+    end if;
+
+    -- Add execImage column to clusterNodes
+    if not exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'execImage') then
+      alter table "clusterNodes" add column "execImage" varchar(80);
+    end if;
+
+    -- Add execImage column to systemNodes
+    if not exists (select 1 from information_schema.columns where table_name = 'systemNodes' and column_name = 'execImage') then
+      alter table "systemNodes" add column "execImage" varchar(80);
+    end if;
+
+    -- Add earlyAdopterMinionCount to subscriptions
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'earlyAdopterMinionCount') then
+      alter table "subscriptions" add column "earlyAdopterMinionCount" INTEGER;
     end if;
 
   end
