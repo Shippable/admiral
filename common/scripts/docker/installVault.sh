@@ -41,7 +41,7 @@ __update_vault_config() {
   cp -vr $SCRIPTS_DIR/configs/vault_config.hcl.template $VAULT_CONFIG_DIR/config.hcl
   cp -vr $SCRIPTS_DIR/configs/policy.hcl $VAULT_CONFIG_DIR/scripts/policy.hcl
   cp -vr $SCRIPTS_DIR/configs/vaultToken.json.template $VAULT_CONFIG_DIR/scripts/vaultToken.json.template
-  cp -vr $SCRIPTS_DIR/docker/bootstrap_vault.sh $VAULT_CONFIG_DIR/scripts/bootstrap_vault.sh
+  cp -vr $SCRIPTS_DIR/docker/initializeVault.sh $VAULT_CONFIG_DIR/scripts/initializeVault.sh
 }
 
 __run_vault() {
@@ -63,11 +63,11 @@ __run_vault() {
   __process_msg "Vault container successfully running"
 }
 
-__execute_vault_bootstrap() {
-  __process_msg "Bootstrapping vault"
+__initialize_vault() {
+  __process_msg "Initialize vault"
 
   local bootstrap_cmd="sudo docker exec \
-    vault sh -c '/vault/config/scripts/bootstrap_vault.sh'"
+    vault sh -c '/vault/config/scripts/initializeVault.sh'"
   __process_msg "Executing: $bootstrap_cmd"
   eval "$bootstrap_cmd"
 
@@ -108,7 +108,7 @@ main() {
     __process_msg "Vault already initialized, skipping"
   else
     __process_msg "Vault not initialized"
-    __execute_vault_bootstrap
+    __initialize_vault
   fi
   __process_msg "Vault container successfully running"
 }
