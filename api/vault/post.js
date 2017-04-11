@@ -7,7 +7,9 @@ var async = require('async');
 var _ = require('underscore');
 var path = require('path');
 var fs = require('fs');
+var readline = require('readline');
 var spawn = require('child_process').spawn;
+var envHandler = require('../../common/envHandler.js');
 
 function post(req, res) {
   var bag = {
@@ -28,6 +30,8 @@ function post(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeVault.bind(null, bag),
+      _getUnsealKeys.bind(null, bag),
+      _getVaultRootToken.bind(null, bag),
       _post.bind(null, bag),
       _updateVaultUrl.bind(null, bag)
     ],
@@ -166,6 +170,66 @@ function _initializeVault(bag, next) {
   exec.on('close',
     function (exitCode)  {
       return next(exitCode);
+    }
+  );
+}
+
+function _getUnsealKeys(bag, next) {
+  var who = bag.who + '|' + _getUnsealKeys.name;
+  logger.verbose(who, 'Inside');
+
+  var keyIndex = 1;
+  var unsealKeysFile = path.join(
+    global.config.configDir, '/vault/scripts/keys.txt');
+
+  var filereader = readline.createInterface({
+    input: fs.createReadStream(unsealKeysFile),
+    console: false
+  });
+
+  filereader.on('line',
+    function (line) {
+      // this is the format in which unseal keys are stored
+      var keyString = util.format('Unseal Key %s:', keyIndex);
+      if (!_.isEmpty(line) && line.indexOf(keyString) >= 0) {
+        var value = line.split(' ')[3];
+        var keyNameInConfig = 'unsealKey' + keyIndex;
+
+        // set the unseal key in config object
+        bag.config[keyNameInConfig] = value;
+
+        // parse next key
+        keyIndex ++;
+      }
+    }
+  );
+
+  filereader.on('close',
+    function () {
+      return next(null);
+    }
+  );
+}
+
+function _getVaultRootToken(bag, next) {
+  var who = bag.who + '|' + _getVaultRootToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('VAULT_TOKEN',
+    function (err, value) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+
+      if (_.isEmpty(value))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'empty VAULT_TOKEN in admiral.env')
+        );
+
+      bag.config.rootToken = value;
+      return next();
     }
   );
 }
