@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = secretsRoutes;
+module.exports = stateRoutes;
 var validateAccount = require('../../common/auth/validateAccount.js');
 
-function secretsRoutes(app) {
+function stateRoutes(app) {
   app.get('/api/state', validateAccount, require('./get.js'));
 }
