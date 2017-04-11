@@ -29,7 +29,8 @@ function post(req, res) {
       _upsertSystemConfigs.bind(null, bag),
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
-      _upsertMasterIntegrations.bind(null, bag)
+      _upsertMasterIntegrations.bind(null, bag),
+      _upsertSystemCodes.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -52,54 +53,24 @@ function _upsertSystemConfigs(bag, next) {
   var who = bag.who + '|' + _upsertSystemConfigs.name;
   logger.verbose(who, 'Inside');
 
-  var seriesBag = {
-    who: who,
-    params: {},
-    script: '',
-    tmpScriptFilename: '/tmp/systemConfigs.sh',
-    scriptEnvs: {
-      'CONFIG_DIR': global.config.configDir,
-      'SCRIPTS_DIR': global.config.scriptsDir,
-      'DBUSERNAME': global.config.dbUsername,
-      'DBNAME': global.config.dbName,
-      'RELEASE': global.config.release
-    }
-  };
-
-  async.series([
-      _generateSystemConfigsScript.bind(null, seriesBag),
-      _writeScriptToFile.bind(null, seriesBag),
-      _runScript.bind(null, seriesBag)
-    ],
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: '../../common/scripts/create_sys_configs.sh',
+      tmpScriptFilename: '/tmp/systemConfigs.sh',
+      scriptEnvs: {
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName,
+        'RELEASE': global.config.release
+      }
+    },
     function (err) {
-      fs.remove(seriesBag.tmpScriptFilename,
-        function (error) {
-          if (error)
-            logger.warn(
-              util.format('%s, Failed to remove %s %s', who, path, error)
-            );
-        }
-      );
       return next(err);
     }
   );
-}
-
-function _generateSystemConfigsScript(seriesBag, next) {
-  var who = seriesBag.who + '|' + _generateSystemConfigsScript.name;
-  logger.verbose(who, 'Inside');
-
-  //attach header
-  var fileName = '../../lib/_logger.sh';
-
-  var script = '';
-  script = script.concat(__applyTemplate(fileName, seriesBag.params));
-
-  fileName = '../../common/scripts/create_sys_configs.sh';
-  script = script.concat(__applyTemplate(fileName, seriesBag.params));
-
-  seriesBag.script = script;
-  return next();
 }
 
 function _generateServiceUserToken(bag, next) {
@@ -151,21 +122,54 @@ function _upsertMasterIntegrations(bag, next) {
   var who = bag.who + '|' + _upsertMasterIntegrations.name;
   logger.verbose(who, 'Inside');
 
-  var seriesBag = {
-    who: who,
-    params: {},
-    script: '',
-    tmpScriptFilename: '/tmp/masterIntegrations.sh',
-    scriptEnvs: {
-      'CONFIG_DIR': global.config.configDir,
-      'SCRIPTS_DIR': global.config.scriptsDir,
-      'DBUSERNAME': global.config.dbUsername,
-      'DBNAME': global.config.dbName
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: '../../common/scripts/create_master_integrations.sh',
+      tmpScriptFilename: '/tmp/masterIntegrations.sh',
+      scriptEnvs: {
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName
+      }
+    },
+    function (err) {
+      return next(err);
     }
-  };
+  );
+}
+
+function _upsertSystemCodes(bag, next) {
+  var who = bag.who + '|' + _upsertSystemCodes.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: '../../common/scripts/create_system_codes.sh',
+      tmpScriptFilename: '/tmp/systemCodes.sh',
+      scriptEnvs: {
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName
+      }
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+function _copyAndRunScript(seriesBag, next) {
+  var who = seriesBag.who + '|' + _copyAndRunScript.name;
+  logger.verbose(who, 'Inside');
 
   async.series([
-      _generateMasterIntegrationsScript.bind(null, seriesBag),
+      _generateScript.bind(null, seriesBag),
       _writeScriptToFile.bind(null, seriesBag),
       _runScript.bind(null, seriesBag)
     ],
@@ -183,18 +187,17 @@ function _upsertMasterIntegrations(bag, next) {
   );
 }
 
-function _generateMasterIntegrationsScript(seriesBag, next) {
-  var who = seriesBag.who + '|' + _generateSystemConfigsScript.name;
+function _generateScript(seriesBag, next) {
+  var who = seriesBag.who + '|' + _generateScript.name;
   logger.verbose(who, 'Inside');
 
-  //attach header
-  var fileName = '../../lib/_logger.sh';
-
   var script = '';
-  script = script.concat(__applyTemplate(fileName, seriesBag.params));
+  //attach header
+  script = script.concat(
+    __applyTemplate('../../lib/_logger.sh', seriesBag.params));
 
-  fileName = '../../common/scripts/create_master_integrations.sh';
-  script = script.concat(__applyTemplate(fileName, seriesBag.params));
+  script = script.concat(
+    __applyTemplate(seriesBag.scriptPath, seriesBag.params));
 
   seriesBag.script = script;
   return next();
