@@ -52,6 +52,18 @@
                       </td>
                     </tr>
                     <tr>
+                      <td>
+                        <b>Redis:</b>
+                      </td>
+                      <td>
+                        {{vm.rdsInitialized ? 'initialized' : 'not initialized'}}
+                      </td>
+                      <td>
+                        <button class="btn btn-sm btn-default" ng-disabled="!vm.rdsInitialized">config</button>
+                        <button class="btn btn-sm btn-default" ng-disabled="!vm.rdsInitialized">logs</button>
+                      </td>
+                    </tr>
+                    <tr>
                       <td colspan=3>
                         <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.initializing" ng-click="vm.initialize()">
                           <div ng-if="vm.initializing">
