@@ -30,7 +30,9 @@ function post(req, res) {
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
       _upsertMasterIntegrations.bind(null, bag),
-      _upsertSystemCodes.bind(null, bag)
+      _upsertSystemCodes.bind(null, bag),
+      _setDbFlags.bind(null, bag)
+
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -162,6 +164,37 @@ function _upsertSystemCodes(bag, next) {
       return next(err);
     }
   );
+}
+
+function _setDbFlags(bag, next) {
+  var who = bag.who + '|' + _setDbFlags.name;
+  logger.verbose(who, 'Inside');
+
+  var update = {
+    isInstalled: true,
+    isInitialized: true
+  };
+
+  var query = util.format('UPDATE "systemConfigs" set db=\'%s\';',
+    JSON.stringify(update));
+
+  global.config.client.query(query,
+    function (err, response) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DataNotFound, err)
+        );
+
+      if (response.rowCount === 1) {
+        logger.debug('Successfully initialized the database');
+      } else {
+        logger.warn('Failed to initialize the database');
+      }
+
+      return next();
+    }
+  );
+
 }
 
 function _copyAndRunScript(seriesBag, next) {
