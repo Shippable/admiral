@@ -29,8 +29,9 @@ function post(req, res) {
       _upsertSystemConfigs.bind(null, bag),
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
-      _upsertMasterIntegrations.bind(null, bag),
       _upsertSystemCodes.bind(null, bag),
+      _upsertMasterIntegrations.bind(null, bag),
+      _upsertMasterIntegrationFields.bind(null, bag),
       _upsertSystemIntegrations.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
@@ -120,6 +121,29 @@ function _setServiceUserToken(bag, next) {
   );
 }
 
+function _upsertSystemCodes(bag, next) {
+  var who = bag.who + '|' + _upsertSystemCodes.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: '../../common/scripts/create_system_codes.sh',
+      tmpScriptFilename: '/tmp/systemCodes.sh',
+      scriptEnvs: {
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName
+      }
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
 function _upsertMasterIntegrations(bag, next) {
   var who = bag.who + '|' + _upsertMasterIntegrations.name;
   logger.verbose(who, 'Inside');
@@ -143,16 +167,16 @@ function _upsertMasterIntegrations(bag, next) {
   );
 }
 
-function _upsertSystemCodes(bag, next) {
-  var who = bag.who + '|' + _upsertSystemCodes.name;
+function _upsertMasterIntegrationFields(bag, next) {
+  var who = bag.who + '|' + _upsertMasterIntegrationFields.name;
   logger.verbose(who, 'Inside');
 
   _copyAndRunScript({
       who: who,
       params: {},
       script: '',
-      scriptPath: '../../common/scripts/create_system_codes.sh',
-      tmpScriptFilename: '/tmp/systemCodes.sh',
+      scriptPath: '../../common/scripts/create_master_integration_fields.sh',
+      tmpScriptFilename: '/tmp/masterIntegrationFields.sh',
       scriptEnvs: {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
@@ -217,7 +241,6 @@ function _setDbFlags(bag, next) {
       return next();
     }
   );
-
 }
 
 function _copyAndRunScript(seriesBag, next) {
