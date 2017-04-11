@@ -32,11 +32,23 @@
                         <b>Database:</b>
                       </td>
                       <td>
-                        {{vm.dbInitialized ? 'initialized' : 'checking status'}}
+                        {{vm.dbInitialized ? 'initialized' : 'not initialized'}}
                       </td>
                       <td>
                         <button class="btn btn-sm btn-default" ng-disabled="!vm.dbInitialized">config</button>
                         <button class="btn btn-sm btn-default" ng-disabled="!vm.dbInitialized">logs</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>Messaging:</b>
+                      </td>
+                      <td>
+                        {{vm.msgInitialized ? 'initialized' : 'not initialized'}}
+                      </td>
+                      <td>
+                        <button class="btn btn-sm btn-default" ng-disabled="!vm.msgInitialized">config</button>
+                        <button class="btn btn-sm btn-default" ng-disabled="!vm.msgInitialized">logs</button>
                       </td>
                     </tr>
                     <tr>

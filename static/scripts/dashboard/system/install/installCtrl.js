@@ -49,9 +49,11 @@
 
           bag.systemConfigs = systemConfigs;
           bag.dbStatus = JSON.parse(systemConfigs.db);
+          bag.msgStatus = JSON.parse(systemConfigs.msg);
 
           $scope.vm.dbInitialized = bag.dbStatus && bag.dbStatus.isInitialized;
-
+          $scope.vm.msgInitialized =
+            bag.msgStatus && bag.msgStatus.isInitialized;
 
           return next();
         }
