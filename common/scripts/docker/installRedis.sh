@@ -95,7 +95,7 @@ main() {
     __process_msg "Redis not initialized"
     __check_redis
   fi
-  __process_msg "Gitlab container successfully running"
+  __process_msg "Redis container successfully running"
 }
 
 main
