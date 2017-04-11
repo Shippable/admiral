@@ -22,6 +22,9 @@
     $scope.vm = {
       isLoaded: false,
       initializing: false,
+      dbInitialized: false,
+      msgInitialized: false,
+      rdsInitialized: false,
       initialize: initialize
     };
 
@@ -50,10 +53,13 @@
           bag.systemConfigs = systemConfigs;
           bag.dbStatus = JSON.parse(systemConfigs.db);
           bag.msgStatus = JSON.parse(systemConfigs.msg);
+          bag.rdsStatus = JSON.parse(systemConfigs.redis);
 
           $scope.vm.dbInitialized = bag.dbStatus && bag.dbStatus.isInitialized;
           $scope.vm.msgInitialized =
             bag.msgStatus && bag.msgStatus.isInitialized;
+          $scope.vm.rdsInitialized =
+            bag.rdsStatus && bag.rdsStatus.isInitialized;
 
           return next();
         }
