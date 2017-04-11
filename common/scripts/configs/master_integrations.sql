@@ -18,6 +18,18 @@ do $$
       );
     end if;
 
+    -- Create indexes
+
+    -- Add mIntmIntIdU index
+    if not exists (select 1 from pg_indexes where tablename = 'masterIntegrations' and indexname = 'mIntmIntIdU') then
+      create index "mIntmIntIdU" on "masterIntegrations" using btree("masterIntegrationId");
+    end if;
+
+    -- Add mIntNameTypeU index
+    if not exists (select 1 from pg_indexes where tablename = 'masterIntegrations' and indexname = 'mIntNameTypeU') then
+      create index "mIntNameTypeU" on "masterIntegrations" using btree("name", "type");
+    end if;
+
     -- Insert all masterIntegrations:
 
     -- Docker
@@ -286,6 +298,40 @@ do $$
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values ('58a160e8c2845c9d5fb82042', 63, 'keyValuePair', 'Key-Value pair', 'generic', true, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
     end if;
+
+    -- Azure DC/OS master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'AZURE-DC/OS' and "typeCode" = 5002) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('58ecb1a8f318373d7f5645f4', 64, 'AZURE-DC/OS', 'Azure DC/OS', 'deploy', true, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+
+    -- these masterIntegrations (rabbitmq, redis, www, mktg) are not in base
+
+    -- rabbitmq master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'rabbitmq' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('589528a99ce3dd1000a94b06', 65, 'rabbitmq', 'RabbitMQ', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    -- redis master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'redis' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('540e55445e5bad6f98764522', 66, 'redis', 'Redis', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    -- www master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'www' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('589528aa9ce3dd1000a94b1c', 67, 'www', 'www', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    -- mktg master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'mktg' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('589528aa9ce3dd1000a94b1e', 68, 'mktg', 'mktg', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
     -- END adding master integrations
 
     -- Remove masterIntegrations
