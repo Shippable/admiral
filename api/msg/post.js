@@ -11,13 +11,14 @@ var spawn = require('child_process').spawn;
 
 function post(req, res) {
   var bag = {
-    reqQuery: req.query,
+    reqBody: req.body,
     resBody: [],
     params: {},
-    tmpScript: '/tmp/vault.sh'
+    component: 'msg',
+    tmpScript: '/tmp/msg.sh'
   };
 
-  bag.who = util.format('vault|%s', self.name);
+  bag.who = util.format('msg|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
@@ -26,7 +27,7 @@ function post(req, res) {
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
-      _initializeVault.bind(null, bag),
+      _initializeMsg.bind(null, bag),
       _post.bind(null, bag)
     ],
     function (err) {
@@ -44,9 +45,11 @@ function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
 
-  //TODO:
-  //if ip exists, then just update value in db and dont run init
-  //if no object exists, initialize
+  if (!_.has(bag.reqBody, 'password') || _.isEmpty(bag.reqBody.password))
+    return next(
+      new ActErr(who, ActErr.DataNotFound, 'Missing body data :password')
+    );
+
   return next();
 }
 
@@ -54,7 +57,8 @@ function _get(bag, next) {
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  global.config.client.query('SELECT secrets from "systemConfigs"',
+  var query = util.format('SELECT %s from "systemConfigs"', bag.component);
+  global.config.client.query(query,
     function (err, systemConfigs) {
       if (err)
         return next(
@@ -62,16 +66,15 @@ function _get(bag, next) {
         );
 
       if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].secrets)) {
-        logger.debug('Found vault configuration');
+        !_.isEmpty(systemConfigs.rows[0].msg)) {
+        logger.debug('Found configuration for ' + bag.component);
 
-        bag.vaultConfig = systemConfigs.rows[0].secrets;
-        bag.vaultConfig = JSON.parse(bag.vaultConfig);
-
+        bag.config = systemConfigs.rows[0].msg;
+        bag.config = JSON.parse(bag.config);
       } else {
         return next(
           new ActErr(who, ActErr.DataNotFound,
-            'No vault configuration in database')
+            'No configuration present in configs for ' + bag.component)
         );
       }
 
@@ -84,9 +87,20 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
-  //TODO:
-  //gather all the variables that will be injected in init script
-  //
+  var scriptsDir = '/home/shippable/admiral/common/scripts';
+  bag.scriptEnvs = {
+    'RUNTIME_DIR': global.config.runtimeDir,
+    'CONFIG_DIR': global.config.configDir,
+    'MSG_HOST': global.config.admiralIP,
+    'SCRIPTS_DIR': scriptsDir,
+    'IS_INITIALIZED': bag.config.isInitialized,
+    'IS_INSTALLED': bag.config.isInstalled,
+    'MSG_UI_USER': 'shippable',
+    'MSG_UI_PASS': 'abc123',
+    'MSG_USER': 'shippableRoot',
+    'MSG_PASS': bag.reqBody.password,
+    'RABBITMQ_ADMIN': path.join(scriptsDir, '/docker/rabbitmqadmin')
+  };
 
   return next();
 }
@@ -101,7 +115,7 @@ function _generateInitializeScript(bag, next) {
   headerScript = headerScript.concat(__applyTemplate(fileName, bag.params));
 
   var initializeScript = headerScript;
-  fileName = '../../common/scripts/docker/installVault.sh';
+  fileName = '../../common/scripts/docker/installMsg.sh';
   initializeScript = headerScript.concat(__applyTemplate(fileName, bag.params));
 
   bag.script = initializeScript;
@@ -129,24 +143,15 @@ function _writeScriptToFile(bag, next) {
 }
 
 
-function _initializeVault(bag, next) {
-  var who = bag.who + '|' + _initializeVault.name;
+function _initializeMsg(bag, next) {
+  var who = bag.who + '|' + _initializeMsg.name;
   logger.verbose(who, 'Inside');
-
-  //TODO: these should come from env values
-  var scriptEnvs = {
-    'RUNTIME_DIR': global.config.runtimeDir,
-    'CONFIG_DIR': global.config.configDir,
-    'SCRIPTS_DIR': '/home/shippable/admiral/common/scripts',
-    'IS_INITIALIZED': bag.vaultConfig.isInitialized,
-    'IS_INSTALLED': bag.vaultConfig.isInstalled
-  };
 
   var exec = spawn('/bin/bash',
     ['-c', bag.tmpScript],
     {
       cwd: bag.buildRootDir,
-      env: scriptEnvs
+      env: bag.scriptEnvs
     }
   );
 
@@ -173,11 +178,11 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  var update = bag.vaultConfig;
-  bag.vaultConfig.isInstalled = true;
-  bag.vaultConfig.isInitialized = true;
+  var update = bag.config;
+  bag.config.isInstalled = true;
+  bag.config.isInitialized = true;
 
-  var query = util.format('UPDATE "systemConfigs" set secrets=\'%s\';',
+  var query = util.format('UPDATE "systemConfigs" set msg=\'%s\';',
     JSON.stringify(update));
 
   global.config.client.query(query,
@@ -188,10 +193,10 @@ function _post(bag, next) {
         );
 
       if (response.rowCount === 1) {
-        logger.debug('Successfully added default value for vault server');
+        logger.debug('Successfully added default value for ' + bag.component);
         bag.resBody = update;
       } else {
-        logger.warn('Failed to set default vault server value');
+        logger.warn('Failed to set default value for ' + bag.component);
       }
 
       return next();
