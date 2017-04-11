@@ -31,8 +31,8 @@ function post(req, res) {
       _setServiceUserToken.bind(null, bag),
       _upsertMasterIntegrations.bind(null, bag),
       _upsertSystemCodes.bind(null, bag),
+      _upsertSystemIntegrations.bind(null, bag),
       _setDbFlags.bind(null, bag)
-
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -153,6 +153,29 @@ function _upsertSystemCodes(bag, next) {
       script: '',
       scriptPath: '../../common/scripts/create_system_codes.sh',
       tmpScriptFilename: '/tmp/systemCodes.sh',
+      scriptEnvs: {
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName
+      }
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+function _upsertSystemIntegrations(bag, next) {
+  var who = bag.who + '|' + _upsertSystemIntegrations.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: '../../common/scripts/create_system_integrations.sh',
+      tmpScriptFilename: '/tmp/systemIntegrations.sh',
       scriptEnvs: {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
