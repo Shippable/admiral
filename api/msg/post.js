@@ -98,7 +98,8 @@ function _generateInitializeEnvs(bag, next) {
     'MSG_UI_PASS': 'abc123',
     'MSG_USER': 'shippableRoot',
     'MSG_PASS': bag.reqBody.password,
-    'RABBITMQ_ADMIN': path.join(scriptsDir, '/docker/rabbitmqadmin')
+    'RABBITMQ_ADMIN':
+      path.join(global.config.scriptsDir, '/docker/rabbitmqadmin')
   };
 
   return next();
@@ -149,7 +150,6 @@ function _initializeMsg(bag, next) {
   var exec = spawn('/bin/bash',
     ['-c', bag.tmpScript],
     {
-      cwd: bag.buildRootDir,
       env: bag.scriptEnvs
     }
   );

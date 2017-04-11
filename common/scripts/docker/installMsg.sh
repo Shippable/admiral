@@ -50,6 +50,7 @@ __run_msg() {
     -v $MSG_CONFIG_DIR:$config_dir_container \
     --publish 5672:5672 \
     --publish 15672:15672 \
+    --net=host \
     --privileged=true \
     --name=$COMPONENT \
     $MSG_IMAGE
