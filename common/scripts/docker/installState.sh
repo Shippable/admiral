@@ -71,7 +71,7 @@ __run_state() {
   "
 
   eval "$run_cmd"
-  __process_msg "Rabbitmq container successfully running"
+  __process_msg "Gitlab container successfully running"
 }
 
 __check_state() {
