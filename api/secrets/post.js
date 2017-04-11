@@ -67,7 +67,7 @@ function _get(bag, next) {
 
       if (!_.isEmpty(systemConfigs.rows) &&
         !_.isEmpty(systemConfigs.rows[0].secrets)) {
-        logger.debug('Found configuration for component ' + bag.secrets);
+        logger.debug('Found configuration for component ' + bag.component);
 
         bag.config = systemConfigs.rows[0].secrets;
         bag.config = JSON.parse(bag.config);

@@ -104,7 +104,7 @@ function _setDefault(bag, next) {
         logger.debug('Successfully added default value for ' + bag.component);
         bag.resBody = JSON.parse(defaultConfig);
       } else {
-        logger.warn('Failed to get default vaulue for ' + bag.component);
+        logger.warn('Failed to get default value for ' + bag.component);
       }
 
       return next();
