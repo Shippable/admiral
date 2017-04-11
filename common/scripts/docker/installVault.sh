@@ -3,14 +3,15 @@
 export COMPONENT="vault"
 export VAULT_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export VAULT_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
-export VAULT_IMAGE="library/vault:0.6.0"
 export VAULT_MOUNTS="$VAULT_MOUNTS"
+export VAULT_IMAGE="drydock/vault:$RELEASE"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export DB_USER=apiuser
 export DB_NAME=shipdb
 
 __validate_vault_envs() {
   __process_msg "Initializing vault environment variables"
+  __process_msg "VAULT_IMAGE: $VAULT_IMAGE"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "VAULT_DATA_DIR: $VAULT_DATA_DIR"
   __process_msg "VAULT_CONFIG_DIR: $VAULT_CONFIG_DIR"

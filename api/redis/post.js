@@ -7,20 +7,18 @@ var async = require('async');
 var _ = require('underscore');
 var path = require('path');
 var fs = require('fs');
-var readline = require('readline');
 var spawn = require('child_process').spawn;
-var envHandler = require('../../common/envHandler.js');
 
 function post(req, res) {
   var bag = {
-    reqQuery: req.query,
+    reqBody: req.body,
     resBody: [],
     params: {},
-    component: 'secrets',
-    tmpScript: '/tmp/secrets.sh'
+    component: 'redis',
+    tmpScript: '/tmp/redis.sh'
   };
 
-  bag.who = util.format('secrets|%s', self.name);
+  bag.who = util.format('redis|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
@@ -29,11 +27,8 @@ function post(req, res) {
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
-      _initializeVault.bind(null, bag),
-      _getUnsealKeys.bind(null, bag),
-      _getVaultRootToken.bind(null, bag),
-      _post.bind(null, bag),
-      _updateVaultUrl.bind(null, bag)
+      _initializeRedis.bind(null, bag),
+      _post.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -66,16 +61,15 @@ function _get(bag, next) {
         );
 
       if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].secrets)) {
-        logger.debug('Found configuration for component ' + bag.component);
+        !_.isEmpty(systemConfigs.rows[0].redis)) {
+        logger.debug('Found configuration for ' + bag.component);
 
-        bag.config = systemConfigs.rows[0].secrets;
+        bag.config = systemConfigs.rows[0].redis;
         bag.config = JSON.parse(bag.config);
-
       } else {
         return next(
           new ActErr(who, ActErr.DataNotFound,
-            'No configuration in database for ' + bag.component)
+            'No configuration present in configs for ' + bag.component)
         );
       }
 
@@ -91,17 +85,11 @@ function _generateInitializeEnvs(bag, next) {
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
+    'REDIS_HOST': global.config.admiralIP,
     'RELEASE': global.config.release,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
-    'IS_INSTALLED': bag.config.isInstalled,
-    'DBUSERNAME': global.config.dbUsername,
-    'DBPASSWORD': global.config.dbPassword,
-    'DBHOST': global.config.dbHost,
-    'DBPORT': global.config.dbPort,
-    'DBNAME': global.config.dbName,
-    'VAULT_HOST': global.config.admiralIP,
-    'VAULT_PORT': bag.config.port
+    'IS_INSTALLED': bag.config.isInstalled
   };
 
   return next();
@@ -117,7 +105,7 @@ function _generateInitializeScript(bag, next) {
   headerScript = headerScript.concat(__applyTemplate(fileName, bag.params));
 
   var initializeScript = headerScript;
-  fileName = '../../common/scripts/docker/installVault.sh';
+  fileName = '../../common/scripts/docker/installRedis.sh';
   initializeScript = headerScript.concat(__applyTemplate(fileName, bag.params));
 
   bag.script = initializeScript;
@@ -145,8 +133,8 @@ function _writeScriptToFile(bag, next) {
 }
 
 
-function _initializeVault(bag, next) {
-  var who = bag.who + '|' + _initializeVault.name;
+function _initializeRedis(bag, next) {
+  var who = bag.who + '|' + _initializeRedis.name;
   logger.verbose(who, 'Inside');
 
   var exec = spawn('/bin/bash',
@@ -175,66 +163,6 @@ function _initializeVault(bag, next) {
   );
 }
 
-function _getUnsealKeys(bag, next) {
-  var who = bag.who + '|' + _getUnsealKeys.name;
-  logger.verbose(who, 'Inside');
-
-  var keyIndex = 1;
-  var unsealKeysFile = path.join(
-    global.config.configDir, '/vault/scripts/keys.txt');
-
-  var filereader = readline.createInterface({
-    input: fs.createReadStream(unsealKeysFile),
-    console: false
-  });
-
-  filereader.on('line',
-    function (line) {
-      // this is the format in which unseal keys are stored
-      var keyString = util.format('Unseal Key %s:', keyIndex);
-      if (!_.isEmpty(line) && line.indexOf(keyString) >= 0) {
-        var value = line.split(' ')[3];
-        var keyNameInConfig = 'unsealKey' + keyIndex;
-
-        // set the unseal key in config object
-        bag.config[keyNameInConfig] = value;
-
-        // parse next key
-        keyIndex ++;
-      }
-    }
-  );
-
-  filereader.on('close',
-    function () {
-      return next(null);
-    }
-  );
-}
-
-function _getVaultRootToken(bag, next) {
-  var who = bag.who + '|' + _getVaultRootToken.name;
-  logger.verbose(who, 'Inside');
-
-  envHandler.get('VAULT_TOKEN',
-    function (err, value) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed, err)
-        );
-
-      if (_.isEmpty(value))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'empty VAULT_TOKEN in admiral.env')
-        );
-
-      bag.config.rootToken = value;
-      return next();
-    }
-  );
-}
-
 function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
@@ -258,31 +186,6 @@ function _post(bag, next) {
         bag.resBody = update;
       } else {
         logger.warn('Failed to set default value for ' + bag.component);
-      }
-
-      return next();
-    }
-  );
-}
-
-function _updateVaultUrl(bag, next) {
-  var who = bag.who + '|' +  _updateVaultUrl.name;
-  logger.verbose(who, 'Inside');
-
-  var query = util.format('UPDATE "systemConfigs" set "vaultUrl"=\'%s\';',
-    bag.config.address);
-
-  global.config.client.query(query,
-    function (err, response) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.DataNotFound, err)
-        );
-
-      if (response.rowCount === 1) {
-        logger.debug('Successfully added default value for vault url');
-      } else {
-        logger.warn('Failed to set default vault url');
       }
 
       return next();
