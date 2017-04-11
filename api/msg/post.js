@@ -181,8 +181,8 @@ function _post(bag, next) {
   bag.config.isInstalled = true;
   bag.config.isInitialized = true;
 
-  var query = util.format('UPDATE "systemConfigs" set msg=\'%s\';',
-    JSON.stringify(update));
+  var query = util.format('UPDATE "systemConfigs" set %s=\'%s\';',
+    bag.component, JSON.stringify(update));
 
   global.config.client.query(query,
     function (err, response) {
