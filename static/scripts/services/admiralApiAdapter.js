@@ -24,11 +24,11 @@
         return API.get('/api/systemConfigs', callback);
       },
       // Service Routes
+      postInitialize: function (body, callback) {
+        return API.post('/api/workflow/initialize', body, callback);
+      },
       getDatabase: function (callback) {
         return API.get('/api/db', callback);
-      },
-      postDatabase: function (body, callback) {
-        return API.post('/api/db', body, callback);
       },
       getVault: function (callback) {
         return API.get('/api/vault', callback);

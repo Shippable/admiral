@@ -69,7 +69,7 @@
       $scope.vm.initializing = true;
       var bag = {};
       async.series([
-          initializeDatabase.bind(null, bag),
+          postInitialize.bind(null, bag),
           getSystemConfigs.bind(null, bag)
         ],
         function (err) {
@@ -82,9 +82,9 @@
         }
       );
     }
-    function initializeDatabase(bag, next) {
+    function postInitialize(bag, next) {
 
-      admiralApiAdapter.postDatabase({},
+      admiralApiAdapter.postInitialize({},
         function (err) {
           return next(err);
         }
