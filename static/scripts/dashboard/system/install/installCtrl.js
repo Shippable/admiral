@@ -48,10 +48,10 @@
             return next(err);
 
           bag.systemConfigs = systemConfigs;
-          bag.dbStatus = systemConfigs.db;
+          bag.dbStatus = JSON.parse(systemConfigs.db);
 
-          if (bag.dbStatus && bag.dbStatus.initialized === 'true')
-            $scope.vm.dbInitialized = true;
+          $scope.vm.dbInitialized = bag.dbStatus && bag.dbStatus.isInitialized;
+
 
           return next();
         }
@@ -78,8 +78,6 @@
 
       admiralApiAdapter.postDatabase({},
         function (err) {
-          // set to true regardless until actual functionality is added
-          $scope.vm.dbInitialized = true;
           return next(err);
         }
       );
