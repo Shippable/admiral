@@ -14,7 +14,7 @@ function get(req, res) {
     component: 'secrets',
     defaultConfig: {
       address: global.config.admiralIP,
-      port: 8300,
+      port: 8200,
       rootToken: '',
       unsealKey1: '',
       unsealKey2: '',

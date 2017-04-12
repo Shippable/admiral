@@ -30,7 +30,7 @@ __validate_vault_envs() {
 }
 
 __cleanup() {
-  __process_msg "Removing state containers"
+  __process_msg "Removing stale containers"
   sudo docker rm -f $COMPONENT || true
 }
 
@@ -89,7 +89,7 @@ __run_vault() {
     -d \
     -v $VAULT_DATA_DIR:$data_dir_container \
     -v $VAULT_CONFIG_DIR:$config_dir_container \
-    --publish 8200:8200 \
+    --publish $VAULT_PORT:$VAULT_PORT \
     --privileged=true \
     --net=host \
     --name=$COMPONENT \
@@ -98,6 +98,30 @@ __run_vault() {
 
   eval "$run_cmd"
   __process_msg "Vault container successfully running"
+}
+
+__check_vault() {
+  __process_msg "Checking vault container status on: $VAULT_HOST:$VAULT_PORT"
+  local interval=3
+  local timeout=60
+  local counter=0
+  local is_booted=false
+
+  while [ $is_booted != true ] && [ $counter -lt $timeout ]; do
+    if nc -vz $VAULT_HOST $VAULT_PORT &>/dev/null; then
+      __process_msg "Vault found"
+      sleep 5
+      is_booted=true
+    else
+      __process_msg "Waiting for vault to start"
+      let "counter = $counter + $interval"
+      sleep $interval
+    fi
+  done
+  if [ $is_booted = false ]; then
+    __process_error "Failed to boot vault container"
+    exit 1
+  fi
 }
 
 __initialize_vault() {
@@ -145,6 +169,7 @@ main() {
     __process_msg "Vault already initialized, skipping"
   else
     __process_msg "Vault not initialized"
+    __check_vault
     __initialize_vault
   fi
   __process_msg "Vault container successfully running"
