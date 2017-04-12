@@ -20,7 +20,7 @@
                 Loading...
               </div>
               <div class="col-md-offset-1 col-md-10" ng-if="vm.isLoaded">
-                <div ng-if="!vm.msgInitialized"
+                <div ng-if="!vm.systemConfigs.msg.isInitialized"
                   class="row">
                   <span class="col-md-7">Choose a password for RabbitMQ (the message bus):</span>
                   <div class="col-md-5">
@@ -28,7 +28,7 @@
                     ng-model="vm.initializeForm.msgPassword" ng-disabled="vm.isInitializing"/>
                   </div>
                 </div>
-                <div ng-if="!vm.stateInitialized" class="row">
+                <div ng-if="!vm.systemConfigs.state.isInitialized" class="row">
                   <span class="col-md-7">Choose a password for Gitlab (this stores job state):</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="statePassword"
@@ -49,11 +49,11 @@
                           <b>Database:</b>
                         </td>
                         <td>
-                          {{vm.dbInitialized ? 'initialized' : 'not initialzed'}}
+                          {{vm.systemConfigs.db.isInitialized ? 'initialized' : 'not initialized'}}
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.dbInitialized">config</button>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.dbInitialized">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')">config</button>
+                          <button class="btn btn-sm btn-default">logs</button>
                         </td>
                       </tr>
                       <tr>
@@ -61,11 +61,11 @@
                           <b>Secrets:</b>
                         </td>
                         <td>
-                          {{vm.secretsInitialized ? 'initialized' : 'not initialized'}}
+                          {{vm.systemConfigs.secrets.isInitialized ? 'initialized' : 'not initialized'}}
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.secretsInitialized">config</button>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.secretsInitialized">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" >config</button>
+                          <button class="btn btn-sm btn-default">logs</button>
                         </td>
                       </tr>
                       <tr>
@@ -73,11 +73,11 @@
                           <b>Messaging:</b>
                         </td>
                         <td>
-                          {{vm.msgInitialized ? 'initialized' : 'not initialized'}}
+                          {{vm.systemConfigs.msg.isInitialized ? 'initialized' : 'not initialized'}}
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.msgInitialized">config</button>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.msgInitialized">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')">config</button>
+                          <button class="btn btn-sm btn-default">logs</button>
                         </td>
                       </tr>
                       <tr>
@@ -85,11 +85,11 @@
                           <b>State:</b>
                         </td>
                         <td>
-                          {{vm.stateInitialized ? 'initialized' : 'not initialized'}}
+                          {{vm.systemConfigs.state.isInitialized ? 'initialized' : 'not initialized'}}
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.stateInitialized">config</button>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.stateInitialized">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')">config</button>
+                          <button class="btn btn-sm btn-default">logs</button>
                         </td>
                       </tr>
                       <tr>
@@ -97,11 +97,11 @@
                           <b>Redis:</b>
                         </td>
                         <td>
-                          {{vm.rdsInitialized ? 'initialized' : 'not initialized'}}
+                          {{vm.systemConfigs.redis.isInitialized ? 'initialized' : 'not initialized'}}
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.rdsInitialized">config</button>
-                          <button class="btn btn-sm btn-default" ng-disabled="!vm.rdsInitialized">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')">config</button>
+                          <button class="btn btn-sm btn-default">logs</button>
                         </td>
                       </tr>
                       <tr>
@@ -153,6 +153,43 @@
               test data
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COnfigs Modal -->
+  <div class="modal fade" id="configsModal"
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{vm.selectedService.displayName}} Configs</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-condensed table-striped">
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="config in vm.selectedService.configs">
+                <td>
+                  <b>{{config.key}}:</b>
+                </td>
+                <td style="word-wrap: break-word; word-break: break-all;">
+                  {{config.value}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
         </div>
       </div>
     </div>

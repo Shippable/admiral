@@ -26,17 +26,37 @@
     $scope.vm = {
       isLoaded: false,
       initializing: false,
-      dbInitialized: false,
-      secretsInitialized: false,
-      stateInitialized: false,
-      msgInitialized: false,
-      rdsInitialized: false,
       initializeForm: {
         msgPassword: '',
         statePassword: ''
       },
+      systemConfigs: {
+        db: {
+          displayName: 'Database',
+          getRoute: 'getDatabase',
+          isInitialized: false
+        },
+        secrets: {
+          displayName: 'Vault',
+          getRoute: 'getSecrets'
+        },
+        msg: {
+          displayName: 'Messaging',
+          getRoute: 'getMsg'
+        },
+        state: {
+          displayName: 'State',
+          getRoute: 'getState'
+        },
+        redis: {
+          displayName: 'Redis',
+          getRoute: 'getRedis'
+        }
+      },
+      selectedService: {},
       initializeResponse: '',
       initialize: initialize,
+      showConfigModal: showConfigModal,
       logOutOfAdmiral: logOutOfAdmiral
     };
 
@@ -55,7 +75,6 @@
             dashboardCtrlDefer.reject(err);
             return horn.error(err);
           }
-          $scope.vm.systemConfigs = bag.systemConfigs;
           dashboardCtrlDefer.resolve();
         }
       );
@@ -76,41 +95,32 @@
     function getSystemConfigs(bag, next) {
       admiralApiAdapter.getSystemConfigs(
         function (err, systemConfigs) {
-          if (err) {
+          if (err || !systemConfigs) {
             // the route will return an error when
             // the db hasn't been initialized yet
-            $scope.vm.dbInitialized = false;
             return next();
           }
 
-          bag.systemConfigs = systemConfigs;
+          $scope.vm.systemConfigs.db =
+            _.extend($scope.vm.systemConfigs.db,
+              (systemConfigs.db && JSON.parse(systemConfigs.db)));
+          $scope.vm.systemConfigs.secrets =
+            _.extend($scope.vm.systemConfigs.secrets,
+              (systemConfigs.secrets && JSON.parse(systemConfigs.secrets)));
+          $scope.vm.systemConfigs.msg =
+            _.extend($scope.vm.systemConfigs.msg,
+              (systemConfigs.msg && JSON.parse(systemConfigs.msg)));
+          $scope.vm.systemConfigs.state =
+            _.extend($scope.vm.systemConfigs.state,
+              (systemConfigs.state && JSON.parse(systemConfigs.state)));
+          $scope.vm.systemConfigs.redis =
+            _.extend($scope.vm.systemConfigs.redis,
+              (systemConfigs.redis && JSON.parse(systemConfigs.redis)));
 
-          bag.dbStatus = JSON.parse(systemConfigs.db);
-          bag.secretsStatus = systemConfigs.secrets &&
-            JSON.parse(systemConfigs.secrets);
-          bag.msgStatus = systemConfigs.msg && JSON.parse(systemConfigs.msg);
-          bag.stateStatus = systemConfigs.state &&
-            JSON.parse(systemConfigs.state);
-          bag.rdsStatus = systemConfigs.redis &&
-            JSON.parse(systemConfigs.redis);
-
-          $scope.vm.dbInitialized = bag.dbStatus && bag.dbStatus.isInitialized;
-
-          $scope.vm.secretsInitialized =
-            bag.secretsStatus && bag.secretsStatus.isInitialized;
-
-          $scope.vm.msgInitialized =
-            bag.msgStatus && bag.msgStatus.isInitialized;
           $scope.vm.initializeForm.msgPassword =
-              (bag.msgStatus && bag.msgStatus.password) || '';
-
-          $scope.vm.stateInitialized =
-            bag.stateStatus && bag.stateStatus.isInitialized;
+              $scope.vm.systemConfigs.msg.password || '';
           $scope.vm.initializeForm.statePassword =
-            (bag.stateStatus && bag.stateStatus.rootPassword) || '';
-
-          $scope.vm.rdsInitialized =
-            bag.rdsStatus && bag.rdsStatus.isInitialized;
+            $scope.vm.systemConfigs.state.rootPassword || '';
 
           return next();
         }
@@ -130,7 +140,6 @@
             console.log(err);
             return;
           }
-          $scope.vm.systemConfigs = bag.systemConfigs;
         }
       );
     }
@@ -140,6 +149,30 @@
           if (err)
             $scope.vm.initializeResponse = err.methodName + ': ' + err.message;
           return next();
+        }
+      );
+    }
+
+    function showConfigModal(service) {
+      $scope.vm.selectedService = $scope.vm.systemConfigs[service];
+
+      admiralApiAdapter[$scope.vm.selectedService.getRoute](
+        function (err, configs) {
+          if (err)
+            return horn.error(err);
+
+          $scope.vm.selectedService.configs = [];
+
+          _.each(configs,
+            function(value, key) {
+              $scope.vm.selectedService.configs.push({
+                key: key,
+                value: value
+              });
+            }
+          );
+
+          $('#configsModal').modal('show');
         }
       );
     }

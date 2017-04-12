@@ -30,12 +30,21 @@
       getDatabase: function (callback) {
         return API.get('/api/db', callback);
       },
-      getVault: function (callback) {
-        return API.get('/api/vault', callback);
+      getSecrets: function (callback) {
+        return API.get('/api/secrets', callback);
       },
-      postVault: function (body, callback) {
-        return API.post('/api/vault', body, callback);
+      postSecrets: function (body, callback) {
+        return API.post('/api/secrets', body, callback);
       },
+      getMsg: function (callback) {
+        return API.get('/api/msg', callback);
+      },
+      getState: function (callback) {
+        return API.get('/api/state', callback);
+      },
+      getRedis: function (callback) {
+        return API.get('/api/redis', callback);
+      }
     };
   }
 }());
