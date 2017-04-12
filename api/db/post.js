@@ -63,6 +63,7 @@ function _upsertSystemConfigs(bag, next) {
       scriptPath: '../../common/scripts/create_sys_configs.sh',
       tmpScriptFilename: '/tmp/systemConfigs.sh',
       scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
@@ -132,6 +133,7 @@ function _upsertSystemCodes(bag, next) {
       scriptPath: '../../common/scripts/create_system_codes.sh',
       tmpScriptFilename: '/tmp/systemCodes.sh',
       scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
@@ -156,6 +158,7 @@ function _upsertMasterIntegrations(bag, next) {
       tmpScriptFilename: '/tmp/masterIntegrations.sh',
       scriptEnvs: {
         'CONFIG_DIR': global.config.configDir,
+        'RUNTIME_DIR': global.config.runtimeDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName
@@ -178,6 +181,7 @@ function _upsertMasterIntegrationFields(bag, next) {
       scriptPath: '../../common/scripts/create_master_integration_fields.sh',
       tmpScriptFilename: '/tmp/masterIntegrationFields.sh',
       scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
@@ -201,6 +205,7 @@ function _upsertSystemIntegrations(bag, next) {
       scriptPath: '../../common/scripts/create_system_integrations.sh',
       tmpScriptFilename: '/tmp/systemIntegrations.sh',
       scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
