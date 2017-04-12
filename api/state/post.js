@@ -186,7 +186,7 @@ function _postSystemIntegration(bag, next) {
   logger.verbose(who, 'Inside');
 
   var postObject = {
-    name: 'gitlabCreds',
+    name: 'state',
     masterName: 'gitlabCreds',
     data: {
       username: 'root',
