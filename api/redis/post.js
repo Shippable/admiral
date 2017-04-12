@@ -158,7 +158,12 @@ function _initializeRedis(bag, next) {
 
   exec.on('close',
     function (exitCode)  {
-      return next(exitCode);
+      if (exitCode > 0)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Script returned code: ' + exitCode)
+        );
+      return next();
     }
   );
 }

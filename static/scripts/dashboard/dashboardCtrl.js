@@ -28,12 +28,14 @@
       initializing: false,
       dbInitialized: false,
       secretsInitialized: false,
+      stateInitialized: false,
       msgInitialized: false,
       rdsInitialized: false,
       initializeForm: {
         msgPassword: '',
         statePassword: ''
       },
+      initializeResponse: '',
       initialize: initialize,
       logOutOfAdmiral: logOutOfAdmiral
     };
@@ -96,7 +98,7 @@
 
           $scope.vm.secretsInitialized =
             bag.secretsStatus && bag.secretsStatus.isInitialized;
-            
+
           $scope.vm.msgInitialized =
             bag.msgStatus && bag.msgStatus.isInitialized;
           $scope.vm.initializeForm.msgPassword =
@@ -135,7 +137,9 @@
     function postInitialize(bag, next) {
       admiralApiAdapter.postInitialize($scope.vm.initializeForm,
         function (err) {
-          return next(err);
+          if (err)
+            $scope.vm.initializeResponse = err.methodName + ': ' + err.message;
+          return next();
         }
       );
     }
