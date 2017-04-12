@@ -23,6 +23,8 @@ function initialize(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _initializeDatabase.bind(null, bag),
+      _getSecrets.bind(null, bag),
+      _initializeSecrets.bind(null, bag),
       _getMsg.bind(null, bag),
       _initializeMsg.bind(null, bag),
       _getState.bind(null, bag),
@@ -63,6 +65,41 @@ function _initializeDatabase(bag, next) {
   logger.verbose(who, 'Inside');
 
   bag.apiAdapter.postDB({},
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, err.id || ActErr.OperationFailed, err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getSecrets(bag, next) {
+  var who = bag.who + '|' + _getSecrets.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getSecrets(
+    function (err, secrets) {
+      if (err)
+        return next(
+          new ActErr(who, err.id || ActErr.OperationFailed, err)
+        );
+      bag.secretsInitialized =
+        secrets && secrets.isInstalled && secrets.isInitialized;
+      return next();
+    }
+  );
+}
+
+function _initializeSecrets(bag, next) {
+  if (bag.secretsInitialized) return next();
+
+  var who = bag.who + '|' + _initializeSecrets.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.postSecrets({},
     function (err) {
       if (err)
         return next(

@@ -43,6 +43,19 @@ APIAdapter.prototype.postMsg =
     this.post(url, body, callback);
   };
 
+// secrets
+APIAdapter.prototype.getSecrets =
+  function (callback) {
+    var url = '/api/secrets';
+    this.get(url, callback);
+  };
+
+APIAdapter.prototype.postSecrets =
+  function (body, callback) {
+    var url = '/api/secrets';
+    this.post(url, body, callback);
+  };
+
 // state
 APIAdapter.prototype.getState =
   function (callback) {
@@ -55,6 +68,7 @@ APIAdapter.prototype.postState =
     var url = '/api/state';
     this.post(url, body, callback);
   };
+  
 
 /*****************************************/
 /*              HTTP METHODS             */
