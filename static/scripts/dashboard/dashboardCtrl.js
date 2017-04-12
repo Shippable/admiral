@@ -30,7 +30,8 @@
       msgInitialized: false,
       rdsInitialized: false,
       initializeForm: {
-        msgPassword: ''
+        msgPassword: '',
+        statePassword: ''
       },
       initialize: initialize,
       logOutOfAdmiral: logOutOfAdmiral
@@ -80,14 +81,26 @@
           }
 
           bag.systemConfigs = systemConfigs;
+
           bag.dbStatus = JSON.parse(systemConfigs.db);
           bag.msgStatus = systemConfigs.msg && JSON.parse(systemConfigs.msg);
+          bag.stateStatus = systemConfigs.state &&
+            JSON.parse(systemConfigs.state);
           bag.rdsStatus = systemConfigs.redis &&
             JSON.parse(systemConfigs.redis);
 
           $scope.vm.dbInitialized = bag.dbStatus && bag.dbStatus.isInitialized;
+
           $scope.vm.msgInitialized =
             bag.msgStatus && bag.msgStatus.isInitialized;
+          $scope.vm.initializeForm.msgPassword =
+              (bag.msgStatus && bag.msgStatus.password) || '';
+
+          $scope.vm.stateInitialized =
+            bag.stateStatus && bag.stateStatus.isInitialized;
+          $scope.vm.initializeForm.statePassword =
+            (bag.stateStatus && bag.stateStatus.password) || '';
+
           $scope.vm.rdsInitialized =
             bag.rdsStatus && bag.rdsStatus.isInitialized;
 

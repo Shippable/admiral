@@ -20,21 +20,25 @@
                 Loading...
               </div>
               <div class="col-md-offset-1 col-md-10">
-                <div ng-if="vm.isLoaded && (!vm.dbInitialized || !vm.msgInitialized) && !vm.initializing" class="row">
-                  <div class="form-group">
-                    <span class="col-md-7">Choose a password for RabbitMQ (the message bus):</span>
-                    <div class="col-md-5">
-                      <input type="text" class="form-control" name ="rabbitmqPassword"
-                      ng-model="vm.initializeForm.msgPassword"/>
-                    </div>
+                <div ng-if="vm.isLoaded &&
+                 !vm.initializing && (!vm.dbInitialized || !vm.msgInitialized || !vm.stateInitialized)" class="row">
+                  <span class="col-md-7">Choose a password for RabbitMQ (the message bus):</span>
+                  <div class="col-md-5">
+                    <input type="text" class="form-control" name="msgPassword"
+                    ng-model="vm.initializeForm.msgPassword"/>
                   </div>
-                  <div class="col-md-10">
-                    <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.initializing || !vm.initializeForm.msgPassword" ng-click="vm.initialize()">
-                      Initialize
-                    </button>
+                  <span class="col-md-7">Choose a password for Gitlab (this stores job state):</span>
+                  <div class="col-md-5">
+                    <input type="text" class="form-control" name="statePassword"
+                    ng-model="vm.initializeForm.statePassword"/>
                   </div>
                 </div>
-                <div ng-if="vm.isLoaded && ((vm.dbInitialized && vm.msgInitialized) || vm.initializing)" class="row">
+                <div class="col-md-12 text-right">
+                  <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.initializing || !vm.initializeForm.msgPassword || !vm.initializeForm.statePassword" ng-click="vm.initialize()">
+                    Initialize
+                  </button>
+                </div>
+                <div ng-if="vm.isLoaded && ((vm.dbInitialized && vm.msgInitialized && vm.stateInitialized) || vm.initializing)" class="row">
                   <table class="table table-condensed table-striped">
                     <thead>
                       <tr>

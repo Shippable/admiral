@@ -43,6 +43,18 @@ APIAdapter.prototype.postMsg =
     this.post(url, body, callback);
   };
 
+// state
+APIAdapter.prototype.getState =
+  function (callback) {
+    var url = '/api/state';
+    this.get(url, callback);
+  };
+
+APIAdapter.prototype.postState =
+  function (body, callback) {
+    var url = '/api/state';
+    this.post(url, body, callback);
+  };
 
 /*****************************************/
 /*              HTTP METHODS             */
