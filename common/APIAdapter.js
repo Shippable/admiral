@@ -70,6 +70,13 @@ APIAdapter.prototype.postState =
   };
   
 
+// systemIntegrations
+APIAdapter.prototype.postSystemIntegration =
+  function (body, callback) {
+    var url = '/api/systemIntegrations';
+    this.post(url, body, callback);
+  };
+
 /*****************************************/
 /*              HTTP METHODS             */
 /*****************************************/
