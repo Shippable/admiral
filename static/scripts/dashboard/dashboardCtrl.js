@@ -27,6 +27,7 @@
       isLoaded: false,
       initializing: false,
       dbInitialized: false,
+      secretsInitialized: false,
       msgInitialized: false,
       rdsInitialized: false,
       initializeForm: {
@@ -83,6 +84,8 @@
           bag.systemConfigs = systemConfigs;
 
           bag.dbStatus = JSON.parse(systemConfigs.db);
+          bag.secretsStatus = systemConfigs.secrets &&
+            JSON.parse(systemConfigs.secrets);
           bag.msgStatus = systemConfigs.msg && JSON.parse(systemConfigs.msg);
           bag.stateStatus = systemConfigs.state &&
             JSON.parse(systemConfigs.state);
@@ -91,6 +94,9 @@
 
           $scope.vm.dbInitialized = bag.dbStatus && bag.dbStatus.isInitialized;
 
+          $scope.vm.secretsInitialized =
+            bag.secretsStatus && bag.secretsStatus.isInitialized;
+            
           $scope.vm.msgInitialized =
             bag.msgStatus && bag.msgStatus.isInitialized;
           $scope.vm.initializeForm.msgPassword =

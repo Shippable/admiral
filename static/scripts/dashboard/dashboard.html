@@ -20,8 +20,9 @@
                 Loading...
               </div>
               <div class="col-md-offset-1 col-md-10">
-                <div ng-if="vm.isLoaded &&
-                 !vm.initializing && (!vm.dbInitialized || !vm.msgInitialized || !vm.stateInitialized)" class="row">
+                <div ng-if="vm.isLoaded && !vm.initializing &&
+                  (!vm.dbInitialized || !vm.msgInitialized || !vm.stateInitialized || !vm.secretsInitialized)"
+                  class="row">
                   <span class="col-md-7">Choose a password for RabbitMQ (the message bus):</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="msgPassword"
@@ -57,6 +58,18 @@
                         <td>
                           <button class="btn btn-sm btn-default" ng-disabled="!vm.dbInitialized">config</button>
                           <button class="btn btn-sm btn-default" ng-disabled="!vm.dbInitialized">logs</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <b>Secrets:</b>
+                        </td>
+                        <td>
+                          {{vm.secretsInitialized ? 'initialized' : 'not initialized'}}
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-disabled="!vm.secretsInitialized">config</button>
+                          <button class="btn btn-sm btn-default" ng-disabled="!vm.secretsInitialized">logs</button>
                         </td>
                       </tr>
                       <tr>

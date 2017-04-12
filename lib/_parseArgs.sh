@@ -161,6 +161,7 @@ __print_help() {
   Commmands:
     install         Run Shippable installation
     help            Print this message
+    clean           Remove shippable containers and configurations
   "
   exit 0
 }
@@ -168,6 +169,44 @@ __print_help() {
 __show_status() {
   __process_msg "All good !!!"
 }
+
+__wipe_clean() {
+  __process_marker "Cleaning installation"
+
+  __process_msg "WARNING: this will erase your Shippable installation..."
+  __process_msg "WARNING: including all containers and the database."
+  __process_msg "Do you wish to continue? (Y to confirm)"
+  read confirmation
+
+  if [[ "$confirmation" =~ "Y" ]]; then
+
+    local count=$(docker ps -aq | wc -l)
+    if [[ "$count" -ne 0 ]]; then
+      local container_ids=$(docker ps -aq)
+      local remove_cmd="docker rm -f"
+      __process_msg "Executing: $remove_cmd"
+      for id in ${container_ids[@]}; do
+        eval "$remove_cmd $id"
+      done
+    else
+      __process_msg "No containers found. Skipping removal."
+    fi
+    local remove_mnts_cmd="sudo rm -rf /var/run/shippable"
+    __process_msg "Executing: $remove_mnts_cmd"
+    eval "$remove_mnts_cmd"
+    local remove_configs_cmd="sudo rm -rf /etc/shippable"
+    __process_msg "Executing: $remove_configs_cmd"
+    eval "$remove_configs_cmd"
+    __process_success "Clean is complete. Reinstall by running 'sudo ./admiral.sh install'"
+    exit 0
+  else
+    __process_error "Cancelling clean"
+    exit 1
+  fi
+
+
+}
+
 
 __parse_args() {
   if [[ $# -gt 0 ]]; then
@@ -184,6 +223,9 @@ __parse_args() {
         ;;
       help)
         __print_help
+        ;;
+      clean)
+        __wipe_clean
         ;;
       *)
         echo "Invalid option: $key"
