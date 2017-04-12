@@ -33,30 +33,25 @@
       systemConfigs: {
         db: {
           displayName: 'Database',
-          getRoute: 'getDatabase',
           isInitialized: false
         },
         secrets: {
-          displayName: 'Vault',
-          getRoute: 'getSecrets'
+          displayName: 'Secrets'
         },
         msg: {
-          displayName: 'Messaging',
-          getRoute: 'getMsg'
+          displayName: 'Messaging'
         },
         state: {
-          displayName: 'State',
-          getRoute: 'getState'
+          displayName: 'State'
         },
         redis: {
-          displayName: 'Redis',
-          getRoute: 'getRedis'
+          displayName: 'Redis'
         }
       },
       selectedService: {},
-      initializeResponse: '',
       initialize: initialize,
       showConfigModal: showConfigModal,
+      showLogModal: showLogModal,
       logOutOfAdmiral: logOutOfAdmiral
     };
 
@@ -137,7 +132,7 @@
         function (err) {
           $scope.vm.initializing = false;
           if (err) {
-            console.log(err);
+            horn.error(err);
             return;
           }
         }
@@ -147,7 +142,7 @@
       admiralApiAdapter.postInitialize($scope.vm.initializeForm,
         function (err) {
           if (err)
-            $scope.vm.initializeResponse = err.methodName + ': ' + err.message;
+            horn.error(err);
           return next();
         }
       );
@@ -156,7 +151,7 @@
     function showConfigModal(service) {
       $scope.vm.selectedService = $scope.vm.systemConfigs[service];
 
-      admiralApiAdapter[$scope.vm.selectedService.getRoute](
+      admiralApiAdapter.getService(service,
         function (err, configs) {
           if (err)
             return horn.error(err);
@@ -173,6 +168,22 @@
           );
 
           $('#configsModal').modal('show');
+        }
+      );
+    }
+
+    function showLogModal(service) {
+      $scope.vm.selectedService = $scope.vm.systemConfigs[service];
+      $scope.vm.selectedService.logs = [];
+
+      admiralApiAdapter.getServiceLogs(service,
+        function (err, logs) {
+          if (err)
+            return horn.error(err);
+
+          $scope.vm.selectedService.logs = logs;
+
+          $('#logsModal').modal('show');
         }
       );
     }

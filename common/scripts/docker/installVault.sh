@@ -164,6 +164,7 @@ main() {
     __update_vault_config
     __update_vault_creds
     __run_vault
+    __check_vault
   fi
 
   if [ "$IS_INITIALIZED" == true ]; then
