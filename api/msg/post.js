@@ -96,7 +96,7 @@ function _generateInitializeEnvs(bag, next) {
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
     'MSG_UI_USER': 'shippable',
-    'MSG_UI_PASS': 'abc123',
+    'MSG_UI_PASS': bag.reqBody.password,
     'MSG_USER': 'shippableRoot',
     'MSG_PASS': bag.reqBody.password,
     'RABBITMQ_ADMIN':
@@ -181,6 +181,10 @@ function _post(bag, next) {
   var update = bag.config;
   bag.config.isInstalled = true;
   bag.config.isInitialized = true;
+  bag.config.uiUsername = bag.scriptEnvs.MSG_UI_USER;
+  bag.config.uiPassword = bag.scriptEnvs.MSG_UI_PASS;
+  bag.config.username = bag.scriptEnvs.MSG_USER;
+  bag.config.password = bag.scriptEnvs.MSG_PASS;
 
   var query = util.format('UPDATE "systemConfigs" set %s=\'%s\';',
     bag.component, JSON.stringify(update));
