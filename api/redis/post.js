@@ -9,10 +9,13 @@ var path = require('path');
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 
+var APIAdapter = require('../../common/APIAdapter.js');
+
 function post(req, res) {
   var bag = {
     reqBody: req.body,
     resBody: [],
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     params: {},
     component: 'redis',
     tmpScript: '/tmp/redis.sh'
@@ -28,6 +31,7 @@ function post(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeRedis.bind(null, bag),
+      _postSystemIntegration.bind(null, bag),
       _post.bind(null, bag)
     ],
     function (err) {
@@ -159,6 +163,31 @@ function _initializeRedis(bag, next) {
   exec.on('close',
     function (exitCode)  {
       return next(exitCode);
+    }
+  );
+}
+
+function _postSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _postSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var postObject = {
+    name: 'redis',
+    masterName: 'redis',
+    data: {
+      redisUrl: bag.scriptEnvs.REDIS_HOST + ':' + bag.config.port
+    }
+  };
+
+  bag.apiAdapter.postSystemIntegration(postObject,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
     }
   );
 }

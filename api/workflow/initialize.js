@@ -28,7 +28,9 @@ function initialize(req, res) {
       _getMsg.bind(null, bag),
       _initializeMsg.bind(null, bag),
       _getState.bind(null, bag),
-      _initializeState.bind(null, bag)
+      _initializeState.bind(null, bag),
+      _getRedis.bind(null, bag),
+      _initializeRedis.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -180,6 +182,44 @@ function _initializeState(bag, next) {
   };
 
   bag.apiAdapter.postState(postObj,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, err.id || ActErr.OperationFailed, err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getRedis(bag, next) {
+  var who = bag.who + '|' + _getRedis.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getRedis(
+    function (err, redis) {
+      if (err)
+        return next(
+          new ActErr(who, err.id || ActErr.OperationFailed, err)
+        );
+
+      bag.redisInitialized = redis && redis.isInstalled && redis.isInitialized;
+
+      return next();
+    }
+  );
+}
+
+function _initializeRedis(bag, next) {
+  if (bag.redisInitialized) return next();
+
+  var who = bag.who + '|' + _initializeRedis.name;
+  logger.verbose(who, 'Inside');
+
+  var postObj = {};
+
+  bag.apiAdapter.postRedis(postObj,
     function (err) {
       if (err)
         return next(

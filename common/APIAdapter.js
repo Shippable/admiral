@@ -43,6 +43,19 @@ APIAdapter.prototype.postMsg =
     this.post(url, body, callback);
   };
 
+// redis
+APIAdapter.prototype.getRedis =
+  function (callback) {
+    var url = '/api/redis';
+    this.get(url, callback);
+  };
+
+APIAdapter.prototype.postRedis =
+  function (body, callback) {
+    var url = '/api/redis';
+    this.post(url, body, callback);
+  };
+
 // secrets
 APIAdapter.prototype.getSecrets =
   function (callback) {
@@ -68,7 +81,7 @@ APIAdapter.prototype.postState =
     var url = '/api/state';
     this.post(url, body, callback);
   };
-  
+
 
 // systemIntegrations
 APIAdapter.prototype.postSystemIntegration =
