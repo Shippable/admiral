@@ -30,6 +30,20 @@ APIAdapter.prototype.postDB =
     this.post(url, body, callback);
   };
 
+// msg
+APIAdapter.prototype.getMsg =
+  function (callback) {
+    var url = '/api/msg';
+    this.get(url, callback);
+  };
+
+APIAdapter.prototype.postMsg =
+  function (body, callback) {
+    var url = '/api/msg';
+    this.post(url, body, callback);
+  };
+
+
 /*****************************************/
 /*              HTTP METHODS             */
 /*****************************************/

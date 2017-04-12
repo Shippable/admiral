@@ -25,6 +25,14 @@
 
     $scope.vm = {
       isLoaded: false,
+      initializing: false,
+      dbInitialized: false,
+      msgInitialized: false,
+      rdsInitialized: false,
+      initializeForm: {
+        msgPassword: ''
+      },
+      initialize: initialize,
       logOutOfAdmiral: logOutOfAdmiral
     };
 
@@ -34,7 +42,8 @@
       var bag = {};
 
       async.series([
-          setBreadcrumb.bind(null, bag)
+          setBreadcrumb.bind(null, bag),
+          getSystemConfigs.bind(null, bag)
         ],
         function (err) {
           $scope.vm.isLoaded = true;
@@ -42,7 +51,7 @@
             dashboardCtrlDefer.reject(err);
             return horn.error(err);
           }
-
+          $scope.vm.systemConfigs = bag.systemConfigs;
           dashboardCtrlDefer.resolve();
         }
       );
@@ -58,6 +67,58 @@
       $scope._r.showCrumb = true;
       $scope._r.title = 'Admiral - Shippable';
       return next();
+    }
+
+    function getSystemConfigs(bag, next) {
+      admiralApiAdapter.getSystemConfigs(
+        function (err, systemConfigs) {
+          if (err) {
+            // the route will return an error when
+            // the db hasn't been initialized yet
+            $scope.vm.dbInitialized = false;
+            return next();
+          }
+
+          bag.systemConfigs = systemConfigs;
+          bag.dbStatus = JSON.parse(systemConfigs.db);
+          bag.msgStatus = systemConfigs.msg && JSON.parse(systemConfigs.msg);
+          bag.rdsStatus = systemConfigs.redis &&
+            JSON.parse(systemConfigs.redis);
+
+          $scope.vm.dbInitialized = bag.dbStatus && bag.dbStatus.isInitialized;
+          $scope.vm.msgInitialized =
+            bag.msgStatus && bag.msgStatus.isInitialized;
+          $scope.vm.rdsInitialized =
+            bag.rdsStatus && bag.rdsStatus.isInitialized;
+
+          return next();
+        }
+      );
+    }
+
+    function initialize() {
+      $scope.vm.initializing = true;
+      var bag = {};
+      async.series([
+          postInitialize.bind(null, bag),
+          getSystemConfigs.bind(null, bag)
+        ],
+        function (err) {
+          $scope.vm.initializing = false;
+          if (err) {
+            console.log(err);
+            return;
+          }
+          $scope.vm.systemConfigs = bag.systemConfigs;
+        }
+      );
+    }
+    function postInitialize(bag, next) {
+      admiralApiAdapter.postInitialize($scope.vm.initializeForm,
+        function (err) {
+          return next(err);
+        }
+      );
     }
 
     function logOutOfAdmiral(e) {

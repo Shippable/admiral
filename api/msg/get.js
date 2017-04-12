@@ -16,6 +16,8 @@ function get(req, res) {
       address: global.config.admiralIP,
       amqpPort: 5672,
       adminPort: 15672,
+      uiUsername: '',
+      uiPassword: '',
       username: '',
       password: '',
       isSecure: false,
