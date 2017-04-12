@@ -68,7 +68,8 @@ function _initializeDatabase(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to initialize database.', err)
         );
 
       return next();
@@ -84,7 +85,8 @@ function _getSecrets(bag, next) {
     function (err, secrets) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to fetch secrets information', err)
         );
       bag.secretsInitialized =
         secrets && secrets.isInstalled && secrets.isInitialized;
@@ -103,7 +105,8 @@ function _initializeSecrets(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to initialize secrets provider', err)
         );
 
       return next();
@@ -119,7 +122,8 @@ function _getMsg(bag, next) {
     function (err, msg) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to get message information', err)
         );
 
       bag.msgInitialized = msg && msg.isInstalled && msg.isInitialized;
@@ -143,7 +147,8 @@ function _initializeMsg(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to initialize messaging provider', err)
         );
 
       return next();
@@ -159,7 +164,8 @@ function _getState(bag, next) {
     function (err, state) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to get state information', err)
         );
 
       bag.stateInitialized = state && state.isInstalled && state.isInitialized;
@@ -183,7 +189,8 @@ function _initializeState(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to initialize state provider', err)
         );
 
       return next();
