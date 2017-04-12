@@ -306,19 +306,12 @@ do $$
       values ('58a160e8c2845c9d5fb82042', 63, 'keyValuePair', 'Key-Value pair', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
     end if;
 
-    -- Azure DC/OS master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'AZURE-DC/OS' and "typeCode" = 5002) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58ecb1a8f318373d7f5645f4', 64, 'AZURE-DC/OS', 'Azure DC/OS', 'deploy', false, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-
     -- these masterIntegrations (rabbitmq, redis, www, mktg) are not in base
 
     -- rabbitmq master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'rabbitmq' and "typeCode" = 5012) then
+    if not exists (select 1 from "masterIntegrations" where "name" = 'rabbitmqCreds' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('589528a99ce3dd1000a94b06', 65, 'rabbitmq', 'RabbitMQ', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values ('589528a99ce3dd1000a94b06', 65, 'rabbitmqCreds', 'RabbitMQ Credentials', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- redis master integration

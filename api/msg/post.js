@@ -197,8 +197,8 @@ function _postSystemIntegration(bag, next) {
     '@' + bag.scriptEnvs.MSG_HOST + ':' + bag.config.adminPort;
 
   var postObject = {
-    name: 'rabbitmq',
-    masterName: 'rabbitmq',
+    name: 'msg',
+    masterName: 'rabbitmqCreds',
     data: {
       amqpUrl: amqpAddress + '/shippable',
       amqpUrlRoot: amqpAddress + '/shippableRoot',
