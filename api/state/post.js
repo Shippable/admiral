@@ -99,7 +99,10 @@ function _generateInitializeEnvs(bag, next) {
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
-    'STATE_PASS': bag.reqBody.password
+    'STATE_PASS': bag.reqBody.password,
+    'STATE_PORT': bag.config.port,
+    'SSH_PORT': bag.config.sshPort,
+    'SECURE_PORT': bag.config.securePort
   };
 
   return next();

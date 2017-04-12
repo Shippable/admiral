@@ -6,6 +6,10 @@ export REDIS_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export REDIS_IMAGE="drydock/redis:$RELEASE"
 export REDIS_PORT=6379
+export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+
+## Write logs of this script to component specific file
+exec &> >(tee -a "$LOGS_FILE")
 
 __validate_redis_envs() {
   __process_msg "Initializing redis environment variables"
@@ -14,6 +18,7 @@ __validate_redis_envs() {
   __process_msg "STATE_DATA_DIR: $STATE_DATA_DIR"
   __process_msg "STATE_CONFIG_DIR: $STATE_CONFIG_DIR"
   __process_msg "REDIS_HOST: $REDIS_HOST"
+  __process_msg "REDIS_PORT: $REDIS_PORT"
 }
 
 __validate_redis_mounts() {

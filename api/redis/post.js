@@ -93,7 +93,8 @@ function _generateInitializeEnvs(bag, next) {
     'RELEASE': global.config.release,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
-    'IS_INSTALLED': bag.config.isInstalled
+    'IS_INSTALLED': bag.config.isInstalled,
+    'REDIS_PORT': bag.config.port
   };
 
   return next();

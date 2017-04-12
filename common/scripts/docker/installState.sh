@@ -6,7 +6,11 @@ export STATE_LOGS_DIR="$RUNTIME_DIR/$COMPONENT/logs"
 export STATE_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export STATE_IMAGE="drydock/gitlab:$RELEASE"
-export STATE_PORT=80
+
+export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+
+## Write logs of this script to component specific file
+exec &> >(tee -a "$LOGS_FILE")
 
 __validate_state_envs() {
   __process_msg "Initializing state environment variables"
@@ -16,6 +20,9 @@ __validate_state_envs() {
   __process_msg "STATE_CONFIG_DIR: $STATE_CONFIG_DIR"
   __process_msg "STATE_HOST: $STATE_HOST"
   __process_msg "STATE_PASS: $STATE_PASS"
+  __process_msg "STATE_PORT: $STATE_PORT"
+  __process_msg "SSH_PORT: $SSH_PORT"
+  __process_msg "SECURE_PORT: $SECURE_PORT"
 }
 
 __validate_state_mounts() {
@@ -62,14 +69,16 @@ __run_state() {
     -v $STATE_CONFIG_DIR:$config_dir_container \
     -v $STATE_DATA_DIR:$data_dir_container \
     -v $STATE_LOGS_DIR:$logs_dir_container \
-    --publish 22:22 \
-    --publish 80:80 \
-    --publish 443:443 \
+    --publish $SSH_PORT:$SSH_PORT \
+    --publish $STATE_PORT:$STATE_PORT \
+    --publish $SECURE_PORT:$SECURE_PORT \
     --net=host \
     --privileged=true \
     --name=$COMPONENT \
     $STATE_IMAGE
   "
+
+  __process_msg "Executing: $run_cmd"
 
   eval "$run_cmd"
   __process_msg "Gitlab container successfully running"
