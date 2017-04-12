@@ -13,10 +13,10 @@ function getLogs(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: [],
-    component: 'secrets'
+    component: 'msg'
   };
 
-  bag.who = util.format('secrets|%s', self.name);
+  bag.who = util.format('msg|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([

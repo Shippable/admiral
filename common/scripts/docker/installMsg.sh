@@ -6,6 +6,10 @@ export MSG_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
 export MSG_IMAGE="drydock/rabbitmq:$RELEASE"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export MSG_PORT=15672
+export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+
+## Write logs of this script to component specific file
+exec &> >(tee -a "$LOGS_FILE")
 
 __validate_msg_envs() {
   __process_msg "Initializing vault environment variables"
@@ -18,6 +22,8 @@ __validate_msg_envs() {
   __process_msg "MSG_UI_PASS: $MSG_UI_PASS"
   __process_msg "MSG_USER: $MSG_USER"
   __process_msg "MSG_PASS: $MSG_PASS"
+  __process_msg "AMQP_PORT: $AMQP_PORT"
+  __process_msg "ADMIN_PORT: $ADMIN_PORT"
   __process_msg "RABBITMQ_ADMIN: $RABBITMQ_ADMIN"
 }
 
@@ -49,14 +55,15 @@ __run_msg() {
     -d \
     -v $MSG_DATA_DIR:$data_dir_container \
     -v $MSG_CONFIG_DIR:$config_dir_container \
-    --publish 5672:5672 \
-    --publish 15672:15672 \
+    --publish $AMQP_PORT:$AMQP_PORT \
+    --publish $ADMIN_PORT:$ADMIN_PORT \
     --net=host \
     --privileged=true \
     --name=$COMPONENT \
     $MSG_IMAGE
   "
 
+  __process_msg "Executing: $run_cmd"
   eval "$run_cmd"
   __process_msg "Rabbitmq container successfully running"
 }

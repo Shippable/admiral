@@ -96,6 +96,7 @@ __run_vault() {
     $VAULT_IMAGE server
   "
 
+  __process_msg "Executing: $run_cmd"
   eval "$run_cmd"
   __process_msg "Vault container successfully running"
 }

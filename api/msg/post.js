@@ -103,6 +103,8 @@ function _generateInitializeEnvs(bag, next) {
     'MSG_UI_PASS': bag.reqBody.password,
     'MSG_USER': 'shippableRoot',
     'MSG_PASS': bag.reqBody.password,
+    'AMQP_PORT': bag.config.amqpPort,
+    'ADMIN_PORT': bag.config.adminPort,
     'RABBITMQ_ADMIN':
       path.join(global.config.scriptsDir, '/docker/rabbitmqadmin')
   };
