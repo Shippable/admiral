@@ -22,7 +22,7 @@ function getLogs(req, res) {
   async.series([
     _checkInputParams.bind(null, bag),
     _get.bind(null, bag)
-  ],
+    ],
     function (err) {
       logger.info(bag.who, 'Completed');
       if (err)
