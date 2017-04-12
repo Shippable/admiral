@@ -33,6 +33,9 @@ function post(req, res) {
       _upsertMasterIntegrations.bind(null, bag),
       _upsertMasterIntegrationFields.bind(null, bag),
       _upsertSystemIntegrations.bind(null, bag),
+      _readPublicSSHKey.bind(null, bag),
+      _readPrivateSSHKey.bind(null, bag),
+      _saveSSHKeys.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
     function (err) {
@@ -214,6 +217,72 @@ function _upsertSystemIntegrations(bag, next) {
     },
     function (err) {
       return next(err);
+    }
+  );
+}
+
+function _readPublicSSHKey(bag, next) {
+  var who = bag.who + '|' + _readPublicSSHKey.name;
+  logger.verbose(who, 'Inside');
+
+  var publicKey = path.join(global.config.configDir, 'machinekey.pub');
+  fs.readFile(publicKey,
+    function (err, data) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+
+      bag.publicSSHKey = data.toString();
+
+      return next();
+    }
+  );
+}
+
+function _readPrivateSSHKey(bag, next) {
+  var who = bag.who + '|' + _readPrivateSSHKey.name;
+  logger.verbose(who, 'Inside');
+
+  var publicKey = path.join(global.config.configDir, 'machinekey');
+  fs.readFile(publicKey,
+    function (err, data) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+
+      bag.privateSSHKey = data.toString();
+
+      return next();
+    }
+  );
+}
+
+function _saveSSHKeys(bag, next) {
+  var who = bag.who + '|' +  _saveSSHKeys.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format(
+    'UPDATE "systemConfigs" set ' +
+    ' "systemNodePrivateKey"=\'%s\',' +
+    ' "systemNodePublicKey"=\'%s\';', bag.privateSSHKey, bag.publicSSHKey);
+
+
+  global.config.client.query(query,
+    function (err, response) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DataNotFound, err)
+        );
+
+      if (response.rowCount === 1) {
+        logger.debug('Successfully updated ssh keys in database');
+      } else {
+        logger.warn('Failed to update ssh keys in database');
+      }
+
+      return next();
     }
   );
 }
