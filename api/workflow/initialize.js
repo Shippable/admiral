@@ -24,7 +24,9 @@ function initialize(req, res) {
       _checkInputParams.bind(null, bag),
       _initializeDatabase.bind(null, bag),
       _getMsg.bind(null, bag),
-      _initializeMsg.bind(null, bag)
+      _initializeMsg.bind(null, bag),
+      _getState.bind(null, bag),
+      _initializeState.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -45,6 +47,13 @@ function _checkInputParams(bag, next) {
     return next(
       new ActErr(who, ActErr.DataNotFound, 'Missing body data: msgPassword')
     );
+
+  if (!_.has(bag.reqBody, 'statePassword') ||
+    _.isEmpty(bag.reqBody.statePassword))
+    return next(
+      new ActErr(who, ActErr.DataNotFound, 'Missing body data: statePassword')
+    );
+
 
   return next();
 }
@@ -94,6 +103,46 @@ function _initializeMsg(bag, next) {
   };
 
   bag.apiAdapter.postMsg(postObj,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, err.id || ActErr.OperationFailed, err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getState(bag, next) {
+  var who = bag.who + '|' + _getState.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getState(
+    function (err, state) {
+      if (err)
+        return next(
+          new ActErr(who, err.id || ActErr.OperationFailed, err)
+        );
+
+      bag.stateInitialized = state && state.isInstalled && state.isInitialized;
+
+      return next();
+    }
+  );
+}
+
+function _initializeState(bag, next) {
+  if (bag.stateInitialized) return next();
+
+  var who = bag.who + '|' + _initializeState.name;
+  logger.verbose(who, 'Inside');
+
+  var postObj = {
+    password: bag.reqBody.statePassword
+  };
+
+  bag.apiAdapter.postState(postObj,
     function (err) {
       if (err)
         return next(
