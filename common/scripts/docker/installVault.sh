@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export COMPONENT="vault"
+export COMPONENT="secrets"
 export VAULT_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export VAULT_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
 export VAULT_MOUNTS="$VAULT_MOUNTS"
@@ -8,6 +8,10 @@ export VAULT_IMAGE="drydock/vault:$RELEASE"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export DB_USER=apiuser
 export DB_NAME=shipdb
+export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+
+## Write logs of this script to component specific file
+exec &> >(tee -a "$LOGS_FILE")
 
 __validate_vault_envs() {
   __process_msg "Initializing vault environment variables"
@@ -22,6 +26,12 @@ __validate_vault_envs() {
   __process_msg "DBNAME: $DBNAME"
   __process_msg "DBUSERNAME: $DBUSERNAME"
   __process_msg "DBPASSWORD: $DBPASSWORD"
+  __process_msg "LOGS_FILE:$LOGS_FILE"
+}
+
+__cleanup() {
+  __process_msg "Removing state containers"
+  sudo docker rm -f $COMPONENT || true
 }
 
 __validate_vault_mounts() {
@@ -94,7 +104,7 @@ __initialize_vault() {
   __process_msg "Initialize vault"
 
   local bootstrap_cmd="sudo docker exec \
-    vault sh -c '/vault/config/scripts/initializeVault.sh'"
+    $COMPONENT sh -c '/vault/config/scripts/initializeVault.sh'"
   __process_msg "Executing: $bootstrap_cmd"
   eval "$bootstrap_cmd"
 
@@ -124,6 +134,7 @@ main() {
   else
     __process_msg "Vault not installed"
     __validate_vault_envs
+    __cleanup
     __validate_vault_mounts
     __update_vault_config
     __update_vault_creds

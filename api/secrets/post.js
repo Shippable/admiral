@@ -181,7 +181,7 @@ function _getUnsealKeys(bag, next) {
 
   var keyIndex = 1;
   var unsealKeysFile = path.join(
-    global.config.configDir, '/vault/scripts/keys.txt');
+    global.config.configDir, bag.component, 'scripts/keys.txt');
 
   var filereader = readline.createInterface({
     input: fs.createReadStream(unsealKeysFile),
