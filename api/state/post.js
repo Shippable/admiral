@@ -9,10 +9,13 @@ var path = require('path');
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 
+var APIAdapter = require('../../common/APIAdapter.js');
+
 function post(req, res) {
   var bag = {
     reqBody: req.body,
     resBody: [],
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     params: {},
     component: 'state',
     tmpScript: '/tmp/state.sh'
@@ -28,6 +31,7 @@ function post(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeState.bind(null, bag),
+      _postSystemIntegration.bind(null, bag),
       _post.bind(null, bag)
     ],
     function (err) {
@@ -169,6 +173,33 @@ function _initializeState(bag, next) {
           new ActErr(who, ActErr.OperationFailed,
             'Script returned code: ' + exitCode)
         );
+      return next();
+    }
+  );
+}
+
+function _postSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _postSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var postObject = {
+    name: 'gitlabCreds',
+    masterName: 'gitlabCreds',
+    data: {
+      username: 'root',
+      password: bag.scriptEnvs.STATE_PASS,
+      url: util.format('http://%s/api/v3', bag.scriptEnvs.STATE_HOST)
+    }
+  };
+
+  bag.apiAdapter.postSystemIntegration(postObject,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
       return next();
     }
   );
