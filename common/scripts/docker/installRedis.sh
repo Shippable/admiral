@@ -56,6 +56,8 @@ __run_redis() {
     $REDIS_IMAGE
   "
 
+  __process_msg "Executing: $run_cmd"
+
   eval "$run_cmd"
   __process_msg "Redis container successfully running"
 }
