@@ -20,8 +20,8 @@ readonly POST_INSTALL_MIGRATIONS_DIR="$MIGRATIONS_DIR/post_install"
 readonly SCRIPTS_DIR="$ROOT_DIR/common/scripts"
 readonly LIB_DIR="$ROOT_DIR/lib"
 readonly LOGS_DIR="$RUNTIME_DIR/logs"
-readonly TIMESTAMP="$(date +%Y_%m_%d_%H_%M_%S)"
-readonly LOG_FILE="$LOGS_DIR/${TIMESTAMP}_logs.txt"
+readonly TIMESTAMP="$(date +%Y%m%d%H%M)"
+readonly LOG_FILE="$LOGS_DIR/${TIMESTAMP}_cli.txt"
 readonly REMOTE_SCRIPTS_DIR="$SCRIPTS_DIR/remote"
 readonly LOCAL_SCRIPTS_DIR="$SCRIPTS_DIR/local"
 readonly ADMIRAL_ENV="$CONFIG_DIR/admiral.env"
@@ -52,11 +52,12 @@ main() {
   __parse_args "$@"
   __check_dependencies
   __validate_runtime
-  __print_runtime
-
-  source "$SCRIPTS_DIR/$OS_TYPE/installDb.sh"
-  source "$SCRIPTS_DIR/create_vault_table.sh"
-  source "$SCRIPTS_DIR/boot_admiral.sh"
+  {
+    __print_runtime
+    source "$SCRIPTS_DIR/$OS_TYPE/installDb.sh"
+    source "$SCRIPTS_DIR/create_vault_table.sh"
+    source "$SCRIPTS_DIR/boot_admiral.sh"
+  } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )
 
   __process_msg "Installation successfully completed !!!"
 }
