@@ -277,9 +277,9 @@ function _saveSSHKeys(bag, next) {
         );
 
       if (response.rowCount === 1) {
-        logger.debug('Successfully initialized the database');
+        logger.debug('Successfully updated ssh keys in database');
       } else {
-        logger.warn('Failed to initialize the database');
+        logger.warn('Failed to update ssh keys in database');
       }
 
       return next();
