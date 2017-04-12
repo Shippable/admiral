@@ -107,7 +107,7 @@
           $scope.vm.stateInitialized =
             bag.stateStatus && bag.stateStatus.isInitialized;
           $scope.vm.initializeForm.statePassword =
-            (bag.stateStatus && bag.stateStatus.password) || '';
+            (bag.stateStatus && bag.stateStatus.rootPassword) || '';
 
           $scope.vm.rdsInitialized =
             bag.rdsStatus && bag.rdsStatus.isInitialized;
