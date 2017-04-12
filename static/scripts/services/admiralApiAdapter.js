@@ -27,23 +27,15 @@
       postInitialize: function (body, callback) {
         return API.post('/api/workflow/initialize', body, callback);
       },
-      getDatabase: function (callback) {
-        return API.get('/api/db', callback);
-      },
-      getSecrets: function (callback) {
-        return API.get('/api/secrets', callback);
-      },
       postSecrets: function (body, callback) {
         return API.post('/api/secrets', body, callback);
       },
-      getMsg: function (callback) {
-        return API.get('/api/msg', callback);
+      getService: function(component, callback) {
+        return API.get('/api/' + component + '/logs', callback);
       },
-      getState: function (callback) {
-        return API.get('/api/state', callback);
-      },
-      getRedis: function (callback) {
-        return API.get('/api/redis', callback);
+      // logs
+      getServiceLogs: function(component, callback) {
+        return API.get('/api/' + component + '/logs', callback);
       }
     };
   }
