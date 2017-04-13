@@ -28,11 +28,11 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
 ]);
 
 (function () {
-  admiral.run(['$rootScope', '$timeout', '$q',
+  admiral.run(['$rootScope', '$timeout', '$q', '$cookies',
     startApp
   ]);
 
-  function startApp($rootScope, $timeout, $q) {
+  function startApp($rootScope, $timeout, $q, $cookies) {
     $('#overlay').fadeOut(800);
     // All root variables to be stored in _r
     $rootScope._r = {};
@@ -55,11 +55,15 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
       $rootScope._r.title = 'Shippable | Admiral';
       $rootScope._r.appDefer = $q.defer();
       $rootScope._r.appPromise = $rootScope._r.appDefer.promise;
+
       $rootScope._r.appPromise.then(
         function () {
           $rootScope._r.appLoaded = true;
         }
       );
+
+      $rootScope._r.loginToken = $cookies.loginToken;
+
       $timeout(
         function () {
           $rootScope._r.loadingMessage = 'Loading app...';

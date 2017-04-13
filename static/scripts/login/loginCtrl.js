@@ -72,6 +72,7 @@
             return horn.error(err);
 
           e.preventDefault();
+          $scope._r.loginToken = loginToken;
           $state.go('dashboard', $state.params);
           window.scrollTo(0, 0);
         }

@@ -11,11 +11,11 @@
    *  is called when the request completes.
    */
 
-  admiral.service('admiralService', ['ADMIRAL_URL', '$http', '$cookies',
+  admiral.service('admiralService', ['ADMIRAL_URL', '$http', '$rootScope',
     admiralService
   ]);
 
-  function admiralService(ADMIRAL_URL, $http, $cookies) {
+  function admiralService(ADMIRAL_URL, $http, $rootScope) {
     function handler(promise, callback) {
       if (callback)
         promise
@@ -34,7 +34,7 @@
 
         var promise = $http.get(ADMIRAL_URL + path, {
           headers: {
-            Authorization: 'apiToken ' + $cookies.loginToken
+            Authorization: 'apiToken ' + $rootScope._r.loginToken
           }
         });
         return handler(promise, callback);
@@ -42,7 +42,7 @@
       put: function (path, body, callback) {
         var promise = $http.put(ADMIRAL_URL + path, body, {
           headers: {
-            Authorization: 'apiToken ' + $cookies.loginToken
+            Authorization: 'apiToken ' + $rootScope._r.loginToken
           }
         });
         return handler(promise, callback);
@@ -50,7 +50,7 @@
       post: function (path, body, callback) {
         var promise = $http.post(ADMIRAL_URL + path, body, {
           headers: {
-            Authorization: 'apiToken ' + $cookies.loginToken
+            Authorization: 'apiToken ' + $rootScope._r.loginToken
           }
         });
         return handler(promise, callback);
@@ -58,7 +58,7 @@
       delete: function (path, callback) {
         var promise = $http.delete(ADMIRAL_URL + path, {
           headers: {
-            Authorization: 'apiToken ' + $cookies.loginToken
+            Authorization: 'apiToken ' + $rootScope._r.loginToken
           }
         });
         return handler(promise, callback);
