@@ -40,7 +40,10 @@ function post(req, res) {
       _saveSSHKeys.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
+      _checkIsBootstrapped.bind(null, bag),
+      _runMigrationsBeforeAPIStart.bind(null, bag),
       _startFakeAPI.bind(null, bag),
+      _setIsBootstrapped.bind(null, bag),
       _runMigrations.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
@@ -333,6 +336,59 @@ function _getSecretKey(bag, next) {
   );
 }
 
+function _checkIsBootstrapped(bag, next) {
+  var who = bag.who + '|' + _checkIsBootstrapped.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'SELECT "isBootstrapped" FROM "systemConfigs"';
+
+  global.config.client.query(query,
+    function (err, systemConfigs) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed, err)
+        );
+
+      if (!_.isEmpty(systemConfigs.rows) &&
+        !_.isEmpty(systemConfigs.rows[0])) {
+
+        bag.isBootstrapped = systemConfigs.rows[0].isBootstrapped;
+        return next();
+      }
+
+      return next(
+        new ActErr(who, ActErr.DataNotFound, 'No systemConfigs found')
+      );
+    }
+  );
+}
+
+function _runMigrationsBeforeAPIStart(bag, next) {
+  if (!bag.isBootstrapped) return next();
+  var who = bag.who + '|' + _runMigrationsBeforeAPIStart.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: 'migrate.sh',
+      tmpScriptFilename: '/tmp/migrate.sh',
+      scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'MIGRATIONS_DIR': global.config.migrationsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName
+      }
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
 function _startFakeAPI(bag, next) {
   var who = bag.who + '|' + _startFakeAPI.name;
   logger.verbose(who, 'Inside');
@@ -361,6 +417,32 @@ function _startFakeAPI(bag, next) {
     },
     function (err) {
       return next(err);
+    }
+  );
+}
+
+function _setIsBootstrapped(bag, next) {
+  if (bag.isBootstrapped) return next();
+  var who = bag.who + '|' + _setIsBootstrapped.name;
+  logger.verbose(who, 'Inside');
+
+
+  var query = 'UPDATE "systemConfigs" set "isBootstrapped"=true';
+
+  global.config.client.query(query,
+    function (err, response) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DataNotFound, err)
+        );
+
+      if (response.rowCount === 1) {
+        logger.debug('Successfully updated isBootstrapped');
+      } else {
+        logger.warn('Failed to update isBootstrapped');
+      }
+
+      return next();
     }
   );
 }
