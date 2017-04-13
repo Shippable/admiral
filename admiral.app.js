@@ -148,12 +148,6 @@ function _initializeConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'RUNTIME_DIR is not defined'));
 
-  if (bag.env.MIGRATIONS_DIR)
-    bag.config.migrationsDir = bag.env.MIGRATIONS_DIR;
-  else
-    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
-      'MIGRATIONS_DIR is not defined'));
-
   if (bag.env.SERVICES_DIR)
     bag.config.servicesDir = bag.env.SERVICES_DIR;
   else
@@ -180,6 +174,7 @@ function _initializeConfig(bag, next) {
 
   bag.config.admiralEnv = util.format('%s/admiral.env', bag.config.configDir);
   bag.config.scriptsDir = '/home/shippable/admiral/common/scripts';
+  bag.config.migrationsDir = '/home/shippable/admiral/migrations';
   if (configErrors.length)
     return next(configErrors);
   else
