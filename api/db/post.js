@@ -68,7 +68,7 @@ function _upsertSystemConfigs(bag, next) {
       who: who,
       params: {},
       script: '',
-      scriptPath: '../../common/scripts/create_sys_configs.sh',
+      scriptPath: 'create_sys_configs.sh',
       tmpScriptFilename: '/tmp/systemConfigs.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
@@ -138,7 +138,7 @@ function _upsertSystemCodes(bag, next) {
       who: who,
       params: {},
       script: '',
-      scriptPath: '../../common/scripts/create_system_codes.sh',
+      scriptPath: 'create_system_codes.sh',
       tmpScriptFilename: '/tmp/systemCodes.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
@@ -162,7 +162,7 @@ function _upsertMasterIntegrations(bag, next) {
       who: who,
       params: {},
       script: '',
-      scriptPath: '../../common/scripts/create_master_integrations.sh',
+      scriptPath: 'create_master_integrations.sh',
       tmpScriptFilename: '/tmp/masterIntegrations.sh',
       scriptEnvs: {
         'CONFIG_DIR': global.config.configDir,
@@ -186,7 +186,7 @@ function _upsertMasterIntegrationFields(bag, next) {
       who: who,
       params: {},
       script: '',
-      scriptPath: '../../common/scripts/create_master_integration_fields.sh',
+      scriptPath: 'create_master_integration_fields.sh',
       tmpScriptFilename: '/tmp/masterIntegrationFields.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
@@ -210,7 +210,7 @@ function _upsertSystemIntegrations(bag, next) {
       who: who,
       params: {},
       script: '',
-      scriptPath: '../../common/scripts/create_system_integrations.sh',
+      scriptPath: 'create_system_integrations.sh',
       tmpScriptFilename: '/tmp/systemIntegrations.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
@@ -340,7 +340,7 @@ function _startFakeAPI(bag, next) {
       who: who,
       params: {},
       script: '',
-      scriptPath: '../../common/scripts/docker/startFakeAPI.sh',
+      scriptPath: 'docker/startFakeAPI.sh',
       tmpScriptFilename: '/tmp/startFakeAPI.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
@@ -423,11 +423,11 @@ function _generateScript(seriesBag, next) {
 
   var script = '';
   //attach header
-  script = script.concat(
-    __applyTemplate('../../lib/_logger.sh', seriesBag.params));
+  var filePath = path.join(global.config.scriptsDir, '/lib/_logger.sh');
+  script = script.concat(__applyTemplate(filePath, seriesBag.params));
 
-  script = script.concat(
-    __applyTemplate(seriesBag.scriptPath, seriesBag.params));
+  filePath = path.join(global.config.scriptsDir, seriesBag.scriptPath);
+  script = script.concat(__applyTemplate(filePath, seriesBag.params));
 
   seriesBag.script = script;
   return next();
@@ -483,8 +483,7 @@ function _runScript(seriesBag, next) {
 }
 
 //local function to apply vars to template
-function __applyTemplate(fileName, dataObj) {
-  var filePath = path.join(__dirname, fileName);
+function __applyTemplate(filePath, dataObj) {
   var fileContent = fs.readFileSync(filePath).toString();
   var template = _.template(fileContent);
 
