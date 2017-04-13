@@ -25,6 +25,7 @@ __validate_msg_envs() {
   __process_msg "AMQP_PORT: $AMQP_PORT"
   __process_msg "ADMIN_PORT: $ADMIN_PORT"
   __process_msg "RABBITMQ_ADMIN: $RABBITMQ_ADMIN"
+  __process_msg "LOGS_FILE: $LOGS_FILE"
 }
 
 __cleanup() {

@@ -2,6 +2,10 @@
 
 export COMPONENT="db"
 export API_IMAGE="$PRIVATE_IMAGE_REGISTRY/api:$RELEASE"
+export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+
+## Write logs of this script to component specific file
+exec &> >(tee -a "$LOGS_FILE")
 
 __validate_api_envs() {
   __process_msg "Initializing api environment variables"
@@ -16,6 +20,7 @@ __validate_api_envs() {
   __process_msg "DBDIALECT: $DBDIALECT"
   __process_msg "ACCESS_KEY: $ACCESS_KEY"
   __process_msg "SECRET_KEY: $SECRET_KEY"
+  __process_msg "LOGS_FILE: $LOGS_FILE"
 }
 
 __docker_login() {

@@ -117,13 +117,13 @@ function _generateInitializeScript(bag, next) {
   logger.verbose(who, 'Inside');
 
   //attach header
-  var fileName = '../../lib/_logger.sh';
+  var filePath = path.join(global.config.scriptsDir, '/lib/_logger.sh');
   var headerScript = '';
-  headerScript = headerScript.concat(__applyTemplate(fileName, bag.params));
+  headerScript = headerScript.concat(__applyTemplate(filePath, bag.params));
 
   var initializeScript = headerScript;
-  fileName = '../../common/scripts/docker/installMsg.sh';
-  initializeScript = headerScript.concat(__applyTemplate(fileName, bag.params));
+  filePath = path.join(global.config.scriptsDir, 'docker/installMsg.sh');
+  initializeScript = headerScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
   return next();
@@ -261,8 +261,7 @@ function _post(bag, next) {
 }
 
 //local function to apply vars to template
-function __applyTemplate(fileName, dataObj) {
-  var filePath = path.join(__dirname, fileName);
+function __applyTemplate(filePath, dataObj) {
   var fileContent = fs.readFileSync(filePath).toString();
   var template = _.template(fileContent);
 
