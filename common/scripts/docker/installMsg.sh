@@ -27,6 +27,11 @@ __validate_msg_envs() {
   __process_msg "RABBITMQ_ADMIN: $RABBITMQ_ADMIN"
 }
 
+__cleanup() {
+  __process_msg "Removing stale containers"
+  sudo docker rm -f $COMPONENT || true
+}
+
 __validate_msg_mounts() {
   __process_msg "Validating msg mounts"
   if [ ! -d "$MSG_DATA_DIR" ]; then
@@ -137,6 +142,7 @@ main() {
   else
     __process_msg "Rabbitmq not installed"
     __validate_msg_envs
+    __cleanup
     __validate_msg_mounts
     __run_msg
   fi

@@ -21,6 +21,11 @@ __validate_redis_envs() {
   __process_msg "REDIS_PORT: $REDIS_PORT"
 }
 
+__cleanup() {
+  __process_msg "Removing stale containers"
+  sudo docker rm -f $COMPONENT || true
+}
+
 __validate_redis_mounts() {
   __process_msg "Validating redis mounts"
   if [ ! -d "$REDIS_DATA_DIR" ]; then
@@ -93,6 +98,7 @@ main() {
   else
     __process_msg "Redis not installed"
     __validate_redis_envs
+    __cleanup
     __validate_redis_mounts
     __run_redis
   fi
