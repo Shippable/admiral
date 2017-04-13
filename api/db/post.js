@@ -348,13 +348,13 @@ function _startFakeAPI(bag, next) {
         'SCRIPTS_DIR': global.config.scriptsDir,
         'RELEASE': global.config.release,
         'DBNAME': global.config.dbName,
-        'DBUSER': global.config.dbUsername,
+        'DBUSERNAME': global.config.dbUsername,
         'DBPASSWORD': global.config.dbPassword,
         'DBHOST': global.config.dbHost,
         'DBPORT': global.config.dbPort,
         'DBDIALECT': global.config.dbDialect,
-        'ACCESS_KEY': global.config.accessKey,
-        'SECRET_KEY': global.config.secretKey,
+        'ACCESS_KEY': bag.accessKey,
+        'SECRET_KEY': bag.secretKey,
         'PRIVATE_IMAGE_REGISTRY': global.config.privateImageRegistry
       }
     },
