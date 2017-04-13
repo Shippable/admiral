@@ -28,7 +28,9 @@
       initializing: false,
       initializeForm: {
         msgPassword: '',
-        statePassword: ''
+        statePassword: '',
+        accessKey: '',
+        secretKey: ''
       },
       systemConfigs: {
         db: {

@@ -31,7 +31,7 @@ __boot_admiral() {
       -v /usr/lib/x86_64-linux-gnu/libltdl.so.7.3.0:/lib/x86_64-linux-gnu/libltdl.so.7:rw \
       -v /var/run/docker.sock:/var/run/docker.sock"
 
-    local admiral_image="$SYSTEM_IMAGE_REGISTRY/admiral:$RELEASE"
+    local admiral_image="$PUBLIC_IMAGE_REGISTRY/admiral:$RELEASE"
 
     local boot_cmd="sudo docker run -d \
       $envs \

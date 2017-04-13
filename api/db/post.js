@@ -18,7 +18,9 @@ function post(req, res) {
     resBody: {},
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
     serviceUserToken: '',
-    setServiceUserToken: false
+    setServiceUserToken: false,
+    accessKeyEnv: 'ACCESS_KEY',
+    secretKeyEnv: 'SECRET_KEY'
   };
 
   bag.who = util.format('db|%s', self.name);
@@ -36,6 +38,9 @@ function post(req, res) {
       _readPublicSSHKey.bind(null, bag),
       _readPrivateSSHKey.bind(null, bag),
       _saveSSHKeys.bind(null, bag),
+      _getAccessKey.bind(null, bag),
+      _getSecretKey.bind(null, bag),
+      _startFakeAPI.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
     function (err) {
@@ -283,6 +288,78 @@ function _saveSSHKeys(bag, next) {
       }
 
       return next();
+    }
+  );
+}
+
+function _getAccessKey(bag, next) {
+  var who = bag.who + '|' + _getAccessKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.accessKeyEnv,
+    function (err, accessKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.accessKeyEnv)
+        );
+
+      bag.accessKey = accessKey;
+      logger.debug('Found access key');
+
+      return next();
+    }
+  );
+}
+
+function _getSecretKey(bag, next) {
+  var who = bag.who + '|' + _getSecretKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.secretKeyEnv,
+    function (err, secretKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.secretKeyEnv)
+        );
+
+      bag.secretKey = secretKey;
+      logger.debug('Found secret key');
+
+      return next();
+    }
+  );
+}
+
+function _startFakeAPI(bag, next) {
+  var who = bag.who + '|' + _startFakeAPI.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: '../../common/scripts/docker/startFakeAPI.sh',
+      tmpScriptFilename: '/tmp/startFakeAPI.sh',
+      scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'RELEASE': global.config.release,
+        'DBNAME': global.config.dbName,
+        'DBUSER': global.config.dbUsername,
+        'DBPASSWORD': global.config.dbPassword,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBDIALECT': global.config.dbDialect,
+        'ACCESS_KEY': global.config.accessKey,
+        'SECRET_KEY': global.config.secretKey,
+        'PRIVATE_IMAGE_REGISTRY': global.config.privateImageRegistry
+      }
+    },
+    function (err) {
+      return next(err);
     }
   );
 }

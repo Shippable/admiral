@@ -185,26 +185,26 @@ __set_db_password() {
   __process_msg "Successfully set database password"
 }
 
-__set_system_image_registry() {
-  __process_msg "Setting system image registry"
-  local system_image_registry=""
+__set_public_image_registry() {
+  __process_msg "Setting public image registry"
+  local public_image_registry=""
 
-  __process_msg "Please enter the value of the Shippable system image registry."
+  __process_msg "Please enter the value of the Shippable public image registry."
   read response
 
   if [ "$response" != "" ]; then
-    __process_msg "Setting the system image registry to: $response, enter Y to confirm"
+    __process_msg "Setting the public image registry to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
-      system_image_registry=$response
+      public_image_registry=$response
     else
-      __process_error "Invalid response, please enter a valid system image registry and continue"
-      __set_system_image_registry
+      __process_error "Invalid response, please enter a valid public image registry and continue"
+      __set_public_image_registry
     fi
   fi
 
-  sed -i 's#.*SYSTEM_IMAGE_REGISTRY=.*#SYSTEM_IMAGE_REGISTRY="'$system_image_registry'"#g' $ADMIRAL_ENV
-  __process_msg "Successfully set system image registry"
+  sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$public_image_registry'"#g' $ADMIRAL_ENV
+  __process_msg "Successfully set public image registry"
 }
 
 __copy_script_remote() {

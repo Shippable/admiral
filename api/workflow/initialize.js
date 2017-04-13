@@ -7,6 +7,7 @@ var async = require('async');
 var _ = require('underscore');
 
 var APIAdapter = require('../../common/APIAdapter.js');
+var envHandler = require('../../common/envHandler.js');
 
 function initialize(req, res) {
   var bag = {
@@ -14,7 +15,9 @@ function initialize(req, res) {
     reqBody: req.body,
     resBody: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
-    msgInitialized: false
+    msgInitialized: false,
+    accessKeyEnv: 'ACCESS_KEY',
+    secretKeyEnv: 'SECRET_KEY'
   };
 
   bag.who = util.format('workflow|%s', self.name);
@@ -22,6 +25,8 @@ function initialize(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
+      _saveAccessKey.bind(null, bag),
+      _saveSecretKey.bind(null, bag),
       _initializeDatabase.bind(null, bag),
       _getSecrets.bind(null, bag),
       _initializeSecrets.bind(null, bag),
@@ -60,6 +65,46 @@ function _checkInputParams(bag, next) {
 
 
   return next();
+}
+
+function _saveAccessKey(bag, next) {
+  if (!bag.reqBody.accessKey) return next();
+  var who = bag.who + '|' + _saveAccessKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.put(bag.accessKeyEnv, bag.reqBody.accessKey,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot set env: ' + bag.accessKeyEnv)
+        );
+
+      logger.debug('Set access key');
+
+      return next();
+    }
+  );
+}
+
+function _saveSecretKey(bag, next) {
+  if (!bag.reqBody.secretKey) return next();
+  var who = bag.who + '|' + _saveSecretKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.put(bag.secretKeyEnv, bag.reqBody.secretKey,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot set env: ' + bag.secretKeyEnv)
+        );
+
+      logger.debug('Set secret key');
+
+      return next();
+    }
+  );
 }
 
 function _initializeDatabase(bag, next) {

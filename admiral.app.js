@@ -172,6 +172,12 @@ function _initializeConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'RELEASE is not defined'));
 
+  if (bag.env.PRIVATE_IMAGE_REGISTRY)
+    bag.config.privateImageRegistry = bag.env.PRIVATE_IMAGE_REGISTRY;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'PRIVATE_IMAGE_REGISTRY is not defined'));
+
   bag.config.admiralEnv = util.format('%s/admiral.env', bag.config.configDir);
   bag.config.scriptsDir = '/home/shippable/admiral/common/scripts';
   if (configErrors.length)

@@ -36,6 +36,20 @@
                   </div>
                 </div>
                 <div class="row">
+                  <span class="col-md-7">Enter your installer access key:</span>
+                  <div class="col-md-5">
+                    <input type="text" class="form-control" name="accessKey"
+                    ng-model="vm.initializeForm.accessKey" ng-disabled="vm.initializing"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <span class="col-md-7">Enter your installer secret key:</span>
+                  <div class="col-md-5">
+                    <input type="text" class="form-control" name="secretKey"
+                    ng-model="vm.initializeForm.secretKey" ng-disabled="vm.initializing"/>
+                  </div>
+                </div>
+                <div class="row">
                   <table class="table table-condensed table-striped">
                     <thead>
                       <tr ng-if="vm.initializeResponse">
