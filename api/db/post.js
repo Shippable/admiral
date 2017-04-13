@@ -559,7 +559,13 @@ function _runScript(seriesBag, next) {
 
   exec.on('close',
     function (exitCode)  {
-      return next(exitCode);
+      if (exitCode > 0)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Script: ' + seriesBag.tmpScriptFilename + ' returned code: ' +
+          exitCode)
+        );
+      return next();
     }
   );
 }

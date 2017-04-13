@@ -18,9 +18,20 @@ __validate_api_envs() {
   __process_msg "DBHOST: $DBHOST"
   __process_msg "DBPORT: $DBPORT"
   __process_msg "DBDIALECT: $DBDIALECT"
-  __process_msg "ACCESS_KEY: $ACCESS_KEY"
-  __process_msg "SECRET_KEY: $SECRET_KEY"
   __process_msg "LOGS_FILE: $LOGS_FILE"
+  if [ "$ACCESS_KEY" == "" ]; then
+    __process_error "Access key not present, exiting"
+    exit 1
+  else
+    __process_msg "ACCESS_KEY: $ACCESS_KEY"
+  fi
+
+  if [ "$SECRET_KEY" == "" ]; then
+    __process_error "Secret key not present, exiting"
+    exit 1
+  else
+    __process_msg "SECRET_KEY: $SECRET_KEY"
+  fi
 }
 
 __docker_login() {
