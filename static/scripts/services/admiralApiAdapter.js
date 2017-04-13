@@ -31,7 +31,7 @@
         return API.post('/api/secrets', body, callback);
       },
       getService: function(component, callback) {
-        return API.get('/api/' + component + '/logs', callback);
+        return API.get('/api/' + component, callback);
       },
       // logs
       getServiceLogs: function(component, callback) {

@@ -198,8 +198,14 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"
             aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">{{vm.selectedService.displayName}} Logs</h4>
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            {{vm.selectedService.displayName}} Logs
+            <button class="btn btn-sm btn-default" ng-click="vm.refreshLogs()">
+              Refresh
+            </button>
+          </h4>
         </div>
         <div class="modal-body ship-console">
           <div class="ship-console-command-line" ng-repeat="log in vm.selectedService.logs track by $index">
