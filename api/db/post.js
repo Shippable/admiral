@@ -42,6 +42,8 @@ function post(req, res) {
       _getSecretKey.bind(null, bag),
       _startFakeAPI.bind(null, bag),
       _runMigrations.bind(null, bag),
+      _templateServiceUserAccountFile.bind(null, bag),
+      _upsertServiceUserAccount.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
     function (err) {
@@ -380,6 +382,60 @@ function _runMigrations(bag, next) {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'MIGRATIONS_DIR': global.config.migrationsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName
+      }
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+function _templateServiceUserAccountFile(bag, next) {
+  var who = bag.who + '|' + _templateServiceUserAccountFile.name;
+  logger.verbose(who, 'Inside');
+
+  var filePath = util.format('%s/db/service_user_account.sql',
+    global.config.configDir);
+  var templatePath =
+    util.format('%s/configs/service_user_account.sql.template',
+      global.config.scriptsDir);
+  var dataObj = {
+    serviceUserToken: bag.serviceUserToken
+  };
+
+  var script = {
+    tmpScriptFilename: filePath,
+    script: __applyTemplate(templatePath, dataObj)
+  };
+
+  _writeScriptToFile(script,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _upsertServiceUserAccount(bag, next) {
+  var who = bag.who + '|' + _upsertServiceUserAccount.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: 'create_service_user_account.sh',
+      tmpScriptFilename: '/tmp/serviceUserAccount.sh',
+      scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName
       }
