@@ -20,7 +20,6 @@ __boot_admiral() {
       -e PRIVATE_IMAGE_REGISTRY=$PRIVATE_IMAGE_REGISTRY \
       -e CONFIG_DIR=$CONFIG_DIR \
       -e RUNTIME_DIR=$RUNTIME_DIR \
-      -e MIGRATIONS_DIR=$MIGRATIONS_DIR \
       -e SERVICES_DIR=$SERVICES_DIR"
 
     __process_msg "Generating admiral mounts"

@@ -90,15 +90,6 @@ __validate_runtime() {
     __process_msg "DB_PASSWORD already set, skipping"
   fi
 
-  ################## check migrations  #############################
-  local migrations_path=$MIGRATIONS_DIR/migrations.sql
-  if [ ! -f "$migrations_path" ]; then
-    __process_error "Migrations file $migrations_path does not exist, exiting"
-    exit 1
-  else
-    __process_msg "Migrations file: $migrations_path"
-  fi
-
   ################## check for services #################################
   local services_path=$SERVICES_DIR/services.json
   if [ ! -f "$services_path" ]; then

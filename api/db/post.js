@@ -41,6 +41,7 @@ function post(req, res) {
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
       _startFakeAPI.bind(null, bag),
+      _runMigrations.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
     function (err) {
@@ -356,6 +357,31 @@ function _startFakeAPI(bag, next) {
         'ACCESS_KEY': bag.accessKey,
         'SECRET_KEY': bag.secretKey,
         'PRIVATE_IMAGE_REGISTRY': global.config.privateImageRegistry
+      }
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+function _runMigrations(bag, next) {
+  var who = bag.who + '|' + _runMigrations.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: 'migrate.sh',
+      tmpScriptFilename: '/tmp/migrate.sh',
+      scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'MIGRATIONS_DIR': global.config.migrationsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName
       }
     },
     function (err) {
