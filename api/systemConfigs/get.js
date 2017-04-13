@@ -41,10 +41,15 @@ function _get(bag, next) {
 
   global.config.client.query('SELECT * from "systemConfigs"',
     function (err, systemConfigs) {
-      if (err)
+      if (err) {
+        if (err.code === '42P01') {
+          logger.debug('SystemConfigs table not created. Please initialize.');
+          return next();
+        }
         return next(
-          new ActErr(who, ActErr.DataNotFound, err)
+          new ActErr(who, ActErr.DBOperationFailed, err)
         );
+      }
 
       if (!systemConfigs.rows || !systemConfigs.rows[0])
         return next(
