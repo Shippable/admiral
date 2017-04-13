@@ -93,9 +93,10 @@
     function getSystemConfigs(bag, next) {
       admiralApiAdapter.getSystemConfigs(
         function (err, systemConfigs) {
-          if (err || !systemConfigs) {
-            // the route will return an error when
-            // the db hasn't been initialized yet
+          if (err)
+            return next(err);
+          if (_.isEmpty(systemConfigs)) {
+            // if empty, we can't do anything yet
             return next();
           }
 
