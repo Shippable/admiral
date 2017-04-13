@@ -52,6 +52,7 @@
       initialize: initialize,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
+      refreshLogs: refreshLogs,
       logOutOfAdmiral: logOutOfAdmiral
     };
 
@@ -174,6 +175,7 @@
 
     function showLogModal(service) {
       $scope.vm.selectedService = $scope.vm.systemConfigs[service];
+      $scope.vm.selectedService.serviceName = service;
       $scope.vm.selectedService.logs = [];
 
       admiralApiAdapter.getServiceLogs(service,
@@ -184,6 +186,17 @@
           $scope.vm.selectedService.logs = logs;
 
           $('#logsModal').modal('show');
+        }
+      );
+    }
+
+    function refreshLogs() {
+      admiralApiAdapter.getServiceLogs($scope.vm.selectedService.serviceName,
+        function (err, logs) {
+          if (err)
+            return horn.error(err);
+
+          $scope.vm.selectedService.logs = logs;
         }
       );
     }
