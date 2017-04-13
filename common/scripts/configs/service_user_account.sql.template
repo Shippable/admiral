@@ -1,0 +1,23 @@
+do $$
+  begin
+    -- Adds account details in accounts table
+    if not exists (select 1 from "accounts" where "id" = '540e55445e5bad6f98764522') then
+     insert into "accounts" ("id", "createdAt", "updatedAt")
+     values ('540e55445e5bad6f98764522', '2016-02-29T00:00:00Z', '2016-02-29T00:00:00Z');
+    end if;
+
+    -- Adds accountRole for serviceUser
+    if exists (select 1 from information_schema.columns where table_name = 'accountRoles') then
+      if not exists (select 1 from "accountRoles" where "accountId" = '540e55445e5bad6f98764522' and "roleCode" = 6100) then
+        insert into "accountRoles" ("accountId", "roleCode", "createdAt", "updatedAt")
+        values ('540e55445e5bad6f98764522', 6100, '2016-02-29T00:00:00Z', '2016-02-29T00:00:00Z');
+      end if;
+    end if;
+
+    -- Adds serviceUser token in accountTokens table
+    if not exists (select 1 from "accountTokens" where "name" = 'serviceUser' and "isInternal" = true) then
+     insert into "accountTokens" ("id", "name", "accountId", "apiToken", "isInternal", "createdBy", "updatedBy", "createdAt", "updatedAt")
+     values ('540e55445e5bad6f98764522', 'serviceUser', '540e55445e5bad6f98764522', '<%= obj.serviceUserToken %>', true, '540e55445e5bad6f98764522', '540e55445e5bad6f98764522', '2016-02-29T00:00:00Z', '2016-02-29T00:00:00Z');
+    end if;
+  end
+$$
