@@ -191,12 +191,7 @@ __wipe_clean() {
     else
       __process_msg "No containers found. Skipping removal."
     fi
-    local remove_mnts_cmd="sudo rm -rf /var/run/shippable"
-    __process_msg "Executing: $remove_mnts_cmd"
-    eval "$remove_mnts_cmd"
-    local remove_configs_cmd="sudo rm -rf /etc/shippable"
-    __process_msg "Executing: $remove_configs_cmd"
-    eval "$remove_configs_cmd"
+    __cleanup
     __process_success "Clean is complete. Reinstall by running 'sudo ./admiral.sh install'"
     exit 0
   else
