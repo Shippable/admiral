@@ -46,6 +46,7 @@ run_component() {
     -e CONFIG_DIR=$CONFIG_DIR \
     -e RUNTIME_DIR=$RUNTIME_DIR \
     -e MIGRATIONS_DIR=$MIGRATIONS_DIR \
+    -e PRIVATE_IMAGE_REGISTRY=$PRIVATE_IMAGE_REGISTRY \
     -e SERVICES_DIR=$SERVICES_DIR"
 
   run_cmd="sudo docker run -d --name=$ONEBOX_NAME --privileged=true --restart=always --net=host"
