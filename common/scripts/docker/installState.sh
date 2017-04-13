@@ -25,6 +25,11 @@ __validate_state_envs() {
   __process_msg "SECURE_PORT: $SECURE_PORT"
 }
 
+__cleanup() {
+  __process_msg "Removing stale containers"
+  sudo docker rm -f $COMPONENT || true
+}
+
 __validate_state_mounts() {
   __process_msg "Validating state mounts"
   if [ ! -d "$STATE_DATA_DIR" ]; then
@@ -115,6 +120,7 @@ main() {
   else
     __process_msg "Gitlab not installed"
     __validate_state_envs
+    __cleanup
     __validate_state_mounts
     __run_state
   fi

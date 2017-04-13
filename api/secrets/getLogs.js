@@ -4,7 +4,6 @@ var self = getLogs;
 module.exports = self;
 
 var async = require('async');
-var _ = require('underscore');
 var fs = require('fs');
 var readline = require('readline');
 var path = require('path');
@@ -13,7 +12,8 @@ function getLogs(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: [],
-    component: 'secrets'
+    component: 'secrets',
+    skipRead: false
   };
 
   bag.who = util.format('secrets|%s', self.name);
@@ -21,6 +21,7 @@ function getLogs(req, res) {
 
   async.series([
     _checkInputParams.bind(null, bag),
+    _checkFile.bind(null, bag),
     _get.bind(null, bag)
     ],
     function (err) {
@@ -43,7 +44,28 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
+function _checkFile(bag, next) {
+  var who = bag.who + '|' + _checkFile.name;
+  logger.verbose(who, 'Inside');
+
+  fs.stat(bag.logsFile,
+    function (err) {
+      if (err && err.code === 'ENOENT')
+        bag.skipRead = true;
+      else if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get logs for ' + bag.component, err)
+        );
+
+      return next();
+    }
+  );
+}
+
 function _get(bag, next) {
+  if (bag.skipRead) return next();
+
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
