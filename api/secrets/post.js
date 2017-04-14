@@ -9,13 +9,16 @@ var path = require('path');
 var fs = require('fs');
 var readline = require('readline');
 var spawn = require('child_process').spawn;
+
 var envHandler = require('../../common/envHandler.js');
+var configHandler = require('../../common/configHandler.js');
 
 function post(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: [],
     params: {},
+    skipStatusChange: false,
     component: 'secrets',
     tmpScript: '/tmp/secrets.sh'
   };
@@ -26,6 +29,7 @@ function post(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
+      _setProcessingFlag.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
@@ -37,6 +41,9 @@ function post(req, res) {
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
+      if (!bag.skipStatusChange)
+        _setCompleteStatus(bag, err);
+
       if (err)
         return respondWithError(res, err);
 
@@ -57,27 +64,44 @@ function _get(bag, next) {
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  var query = util.format('SELECT %s from "systemConfigs"', bag.component);
-  global.config.client.query(query,
-    function (err, systemConfigs) {
-      if (err)
+  configHandler.get(bag.component,
+    function (err, secrets) {
+      if (err) {
+        bag.skipStatusChange = true;
         return next(
           new ActErr(who, ActErr.DataNotFound, err)
         );
+      }
 
-      if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].secrets)) {
-        logger.debug('Found configuration for component ' + bag.component);
-
-        bag.config = systemConfigs.rows[0].secrets;
-        bag.config = JSON.parse(bag.config);
-
-      } else {
+      if (_.isEmpty(secrets)) {
+        bag.skipStatusChange = true;
         return next(
           new ActErr(who, ActErr.DataNotFound,
             'No configuration in database for ' + bag.component)
         );
       }
+
+      bag.config = secrets;
+      return next();
+    }
+  );
+}
+
+function _setProcessingFlag(bag, next) {
+  var who = bag.who + '|' + _setProcessingFlag.name;
+  logger.verbose(who, 'Inside');
+
+  var update = {
+    isProcessing: true,
+    isFailed: false
+  };
+
+  configHandler.put(bag.component, update,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
 
       return next();
     }
@@ -244,26 +268,17 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  var update = bag.config;
-  bag.config.isInstalled = true;
-  bag.config.isInitialized = true;
+  var update = {
+    isInstalled: true,
+    isInitialized: true
+  };
 
-  var query = util.format('UPDATE "systemConfigs" set %s=\'%s\';',
-    bag.component, JSON.stringify(update));
-
-  global.config.client.query(query,
-    function (err, response) {
+  configHandler.put(bag.component, update,
+    function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DataNotFound, err)
+          new ActErr(who, ActErr.OperationFailed, err)
         );
-
-      if (response.rowCount === 1) {
-        logger.debug('Successfully added default value for ' + bag.component);
-        bag.resBody = update;
-      } else {
-        logger.warn('Failed to set default value for ' + bag.component);
-      }
 
       return next();
     }
@@ -291,6 +306,26 @@ function _updateVaultUrl(bag, next) {
       }
 
       return next();
+    }
+  );
+}
+
+function _setCompleteStatus(bag, err) {
+  var who = bag.who + '|' + _setCompleteStatus.name;
+  logger.verbose(who, 'Inside');
+
+  var update = {
+    isProcessing: false
+  };
+  if (err)
+    update.isFailed = true;
+  else
+    update.isFailed = false;
+
+  configHandler.put(bag.component, update,
+    function (err) {
+      if (err)
+        logger.warn(err);
     }
   );
 }
