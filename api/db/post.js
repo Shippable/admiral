@@ -11,11 +11,13 @@ var fs = require('fs-extra');
 var spawn = require('child_process').spawn;
 
 var envHandler = require('../../common/envHandler.js');
+var configHandler = require('../../common/configHandler.js');
 
 function post(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: {},
+    skipStatusChange: false,
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
     serviceUserToken: '',
     setServiceUserToken: false,
@@ -29,6 +31,7 @@ function post(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _upsertSystemConfigs.bind(null, bag),
+      _setProcessingFlag.bind(null, bag),
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
       _upsertSystemCodes.bind(null, bag),
@@ -51,8 +54,14 @@ function post(req, res) {
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
+      if (!bag.skipStatusChange) {
+        _setCompleteStatus(bag, err);
+      }
+
       if (err)
         return respondWithError(res, err);
+
+
 
       sendJSONResponse(res, bag.resBody);
     }
@@ -86,7 +95,30 @@ function _upsertSystemConfigs(bag, next) {
       }
     },
     function (err) {
+      if (err)
+        bag.skipStatusChange = true;
       return next(err);
+    }
+  );
+}
+
+function _setProcessingFlag(bag, next) {
+  var who = bag.who + '|' + _setProcessingFlag.name;
+  logger.verbose(who, 'Inside');
+
+  var update = {
+    isProcessing: true,
+    isFailed: false
+  };
+
+  configHandler.put('db', update,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+
+      return next();
     }
   );
 }
@@ -537,21 +569,12 @@ function _setDbFlags(bag, next) {
     isInitialized: true
   };
 
-  var query = util.format('UPDATE "systemConfigs" set db=\'%s\';',
-    JSON.stringify(update));
-
-  global.config.client.query(query,
-    function (err, response) {
+  configHandler.put('db', update,
+    function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DataNotFound, err)
+          new ActErr(who, ActErr.OperationFailed, err)
         );
-
-      if (response.rowCount === 1) {
-        logger.debug('Successfully initialized the database');
-      } else {
-        logger.warn('Failed to initialize the database');
-      }
 
       return next();
     }
@@ -658,4 +681,24 @@ function __applyTemplate(filePath, dataObj) {
   var template = _.template(fileContent);
 
   return template({obj: dataObj});
+}
+
+function _setCompleteStatus(bag, err) {
+  var who = bag.who + '|' + _setCompleteStatus.name;
+  logger.verbose(who, 'Inside');
+
+  var update = {
+    isProcessing: false
+  };
+  if (err)
+    update.isFailed = true;
+  else
+    update.isFailed = false;
+
+  configHandler.put('db', update,
+    function (err) {
+      if (err)
+        logger.warn(err);
+    }
+  );
 }
