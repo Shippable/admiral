@@ -181,14 +181,13 @@
 
             var configs = $scope.vm.systemConfigs;
 
-
             var processing = configs.db.isProcessing ||
               configs.secrets.isProcessing || configs.msg.isProcessing ||
               configs.state.isProcessing || configs.redis.isProcessing;
 
             var failed = configs.db.isFailed || configs.secrets.isFailed ||
-              configs.msg.isProcessing || configs.state.isProcessing ||
-              configs.redis.isProcessing;
+              configs.msg.isFailed || configs.state.isFailed ||
+              configs.redis.isFailed;
 
             var initialized = configs.db.isInitialized &&
               configs.secrets.isInitialized && configs.msg.isInitialized &&
