@@ -52,6 +52,7 @@
       },
       selectedService: {},
       initialize: initialize,
+      showAdmiralEnvModal: showAdmiralEnvModal,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
       refreshLogs: refreshLogs,
@@ -65,7 +66,8 @@
 
       async.series([
           setBreadcrumb.bind(null, bag),
-          getSystemConfigs.bind(null, bag)
+          getSystemConfigs.bind(null, bag),
+          getAdmiralEnv.bind(null, bag)
         ],
         function (err) {
           $scope.vm.isLoaded = true;
@@ -125,12 +127,27 @@
       );
     }
 
+    function getAdmiralEnv(bag, next) {
+      admiralApiAdapter.getAdmiralEnv(
+        function (err, admiralEnv) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          $scope.vm.admiralEnv = admiralEnv;
+          return next();
+        }
+      );
+    }
+
     function initialize() {
       $scope.vm.initializing = true;
       var bag = {};
       async.series([
           postInitialize.bind(null, bag),
-          getSystemConfigs.bind(null, bag)
+          getSystemConfigs.bind(null, bag),
+          getAdmiralEnv.bind(null, bag)
         ],
         function (err) {
           $scope.vm.initializing = false;
@@ -150,6 +167,31 @@
         }
       );
     }
+
+    function showAdmiralEnvModal() {
+      $scope.vm.selectedService = {};
+
+      admiralApiAdapter.getAdmiralEnv(
+        function (err, admiralEnv) {
+          if (err)
+            return horn.error(err);
+
+          $scope.vm.selectedService.configs = [];
+
+          _.each(admiralEnv,
+            function (value, key) {
+              $scope.vm.selectedService.configs.push({
+                key: key,
+                value: value
+              });
+            }
+          );
+
+          $('#configsModal').modal('show');
+        }
+      );
+    }
+
 
     function showConfigModal(service) {
       $scope.vm.selectedService = $scope.vm.systemConfigs[service];

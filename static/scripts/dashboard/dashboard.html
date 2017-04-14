@@ -35,14 +35,14 @@
                     ng-model="vm.initializeForm.statePassword" ng-disabled="vm.initializing"/>
                   </div>
                 </div>
-                <div class="row">
+                <div ng-if="!vm.admiralEnv.ACCESS_KEY" class="row">
                   <span class="col-md-7">Enter your installer access key:</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="accessKey"
                     ng-model="vm.initializeForm.accessKey" ng-disabled="vm.initializing"/>
                   </div>
                 </div>
-                <div class="row">
+                <div ng-if="!vm.admiralEnv.SECRET_KEY" class="row">
                   <span class="col-md-7">Enter your installer secret key:</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="secretKey"
@@ -61,6 +61,16 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <tr>
+                        <td>
+                          <b>Admiral Environment:</b>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showAdmiralEnvModal()">config</button>
+                        </td>
+                      </tr>
                       <tr>
                         <td>
                           <b>Database:</b>
