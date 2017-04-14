@@ -13,6 +13,7 @@ function initialize(req, res) {
   var bag = {
     reqQuery: req.query,
     reqBody: req.body,
+    res: res,
     resBody: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     msgInitialized: false,
@@ -25,6 +26,7 @@ function initialize(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
+      _sendResponse.bind(null, bag),
       _saveAccessKey.bind(null, bag),
       _saveSecretKey.bind(null, bag),
       _initializeDatabase.bind(null, bag),
@@ -40,9 +42,7 @@ function initialize(req, res) {
     function (err) {
       logger.info(bag.who, 'Completed');
       if (err)
-        return respondWithError(res, err);
-
-      sendJSONResponse(res, bag.resBody);
+        logger.warn(err);
     }
   );
 }
@@ -51,19 +51,35 @@ function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
 
+  var error = null;
+
   if (!_.has(bag.reqBody, 'msgPassword') ||
     _.isEmpty(bag.reqBody.msgPassword))
-    return next(
-      new ActErr(who, ActErr.DataNotFound, 'Missing body data: msgPassword')
-    );
+    error = new ActErr(who, ActErr.DataNotFound,
+      'Missing body data: msgPassword');
 
-  if (!_.has(bag.reqBody, 'statePassword') ||
-    _.isEmpty(bag.reqBody.statePassword))
-    return next(
-      new ActErr(who, ActErr.DataNotFound, 'Missing body data: statePassword')
-    );
+  if (!error && (!_.has(bag.reqBody, 'statePassword') ||
+    _.isEmpty(bag.reqBody.statePassword)))
+    error = new ActErr(who, ActErr.DataNotFound,
+      'Missing body data: statePassword');
 
+  if (error) {
+    // We will respond in either this function or the next, not at the end,
+    // to avoid timeouts.
+    respondWithError(bag.res, error);
+    return next(error);
+  }
 
+  return next();
+}
+
+function _sendResponse(bag, next) {
+  var who = bag.who + '|' + _checkInputParams.name;
+  logger.verbose(who, 'Inside');
+
+  // We reply early so the request won't time out pulling images.
+
+  sendJSONResponse(bag.res, bag.resBody);
   return next();
 }
 

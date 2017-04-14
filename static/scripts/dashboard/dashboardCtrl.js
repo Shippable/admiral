@@ -2,7 +2,7 @@
   'use strict';
 
   admiral.controller('dashboardCtrl', ['$scope', '$stateParams', '$q', '$state',
-    'admiralApiAdapter', 'horn',
+    '$interval', 'admiralApiAdapter', 'horn',
     dashboardCtrl
   ])
   .config(['$stateProvider', 'SRC_PATH',
@@ -16,8 +16,8 @@
   ]);
 
 
-  function dashboardCtrl($scope, $stateParams, $q, $state, admiralApiAdapter,
-    horn) {
+  function dashboardCtrl($scope, $stateParams, $q, $state, $interval,
+    admiralApiAdapter, horn) {
     var dashboardCtrlDefer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -151,23 +151,58 @@
           getAdmiralEnv.bind(null, bag)
         ],
         function (err) {
-          $scope.vm.initializing = false;
           if (err) {
+            $scope.vm.initializing = false;
             horn.error(err);
             return;
           }
+          pollSystemConfigs();
         }
       );
     }
     function postInitialize(bag, next) {
       admiralApiAdapter.postInitialize($scope.vm.initializeForm,
         function (err) {
-          if (err)
-            horn.error(err);
-          return next();
+          return next(err);
         }
       );
     }
+
+
+    function pollSystemConfigs() {
+      var promise = $interval(function () {
+        getSystemConfigs({},
+          function (err) {
+            if (err) {
+              horn.error(err);
+              $scope.vm.initializing = false;
+              $interval.cancel(promise);
+            }
+
+            var configs = $scope.vm.systemConfigs;
+
+
+            var processing = configs.db.isProcessing ||
+              configs.secrets.isProcessing || configs.msg.isProcessing ||
+              configs.state.isProcessing || configs.redis.isProcessing;
+
+            var failed = configs.db.isFailed || configs.secrets.isFailed ||
+              configs.msg.isProcessing || configs.state.isProcessing ||
+              configs.redis.isProcessing;
+
+            var initialized = configs.db.isInitialized &&
+              configs.secrets.isInitialized && configs.msg.isInitialized &&
+              configs.state.isInitialized && configs.redis.isInitialized;
+
+            if (!processing && (failed || initialized)) {
+              $scope.vm.initializing = false;
+              $interval.cancel(promise);
+            }
+          }
+        );
+      }, 3000);
+    }
+
 
     function showAdmiralEnvModal() {
       $scope.vm.selectedService = {};
