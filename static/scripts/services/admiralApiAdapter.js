@@ -12,6 +12,10 @@
   function admiralApiAdapter(admiralService) {
     var API = admiralService;
     return {
+      // Admiral Routes
+      getAdmiralEnv: function (callback) {
+        return API.get('/api/admiral', callback);
+      },
       //  Auth Routes
       postAuth: function (body, callback) {
         return API.post('/api/auth', body, callback);
