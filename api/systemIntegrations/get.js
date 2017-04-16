@@ -63,13 +63,6 @@ function _getVaultURL(bag, next) {
 
         bag.vaultUrl = systemConfigs.rows[0].vaultUrl;
 
-        if (bag.vaultUrl.indexOf('http') !== 0)
-          bag.vaultUrl = 'http://' + bag.vaultUrl;
-
-        if (systemConfigs.rows[0].secrets) {
-          var secretsConfig = JSON.parse(systemConfigs.rows[0].secrets);
-          bag.vaultUrl = bag.vaultUrl + ':' + secretsConfig.port;
-        }
         return next();
       }
 
