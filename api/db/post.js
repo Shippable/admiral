@@ -374,7 +374,7 @@ function _checkIsBootstrapped(bag, next) {
   var who = bag.who + '|' + _checkIsBootstrapped.name;
   logger.verbose(who, 'Inside');
 
-  var query = 'SELECT "isBootstrapped" FROM "systemConfigs"';
+  var query = 'SELECT "db" FROM "systemConfigs"';
 
   global.config.client.query(query,
     function (err, systemConfigs) {
@@ -385,8 +385,9 @@ function _checkIsBootstrapped(bag, next) {
 
       if (!_.isEmpty(systemConfigs.rows) &&
         !_.isEmpty(systemConfigs.rows[0])) {
-
-        bag.isBootstrapped = systemConfigs.rows[0].isBootstrapped;
+        var dbConfig = systemConfigs.rows[0].db;
+        dbConfig = JSON.parse(dbConfig);
+        bag.isBootstrapped = dbConfig.isInitialized;
         return next();
       }
 
