@@ -43,10 +43,10 @@ function post(req, res) {
       _saveSSHKeys.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
-      _checkIsBootstrapped.bind(null, bag),
+      _checkIsInitialized.bind(null, bag),
       _runMigrationsBeforeAPIStart.bind(null, bag),
       _startFakeAPI.bind(null, bag),
-      _setIsBootstrapped.bind(null, bag),
+      _setIsInitialized.bind(null, bag),
       _runMigrations.bind(null, bag),
       _templateServiceUserAccountFile.bind(null, bag),
       _upsertServiceUserAccount.bind(null, bag),
@@ -370,8 +370,8 @@ function _getSecretKey(bag, next) {
   );
 }
 
-function _checkIsBootstrapped(bag, next) {
-  var who = bag.who + '|' + _checkIsBootstrapped.name;
+function _checkIsInitialized(bag, next) {
+  var who = bag.who + '|' + _checkIsInitialized.name;
   logger.verbose(who, 'Inside');
 
   var query = 'SELECT "db" FROM "systemConfigs"';
@@ -387,7 +387,7 @@ function _checkIsBootstrapped(bag, next) {
         !_.isEmpty(systemConfigs.rows[0])) {
         var dbConfig = systemConfigs.rows[0].db;
         dbConfig = JSON.parse(dbConfig);
-        bag.isBootstrapped = dbConfig.isInitialized;
+        bag.isInitialized = dbConfig.isInitialized;
         return next();
       }
 
@@ -399,7 +399,7 @@ function _checkIsBootstrapped(bag, next) {
 }
 
 function _runMigrationsBeforeAPIStart(bag, next) {
-  if (!bag.isBootstrapped) return next();
+  if (!bag.isInitialized) return next();
   var who = bag.who + '|' + _runMigrationsBeforeAPIStart.name;
   logger.verbose(who, 'Inside');
 
@@ -456,15 +456,16 @@ function _startFakeAPI(bag, next) {
   );
 }
 
-function _setIsBootstrapped(bag, next) {
-  if (bag.isBootstrapped) return next();
-  var who = bag.who + '|' + _setIsBootstrapped.name;
+function _setIsInitialized(bag, next) {
+  if (bag.isInitialized) return next();
+  var who = bag.who + '|' + _setIsInitialized.name;
   logger.verbose(who, 'Inside');
 
+  var update = {
+    isInitialized: true
+  };
 
-  var query = 'UPDATE "systemConfigs" set "isBootstrapped"=true';
-
-  global.config.client.query(query,
+  configHandler.put('db', update,
     function (err, response) {
       if (err)
         return next(
@@ -472,9 +473,9 @@ function _setIsBootstrapped(bag, next) {
         );
 
       if (response.rowCount === 1) {
-        logger.debug('Successfully updated isBootstrapped');
+        logger.debug('Successfully updated isInitialized');
       } else {
-        logger.warn('Failed to update isBootstrapped');
+        logger.warn('Failed to update isInitialized');
       }
 
       return next();
