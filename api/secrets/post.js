@@ -289,8 +289,10 @@ function _updateVaultUrl(bag, next) {
   var who = bag.who + '|' +  _updateVaultUrl.name;
   logger.verbose(who, 'Inside');
 
+  var vaultUrl = util.format('http://%s:%s',
+    bag.config.address, bag.config.port);
   var query = util.format('UPDATE "systemConfigs" set "vaultUrl"=\'%s\';',
-    bag.config.address);
+    vaultUrl);
 
   global.config.client.query(query,
     function (err, response) {
