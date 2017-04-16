@@ -143,8 +143,8 @@ function _deleteByIdInVault(bag, next) {
 
   var key = util.format('shippable/systemIntegrations/%s',
     bag.inputParams.systemIntegrationId);
-  vaultAdapter.deleteSecret (key,
-    function(err, body) {
+  vaultAdapter.deleteSecret(key,
+    function (err, body) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
