@@ -27,6 +27,13 @@
       getSystemConfigs: function (callback) {
         return API.get('/api/systemConfigs', callback);
       },
+      // System Integration Routes
+      getSystemIntegrations: function (query, callback) {
+        return API.get('/api/systemIntegrations?' + query, callback);
+      },
+      postSystemIntegration: function (body, callback) {
+        return API.post('/api/systemIntegrations', body, callback);
+      },
       // Service Routes
       postInitialize: function (body, callback) {
         return API.post('/api/workflow/initialize', body, callback);

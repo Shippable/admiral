@@ -708,7 +708,7 @@ do $$
       values (203, '58a160e8c2845c9d5fb82042', 'envs', 'object', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
     end if;
 
-    -- these masterIntegrationFields (rabbitmq, redis, www, mktg) are not in base
+    -- these masterIntegrationFields (rabbitmq and url) are not in base
 
     -- masterIntegrationFields for rabbitmqCreds
     if not exists (select 1 from "masterIntegrationFields" where "id" = 208) then
@@ -736,32 +736,10 @@ do $$
       values (212, '589528a99ce3dd1000a94b06', 'rootQueueList', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- masterIntegrationFields for redis
+    -- masterIntegrationFields for url
     if not exists (select 1 from "masterIntegrationFields" where "id" = 213) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (213, '540e55445e5bad6f98764522', 'redisUrl', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- masterIntegrationFields for www
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 214) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (214, '589528aa9ce3dd1000a94b1c', 'wwwUrl', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 215) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (215, '589528aa9ce3dd1000a94b1c', 'wwwPort', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    -- masterIntegrationFields for mktg
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 216) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (216, '589528aa9ce3dd1000a94b1e', 'mktgUrl', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 217) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (217, '589528aa9ce3dd1000a94b1e', 'mktgPort', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (213, '589528aa9ce3dd1000a94b1c', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- END adding master integration fields
