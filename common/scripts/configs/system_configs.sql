@@ -137,10 +137,6 @@ do $$
       alter table "systemConfigs" add column "allowedSystemImageFamily" TEXT default 'shippable/minv2|drydock/';
     end if;
 
-    if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'isBootstrapped') then
-      alter table "systemConfigs" add column "isBootstrapped" BOOLEAN default false NOT NULL;
-    end if;
-
     if not exists (select 1 from information_schema.columns where table_name = 'systemConfigs' and column_name = 'release') then
       alter table "systemConfigs" add column "release" VARCHAR(24) default 'master' NOT NULL;
     end if;

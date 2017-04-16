@@ -43,10 +43,9 @@ function post(req, res) {
       _saveSSHKeys.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
-      _checkIsBootstrapped.bind(null, bag),
+      _checkIsInitialized.bind(null, bag),
       _runMigrationsBeforeAPIStart.bind(null, bag),
       _startFakeAPI.bind(null, bag),
-      _setIsBootstrapped.bind(null, bag),
       _runMigrations.bind(null, bag),
       _templateServiceUserAccountFile.bind(null, bag),
       _upsertServiceUserAccount.bind(null, bag),
@@ -370,11 +369,11 @@ function _getSecretKey(bag, next) {
   );
 }
 
-function _checkIsBootstrapped(bag, next) {
-  var who = bag.who + '|' + _checkIsBootstrapped.name;
+function _checkIsInitialized(bag, next) {
+  var who = bag.who + '|' + _checkIsInitialized.name;
   logger.verbose(who, 'Inside');
 
-  var query = 'SELECT "isBootstrapped" FROM "systemConfigs"';
+  var query = 'SELECT "db" FROM "systemConfigs"';
 
   global.config.client.query(query,
     function (err, systemConfigs) {
@@ -385,8 +384,9 @@ function _checkIsBootstrapped(bag, next) {
 
       if (!_.isEmpty(systemConfigs.rows) &&
         !_.isEmpty(systemConfigs.rows[0])) {
-
-        bag.isBootstrapped = systemConfigs.rows[0].isBootstrapped;
+        var dbConfig = systemConfigs.rows[0].db;
+        dbConfig = JSON.parse(dbConfig);
+        bag.isInitialized = dbConfig.isInitialized;
         return next();
       }
 
@@ -398,7 +398,7 @@ function _checkIsBootstrapped(bag, next) {
 }
 
 function _runMigrationsBeforeAPIStart(bag, next) {
-  if (!bag.isBootstrapped) return next();
+  if (!bag.isInitialized) return next();
   var who = bag.who + '|' + _runMigrationsBeforeAPIStart.name;
   logger.verbose(who, 'Inside');
 
@@ -451,32 +451,6 @@ function _startFakeAPI(bag, next) {
     },
     function (err) {
       return next(err);
-    }
-  );
-}
-
-function _setIsBootstrapped(bag, next) {
-  if (bag.isBootstrapped) return next();
-  var who = bag.who + '|' + _setIsBootstrapped.name;
-  logger.verbose(who, 'Inside');
-
-
-  var query = 'UPDATE "systemConfigs" set "isBootstrapped"=true';
-
-  global.config.client.query(query,
-    function (err, response) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.DataNotFound, err)
-        );
-
-      if (response.rowCount === 1) {
-        logger.debug('Successfully updated isBootstrapped');
-      } else {
-        logger.warn('Failed to update isBootstrapped');
-      }
-
-      return next();
     }
   );
 }
