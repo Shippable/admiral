@@ -46,7 +46,6 @@ function post(req, res) {
       _checkIsInitialized.bind(null, bag),
       _runMigrationsBeforeAPIStart.bind(null, bag),
       _startFakeAPI.bind(null, bag),
-      _setIsInitialized.bind(null, bag),
       _runMigrations.bind(null, bag),
       _templateServiceUserAccountFile.bind(null, bag),
       _upsertServiceUserAccount.bind(null, bag),
@@ -452,33 +451,6 @@ function _startFakeAPI(bag, next) {
     },
     function (err) {
       return next(err);
-    }
-  );
-}
-
-function _setIsInitialized(bag, next) {
-  if (bag.isInitialized) return next();
-  var who = bag.who + '|' + _setIsInitialized.name;
-  logger.verbose(who, 'Inside');
-
-  var update = {
-    isInitialized: true
-  };
-
-  configHandler.put('db', update,
-    function (err, response) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.DataNotFound, err)
-        );
-
-      if (response.rowCount === 1) {
-        logger.debug('Successfully updated isInitialized');
-      } else {
-        logger.warn('Failed to update isInitialized');
-      }
-
-      return next();
     }
   );
 }
