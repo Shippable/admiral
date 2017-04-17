@@ -2,7 +2,7 @@
   'use strict';
 
   admiral.controller('dashboardCtrl', ['$scope', '$stateParams', '$q', '$state',
-    '$interval', 'admiralApiAdapter', 'horn',
+    '$interval', 'ADMIRAL_URL', 'admiralApiAdapter', 'horn',
     dashboardCtrl
   ])
   .config(['$stateProvider', 'SRC_PATH',
@@ -17,7 +17,7 @@
 
 
   function dashboardCtrl($scope, $stateParams, $q, $state, $interval,
-    admiralApiAdapter, horn) {
+    ADMIRAL_URL, admiralApiAdapter, horn) {
     var dashboardCtrlDefer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -26,8 +26,22 @@
     $scope.vm = {
       isLoaded: false,
       initializing: false,
+      installing: false,
       initializeForm: {
         msgPassword: '',
+        statePassword: '',
+        accessKey: '',
+        secretKey: ''
+      },
+      installForm: {
+        api: {
+          isEnabled: true,
+          masterName: 'url',
+          data: {
+            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
+              50000
+          }
+        },
         statePassword: '',
         accessKey: '',
         secretKey: ''
@@ -52,6 +66,7 @@
       },
       selectedService: {},
       initialize: initialize,
+      install: install,
       showAdmiralEnvModal: showAdmiralEnvModal,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
@@ -67,7 +82,8 @@
       async.series([
           setBreadcrumb.bind(null, bag),
           getSystemConfigs.bind(null, bag),
-          getAdmiralEnv.bind(null, bag)
+          getAdmiralEnv.bind(null, bag),
+          getSystemIntegrations.bind(null, bag)
         ],
         function (err) {
           $scope.vm.isLoaded = true;
@@ -142,6 +158,28 @@
       );
     }
 
+    function getSystemIntegrations(bag, next) {
+      admiralApiAdapter.getSystemIntegrations('',
+        function (err, systemIntegrations) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          _.each(systemIntegrations,
+            function (systemIntegration) {
+              if ($scope.vm.installForm[systemIntegration.name]) {
+                _.extend($scope.vm.installForm[systemIntegration.name].data,
+                  systemIntegration.data);
+                $scope.vm.installForm[systemIntegration.name].isEnabled = true;
+              }
+            });
+
+          return next();
+        }
+      );
+    }
+
     function initialize() {
       $scope.vm.initializing = true;
       var bag = {};
@@ -202,6 +240,70 @@
       }, 3000);
     }
 
+    function install() {
+      $scope.vm.installing = true;
+
+      async.series([
+          updateAPISystemIntegration
+        ],
+        function (err) {
+          $scope.vm.installing = false;
+          if (err) {
+            horn.error(err);
+            return;
+          }
+        }
+      );
+    }
+
+    function updateAPISystemIntegration(next) {
+      var bag = {
+        name: 'api',
+        masterName: $scope.vm.installForm.api.masterName,
+        data: $scope.vm.installForm.api.data,
+        isEnabled: $scope.vm.installForm.api.isEnabled
+      };
+
+      async.series([
+          getSystemIntegration.bind(null, bag),
+          postSystemIntegration.bind(null, bag)
+        ],
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function getSystemIntegration(bag, next) {
+      var query = 'name=' + bag.name + '&masterName=' + bag.masterName;
+      admiralApiAdapter.getSystemIntegrations(query,
+        function (err, systemIntegrations) {
+          if (err)
+            return next(err);
+
+          if (systemIntegrations.length)
+            bag.systemIntegration = systemIntegrations[0];
+
+          return next();
+        }
+      );
+    }
+
+    function postSystemIntegration(bag, next) {
+      if (bag.systemIntegration) return next();
+      admiralApiAdapter.postSystemIntegration({
+          name: bag.name,
+          masterName: bag.masterName,
+          data: bag.data
+        },
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
 
     function showAdmiralEnvModal() {
       $scope.vm.selectedService = {};

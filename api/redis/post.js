@@ -202,9 +202,9 @@ function _postSystemIntegration(bag, next) {
 
   var postObject = {
     name: 'redis',
-    masterName: 'redis',
+    masterName: 'url',
     data: {
-      redisUrl: bag.scriptEnvs.REDIS_HOST + ':' + bag.config.port
+      url: bag.scriptEnvs.REDIS_HOST + ':' + bag.config.port
     }
   };
 
