@@ -229,6 +229,28 @@
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="vm.installForm.mktg.isEnabled">
+                        mktg
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div>&nbsp;</div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        URL
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="mktgUrl"
+                          ng-model="vm.installForm.mktg.data.url" ng-disabled="vm.installing"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div>
                   <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing" ng-click="vm.install()">
                     <div ng-if="vm.installing">
