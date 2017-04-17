@@ -26,6 +26,7 @@
     $scope.vm = {
       isLoaded: false,
       initializing: false,
+      initialized: false,
       installing: false,
       initializeForm: {
         msgPassword: '',
@@ -40,6 +41,14 @@
           data: {
             url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
               50000
+          }
+        },
+        www: {
+          isEnabled: true,
+          masterName: 'url',
+          data: {
+            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
+              50001
           }
         },
         statePassword: '',
@@ -139,6 +148,12 @@
           $scope.vm.initializeForm.statePassword =
             $scope.vm.systemConfigs.state.rootPassword || '';
 
+          $scope.vm.initialized = $scope.vm.systemConfigs.db.isInitialized &&
+            $scope.vm.systemConfigs.secrets.isInitialized &&
+            $scope.vm.systemConfigs.msg.isInitialized &&
+            $scope.vm.systemConfigs.state.isInitialized &&
+            $scope.vm.systemConfigs.redis.isInitialized;
+
           return next();
         }
       );
@@ -159,6 +174,8 @@
     }
 
     function getSystemIntegrations(bag, next) {
+      if (!$scope.vm.initialized) return next();
+
       admiralApiAdapter.getSystemIntegrations('',
         function (err, systemIntegrations) {
           if (err) {
@@ -227,13 +244,15 @@
               configs.msg.isFailed || configs.state.isFailed ||
               configs.redis.isFailed;
 
-            var initialized = configs.db.isInitialized &&
-              configs.secrets.isInitialized && configs.msg.isInitialized &&
-              configs.state.isInitialized && configs.redis.isInitialized;
-
-            if (!processing && (failed || initialized)) {
+            if (!processing && (failed || $scope.vm.initialized)) {
               $scope.vm.initializing = false;
               $interval.cancel(promise);
+              getSystemIntegrations({},
+                function (err) {
+                  if (err)
+                    horn.error(err);
+                }
+              );
             }
           }
         );
@@ -244,7 +263,8 @@
       $scope.vm.installing = true;
 
       async.series([
-          updateAPISystemIntegration
+          updateAPISystemIntegration,
+          updateWWWSystemIntegration
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -264,12 +284,35 @@
         isEnabled: $scope.vm.installForm.api.isEnabled
       };
 
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateWWWSystemIntegration(next) {
+      var bag = {
+        name: 'www',
+        masterName: $scope.vm.installForm.www.masterName,
+        data: $scope.vm.installForm.www.data,
+        isEnabled: $scope.vm.installForm.www.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateSystemIntegration(bag, callback) {
       async.series([
           getSystemIntegration.bind(null, bag),
           postSystemIntegration.bind(null, bag)
         ],
         function (err) {
-          return next(err);
+          return callback(err);
         }
       );
     }
@@ -291,6 +334,8 @@
 
     function postSystemIntegration(bag, next) {
       if (bag.systemIntegration) return next();
+      if (!bag.isEnabled) return next();
+
       admiralApiAdapter.postSystemIntegration({
           name: bag.name,
           masterName: bag.masterName,
