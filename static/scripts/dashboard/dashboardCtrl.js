@@ -69,6 +69,24 @@
             url: 'https://api.github.com'
           }
         },
+        msg: {
+          isEnabled: true,
+          masterName: 'rabbitmqCreds',
+          data: {
+            amqpUrl: '',
+            amqpUrlRoot: '',
+            amqpUrlAdmin: '',
+            amqpDefaultExchange: '',
+            rootQueueList: ''
+          }
+        },
+        redis: {
+          isEnabled: true,
+          masterName: 'url',
+          data: {
+            url: ''
+          }
+        },
         statePassword: '',
         accessKey: '',
         secretKey: ''
