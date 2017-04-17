@@ -59,6 +59,16 @@
               50002
           }
         },
+        auth: {
+          isEnabled: true,
+          masterName: 'githubKeys',
+          data: {
+            clientId: '',
+            clientSecret: '',
+            wwwUrl: '',
+            url: 'https://api.github.com'
+          }
+        },
         statePassword: '',
         accessKey: '',
         secretKey: ''
@@ -273,7 +283,8 @@
       async.series([
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
-          updateMktgSystemIntegration
+          updateMktgSystemIntegration,
+          updateAuthSystemIntegration
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -322,6 +333,23 @@
         data: $scope.vm.installForm.mktg.data,
         isEnabled: $scope.vm.installForm.mktg.isEnabled
       };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateAuthSystemIntegration(next) {
+      var bag = {
+        name: 'auth',
+        masterName: $scope.vm.installForm.auth.masterName,
+        data: $scope.vm.installForm.auth.data,
+        isEnabled: $scope.vm.installForm.auth.isEnabled
+      };
+
+      bag.data.wwwUrl = $scope.vm.installForm.www.data.url;
 
       updateSystemIntegration(bag,
         function (err) {

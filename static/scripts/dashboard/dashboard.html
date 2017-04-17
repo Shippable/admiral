@@ -251,6 +251,46 @@
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="vm.installForm.auth.isEnabled">
+                        GitHub
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div>&nbsp;</div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        Access Key
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="authClientId"
+                          ng-model="vm.installForm.auth.data.clientId" ng-disabled="vm.installing"/>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        Secret Key
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="authClientSecret"
+                          ng-model="vm.installForm.auth.data.clientSecret" ng-disabled="vm.installing"/>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        URL
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="authUrl"
+                          ng-model="vm.installForm.auth.data.url" ng-disabled="true"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div>
                   <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing" ng-click="vm.install()">
                     <div ng-if="vm.installing">
