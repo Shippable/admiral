@@ -51,6 +51,14 @@
               50001
           }
         },
+        mktg: {
+          isEnabled: true,
+          masterName: 'url',
+          data: {
+            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
+              50002
+          }
+        },
         statePassword: '',
         accessKey: '',
         secretKey: ''
@@ -264,7 +272,8 @@
 
       async.series([
           updateAPISystemIntegration,
-          updateWWWSystemIntegration
+          updateWWWSystemIntegration,
+          updateMktgSystemIntegration
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -297,6 +306,21 @@
         masterName: $scope.vm.installForm.www.masterName,
         data: $scope.vm.installForm.www.data,
         isEnabled: $scope.vm.installForm.www.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateMktgSystemIntegration(next) {
+      var bag = {
+        name: 'mktg',
+        masterName: $scope.vm.installForm.mktg.masterName,
+        data: $scope.vm.installForm.mktg.data,
+        isEnabled: $scope.vm.installForm.mktg.isEnabled
       };
 
       updateSystemIntegration(bag,
