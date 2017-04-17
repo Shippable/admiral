@@ -30,6 +30,20 @@ APIAdapter.prototype.postDB =
     this.post(url, body, callback);
   };
 
+// masterIntegrationFields
+APIAdapter.prototype.getMasterIntegrationFields =
+  function (query, callback) {
+    var url = '/api/masterIntegrationFields?' + query;
+    this.get(url, callback);
+  };
+
+// masterIntegrations
+APIAdapter.prototype.putMasterIntegrationById =
+  function (masterIntegrationId, json, callback) {
+    var url = util.format('/api/masterIntegrations/%s', masterIntegrationId);
+    this.put(url, json, callback);
+  };
+
 // msg
 APIAdapter.prototype.getMsg =
   function (callback) {
@@ -40,6 +54,19 @@ APIAdapter.prototype.getMsg =
 APIAdapter.prototype.postMsg =
   function (body, callback) {
     var url = '/api/msg';
+    this.post(url, body, callback);
+  };
+
+// providers
+APIAdapter.prototype.getProviders =
+  function (query, callback) {
+    var url = '/api/providers?' + query;
+    this.get(url, callback);
+  };
+
+APIAdapter.prototype.postProvider =
+  function (body, callback) {
+    var url = '/api/providers';
     this.post(url, body, callback);
   };
 
@@ -82,13 +109,19 @@ APIAdapter.prototype.postState =
     this.post(url, body, callback);
   };
 
-
 // systemIntegrations
+APIAdapter.prototype.getSystemIntegrations =
+  function (query, callback) {
+    var url = '/api/systemIntegrations?' + query;
+    this.get(url, callback);
+  };
+
 APIAdapter.prototype.postSystemIntegration =
   function (body, callback) {
     var url = '/api/systemIntegrations';
     this.post(url, body, callback);
   };
+
 
 /*****************************************/
 /*              HTTP METHODS             */

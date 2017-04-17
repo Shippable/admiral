@@ -728,7 +728,7 @@ do $$
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 211) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (211, '589528a99ce3dd1000a94b06', 'amqpUrlDefaultExchange', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (211, '589528a99ce3dd1000a94b06', 'amqpDefaultExchange', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 212) then

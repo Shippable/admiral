@@ -7,6 +7,7 @@ var async = require('async');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
+var APIAdapter = require('../../common/APIAdapter.js');
 var envHandler = require('../../common/envHandler.js');
 var VaultAdapter = require('../../common/VaultAdapter.js');
 
@@ -14,6 +15,7 @@ function post(req, res) {
   var bag = {
     reqBody: req.body,
     resBody: {},
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     vaultTokenEnv: 'VAULT_TOKEN'
   };
 
@@ -28,6 +30,8 @@ function post(req, res) {
       _enableMasterIntegration.bind(null, bag),
       _createSystemIntegration.bind(null, bag),
       _getSystemIntegration.bind(null, bag),
+      _getMasterIntegrationFields.bind(null, bag),
+      _validateMasterIntegrationFields.bind(null, bag),
       _postSystemIntegrationFieldsToVault.bind(null, bag)
     ],
     function (err) {
@@ -131,7 +135,7 @@ function _getMasterIntegration(bag, next) {
   var who = bag.who + '|' + _enableMasterIntegration.name;
   logger.verbose(who, 'Inside');
 
-  var selectStatement = util.format('SELECT id FROM "masterIntegrations" ' +
+  var selectStatement = util.format('SELECT * FROM "masterIntegrations" ' +
     ' WHERE name=\'%s\' AND type=\'generic\'', bag.reqBody.masterName);
 
   global.config.client.query(selectStatement,
@@ -141,10 +145,9 @@ function _getMasterIntegration(bag, next) {
           new ActErr(who, ActErr.DBOperationFailed, err)
         );
 
-
       if (!_.isEmpty(masterIntegrations.rows) &&
         !_.isEmpty(masterIntegrations.rows[0])) {
-        bag.masterIntegrationId = masterIntegrations.rows[0].id;
+        bag.masterIntegration = masterIntegrations.rows[0];
         return next();
       }
 
@@ -160,14 +163,16 @@ function _enableMasterIntegration(bag, next) {
   var who = bag.who + '|' + _enableMasterIntegration.name;
   logger.verbose(who, 'Inside');
 
-  var updateStatement = util.format('UPDATE "masterIntegrations" SET ' +
-    '"isEnabled"=true WHERE id=\'%s\'', bag.masterIntegrationId);
+  var update = {
+    isEnabled: true
+  };
 
-  global.config.client.query(updateStatement,
+  bag.apiAdapter.putMasterIntegrationById(bag.masterIntegration.id, update,
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to put master integration: ' + util.inspect(err))
         );
 
       return next();
@@ -187,7 +192,7 @@ function _createSystemIntegration(bag, next) {
     'values (\'%s\', \'%s\', \'%s\', \'%s\', true,' +
     ' \'54188262bc4d591ba438d62a\', \'54188262bc4d591ba438d62a\',' +
     ' \'2016-06-01\', \'2016-06-01\')',
-    bag.systemIntegrationId, bag.reqBody.name, bag.masterIntegrationId,
+    bag.systemIntegrationId, bag.reqBody.name, bag.masterIntegration.id,
     bag.reqBody.masterName);
 
   global.config.client.query(insertStatement,
@@ -230,6 +235,67 @@ function _getSystemIntegration(bag, next) {
   );
 }
 
+function _getMasterIntegrationFields(bag, next) {
+  var who = bag.who + '|' + _getMasterIntegrationFields.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('masterIntegrationIds=%s', bag.masterIntegration.id);
+
+  bag.apiAdapter.getMasterIntegrationFields(query,
+    function (err, masterIntegrationFields) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to put master integration: ' + util.inspect(err))
+        );
+
+      bag.masterIntegrationFields = masterIntegrationFields;
+
+      return next();
+    }
+  );
+}
+
+function _validateMasterIntegrationFields(bag, next) {
+  var who = bag.who + '|' + _validateMasterIntegrationFields.name;
+  logger.verbose(who, 'Inside');
+
+  var errors = [];
+
+  _.each(bag.masterIntegrationFields,
+    function (miField) {
+      if (miField.isRequired && !_.has(bag.reqBody.data, miField.name)) {
+        errors.push(util.format('Missing field %s', miField.name));
+        return;
+      }
+
+      var dataField = bag.reqBody.data[miField.name];
+
+      if (_.has(bag.reqBody.data, miField.name) &&
+        __checkDataType(dataField) !== miField.dataType)
+        errors.push(util.format('%s is not a %s',
+          miField.name, miField.dataType));
+
+      // validate keyValuePair's masterIntegrationField envs
+      if (bag.masterIntegration.name === 'keyValuePair' &&
+        miField.name === 'envs' &&
+        _.isObject(dataField)) {
+        var validationResult = __validateKeys(dataField);
+        if (!validationResult.isValid)
+          errors = errors.concat(validationResult.errors);
+      }
+    }
+  );
+
+  if (errors.length)
+    return next(
+      new ActErr(who, ActErr.OperationFailed,
+        util.format('Invalid systemIntegration data: %s', errors.join(', ')))
+    );
+
+  return next();
+}
+
 function _postSystemIntegrationFieldsToVault(bag, next) {
   var who = bag.who + '|' + _postSystemIntegrationFieldsToVault.name;
   logger.verbose(who, 'Inside');
@@ -265,4 +331,43 @@ function _postSystemIntegrationFieldsToVault(bag, next) {
       return next();
     }
   );
+}
+
+function __checkDataType(data) {
+  // these are the 4 data types supported in masterIntegrationFields
+  if (_.isString(data))
+    return 'string';
+  if (_.isNumber(data))
+    return 'number';
+  if (_.isBoolean(data))
+    return 'boolean';
+  if (_.isObject(data)) {
+    return 'object';
+  }
+}
+
+function __validateKeys(keyValuePair) {
+  var result = {
+    isValid: true,
+    errors: []
+  };
+
+  var invalidKeys = [];
+  _.each(keyValuePair,
+    function (value, key) {
+      if (key.match(/([^a-zA-Z_0-9]|^\d)/)) {
+        result.isValid = false;
+        invalidKeys.push(key);
+      }
+    }
+  );
+
+  if (!_.isEmpty(invalidKeys))
+    result.errors.push(
+      util.format('Invalid keys: ' + invalidKeys.join(', ') +
+        '. A key can contain only letters, digits and underscores, ' +
+        'and may not start with a digit.')
+    );
+
+  return result;
 }
