@@ -6,6 +6,8 @@ module.exports = self;
 var async = require('async');
 var _ = require('underscore');
 
+var configHandler = require('../../common/configHandler.js');
+
 function get(req, res) {
   var bag = {
     reqQuery: req.query,
@@ -55,27 +57,21 @@ function _get(bag, next) {
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  var query = util.format('SELECT %s from "systemConfigs"', bag.component);
-  global.config.client.query(query,
-    function (err, systemConfigs) {
+  configHandler.get(bag.component,
+    function (err, secrets) {
       if (err)
         return next(
           new ActErr(who, ActErr.DBOperationFailed,
             'Failed to get ' + bag.component, err)
         );
 
-      if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].secrets)) {
-          logger.debug('Found configuration for ' + bag.component);
-
-          var config = systemConfigs.rows[0].secrets;
-          bag.resBody = JSON.parse(config);
-      } else {
-        logger.debug(
-          'No configuration present in configs for ' + bag.component);
+      if (_.isEmpty(secrets)) {
+        logger.debug('No configuration in database for ' + bag.component);
         bag.initializeDefault = true;
+        return next();
       }
 
+      bag.resBody = secrets;
       return next();
     }
   );
@@ -87,26 +83,14 @@ function _setDefault(bag, next) {
   var who = bag.who + '|' + _setDefault.name;
   logger.verbose(who, 'Inside');
 
-  var defaultConfig = JSON.stringify(bag.defaultConfig);
-  var query =
-    util.format('UPDATE "systemConfigs" set "%s"=\'%s\';',
-      bag.component, defaultConfig);
-
-  global.config.client.query(query,
-    function (err, response) {
+  configHandler.put(bag.component, bag.defaultConfig,
+    function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed,
-            'Failed to update ' + bag.component, err)
+          new ActErr(who, ActErr.OperationFailed, err)
         );
 
-      if (response.rowCount === 1) {
-        logger.debug('Successfully added default value for ' + bag.component);
-        bag.resBody = JSON.parse(defaultConfig);
-      } else {
-        logger.warn('Failed to get default value for ' + bag.component);
-      }
-
+      bag.resBody = bag.defaultConfig;
       return next();
     }
   );

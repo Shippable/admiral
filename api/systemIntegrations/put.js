@@ -16,6 +16,7 @@ function put(req, res) {
     reqBody: req.body,
     resBody: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
+    vaultUrlEnv: 'VAULT_URL',
     vaultTokenEnv: 'VAULT_TOKEN'
   };
 
@@ -95,30 +96,28 @@ function _getVaultURL(bag, next) {
   var who = bag.who + '|' + _getVaultURL.name;
   logger.verbose(who, 'Inside');
 
-  var query = 'SELECT "vaultUrl", secrets from "systemConfigs"';
-  global.config.client.query(query,
-    function (err, systemConfigs) {
+  envHandler.get(bag.vaultUrlEnv,
+    function (err, value) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.vaultUrlEnv)
         );
 
-      if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0].vaultUrl)) {
-        logger.debug('Found vault URL');
-
-        bag.vaultUrl = systemConfigs.rows[0].vaultUrl;
-
-        return next();
+      if (_.isEmpty(value)) {
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No vault URL found')
+        );
       }
 
-      return next(
-        new ActErr(who, ActErr.DataNotFound,
-          'No vault URL found in configs')
-      );
+      logger.debug('Found vault URL');
+      bag.vaultUrl = value;
+      return next();
     }
   );
 }
+
 
 function _getVaultToken(bag, next) {
   var who = bag.who + '|' + _getVaultURL.name;
@@ -220,7 +219,7 @@ function _put(bag, next) {
         return;
 
       if (_.isString(value))
-        value = util.format("'%s'", value);
+        value = util.format('\'%s\'', value);
 
       updates.push(
         util.format('"%s"=%s', key, value)

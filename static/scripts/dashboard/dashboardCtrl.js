@@ -97,7 +97,7 @@
           }
         }
       },
-      systemConfigs: {
+      systemSettings: {
         db: {
           displayName: 'Database',
           isInitialized: false
@@ -132,7 +132,7 @@
 
       async.series([
           setBreadcrumb.bind(null, bag),
-          getSystemConfigs.bind(null, bag),
+          getSystemSettings.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
           getSystemIntegrations.bind(null, bag)
         ],
@@ -159,42 +159,42 @@
       return next();
     }
 
-    function getSystemConfigs(bag, next) {
-      admiralApiAdapter.getSystemConfigs(
-        function (err, systemConfigs) {
+    function getSystemSettings(bag, next) {
+      admiralApiAdapter.getSystemSettings(
+        function (err, systemSettings) {
           if (err)
             return next(err);
-          if (_.isEmpty(systemConfigs)) {
+          if (_.isEmpty(systemSettings)) {
             // if empty, we can't do anything yet
             return next();
           }
 
-          $scope.vm.systemConfigs.db =
-            _.extend($scope.vm.systemConfigs.db,
-              (systemConfigs.db && JSON.parse(systemConfigs.db)));
-          $scope.vm.systemConfigs.secrets =
-            _.extend($scope.vm.systemConfigs.secrets,
-              (systemConfigs.secrets && JSON.parse(systemConfigs.secrets)));
-          $scope.vm.systemConfigs.msg =
-            _.extend($scope.vm.systemConfigs.msg,
-              (systemConfigs.msg && JSON.parse(systemConfigs.msg)));
-          $scope.vm.systemConfigs.state =
-            _.extend($scope.vm.systemConfigs.state,
-              (systemConfigs.state && JSON.parse(systemConfigs.state)));
-          $scope.vm.systemConfigs.redis =
-            _.extend($scope.vm.systemConfigs.redis,
-              (systemConfigs.redis && JSON.parse(systemConfigs.redis)));
+          $scope.vm.systemSettings.db =
+            _.extend($scope.vm.systemSettings.db,
+              (systemSettings.db && JSON.parse(systemSettings.db)));
+          $scope.vm.systemSettings.secrets =
+            _.extend($scope.vm.systemSettings.secrets,
+              (systemSettings.secrets && JSON.parse(systemSettings.secrets)));
+          $scope.vm.systemSettings.msg =
+            _.extend($scope.vm.systemSettings.msg,
+              (systemSettings.msg && JSON.parse(systemSettings.msg)));
+          $scope.vm.systemSettings.state =
+            _.extend($scope.vm.systemSettings.state,
+              (systemSettings.state && JSON.parse(systemSettings.state)));
+          $scope.vm.systemSettings.redis =
+            _.extend($scope.vm.systemSettings.redis,
+              (systemSettings.redis && JSON.parse(systemSettings.redis)));
 
           $scope.vm.initializeForm.msgPassword =
-              $scope.vm.systemConfigs.msg.password || '';
+              $scope.vm.systemSettings.msg.password || '';
           $scope.vm.initializeForm.statePassword =
-            $scope.vm.systemConfigs.state.rootPassword || '';
+            $scope.vm.systemSettings.state.rootPassword || '';
 
-          $scope.vm.initialized = $scope.vm.systemConfigs.db.isInitialized &&
-            $scope.vm.systemConfigs.secrets.isInitialized &&
-            $scope.vm.systemConfigs.msg.isInitialized &&
-            $scope.vm.systemConfigs.state.isInitialized &&
-            $scope.vm.systemConfigs.redis.isInitialized;
+          $scope.vm.initialized = $scope.vm.systemSettings.db.isInitialized &&
+            $scope.vm.systemSettings.secrets.isInitialized &&
+            $scope.vm.systemSettings.msg.isInitialized &&
+            $scope.vm.systemSettings.state.isInitialized &&
+            $scope.vm.systemSettings.redis.isInitialized;
 
           return next();
         }
@@ -244,7 +244,7 @@
       var bag = {};
       async.series([
           postInitialize.bind(null, bag),
-          getSystemConfigs.bind(null, bag),
+          getSystemSettings.bind(null, bag),
           getAdmiralEnv.bind(null, bag)
         ],
         function (err) {
@@ -253,7 +253,7 @@
             horn.error(err);
             return;
           }
-          pollSystemConfigs();
+          pollSystemSettings();
         }
       );
     }
@@ -265,9 +265,9 @@
       );
     }
 
-    function pollSystemConfigs() {
+    function pollSystemSettings() {
       var promise = $interval(function () {
-        getSystemConfigs({},
+        getSystemSettings({},
           function (err) {
             if (err) {
               horn.error(err);
@@ -275,7 +275,7 @@
               $interval.cancel(promise);
             }
 
-            var configs = $scope.vm.systemConfigs;
+            var configs = $scope.vm.systemSettings;
 
             var processing = configs.db.isProcessing ||
               configs.secrets.isProcessing || configs.msg.isProcessing ||
@@ -518,7 +518,7 @@
 
 
     function showConfigModal(service) {
-      $scope.vm.selectedService = $scope.vm.systemConfigs[service];
+      $scope.vm.selectedService = $scope.vm.systemSettings[service];
 
       admiralApiAdapter.getService(service,
         function (err, configs) {
@@ -542,7 +542,7 @@
     }
 
     function showLogModal(service) {
-      $scope.vm.selectedService = $scope.vm.systemConfigs[service];
+      $scope.vm.selectedService = $scope.vm.systemSettings[service];
       $scope.vm.selectedService.serviceName = service;
       $scope.vm.selectedService.logs = [];
 

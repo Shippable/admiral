@@ -19,5 +19,8 @@ do $$
      insert into "accountTokens" ("id", "name", "accountId", "apiToken", "isInternal", "createdBy", "updatedBy", "createdAt", "updatedAt")
      values ('540e55445e5bad6f98764522', 'serviceUser', '540e55445e5bad6f98764522', '<%= obj.serviceUserToken %>', true, '540e55445e5bad6f98764522', '540e55445e5bad6f98764522', '2016-02-29T00:00:00Z', '2016-02-29T00:00:00Z');
     end if;
+
+    -- Updates serviceUserToken in systemSettings table
+    update "systemSettings" set "serviceUserToken"='<%= obj.serviceUserToken %>';
   end
 $$

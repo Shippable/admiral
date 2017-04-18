@@ -13,13 +13,13 @@ function put(req, res) {
     resBody: {}
   };
 
-  bag.who = util.format('systemConfigs|%s', self.name);
+  bag.who = util.format('systemSettings|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
       _checkInputParams.bind(null, bag),
       _put.bind(null, bag),
-      _getSystemConfig.bind(null, bag)
+      _getSystemSettings.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -40,10 +40,10 @@ function _checkInputParams(bag, next) {
       new ActErr(who, ActErr.BodyNotFound, 'Missing body')
     );
 
-  if (!bag.inputParams.systemConfigId)
+  if (!bag.inputParams.systemSettingId)
     return next(
       new ActErr(who, ActErr.ParamNotFound,
-        'Route param not found :systemConfigId')
+        'Route param not found :systemSettingId')
     );
 
   return next();
@@ -58,7 +58,7 @@ function _put(bag, next) {
   _.each(bag.reqBody,
     function (value, key) {
       if (_.isString(value))
-        value = util.format("'%s'", value);
+        value = util.format('\'%s\'', value);
 
       updates.push(
         util.format('"%s"=%s', key, value)
@@ -68,8 +68,8 @@ function _put(bag, next) {
 
   updates = updates.join(', ');
 
-  var query = util.format('UPDATE "systemConfigs" SET %s WHERE id=\'%s\'',
-    updates, bag.inputParams.systemConfigId);
+  var query = util.format('UPDATE "systemSettings" SET %s WHERE id=\'%s\'',
+    updates, bag.inputParams.systemSettingId);
 
   global.config.client.query(query,
     function (err) {
@@ -83,31 +83,31 @@ function _put(bag, next) {
   );
 }
 
-function _getSystemConfig(bag, next) {
-  var who = bag.who + '|' + _getSystemConfig.name;
+function _getSystemSettings(bag, next) {
+  var who = bag.who + '|' + _getSystemSettings.name;
   logger.verbose(who, 'Inside');
 
-  var query = util.format('SELECT * FROM "systemConfigs" WHERE id=\'%s\'',
-    bag.inputParams.systemConfigId);
+  var query = util.format('SELECT * FROM "systemSettings" WHERE id=\'%s\'',
+    bag.inputParams.systemSettingId);
 
   global.config.client.query(query,
-    function (err, systemConfigs) {
+    function (err, systemSettings) {
       if (err)
         return next(
           new ActErr(who, ActErr.DBOperationFailed, err)
         );
 
-      if (_.isEmpty(systemConfigs.rows))
+      if (_.isEmpty(systemSettings.rows))
         return next(
           new ActErr(who, ActErr.DBEntityNotFound,
-            'systemConfigs not found for id: ' +
-             bag.inputParams.systemConfigId)
+            'systemSettings not found for id: ' +
+             bag.inputParams.systemSettingId)
         );
 
-      logger.debug('Found systemConfigs for ' +
-        bag.inputParams.systemConfigId);
+      logger.debug('Found systemSettings for ' +
+        bag.inputParams.systemSettingId);
 
-      bag.resBody = systemConfigs.rows[0];
+      bag.resBody = systemSettings.rows[0];
       return next();
     }
   );

@@ -11,7 +11,7 @@ function get(req, res) {
     resBody: {}
   };
 
-  bag.who = util.format('systemConfigs|%s', self.name);
+  bag.who = util.format('systemSettings|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
@@ -39,11 +39,11 @@ function _get(bag, next) {
   var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  global.config.client.query('SELECT * from "systemConfigs"',
-    function (err, systemConfigs) {
+  global.config.client.query('SELECT * from "systemSettings"',
+    function (err, systemSettings) {
       if (err) {
         if (err.code === '42P01') {
-          logger.debug('SystemConfigs table not created. Please initialize.');
+          logger.debug('SystemSettings table not created. Please initialize.');
           return next();
         }
         return next(
@@ -51,12 +51,12 @@ function _get(bag, next) {
         );
       }
 
-      if (!systemConfigs.rows || !systemConfigs.rows[0])
+      if (!systemSettings.rows || !systemSettings.rows[0])
         return next(
-          new ActErr(who, ActErr.DataNotFound, 'System configs not found')
+          new ActErr(who, ActErr.DataNotFound, 'System settings not found')
         );
 
-      bag.resBody = systemConfigs.rows[0];
+      bag.resBody = systemSettings.rows[0];
 
       return next();
     }

@@ -30,7 +30,7 @@ function post(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
-      _upsertSystemConfigs.bind(null, bag),
+      _upsertSystemSettings.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
@@ -38,9 +38,9 @@ function post(req, res) {
       _upsertMasterIntegrations.bind(null, bag),
       _upsertMasterIntegrationFields.bind(null, bag),
       _upsertSystemIntegrations.bind(null, bag),
-      _readPublicSSHKey.bind(null, bag),
-      _readPrivateSSHKey.bind(null, bag),
-      _saveSSHKeys.bind(null, bag),
+  //    _readPublicSSHKey.bind(null, bag),            Uncomment these in #237
+  //    _readPrivateSSHKey.bind(null, bag),
+  //    _saveSSHKeys.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
       _checkIsInitialized.bind(null, bag),
@@ -74,16 +74,16 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-function _upsertSystemConfigs(bag, next) {
-  var who = bag.who + '|' + _upsertSystemConfigs.name;
+function _upsertSystemSettings(bag, next) {
+  var who = bag.who + '|' + _upsertSystemSettings.name;
   logger.verbose(who, 'Inside');
 
   _copyAndRunScript({
       who: who,
       params: {},
       script: '',
-      scriptPath: 'create_sys_configs.sh',
-      tmpScriptFilename: '/tmp/systemConfigs.sh',
+      scriptPath: 'create_system_settings.sh',
+      tmpScriptFilename: '/tmp/systemSettings.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
@@ -373,26 +373,22 @@ function _checkIsInitialized(bag, next) {
   var who = bag.who + '|' + _checkIsInitialized.name;
   logger.verbose(who, 'Inside');
 
-  var query = 'SELECT "db" FROM "systemConfigs"';
-
-  global.config.client.query(query,
-    function (err, systemConfigs) {
+  configHandler.get('db',
+    function (err, db) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get ' + bag.component, err)
         );
 
-      if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0])) {
-        var dbConfig = systemConfigs.rows[0].db;
-        dbConfig = JSON.parse(dbConfig);
-        bag.isInitialized = dbConfig.isInitialized;
-        return next();
-      }
+      if (_.isEmpty(db))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No config found')
+        );
 
-      return next(
-        new ActErr(who, ActErr.DataNotFound, 'No systemConfigs found')
-      );
+      bag.isInitialized = db.isInitialized;
+      return next();
     }
   );
 }

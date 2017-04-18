@@ -143,8 +143,6 @@ __initialize_vault() {
     __process_msg "Generated vault token: $vault_token"
   fi
 
-  #sudo docker exec db \ psql -U $DB_USER -d $DB_NAME -v ON_ERROR_STOP=1 \ -c "UPDATE \"systemConfigs\" set \"vaultToken\"='$vault_token'"
-
   local admiral_env="$CONFIG_DIR/admiral.env"
   __process_msg "Updating vault token in admiral env"
   sed -i 's#.*VAULT_TOKEN=.*#VAULT_TOKEN="'$vault_token'"#g' $admiral_env

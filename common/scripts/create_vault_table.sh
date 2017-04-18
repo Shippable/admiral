@@ -17,7 +17,6 @@ __validate_vault_store() {
 __copy_script() {
   __process_msg "Copying vault sql to configs dir $CONFIG_DIR/db"
   local vault_script_host_location="$SCRIPTS_DIR/configs/vault_kv_store.sql"
-  local vault_script_container_location="$CONFIG_DIR/db/system_configs.sql"
 
   sudo cp -vr $SCRIPTS_DIR/configs/vault_kv_store.sql $CONFIG_DIR/db
 }

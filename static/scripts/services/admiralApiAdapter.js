@@ -23,9 +23,9 @@
       postLogout: function (body, callback) {
         return API.post('/api/logout', body, callback);
       },
-      // System Config Routes
-      getSystemConfigs: function (callback) {
-        return API.get('/api/systemConfigs', callback);
+      // System Settings Routes
+      getSystemSettings: function (callback) {
+        return API.get('/api/systemSettings', callback);
       },
       // System Integration Routes
       getSystemIntegrations: function (query, callback) {
