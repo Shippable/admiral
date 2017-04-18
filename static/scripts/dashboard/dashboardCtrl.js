@@ -39,8 +39,7 @@
           isEnabled: true,
           masterName: 'url',
           data: {
-            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
-              50000
+            url: ''
           }
         },
         auth: {
@@ -50,15 +49,14 @@
             clientId: '',
             clientSecret: '',
             wwwUrl: '',
-            url: 'https://api.github.com'
+            url: ''
           }
         },
         mktg: {
           isEnabled: true,
           masterName: 'url',
           data: {
-            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
-              50002
+            url: ''
           }
         },
         msg: {
@@ -92,8 +90,7 @@
           isEnabled: true,
           masterName: 'url',
           data: {
-            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
-              50001
+            url: ''
           }
         }
       },
@@ -123,6 +120,42 @@
       showLogModal: showLogModal,
       refreshLogs: refreshLogs,
       logOutOfAdmiral: logOutOfAdmiral
+    };
+
+    var systemIntDataDefaults = {
+      api: {
+        url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
+            50000
+      },
+      auth: {
+        clientId: '',
+        clientSecret: '',
+        wwwUrl: '',
+        url: 'https://api.github.com'
+      },
+      mktg: {
+        url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
+          50002
+      },
+      msg: {
+        amqpUrl: '',
+        amqpUrlRoot: '',
+        amqpUrlAdmin: '',
+        amqpDefaultExchange: '',
+        rootQueueList: ''
+      },
+      redis: {
+        url: ''
+      },
+      state: {
+        password: '',
+        url: '',
+        username: ''
+      },
+      www: {
+        url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
+          50001
+      }
     };
 
     $scope._r.appPromise.then(initWorkflow);
@@ -218,6 +251,13 @@
     function getSystemIntegrations(bag, next) {
       if (!$scope.vm.initialized) return next();
 
+      // reset all systemIntegrations to their defaults
+      _.each($scope.vm.installForm,
+        function (value, key) {
+          resetSystemIntegration(key);
+        }
+      );
+
       admiralApiAdapter.getSystemIntegrations('',
         function (err, systemIntegrations) {
           if (err) {
@@ -225,6 +265,7 @@
             return next();
           }
 
+          // override defaults with actual systemInt values
           _.each(systemIntegrations,
             function (systemIntegration) {
               if ($scope.vm.installForm[systemIntegration.name]) {
@@ -433,7 +474,8 @@
       async.series([
           getSystemIntegration.bind(null, bag),
           postSystemIntegration.bind(null, bag),
-          putSystemIntegration.bind(null, bag)
+          putSystemIntegration.bind(null, bag),
+          deleteSystemIntegration.bind(null, bag)
         ],
         function (err) {
           return callback(err);
@@ -490,6 +532,29 @@
           return next();
         }
       );
+    }
+
+    function deleteSystemIntegration(bag, next) {
+      if (!bag.systemIntegration) return next();
+      if (bag.isEnabled) return next();
+
+      admiralApiAdapter.deleteSystemIntegration(bag.systemIntegration.id,
+        function (err) {
+          if (err)
+            return next(err);
+
+          resetSystemIntegration(bag.name);
+
+          return next();
+        }
+      );
+    }
+
+    function resetSystemIntegration(systemIntName) {
+      $scope.vm.installForm[systemIntName].isEnabled = false;
+
+      _.extend($scope.vm.installForm[systemIntName].data,
+        systemIntDataDefaults[systemIntName]);
     }
 
     function showAdmiralEnvModal() {

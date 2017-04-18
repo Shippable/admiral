@@ -321,6 +321,8 @@ function _postSystemIntegrationFieldsToVault(bag, next) {
         );
 
       bag.resBody = bag.systemIntegration;
+      bag.resBody.data = bag.reqBody.data;
+
       return next();
     }
   );
