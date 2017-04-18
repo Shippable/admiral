@@ -51,7 +51,6 @@ function _generateEnvs(bag, next) {
   var who = bag.who + '|' + _generateEnvs.name;
   logger.verbose(who, 'Inside');
 
-  bag.config.env = '-e FOO=foo';
   return next();
 }
 
