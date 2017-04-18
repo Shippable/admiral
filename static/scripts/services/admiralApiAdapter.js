@@ -38,6 +38,10 @@
         return API.put('/api/systemIntegrations/' +
           systemIntegrationId, body, callback);
       },
+      deleteSystemIntegration: function (systemIntegrationId, callback) {
+        return API.delete('/api/systemIntegrations/' +
+          systemIntegrationId, callback);
+      },
       // Service Routes
       postInitialize: function (body, callback) {
         return API.post('/api/workflow/initialize', body, callback);
