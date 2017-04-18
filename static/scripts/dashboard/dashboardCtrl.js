@@ -2,7 +2,7 @@
   'use strict';
 
   admiral.controller('dashboardCtrl', ['$scope', '$stateParams', '$q', '$state',
-    '$interval', 'ADMIRAL_URL', 'admiralApiAdapter', 'horn',
+    '$interval', 'admiralApiAdapter', 'horn',
     dashboardCtrl
   ])
   .config(['$stateProvider', 'SRC_PATH',
@@ -17,7 +17,7 @@
 
 
   function dashboardCtrl($scope, $stateParams, $q, $state, $interval,
-    ADMIRAL_URL, admiralApiAdapter, horn) {
+    admiralApiAdapter, horn) {
     var dashboardCtrlDefer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -122,41 +122,7 @@
       logOutOfAdmiral: logOutOfAdmiral
     };
 
-    var systemIntDataDefaults = {
-      api: {
-        url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
-            50000
-      },
-      auth: {
-        clientId: '',
-        clientSecret: '',
-        wwwUrl: '',
-        url: 'https://api.github.com'
-      },
-      mktg: {
-        url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
-          50002
-      },
-      msg: {
-        amqpUrl: '',
-        amqpUrlRoot: '',
-        amqpUrlAdmin: '',
-        amqpDefaultExchange: '',
-        rootQueueList: ''
-      },
-      redis: {
-        url: ''
-      },
-      state: {
-        password: '',
-        url: '',
-        username: ''
-      },
-      www: {
-        url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
-          50001
-      }
-    };
+    var systemIntDataDefaults = {};
 
     $scope._r.appPromise.then(initWorkflow);
 
@@ -167,6 +133,7 @@
           setBreadcrumb.bind(null, bag),
           getSystemSettings.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
+          setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag)
         ],
         function (err) {
@@ -246,6 +213,46 @@
           return next();
         }
       );
+    }
+
+    function setupSystemIntDefaults(bag, next) {
+      systemIntDataDefaults = {
+        api: {
+          url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
+              ':50000'
+        },
+        auth: {
+          clientId: '',
+          clientSecret: '',
+          wwwUrl: '',
+          url: 'https://api.github.com'
+        },
+        mktg: {
+          url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
+            ':50002'
+        },
+        msg: {
+          amqpUrl: '',
+          amqpUrlRoot: '',
+          amqpUrlAdmin: '',
+          amqpDefaultExchange: '',
+          rootQueueList: ''
+        },
+        redis: {
+          url: ''
+        },
+        state: {
+          password: '',
+          url: '',
+          username: ''
+        },
+        www: {
+          url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
+            ':50001'
+        }
+      };
+
+      return next();
     }
 
     function getSystemIntegrations(bag, next) {
@@ -544,6 +551,7 @@
             return next(err);
 
           resetSystemIntegration(bag.name);
+          $scope.vm.installForm[bag.name].isEnabled = false;
 
           return next();
         }
@@ -551,8 +559,6 @@
     }
 
     function resetSystemIntegration(systemIntName) {
-      $scope.vm.installForm[systemIntName].isEnabled = false;
-
       _.extend($scope.vm.installForm[systemIntName].data,
         systemIntDataDefaults[systemIntName]);
     }
