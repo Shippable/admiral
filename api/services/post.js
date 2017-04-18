@@ -9,6 +9,7 @@ var _ = require('underscore');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 
+var envHandler = require('../../common/envHandler.js');
 var configHandler = require('../../common/configHandler.js');
 
 var apiConfig = require('./apiConfig.js');
@@ -18,7 +19,9 @@ function post(req, res) {
     reqBody: req.body,
     resBody: {},
     params: {},
-    tmpScript: '/tmp/service.sh'
+    tmpScript: '/tmp/service.sh',
+    accessKeyEnv: 'ACCESS_KEY',
+    secretKeyEnv: 'SECRET_KEY'
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -27,6 +30,8 @@ function post(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _getServiceConfig.bind(null, bag),
+      _getAccessKey.bind(null, bag),
+      _getSecretKey.bind(null, bag),
       _generateServiceConfig.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
@@ -132,6 +137,46 @@ function _generateServiceConfig(bag, next) {
   );
 }
 
+function _getAccessKey(bag, next) {
+  var who = bag.who + '|' + _getAccessKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.accessKeyEnv,
+    function (err, accessKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.accessKeyEnv)
+        );
+
+      bag.accessKey = accessKey;
+      logger.debug('Found access key');
+
+      return next();
+    }
+  );
+}
+
+function _getSecretKey(bag, next) {
+  var who = bag.who + '|' + _getSecretKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.secretKeyEnv,
+    function (err, secretKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.secretKeyEnv)
+        );
+
+      bag.secretKey = secretKey;
+      logger.debug('Found secret key');
+
+      return next();
+    }
+  );
+}
+
 function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
@@ -144,6 +189,8 @@ function _generateInitializeEnvs(bag, next) {
     'SERVICE_ENV': bag.serviceConfig.env,
     'SERVICE_OPTS': bag.serviceConfig.opts,
     'SERVICE_MOUNTS': bag.serviceConfig.mounts,
+    'ACCESS_KEY': bag.accessKey,
+    'SECRET_KEY': bag.secretKey,
     'RUN_COMMAND': runCommand
   };
 
