@@ -9,7 +9,6 @@ __validate_service_configs() {
   __process_msg "Service $SERVICE_NAME configuration"
   __process_msg "SERVICE: $SERVICE_NAME"
   __process_msg "LOGS_FILE:$LOGS_FILE"
-
 }
 
 __cleanup_containers() {

@@ -104,7 +104,8 @@ function _generateServiceConfig(bag, next) {
   logger.verbose(who, 'Inside');
 
   var configGenerator = null;
-  if (bag.name === 'api') configGenerator = apiConfig;
+  if (bag.name === 'api')
+    configGenerator = apiConfig;
 
   var params = {
     config: bag.serviceConfig,
