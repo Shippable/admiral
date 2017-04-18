@@ -130,13 +130,15 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
+  var runCommand = '';
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
     'SERVICE_NAME': bag.serviceConfig.serviceName,
     'SERVICE_IMAGE': bag.serviceConfig.image,
     'SERVICE_ENV': bag.serviceConfig.env,
     'SERVICE_OPTS': bag.serviceConfig.opts,
-    'SERVICE_MOUNTS': bag.serviceConfig.mounts
+    'SERVICE_MOUNTS': bag.serviceConfig.mounts,
+    'RUN_COMMAND': runCommand
   };
 
   return next();
