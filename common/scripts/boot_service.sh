@@ -9,6 +9,7 @@ exec &> >(tee -a "$LOGS_FILE")
 __validate_service_configs() {
   __process_msg "Service $SERVICE_NAME configuration"
   __process_msg "SERVICE: $SERVICE_NAME"
+  __process_msg "SERVICE_IMAGE: $SERVICE_IMAGE"
   __process_msg "ACCESS_KEY: $ACCESS_KEY"
   __process_msg "SECRET_KEY: $SECRET_KEY"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
@@ -31,13 +32,19 @@ __registry_login() {
   eval "$docker_login_cmd"
 }
 
+__pull_image() {
+  __process_msg "Pulling service image: $SERVICE_IMAGE"
+  sudo docker pull $SERVICE_IMAGE
+}
+
 __cleanup_containers() {
   __process_msg "Stopping stale container for the service"
-
+  sudo docker rm -f $SERVICE_NAME || true
 }
 
 __cleanup_service() {
   __process_msg "Removing stale service definitions"
+  sudo docker service rm $SERVICE_NAME || true
 }
 
 __run_service() {
@@ -53,6 +60,7 @@ main() {
     __process_marker "Booting service: $SERVICE_NAME"
     __validate_service_configs
     __registry_login
+    __pull_image
   fi
 }
 

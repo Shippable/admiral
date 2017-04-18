@@ -8,7 +8,8 @@ var async = require('async');
 function apiConfig(params, callback) {
   var bag = {
     config: params.config,
-    name: params.name
+    name: params.name,
+    registry: params.registry
   };
 
   bag.who = util.format('apiConfig|%s', self.name);
@@ -43,6 +44,9 @@ function _checkInputParams(bag, next) {
 function _generateImage(bag, next) {
   var who = bag.who + '|' + _generateImage.name;
   logger.verbose(who, 'Inside');
+
+  bag.config.image = util.format('%s/%s:%s',
+    bag.registry, bag.config.serviceName, global.config.release);
 
   return next();
 }

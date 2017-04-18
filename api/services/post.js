@@ -21,7 +21,8 @@ function post(req, res) {
     params: {},
     tmpScript: '/tmp/service.sh',
     accessKeyEnv: 'ACCESS_KEY',
-    secretKeyEnv: 'SECRET_KEY'
+    secretKeyEnv: 'SECRET_KEY',
+    registryEnv: 'PRIVATE_IMAGE_REGISTRY'
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -32,6 +33,7 @@ function post(req, res) {
       _getServiceConfig.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
+      _getRegistry.bind(null, bag),
       _generateServiceConfig.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
@@ -104,6 +106,26 @@ function _getServiceConfig(bag, next) {
   );
 }
 
+function _getRegistry(bag, next) {
+  var who = bag.who + '|' + _getRegistry.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.registryEnv,
+    function (err, registry) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.registryEnv)
+        );
+
+      bag.registry = registry;
+      logger.debug('Found registry');
+
+      return next();
+    }
+  );
+}
+
 function _generateServiceConfig(bag, next) {
   var who = bag.who + '|' + _generateServiceConfig.name;
   logger.verbose(who, 'Inside');
@@ -114,7 +136,8 @@ function _generateServiceConfig(bag, next) {
 
   var params = {
     config: bag.serviceConfig,
-    name: bag.name
+    name: bag.name,
+    registry: bag.registry
   };
 
   if (!configGenerator)
@@ -184,6 +207,7 @@ function _generateInitializeEnvs(bag, next) {
   var runCommand = '';
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
+    'SCRIPTS_DIR': global.config.scriptsDir,
     'SERVICE_NAME': bag.serviceConfig.serviceName,
     'SERVICE_IMAGE': bag.serviceConfig.image,
     'SERVICE_ENV': bag.serviceConfig.env,
