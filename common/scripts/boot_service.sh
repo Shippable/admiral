@@ -49,7 +49,14 @@ __cleanup_service() {
 
 __run_service() {
   __process_msg "Running service: $SERVICE_NAME"
-
+  local run_cmd="sudo docker run -d \
+    $SERVICE_ENV \
+    $SERVICE_MOUNTS \
+    $SERVICE_OPTS \
+    --name $SERVICE_NAME \
+    $SERVICE_IMAGE"
+  __process_msg "Executing: $run_cmd"
+  eval "$run_cmd"
 }
 
 main() {
@@ -61,6 +68,9 @@ main() {
     __validate_service_configs
     __registry_login
     __pull_image
+    __cleanup_containers
+    __cleanup_service
+    __run_service
   fi
 }
 

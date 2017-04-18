@@ -22,7 +22,9 @@ function post(req, res) {
     tmpScript: '/tmp/service.sh',
     accessKeyEnv: 'ACCESS_KEY',
     secretKeyEnv: 'SECRET_KEY',
-    registryEnv: 'PRIVATE_IMAGE_REGISTRY'
+    registryEnv: 'PRIVATE_IMAGE_REGISTRY',
+    vaultUrlEnv: 'VAULT_URL',
+    vaultTokenEnv: 'VAULT_TOKEN'
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -34,6 +36,8 @@ function post(req, res) {
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
       _getRegistry.bind(null, bag),
+      _getVaultURL.bind(null, bag),
+      _getVaultToken.bind(null, bag),
       _generateServiceConfig.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
@@ -126,6 +130,57 @@ function _getRegistry(bag, next) {
   );
 }
 
+function _getVaultURL(bag, next) {
+  var who = bag.who + '|' + _getVaultURL.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.vaultUrlEnv,
+    function (err, value) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.vaultUrlEnv)
+        );
+
+      if (_.isEmpty(value))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No vault URL found')
+        );
+
+      logger.debug('Found vault URL');
+      bag.vaultUrl = value;
+      return next();
+    }
+  );
+}
+
+function _getVaultToken(bag, next) {
+  var who = bag.who + '|' + _getVaultToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.vaultTokenEnv,
+    function (err, value) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.vaultTokenEnv)
+        );
+
+      if (_.isEmpty(value)) {
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No vault token found')
+        );
+      }
+
+      logger.debug('Found vault token');
+      bag.vaultToken = value;
+      return next();
+    }
+  );
+}
+
 function _generateServiceConfig(bag, next) {
   var who = bag.who + '|' + _generateServiceConfig.name;
   logger.verbose(who, 'Inside');
@@ -137,7 +192,9 @@ function _generateServiceConfig(bag, next) {
   var params = {
     config: bag.serviceConfig,
     name: bag.name,
-    registry: bag.registry
+    registry: bag.registry,
+    vaultUrl: bag.vaultUrl,
+    vaultToken: bag.vaultToken
   };
 
   if (!configGenerator)
@@ -210,7 +267,7 @@ function _generateInitializeEnvs(bag, next) {
     'SCRIPTS_DIR': global.config.scriptsDir,
     'SERVICE_NAME': bag.serviceConfig.serviceName,
     'SERVICE_IMAGE': bag.serviceConfig.image,
-    'SERVICE_ENV': bag.serviceConfig.env,
+    'SERVICE_ENV': bag.serviceConfig.envs,
     'SERVICE_OPTS': bag.serviceConfig.opts,
     'SERVICE_MOUNTS': bag.serviceConfig.mounts,
     'ACCESS_KEY': bag.accessKey,
