@@ -43,22 +43,6 @@
               50000
           }
         },
-        www: {
-          isEnabled: true,
-          masterName: 'url',
-          data: {
-            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
-              50001
-          }
-        },
-        mktg: {
-          isEnabled: true,
-          masterName: 'url',
-          data: {
-            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
-              50002
-          }
-        },
         auth: {
           isEnabled: true,
           masterName: 'githubKeys',
@@ -67,6 +51,14 @@
             clientSecret: '',
             wwwUrl: '',
             url: 'https://api.github.com'
+          }
+        },
+        mktg: {
+          isEnabled: true,
+          masterName: 'url',
+          data: {
+            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
+              50002
           }
         },
         msg: {
@@ -87,9 +79,23 @@
             url: ''
           }
         },
-        statePassword: '',
-        accessKey: '',
-        secretKey: ''
+        state: {
+          isEnabled: true,
+          masterName: 'gitlabCreds',
+          data: {
+            password: '',
+            url: '',
+            username: ''
+          }
+        },
+        www: {
+          isEnabled: true,
+          masterName: 'url',
+          data: {
+            url: ADMIRAL_URL.substring(0, ADMIRAL_URL.lastIndexOf(':') + 1) +
+              50001
+          }
+        }
       },
       systemConfigs: {
         db: {
@@ -259,7 +265,6 @@
       );
     }
 
-
     function pollSystemConfigs() {
       var promise = $interval(function () {
         getSystemConfigs({},
@@ -301,8 +306,11 @@
       async.series([
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
+          updateAuthSystemIntegration,
           updateMktgSystemIntegration,
-          updateAuthSystemIntegration
+          updateMsgSystemIntegration,
+          updateRedisSystemIntegration,
+          updateStateSystemIntegration
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -344,21 +352,6 @@
       );
     }
 
-    function updateMktgSystemIntegration(next) {
-      var bag = {
-        name: 'mktg',
-        masterName: $scope.vm.installForm.mktg.masterName,
-        data: $scope.vm.installForm.mktg.data,
-        isEnabled: $scope.vm.installForm.mktg.isEnabled
-      };
-
-      updateSystemIntegration(bag,
-        function (err) {
-          return next(err);
-        }
-      );
-    }
-
     function updateAuthSystemIntegration(next) {
       var bag = {
         name: 'auth',
@@ -376,10 +369,71 @@
       );
     }
 
+    function updateMktgSystemIntegration(next) {
+      var bag = {
+        name: 'mktg',
+        masterName: $scope.vm.installForm.mktg.masterName,
+        data: $scope.vm.installForm.mktg.data,
+        isEnabled: $scope.vm.installForm.mktg.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateMsgSystemIntegration(next) {
+      var bag = {
+        name: 'msg',
+        masterName: $scope.vm.installForm.msg.masterName,
+        data: $scope.vm.installForm.msg.data,
+        isEnabled: $scope.vm.installForm.msg.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateRedisSystemIntegration(next) {
+      var bag = {
+        name: 'redis',
+        masterName: $scope.vm.installForm.redis.masterName,
+        data: $scope.vm.installForm.redis.data,
+        isEnabled: $scope.vm.installForm.redis.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateStateSystemIntegration(next) {
+      var bag = {
+        name: 'state',
+        masterName: $scope.vm.installForm.state.masterName,
+        data: $scope.vm.installForm.state.data,
+        isEnabled: $scope.vm.installForm.state.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
     function updateSystemIntegration(bag, callback) {
       async.series([
           getSystemIntegration.bind(null, bag),
-          postSystemIntegration.bind(null, bag)
+          postSystemIntegration.bind(null, bag),
+          putSystemIntegration.bind(null, bag)
         ],
         function (err) {
           return callback(err);
@@ -407,6 +461,24 @@
       if (!bag.isEnabled) return next();
 
       admiralApiAdapter.postSystemIntegration({
+          name: bag.name,
+          masterName: bag.masterName,
+          data: bag.data
+        },
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function putSystemIntegration(bag, next) {
+      if (!bag.systemIntegration) return next();
+      if (!bag.isEnabled) return next();
+
+      admiralApiAdapter.putSystemIntegration(bag.systemIntegration.id, {
           name: bag.name,
           masterName: bag.masterName,
           data: bag.data

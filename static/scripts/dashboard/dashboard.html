@@ -184,73 +184,10 @@
               <div ng-if="!vm.initialized">
                 Please initialize first.
               </div>
+              <div class="col-md-10">
+                Please configure your auth provider.
+              </div>
               <div class="col-md-offset-1 col-md-10" ng-if="vm.isLoaded && vm.initialized">
-                <div class="row">
-                  <div class="col-md-2">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" ng-model="vm.installForm.api.isEnabled" ng-disabled="true">
-                        api
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-10">
-                    <div>&nbsp;</div>
-                    <div class="row">
-                      <div class="col-md-3">
-                        URL
-                      </div>
-                      <div class="col-md-9">
-                        <input type="text" class="form-control" name="apiUrl"
-                          ng-model="vm.installForm.api.data.url" ng-disabled="vm.installing"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-2">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" ng-model="vm.installForm.www.isEnabled" ng-disabled="true">
-                        www
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-10">
-                    <div>&nbsp;</div>
-                    <div class="row">
-                      <div class="col-md-3">
-                        URL
-                      </div>
-                      <div class="col-md-9">
-                        <input type="text" class="form-control" name="wwwUrl"
-                          ng-model="vm.installForm.www.data.url" ng-disabled="vm.installing"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-2">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" ng-model="vm.installForm.mktg.isEnabled" ng-disabled="true">
-                        mktg
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-10">
-                    <div>&nbsp;</div>
-                    <div class="row">
-                      <div class="col-md-3">
-                        URL
-                      </div>
-                      <div class="col-md-9">
-                        <input type="text" class="form-control" name="mktgUrl"
-                          ng-model="vm.installForm.mktg.data.url" ng-disabled="vm.installing"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div class="row">
                   <div class="col-md-2">
                     <div class="checkbox">
@@ -287,6 +224,95 @@
                       <div class="col-md-9">
                         <input type="text" class="form-control" name="authUrl"
                           ng-model="vm.installForm.auth.data.url" ng-disabled="true"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10">
+                Next, review/edit your system's configurations.
+              </div>
+              <div class="col-md-offset-1 col-md-10" ng-if="vm.isLoaded && vm.initialized">
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="vm.installForm.api.isEnabled" ng-disabled="true">
+                        api
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-10">
+                    <div>&nbsp;</div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        URL
+                      </div>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" name="apiUrl"
+                          ng-model="vm.installForm.api.data.url" ng-disabled="vm.installing"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="vm.installForm.state.isEnabled" ng-disabled="true">
+                        Gitlab
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-10">
+                    <div>&nbsp;</div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        Password
+                      </div>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" name="statePassword"
+                          ng-model="vm.installForm.state.data.password" ng-disabled="true"/>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        Username
+                      </div>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" name="stateURL"
+                          ng-model="vm.installForm.state.data.username" ng-disabled="true"/>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        URL
+                      </div>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" name="stateURL"
+                          ng-model="vm.installForm.state.data.url" ng-disabled="vm.installing"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="vm.installForm.mktg.isEnabled" ng-disabled="true">
+                        mktg
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-10">
+                    <div>&nbsp;</div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        URL
+                      </div>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" name="mktgUrl"
+                          ng-model="vm.installForm.mktg.data.url" ng-disabled="vm.installing"/>
                       </div>
                     </div>
                   </div>
@@ -354,7 +380,7 @@
                     <div class="checkbox">
                       <label>
                         <input type="checkbox" ng-model="vm.installForm.redis.isEnabled" ng-disabled="true">
-                        redis
+                        Redis
                       </label>
                     </div>
                   </div>
@@ -366,7 +392,29 @@
                       </div>
                       <div class="col-md-9">
                         <input type="text" class="form-control" name="redisUrl"
-                          ng-model="vm.installForm.redis.data.url" ng-disabled="true"/>
+                          ng-model="vm.installForm.redis.data.url" ng-disabled="vm.installing"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="vm.installForm.www.isEnabled" ng-disabled="true">
+                        www
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-10">
+                    <div>&nbsp;</div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        URL
+                      </div>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" name="wwwUrl"
+                          ng-model="vm.installForm.www.data.url" ng-disabled="vm.installing"/>
                       </div>
                     </div>
                   </div>
