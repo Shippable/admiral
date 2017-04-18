@@ -112,6 +112,12 @@ function _generateServiceConfig(bag, next) {
     name: bag.name
   };
 
+  if (!configGenerator)
+    return next(
+      new ActErr(who, ActErr.ParamNotFound,
+        'No config generator for service: ' + bag.name)
+    );
+
   configGenerator(params,
     function (err, config) {
       if (err)
