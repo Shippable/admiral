@@ -9,6 +9,7 @@ var _ = require('underscore');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 
+var envHandler = require('../../common/envHandler.js');
 var configHandler = require('../../common/configHandler.js');
 
 var apiConfig = require('./apiConfig.js');
@@ -18,7 +19,12 @@ function post(req, res) {
     reqBody: req.body,
     resBody: {},
     params: {},
-    tmpScript: '/tmp/service.sh'
+    tmpScript: '/tmp/service.sh',
+    accessKeyEnv: 'ACCESS_KEY',
+    secretKeyEnv: 'SECRET_KEY',
+    registryEnv: 'PRIVATE_IMAGE_REGISTRY',
+    vaultUrlEnv: 'VAULT_URL',
+    vaultTokenEnv: 'VAULT_TOKEN'
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -27,6 +33,11 @@ function post(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _getServiceConfig.bind(null, bag),
+      _getAccessKey.bind(null, bag),
+      _getSecretKey.bind(null, bag),
+      _getRegistry.bind(null, bag),
+      _getVaultURL.bind(null, bag),
+      _getVaultToken.bind(null, bag),
       _generateServiceConfig.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
@@ -99,6 +110,77 @@ function _getServiceConfig(bag, next) {
   );
 }
 
+function _getRegistry(bag, next) {
+  var who = bag.who + '|' + _getRegistry.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.registryEnv,
+    function (err, registry) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.registryEnv)
+        );
+
+      bag.registry = registry;
+      logger.debug('Found registry');
+
+      return next();
+    }
+  );
+}
+
+function _getVaultURL(bag, next) {
+  var who = bag.who + '|' + _getVaultURL.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.vaultUrlEnv,
+    function (err, value) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.vaultUrlEnv)
+        );
+
+      if (_.isEmpty(value))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No vault URL found')
+        );
+
+      logger.debug('Found vault URL');
+      bag.vaultUrl = value;
+      return next();
+    }
+  );
+}
+
+function _getVaultToken(bag, next) {
+  var who = bag.who + '|' + _getVaultToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.vaultTokenEnv,
+    function (err, value) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.vaultTokenEnv)
+        );
+
+      if (_.isEmpty(value)) {
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No vault token found')
+        );
+      }
+
+      logger.debug('Found vault token');
+      bag.vaultToken = value;
+      return next();
+    }
+  );
+}
+
 function _generateServiceConfig(bag, next) {
   var who = bag.who + '|' + _generateServiceConfig.name;
   logger.verbose(who, 'Inside');
@@ -109,7 +191,10 @@ function _generateServiceConfig(bag, next) {
 
   var params = {
     config: bag.serviceConfig,
-    name: bag.name
+    name: bag.name,
+    registry: bag.registry,
+    vaultUrl: bag.vaultUrl,
+    vaultToken: bag.vaultToken
   };
 
   if (!configGenerator)
@@ -132,6 +217,46 @@ function _generateServiceConfig(bag, next) {
   );
 }
 
+function _getAccessKey(bag, next) {
+  var who = bag.who + '|' + _getAccessKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.accessKeyEnv,
+    function (err, accessKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.accessKeyEnv)
+        );
+
+      bag.accessKey = accessKey;
+      logger.debug('Found access key');
+
+      return next();
+    }
+  );
+}
+
+function _getSecretKey(bag, next) {
+  var who = bag.who + '|' + _getSecretKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.secretKeyEnv,
+    function (err, secretKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.secretKeyEnv)
+        );
+
+      bag.secretKey = secretKey;
+      logger.debug('Found secret key');
+
+      return next();
+    }
+  );
+}
+
 function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
@@ -139,11 +264,14 @@ function _generateInitializeEnvs(bag, next) {
   var runCommand = '';
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
+    'SCRIPTS_DIR': global.config.scriptsDir,
     'SERVICE_NAME': bag.serviceConfig.serviceName,
     'SERVICE_IMAGE': bag.serviceConfig.image,
-    'SERVICE_ENV': bag.serviceConfig.env,
+    'SERVICE_ENV': bag.serviceConfig.envs,
     'SERVICE_OPTS': bag.serviceConfig.opts,
     'SERVICE_MOUNTS': bag.serviceConfig.mounts,
+    'ACCESS_KEY': bag.accessKey,
+    'SECRET_KEY': bag.secretKey,
     'RUN_COMMAND': runCommand
   };
 
