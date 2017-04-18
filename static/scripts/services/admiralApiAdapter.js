@@ -34,6 +34,10 @@
       postSystemIntegration: function (body, callback) {
         return API.post('/api/systemIntegrations', body, callback);
       },
+      putSystemIntegration: function (systemIntegrationId, body, callback) {
+        return API.put('/api/systemIntegrations/' +
+          systemIntegrationId, body, callback);
+      },
       // Service Routes
       postInitialize: function (body, callback) {
         return API.post('/api/workflow/initialize', body, callback);
