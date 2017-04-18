@@ -20,7 +20,8 @@ function post(req, res) {
     params: {},
     skipStatusChange: false,
     component: 'secrets',
-    tmpScript: '/tmp/secrets.sh'
+    tmpScript: '/tmp/secrets.sh',
+    vaultUrlEnv: 'VAULT_URL'
   };
 
   bag.who = util.format('secrets|%s', self.name);
@@ -291,21 +292,14 @@ function _updateVaultUrl(bag, next) {
 
   var vaultUrl = util.format('http://%s:%s',
     bag.config.address, bag.config.port);
-  var query = util.format('UPDATE "systemConfigs" set "vaultUrl"=\'%s\';',
-    vaultUrl);
 
-  global.config.client.query(query,
-    function (err, response) {
+  envHandler.put(bag.vaultUrlEnv, vaultUrl,
+    function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DataNotFound, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot set env: ' + bag.vaultUrlEnv + ' err: ' + err)
         );
-
-      if (response.rowCount === 1) {
-        logger.debug('Successfully added default value for vault url');
-      } else {
-        logger.warn('Failed to set default vault url');
-      }
 
       return next();
     }

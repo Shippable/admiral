@@ -20,7 +20,7 @@
                 Loading...
               </div>
               <div class="col-md-offset-1 col-md-10" ng-if="vm.isLoaded">
-                <div ng-if="!vm.systemConfigs.msg.isInitialized"
+                <div ng-if="!vm.systemSettings.msg.isInitialized"
                   class="row">
                   <span class="col-md-7">Choose a password for RabbitMQ (the message bus):</span>
                   <div class="col-md-5">
@@ -28,7 +28,7 @@
                     ng-model="vm.initializeForm.msgPassword" ng-disabled="vm.initializing"/>
                   </div>
                 </div>
-                <div ng-if="!vm.systemConfigs.state.isInitialized" class="row">
+                <div ng-if="!vm.systemSettings.state.isInitialized" class="row">
                   <span class="col-md-7">Choose a password for Gitlab (this stores job state):</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="statePassword"
@@ -76,11 +76,11 @@
                           <b>Database:</b>
                         </td>
                         <td>
-                          <span ng-if="vm.systemConfigs.db.isProcessing">initializing...</span>
-                          <span ng-if="!vm.systemConfigs.db.isProcessing && !vm.systemConfigs.db.isFailed">
-                            {{vm.systemConfigs.db.isInitialized ? 'initialized' : 'not initialized'}}
+                          <span ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
+                          <span ng-if="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed">
+                            {{vm.systemSettings.db.isInitialized ? 'initialized' : 'not initialized'}}
                           </span>
-                          <span ng-if="!vm.systemConfigs.db.isProcessing && vm.systemConfigs.db.isFailed">failed &#x26a0;</span>
+                          <span ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
                         </td>
                         <td>
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')">config</button>
@@ -92,11 +92,11 @@
                           <b>Secrets:</b>
                         </td>
                         <td>
-                          <span ng-if="vm.systemConfigs.secrets.isProcessing">initializing...</span>
-                          <span ng-if="!vm.systemConfigs.secrets.isProcessing && !vm.systemConfigs.secrets.isFailed">
-                            {{vm.systemConfigs.secrets.isInitialized ? 'initialized' : 'not initialized'}}
+                          <span ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
+                          <span ng-if="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed">
+                            {{vm.systemSettings.secrets.isInitialized ? 'initialized' : 'not initialized'}}
                           </span>
-                          <span ng-if="!vm.systemConfigs.secrets.isProcessing && vm.systemConfigs.secrets.isFailed">failed &#x26a0;</span>
+                          <span ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
                         </td>
                         <td>
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" >config</button>
@@ -108,11 +108,11 @@
                           <b>Messaging:</b>
                         </td>
                         <td>
-                          <span ng-if="vm.systemConfigs.msg.isProcessing">initializing...</span>
-                          <span ng-if="!vm.systemConfigs.msg.isProcessing && !vm.systemConfigs.msg.isFailed">
-                            {{vm.systemConfigs.msg.isInitialized ? 'initialized' : 'not initialized'}}
+                          <span ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
+                          <span ng-if="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed">
+                            {{vm.systemSettings.msg.isInitialized ? 'initialized' : 'not initialized'}}
                           </span>
-                          <span ng-if="!vm.systemConfigs.msg.isProcessing && vm.systemConfigs.msg.isFailed">failed &#x26a0;</span>
+                          <span ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
                         </td>
                         <td>
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')">config</button>
@@ -124,11 +124,11 @@
                           <b>State:</b>
                         </td>
                         <td>
-                          <span ng-if="vm.systemConfigs.state.isProcessing">initializing...</span>
-                          <span ng-if="!vm.systemConfigs.state.isProcessing && !vm.systemConfigs.state.isFailed">
-                            {{vm.systemConfigs.state.isInitialized ? 'initialized' : 'not initialized'}}
+                          <span ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
+                          <span ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
+                            {{vm.systemSettings.state.isInitialized ? 'initialized' : 'not initialized'}}
                           </span>
-                          <span ng-if="!vm.systemConfigs.state.isProcessing && vm.systemConfigs.state.isFailed">failed &#x26a0;</span>
+                          <span ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
                         </td>
                         <td>
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')">config</button>
@@ -140,11 +140,11 @@
                           <b>Redis:</b>
                         </td>
                         <td>
-                          <span ng-if="vm.systemConfigs.redis.isProcessing">initializing...</span>
-                          <span ng-if="!vm.systemConfigs.redis.isProcessing && !vm.systemConfigs.redis.isFailed">
-                            {{vm.systemConfigs.redis.isInitialized ? 'initialized' : 'not initialized'}}
+                          <span ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
+                          <span ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
+                            {{vm.systemSettings.redis.isInitialized ? 'initialized' : 'not initialized'}}
                           </span>
-                          <span ng-if="!vm.systemConfigs.redis.isProcessing && vm.systemConfigs.redis.isFailed">failed &#x26a0;</span>
+                          <span ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
                         </td>
                         <td>
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')">config</button>

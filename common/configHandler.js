@@ -10,18 +10,20 @@ function configHandler() {}
 
 configHandler.get = function (component, cb) {
 
-  var query = util.format('SELECT %s from "systemConfigs"', component);
+  var query = util.format('SELECT %s from "systemSettings"', component);
   global.config.client.query(query,
-    function (err, systemConfigs) {
+    function (err, systemSettings) {
       if (err)
         return cb(
           new ActErr(self, ActErr.DataNotFound, err)
         );
+
       var result = {};
-      if (!_.isEmpty(systemConfigs.rows) &&
-        !_.isEmpty(systemConfigs.rows[0][component])) {
+
+      if (!_.isEmpty(systemSettings.rows) &&
+        !_.isEmpty(systemSettings.rows[0][component])) {
         logger.debug('Found configuration for ' + component);
-        var config = systemConfigs.rows[0][component];
+        var config = systemSettings.rows[0][component];
         result = JSON.parse(config);
       }
 
@@ -58,7 +60,7 @@ function _getConfigs(bag, next) {
         return next('Failed to get config for component: ' + bag.component);
 
       bag.update = _.extend(config, bag.update);
-      
+
       return next();
     }
   );
@@ -66,7 +68,7 @@ function _getConfigs(bag, next) {
 
 function _updateConfigs(bag, next) {
 
-  var query = util.format('UPDATE "systemConfigs" set %s=\'%s\';',
+  var query = util.format('UPDATE "systemSettings" set %s=\'%s\';',
     bag.component, JSON.stringify(bag.update));
 
   global.config.client.query(query,
