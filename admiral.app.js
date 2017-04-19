@@ -148,12 +148,6 @@ function _initializeConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'RUNTIME_DIR is not defined'));
 
-  if (bag.env.SERVICES_DIR)
-    bag.config.servicesDir = bag.env.SERVICES_DIR;
-  else
-    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
-      'SERVICES_DIR is not defined'));
-
   if (bag.env.ADMIRAL_IP)
     bag.config.admiralIP = bag.env.ADMIRAL_IP;
   else
