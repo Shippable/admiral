@@ -91,7 +91,7 @@ __validate_runtime() {
   fi
 
   ################## check for services #################################
-  local services_path=$SERVICES_DIR/services.json
+  local services_path=$SCRIPTS_DIR/configs/services.json
   if [ ! -f "$services_path" ]; then
     __process_error "Services file $services_path does not exist, exiting"
     exit 1

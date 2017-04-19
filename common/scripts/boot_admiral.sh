@@ -19,8 +19,7 @@ __boot_admiral() {
       -e INSTALL_MODE=$INSTALL_MODE \
       -e PRIVATE_IMAGE_REGISTRY=$PRIVATE_IMAGE_REGISTRY \
       -e CONFIG_DIR=$CONFIG_DIR \
-      -e RUNTIME_DIR=$RUNTIME_DIR \
-      -e SERVICES_DIR=$SERVICES_DIR"
+      -e RUNTIME_DIR=$RUNTIME_DIR"
 
     __process_msg "Generating admiral mounts"
     local docker_location=$(which docker)

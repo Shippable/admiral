@@ -1,0 +1,369 @@
+{
+  "integrationServices": [
+    {
+      "name": "amazonKeys",
+      "type": "generic",
+      "services": [
+        "marshaller",
+        "ec2"
+      ]
+    },
+    {
+      "name": "artifactory",
+      "type": "hub",
+      "services": []
+    },
+    {
+      "name": "AWS",
+      "type": "deploy",
+      "services": []
+    },
+    {
+      "name": "AWS_IAM",
+      "type": "deploy",
+      "services": []
+    },
+    {
+      "name": "bitbucket",
+      "type": "scm",
+      "services": []
+    },
+    {
+      "name": "bitbucketKeys",
+      "type": "generic",
+      "services": []
+    },
+    {
+      "name": "bitbucketserverKeys",
+      "type": "generic",
+      "services": []
+    },
+    {
+      "name": "braintreeKeys",
+      "type": "generic",
+      "services": [
+        "braintree",
+        "mktg"
+      ]
+    },
+    {
+      "name": "clearbitKeys",
+      "type": "generic",
+      "services" : []
+    },
+    {
+      "name": "CLUSTER",
+      "type": "deploy",
+      "services": [
+        "certgen"
+      ]
+    },
+    {
+      "name": "DCL",
+      "type": "deploy",
+      "services": []
+    },
+    {
+      "name": "DDC",
+      "type": "deploy",
+      "services": []
+    },
+    {
+      "name": "Docker",
+      "type": "hub",
+      "services": []
+    },
+    {
+      "name": "Docker Trusted Registry",
+      "type": "hub",
+      "services": []
+    },
+    {
+      "name": "ECR",
+      "type": "hub",
+      "services": []
+    },
+    {
+      "name": "GCR",
+      "type": "hub",
+      "services": []
+    },
+    {
+      "name": "github",
+      "type": "scm",
+      "services": []
+    },
+    {
+      "name": "githubKeys",
+      "type": "generic",
+      "services": []
+    },
+    {
+      "name": "ghe",
+      "type": "scm",
+      "services": []
+    },
+    {
+      "name": "githubenterpriseKeys",
+      "type": "generic",
+      "services": []
+    },
+    {
+      "name": "gitlab",
+      "type": "scm",
+      "services": []
+    },
+    {
+      "name": "GKE",
+      "type": "deploy",
+      "services": [
+        "provision"
+      ]
+    },
+    {
+      "name": "gmailCreds",
+      "type": "generic",
+      "services": [
+        "nf",
+        "email"
+      ]
+    },
+    {
+      "name": "hipchat",
+      "type": "notification",
+      "services": [
+        "nf",
+        "hipchat"
+      ]
+    },
+    {
+      "name": "hubspotToken",
+      "type": "generic",
+      "services": [
+        "hubspotSync"
+      ]
+    },
+    {
+      "name": "irc",
+      "type": "notification",
+      "services": [
+        "nf",
+        "irc"
+      ]
+    },
+    {
+      "name": "Jenkins",
+      "type": "externalci",
+      "services": [
+        "jSync"
+      ]
+    },
+    {
+      "name": "KUBERNETES",
+      "type": "deploy",
+      "services": [
+        "certgen"
+      ]
+    },
+    {
+      "name": "mailgunCreds",
+      "type": "generic",
+      "services": [
+        "nf",
+        "email"
+      ]
+    },
+    {
+      "name": "pem-key",
+      "type": "key",
+      "services": []
+    },
+    {
+      "name": "Private Docker Registry",
+      "type": "hub",
+      "services": []
+    },
+    {
+      "name": "Quay.io",
+      "type": "hub",
+      "services": []
+    },
+    {
+      "name": "segmentKeys",
+      "type": "generic",
+      "services" : [
+        "segmentListener"
+      ]
+    },
+    {
+      "name": "Slack",
+      "type": "notification",
+      "services": [
+        "nf",
+        "slack"
+      ]
+    },
+    {
+      "name": "smtpCreds",
+      "type": "generic",
+      "services": [
+        "nf",
+        "email"
+      ]
+    },
+    {
+      "name": "ssh-key",
+      "type": "key",
+      "services": []
+    },
+    {
+      "name": "TRIPUB",
+      "type": "deploy",
+      "services": [
+        "certgen"
+      ]
+    },
+    {
+      "name": "VAULT",
+      "type": "secretsBackend",
+      "services": []
+    },
+    {
+      "name": "webhook",
+      "type": "notification",
+      "services": [
+        "nf",
+        "webhook"
+      ]
+    }
+  ],
+  "serviceConfigs": [
+    {
+      "name": "api",
+      "repository": "api",
+      "isGlobal": true,
+      "isCore": true
+    },
+    {
+      "name": "braintree",
+      "repository": "micro"
+    },
+    {
+      "name": "certgen",
+      "repository": "micro"
+    },
+    {
+      "name": "charon",
+      "repository": "micro"
+    },
+    {
+      "name": "cron",
+      "repository": "micro"
+    },
+    {
+      "name": "deploy",
+      "repository": "micro"
+    },
+    {
+      "name": "ec2",
+      "repository": "micro"
+    },
+    {
+      "name": "email",
+      "repository": "micro"
+    },
+    {
+      "name": "hipchat",
+      "repository": "micro"
+    },
+    {
+      "name": "hubspotSync",
+      "repository": "micro"
+    },
+    {
+      "name": "irc",
+      "repository": "micro"
+    },
+    {
+      "name": "jobRequest",
+      "repository": "micro"
+    },
+    {
+      "name": "jobTrigger",
+      "repository": "micro"
+    },
+    {
+      "name": "jSync",
+      "repository": "micro"
+    },
+    {
+      "name": "logup",
+      "repository": "micro"
+    },
+    {
+      "name": "marshaller",
+      "repository": "micro"
+    },
+    {
+      "name": "manifest",
+      "repository": "micro"
+    },
+    {
+      "name": "mktg",
+      "repository": "mktg",
+      "isGlobal": true,
+      "isCore": true
+    },
+    {
+      "name": "nexec",
+      "repository": "nexec"
+    },
+    {
+      "name": "nf",
+      "repository": "micro"
+    },
+    {
+      "name": "provision",
+      "repository": "micro"
+    },
+    {
+      "name": "release",
+      "repository": "micro"
+    },
+    {
+      "name": "rSync",
+      "repository": "micro"
+    },
+    {
+      "name": "segmentListener",
+      "repository": "micro"
+    },
+    {
+      "name": "slack",
+      "repository": "micro"
+    },
+    {
+      "name": "sync",
+      "repository": "micro",
+      "isCore": "true"
+    },
+    {
+      "name": "timeTrigger",
+      "repository": "micro"
+    },
+    {
+      "name": "versionTrigger",
+      "repository": "micro"
+    },
+    {
+      "name": "webhook",
+      "repository": "micro"
+    },
+    {
+      "name": "www",
+      "repository": "www",
+      "isGlobal": true,
+      "isCore": true
+    }
+  ]
+}
