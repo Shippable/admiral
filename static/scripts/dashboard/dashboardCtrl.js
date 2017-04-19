@@ -92,7 +92,8 @@
           data: {
             url: ''
           }
-        }
+        },
+        systemSettings: []
       },
       systemSettings: {
         db: {
@@ -112,6 +113,7 @@
           displayName: 'Redis'
         }
       },
+      systemSettingsId: null,
       selectedService: {},
       initialize: initialize,
       install: install,
@@ -134,7 +136,8 @@
           getSystemSettings.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
-          getSystemIntegrations.bind(null, bag)
+          getSystemIntegrations.bind(null, bag),
+          getSystemSettingsForInstallPanel.bind(null, bag)
         ],
         function (err) {
           $scope.vm.isLoaded = true;
@@ -261,7 +264,8 @@
       // reset all systemIntegrations to their defaults
       _.each($scope.vm.installForm,
         function (value, key) {
-          resetSystemIntegration(key);
+          if (key !== 'systemSettings')
+            resetSystemIntegration(key);
         }
       );
 
@@ -281,6 +285,186 @@
                 $scope.vm.installForm[systemIntegration.name].isEnabled = true;
               }
             });
+
+          return next();
+        }
+      );
+    }
+
+    function getSystemSettingsForInstallPanel(bag, next) {
+      if (!$scope.vm.initialized) return next();
+
+      admiralApiAdapter.getSystemSettings(
+        function (err, systemSettings) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          if (!systemSettings)
+            return next();
+
+          $scope.vm.systemSettingsId = systemSettings.id;
+
+          var settings = [];
+
+          settings.push({
+            name: 'defaultMinionCount',
+            value: systemSettings.defaultMinionCount,
+            type: 'number'
+          });
+
+          settings.push({
+            name: 'autoSelectBuilderToken',
+            value: systemSettings.autoSelectBuilderToken,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'buildTimeoutMS',
+            value: systemSettings.buildTimeoutMS,
+            type: 'number'
+          });
+
+          settings.push({
+            name: 'defaultPrivateJobQuota',
+            value: systemSettings.defaultPrivateJobQuota,
+            type: 'number'
+          });
+
+          settings.push({
+            name: 'serviceUserToken',
+            value: systemSettings.serviceUserToken,
+            type: 'text'
+          });
+
+          settings.push({
+            name: 'runMode',
+            value: systemSettings.runMode,
+            type: 'text'
+          });
+
+          settings.push({
+            name: 'allowSystemNodes',
+            value: systemSettings.allowSystemNodes,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'allowDynamicNodes',
+            value: systemSettings.allowDynamicNodes,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'allowCustomNodes',
+            value: systemSettings.allowCustomNodes,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'awsAccountId',
+            value: systemSettings.awsAccountId,
+            type: 'text'
+          });
+
+          settings.push({
+            name: 'jobConsoleBatchSize',
+            value: systemSettings.jobConsoleBatchSize,
+            type: 'number'
+          });
+
+          settings.push({
+            name: 'jobConsoleBufferTimeIntervalMS',
+            value: systemSettings.jobConsoleBufferTimeIntervalMS,
+            type: 'number'
+          });
+
+          settings.push({
+            name: 'apiRetryIntervalMS',
+            value: systemSettings.apiRetryIntervalMS,
+            type: 'number'
+          });
+
+          settings.push({
+            name: 'truck',
+            value: systemSettings.truck,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'hubspotListId',
+            value: systemSettings.hubspotListId,
+            type: 'number'
+          });
+
+          settings.push({
+            name: 'hubspotShouldSimulate',
+            value: systemSettings.hubspotShouldSimulate,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'rootS3Bucket',
+            value: systemSettings.rootS3Bucket,
+            type: 'text'
+          });
+
+          settings.push({
+            name: 'nodeScriptsLocation',
+            value: systemSettings.nodeScriptsLocation,
+            type: 'text'
+          });
+
+          settings.push({
+            name: 'enforcePrivateJobQuota',
+            value: systemSettings.enforcePrivateJobQuota,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'technicalSupportAvailable',
+            value: systemSettings.technicalSupportAvailable,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'customNodesAdminOnly',
+            value: systemSettings.customNodesAdminOnly,
+            type: 'checkbox'
+          });
+
+          settings.push({
+            name: 'allowedSystemImageFamily',
+            value: systemSettings.allowedSystemImageFamily,
+            type: 'text'
+          });
+
+          settings.push({
+            name: 'releaseVersion',
+            value: systemSettings.releaseVersion,
+            type: 'text'
+          });
+
+          settings.push({
+            name: 'defaultMinionInstanceSize',
+            value: systemSettings.defaultMinionInstanceSize,
+            type: 'text'
+          });
+
+          settings.push({
+            name: 'mktgPageAggsLastDtTm',
+            value: systemSettings.mktgPageAggsLastDtTm,
+            type: 'datetime'
+          });
+
+          settings.push({
+            name: 'mktgCTAAggsLastDtTm',
+            value: systemSettings.mktgCTAAggsLastDtTm,
+            type: 'datetime'
+          });
+
+          $scope.vm.installForm.systemSettings = settings;
 
           return next();
         }
@@ -342,6 +526,12 @@
                     horn.error(err);
                 }
               );
+              getSystemSettingsForInstallPanel({},
+                function (err) {
+                  if (err)
+                    horn.error(err);
+                }
+              );
             }
           }
         );
@@ -358,7 +548,8 @@
           updateMktgSystemIntegration,
           updateMsgSystemIntegration,
           updateRedisSystemIntegration,
-          updateStateSystemIntegration
+          updateStateSystemIntegration,
+          updateSystemSettings
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -563,6 +754,27 @@
         systemIntDataDefaults[systemIntName]);
     }
 
+    function updateSystemSettings(next) {
+      if (!$scope.vm.systemSettingsId) return next();
+
+      var update = {};
+
+      _.each($scope.vm.installForm.systemSettings,
+        function (setting) {
+          update[setting.name] = setting.value;
+        }
+      );
+
+      admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
     function showAdmiralEnvModal() {
       $scope.vm.selectedService = {};
 
@@ -599,7 +811,7 @@
           $scope.vm.selectedService.configs = [];
 
           _.each(configs,
-            function(value, key) {
+            function (value, key) {
               $scope.vm.selectedService.configs.push({
                 key: key,
                 value: value
