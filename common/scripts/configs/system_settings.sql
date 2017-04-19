@@ -35,8 +35,8 @@ do $$
         "redis" TEXT,
         "master" TEXT,
         "workers" TEXT,
-        "mktgPageAggsLastDtTime" timestamp with time zone,
-        "mktgCTAAggsLastDtTime" timestamp with time zone,
+        "mktgPageAggsLastDtTm" timestamp with time zone,
+        "mktgCTAAggsLastDtTm" timestamp with time zone,
         "defaultMinionInstanceSize" VARCHAR(255),
         "createdAt" timestamp with time zone NOT NULL,
         "updatedAt" timestamp with time zone NOT NULL
