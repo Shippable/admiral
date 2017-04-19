@@ -269,12 +269,11 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  var update = {
-    isInstalled: true,
-    isInitialized: true
-  };
+  // The keys have been added to bag.config
+  bag.config.isInstalled = true;
+  bag.config.isInitialized = true;
 
-  configHandler.put(bag.component, update,
+  configHandler.put(bag.component, bag.config,
     function (err) {
       if (err)
         return next(
