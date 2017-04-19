@@ -27,6 +27,10 @@
       getSystemSettings: function (callback) {
         return API.get('/api/systemSettings', callback);
       },
+      putSystemSettings: function (systemSettingId, body, callback) {
+        return API.put('/api/systemSettings/' + systemSettingId,
+          body, callback);
+      },
       // System Integration Routes
       getSystemIntegrations: function (query, callback) {
         return API.get('/api/systemIntegrations?' + query, callback);
