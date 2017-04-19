@@ -126,7 +126,7 @@ function _getMasterIntegration(bag, next) {
   logger.verbose(who, 'Inside');
 
   var selectStatement = util.format('SELECT * FROM "masterIntegrations" ' +
-    ' WHERE name=\'%s\' AND type=\'generic\'', bag.reqBody.masterName);
+    ' WHERE name=\'%s\'', bag.reqBody.masterName);
 
   global.config.client.query(selectStatement,
     function (err, masterIntegrations) {
