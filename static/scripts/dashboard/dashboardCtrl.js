@@ -93,7 +93,8 @@
             url: ''
           }
         },
-        systemSettings: []
+        systemSettings: [],
+        coreServices: []
       },
       systemSettings: {
         db: {
@@ -137,7 +138,8 @@
           getAdmiralEnv.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
-          getSystemSettingsForInstallPanel.bind(null, bag)
+          getSystemSettingsForInstallPanel.bind(null, bag),
+          getServices.bind(null, bag)
         ],
         function (err) {
           $scope.vm.isLoaded = true;
@@ -465,6 +467,25 @@
           });
 
           $scope.vm.installForm.systemSettings = settings;
+
+          return next();
+        }
+      );
+    }
+
+    function getServices(bag, next) {
+      admiralApiAdapter.getServices('',
+        function (err, services) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          $scope.vm.coreServices = _.filter(services,
+            function (service) {
+              return service.isCore;
+            }
+          );
 
           return next();
         }

@@ -56,6 +56,10 @@
       getService: function(component, callback) {
         return API.get('/api/' + component, callback);
       },
+      // Services Routes
+      getServices: function (query, callback) {
+        return API.get('/api/services?' + query, callback);
+      },
       // logs
       getServiceLogs: function(component, callback) {
         return API.get('/api/' + component + '/logs', callback);

@@ -155,7 +155,7 @@
                         <td colspan=3 class="text-right">
                           <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.initializing" ng-click="vm.initialize()">
                             <div ng-if="vm.initializing">
-                              initializing...
+                              Initializing...
                             </div>
                             <div ng-if="!vm.initializing">
                               Initialize
@@ -442,9 +442,46 @@
                           {{setting.name}}
                         </div>
                         <div class="col-md-9">
-                          <input type="{{setting.type}}" class="form-control" name="settings{{key}}"
+                          <input type="{{setting.type}}" ng-class="{'form-control': setting.type !== 'checkbox'}"  name="settings{{key}}"
                             ng-model="setting.value" ng-disabled="vm.installing"/>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-10">
+                  &nbsp;
+                  <p>
+                    Core services to be installed:
+                  </p>
+                </div>
+                <div class="col-md-offset-1 col-md-10">
+                  <div class="row">
+                    <div class="col-md-offset-2 col-md-10">
+                      <div class="row">
+                        <table class="table table-condensed table-striped">
+                          <thead>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="service in vm.coreServices">
+                              <td>
+                                <b>{{service.serviceName}}</b>
+                              </td>
+                              <td>
+                              </td>
+                              <td>
+                              </td>
+                              <td>
+                              </td>
+                              <td class="text-right">
+                                Replicas:
+                              </td>
+                              <td>
+                                {{service.replicas}}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
@@ -458,7 +495,7 @@
                   </p>
                   <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing" ng-click="vm.install()">
                     <div ng-if="vm.installing">
-                      installing...
+                      Installing...
                     </div>
                     <div ng-if="!vm.installing">
                       Install
