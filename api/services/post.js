@@ -15,6 +15,7 @@ var configHandler = require('../../common/configHandler.js');
 
 var apiConfig = require('./apiConfig.js');
 var wwwConfig = require('./wwwConfig.js');
+var microConfig = require('./microConfig.js');
 
 function post(req, res) {
   var bag = {
@@ -138,6 +139,8 @@ function _generateServiceConfig(bag, next) {
     configGenerator = apiConfig;
   if (bag.name === 'www')
     configGenerator = wwwConfig;
+  else
+    configGenerator = microConfig;
 
   var params = {
     apiAdapter: bag.apiAdapter,
