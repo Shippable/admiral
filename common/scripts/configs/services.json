@@ -286,7 +286,8 @@
     },
     {
       "name": "jobRequest",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "jobTrigger",
@@ -346,7 +347,7 @@
     {
       "name": "sync",
       "repository": "micro",
-      "isCore": "true"
+      "isCore": true
     },
     {
       "name": "timeTrigger",
