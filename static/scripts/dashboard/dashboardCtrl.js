@@ -474,6 +474,8 @@
     }
 
     function getServices(bag, next) {
+      if (!$scope.vm.initialized) return next();
+
       admiralApiAdapter.getServices('',
         function (err, services) {
           if (err) {
@@ -553,6 +555,12 @@
                     horn.error(err);
                 }
               );
+              getServices({},
+                function (err) {
+                  if (err)
+                    horn.error(err);
+                }
+              );
             }
           }
         );
@@ -574,7 +582,8 @@
           startAPI,
           startWWW,
           startSync,
-          startMktg
+          startMktg,
+          startNexec
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -835,6 +844,17 @@
 
     function startMktg(next) {
       startService('mktg',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startNexec(next) {
+      startService('nexec',
         function (err) {
           if (err)
             return next(err);

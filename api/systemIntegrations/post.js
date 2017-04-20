@@ -232,7 +232,6 @@ function _validateMasterIntegrationFields(bag, next) {
   return next();
 }
 
-
 function _postProvider(bag, next) {
   var who = bag.who + '|' + _postProvider.name;
   logger.verbose(who, 'Inside');
