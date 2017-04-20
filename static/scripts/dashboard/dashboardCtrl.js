@@ -584,7 +584,8 @@
           startSync,
           startMktg,
           startNexec,
-          startJobRequest
+          startJobRequest,
+          startJobTrigger
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -867,6 +868,17 @@
 
     function startJobRequest(next) {
       startService('jobRequest',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startJobTrigger(next) {
+      startService('jobTrigger',
         function (err) {
           if (err)
             return next(err);
