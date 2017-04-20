@@ -291,7 +291,8 @@
     },
     {
       "name": "jobTrigger",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "jSync",
