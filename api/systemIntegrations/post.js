@@ -29,10 +29,11 @@ function post(req, res) {
       _getVaultToken.bind(null, bag),
       _getMasterIntegration.bind(null, bag),
       _enableMasterIntegration.bind(null, bag),
-      _createSystemIntegration.bind(null, bag),
-      _getSystemIntegration.bind(null, bag),
       _getMasterIntegrationFields.bind(null, bag),
       _validateMasterIntegrationFields.bind(null, bag),
+      _postProvider.bind(null, bag),
+      _createSystemIntegration.bind(null, bag),
+      _getSystemIntegration.bind(null, bag),
       _postSystemIntegrationFieldsToVault.bind(null, bag)
     ],
     function (err) {
@@ -170,61 +171,6 @@ function _enableMasterIntegration(bag, next) {
   );
 }
 
-function _createSystemIntegration(bag, next) {
-  var who = bag.who + '|' + _createSystemIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  bag.systemIntegrationId = mongoose.Types.ObjectId().toString();
-
-  var insertStatement = util.format('INSERT INTO "systemIntegrations" ' +
-    '("id", "name", "masterIntegrationId", "masterName", "isEnabled", ' +
-    '"createdBy", "updatedBy", "createdAt", "updatedAt") ' +
-    'values (\'%s\', \'%s\', \'%s\', \'%s\', true,' +
-    ' \'54188262bc4d591ba438d62a\', \'54188262bc4d591ba438d62a\',' +
-    ' \'2016-06-01\', \'2016-06-01\')',
-    bag.systemIntegrationId, bag.reqBody.name, bag.masterIntegration.id,
-    bag.reqBody.masterName);
-
-  global.config.client.query(insertStatement,
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
-        );
-
-      return next();
-    }
-  );
-}
-
-function _getSystemIntegration(bag, next) {
-  var who = bag.who + '|' + _getSystemIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  var query = util.format('SELECT * FROM "systemIntegrations" WHERE ' +
-    '"id"=\'%s\'', bag.systemIntegrationId);
-
-  global.config.client.query(query,
-    function (err, systemIntegrations) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
-        );
-
-      if (!_.isEmpty(systemIntegrations.rows) &&
-        !_.isEmpty(systemIntegrations.rows[0])) {
-        bag.systemIntegration = systemIntegrations.rows[0];
-        return next();
-      }
-
-      return next(
-        new ActErr(who, ActErr.DataNotFound,
-          'No system integration found')
-      );
-    }
-  );
-}
-
 function _getMasterIntegrationFields(bag, next) {
   var who = bag.who + '|' + _getMasterIntegrationFields.name;
   logger.verbose(who, 'Inside');
@@ -286,6 +232,99 @@ function _validateMasterIntegrationFields(bag, next) {
   return next();
 }
 
+
+function _postProvider(bag, next) {
+  var who = bag.who + '|' + _postProvider.name;
+  logger.verbose(who, 'Inside');
+
+  if (!bag.reqBody.data.url) {
+    logger.debug(
+      'No provider available for system integration: ' + bag.reqBody.name);
+    return next();
+  }
+
+  // Strip 'Keys' from the end of the name
+  // This is to deal with the fact that providers will be dynamically created
+  // for auth providers when the system integration is created. The system
+  // integrations are named "githubKeys", "bitbucketKeys', etc., whereas the
+  // SCM account integrations are always named "github" and "bitbucket".
+  var name = bag.reqBody.masterName;
+  if (name.endsWith('Keys'))
+    name = name.replace('Keys', '');
+  var provider = {
+    url: bag.reqBody.data.url,
+    name: name
+  };
+
+  bag.apiAdapter.postProvider(provider,
+    function (err, newProvider) {
+      if (err)
+        return next(
+          new ActErr(who, err.id,
+            'postProvider for masterIntegrationId: ' +
+            bag.masterIntegration.id + ' returned an error: ', err)
+        );
+      bag.provider = newProvider;
+      return next();
+    }
+  );
+}
+
+function _createSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _createSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  bag.systemIntegrationId = mongoose.Types.ObjectId().toString();
+
+  var insertStatement = util.format('INSERT INTO "systemIntegrations" ' +
+    '("id", "name", "masterIntegrationId", "masterName", "isEnabled", ' +
+    '"createdBy", "updatedBy", "createdAt", "updatedAt") ' +
+    'values (\'%s\', \'%s\', \'%s\', \'%s\', true,' +
+    ' \'54188262bc4d591ba438d62a\', \'54188262bc4d591ba438d62a\',' +
+    ' \'2016-06-01\', \'2016-06-01\')',
+    bag.systemIntegrationId, bag.reqBody.name, bag.masterIntegration.id,
+    bag.reqBody.masterName);
+
+  global.config.client.query(insertStatement,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed, err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('SELECT * FROM "systemIntegrations" WHERE ' +
+    '"id"=\'%s\'', bag.systemIntegrationId);
+
+  global.config.client.query(query,
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed, err)
+        );
+
+      if (!_.isEmpty(systemIntegrations.rows) &&
+        !_.isEmpty(systemIntegrations.rows[0])) {
+        bag.systemIntegration = systemIntegrations.rows[0];
+        return next();
+      }
+
+      return next(
+        new ActErr(who, ActErr.DataNotFound,
+          'No system integration found')
+      );
+    }
+  );
+}
+
 function _postSystemIntegrationFieldsToVault(bag, next) {
   var who = bag.who + '|' + _postSystemIntegrationFieldsToVault.name;
   logger.verbose(who, 'Inside');
@@ -305,6 +344,9 @@ function _postSystemIntegrationFieldsToVault(bag, next) {
     updatedAt: bag.systemIntegration.updatedAt,
     data: bag.reqBody.data
   };
+
+  if (bag.provider)
+    vaultSecret.data.providerId = bag.provider.id;
 
   var key = util.format('shippable/systemIntegrations/%s',
     bag.systemIntegration.id);

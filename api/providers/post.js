@@ -20,6 +20,7 @@ function post(req, res) {
   async.series([
     _checkInputParams.bind(null, bag),
     _normalizeUrl.bind(null, bag),
+    _getExistingProvider.bind(null, bag),
     _post.bind(null, bag),
     _getProvider.bind(null, bag)
   ],
@@ -80,7 +81,35 @@ function _normalizeUrl(bag, next){
   return next();
 }
 
+function _getExistingProvider(bag, next) {
+  var who = bag.who + '|' + _getExistingProvider.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('SELECT * FROM "providers" WHERE ' +
+    '"url"=\'%s\'', bag.reqBody.url);
+
+  global.config.client.query(query,
+    function (err, providers) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed, err)
+        );
+
+      if (!_.isEmpty(providers.rows) &&
+        !_.isEmpty(providers.rows[0])) {
+        bag.resBody = providers.rows[0];
+        bag.providerExists = true;
+        return next();
+      }
+
+      return next();
+    }
+  );
+}
+
 function _post(bag, next) {
+  if (bag.providerExists) return next();
+
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
@@ -130,6 +159,8 @@ function _post(bag, next) {
 }
 
 function _getProvider(bag, next) {
+  if (bag.providerExists) return next();
+
   var who = bag.who + '|' + _getProvider.name;
   logger.verbose(who, 'Inside');
 
