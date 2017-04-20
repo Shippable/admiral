@@ -316,7 +316,8 @@
     },
     {
       "name": "nexec",
-      "repository": "nexec"
+      "repository": "nexec",
+      "isCore": true
     },
     {
       "name": "nf",

@@ -16,6 +16,7 @@ var configHandler = require('../../common/configHandler.js');
 var apiConfig = require('./apiConfig.js');
 var wwwConfig = require('./wwwConfig.js');
 var mktgConfig = require('./mktgConfig.js');
+var nexecConfig = require('./nexecConfig.js');
 var microConfig = require('./microConfig.js');
 
 function post(req, res) {
@@ -142,6 +143,8 @@ function _generateServiceConfig(bag, next) {
     configGenerator = wwwConfig;
   else if (bag.name === 'mktg')
     configGenerator = mktgConfig;
+  else if (bag.name === 'nexec')
+    configGenerator = nexecConfig;
   else
     configGenerator = microConfig;
 

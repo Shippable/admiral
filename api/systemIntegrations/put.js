@@ -30,6 +30,7 @@ function put(req, res) {
       _getVaultToken.bind(null, bag),
       _getMasterIntegrationFields.bind(null, bag),
       _validateMasterIntegrationFields.bind(null, bag),
+      _postProvider.bind(null, bag),
       _put.bind(null, bag),
       _getUpdatedSystemIntegration.bind(null, bag),
       _postSystemIntegrationFieldsToVault.bind(null, bag)
@@ -207,6 +208,43 @@ function _validateMasterIntegrationFields(bag, next) {
   return next();
 }
 
+function _postProvider(bag, next) {
+  var who = bag.who + '|' + _postProvider.name;
+  logger.verbose(who, 'Inside');
+
+  if (!bag.reqBody.data.url) {
+    logger.debug(
+      'No provider available for system integration: ' + bag.reqBody.name);
+    return next();
+  }
+
+  // Strip 'Keys' from the end of the name
+  // This is to deal with the fact that providers will be dynamically created
+  // for auth providers when the system integration is created. The system
+  // integrations are named "githubKeys", "bitbucketKeys', etc., whereas the
+  // SCM account integrations are always named "github" and "bitbucket".
+  var name = bag.reqBody.masterName;
+  if (name.endsWith('Keys'))
+    name = name.replace('Keys', '');
+  var provider = {
+    url: bag.reqBody.data.url,
+    name: name
+  };
+
+  bag.apiAdapter.postProvider(provider,
+    function (err, newProvider) {
+      if (err)
+        return next(
+          new ActErr(who, err.id,
+            'postProvider for masterIntegrationId: ' +
+            bag.masterIntegration.id + ' returned an error: ', err)
+        );
+      bag.provider = newProvider;
+      return next();
+    }
+  );
+}
+
 function _put(bag, next) {
   var who = bag.who + '|' + _put.name;
   logger.verbose(who, 'Inside');
@@ -293,6 +331,9 @@ function _postSystemIntegrationFieldsToVault(bag, next) {
     updatedAt: bag.resBody.updatedAt,
     data: bag.reqBody.data
   };
+
+  if (bag.provider)
+    vaultSecret.data.providerId = bag.provider.id;
 
   var key = util.format('shippable/systemIntegrations/%s',
     bag.systemIntegration.id);

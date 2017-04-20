@@ -742,6 +742,11 @@ do $$
       values (213, '589528aa9ce3dd1000a94b1c', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 214) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (214, '589528aa9ce3dd1000a94b1c', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
     -- END adding master integration fields
 
 
