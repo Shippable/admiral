@@ -583,7 +583,8 @@
           startWWW,
           startSync,
           startMktg,
-          startNexec
+          startNexec,
+          startJobRequest
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -855,6 +856,17 @@
 
     function startNexec(next) {
       startService('nexec',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startJobRequest(next) {
+      startService('jobRequest',
         function (err) {
           if (err)
             return next(err);
