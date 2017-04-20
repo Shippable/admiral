@@ -25,6 +25,7 @@ function microConfig(params, callback) {
       _checkInputParams.bind(null, bag),
       _getServiceUserToken.bind(null, bag),
       _getAPISystemIntegration.bind(null, bag),
+      _getMsgSystemIntegration.bind(null, bag),
       _generateImage.bind(null, bag),
       _generateEnvs.bind(null, bag),
       _generateMounts.bind(null, bag),
@@ -33,7 +34,7 @@ function microConfig(params, callback) {
     function (err) {
       logger.info(bag.who, 'Completed');
       if (err)
-        callback(err);
+        return callback(err);
       callback(null, bag.config);
     }
   );
@@ -100,6 +101,32 @@ function _getAPISystemIntegration(bag, next) {
   );
 }
 
+function _getMsgSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getMsgSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'name=msg&masterName=rabbitmqCreds';
+  bag.apiAdapter.getSystemIntegrations(query,
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system integrations: ' + util.inspect(err))
+        );
+
+      if (!systemIntegrations.length)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'No msg systemIntegration found.')
+        );
+
+      bag.msgSystemIntegration = _.first(systemIntegrations);
+
+      return next();
+    }
+  );
+}
+
 function _generateImage(bag, next) {
   var who = bag.who + '|' + _generateImage.name;
   logger.verbose(who, 'Inside');
@@ -119,8 +146,23 @@ function _generateEnvs(bag, next) {
 
   if (!apiUrl)
     return next(
-      new ActErr(who, ActErr.OperationFailed,
-        'No apiUrl found.')
+      new ActErr(who, ActErr.OperationFailed, 'No apiUrl found.')
+    );
+
+  var amqpUrlRoot = bag.msgSystemIntegration.data &&
+    bag.msgSystemIntegration.data.amqpUrlRoot;
+
+  if (!amqpUrlRoot)
+    return next(
+      new ActErr(who, ActErr.OperationFailed, 'No amqpUrlRoot found.')
+    );
+
+  var amqpDefaultExchange = bag.msgSystemIntegration.data &&
+    bag.msgSystemIntegration.data.amqpDefaultExchange;
+
+  if (!amqpDefaultExchange)
+    return next(
+      new ActErr(who, ActErr.OperationFailed, 'No amqpDefaultExchange found.')
     );
 
   var envs = '';
@@ -128,6 +170,10 @@ function _generateEnvs(bag, next) {
     envs, 'SHIPPABLE_API_TOKEN', bag.serviceUserToken);
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_API_URL', apiUrl);
+  envs = util.format('%s -e %s=%s',
+    envs, 'SHIPPABLE_ROOT_AMQP_URL', amqpUrlRoot);
+  envs = util.format('%s -e %s=%s',
+    envs, 'SHIPPABLE_AMQP_DEFAULT_EXCHANGE', amqpDefaultExchange);
   envs = util.format('%s -e %s=%s',
     envs, 'COMPONENT', bag.name);
 

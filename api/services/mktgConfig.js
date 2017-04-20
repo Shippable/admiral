@@ -33,7 +33,7 @@ function mktgConfig(params, callback) {
     function (err) {
       logger.info(bag.who, 'Completed');
       if (err)
-        callback(err);
+        return callback(err);
       callback(null, bag.config);
     }
   );

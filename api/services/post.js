@@ -163,7 +163,8 @@ function _generateServiceConfig(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to generate config for service: ' + params.name)
+            'Failed to generate config for service: ' + params.name +
+            ' with error: ' + err.message)
         );
 
       bag.serviceConfig = config;
