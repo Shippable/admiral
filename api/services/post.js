@@ -9,22 +9,23 @@ var _ = require('underscore');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 
+var APIAdapter = require('../../common/APIAdapter.js');
 var envHandler = require('../../common/envHandler.js');
 var configHandler = require('../../common/configHandler.js');
 
 var apiConfig = require('./apiConfig.js');
+var wwwConfig = require('./wwwConfig.js');
 
 function post(req, res) {
   var bag = {
     reqBody: req.body,
     resBody: {},
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     params: {},
     tmpScript: '/tmp/service.sh',
     accessKeyEnv: 'ACCESS_KEY',
     secretKeyEnv: 'SECRET_KEY',
-    registryEnv: 'PRIVATE_IMAGE_REGISTRY',
-    vaultUrlEnv: 'VAULT_URL',
-    vaultTokenEnv: 'VAULT_TOKEN'
+    registryEnv: 'PRIVATE_IMAGE_REGISTRY'
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -36,8 +37,6 @@ function post(req, res) {
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
       _getRegistry.bind(null, bag),
-      _getVaultURL.bind(null, bag),
-      _getVaultToken.bind(null, bag),
       _generateServiceConfig.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
@@ -71,7 +70,7 @@ function _checkInputParams(bag, next) {
     );
   bag.name = bag.reqBody.name;
 
-  if (_.isEmpty(bag.reqBody.replicas))
+  if (!_.isString(bag.reqBody.replicas) && !_.isNumber(bag.reqBody.replicas))
     return next(
       new ActErr(who, ActErr.ParamNotFound,
         'Data not found :replicas')
@@ -130,57 +129,6 @@ function _getRegistry(bag, next) {
   );
 }
 
-function _getVaultURL(bag, next) {
-  var who = bag.who + '|' + _getVaultURL.name;
-  logger.verbose(who, 'Inside');
-
-  envHandler.get(bag.vaultUrlEnv,
-    function (err, value) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Cannot get env: ' + bag.vaultUrlEnv)
-        );
-
-      if (_.isEmpty(value))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No vault URL found')
-        );
-
-      logger.debug('Found vault URL');
-      bag.vaultUrl = value;
-      return next();
-    }
-  );
-}
-
-function _getVaultToken(bag, next) {
-  var who = bag.who + '|' + _getVaultToken.name;
-  logger.verbose(who, 'Inside');
-
-  envHandler.get(bag.vaultTokenEnv,
-    function (err, value) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Cannot get env: ' + bag.vaultTokenEnv)
-        );
-
-      if (_.isEmpty(value)) {
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No vault token found')
-        );
-      }
-
-      logger.debug('Found vault token');
-      bag.vaultToken = value;
-      return next();
-    }
-  );
-}
-
 function _generateServiceConfig(bag, next) {
   var who = bag.who + '|' + _generateServiceConfig.name;
   logger.verbose(who, 'Inside');
@@ -188,13 +136,14 @@ function _generateServiceConfig(bag, next) {
   var configGenerator = null;
   if (bag.name === 'api')
     configGenerator = apiConfig;
+  if (bag.name === 'www')
+    configGenerator = wwwConfig;
 
   var params = {
+    apiAdapter: bag.apiAdapter,
     config: bag.serviceConfig,
     name: bag.name,
-    registry: bag.registry,
-    vaultUrl: bag.vaultUrl,
-    vaultToken: bag.vaultToken
+    registry: bag.registry
   };
 
   if (!configGenerator)

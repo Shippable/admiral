@@ -1,6 +1,6 @@
 'use strict';
 
-var self = apiConfig;
+var self = wwwConfig;
 module.exports = self;
 
 var async = require('async');
@@ -8,24 +8,23 @@ var _ = require('underscore');
 
 var envHandler = require('../../common/envHandler.js');
 
-function apiConfig(params, callback) {
+function wwwConfig(params, callback) {
   var bag = {
+    apiAdapter: params.apiAdapter,
     config: params.config,
     name: params.name,
     registry: params.registry,
-    vaultUrlEnv: 'VAULT_URL',
-    vaultUrl: '',
-    vaultTokenEnv: 'VAULT_TOKEN',
-    vaultToken: ''
+    serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
+    serviceUserToken: ''
   };
 
-  bag.who = util.format('apiConfig|%s', self.name);
+  bag.who = util.format('wwwConfig|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
       _checkInputParams.bind(null, bag),
-      _getVaultURL.bind(null, bag),
-      _getVaultToken.bind(null, bag),
+      _getServiceUserToken.bind(null, bag),
+      _getAPISystemIntegration.bind(null, bag),
       _generateImage.bind(null, bag),
       _generateEnvs.bind(null, bag),
       _generateMounts.bind(null, bag),
@@ -50,51 +49,52 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-function _getVaultURL(bag, next) {
-  var who = bag.who + '|' + _getVaultURL.name;
+function _getServiceUserToken(bag, next) {
+  var who = bag.who + '|' + _getServiceUserToken.name;
   logger.verbose(who, 'Inside');
 
-  envHandler.get(bag.vaultUrlEnv,
+  envHandler.get(bag.serviceUserTokenEnv,
     function (err, value) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Cannot get env: ' + bag.vaultUrlEnv)
+            'Cannot get env: ' + bag.serviceUserTokenEnv)
         );
 
       if (_.isEmpty(value))
         return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No vault URL found')
+          new ActErr(who, ActErr.OperationFailed,
+            'No serviceUserToken found.')
         );
 
-      logger.debug('Found vault URL');
-      bag.vaultUrl = value;
+      bag.serviceUserToken = value;
+
       return next();
     }
   );
 }
 
-function _getVaultToken(bag, next) {
-  var who = bag.who + '|' + _getVaultToken.name;
+function _getAPISystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getAPISystemIntegration.name;
   logger.verbose(who, 'Inside');
 
-  envHandler.get(bag.vaultTokenEnv,
-    function (err, value) {
+  var query = 'name=api&masterName=url';
+  bag.apiAdapter.getSystemIntegrations(query,
+    function (err, systemIntegrations) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Cannot get env: ' + bag.vaultTokenEnv)
+            'Failed to get system integrations: ' + util.inspect(err))
         );
 
-      if (_.isEmpty(value))
+      if (!systemIntegrations.length)
         return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No vault token found')
+          new ActErr(who, ActErr.OperationFailed,
+            'No api systemIntegration found.')
         );
 
-      logger.debug('Found vault token');
-      bag.vaultToken = value;
+      bag.apiSystemIntegration = _.first(systemIntegrations);
+
       return next();
     }
   );
@@ -114,23 +114,20 @@ function _generateEnvs(bag, next) {
   var who = bag.who + '|' + _generateEnvs.name;
   logger.verbose(who, 'Inside');
 
+  var apiUrl = bag.apiSystemIntegration.data &&
+    bag.apiSystemIntegration.data.url;
+
+  if (!apiUrl)
+    return next(
+      new ActErr(who, ActErr.OperationFailed,
+        'No apiUrl found.')
+    );
+
   var envs = '';
   envs = util.format('%s -e %s=%s',
-    envs, 'DBNAME', global.config.dbName);
+    envs, 'SHIPPABLE_API_TOKEN', bag.serviceUserToken);
   envs = util.format('%s -e %s=%s',
-    envs, 'DBUSERNAME', global.config.dbUsername);
-  envs = util.format('%s -e %s=%s',
-    envs, 'DBPASSWORD', global.config.dbPassword);
-  envs = util.format('%s -e %s=%s',
-    envs, 'DBHOST', global.config.dbHost);
-  envs = util.format('%s -e %s=%s',
-    envs, 'DBPORT', global.config.dbPort);
-  envs = util.format('%s -e %s=%s',
-    envs, 'DBDIALECT', global.config.dbDialect);
-  envs = util.format('%s -e %s=%s',
-    envs, 'VAULT_URL', bag.vaultUrl);
-  envs = util.format('%s -e %s=%s',
-    envs, 'VAULT_TOKEN', bag.vaultToken);
+    envs, 'SHIPPABLE_API_URL', apiUrl);
 
   bag.config.envs = envs;
   return next();
@@ -148,7 +145,7 @@ function _generateOpts(bag, next) {
   var who = bag.who + '|' + _generateOpts.name;
   logger.verbose(who, 'Inside');
 
-  var opts = ' --publish=50000:50000/tcp ' +
+  var opts = ' --publish=50001:50001/tcp ' +
     ' --network=host'
     ' --privileged=true';
 
