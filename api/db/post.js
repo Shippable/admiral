@@ -10,7 +10,6 @@ var path = require('path');
 var fs = require('fs-extra');
 var spawn = require('child_process').spawn;
 
-var APIAdapter = require('../../common/APIAdapter.js');
 var envHandler = require('../../common/envHandler.js');
 var configHandler = require('../../common/configHandler.js');
 
@@ -18,7 +17,6 @@ function post(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: {},
-    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     skipStatusChange: false,
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
     serviceUserToken: '',
@@ -40,10 +38,6 @@ function post(req, res) {
       _upsertMasterIntegrations.bind(null, bag),
       _upsertMasterIntegrationFields.bind(null, bag),
       _upsertSystemIntegrations.bind(null, bag),
-      _getSSHKeysIntegration.bind(null, bag),
-      _readPublicSSHKey.bind(null, bag),
-      _readPrivateSSHKey.bind(null, bag),
-      _saveSSHKeys.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
       _checkIsInitialized.bind(null, bag),
@@ -262,95 +256,6 @@ function _upsertSystemIntegrations(bag, next) {
     },
     function (err) {
       return next(err);
-    }
-  );
-}
-
-function _getSSHKeysIntegration(bag, next) {
-  var who = bag.who + '|' +  _getSSHKeysIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  var query = 'name=sshKeys&masterName=ssh-key';
-  bag.apiAdapter.getSystemIntegrations(query,
-    function (err, systemIntegrations) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to get system integrations: ' + util.inspect(err))
-        );
-
-      if (!systemIntegrations.length)
-        bag.saveSSHKeys = true;
-
-      return next();
-    }
-  );
-}
-
-
-function _readPublicSSHKey(bag, next) {
-  if (!bag.saveSSHKeys) return next();
-  var who = bag.who + '|' + _readPublicSSHKey.name;
-  logger.verbose(who, 'Inside');
-
-  var publicKey = path.join(global.config.configDir, 'machinekey.pub');
-  fs.readFile(publicKey,
-    function (err, data) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed, err)
-        );
-
-      bag.publicSSHKey = data.toString();
-
-      return next();
-    }
-  );
-}
-
-function _readPrivateSSHKey(bag, next) {
-  if (!bag.saveSSHKeys) return next();
-  var who = bag.who + '|' + _readPrivateSSHKey.name;
-  logger.verbose(who, 'Inside');
-
-  var publicKey = path.join(global.config.configDir, 'machinekey');
-  fs.readFile(publicKey,
-    function (err, data) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed, err)
-        );
-
-      bag.privateSSHKey = data.toString();
-
-      return next();
-    }
-  );
-}
-
-function _saveSSHKeys(bag, next) {
-  if (!bag.saveSSHKeys) return next();
-  var who = bag.who + '|' +  _saveSSHKeys.name;
-  logger.verbose(who, 'Inside');
-
-  var postObject = {
-    name: 'sshKeys',
-    masterName: 'ssh-key',
-    data: {
-      publicKey: bag.publicSSHKey,
-      privateKey: bag.privateSSHKey
-    }
-  };
-
-  bag.apiAdapter.postSystemIntegration(postObject,
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to create system integration: ' + util.inspect(err))
-        );
-
-      return next();
     }
   );
 }
