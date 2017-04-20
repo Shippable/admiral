@@ -138,9 +138,9 @@ function _generateServiceConfig(bag, next) {
   var configGenerator = null;
   if (bag.name === 'api')
     configGenerator = apiConfig;
-  if (bag.name === 'www')
+  else if (bag.name === 'www')
     configGenerator = wwwConfig;
-  if (bag.name === 'mktg')
+  else if (bag.name === 'mktg')
     configGenerator = mktgConfig;
   else
     configGenerator = microConfig;

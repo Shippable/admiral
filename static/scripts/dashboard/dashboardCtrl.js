@@ -570,7 +570,11 @@
           updateMsgSystemIntegration,
           updateRedisSystemIntegration,
           updateStateSystemIntegration,
-          updateSystemSettings
+          updateSystemSettings,
+          startAPI,
+          startWWW,
+          startSync,
+          startMktg
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -792,6 +796,69 @@
             return next(err);
 
           return next();
+        }
+      );
+    }
+
+    function startAPI(next) {
+      startService('api',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startWWW(next) {
+      startService('www',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startSync(next) {
+      startService('sync',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startMktg(next) {
+      startService('mktg',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startService(serviceName, callback) {
+      var serviceConfig = _.find($scope.vm.coreServices,
+        function (service) {
+          return service.serviceName === serviceName;
+        }
+      );
+
+      var body = {
+        name: serviceName,
+        replicas: serviceConfig.replicas
+      };
+
+      admiralApiAdapter.postService(body,
+        function (err) {
+          return callback(err);
         }
       );
     }

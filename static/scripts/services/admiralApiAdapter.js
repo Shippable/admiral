@@ -53,15 +53,18 @@
       postSecrets: function (body, callback) {
         return API.post('/api/secrets', body, callback);
       },
-      getService: function(component, callback) {
+      getService: function (component, callback) {
         return API.get('/api/' + component, callback);
+      },
+      postService: function (body, callback) {
+        return API.post('/api/services', body, callback);
       },
       // Services Routes
       getServices: function (query, callback) {
         return API.get('/api/services?' + query, callback);
       },
       // logs
-      getServiceLogs: function(component, callback) {
+      getServiceLogs: function (component, callback) {
         return API.get('/api/' + component + '/logs', callback);
       }
     };
