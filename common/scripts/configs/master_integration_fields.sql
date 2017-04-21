@@ -708,7 +708,7 @@ do $$
       values (203, '58a160e8c2845c9d5fb82042', 'envs', 'object', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
     end if;
 
-    -- these masterIntegrationFields (rabbitmq and url) are not in base
+    -- these masterIntegrationFields (rabbitmq, url, and additional gitlabCreds fields) are not in base
 
     -- masterIntegrationFields for rabbitmqCreds
     if not exists (select 1 from "masterIntegrationFields" where "id" = 208) then
@@ -745,6 +745,17 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 214) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (214, '589528aa9ce3dd1000a94b1c', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    -- additional masterIntegrationFields for gitlabCreds
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 215) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (215, '574ee696d49b091400b71112', 'sshPort', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 216) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (216, '574ee696d49b091400b71112', 'subscriptionProjectLimit', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- END adding master integration fields

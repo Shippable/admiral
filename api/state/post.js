@@ -217,7 +217,9 @@ function _postSystemIntegration(bag, next) {
     data: {
       username: 'root',
       password: bag.scriptEnvs.STATE_PASS,
-      url: util.format('http://%s/api/v3', bag.scriptEnvs.STATE_HOST)
+      url: util.format('http://%s/api/v3', bag.scriptEnvs.STATE_HOST),
+      sshPort: '22',
+      subscriptionProjectLimit: '100'
     }
   };
 
