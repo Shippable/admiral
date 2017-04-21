@@ -7,6 +7,7 @@ export MSG_IMAGE="drydock/rabbitmq:$RELEASE"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
 export MSG_PORT=15672
 export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+export TIMEOUT=120
 
 ## Write logs of this script to component specific file
 exec &> >(tee -a "$LOGS_FILE")
@@ -77,11 +78,10 @@ __run_msg() {
 __check_msg() {
   __process_msg "Checking rabbitmq container status on: $MSG_HOST:$MSG_PORT"
   local interval=3
-  local timeout=60
   local counter=0
   local is_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $timeout ]; do
+  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
     if nc -vz $MSG_HOST $MSG_PORT &>/dev/null; then
       __process_msg "Rabbitmq found"
       sleep 5

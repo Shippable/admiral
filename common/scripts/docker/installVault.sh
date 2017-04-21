@@ -9,6 +9,7 @@ export SCRIPTS_DIR="$SCRIPTS_DIR"
 export DB_USER=apiuser
 export DB_NAME=shipdb
 export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+export TIMEOUT=120
 
 ## Write logs of this script to component specific file
 exec &> >(tee -a "$LOGS_FILE")
@@ -104,11 +105,10 @@ __run_vault() {
 __check_vault() {
   __process_msg "Checking vault container status on: $VAULT_HOST:$VAULT_PORT"
   local interval=3
-  local timeout=60
   local counter=0
   local is_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $timeout ]; do
+  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
     if nc -vz $VAULT_HOST $VAULT_PORT &>/dev/null; then
       __process_msg "Vault found"
       sleep 5
