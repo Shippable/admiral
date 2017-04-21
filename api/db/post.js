@@ -46,6 +46,8 @@ function post(req, res) {
       _runMigrations.bind(null, bag),
       _templateServiceUserAccountFile.bind(null, bag),
       _upsertServiceUserAccount.bind(null, bag),
+      _templateDefaultSystemMachineImageFile.bind(null, bag),
+      _upsertDefaultSystemMachineImage.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
     function (err) {
@@ -447,6 +449,61 @@ function _upsertServiceUserAccount(bag, next) {
       script: '',
       scriptPath: 'create_service_user_account.sh',
       tmpScriptFilename: '/tmp/serviceUserAccount.sh',
+      scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName
+      }
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+
+function _templateDefaultSystemMachineImageFile(bag, next) {
+  var who = bag.who + '|' + _templateDefaultSystemMachineImageFile.name;
+  logger.verbose(who, 'Inside');
+
+  var filePath = util.format('%s/db/default_system_machine_image.sql',
+    global.config.configDir);
+  var templatePath =
+    util.format('%s/configs/default_system_machine_image.sql.template',
+      global.config.scriptsDir);
+  var dataObj = {
+    releaseVersion: global.config.release
+  };
+
+  var script = {
+    tmpScriptFilename: filePath,
+    script: __applyTemplate(templatePath, dataObj)
+  };
+
+  _writeScriptToFile(script,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _upsertDefaultSystemMachineImage(bag, next) {
+  var who = bag.who + '|' + _upsertDefaultSystemMachineImage.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: 'create_default_system_machine_image.sh',
+      tmpScriptFilename: '/tmp/defaultSystemMachineImage.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
