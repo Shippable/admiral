@@ -190,10 +190,13 @@
             _.extend($scope.vm.systemSettings.redis,
               (systemSettings.redis && JSON.parse(systemSettings.redis)));
 
-          $scope.vm.initializeForm.msgPassword =
-              $scope.vm.systemSettings.msg.password || '';
-          $scope.vm.initializeForm.statePassword =
-            $scope.vm.systemSettings.state.rootPassword || '';
+          if ($scope.vm.systemSettings.msg.password)
+            $scope.vm.initializeForm.msgPassword =
+              $scope.vm.systemSettings.msg.password;
+
+          if ($scope.vm.systemSettings.state.rootPassword)
+            $scope.vm.initializeForm.statePassword =
+              $scope.vm.systemSettings.state.rootPassword;
 
           $scope.vm.initialized = $scope.vm.systemSettings.db.isInitialized &&
             $scope.vm.systemSettings.secrets.isInitialized &&
@@ -215,6 +218,13 @@
           }
 
           $scope.vm.admiralEnv = admiralEnv;
+
+          if (admiralEnv.ACCESS_KEY)
+            $scope.vm.initializeForm.accessKey = admiralEnv.ACCESS_KEY;
+
+          if (admiralEnv.SECRET_KEY)
+            $scope.vm.initializeForm.secretKey = admiralEnv.SECRET_KEY;
+
           return next();
         }
       );

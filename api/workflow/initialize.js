@@ -28,9 +28,9 @@ function initialize(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
-      _sendResponse.bind(null, bag),
       _saveAccessKey.bind(null, bag),
       _saveSecretKey.bind(null, bag),
+      _sendResponse.bind(null, bag),
       _initializeDatabase.bind(null, bag),
       _getSecrets.bind(null, bag),
       _initializeSecrets.bind(null, bag),
@@ -79,16 +79,6 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-function _sendResponse(bag, next) {
-  var who = bag.who + '|' + _checkInputParams.name;
-  logger.verbose(who, 'Inside');
-
-  // We reply early so the request won't time out pulling images.
-
-  sendJSONResponse(bag.res, bag.resBody);
-  return next();
-}
-
 function _saveAccessKey(bag, next) {
   if (!bag.reqBody.accessKey) return next();
   var who = bag.who + '|' + _saveAccessKey.name;
@@ -127,6 +117,16 @@ function _saveSecretKey(bag, next) {
       return next();
     }
   );
+}
+
+function _sendResponse(bag, next) {
+  var who = bag.who + '|' + _checkInputParams.name;
+  logger.verbose(who, 'Inside');
+
+  // We reply early so the request won't time out pulling images.
+
+  sendJSONResponse(bag.res, bag.resBody);
+  return next();
 }
 
 function _initializeDatabase(bag, next) {
