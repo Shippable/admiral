@@ -8,6 +8,7 @@ export SCRIPTS_DIR="$SCRIPTS_DIR"
 export STATE_IMAGE="drydock/gitlab:$RELEASE"
 
 export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+export TIMEOUT=120
 
 ## Write logs of this script to component specific file
 exec &> >(tee -a "$LOGS_FILE")
@@ -92,11 +93,10 @@ __run_state() {
 __check_state() {
   __process_msg "Checking gitlab container status on: $STATE_HOST:$STATE_PORT"
   local interval=3
-  local timeout=60
   local counter=0
   local is_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $timeout ]; do
+  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
     if nc -vz $STATE_HOST $STATE_PORT &>/dev/null; then
       __process_msg "Gitlab found"
       sleep 5
