@@ -63,7 +63,8 @@ __run_state() {
   local config_dir_container="/etc/gitlab"
   local logs_dir_container="/var/log/gitlab"
 
-  local config="gitlab_rails['initial_root_password'] = '$STATE_PASS'; \
+  local config="external_url 'http://$STATE_HOST'; \
+      gitlab_rails['initial_root_password'] = '$STATE_PASS'; \
       gitlab_rails['rate_limit_requests_per_period'] = 1000000; \
       gitlab_rails['rate_limit_period'] = 1;"
 
@@ -75,10 +76,9 @@ __run_state() {
     -v $STATE_CONFIG_DIR:$config_dir_container \
     -v $STATE_DATA_DIR:$data_dir_container \
     -v $STATE_LOGS_DIR:$logs_dir_container \
-    --publish $SSH_PORT:$SSH_PORT \
+    --publish $SSH_PORT:22 \
     --publish $STATE_PORT:$STATE_PORT \
     --publish $SECURE_PORT:$SECURE_PORT \
-    --net=host \
     --privileged=true \
     --name=$COMPONENT \
     $STATE_IMAGE
