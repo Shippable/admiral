@@ -20,33 +20,33 @@
                 Loading...
               </div>
               <div class="col-md-offset-1 col-md-10" ng-if="vm.isLoaded">
-                <div ng-if="!vm.systemSettings.msg.isInitialized"
+                <div ng-if="!vm.initialized"
                   class="row">
                   <span class="col-md-7">Choose a password for RabbitMQ (the message bus):</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="msgPassword"
-                    ng-model="vm.initializeForm.msgPassword" ng-disabled="vm.initializing"/>
+                    ng-model="vm.initializeForm.msgPassword" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
                   </div>
                 </div>
-                <div ng-if="!vm.systemSettings.state.isInitialized" class="row">
+                <div ng-if="!vm.initialized" class="row">
                   <span class="col-md-7">Choose a password for Gitlab (this stores job state):</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="statePassword"
-                    ng-model="vm.initializeForm.statePassword" ng-disabled="vm.initializing"/>
+                    ng-model="vm.initializeForm.statePassword" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
                   </div>
                 </div>
-                <div ng-if="!vm.admiralEnv.ACCESS_KEY" class="row">
+                <div ng-if="!vm.initialized" class="row">
                   <span class="col-md-7">Enter your installer access key:</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="accessKey"
-                    ng-model="vm.initializeForm.accessKey" ng-disabled="vm.initializing"/>
+                    ng-model="vm.initializeForm.accessKey" ng-disabled="vm.admiralEnv.ACCESS_KEY || vm.initializing"/>
                   </div>
                 </div>
-                <div ng-if="!vm.admiralEnv.SECRET_KEY" class="row">
+                <div ng-if="!vm.initialized" class="row">
                   <span class="col-md-7">Enter your installer secret key:</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="secretKey"
-                    ng-model="vm.initializeForm.secretKey" ng-disabled="vm.initializing"/>
+                    ng-model="vm.initializeForm.secretKey" ng-disabled="vm.admiralEnv.SECRET_KEY || vm.initializing"/>
                   </div>
                 </div>
                 <div class="row">
