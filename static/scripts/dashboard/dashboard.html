@@ -205,7 +205,7 @@
                       <div>&nbsp;</div>
                       <div class="row">
                         <div class="col-md-3">
-                          Access Key
+                          Client ID
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="authClientId"
@@ -214,11 +214,20 @@
                       </div>
                       <div class="row">
                         <div class="col-md-3">
-                          Secret Key
+                          Client Secret
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="authClientSecret"
                             ng-model="vm.installForm.auth.data.clientSecret" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          WWW URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="authWWWUrl"
+                            ng-model="vm.installForm.www.data.url" ng-disabled="true"/>
                         </div>
                       </div>
                       <div class="row">
