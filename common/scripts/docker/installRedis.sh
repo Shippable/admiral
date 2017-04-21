@@ -7,6 +7,7 @@ export SCRIPTS_DIR="$SCRIPTS_DIR"
 export REDIS_IMAGE="drydock/redis:$RELEASE"
 export REDIS_PORT=6379
 export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+export TIMEOUT=120
 
 ## Write logs of this script to component specific file
 exec &> >(tee -a "$LOGS_FILE")
@@ -70,11 +71,10 @@ __run_redis() {
 __check_redis() {
   __process_msg "Checking redis container status on: $REDIS_HOST:$REDIS_PORT"
   local interval=3
-  local timeout=60
   local counter=0
   local is_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $timeout ]; do
+  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
     if nc -vz $REDIS_HOST $REDIS_PORT &>/dev/null; then
       __process_msg "Redis found"
       sleep 5

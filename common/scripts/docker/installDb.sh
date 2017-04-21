@@ -5,6 +5,7 @@ export DB_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export DB_CONFIG_DIR="$CONFIG_DIR/$COMPONENT/"
 export DB_IMAGE="drydock/postgres:$RELEASE"
 export DB_MOUNTS=""
+export TIMEOUT=120
 
 __validate_db_envs() {
   __process_msg "Validating db ENV variables"
@@ -60,11 +61,10 @@ __validate_db_mounts() {
 __check_db() {
   __process_msg "Checking database container status on: $DB_IP:$DB_PORT"
   local interval=3
-  local db_timeout=60
   local counter=0
   local db_booted=false
 
-  while [ $db_booted != true ] && [ $counter -lt $db_timeout ]; do
+  while [ $db_booted != true ] && [ $counter -lt $TIMEOUT ]; do
     if nc -vz $DB_IP $DB_PORT &>/dev/null; then
       __process_msg "Database found"
       db_booted=true
