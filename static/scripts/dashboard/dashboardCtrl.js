@@ -34,71 +34,98 @@
         accessKey: '',
         secretKey: ''
       },
+      // map by systemInt name, then masterName
       installForm: {
         api: {
-          isEnabled: true,
-          masterName: 'url',
-          data: {
-            url: ''
+          url: {
+            isEnabled: true,
+            masterName: 'url',
+            data: {
+              url: ''
+            }
           }
         },
         auth: {
-          isEnabled: true,
-          masterName: 'githubKeys',
-          data: {
-            clientId: '',
-            clientSecret: '',
-            wwwUrl: '',
-            url: ''
+          bitbucketKeys: {
+            isEnabled: false,
+            masterName: 'bitbucketKeys',
+            data: {
+              clientId: '',
+              clientSecret: '',
+              wwwUrl: '',
+              url: ''
+            }
+          },
+          githubKeys: {
+            isEnabled: false,
+            masterName: 'githubKeys',
+            data: {
+              clientId: '',
+              clientSecret: '',
+              wwwUrl: '',
+              url: ''
+            }
           }
         },
         filestore: {
-          isEnabled: true,
-          masterName: 'amazonKeys',
-          data: {
-            accessKey: '',
-            secretKey: ''
+          amazonKeys: {
+            isEnabled: false,
+            masterName: 'amazonKeys',
+            data: {
+              accessKey: '',
+              secretKey: ''
+            }
           }
         },
         mktg: {
-          isEnabled: true,
-          masterName: 'url',
-          data: {
-            url: ''
+          url: {
+            isEnabled: true,
+            masterName: 'url',
+            data: {
+              url: ''
+            }
           }
         },
         msg: {
-          isEnabled: true,
-          masterName: 'rabbitmqCreds',
-          data: {
-            amqpUrl: '',
-            amqpUrlRoot: '',
-            amqpUrlAdmin: '',
-            amqpDefaultExchange: '',
-            rootQueueList: ''
+          rabbitmqCreds: {
+            isEnabled: true,
+            masterName: 'rabbitmqCreds',
+            data: {
+              amqpUrl: '',
+              amqpUrlRoot: '',
+              amqpUrlAdmin: '',
+              amqpDefaultExchange: '',
+              rootQueueList: ''
+            }
           }
         },
-        redis: {
-          isEnabled: true,
-          masterName: 'url',
-          data: {
-            url: ''
+        redis:  {
+          url: {
+            isEnabled: true,
+            masterName: 'url',
+            data: {
+              url: ''
+            }
           }
         },
         state: {
-          isEnabled: true,
-          masterName: 'gitlabCreds',
-          data: {
-            password: '',
-            url: '',
-            username: ''
+          gitlabCreds: {
+            isEnabled: true,
+            masterName: 'gitlabCreds',
+            data: {
+              password: '',
+              url: '',
+              username: ''
+            }
           }
         },
         www: {
-          isEnabled: true,
-          masterName: 'url',
-          data: {
-            url: ''
+          url: {
+            isEnabled: true,
+            masterName: 'url',
+            data: {
+              url: ''
+            }
           }
         },
         systemSettings: [],
@@ -241,37 +268,63 @@
     function setupSystemIntDefaults(bag, next) {
       systemIntDataDefaults = {
         api: {
-          url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
-              ':50000'
+          url: {
+            url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
+                ':50000'
+          }
         },
         auth: {
-          clientId: '',
-          clientSecret: '',
-          wwwUrl: '',
-          url: 'https://api.github.com'
+          bitbucketKeys: {
+            clientId: '',
+            clientSecret: '',
+            wwwUrl: '',
+            url: 'https://api.bitbucket.org'
+          },
+          githubKeys: {
+            clientId: '',
+            clientSecret: '',
+            wwwUrl: '',
+            url: 'https://api.github.com'
+          }
+        },
+        filestore:{
+          amazonKeys: {
+            accessKey: '',
+            secretKey: ''
+          }
         },
         mktg: {
-          url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
-            ':50002'
+          url: {
+            url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
+              ':50002'
+          }
         },
         msg: {
-          amqpUrl: '',
-          amqpUrlRoot: '',
-          amqpUrlAdmin: '',
-          amqpDefaultExchange: '',
-          rootQueueList: ''
+          rabbitmqCreds: {
+            amqpUrl: '',
+            amqpUrlRoot: '',
+            amqpUrlAdmin: '',
+            amqpDefaultExchange: '',
+            rootQueueList: ''
+          }
         },
         redis: {
-          url: ''
+          url: {
+            url: ''
+          }
         },
         state: {
-          password: '',
-          url: '',
-          username: ''
+          gitlabCreds: {
+            password: '',
+            url: '',
+            username: ''
+          }
         },
         www: {
-          url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
-            ':50001'
+          url: {
+            url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
+              ':50001'
+          }
         }
       };
 
@@ -283,9 +336,14 @@
 
       // reset all systemIntegrations to their defaults
       _.each($scope.vm.installForm,
-        function (value, key) {
-          if (key !== 'systemSettings')
-            resetSystemIntegration(key);
+        function (systemInts, systemIntName) {
+          if (systemIntName !== 'systemSettings') {
+            _.each(systemInts,
+              function (value, masterName) {
+                resetSystemIntegration(systemIntName, masterName);
+              }
+            );
+          }
         }
       );
 
@@ -299,12 +357,19 @@
           // override defaults with actual systemInt values
           _.each(systemIntegrations,
             function (systemIntegration) {
-              if ($scope.vm.installForm[systemIntegration.name]) {
-                _.extend($scope.vm.installForm[systemIntegration.name].data,
-                  systemIntegration.data);
-                $scope.vm.installForm[systemIntegration.name].isEnabled = true;
+              var sysIntName = systemIntegration.name;
+              var masterName = systemIntegration.masterName;
+
+              if ($scope.vm.installForm[sysIntName] &&
+                $scope.vm.installForm[sysIntName][masterName]) {
+                _.extend(
+                  $scope.vm.installForm[sysIntName][masterName].data,
+                  systemIntegration.data
+                );
+                $scope.vm.installForm[sysIntName][masterName].isEnabled = true;
               }
-            });
+            }
+          );
 
           return next();
         }
@@ -592,7 +657,7 @@
           updateFilestoreSystemIntegration,
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
-          updateAuthSystemIntegration,
+          updateAuthSystemIntegrations,
           updateMktgSystemIntegration,
           updateMsgSystemIntegration,
           updateRedisSystemIntegration,
@@ -620,9 +685,9 @@
     function updateFilestoreSystemIntegration(next) {
       var bag = {
         name: 'filestore',
-        masterName: $scope.vm.installForm.filestore.masterName,
-        data: $scope.vm.installForm.filestore.data,
-        isEnabled: $scope.vm.installForm.filestore.isEnabled
+        masterName: $scope.vm.installForm.filestore.amazonKeys.masterName,
+        data: $scope.vm.installForm.filestore.amazonKeys.data,
+        isEnabled: $scope.vm.installForm.filestore.amazonKeys.isEnabled
       };
 
       updateSystemIntegration(bag,
@@ -635,9 +700,9 @@
     function updateAPISystemIntegration(next) {
       var bag = {
         name: 'api',
-        masterName: $scope.vm.installForm.api.masterName,
-        data: $scope.vm.installForm.api.data,
-        isEnabled: $scope.vm.installForm.api.isEnabled
+        masterName: $scope.vm.installForm.api.url.masterName,
+        data: $scope.vm.installForm.api.url.data,
+        isEnabled: $scope.vm.installForm.api.url.isEnabled
       };
 
       updateSystemIntegration(bag,
@@ -650,9 +715,9 @@
     function updateWWWSystemIntegration(next) {
       var bag = {
         name: 'www',
-        masterName: $scope.vm.installForm.www.masterName,
-        data: $scope.vm.installForm.www.data,
-        isEnabled: $scope.vm.installForm.www.isEnabled
+        masterName: $scope.vm.installForm.www.url.masterName,
+        data: $scope.vm.installForm.www.url.data,
+        isEnabled: $scope.vm.installForm.www.url.isEnabled
       };
 
       updateSystemIntegration(bag,
@@ -662,17 +727,26 @@
       );
     }
 
-    function updateAuthSystemIntegration(next) {
-      var bag = {
-        name: 'auth',
-        masterName: $scope.vm.installForm.auth.masterName,
-        data: $scope.vm.installForm.auth.data,
-        isEnabled: $scope.vm.installForm.auth.isEnabled
-      };
+    function updateAuthSystemIntegrations(next) {
+      async.each($scope.vm.installForm.auth,
+        function (systemInt, done) {
+          var bag = {
+            name: 'auth',
+            masterName: systemInt.masterName,
+            data: systemInt.data,
+            isEnabled: systemInt.isEnabled
+          };
 
-      bag.data.wwwUrl = $scope.vm.installForm.www.data.url;
+          bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
 
-      updateSystemIntegration(bag,
+          async.series([
+              updateSystemIntegration.bind(null, bag)
+            ],
+            function (err) {
+              return done(err);
+            }
+          );
+        },
         function (err) {
           return next(err);
         }
@@ -682,9 +756,9 @@
     function updateMktgSystemIntegration(next) {
       var bag = {
         name: 'mktg',
-        masterName: $scope.vm.installForm.mktg.masterName,
-        data: $scope.vm.installForm.mktg.data,
-        isEnabled: $scope.vm.installForm.mktg.isEnabled
+        masterName: $scope.vm.installForm.mktg.url.masterName,
+        data: $scope.vm.installForm.mktg.url.data,
+        isEnabled: $scope.vm.installForm.mktg.url.isEnabled
       };
 
       updateSystemIntegration(bag,
@@ -697,9 +771,9 @@
     function updateMsgSystemIntegration(next) {
       var bag = {
         name: 'msg',
-        masterName: $scope.vm.installForm.msg.masterName,
-        data: $scope.vm.installForm.msg.data,
-        isEnabled: $scope.vm.installForm.msg.isEnabled
+        masterName: $scope.vm.installForm.msg.rabbitmqCreds.masterName,
+        data: $scope.vm.installForm.msg.rabbitmqCreds.data,
+        isEnabled: $scope.vm.installForm.msg.rabbitmqCreds.isEnabled
       };
 
       updateSystemIntegration(bag,
@@ -712,9 +786,9 @@
     function updateRedisSystemIntegration(next) {
       var bag = {
         name: 'redis',
-        masterName: $scope.vm.installForm.redis.masterName,
-        data: $scope.vm.installForm.redis.data,
-        isEnabled: $scope.vm.installForm.redis.isEnabled
+        masterName: $scope.vm.installForm.redis.url.masterName,
+        data: $scope.vm.installForm.redis.url.data,
+        isEnabled: $scope.vm.installForm.redis.url.isEnabled
       };
 
       updateSystemIntegration(bag,
@@ -727,9 +801,9 @@
     function updateStateSystemIntegration(next) {
       var bag = {
         name: 'state',
-        masterName: $scope.vm.installForm.state.masterName,
-        data: $scope.vm.installForm.state.data,
-        isEnabled: $scope.vm.installForm.state.isEnabled
+        masterName: $scope.vm.installForm.state.gitlabCreds.masterName,
+        data: $scope.vm.installForm.state.gitlabCreds.data,
+        isEnabled: $scope.vm.installForm.state.gitlabCreds.isEnabled
       };
 
       updateSystemIntegration(bag,
@@ -812,17 +886,23 @@
           if (err)
             return next(err);
 
-          resetSystemIntegration(bag.name);
-          $scope.vm.installForm[bag.name].isEnabled = false;
+          var sysIntName = bag.name;
+          var masterName = bag.masterName;
+
+          if (!sysIntName || ! masterName) return next();
+
+          resetSystemIntegration(sysIntName, masterName);
+          $scope.vm.installForm[sysIntName][masterName].isEnabled = false;
 
           return next();
         }
       );
     }
 
-    function resetSystemIntegration(systemIntName) {
-      _.extend($scope.vm.installForm[systemIntName].data,
-        systemIntDataDefaults[systemIntName]);
+    function resetSystemIntegration(sysIntName, masterName) {
+      if (!sysIntName || !masterName) return;
+      _.extend($scope.vm.installForm[sysIntName][masterName].data,
+        systemIntDataDefaults[sysIntName][masterName]);
     }
 
     function updateSystemSettings(next) {

@@ -188,7 +188,7 @@
                 <div class="col-md-10">
                   &nbsp;
                   <p>
-                    Please configure your auth provider.
+                    Configure your auth provider(s).
                   </p>
                 </div>
                 <div class="col-md-offset-1 col-md-10">
@@ -196,7 +196,58 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.auth.isEnabled">
+                          <input type="checkbox" ng-model="vm.installForm.auth.bitbucketKeys.isEnabled">
+                          Bitbucket
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div>&nbsp;</div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Client ID
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="bitbucketClientId"
+                            ng-model="vm.installForm.auth.bitbucketKeys.data.clientId" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Client Secret
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="bitbucketClientSecret"
+                            ng-model="vm.installForm.auth.bitbucketKeys.data.clientSecret" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          WWW URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="bitbucketWWWUrl"
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="bitbucketUrl"
+                            ng-model="vm.installForm.auth.bitbucketKeys.data.url" ng-disabled="true"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-offset-1 col-md-10">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.installForm.auth.githubKeys.isEnabled">
                           GitHub
                         </label>
                       </div>
@@ -208,8 +259,8 @@
                           Client ID
                         </div>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" name="authClientId"
-                            ng-model="vm.installForm.auth.data.clientId" ng-disabled="vm.installing"/>
+                          <input type="text" class="form-control" name="githubClientId"
+                            ng-model="vm.installForm.auth.githubKeys.data.clientId" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                       <div class="row">
@@ -217,8 +268,8 @@
                           Client Secret
                         </div>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" name="authClientSecret"
-                            ng-model="vm.installForm.auth.data.clientSecret" ng-disabled="vm.installing"/>
+                          <input type="text" class="form-control" name="githubClientSecret"
+                            ng-model="vm.installForm.auth.githubKeys.data.clientSecret" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                       <div class="row">
@@ -226,8 +277,8 @@
                           WWW URL
                         </div>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" name="authWWWUrl"
-                            ng-model="vm.installForm.www.data.url" ng-disabled="true"/>
+                          <input type="text" class="form-control" name="githubWWWUrl"
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                         </div>
                       </div>
                       <div class="row">
@@ -235,8 +286,8 @@
                           URL
                         </div>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" name="authUrl"
-                            ng-model="vm.installForm.auth.data.url" ng-disabled="true"/>
+                          <input type="text" class="form-control" name="githubUrl"
+                            ng-model="vm.installForm.auth.githubKeys.data.url" ng-disabled="true"/>
                         </div>
                       </div>
                     </div>
@@ -253,7 +304,7 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.filestore.isEnabled" ng-disabled="vm.installing">
+                          <input type="checkbox" ng-model="vm.installForm.filestore.amazonKeys.isEnabled" ng-disabled="vm.installing">
                           AWS credentials for artifact upload
                         </label>
                       </div>
@@ -266,14 +317,14 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="filestoreAccessKey"
-                            ng-model="vm.installForm.filestore.data.accessKey" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.filestore.amazonKeys.data.accessKey" ng-disabled="vm.installing"/>
                         </div>
                         <div class="col-md-3">
                           Secret Key
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="filestoreSecretKey"
-                            ng-model="vm.installForm.filestore.data.secretKey" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.filestore.amazonKeys.data.secretKey" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                     </div>
@@ -282,7 +333,7 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.api.isEnabled" ng-disabled="true">
+                          <input type="checkbox" ng-model="vm.installForm.api.url.isEnabled" ng-disabled="true">
                           api
                         </label>
                       </div>
@@ -295,7 +346,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="apiUrl"
-                            ng-model="vm.installForm.api.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.api.url.data.url" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                     </div>
@@ -304,7 +355,7 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.state.isEnabled" ng-disabled="true">
+                          <input type="checkbox" ng-model="vm.installForm.state.gitlabCreds.isEnabled" ng-disabled="true">
                           Gitlab
                         </label>
                       </div>
@@ -317,7 +368,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="statePassword"
-                            ng-model="vm.installForm.state.data.password" ng-disabled="true"/>
+                            ng-model="vm.installForm.state.gitlabCreds.data.password" ng-disabled="true"/>
                         </div>
                       </div>
                       <div class="row">
@@ -326,7 +377,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="stateURL"
-                            ng-model="vm.installForm.state.data.username" ng-disabled="true"/>
+                            ng-model="vm.installForm.state.gitlabCreds.data.username" ng-disabled="true"/>
                         </div>
                       </div>
                       <div class="row">
@@ -335,7 +386,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="stateURL"
-                            ng-model="vm.installForm.state.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.state.gitlabCreds.data.url" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                     </div>
@@ -344,7 +395,7 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.mktg.isEnabled" ng-disabled="true">
+                          <input type="checkbox" ng-model="vm.installForm.mktg.url.isEnabled" ng-disabled="true">
                           mktg
                         </label>
                       </div>
@@ -357,7 +408,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="mktgUrl"
-                            ng-model="vm.installForm.mktg.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.mktg.url.data.url" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                     </div>
@@ -366,7 +417,7 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.msg.isEnabled" ng-disabled="true">
+                          <input type="checkbox" ng-model="vm.installForm.msg.rabbitmqCreds.isEnabled" ng-disabled="true">
                           RabbitMQ
                         </label>
                       </div>
@@ -379,7 +430,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="msgAmqpUrl"
-                            ng-model="vm.installForm.msg.data.amqpUrl" ng-disabled="true"/>
+                            ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrl" ng-disabled="true"/>
                         </div>
                       </div>
                       <div class="row">
@@ -388,7 +439,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="msgAmqpUrlRoot"
-                            ng-model="vm.installForm.msg.data.amqpUrlRoot" ng-disabled="true"/>
+                            ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot" ng-disabled="true"/>
                         </div>
                       </div>
                       <div class="row">
@@ -397,7 +448,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="msgAmqpUrlAdmin"
-                            ng-model="vm.installForm.msg.data.amqpUrlAdmin" ng-disabled="true"/>
+                            ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin" ng-disabled="true"/>
                         </div>
                       </div>
                       <div class="row">
@@ -406,7 +457,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="msgAmqpDefaultExchange"
-                            ng-model="vm.installForm.msg.data.amqpDefaultExchange" ng-disabled="true"/>
+                            ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange" ng-disabled="true"/>
                         </div>
                       </div>
                       <div class="row">
@@ -415,7 +466,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="msgRootQueueList"
-                            ng-model="vm.installForm.msg.data.rootQueueList" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.msg.rabbitmqCreds.data.rootQueueList" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                     </div>
@@ -424,7 +475,7 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.redis.isEnabled" ng-disabled="true">
+                          <input type="checkbox" ng-model="vm.installForm.redis.url.isEnabled" ng-disabled="true">
                           Redis
                         </label>
                       </div>
@@ -437,7 +488,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="redisUrl"
-                            ng-model="vm.installForm.redis.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.redis.url.data.url" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                     </div>
@@ -446,7 +497,7 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.www.isEnabled" ng-disabled="true">
+                          <input type="checkbox" ng-model="vm.installForm.www.url.isEnabled" ng-disabled="true">
                           www
                         </label>
                       </div>
@@ -459,7 +510,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="wwwUrl"
-                            ng-model="vm.installForm.www.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                     </div>
