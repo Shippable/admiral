@@ -48,6 +48,8 @@ function post(req, res) {
       _upsertServiceUserAccount.bind(null, bag),
       _templateDefaultSystemMachineImageFile.bind(null, bag),
       _upsertDefaultSystemMachineImage.bind(null, bag),
+      _getRootBucket.bind(null, bag),
+      _setRootBucket.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
     function (err) {
@@ -514,6 +516,49 @@ function _upsertDefaultSystemMachineImage(bag, next) {
     },
     function (err) {
       return next(err);
+    }
+  );
+}
+
+function _getRootBucket(bag, next) {
+  var who = bag.who + '|' + _getRootBucket.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'SELECT "rootS3Bucket" from "systemSettings";';
+  global.config.client.query(query,
+    function (err, res) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+
+      if (!_.isEmpty(res.rows) && !_.isEmpty(res.rows[0].rootS3Bucket))
+        bag.rootS3Bucket = res.rows[0].rootS3Bucket;
+
+      return next();
+    }
+  );
+}
+
+function _setRootBucket(bag, next) {
+  if (!_.isEmpty(bag.rootS3Bucket)) return next();
+
+  var who = bag.who + '|' + _setRootBucket.name;
+  logger.verbose(who, 'Inside');
+
+  var rootS3Bucket = util.format('shippable-%s-%s',
+    global.config.runMode, uuid.v4());
+
+  var query = util.format(
+    'UPDATE "systemSettings" set "rootS3Bucket"=\'%s\';', rootS3Bucket);
+  global.config.client.query(query,
+    function (err, rootS3Bucket) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, err)
+        );
+      bag.rootS3Bucket = rootS3Bucket;
+      return next();
     }
   );
 }
