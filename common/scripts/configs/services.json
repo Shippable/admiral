@@ -300,7 +300,8 @@
     },
     {
       "name": "logup",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "marshaller",

@@ -604,7 +604,8 @@
           startMktg,
           startNexec,
           startJobRequest,
-          startJobTrigger
+          startJobTrigger,
+          startLogup
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -913,6 +914,17 @@
 
     function startJobTrigger(next) {
       startService('jobTrigger',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startLogup(next) {
+      startService('logup',
         function (err) {
           if (err)
             return next(err);
