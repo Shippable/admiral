@@ -52,6 +52,14 @@
             url: ''
           }
         },
+        filestore: {
+          isEnabled: true,
+          masterName: 'amazonKeys',
+          data: {
+            accessKey: '',
+            secretKey: ''
+          }
+        },
         mktg: {
           isEnabled: true,
           masterName: 'url',
@@ -581,6 +589,7 @@
       $scope.vm.installing = true;
 
       async.series([
+          updateFilestoreSystemIntegration,
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
           updateAuthSystemIntegration,
@@ -603,6 +612,21 @@
             horn.error(err);
             return;
           }
+        }
+      );
+    }
+
+    function updateFilestoreSystemIntegration(next) {
+      var bag = {
+        name: 'filestore',
+        masterName: $scope.vm.installForm.filestore.masterName,
+        data: $scope.vm.installForm.filestore.data,
+        isEnabled: $scope.vm.installForm.filestore.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
         }
       );
     }

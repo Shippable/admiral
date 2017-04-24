@@ -253,6 +253,35 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
+                          <input type="checkbox" ng-model="vm.installForm.filestore.isEnabled" ng-disabled="vm.installing">
+                          AWS credentials for artifact upload
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div>&nbsp;</div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Access Key
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="filestoreAccessKey"
+                            ng-model="vm.installForm.filestore.data.accessKey" ng-disabled="vm.installing"/>
+                        </div>
+                        <div class="col-md-3">
+                          Secret Key
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="filestoreSecretKey"
+                            ng-model="vm.installForm.filestore.data.secretKey" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
                           <input type="checkbox" ng-model="vm.installForm.api.isEnabled" ng-disabled="true">
                           api
                         </label>
