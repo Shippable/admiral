@@ -10,7 +10,7 @@ function get(req, res) {
   var bag = {
     inputParams: req.params,
     reqBody: req.body,
-    resBody: {}
+    resBody: []
   };
 
   bag.who = util.format('masterIntegrations|%s', self.name);
@@ -54,12 +54,8 @@ function _get(bag, next) {
         return next(
           new ActErr(who, ActErr.DBOperationFailed, err)
         );
-      if (_.isEmpty(masterIntegrations.rows))
-        return next(
-          new ActErr(who, ActErr.DBEntityNotFound,
-            'No Master Integrations found')
-        );
-      bag.resBody = masterIntegrations.rows;
+      if (!_.isEmpty(masterIntegrations.rows))
+        bag.resBody = masterIntegrations.rows;
       return next();
     }
   );
