@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  /* global _, async */
+
   admiral.controller('dashboardCtrl', ['$scope', '$stateParams', '$q', '$state',
     '$interval', 'admiralApiAdapter', 'horn',
     dashboardCtrl
@@ -204,6 +206,10 @@
       },
       masterIntegrations: [],
       addonsForm: {
+        AWS: {
+          displayName: '',
+          isEnabled: false
+        },
         Docker: {
           displayName: '',
           isEnabled: false

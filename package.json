@@ -72,13 +72,13 @@
     "maxstatements": 40,
     "predef": [
       "ActErr",
-      "mapSequelizeErr",
       "logger",
       "util",
       "sendJSONResponse",
       "respondWithError",
       "config",
-      "safeGet"
+      "$",
+      "window"
     ]
   }
 }
