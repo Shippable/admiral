@@ -165,6 +165,15 @@ function _generateEnvs(bag, next) {
       new ActErr(who, ActErr.OperationFailed, 'No amqpDefaultExchange found.')
     );
 
+  var component;
+
+  if (_.contains(['deploy', 'manifest', 'provision', 'release', 'rSync'],
+    bag.name))
+    component = 'stepExec';
+  else
+    component = bag.name;
+
+
   var envs = '';
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_API_TOKEN', bag.serviceUserToken);
@@ -175,7 +184,11 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_AMQP_DEFAULT_EXCHANGE', amqpDefaultExchange);
   envs = util.format('%s -e %s=%s',
-    envs, 'COMPONENT', bag.name);
+    envs, 'COMPONENT', component);
+
+  if (component === 'stepExec')
+    envs = util.format('%s -e %s=%s',
+      envs, 'JOB_TYPE', bag.name);
 
   bag.config.envs = envs;
   return next();
