@@ -210,6 +210,10 @@
           displayName: '',
           isEnabled: false
         },
+        AWS_IAM: {
+          displayName: '',
+          isEnabled: false
+        },
         Docker: {
           displayName: '',
           isEnabled: false
