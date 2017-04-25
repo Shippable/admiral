@@ -997,6 +997,12 @@
                       </div>
                       <div class="checkbox">
                         <label>
+                          <input type="checkbox" ng-model="vm.addonsForm.KUBERNETES.isEnabled">
+                          {{vm.addonsForm.KUBERNETES.displayName}}
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
                           <input type="checkbox" ng-model="vm.addonsForm.TRIPUB.isEnabled">
                           {{vm.addonsForm.TRIPUB.displayName}}
                         </label>
