@@ -961,26 +961,26 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.addonsForm.hipchat">
-                          HipChat
+                          <input type="checkbox" ng-model="vm.addonsForm.webhook.isEnabled">
+                          {{vm.addonsForm.webhook.displayName}}
                         </label>
                       </div>
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.addonsForm.irc">
-                          IRC
+                          <input type="checkbox" ng-model="vm.addonsForm.hipchat.isEnabled">
+                          {{vm.addonsForm.hipchat.displayName}}
                         </label>
                       </div>
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.addonsForm.Slack">
-                          Slack
+                          <input type="checkbox" ng-model="vm.addonsForm.irc.isEnabled">
+                          {{vm.addonsForm.irc.displayName}}
                         </label>
                       </div>
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.addonsForm.webhook">
-                          Webhook
+                          <input type="checkbox" ng-model="vm.addonsForm.Slack.isEnabled">
+                          {{vm.addonsForm.Slack.displayName}}
                         </label>
                       </div>
                     </div>
@@ -992,8 +992,14 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.addonsForm.Docker">
-                          Docker
+                          <input type="checkbox" ng-model="vm.addonsForm.Docker.isEnabled">
+                          {{vm.addonsForm.Docker.displayName}}
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.addonsForm.ECR.isEnabled">
+                          {{vm.addonsForm.ECR.displayName}}
                         </label>
                       </div>
                     </div>
