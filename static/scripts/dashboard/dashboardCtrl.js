@@ -230,6 +230,10 @@
           displayName: '',
           isEnabled: false
         },
+        'Quay.io': {
+          displayName: '',
+          isEnabled: false
+        },
         Slack: {
           displayName: '',
           isEnabled: false
@@ -530,6 +534,8 @@
     }
 
     function getMasterIntegrations(bag, next) {
+      if (!$scope.vm.initialized) return next();
+
       admiralApiAdapter.getMasterIntegrations(
         function (err, masterIntegrations) {
           if (err) {
