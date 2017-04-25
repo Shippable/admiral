@@ -250,6 +250,10 @@
           displayName: '',
           isEnabled: false
         },
+        Jenkins: {
+          displayName: '',
+          isEnabled: false
+        },
         'pem-key': {
           displayName: '',
           isEnabled: false
