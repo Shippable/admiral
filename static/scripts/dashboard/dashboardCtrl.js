@@ -65,6 +65,16 @@
               wwwUrl: '',
               url: ''
             }
+          },
+          gitlabKeys: {
+            isEnabled: false,
+            masterName: 'gitlabKeys',
+            data: {
+              clientId: '',
+              clientSecret: '',
+              wwwUrl: '',
+              url: ''
+            }
           }
         },
         filestore: {
@@ -285,6 +295,12 @@
             clientSecret: '',
             wwwUrl: '',
             url: 'https://api.github.com'
+          },
+          gitlabKeys: {
+            clientId: '',
+            clientSecret: '',
+            wwwUrl: '',
+            url: 'https://gitlab.com/api/v3'
           }
         },
         filestore:{
