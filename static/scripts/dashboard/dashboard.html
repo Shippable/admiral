@@ -293,6 +293,57 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-md-offset-1 col-md-10">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.installForm.auth.gitlabKeys.isEnabled">
+                          Gitlab
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div>&nbsp;</div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Application ID
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gitlabClientId"
+                            ng-model="vm.installForm.auth.gitlabKeys.data.clientId" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Secret
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gitlabClientSecret"
+                            ng-model="vm.installForm.auth.gitlabKeys.data.clientSecret" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          WWW URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gitlabWWWUrl"
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gitlabUrl"
+                            ng-model="vm.installForm.auth.gitlabKeys.data.url" ng-disabled="false"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-md-10">
                   &nbsp;
                   <p>
