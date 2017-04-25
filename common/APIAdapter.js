@@ -135,6 +135,12 @@ APIAdapter.prototype.getServices =
     this.get(url, callback);
   };
 
+APIAdapter.prototype.deleteServices =
+  function (name, callback) {
+    var url = '/api/services/' + name;
+    this.delete(url, callback);
+  };
+
 /*****************************************/
 /*              HTTP METHODS             */
 /*****************************************/

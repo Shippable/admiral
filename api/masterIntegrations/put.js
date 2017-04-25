@@ -28,7 +28,8 @@ function put(req, res) {
       _getMasterIntegration.bind(null, bag),
       _getServicesList.bind(null, bag),
       _getIntegrationServices.bind(null, bag),
-      _startIntegrationServices.bind(null, bag)
+      _startIntegrationServices.bind(null, bag),
+      _stopIntegrationServices.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -205,8 +206,6 @@ function _startIntegrationServices(bag, next) {
     }
   );
 
-  logger.error(util.inspect(enabledServices))
-
   async.each(enabledServices,
     function (enabledService, callback) {
       var data = {
@@ -225,6 +224,46 @@ function _startIntegrationServices(bag, next) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to start service: ', err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _stopIntegrationServices(bag, next) {
+  if (bag.reqBody.isEnabled) return next();
+
+  var who = bag.who + '|' + _stopIntegrationServices.name;
+  logger.verbose(who, 'Inside');
+
+  // disable services for this integration
+  var disabledServices = [];
+  _.each(bag.integrationServices,
+    function (integrationService) {
+      _.each(bag.services,
+        function (service) {
+          if (service.serviceName === integrationService)
+            disabledServices.push(service);
+        }
+      );
+    }
+  );
+
+  async.each(disabledServices,
+    function (disabledService, callback) {
+
+      bag.apiAdapter.deleteServices(disabledService.serviceName,
+        function (err) {
+          callback(err);
+        }
+      );
+    },
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to disable service: ', err)
         );
 
       return next();
