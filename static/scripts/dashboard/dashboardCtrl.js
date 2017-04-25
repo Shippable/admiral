@@ -262,6 +262,10 @@
           displayName: '',
           isEnabled: false
         },
+        KUBERNETES: {
+          displayName: '',
+          isEnabled: false
+        },
         'pem-key': {
           displayName: '',
           isEnabled: false
