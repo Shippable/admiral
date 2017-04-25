@@ -238,6 +238,10 @@
           displayName: '',
           isEnabled: false
         },
+        'Private Docker Registry': {
+          displayName: '',
+          isEnabled: false
+        },
         'Quay.io': {
           displayName: '',
           isEnabled: false
