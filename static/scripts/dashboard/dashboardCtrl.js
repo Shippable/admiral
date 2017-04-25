@@ -204,6 +204,7 @@
       },
       masterIntegrations: [],
       addonsForm: {
+        hipchat: false,
         irc: false,
         Slack: false
       },
