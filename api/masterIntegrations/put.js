@@ -195,7 +195,6 @@ function _startIntegrationServices(bag, next) {
   var who = bag.who + '|' + _startIntegrationServices.name;
   logger.verbose(who, 'Inside');
 
-  logger.error(util.inspect(bag.integrationServices))
   // enable services for this integration
   var enabledServices = [];
   _.each(bag.integrationServices,
