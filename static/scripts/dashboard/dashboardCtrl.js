@@ -242,6 +242,10 @@
           displayName: '',
           isEnabled: false
         },
+        'pem-key': {
+          displayName: '',
+          isEnabled: false
+        },
         'Private Docker Registry': {
           displayName: '',
           isEnabled: false
@@ -251,6 +255,10 @@
           isEnabled: false
         },
         Slack: {
+          displayName: '',
+          isEnabled: false
+        },
+        'ssh-key': {
           displayName: '',
           isEnabled: false
         },
