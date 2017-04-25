@@ -956,6 +956,19 @@
                   </p>
                 </div>
                 <div class="col-md-offset-1 col-md-10">
+                  Cloud Providers
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.addonsForm.AWS.isEnabled">
+                          {{vm.addonsForm.AWS.displayName}}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-offset-1 col-md-10">
                   Notifications
                   <div class="row">
                     <div class="col-md-2">
@@ -1012,11 +1025,11 @@
                   <p>
                     &nbsp;
                   </p>
-                  <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installingAddons" ng-click="vm.installingAddons()">
+                  <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installingAddons" ng-click="vm.installAddons()">
                     <div ng-if="vm.installingAddons">
                       Installing Add-ons...
                     </div>
-                    <div ng-if="!vm.installingAddons" ng-click="vm.installAddons()">
+                    <div ng-if="!vm.installingAddons">
                       Install Add-ons
                     </div>
                   </button>
