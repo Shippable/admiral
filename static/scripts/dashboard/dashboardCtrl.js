@@ -206,6 +206,10 @@
       },
       masterIntegrations: [],
       addonsForm: {
+        artifactory: {
+          displayName: '',
+          isEnabled: false
+        },
         AWS: {
           displayName: '',
           isEnabled: false
