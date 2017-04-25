@@ -238,6 +238,10 @@
           displayName: '',
           isEnabled: false
         },
+        GKE: {
+          displayName: '',
+          isEnabled: false
+        },
         hipchat: {
           displayName: '',
           isEnabled: false
