@@ -204,11 +204,30 @@
       },
       masterIntegrations: [],
       addonsForm: {
-        Docker: false,
-        hipchat: false,
-        irc: false,
-        Slack: false,
-        webhook: false
+        Docker: {
+          displayName: '',
+          isEnabled: false
+        },
+        ECR: {
+          displayName: '',
+          isEnabled: false
+        },
+        hipchat: {
+          displayName: '',
+          isEnabled: false
+        },
+        irc: {
+          displayName: '',
+          isEnabled: false
+        },
+        Slack: {
+          displayName: '',
+          isEnabled: false
+        },
+        webhook: {
+          displayName: '',
+          isEnabled: false
+        }
       },
       installingAddons: false,
       systemSettings: {
@@ -513,7 +532,10 @@
           _.each(masterIntegrations,
             function (masterInt) {
               if (_.has($scope.vm.addonsForm, masterInt.name)) {
-                $scope.vm.addonsForm[masterInt.name] = masterInt.isEnabled;
+                $scope.vm.addonsForm[masterInt.name].isEnabled =
+                  masterInt.isEnabled;
+                $scope.vm.addonsForm[masterInt.name].displayName =
+                  masterInt.displayName;
               }
             }
           );
@@ -1379,7 +1401,7 @@
       $scope.vm.installingAddons = true;
 
       async.eachOfLimit($scope.vm.addonsForm, 10,
-        function (value, masterIntName, done) {
+        function (addonsMasterInt, masterIntName, done) {
           var masterInt = _.find($scope.vm.masterIntegrations,
             function (masterInt) {
               return masterInt.name === masterIntName;
@@ -1389,11 +1411,11 @@
           if (!masterInt)
             return done('No master integration found for: ' + masterIntName);
 
-          if (masterInt.isEnabled === value)
+          if (masterInt.isEnabled === addonsMasterInt.isEnabled)
             return done();
 
           var update = {
-            isEnabled: $scope.vm.addonsForm[masterIntName]
+            isEnabled: addonsMasterInt.isEnabled
           };
 
           admiralApiAdapter.putMasterIntegration(masterInt.id, update,
