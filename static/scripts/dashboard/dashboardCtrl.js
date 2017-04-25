@@ -214,6 +214,10 @@
           displayName: '',
           isEnabled: false
         },
+        DCL: {
+          displayName: '',
+          isEnabled: false
+        },
         Docker: {
           displayName: '',
           isEnabled: false
