@@ -172,14 +172,17 @@ function _getIntegrationServices(bag, next) {
       bag.servicesMap = services;
 
       var integrationServices = [];
-      _.each(services.integrationServices,
+      _.each(bag.servicesMap.integrationServices,
         function (integrationService) {
-          if (integrationService.name === bag.resBody.name)
+          if (integrationService.name === bag.resBody.name) {
             integrationServices =
-              _.uniq(
-                _.extend(integrationServices, integrationService.services));
+              integrationServices.concat(integrationService.services);
+
+            integrationServices = _.uniq(integrationServices);
+          }
         }
       );
+
       bag.integrationServices = integrationServices;
       return next(error);
     }
@@ -192,6 +195,7 @@ function _startIntegrationServices(bag, next) {
   var who = bag.who + '|' + _startIntegrationServices.name;
   logger.verbose(who, 'Inside');
 
+  logger.error(util.inspect(bag.integrationServices))
   // enable services for this integration
   var enabledServices = [];
   _.each(bag.integrationServices,
@@ -265,7 +269,8 @@ function _filterEnabledIntegrationServices(bag, next) {
       _.each(bag.servicesMap.integrationServices,
         function (service) {
           if (enabledMasterIntegration.name === service.name)
-            _.extend(enabledMasterIntegrationServices, service.services);
+            enabledMasterIntegrationServices =
+              enabledMasterIntegrationServices.concat(service.services);
         }
       );
     }
