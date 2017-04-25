@@ -958,7 +958,7 @@
                 <div class="col-md-offset-1 col-md-10">
                   Cloud Providers
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.addonsForm.AWS.isEnabled">
@@ -989,7 +989,7 @@
                 <div class="col-md-offset-1 col-md-10">
                   Notifications
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.addonsForm.webhook.isEnabled">
@@ -1020,7 +1020,7 @@
                 <div class="col-md-offset-1 col-md-10">
                   Registries
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.addonsForm.ECR.isEnabled">
@@ -1069,7 +1069,13 @@
                 <div class="col-md-offset-1 col-md-10">
                   Other
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-10">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.addonsForm.Jenkins.isEnabled">
+                          {{vm.addonsForm.Jenkins.displayName}}
+                        </label>
+                      </div>
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.addonsForm['pem-key'].isEnabled">
