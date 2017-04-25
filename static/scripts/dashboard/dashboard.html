@@ -223,20 +223,20 @@
                       </div>
                       <div class="row">
                         <div class="col-md-3">
-                          WWW URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" name="bitbucketWWWUrl"
-                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
                           URL
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="bitbucketUrl"
                             ng-model="vm.installForm.auth.bitbucketKeys.data.url" ng-disabled="true"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          WWW URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="bitbucketWWWUrl"
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                         </div>
                       </div>
                     </div>
@@ -274,20 +274,20 @@
                       </div>
                       <div class="row">
                         <div class="col-md-3">
-                          WWW URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" name="bitbucketServerWWWUrl"
-                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
                           URL
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="bitbucketServerUrl"
                             ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          WWW URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="bitbucketServerWWWUrl"
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                         </div>
                       </div>
                     </div>
@@ -325,6 +325,15 @@
                       </div>
                       <div class="row">
                         <div class="col-md-3">
+                          URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="githubUrl"
+                            ng-model="vm.installForm.auth.githubKeys.data.url" ng-disabled="true"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
                           WWW URL
                         </div>
                         <div class="col-md-9">
@@ -332,13 +341,55 @@
                             ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-offset-1 col-md-10">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled">
+                          GitHub Enterprise
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div>&nbsp;</div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Client ID
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="githubEnterpriseClientId"
+                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientId" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Client Secret
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="githubEnterpriseClientSecret"
+                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientSecret" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
                       <div class="row">
                         <div class="col-md-3">
                           URL
                         </div>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" name="githubUrl"
-                            ng-model="vm.installForm.auth.githubKeys.data.url" ng-disabled="true"/>
+                          <input type="text" class="form-control" name="githubEnterpriseUrl"
+                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          WWW URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="githubEnterpriseWWWUrl"
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                         </div>
                       </div>
                     </div>
@@ -376,20 +427,20 @@
                       </div>
                       <div class="row">
                         <div class="col-md-3">
-                          WWW URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" name="gitlabWWWUrl"
-                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
                           URL
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="gitlabUrl"
                             ng-model="vm.installForm.auth.gitlabKeys.data.url" ng-disabled="false"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          WWW URL
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gitlabWWWUrl"
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                         </div>
                       </div>
                     </div>
