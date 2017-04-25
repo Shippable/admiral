@@ -803,7 +803,8 @@
           startNexec,
           startJobRequest,
           startJobTrigger,
-          startLogup
+          startLogup,
+          startNf
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -1208,6 +1209,17 @@
 
     function startLogup(next) {
       startService('logup',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startNf(next) {
+      startService('nf',
         function (err) {
           if (err)
             return next(err);
