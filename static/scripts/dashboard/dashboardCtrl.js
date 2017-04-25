@@ -113,6 +113,16 @@
           }
         },
         notification:  {
+          gmailCreds: {
+            isEnabled: false,
+            masterName: 'gmailCreds',
+            data: {
+              username: '',
+              password: '',
+              proxy: '',
+              emailSender: ''
+            }
+          },
           mailgunCreds: {
             isEnabled: false,
             masterName: 'mailgunCreds',
@@ -356,6 +366,12 @@
           }
         },
         notification:  {
+          gmailCreds: {
+            username: '',
+            password: '',
+            proxy: '',
+            emailSender: ''
+          },
           mailgunCreds: {
             apiKey: '',
             domain: '',
@@ -741,6 +757,7 @@
           updateMsgSystemIntegration,
           updateRedisSystemIntegration,
           updateStateSystemIntegration,
+          updateGmailSystemIntegration,
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
           getMasterIntegrations.bind(null, {}),
@@ -896,6 +913,22 @@
         }
       );
     }
+
+    function updateGmailSystemIntegration(next) {
+      var bag = {
+        name: 'notification',
+        masterName: $scope.vm.installForm.notification.gmailCreds.masterName,
+        data: $scope.vm.installForm.notification.gmailCreds.data,
+        isEnabled: $scope.vm.installForm.notification.gmailCreds.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
     function updateMailgunSystemIntegration(next) {
       var bag = {
         name: 'notification',

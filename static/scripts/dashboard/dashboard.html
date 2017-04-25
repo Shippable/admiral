@@ -578,8 +578,56 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
+                          <input type="checkbox" ng-model="vm.installForm.notification.gmailCreds.isEnabled"
+                            ng-disabled="vm.installing || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.smtpCreds.isEnabled">
+                          Gmail
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div>&nbsp;</div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Username
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gmailUsername"
+                            ng-model="vm.installForm.notification.gmailCreds.data.username" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Password
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gmailPassword"
+                            ng-model="vm.installForm.notification.gmailCreds.data.password" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Proxy
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gmailProxy"
+                            ng-model="vm.installForm.notification.gmailCreds.data.proxy" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Email Sender
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="gmailEmailSender"
+                            ng-model="vm.installForm.notification.gmailCreds.data.emailSender" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
                           <input type="checkbox" ng-model="vm.installForm.notification.mailgunCreds.isEnabled"
-                            ng-disabled="vm.installing || vm.installForm.notification.smtpCreds.isEnabled">
+                            ng-disabled="vm.installing || vm.installForm.notification.smtpCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
                           Mailgun
                         </label>
                       </div>
@@ -629,7 +677,7 @@
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.notification.smtpCreds.isEnabled"
-                            ng-disabled="vm.installing || vm.installForm.notification.mailgunCreds.isEnabled">
+                            ng-disabled="vm.installing || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
                           SMTP
                         </label>
                       </div>
