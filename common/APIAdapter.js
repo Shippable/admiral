@@ -44,6 +44,12 @@ APIAdapter.prototype.putMasterIntegrationById =
     this.put(url, json, callback);
   };
 
+APIAdapter.prototype.getMasterIntegrations =
+  function (query, callback) {
+    var url = util.format('/api/masterIntegrations?%s', query);
+    this.get(url, callback);
+  };
+
 // msg
 APIAdapter.prototype.getMsg =
   function (callback) {

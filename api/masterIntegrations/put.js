@@ -29,6 +29,8 @@ function put(req, res) {
       _getServicesList.bind(null, bag),
       _getIntegrationServices.bind(null, bag),
       _startIntegrationServices.bind(null, bag),
+      _getEnabledIntegrations.bind(null, bag),
+      _filterEnabledIntegrationServices.bind(null, bag),
       _stopIntegrationServices.bind(null, bag)
     ],
     function (err) {
@@ -167,8 +169,10 @@ function _getIntegrationServices(bag, next) {
           );
       }
 
+      bag.servicesMap = services;
+
       var integrationServices = [];
-      _.map(services.integrationServices,
+      _.each(services.integrationServices,
         function (integrationService) {
           if (integrationService.name === bag.resBody.name)
             integrationServices =
@@ -226,19 +230,70 @@ function _startIntegrationServices(bag, next) {
   );
 }
 
+function _getEnabledIntegrations(bag, next) {
+  if (bag.reqBody.isEnabled) return next();
+
+  var who = bag.who + '|' + _getEnabledIntegrations.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'isEnabled=true';
+  bag.apiAdapter.getMasterIntegrations(query,
+    function (err, masterIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get enabled master integrations: ', err)
+        );
+      bag.enabledMasterIntegrations = masterIntegrations;
+
+      return next();
+    }
+  );
+}
+
+function _filterEnabledIntegrationServices(bag, next) {
+  if (bag.reqBody.isEnabled) return next();
+
+  var who = bag.who + '|' + _filterEnabledIntegrationServices.name;
+  logger.verbose(who, 'Inside');
+
+  var enabledMasterIntegrationServices = [];
+
+  // find all services used by enabled master integrations
+  _.each(bag.enabledMasterIntegrations,
+    function (enabledMasterIntegration) {
+      _.each(bag.servicesMap.integrationServices,
+        function (service) {
+          if (enabledMasterIntegration.name === service.name)
+            _.extend(enabledMasterIntegrationServices, service.services);
+        }
+      );
+    }
+  );
+
+  enabledMasterIntegrationServices = _.uniq(enabledMasterIntegrationServices);
+  bag.enabledMasterIntegrationServices = enabledMasterIntegrationServices;
+
+  return next();
+}
+
 function _stopIntegrationServices(bag, next) {
   if (bag.reqBody.isEnabled) return next();
 
   var who = bag.who + '|' + _stopIntegrationServices.name;
   logger.verbose(who, 'Inside');
 
-  // disable services for this integration
+  // disable services only if
+  // - service corresponds to current integration
+  // - service is not used by any enabled master integration
   var disabledServices = [];
   _.each(bag.integrationServices,
     function (integrationService) {
       _.each(bag.services,
         function (service) {
-          if (service.serviceName === integrationService)
+          if (service.serviceName === integrationService &&
+            !_.contains(
+              bag.enabledMasterIntegrationServices, service.serviceName))
             disabledServices.push(service);
         }
       );
