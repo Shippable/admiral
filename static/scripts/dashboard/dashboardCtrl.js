@@ -274,6 +274,10 @@
           displayName: '',
           isEnabled: false
         },
+        TRIPUB: {
+          displayName: '',
+          isEnabled: false
+        },
         webhook: {
           displayName: '',
           isEnabled: false
