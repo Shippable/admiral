@@ -968,6 +968,22 @@
                     </div>
                   </div>
                 </div>
+                <div>
+                  &nbsp;
+                </div>
+                <div class="col-md-offset-1 col-md-10 text-right">
+                  <p>
+                    &nbsp;
+                  </p>
+                  <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installingAddons" ng-click="vm.installingAddons()">
+                    <div ng-if="vm.installingAddons">
+                      Installing Add-ons...
+                    </div>
+                    <div ng-if="!vm.installingAddons" ng-click="vm.installAddons()">
+                      Install Add-ons
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

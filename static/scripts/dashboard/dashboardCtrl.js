@@ -24,9 +24,6 @@
     $scope.dashboardCtrlPromise = dashboardCtrlDefer.promise;
 
     $scope.vm = {
-      addonsForm: {
-        irc: false
-      },
       isLoaded: false,
       initializing: false,
       initialized: false,
@@ -206,6 +203,10 @@
         coreServices: []
       },
       masterIntegrations: [],
+      addonsForm: {
+        irc: false
+      },
+      installingAddons: false,
       systemSettings: {
         db: {
           displayName: 'Database',
@@ -228,6 +229,7 @@
       selectedService: {},
       initialize: initialize,
       install: install,
+      installAddons: installAddons,
       showAdmiralEnvModal: showAdmiralEnvModal,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
@@ -503,6 +505,15 @@
           }
 
           $scope.vm.masterIntegrations = masterIntegrations;
+
+          _.each(masterIntegrations,
+            function (masterInt) {
+              if (_.has($scope.vm.addonsForm, masterInt.name)) {
+                $scope.vm.addonsForm[masterInt.name] = masterInt.isEnabled;
+              }
+            }
+          );
+
           return next();
         }
       );
@@ -1324,6 +1335,42 @@
             return horn.error(err);
 
           $scope.vm.selectedService.logs = logs;
+        }
+      );
+    }
+
+    function installAddons() {
+      $scope.vm.installingAddons = true;
+
+      async.eachOfLimit($scope.vm.addonsForm, 10,
+        function (value, masterIntName, done) {
+          var masterInt = _.find($scope.vm.masterIntegrations,
+            function (masterInt) {
+              return masterInt.name === masterIntName;
+            }
+          );
+
+          if (!masterInt)
+            return done('No master integration found for: ' + masterIntName);
+
+          if (masterInt.isEnabled === value)
+            return done();
+
+          var update = {
+            isEnabled: $scope.vm.addonsForm[masterIntName]
+          };
+
+          admiralApiAdapter.putMasterIntegration(masterInt.id, update,
+            function (err, MI) {
+              return done(err);
+            }
+          );
+        },
+        function (err) {
+          $scope.vm.installingAddons = false;
+          getMasterIntegrations({}, function () {});
+          if (err)
+            return horn.error(err);
         }
       );
     }
