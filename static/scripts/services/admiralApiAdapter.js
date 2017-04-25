@@ -23,6 +23,14 @@
       postLogout: function (body, callback) {
         return API.post('/api/logout', body, callback);
       },
+      // Master Integrations Routes
+      getMasterIntegrations: function (callback) {
+        return API.get('/api/masterIntegrations', callback);
+      },
+      putMasterIntegration: function (masterIntegrationId, body, callback) {
+        return API.put('/api/masterIntegrations/' +
+          masterIntegrationId, body, callback);
+      },
       // System Settings Routes
       getSystemSettings: function (callback) {
         return API.get('/api/systemSettings', callback);

@@ -49,6 +49,7 @@
           bitbucketKeys: {
             isEnabled: false,
             masterName: 'bitbucketKeys',
+            scmMasterName: 'bitbucket',
             data: {
               clientId: '',
               clientSecret: '',
@@ -59,6 +60,7 @@
           githubKeys: {
             isEnabled: false,
             masterName: 'githubKeys',
+            scmMasterName: 'github',
             data: {
               clientId: '',
               clientSecret: '',
@@ -69,6 +71,7 @@
           gitlabKeys: {
             isEnabled: false,
             masterName: 'gitlabKeys',
+            scmMasterName: 'gitlab',
             data: {
               clientId: '',
               clientSecret: '',
@@ -141,6 +144,7 @@
         systemSettings: [],
         coreServices: []
       },
+      masterIntegrations: [],
       systemSettings: {
         db: {
           displayName: 'Database',
@@ -183,6 +187,7 @@
           getAdmiralEnv.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
+          getMasterIntegrations.bind(null, bag),
           getSystemSettingsForInstallPanel.bind(null, bag),
           getServices.bind(null, bag)
         ],
@@ -387,6 +392,20 @@
             }
           );
 
+          return next();
+        }
+      );
+    }
+
+    function getMasterIntegrations(bag, next) {
+      admiralApiAdapter.getMasterIntegrations(
+        function (err, masterIntegrations) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          $scope.vm.masterIntegrations = masterIntegrations;
           return next();
         }
       );
@@ -678,6 +697,7 @@
           updateMsgSystemIntegration,
           updateRedisSystemIntegration,
           updateStateSystemIntegration,
+          getMasterIntegrations.bind(null, {}),
           updateSystemSettings,
           startAPI,
           startWWW,
@@ -749,6 +769,7 @@
           var bag = {
             name: 'auth',
             masterName: systemInt.masterName,
+            scmMasterName: systemInt.scmMasterName,
             data: systemInt.data,
             isEnabled: systemInt.isEnabled
           };
@@ -756,7 +777,8 @@
           bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
 
           async.series([
-              updateSystemIntegration.bind(null, bag)
+              updateSystemIntegration.bind(null, bag),
+              enableSCMMasterIntegration.bind(null, bag)
             ],
             function (err) {
               return done(err);
@@ -919,6 +941,29 @@
       if (!sysIntName || !masterName) return;
       _.extend($scope.vm.installForm[sysIntName][masterName].data,
         systemIntDataDefaults[sysIntName][masterName]);
+    }
+
+    function enableSCMMasterIntegration(bag, callback) {
+      var masterInt =
+        _.findWhere($scope.vm.masterIntegrations, {name: bag.scmMasterName});
+
+      if (!masterInt)
+        return callback('No scm masterIntegration found for ' + bag.scmMasterName);
+
+      if (masterInt.isEnabled) return callback();
+
+      var update = {
+        isEnabled: true
+      };
+
+      admiralApiAdapter.putMasterIntegration(masterInt.id, update,
+        function (err, masterInt) {
+          if (err)
+            return callback(err);
+
+          return callback();
+        }
+      );
     }
 
     function updateSystemSettings(next) {
