@@ -218,6 +218,10 @@
           displayName: '',
           isEnabled: false
         },
+        CLUSTER: {
+          displayName: '',
+          isEnabled: false
+        },
         DCL: {
           displayName: '',
           isEnabled: false
