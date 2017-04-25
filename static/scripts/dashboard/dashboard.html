@@ -973,6 +973,12 @@
                       </div>
                       <div class="checkbox">
                         <label>
+                          <input type="checkbox" ng-model="vm.addonsForm.AZURE_DCOS.isEnabled">
+                          {{vm.addonsForm.AZURE_DCOS.displayName}}
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
                           <input type="checkbox" ng-model="vm.addonsForm.CLUSTER.isEnabled">
                           {{vm.addonsForm.CLUSTER.displayName}}
                         </label>

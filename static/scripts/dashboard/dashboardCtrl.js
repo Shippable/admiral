@@ -218,6 +218,10 @@
           displayName: '',
           isEnabled: false
         },
+        AZURE_DCOS: {
+          displayName: '',
+          isEnabled: false
+        },
         CLUSTER: {
           displayName: '',
           isEnabled: false
