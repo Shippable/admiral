@@ -122,6 +122,20 @@
               proxy: '',
               emailSender: ''
             }
+          },
+          smtpCreds: {
+            isEnabled: false,
+            masterName: 'smtpCreds',
+            data: {
+              emailAuthUser: '',
+              emailAuthPassword: '',
+              emailSender: '',
+              host: '',
+              port: '',
+              secure: '',
+              hostname: '',
+              proxy: ''
+            }
           }
         },
         redis:  {
@@ -347,6 +361,16 @@
             domain: '',
             proxy: '',
             emailSender: ''
+          },
+          smtpCreds: {
+            emailAuthUser: '',
+            emailAuthPassword: '',
+            emailSender: '',
+            host: '',
+            port: '',
+            secure: '',
+            hostname: '',
+            proxy: ''
           }
         },
         redis: {
@@ -718,6 +742,7 @@
           updateRedisSystemIntegration,
           updateStateSystemIntegration,
           updateMailgunSystemIntegration,
+          updateSMTPSystemIntegration,
           getMasterIntegrations.bind(null, {}),
           updateSystemSettings,
           startAPI,
@@ -871,13 +896,27 @@
         }
       );
     }
-
     function updateMailgunSystemIntegration(next) {
       var bag = {
         name: 'notification',
         masterName: $scope.vm.installForm.notification.mailgunCreds.masterName,
         data: $scope.vm.installForm.notification.mailgunCreds.data,
         isEnabled: $scope.vm.installForm.notification.mailgunCreds.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateSMTPSystemIntegration(next) {
+      var bag = {
+        name: 'notification',
+        masterName: $scope.vm.installForm.notification.smtpCreds.masterName,
+        data: $scope.vm.installForm.notification.smtpCreds.data,
+        isEnabled: $scope.vm.installForm.notification.smtpCreds.isEnabled
       };
 
       updateSystemIntegration(bag,
