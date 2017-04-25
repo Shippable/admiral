@@ -123,8 +123,6 @@ function _setDefault(bag, next) {
 
   _.each(bag.services.serviceConfigs,
     function (service) {
-      if (!service.isCore)
-        return;
 
       bag.defaultService[service.name] = {
         serviceName: service.name,
@@ -132,7 +130,8 @@ function _setDefault(bag, next) {
         envs: '',
         opts: '',
         isCore: service.isCore,
-        replicas: service.isGlobal ? 'global' : 1
+        replicas: service.isGlobal ? 'global' : 1,
+        isEnabled: false
       };
     }
   );

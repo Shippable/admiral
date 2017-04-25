@@ -44,6 +44,12 @@ APIAdapter.prototype.putMasterIntegrationById =
     this.put(url, json, callback);
   };
 
+APIAdapter.prototype.getMasterIntegrations =
+  function (query, callback) {
+    var url = util.format('/api/masterIntegrations?%s', query);
+    this.get(url, callback);
+  };
+
 // msg
 APIAdapter.prototype.getMsg =
   function (callback) {
@@ -122,6 +128,24 @@ APIAdapter.prototype.postSystemIntegration =
     this.post(url, body, callback);
   };
 
+// services
+APIAdapter.prototype.postServices =
+  function (body, callback) {
+    var url = '/api/services';
+    this.post(url, body, callback);
+  };
+
+APIAdapter.prototype.getServices =
+  function (query, callback) {
+    var url = '/api/services?' + query;
+    this.get(url, callback);
+  };
+
+APIAdapter.prototype.deleteServices =
+  function (name, callback) {
+    var url = '/api/services/' + name;
+    this.delete(url, callback);
+  };
 
 /*****************************************/
 /*              HTTP METHODS             */
