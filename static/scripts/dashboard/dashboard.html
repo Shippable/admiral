@@ -1017,6 +1017,12 @@
                       </div>
                       <div class="checkbox">
                         <label>
+                          <input type="checkbox" ng-model="vm.addonsForm['Docker Trusted Registry'].isEnabled">
+                          {{vm.addonsForm['Docker Trusted Registry'].displayName}}
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
                           <input type="checkbox" ng-model="vm.addonsForm.GCR.isEnabled">
                           {{vm.addonsForm.GCR.displayName}}
                         </label>

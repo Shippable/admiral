@@ -218,6 +218,10 @@
           displayName: '',
           isEnabled: false
         },
+        'Docker Trusted Registry': {
+          displayName: '',
+          isEnabled: false
+        },
         ECR: {
           displayName: '',
           isEnabled: false
