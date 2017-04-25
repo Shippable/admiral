@@ -956,7 +956,7 @@
                   </p>
                 </div>
                 <div class="col-md-offset-1 col-md-10">
-                  Cloud Providers
+                  <b>Cloud Providers</b>
                   <div class="row">
                     <div class="col-md-10">
                       <div class="checkbox">
@@ -985,6 +985,12 @@
                       </div>
                       <div class="checkbox">
                         <label>
+                          <input type="checkbox" ng-model="vm.addonsForm.DDC.isEnabled">
+                          {{vm.addonsForm.DDC.displayName}}
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
                           <input type="checkbox" ng-model="vm.addonsForm.GKE.isEnabled">
                           {{vm.addonsForm.GKE.displayName}}
                         </label>
@@ -999,7 +1005,7 @@
                   </div>
                 </div>
                 <div class="col-md-offset-1 col-md-10">
-                  Notifications
+                  <b>Notifications</b>
                   <div class="row">
                     <div class="col-md-10">
                       <div class="checkbox">
@@ -1030,7 +1036,7 @@
                   </div>
                 </div>
                 <div class="col-md-offset-1 col-md-10">
-                  Registries
+                  <b>Registries</b>
                   <div class="row">
                     <div class="col-md-10">
                       <div class="checkbox">
@@ -1079,7 +1085,7 @@
                   </div>
                 </div>
                 <div class="col-md-offset-1 col-md-10">
-                  Other
+                  <b>Other</b>
                   <div class="row">
                     <div class="col-md-10">
                       <div class="checkbox">
