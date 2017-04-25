@@ -912,7 +912,8 @@
           startRelease,
           startRSync,
           startTimeTrigger,
-          startVersionTrigger
+          startVersionTrigger,
+          startCron
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -1433,6 +1434,17 @@
 
     function startVersionTrigger(next) {
       startService('versionTrigger',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startCron(next) {
+      startService('cron',
         function (err) {
           if (err)
             return next(err);
