@@ -205,7 +205,8 @@
       masterIntegrations: [],
       addonsForm: {
         irc: false,
-        Slack: false
+        Slack: false,
+        webhook: false
       },
       installingAddons: false,
       systemSettings: {
