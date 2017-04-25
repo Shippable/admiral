@@ -259,7 +259,8 @@
     },
     {
       "name": "cron",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "deploy",
