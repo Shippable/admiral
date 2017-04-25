@@ -112,6 +112,18 @@
             }
           }
         },
+        notification:  {
+          mailgunCreds: {
+            isEnabled: false,
+            masterName: 'mailgunCreds',
+            data: {
+              apiKey: '',
+              domain: '',
+              proxy: '',
+              emailSender: ''
+            }
+          }
+        },
         redis:  {
           url: {
             isEnabled: true,
@@ -327,6 +339,14 @@
             amqpUrlAdmin: '',
             amqpDefaultExchange: '',
             rootQueueList: ''
+          }
+        },
+        notification:  {
+          mailgunCreds: {
+            apiKey: '',
+            domain: '',
+            proxy: '',
+            emailSender: ''
           }
         },
         redis: {
@@ -697,6 +717,7 @@
           updateMsgSystemIntegration,
           updateRedisSystemIntegration,
           updateStateSystemIntegration,
+          updateMailgunSystemIntegration,
           getMasterIntegrations.bind(null, {}),
           updateSystemSettings,
           startAPI,
@@ -842,6 +863,21 @@
         masterName: $scope.vm.installForm.state.gitlabCreds.masterName,
         data: $scope.vm.installForm.state.gitlabCreds.data,
         isEnabled: $scope.vm.installForm.state.gitlabCreds.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateMailgunSystemIntegration(next) {
+      var bag = {
+        name: 'notification',
+        masterName: $scope.vm.installForm.notification.mailgunCreds.masterName,
+        data: $scope.vm.installForm.notification.mailgunCreds.data,
+        isEnabled: $scope.vm.installForm.notification.mailgunCreds.isEnabled
       };
 
       updateSystemIntegration(bag,
