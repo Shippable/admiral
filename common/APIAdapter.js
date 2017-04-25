@@ -122,6 +122,18 @@ APIAdapter.prototype.postSystemIntegration =
     this.post(url, body, callback);
   };
 
+// services
+APIAdapter.prototype.postServices =
+  function (body, callback) {
+    var url = '/api/services';
+    this.post(url, body, callback);
+  };
+
+APIAdapter.prototype.getServices =
+  function (query, callback) {
+    var url = '/api/services?' + query;
+    this.get(url, callback);
+  };
 
 /*****************************************/
 /*              HTTP METHODS             */

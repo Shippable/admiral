@@ -312,6 +312,7 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
+  bag.serviceConfig.isEnabled = true;
   bag.services[bag.name] = bag.serviceConfig;
 
   configHandler.put('services', bag.services,
