@@ -24,6 +24,9 @@
     $scope.dashboardCtrlPromise = dashboardCtrlDefer.promise;
 
     $scope.vm = {
+      addonsForm: {
+        irc: false
+      },
       isLoaded: false,
       initializing: false,
       initialized: false,

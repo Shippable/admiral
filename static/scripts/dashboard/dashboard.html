@@ -948,7 +948,27 @@
           </div>
           <div id="addonpanel" class="panel-collapse collapse">
             <div class="panel-body">
-              test data
+              <div ng-if="vm.isLoaded && vm.initialized">
+                <div class="col-md-10">
+                  &nbsp;
+                  <p>
+                    Enable account integrations for your users:
+                  </p>
+                </div>
+                <div class="col-md-offset-1 col-md-10">
+                  Notifications
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.addonsForm.irc">
+                          IRC
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
