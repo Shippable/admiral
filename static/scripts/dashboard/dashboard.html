@@ -578,7 +578,8 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.notification.mailgunCreds.isEnabled">
+                          <input type="checkbox" ng-model="vm.installForm.notification.mailgunCreds.isEnabled"
+                            ng-disabled="vm.installing || vm.installForm.notification.smtpCreds.isEnabled">
                           Mailgun
                         </label>
                       </div>
@@ -619,6 +620,92 @@
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="mailgunEmailSender"
                             ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.installForm.notification.smtpCreds.isEnabled"
+                            ng-disabled="vm.installing || vm.installForm.notification.mailgunCreds.isEnabled">
+                          SMTP
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div>&nbsp;</div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Email Auth User
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="smtpEmailAuthUser"
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthUser" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Email Auth Password
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="smtpEmailAuthPassword"
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthPassword" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Email Sender
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="smtpEmailSender"
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailSender" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Host
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="smtpHost"
+                            ng-model="vm.installForm.notification.smtpCreds.data.host" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Port
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="smtpPort"
+                            ng-model="vm.installForm.notification.smtpCreds.data.port" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Secure
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="smtpSecure"
+                            ng-model="vm.installForm.notification.smtpCreds.data.secure" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Hostname
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="smtpHostname"
+                            ng-model="vm.installForm.notification.smtpCreds.data.hostname" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Proxy
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="smtpProxy"
+                            ng-model="vm.installForm.notification.smtpCreds.data.proxy" ng-disabled="vm.installing"/>
                         </div>
                       </div>
                     </div>
