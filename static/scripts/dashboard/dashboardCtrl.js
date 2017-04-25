@@ -57,6 +57,17 @@
               url: ''
             }
           },
+          bitbucketServerKeys: {
+            isEnabled: false,
+            masterName: 'bitbucketServerKeys',
+            scmMasterName: 'bitbucketServer',
+            data: {
+              clientId: '',
+              clientSecret: '',
+              wwwUrl: '',
+              url: ''
+            }
+          },
           githubKeys: {
             isEnabled: false,
             masterName: 'githubKeys',
@@ -330,6 +341,12 @@
             clientSecret: '',
             wwwUrl: '',
             url: 'https://api.bitbucket.org'
+          },
+          bitbucketServerKeys: {
+            clientId: '',
+            clientSecret: '',
+            wwwUrl: '',
+            url: ''
           },
           githubKeys: {
             clientId: '',
