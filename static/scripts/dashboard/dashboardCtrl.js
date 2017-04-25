@@ -79,6 +79,17 @@
               url: ''
             }
           },
+          githubEnterpriseKeys: {
+            isEnabled: false,
+            masterName: 'githubEnterpriseKeys',
+            scmMasterName: 'githubEnterprise',
+            data: {
+              clientId: '',
+              clientSecret: '',
+              wwwUrl: '',
+              url: ''
+            }
+          },
           gitlabKeys: {
             isEnabled: false,
             masterName: 'gitlabKeys',
@@ -353,6 +364,12 @@
             clientSecret: '',
             wwwUrl: '',
             url: 'https://api.github.com'
+          },
+          githubEnterpriseKeys: {
+            clientId: '',
+            clientSecret: '',
+            wwwUrl: '',
+            url: ''
           },
           gitlabKeys: {
             clientId: '',
