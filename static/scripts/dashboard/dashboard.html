@@ -567,6 +567,63 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-md-10">
+                  &nbsp;
+                  <p>
+                    Select your email provider.
+                  </p>
+                </div>
+                <div class="col-md-offset-1 col-md-10">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.installForm.notification.mailgunCreds.isEnabled">
+                          Mailgun
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div>&nbsp;</div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          API Key
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="mailgunApiKey"
+                            ng-model="vm.installForm.notification.mailgunCreds.data.apiKey" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Domain
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="mailgunDomain"
+                            ng-model="vm.installForm.notification.mailgunCreds.data.domain" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Proxy
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="mailgunProxy"
+                            ng-model="vm.installForm.notification.mailgunCreds.data.proxy" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Email Sender
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="mailgunEmailSender"
+                            ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <!-- System Settings -->
                 <div class="col-md-10">
                   &nbsp;
