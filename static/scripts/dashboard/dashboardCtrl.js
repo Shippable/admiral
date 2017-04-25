@@ -809,6 +809,7 @@
           updateGmailSystemIntegration,
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
+          enableEmailMasterIntegration,
           getMasterIntegrations.bind(null, {}),
           updateSystemSettings,
           startAPI,
@@ -1005,6 +1006,34 @@
       updateSystemIntegration(bag,
         function (err) {
           return next(err);
+        }
+      );
+    }
+
+    function enableEmailMasterIntegration(next) {
+      var enable = $scope.vm.installForm.notification.smtpCreds.isEnabled ||
+        $scope.vm.installForm.notification.gmailCreds.isEnabled ||
+        $scope.vm.installForm.notification.smtpCreds.isEnabled;
+
+      var masterInt =
+        _.findWhere($scope.vm.masterIntegrations, {name: 'Email'});
+
+      if (!masterInt)
+        return next('No email masterIntegration found');
+
+      if (masterInt.isEnabled === enable)
+        return next();
+
+      var update = {
+        isEnabled: enable
+      };
+
+      admiralApiAdapter.putMasterIntegration(masterInt.id, update,
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
         }
       );
     }
@@ -1250,6 +1279,9 @@
           return service.serviceName === serviceName;
         }
       );
+
+      if (!serviceConfig)
+        return callback();
 
       var body = {
         name: serviceName,
