@@ -212,6 +212,10 @@
           displayName: '',
           isEnabled: false
         },
+        GCR: {
+          displayName: '',
+          isEnabled: false
+        },
         hipchat: {
           displayName: '',
           isEnabled: false
