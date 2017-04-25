@@ -254,7 +254,8 @@
     },
     {
       "name": "charon",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "cron",
@@ -262,7 +263,8 @@
     },
     {
       "name": "deploy",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "ec2",
@@ -309,7 +311,8 @@
     },
     {
       "name": "manifest",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "mktg",
@@ -333,11 +336,13 @@
     },
     {
       "name": "release",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "rSync",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "segmentListener",
@@ -354,11 +359,13 @@
     },
     {
       "name": "timeTrigger",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "versionTrigger",
-      "repository": "micro"
+      "repository": "micro",
+      "isCore": true
     },
     {
       "name": "webhook",

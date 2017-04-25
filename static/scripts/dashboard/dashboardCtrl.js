@@ -851,7 +851,14 @@
           startJobRequest,
           startJobTrigger,
           startLogup,
-          startNf
+          startNf,
+          startCharon,
+          startDeploy,
+          startManifest,
+          startRelease,
+          startRSync,
+          startTimeTrigger,
+          startVersionTrigger
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -1295,6 +1302,83 @@
 
     function startNf(next) {
       startService('nf',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startCharon(next) {
+      startService('charon',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startDeploy(next) {
+      startService('deploy',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startManifest(next) {
+      startService('manifest',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startRelease(next) {
+      startService('release',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startRSync(next) {
+      startService('rSync',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startTimeTrigger(next) {
+      startService('timeTrigger',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startVersionTrigger(next) {
+      startService('versionTrigger',
         function (err) {
           if (err)
             return next(err);
