@@ -226,6 +226,10 @@
           displayName: '',
           isEnabled: false
         },
+        DDC: {
+          displayName: '',
+          isEnabled: false
+        },
         Docker: {
           displayName: '',
           isEnabled: false
