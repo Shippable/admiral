@@ -115,11 +115,6 @@ function _getMasterIntegration(bag, next) {
   );
 }
 
-//TODO
-//get services mapped to integration
-//call POST /services on each to start
-//call DELETE /services to each to stop
-
 function _getServicesList(bag, next) {
   var who = bag.who + '|' + _getServicesList.name;
   logger.verbose(who, 'Inside');
