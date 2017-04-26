@@ -883,6 +883,46 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-md-10" ng-if="vm.showDynamicNodeSettings()">
+                  &nbsp;
+                  <p>
+                    Configure your dynamic nodes here:
+                  </p>
+                </div>
+                <div class="col-md-offset-1 col-md-10" ng-if="vm.showDynamicNodeSettings()">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="vm.installForm.provision.amazonKeys.isEnabled"
+                            ng-disabled="vm.installing">
+                          AWS credentials for provisioning dynamic nodes
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div>&nbsp;</div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Access Key
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="provisionAccessKey"
+                            ng-model="vm.installForm.provision.amazonKeys.data.accessKey" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          Secret Key
+                        </div>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" name="provisionSecretKey"
+                            ng-model="vm.installForm.provision.amazonKeys.data.secretKey" ng-disabled="vm.installing"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-md-10">
                   &nbsp;
                   <p>
