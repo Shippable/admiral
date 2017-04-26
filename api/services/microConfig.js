@@ -189,6 +189,9 @@ function _generateEnvs(bag, next) {
   if (component === 'stepExec')
     envs = util.format('%s -e %s=%s',
       envs, 'JOB_TYPE', bag.name);
+  else if (component === 'irc')
+    envs = util.format('%s -e %s=%s',
+      envs, 'IRC_BOT_NICK', 'shippable');
 
   bag.config.envs = envs;
   return next();
