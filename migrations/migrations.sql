@@ -327,6 +327,10 @@ do $$
       alter table "builds" add column "projectId" varchar(24);
     end if;
 
+    if not exists (select 1 from information_schema.columns where table_name = 'builds' and column_name = 'propertyBag') then
+      alter table "builds" add column "propertyBag" TEXT;
+    end if;
+
   -- Set projectIds for builds where projectId is null
     UPDATE builds SET "projectId" = (SELECT "projectId" FROM resources WHERE id="resourceId") WHERE "projectId" IS NULL;
 
@@ -976,6 +980,11 @@ do $$
     );
 
     -- set builds routeRoles
+    perform set_route_role(
+       routePattern := '/builds/:buildId',
+       httpVerb := 'GET',
+       roleCode := 6110
+    );
 
     perform set_route_role(
       routePattern := '/builds',
@@ -1118,6 +1127,12 @@ do $$
     );
 
     perform set_route_role(
+      routePattern := '/buildJobs',
+      httpVerb := 'GET',
+      roleCode := 6110
+    );
+
+    perform set_route_role(
       routePattern := '/buildJobs/:buildJobId',
       httpVerb := 'GET',
       roleCode := 6060
@@ -1243,6 +1258,12 @@ do $$
       routePattern := '/buildJobs/:buildJobId/consoles',
       httpVerb := 'GET',
       roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/buildJobs/:buildJobId/consoles',
+      httpVerb := 'GET',
+      roleCode := 6110
     );
 
     perform set_route_role(
@@ -3946,6 +3967,11 @@ do $$
     -- Add earlyAdopterMinionCount to subscriptions
     if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'earlyAdopterMinionCount') then
       alter table "subscriptions" add column "earlyAdopterMinionCount" INTEGER;
+    end if;
+
+    -- Add minionInstanceSize to subscriptions
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'minionInstanceSize') then
+      alter table "subscriptions" add column "minionInstanceSize" varchar(255);
     end if;
 
   end
