@@ -31,6 +31,14 @@
         return API.put('/api/masterIntegrations/' +
           masterIntegrationId, body, callback);
       },
+      // System Machine Image Routes
+      getSystemMachineImages: function (query, callback) {
+        return API.get('/api/systemMachineImages?' + query, callback);
+      },
+      putSystemMachineImage: function (systemMachineImageId, body, callback) {
+        return API.put('/api/systemMachineImages/' + systemMachineImageId,
+          body, callback);
+      },
       // System Settings Routes
       getSystemSettings: function (callback) {
         return API.get('/api/systemSettings', callback);

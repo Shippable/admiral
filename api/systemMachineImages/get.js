@@ -52,10 +52,10 @@ function _constructQuery(bag, next) {
     queries.push(util.format('"provider"=\'%s\'', bag.reqQuery.provider));
 
   if (_.has(bag.reqQuery, 'isDefault'))
-    queries.push(util.format('"isDefault"=\'%s\'', bag.reqQuery.isDefault));
+    queries.push(util.format('"isDefault"=%s', bag.reqQuery.isDefault));
 
   if (_.has(bag.reqQuery, 'isAvailable'))
-    queries.push(util.format('"isAvailable"=\'%s\'', bag.reqQuery.isAvailable));
+    queries.push(util.format('"isAvailable"=%s', bag.reqQuery.isAvailable));
 
   if (queries.length)
     query = query + ' WHERE ' + queries.join(' AND ');

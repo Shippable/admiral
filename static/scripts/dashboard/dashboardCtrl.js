@@ -211,6 +211,7 @@
             }
           }
         },
+        defaultSystemMachineImage: {},
         systemSettings: [],
         coreServices: []
       },
@@ -356,7 +357,8 @@
           getSystemIntegrations.bind(null, bag),
           getMasterIntegrations.bind(null, bag),
           getSystemSettingsForInstallPanel.bind(null, bag),
-          getServices.bind(null, bag)
+          getServices.bind(null, bag),
+          getDefaultSystemMachineImage.bind(null, bag)
         ],
         function (err) {
           $scope.vm.isLoaded = true;
@@ -567,7 +569,8 @@
       // reset all systemIntegrations to their defaults
       _.each($scope.vm.installForm,
         function (systemInts, systemIntName) {
-          if (systemIntName !== 'systemSettings') {
+          if (systemIntName !== 'systemSettings' &&
+            systemIntName !== 'defaultSystemMachineImage') {
             _.each(systemInts,
               function (value, masterName) {
                 resetSystemIntegration(systemIntName, masterName);
@@ -835,6 +838,31 @@
       );
     }
 
+    function getDefaultSystemMachineImage(bag, next) {
+      if (!$scope.vm.initialized) return next();
+
+      admiralApiAdapter.getSystemMachineImages(
+        'isDefault=true&isAvailable=true',
+        function (err, systemMachineImages) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          if (_.isEmpty(systemMachineImages)) {
+            horn.error('No default system machine image found. ' +
+              'Please reinitialize.');
+            return next();
+          }
+
+          $scope.vm.installForm.defaultSystemMachineImage =
+            systemMachineImages[0];
+
+          return next();
+        }
+      );
+    }
+
     function initialize() {
       $scope.vm.initializing = true;
       var bag = {};
@@ -902,6 +930,18 @@
                     horn.error(err);
                 }
               );
+              getDefaultSystemMachineImage({},
+                function (err) {
+                  if (err)
+                    horn.error(err);
+                }
+              );
+              getMasterIntegrations({},
+                function (err) {
+                  if (err)
+                    horn.error(err);
+                }
+              );
             }
           }
         );
@@ -927,6 +967,7 @@
           updateSystemSettings,
           updateProvisionSystemIntegration,
           getMasterIntegrations.bind(null, {}),
+          updateDefaultSystemMachineImage,
           startAPI,
           startWWW,
           startSync,
@@ -1303,6 +1344,21 @@
       );
 
       admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function updateDefaultSystemMachineImage(next) {
+      var image = $scope.vm.installForm.defaultSystemMachineImage;
+
+      if (!image) return next();
+
+      admiralApiAdapter.putSystemMachineImage(image.id, image,
         function (err) {
           if (err)
             return next(err);
