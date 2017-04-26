@@ -1049,13 +1049,13 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10" ng-if="vm.isLoaded && vm.initialized">
                   &nbsp;
                   <p>
                     Core services to be installed:
                   </p>
                 </div>
-                <div class="col-md-offset-1 col-md-10">
+                <div class="col-md-offset-1 col-md-10" ng-if="vm.isLoaded && vm.initialized">
                   <div class="row">
                     <div class="col-md-offset-2 col-md-10">
                       <div class="row">
@@ -1089,7 +1089,7 @@
                 <div>
                   &nbsp;
                 </div>
-                <div class="col-md-offset-1 col-md-10 text-right">
+                <div class="col-md-offset-1 col-md-10 text-right" ng-if="vm.isLoaded && vm.initialized">
                   <p>
                     &nbsp;
                   </p>
