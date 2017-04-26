@@ -56,7 +56,8 @@ __run_service() {
     --name $SERVICE_NAME \
     $SERVICE_IMAGE"
   __process_msg "Executing: $run_cmd"
-  eval "$run_cmd"
+  local run_output=$($run_cmd)
+  __process_msg "Docker run returned: $run_output"
 }
 
 main() {
