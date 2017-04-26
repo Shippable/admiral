@@ -74,7 +74,8 @@ function _get(bag, next) {
       if (err) {
         bag.skipStatusChange = true;
         return next(
-          new ActErr(who, ActErr.DataNotFound, err)
+          new ActErr(who, ActErr.DataNotFound,
+            'Failed to get ' + bag.component, err)
         );
       }
 

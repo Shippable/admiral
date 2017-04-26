@@ -13,10 +13,19 @@ configHandler.get = function (component, cb) {
   var query = util.format('SELECT %s from "systemSettings"', component);
   global.config.client.query(query,
     function (err, systemSettings) {
-      if (err)
+      if (err) {
+        if (err.code === '42P01')
+          return cb(
+            new ActErr(self, ActErr.DataNotFound,
+              'SystemSettings table not created. Please initialize.')
+          );
+
         return cb(
-          new ActErr(self, ActErr.DataNotFound, err)
+          new ActErr(self, ActErr.DBOperationFailed,
+            'Failed to get ' + component + ' with error ' + util.format(err)
+          )
         );
+      }
 
       var result = {};
 
