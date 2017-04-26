@@ -92,7 +92,8 @@ function _getServiceConfig(bag, next) {
     function (err, config) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get services', err)
         );
 
       if (_.isEmpty(config))
