@@ -15,14 +15,25 @@
     admiralService
   ]);
 
+  var timeout = 120000;
+
   function admiralService(ADMIRAL_URL, $http, $rootScope) {
     function handler(promise, callback) {
+      var startTime = Date.now();
       if (callback)
         promise
           .success(function (data) {
             callback(null, data);
           })
           .error(function (data) {
+            if (!data) {
+              var endTime = Date.now();
+              if ((endTime - startTime) >= timeout)
+                return callback('Request timed out', null);
+              else
+                return callback('Request failed', null);
+            }
+
             callback(data, null);
           });
 
@@ -35,7 +46,8 @@
         var promise = $http.get(ADMIRAL_URL + path, {
           headers: {
             Authorization: 'apiToken ' + $rootScope._r.loginToken
-          }
+          },
+          timeout: timeout
         });
         return handler(promise, callback);
       },
@@ -43,7 +55,8 @@
         var promise = $http.put(ADMIRAL_URL + path, body, {
           headers: {
             Authorization: 'apiToken ' + $rootScope._r.loginToken
-          }
+          },
+          timeout: timeout
         });
         return handler(promise, callback);
       },
@@ -51,7 +64,8 @@
         var promise = $http.post(ADMIRAL_URL + path, body, {
           headers: {
             Authorization: 'apiToken ' + $rootScope._r.loginToken
-          }
+          },
+          timeout: timeout
         });
         return handler(promise, callback);
       },
@@ -59,7 +73,8 @@
         var promise = $http.delete(ADMIRAL_URL + path, {
           headers: {
             Authorization: 'apiToken ' + $rootScope._r.loginToken
-          }
+          },
+          timeout: timeout
         });
         return handler(promise, callback);
       }
