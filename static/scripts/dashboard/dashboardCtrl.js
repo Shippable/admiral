@@ -172,6 +172,16 @@
             }
           }
         },
+        provision: {
+          amazonKeys: {
+            isEnabled: false,
+            masterName: 'amazonKeys',
+            data: {
+              accessKey: '',
+              secretKey: ''
+            }
+          }
+        },
         redis:  {
           url: {
             isEnabled: true,
@@ -326,6 +336,7 @@
       showAdmiralEnvModal: showAdmiralEnvModal,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
+      showDynamicNodeSettings: showDynamicNodeSettings,
       refreshLogs: refreshLogs,
       logOutOfAdmiral: logOutOfAdmiral
     };
@@ -519,6 +530,12 @@
             secure: '',
             hostname: '',
             proxy: ''
+          }
+        },
+        provision:{
+          amazonKeys: {
+            accessKey: '',
+            secretKey: ''
           }
         },
         redis: {
@@ -907,8 +924,9 @@
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
           enableEmailMasterIntegration,
-          getMasterIntegrations.bind(null, {}),
           updateSystemSettings,
+          updateProvisionSystemIntegration,
+          getMasterIntegrations.bind(null, {}),
           startAPI,
           startWWW,
           startSync,
@@ -1139,6 +1157,21 @@
             return next(err);
 
           return next();
+        }
+      );
+    }
+
+    function updateProvisionSystemIntegration(next) {
+      var bag = {
+        name: 'provision',
+        masterName: $scope.vm.installForm.provision.amazonKeys.masterName,
+        data: $scope.vm.installForm.provision.amazonKeys.data,
+        isEnabled: $scope.vm.installForm.provision.amazonKeys.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
         }
       );
     }
@@ -1599,6 +1632,14 @@
             return horn.error(err);
         }
       );
+    }
+
+    function showDynamicNodeSettings() {
+      var allowDynamicNodes =
+        _.findWhere($scope.vm.installForm.systemSettings,
+          {name: 'allowDynamicNodes'}
+        );
+      return allowDynamicNodes && allowDynamicNodes.value;
     }
 
     function logOutOfAdmiral(e) {
