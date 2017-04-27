@@ -73,7 +73,9 @@ function _getSystemMachineImages(bag, next) {
     function (err, systemIntegrations) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemMachineImages with error: ' +
+            util.inspect(err))
         );
 
       if (systemIntegrations.rows)

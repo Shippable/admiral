@@ -275,7 +275,8 @@ function _getRedis(bag, next) {
     function (err, redis) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to get Redis information', err)
         );
 
       bag.redisInitialized = redis && redis.isInstalled && redis.isInitialized;
@@ -297,7 +298,8 @@ function _initializeRedis(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, err.id || ActErr.OperationFailed, err)
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to initialize Redis', err)
         );
 
       return next();
@@ -337,7 +339,8 @@ function _readPublicSSHKey(bag, next) {
     function (err, data) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to read public SSH key with error: ' + util.inspect(err))
         );
 
       bag.publicSSHKey = data.toString();
@@ -357,7 +360,8 @@ function _readPrivateSSHKey(bag, next) {
     function (err, data) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to read private SSH key with error: ' + util.inspect(err))
         );
 
       bag.privateSSHKey = data.toString();

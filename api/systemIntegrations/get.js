@@ -125,7 +125,8 @@ function _getSystemIntegrations(bag, next) {
     function (err, systemIntegrations) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemIntegrations with error: ' + util.inspect(err))
         );
 
       if (systemIntegrations.rows)

@@ -92,7 +92,8 @@ function _getExistingProvider(bag, next) {
     function (err, providers) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to find providers with error: ' + util.inspect(err))
         );
 
       if (!_.isEmpty(providers.rows) &&
@@ -144,7 +145,8 @@ function _post(bag, next) {
             }
             else {
               return callback(
-                new ActErr(who, ActErr.DBOperationFailed, err)
+                new ActErr(who, ActErr.DBOperationFailed,
+                  'Failed to create provider with error: ' + util.inspect(err))
               );
             }
           }
@@ -171,7 +173,8 @@ function _getProvider(bag, next) {
     function (err, providers) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to find provider with error: ' + util.inspect(err))
         );
 
       if (!_.isEmpty(providers.rows) &&

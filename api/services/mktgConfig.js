@@ -145,7 +145,7 @@ function _generateOpts(bag, next) {
   logger.verbose(who, 'Inside');
 
   var opts = ' --publish=50002:50002/tcp ' +
-    ' --network=host'
+    ' --network=host' +
     ' --privileged=true';
 
   bag.config.opts = opts;

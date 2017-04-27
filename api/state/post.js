@@ -106,7 +106,8 @@ function _setProcessingFlag(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update config for ' + bag.component, err)
         );
 
       return next();
@@ -251,7 +252,8 @@ function _post(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update config for ' + bag.component, err)
         );
 
       return next();

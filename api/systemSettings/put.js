@@ -75,7 +75,8 @@ function _put(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update systemSettings with error: ' + util.inspect(err))
         );
 
       return next();
@@ -94,7 +95,8 @@ function _getSystemSettings(bag, next) {
     function (err, systemSettings) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemSettings with error: ' + err)
         );
 
       if (_.isEmpty(systemSettings.rows))

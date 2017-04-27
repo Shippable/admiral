@@ -69,7 +69,8 @@ function _get(bag, next) {
     function (err, masterIntegrations) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get masterIntegrations with error: ' + util.format(err))
         );
       if (!_.isEmpty(masterIntegrations.rows))
         bag.resBody = masterIntegrations.rows;
