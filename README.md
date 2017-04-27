@@ -15,7 +15,7 @@
     help            Print this message
 ```
 
-## Installing Shippable enterprise with Github Auth
+## Installing Shippable Enterprise with Github Auth
 
 ### Provisioning
 - All services and core components will run on a single instance. The minimum
