@@ -5,6 +5,7 @@ module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
+var APIAdapter = require('../../common/APIAdapter.js');
 var envHandler = require('../../common/envHandler.js');
 var VaultAdapter = require('../../common/VaultAdapter.js');
 
@@ -12,6 +13,7 @@ function deleteById(req, res) {
   var bag = {
     inputParams: req.params,
     resBody: {},
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     vaultUrlEnv: 'VAULT_URL',
     vaultTokenEnv: 'VAULT_TOKEN'
   };
@@ -23,10 +25,13 @@ function deleteById(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
+      _getSystemIntegrationById.bind(null, bag),
       _getVaultURL.bind(null, bag),
       _getVaultToken.bind(null, bag),
       _deleteById.bind(null, bag),
-      _deleteByIdInVault.bind(null, bag)
+      _deleteByIdInVault.bind(null, bag),
+      _getSystemIntegrations.bind(null, bag),
+      _disableMasterIntegration.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -48,6 +53,28 @@ function _checkInputParams(bag, next) {
     );
   bag.systemIntegrationId = bag.inputParams.systemIntegrationId;
   return next();
+}
+
+function _getSystemIntegrationById(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegrationById.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('SELECT * FROM "systemIntegrations" WHERE id=\'%s\'',
+    bag.systemIntegrationId);
+
+  global.config.client.query(query,
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed, err)
+        );
+
+      if (systemIntegrations.rows)
+        bag.deletedSystemIntegration = _.first(systemIntegrations.rows);
+
+      return next();
+    }
+  );
 }
 
 function _getVaultURL(bag, next) {
@@ -113,7 +140,7 @@ function _deleteById(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, mapSequelizeErr(err),
+          new ActErr(who, ActErr.OperationFailed,
             'systemIntegrations.delete failed for id: ' +
             bag.systemIntegrationId + ' returned error: ' + err.message)
         );
@@ -141,6 +168,56 @@ function _deleteByIdInVault(bag, next) {
             'Failed to :deleteSecret for systemIntegrationId: ' +
             bag.inputParams.systemIntegrationId + ' with status code ' + err,
             body)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getSystemIntegrations(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegrations.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'SELECT * FROM "systemIntegrations"';
+
+  global.config.client.query(query,
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed, err)
+        );
+
+      if (systemIntegrations.rows)
+        bag.systemIntegrations = systemIntegrations.rows;
+
+      bag.masterIntInUse = _.findWhere(
+        bag.systemIntegrations,
+        {masterIntegrationId: bag.deletedSystemIntegration.masterIntegrationId}
+      );
+
+      return next();
+    }
+  );
+}
+
+function _disableMasterIntegration(bag, next) {
+  if (bag.masterIntInUse) return next();
+
+  var who = bag.who + '|' + _disableMasterIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var update = {
+    isEnabled: false
+  };
+
+  bag.apiAdapter.putMasterIntegrationById(
+    bag.deletedSystemIntegration.masterIntegrationId, update,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to put master integration: ' + util.inspect(err))
         );
 
       return next();

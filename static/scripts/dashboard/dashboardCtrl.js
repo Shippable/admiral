@@ -952,7 +952,6 @@
       $scope.vm.installing = true;
 
       async.series([
-          updateFilestoreSystemIntegration,
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
@@ -965,7 +964,6 @@
           updateSMTPSystemIntegration,
           enableEmailMasterIntegration,
           updateSystemSettings,
-          updateProvisionSystemIntegration,
           getMasterIntegrations.bind(null, {}),
           updateDefaultSystemMachineImage,
           startAPI,
@@ -975,7 +973,8 @@
           startNexec,
           startJobRequest,
           startJobTrigger,
-          startLogup,
+          updateFilestoreSystemIntegration,
+          updateProvisionSystemIntegration,
           startNf,
           startCharon,
           startDeploy,
@@ -1185,9 +1184,6 @@
       if (!masterInt)
         return next('No email masterIntegration found');
 
-      if (masterInt.isEnabled === enable)
-        return next();
-
       var update = {
         isEnabled: enable
       };
@@ -1314,12 +1310,11 @@
         _.findWhere($scope.vm.masterIntegrations, {name: bag.scmMasterName});
 
       if (!masterInt)
-        return callback('No scm masterIntegration found for ' + bag.scmMasterName);
-
-      if (masterInt.isEnabled) return callback();
+        return callback('No scm masterIntegration found for ' +
+          bag.scmMasterName);
 
       var update = {
-        isEnabled: true
+        isEnabled: bag.isEnabled
       };
 
       admiralApiAdapter.putMasterIntegration(masterInt.id, update,
@@ -1436,17 +1431,6 @@
 
     function startJobTrigger(next) {
       startService('jobTrigger',
-        function (err) {
-          if (err)
-            return next(err);
-
-          return next();
-        }
-      );
-    }
-
-    function startLogup(next) {
-      startService('logup',
         function (err) {
           if (err)
             return next(err);
@@ -1657,7 +1641,7 @@
     function installAddons() {
       $scope.vm.installingAddons = true;
 
-      async.eachOfLimit($scope.vm.addonsForm, 10,
+      async.eachOfSeries($scope.vm.addonsForm,
         function (addonsMasterInt, masterIntName, done) {
           var masterInt = _.find($scope.vm.masterIntegrations,
             function (masterInt) {
@@ -1667,9 +1651,6 @@
 
           if (!masterInt)
             return done('No master integration found for: ' + masterIntName);
-
-          if (masterInt.isEnabled === addonsMasterInt.isEnabled)
-            return done();
 
           var update = {
             isEnabled: addonsMasterInt.isEnabled

@@ -5,7 +5,8 @@
       "type": "generic",
       "services": [
         "marshaller",
-        "ec2"
+        "ec2",
+        "logup"
       ]
     },
     {
@@ -303,8 +304,7 @@
     },
     {
       "name": "logup",
-      "repository": "micro",
-      "isCore": true
+      "repository": "micro"
     },
     {
       "name": "marshaller",
