@@ -66,7 +66,10 @@ function _getConfigs(bag, next) {
   configHandler.get(bag.component,
     function (err, config) {
       if (err)
-        return next('Failed to get config for component: ' + bag.component);
+        return next(
+          new ActErr(self, err.id || ActErr.DBOperationFailed,
+            'Failed to get config for component: ' + bag.component, err)
+        );
 
       bag.update = _.extend(config, bag.update);
 
@@ -85,11 +88,13 @@ function _updateConfigs(bag, next) {
       if (err)
         return next(err);
 
-      if (response.rowCount === 1) {
+      if (response.rowCount === 1)
         logger.debug('Successfully updated configs');
-      } else {
-        return next('Failed to update config for component: ' + bag.component);
-      }
+      else
+        return next(
+          new ActErr(self, ActErr.DBOperationFailed,
+            'Failed to update config for component: ' + bag.component)
+        );
 
       return next();
     }

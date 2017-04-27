@@ -95,7 +95,8 @@ function _getS(bag, next) {
     function (err, providers) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to find providers with error: ' + util.inspect(err))
         );
 
       if (!_.isEmpty(providers.rows))

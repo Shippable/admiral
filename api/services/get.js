@@ -96,7 +96,7 @@ function _getServicesJson(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get services.json: ', err)
+            'Failed to get services.json: ' + util.inspect(err))
         );
 
       var error;
@@ -140,7 +140,8 @@ function _setDefault(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update config for ' + bag.component, err)
         );
 
       return next();

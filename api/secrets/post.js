@@ -102,7 +102,8 @@ function _setProcessingFlag(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update config for ' + bag.component, err)
         );
 
       return next();
@@ -251,7 +252,8 @@ function _getVaultRootToken(bag, next) {
     function (err, value) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get VAULT_TOKEN with error: ' + err)
         );
 
       if (_.isEmpty(value))
@@ -278,7 +280,8 @@ function _post(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update config for ' + bag.component, err)
         );
 
       return next();

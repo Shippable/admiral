@@ -42,7 +42,8 @@ function _checkFileExists(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get ' + global.config.admiralEnv, err)
+            'Failed to get ' + global.config.admiralEnv +
+            ' with error: ' + util.inspect(err))
         );
 
       return next();
@@ -81,7 +82,8 @@ function _get(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-          'Failed to read ' + global.config.admiralEnv, err)
+          'Failed to read ' + global.config.admiralEnv +
+          ' with error ' + util.inspect(err))
         );
 
       return next();

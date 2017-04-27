@@ -133,7 +133,8 @@ function _getMasterIntegration(bag, next) {
     function (err, masterIntegrations) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get masterIntegrations with error: ' + util.inspect(err))
         );
 
       if (!_.isEmpty(masterIntegrations.rows) &&
@@ -288,7 +289,9 @@ function _createSystemIntegration(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to create systemIntegration with error: ' +
+            util.inspect(err))
         );
 
       return next();
@@ -307,7 +310,8 @@ function _getSystemIntegration(bag, next) {
     function (err, systemIntegrations) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemIntegrations with error: ' + util.inspect(err))
         );
 
       if (!_.isEmpty(systemIntegrations.rows) &&

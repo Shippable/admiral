@@ -61,7 +61,9 @@ function _getSystemMachineImage(bag, next) {
     function (err, systemMachineImages) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemMachineImages with error: ' +
+            util.inspect(err))
         );
 
       if (_.isEmpty(systemMachineImages.rows))
@@ -134,7 +136,9 @@ function _put(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update systemMachineImage with error: ' +
+            util.inspect(err))
         );
 
       return next();
@@ -153,7 +157,8 @@ function _getUpdatedSystemMachineImage(bag, next) {
     function (err, systemMachineImages) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemMachineImage with error: ' + util.inspect(err))
         );
 
       if (_.isEmpty(systemMachineImages.rows))

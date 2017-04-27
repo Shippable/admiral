@@ -80,7 +80,9 @@ function _put(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to enable masterIntegration with error: ' +
+            util.inspect(err))
         );
 
       return next();
@@ -99,7 +101,9 @@ function _getMasterIntegration(bag, next) {
     function (err, masterIntegrations) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to find masterIntegration with error: ' +
+            util.inspect(err))
         );
 
       if (_.isEmpty(masterIntegrations.rows))
@@ -128,7 +132,7 @@ function _getServicesList(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get services: ', err)
+            'Failed to get services with error: ' + util.inspect(err))
         );
 
       // only get non-global service list
@@ -155,7 +159,7 @@ function _getIntegrationServicesMap(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get services.json: ', err)
+            'Failed to get services.json with error: ' + util.inspect(err))
         );
 
       var error;
@@ -186,7 +190,8 @@ function _getEnabledIntegrations(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get enabled master integrations: ', err)
+            'Failed to get enabled master integrations with error: ' +
+            util.inspect(err))
         );
       bag.enabledMasterIntegrations = masterIntegrations;
 
@@ -278,7 +283,7 @@ function _startIntegrationServices(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to start service: ', err)
+            'Failed to start service: ' + util.inspect(err))
         );
 
       return next();
@@ -322,7 +327,7 @@ function _stopIntegrationServices(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to disable service: ', err)
+            'Failed to disable service: ' + util.inspect(err))
         );
 
       return next();

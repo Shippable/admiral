@@ -75,7 +75,8 @@ function _getSystemIntegration(bag, next) {
     function (err, systemIntegrations) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemIntegrations with error: ' + util.inspect(err))
         );
 
       if (_.isEmpty(systemIntegrations.rows))
@@ -275,7 +276,9 @@ function _put(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update systemIntegration with error: ' +
+            util.inspect(err))
         );
 
       return next();
@@ -294,7 +297,8 @@ function _getUpdatedSystemIntegration(bag, next) {
     function (err, systemIntegrations) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemIntegrations with error: ' + util.inspect(err))
         );
 
       if (_.isEmpty(systemIntegrations.rows))

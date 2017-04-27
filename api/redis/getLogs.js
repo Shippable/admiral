@@ -55,7 +55,8 @@ function _checkFile(bag, next) {
       else if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get logs for ' + bag.component, err)
+            'Failed to get logs for ' + bag.component +
+            ' with error: ' + util.inspect(err))
         );
 
       return next();
@@ -85,7 +86,8 @@ function _get(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get logs for ' + bag.component, err)
+            'Failed to get logs for ' + bag.component +
+            ' with error: ' + util.inspect(err))
         );
 
       return next(null);

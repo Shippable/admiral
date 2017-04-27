@@ -47,7 +47,8 @@ function _get(bag, next) {
           return next();
         }
         return next(
-          new ActErr(who, ActErr.DBOperationFailed, err)
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get systemSettings with error: ' + util.inspect(err))
         );
       }
 

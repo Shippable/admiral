@@ -115,7 +115,8 @@ function _setProcessingFlag(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update db config', err)
         );
 
       return next();
@@ -433,7 +434,7 @@ function _templateServiceUserAccountFile(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed, 'Failed to write script', err)
         );
 
       return next();
@@ -488,7 +489,7 @@ function _templateDefaultSystemMachineImageFile(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed, 'Failed to write script', err)
         );
 
       return next();
@@ -529,7 +530,9 @@ function _getRootBucket(bag, next) {
     function (err, res) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to find rootS3Bucket setting with error: ' +
+            util.inspect(err))
         );
 
       if (!_.isEmpty(res.rows) && !_.isEmpty(res.rows[0].rootS3Bucket))
@@ -555,7 +558,9 @@ function _setRootBucket(bag, next) {
     function (err, rootS3Bucket) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update rootS3Bucket setting with error: ' +
+            util.inspect(err))
         );
       bag.rootS3Bucket = rootS3Bucket;
       return next();
@@ -576,7 +581,8 @@ function _setDbFlags(bag, next) {
     function (err) {
       if (err)
         return next(
-          new ActErr(who, ActErr.OperationFailed, err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update db config', err)
         );
 
       return next();
