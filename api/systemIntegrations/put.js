@@ -33,7 +33,8 @@ function put(req, res) {
       _postProvider.bind(null, bag),
       _put.bind(null, bag),
       _getUpdatedSystemIntegration.bind(null, bag),
-      _postSystemIntegrationFieldsToVault.bind(null, bag)
+      _postSystemIntegrationFieldsToVault.bind(null, bag),
+      _putMasterIntegration.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -389,4 +390,26 @@ function __validateKeys(keyValuePair) {
     );
 
   return result;
+}
+
+function _putMasterIntegration(bag, next) {
+  var who = bag.who + '|' + _putMasterIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var update = {
+    isEnabled: true
+  };
+
+  bag.apiAdapter.putMasterIntegrationById(
+    bag.systemIntegration.masterIntegrationId, update,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to put master integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
 }
