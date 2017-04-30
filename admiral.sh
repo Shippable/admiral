@@ -31,6 +31,7 @@ readonly SSH_USER="root"
 readonly DOCKER_VERSION=1.13
 readonly AWSCLI_VERSION=1.10.63
 readonly API_TIMEOUT=600
+declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
 export LC_ALL=C
 
 # Installation default values #############################
@@ -51,6 +52,7 @@ main() {
   __parse_args "$@"
   __validate_runtime
   __check_dependencies
+  __pull_images
   {
     __print_runtime
     source "$SCRIPTS_DIR/$OS_TYPE/installDb.sh"
