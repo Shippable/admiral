@@ -156,10 +156,35 @@
             </div>
           </div>
         </div>
+        <div class="panel panel-default" ng-if="vm.systemSettings.releaseVersion !== vm.installerVersion">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" href="#upgradepanel">2. Upgrade</a>
+            </h3>
+          </div>
+          <div id="upgradepanel" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <div ng-if="!vm.isLoaded">
+                Loading...
+              </div>
+              <div class="col-md-offset-1 col-md-10" ng-if="vm.isLoaded">
+
+                <div>
+                  Current version: {{vm.systemSettings.releaseVersion}}
+                </div>
+                <div>
+                  Available version: {{vm.installerVersion}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <a data-toggle="collapse" href="#installpanel">2. Install</a>
+              <a data-toggle="collapse" href="#installpanel">
+                {{(vm.systemSettings.releaseVersion !== vm.installerVersion) ? '3.' : '2.'}} Install
+              </a>
             </h3>
           </div>
           <div id="installpanel" class="panel-collapse collapse">
@@ -1095,7 +1120,8 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <a data-toggle="collapse" href="#addonpanel">3. Add-ons</a>
+              <a data-toggle="collapse" href="#addonpanel">
+                {{(vm.systemSettings.releaseVersion !== vm.installerVersion) ? '4.' : '3.'}} Add-ons</a>
             </h3>
           </div>
           <div id="addonpanel" class="panel-collapse collapse">
