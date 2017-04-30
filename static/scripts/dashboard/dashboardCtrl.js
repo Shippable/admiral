@@ -30,6 +30,7 @@
       installerVersion: null,
       initializing: false,
       initialized: false,
+      upgrading: false,
       installing: false,
       initializeForm: {
         msgPassword: '',
@@ -331,6 +332,7 @@
       systemSettingsId: null,
       selectedService: {},
       initialize: initialize,
+      upgrade: upgrade,
       install: install,
       installAddons: installAddons,
       showAdmiralEnvModal: showAdmiralEnvModal,
@@ -955,6 +957,172 @@
           }
         );
       }, 3000);
+    }
+
+    function upgrade() {
+      $scope.vm.upgrading = true;
+      var bag = {};
+      async.series([
+          getEnabledServices.bind(null, bag),
+          deleteAddonServices.bind(null, bag),
+          postDB.bind(null, bag),
+          deleteCoreServices.bind(null, bag),
+          startAPIService.bind(null, bag),
+          startCoreServices.bind(null, bag),
+          startAddonServices.bind(null, bag),
+          runPostMigrationScripts.bind(null, bag),
+          getSystemSettings.bind(null, bag),
+          getServices.bind(null, bag)
+        ],
+        function (err) {
+          $scope.vm.upgrading = false;
+          if (err)
+            return horn.error(err);
+        }
+      );
+    }
+
+    function getEnabledServices(bag, next) {
+      admiralApiAdapter.getServices('',
+        function (err, services) {
+          if (err)
+            return next(err);
+
+          bag.enabledCoreServices = _.filter(services,
+            function (service) {
+              return service.isEnabled && service.isCore;
+            }
+          );
+
+          bag.enabledAddonServices = _.filter(services,
+            function (service) {
+              return service.isEnabled && !service.isCore;
+            }
+          );
+
+          return next();
+        }
+      );
+    }
+
+    function deleteAddonServices(bag, next) {
+      async.eachSeries(bag.enabledAddonServices,
+        function (addonService, done) {
+          admiralApiAdapter.deleteService(addonService.serviceName,
+            {isEnabled: true},
+            function (err) {
+              if (err)
+                return done(err);
+
+              return done();
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function postDB(bag, next) {
+      admiralApiAdapter.postDB({},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function deleteCoreServices(bag, next) {
+      async.eachSeries(bag.enabledCoreServices,
+        function (coreService, done) {
+          admiralApiAdapter.deleteService(coreService.serviceName,
+            {isEnabled: true},
+            function (err) {
+              if (err)
+                return done(err);
+
+              return done();
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function startAPIService(bag, next) {
+      // Start API first because the other services need it
+      var apiService = _.findWhere(bag.enabledCoreServices,
+        {serviceName: 'api'});
+
+      if (!apiService) return next();
+
+      var body = {
+        name: apiService.serviceName,
+        replicas: apiService.replicas
+      };
+
+      admiralApiAdapter.postService(body,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function startCoreServices(bag, next) {
+      async.eachSeries(bag.enabledCoreServices,
+        function (coreService, done) {
+          if (coreService.serviceName === 'api') // Started in previous function
+            return done();
+
+          var body = {
+            name: coreService.serviceName,
+            replicas: coreService.replicas
+          };
+
+          admiralApiAdapter.postService(body,
+            function (err) {
+              return done(err);
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function startAddonServices(bag, next) {
+      async.eachSeries(bag.enabledAddonServices,
+        function (addonService, done) {
+          var body = {
+            name: addonService.serviceName,
+            replicas: addonService.replicas
+          };
+
+          admiralApiAdapter.postService(body,
+            function (err) {
+              return done(err);
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function runPostMigrationScripts(bag, next) {
+      admiralApiAdapter.postDBCleanup({},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
     }
 
     function install() {

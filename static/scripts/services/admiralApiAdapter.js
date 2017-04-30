@@ -23,6 +23,13 @@
       postLogout: function (body, callback) {
         return API.post('/api/logout', body, callback);
       },
+      // DB Routes
+      postDB: function (body, callback) {
+        return API.post('/api/db', body, callback);
+      },
+      postDBCleanup: function (body, callback) {
+        return API.post('/api/db/cleanup', body, callback);
+      },
       // Master Integrations Routes
       getMasterIntegrations: function (callback) {
         return API.get('/api/masterIntegrations', callback);
@@ -60,7 +67,7 @@
       },
       deleteSystemIntegration: function (systemIntegrationId, callback) {
         return API.delete('/api/systemIntegrations/' +
-          systemIntegrationId, callback);
+          systemIntegrationId, {}, callback);
       },
       // Service Routes
       postInitialize: function (body, callback) {
@@ -74,6 +81,9 @@
       },
       postService: function (body, callback) {
         return API.post('/api/services', body, callback);
+      },
+      deleteService: function (serviceName, body, callback) {
+        return API.delete('/api/services/' + serviceName, body, callback);
       },
       // Services Routes
       getServices: function (query, callback) {

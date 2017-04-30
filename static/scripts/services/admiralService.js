@@ -69,15 +69,18 @@
         });
         return handler(promise, callback);
       },
-      delete: function (path, callback) {
+      delete: function (path, body, callback) {
         var promise = $http.delete(ADMIRAL_URL + path, {
           headers: {
-            Authorization: 'apiToken ' + $rootScope._r.loginToken
+            Authorization: 'apiToken ' + $rootScope._r.loginToken,
+            'Content-Type': 'application/json;charset=utf-8'
           },
+          data: body,
           timeout: timeout
         });
         return handler(promise, callback);
       }
+
     };
   }
 }());
