@@ -21,11 +21,11 @@ __copy_migrations() {
   local migrations_container_location="$CONFIG_DIR/db/post_install.sql"
   sudo cp -vr $migrations_host_location $migrations_container_location
 
-  __process_msg "Successfully copied migrations.sql to db container"
+  __process_msg "Successfully copied post_install.sql to db container"
 }
 
 __migrate() {
-  __process_msg "Running migrations"
+  __process_msg "Running post installation migrations"
 
   local migrations_location="/etc/postgresql/config/post_install.sql"
   local upsert_cmd="sudo docker exec db \
