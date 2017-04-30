@@ -49,8 +49,8 @@ source "$LIB_DIR/_parseArgs.sh"
 main() {
   __check_logsdir
   __parse_args "$@"
-  __check_dependencies
   __validate_runtime
+  __check_dependencies
   {
     __print_runtime
     source "$SCRIPTS_DIR/$OS_TYPE/installDb.sh"

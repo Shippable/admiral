@@ -32,9 +32,7 @@
       installing: false,
       initializeForm: {
         msgPassword: '',
-        statePassword: '',
-        accessKey: '',
-        secretKey: ''
+        statePassword: ''
       },
       // map by systemInt name, then masterName
       installForm: {
@@ -437,13 +435,6 @@
           }
 
           $scope.vm.admiralEnv = admiralEnv;
-
-          if (admiralEnv.ACCESS_KEY)
-            $scope.vm.initializeForm.accessKey = admiralEnv.ACCESS_KEY;
-
-          if (admiralEnv.SECRET_KEY)
-            $scope.vm.initializeForm.secretKey = admiralEnv.SECRET_KEY;
-
           return next();
         }
       );
