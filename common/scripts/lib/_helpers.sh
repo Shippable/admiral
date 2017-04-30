@@ -97,6 +97,35 @@ __check_dependencies() {
 
 }
 
+__registry_login() {
+  __process_msg "Updating docker credentials to pull Shippable images"
+
+  local credentials_template="$SCRIPTS_DIR/configs/credentials.template"
+  local credentials_file="/tmp/credentials"
+
+  sed "s#{{ACCESS_KEY}}#$ACCESS_KEY#g" $credentials_template > $credentials_file
+  sed -i "s#{{SECRET_KEY}}#$SECRET_KEY#g" $credentials_file
+
+  mkdir -p ~/.aws
+  mv -v $credentials_file ~/.aws
+  local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
+  __process_msg "Docker login generated, logging into ecr"
+  eval "$docker_login_cmd"
+}
+
+__pull_images() {
+  __process_marker "Pulling latest service images"
+  __process_msg "Registry: $PRIVATE_IMAGE_REGISTRY"
+
+  __registry_login
+
+  for image in "${SERVICE_IMAGES[@]}"; do
+    image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
+    __process_msg "Pulling $image"
+    sudo docker pull $image
+  done
+}
+
 __print_runtime() {
   __process_marker "Installer runtime variables"
   __process_msg "RELEASE: $RELEASE"
