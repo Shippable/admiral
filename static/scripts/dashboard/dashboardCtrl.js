@@ -27,6 +27,7 @@
 
     $scope.vm = {
       isLoaded: false,
+      installerVersion: null,
       initializing: false,
       initialized: false,
       installing: false,
@@ -351,6 +352,7 @@
           setBreadcrumb.bind(null, bag),
           getSystemSettings.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
+          getInstallerVersion.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
           getMasterIntegrations.bind(null, bag),
@@ -406,6 +408,8 @@
           $scope.vm.systemSettings.redis =
             _.extend($scope.vm.systemSettings.redis,
               (systemSettings.redis && JSON.parse(systemSettings.redis)));
+          $scope.vm.systemSettings.releaseVersion =
+            systemSettings.releaseVersion;
 
           if ($scope.vm.systemSettings.msg.password)
             $scope.vm.initializeForm.msgPassword =
@@ -435,6 +439,20 @@
           }
 
           $scope.vm.admiralEnv = admiralEnv;
+          return next();
+        }
+      );
+    }
+
+    function getInstallerVersion(bag, next) {
+      admiralApiAdapter.getVersion(
+        function (err, response) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          $scope.vm.installerVersion = response.version;
           return next();
         }
       );
