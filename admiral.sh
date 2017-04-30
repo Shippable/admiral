@@ -31,7 +31,7 @@ readonly SSH_USER="root"
 readonly DOCKER_VERSION=1.13
 readonly AWSCLI_VERSION=1.10.63
 readonly API_TIMEOUT=600
-declare -a SERVICE_IMAGES=("api" "www" "micro")
+declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
 export LC_ALL=C
 
 # Installation default values #############################
