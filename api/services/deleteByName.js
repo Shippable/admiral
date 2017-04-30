@@ -15,6 +15,7 @@ var configHandler = require('../../common/configHandler.js');
 function deleteByName(req, res) {
   var bag = {
     inputParams: req.params,
+    reqBody: req.body,
     resBody: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     params: {},
@@ -53,6 +54,18 @@ function _checkInputParams(bag, next) {
         'Data not found :serviceName')
     );
   bag.name = bag.inputParams.serviceName;
+
+  if (!bag.reqBody)
+    return next(
+      new ActErr(who, ActErr.BodyNotFound, 'Missing body')
+    );
+
+  if (_.has(bag.reqBody, 'isEnabled') &&
+    !_.isBoolean(bag.reqBody.isEnabled))
+    return next(
+      new ActErr(who, ActErr.ParamNotFound,
+        'isEnabled must be a Boolean')
+    );
 
   return next();
 }
@@ -175,7 +188,7 @@ function _delete(bag, next) {
   var who = bag.who + '|' + _delete.name;
   logger.verbose(who, 'Inside');
 
-  bag.serviceConfig.isEnabled = false;
+  bag.serviceConfig.isEnabled = bag.reqBody.isEnabled || false;
   bag.services[bag.name] = bag.serviceConfig;
 
   configHandler.put('services', bag.services,
