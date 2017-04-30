@@ -57,13 +57,20 @@ __validate_runtime() {
     __process_msg "LOGIN_TOKEN available, skipping"
   fi
 
-  ################## check keys  ##################################
-
-  if [ -f "$SSH_PRIVATE_KEY" ] && [ -f $SSH_PUBLIC_KEY ]; then
-    __process_msg "SSH keys already present, skipping"
+  ################## check access key ###############################
+  if [ "$ACCESS_KEY" == "" ]; then
+    __process_msg "ACCESS_KEY is not set"
+    __set_access_key
   else
-    __process_msg "SSH keys not available, generating"
-    __generate_ssh_keys
+    __process_msg "ACCESS_KEY already set, skipping"
+  fi
+
+  ################## check secret key ###############################
+  if [ "$SECRET_KEY" == "" ]; then
+    __process_msg "SECRET_KEY is not set"
+    __set_secret_key
+  else
+    __process_msg "SECRET_KEY already set, skipping"
   fi
 
   ################## check host ip #################################

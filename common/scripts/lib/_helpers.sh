@@ -23,6 +23,7 @@ __cleanup() {
 __check_dependencies() {
   __process_marker "Checking dependencies"
 
+  ################## Install rsync  ######################################
   if type rsync &> /dev/null && true; then
     __process_msg "'rsync' already installed"
   else
@@ -30,6 +31,7 @@ __check_dependencies() {
     apt-get install -y rsync
   fi
 
+  ################## Install SSH  ########################################
   if type ssh &> /dev/null && true; then
     __process_msg "'ssh' already installed"
   else
@@ -37,6 +39,15 @@ __check_dependencies() {
     apt-get install -y ssh-client
   fi
 
+  ################## Generate SSH keys  ##################################
+  if [ -f "$SSH_PRIVATE_KEY" ] && [ -f $SSH_PUBLIC_KEY ]; then
+    __process_msg "SSH keys already present, skipping"
+  else
+    __process_msg "SSH keys not available, generating"
+    __generate_ssh_keys
+  fi
+
+  ################## Install jq  #########################################
   if type jq &> /dev/null && true; then
     __process_msg "'jq' already installed"
   else
@@ -44,6 +55,7 @@ __check_dependencies() {
     apt-get install -y jq
   fi
 
+  ################## Install Docker  #####################################
   if type docker &> /dev/null && true; then
     __process_msg "'docker' already installed, checking version"
     local docker_version=$(docker --version)
@@ -74,6 +86,7 @@ __check_dependencies() {
     rm installDockerScript.sh
   fi
 
+  ################## Install awscli  #####################################
   if type aws &> /dev/null && true; then
     __process_msg "'awscli' already installed"
   else
@@ -117,15 +130,56 @@ __generate_login_token() {
   __process_msg "Successfully generated login token"
 }
 
+__set_access_key() {
+  __process_msg "Setting installer access key"
+
+  __process_success "Please enter the provided installer access key."
+  read response
+
+  __process_success "Setting the installer access key to: $response, enter Y to confirm"
+  read confirmation
+  if [[ "$confirmation" =~ "Y" ]]; then
+    access_key=$response
+  else
+    __process_error "Invalid response, please enter your installer access key and confirm"
+    __set_access_key
+  fi
+
+  sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$access_key'"/g' $ADMIRAL_ENV
+  export ACCESS_KEY=$access_key
+  __process_msg "Successfully set installer access key to $access_key"
+}
+
+__set_secret_key() {
+  __process_msg "Setting installer secret key"
+
+  __process_success "Please enter the provided installer secret key."
+  read response
+
+  __process_success "Setting the installer secret key to: $response, enter Y to confirm"
+  read confirmation
+  if [[ "$confirmation" =~ "Y" ]]; then
+    secret_key=$response
+  else
+    __process_error "Invalid response, please enter your installer secret key and confirm"
+    __set_secret_key
+  fi
+
+  escaped_secret_key=$(echo $secret_key | sed -e 's/[\/&]/\\&/g')
+  sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$escaped_secret_key'"/g' $ADMIRAL_ENV
+  export SECRET_KEY="$secret_key"
+  __process_msg "Successfully set installer secret key to $secret_key"
+}
+
 __set_admiral_ip() {
   __process_msg "Setting value of admiral IP address"
   local admiral_ip='127.0.0.1'
 
-  __process_msg "Please enter your current IP address. This will be the address at which you access the installer webpage. Type D to set default (127.0.0.1) value."
+  __process_success "Please enter your current IP address. This will be the address at which you access the installer webpage. Type D to set default (127.0.0.1) value."
   read response
 
   if [ "$response" != "D" ]; then
-    __process_msg "Setting the admiral IP address to: $response, enter Y to confirm"
+    __process_success "Setting the admiral IP address to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       admiral_ip=$response
@@ -143,11 +197,11 @@ __set_db_ip() {
   __process_msg "Setting value of database IP address"
   local db_ip=$ADMIRAL_IP
   if [ "INSTALL_MODE" == "cluster" ]; then
-    __process_msg "Please enter the IP address where you would like the database installed."
+    __process_success "Please enter the IP address where you would like the database installed."
     read response
 
     if [ "$response" != "" ]; then
-      __process_msg "Setting the database IP address to: $response, enter Y to confirm"
+      __process_success "Setting the database IP address to: $response, enter Y to confirm"
       read confirmation
       if [[ "$confirmation" =~ "Y" ]]; then
         db_ip=$response
@@ -167,11 +221,11 @@ __set_db_password() {
   __process_msg "Setting database password"
   local db_password=""
 
-  __process_msg "Please enter a password for your database."
+  __process_success "Please enter a password for your database."
   read response
 
   if [ "$response" != "" ]; then
-    __process_msg "Setting the database password to: $response, enter Y to confirm"
+    __process_success "Setting the database password to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       db_password=$response
@@ -189,11 +243,11 @@ __set_public_image_registry() {
   __process_msg "Setting public image registry"
   local public_image_registry=""
 
-  __process_msg "Please enter the value of the Shippable public image registry."
+  __process_success "Please enter the value of the Shippable public image registry."
   read response
 
   if [ "$response" != "" ]; then
-    __process_msg "Setting the public image registry to: $response, enter Y to confirm"
+    __process_success "Setting the public image registry to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       public_image_registry=$response
