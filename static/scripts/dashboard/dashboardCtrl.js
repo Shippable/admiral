@@ -32,6 +32,7 @@
       initialized: false,
       upgrading: false,
       installing: false,
+      saving: false,
       requireRestart: false,
       initializeForm: {
         msgPassword: '',
@@ -335,11 +336,13 @@
       initialize: initialize,
       upgrade: upgrade,
       install: install,
+      save: save,
       installAddons: installAddons,
       showAdmiralEnvModal: showAdmiralEnvModal,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
       showDynamicNodeSettings: showDynamicNodeSettings,
+      showSaveModal: showSaveModal,
       refreshLogs: refreshLogs,
       logOutOfAdmiral: logOutOfAdmiral
     };
@@ -845,7 +848,8 @@
             }
           );
 
-          if (!$scope.vm.installing) // Don't change this while installing
+          if (!$scope.vm.installing && !$scope.vm.saving)
+            // Don't change this while installing
             $scope.vm.requireRestart = _.some($scope.vm.coreServices,
               function (service) {
                 return service.isEnabled;
@@ -1172,6 +1176,44 @@
         ],
         function (err) {
           $scope.vm.installing = false;
+          if (err)
+            horn.error(err);
+
+          // Check if we should show "Install" or "Save" and "Restart Services"
+          getServices({},
+            function (err) {
+              if (err)
+                return horn.error(err);
+            }
+          );
+        }
+      );
+    }
+
+    function save() {
+      $scope.vm.saving = true;
+      hideSaveModal();
+
+      async.series([
+          updateAPISystemIntegration,
+          updateWWWSystemIntegration,
+          updateAuthSystemIntegrations,
+          updateMktgSystemIntegration,
+          updateMsgSystemIntegration,
+          updateRedisSystemIntegration,
+          updateStateSystemIntegration,
+          updateGmailSystemIntegration,
+          updateMailgunSystemIntegration,
+          updateSMTPSystemIntegration,
+          enableEmailMasterIntegration,
+          updateSystemSettings,
+          getMasterIntegrations.bind(null, {}),
+          updateDefaultSystemMachineImage,
+          updateFilestoreSystemIntegration,
+          updateProvisionSystemIntegration
+        ],
+        function (err) {
+          $scope.vm.saving = false;
           if (err)
             horn.error(err);
 
@@ -1816,6 +1858,14 @@
           $('#logsModal').modal('show');
         }
       );
+    }
+
+    function showSaveModal() {
+      $('#saveModal').modal('show');
+    }
+
+    function hideSaveModal() {
+      $('#saveModal').modal('hide');
     }
 
     function refreshLogs() {

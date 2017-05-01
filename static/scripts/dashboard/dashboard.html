@@ -162,7 +162,7 @@
               <a data-toggle="collapse" href="#upgradepanel">2. Upgrade</a>
             </h3>
           </div>
-          <div id="upgradepanel" class="panel-collapse collapse in">
+          <div id="upgradepanel" class="panel-collapse collapse">
             <div class="panel-body">
               <div ng-if="!vm.isLoaded">
                 Loading...
@@ -229,7 +229,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="bitbucketClientId"
-                            ng-model="vm.installForm.auth.bitbucketKeys.data.clientId" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.bitbucketKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -238,7 +238,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="bitbucketClientSecret"
-                            ng-model="vm.installForm.auth.bitbucketKeys.data.clientSecret" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.bitbucketKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -280,7 +280,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="bitbucketServerClientId"
-                            ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientId" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -288,7 +288,7 @@
                           Client Secret
                         </div>
                         <div class="col-md-9">
-                          <textarea class="form-control" rows="3" name="bitbucketServerClientSecret" ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientSecret" ng-disabled="vm.installing" placeholder="-----BEGIN ENCRYPTED PRIVATE KEY----- MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIS2qgprFqPxECAggA MBQGCCqGSIb3DQMHBAgD1kGN4ZslJgSCBMi1xk9jhlPxP3FyaMIUq8QmckXCs3Sa 9g73NQbtqZwI+9X5OhpSg/2ALxlCCjbqvzgSu8gfFZ4yo+Xd8VucZDmDSpzZGDod A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  X0R+meOaudPTBxoSgCCM51poFgaqt4l6VlTN4FRpj+c/WZeoMM/BVXO+nayuIMyH blK948UAda/bWVmZjXfY4Tztah0CuqlAldOQBzu8TwE7WDwo5S7lo5u0EXEoqCCq H0ga/iLNvWYexG7FHLRiq5hTj0g9mUPEbeTXuPtOkTEb/0ckVE2iZH9l7g5edmUZ GEs= -----END ENCRYPTED PRIVATE KEY----- -----BEGIN CERTIFICATE----- MIIDXTCCAkWgAwIBAgIJAJC1HiIAZAiIMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTExMjMxMDg1OTQ0WhcNMTIxMjMwMDg1OTQ0WjBF A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  JjyzfN746vaInA1KxYEeI1Rx5KXY8zIdj6a7hhphpj2E04LDdw7r495dv3UgEgpR C3Fayua4DRHyZOLmlvQ6tIChY0ClXXuefbmVSDeUHwc8YufRAERp2GfQnL2JlPUL B7xxt8BVc69rLeHV15A0qyx77CLSj3tCx2IUXVqRs5mlSbq094NBxsauYcm0A6Jq vA== -----END CERTIFICATE-----" required/>
+                          <textarea class="form-control" rows="3" name="bitbucketServerClientSecret" ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving" placeholder="-----BEGIN ENCRYPTED PRIVATE KEY----- MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIS2qgprFqPxECAggA MBQGCCqGSIb3DQMHBAgD1kGN4ZslJgSCBMi1xk9jhlPxP3FyaMIUq8QmckXCs3Sa 9g73NQbtqZwI+9X5OhpSg/2ALxlCCjbqvzgSu8gfFZ4yo+Xd8VucZDmDSpzZGDod A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  X0R+meOaudPTBxoSgCCM51poFgaqt4l6VlTN4FRpj+c/WZeoMM/BVXO+nayuIMyH blK948UAda/bWVmZjXfY4Tztah0CuqlAldOQBzu8TwE7WDwo5S7lo5u0EXEoqCCq H0ga/iLNvWYexG7FHLRiq5hTj0g9mUPEbeTXuPtOkTEb/0ckVE2iZH9l7g5edmUZ GEs= -----END ENCRYPTED PRIVATE KEY----- -----BEGIN CERTIFICATE----- MIIDXTCCAkWgAwIBAgIJAJC1HiIAZAiIMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTExMjMxMDg1OTQ0WhcNMTIxMjMwMDg1OTQ0WjBF A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  JjyzfN746vaInA1KxYEeI1Rx5KXY8zIdj6a7hhphpj2E04LDdw7r495dv3UgEgpR C3Fayua4DRHyZOLmlvQ6tIChY0ClXXuefbmVSDeUHwc8YufRAERp2GfQnL2JlPUL B7xxt8BVc69rLeHV15A0qyx77CLSj3tCx2IUXVqRs5mlSbq094NBxsauYcm0A6Jq vA== -----END CERTIFICATE-----" required/>
                           </textarea>
                         </div>
                       </div>
@@ -298,7 +298,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="bitbucketServerUrl"
-                            ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -331,7 +331,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="githubClientId"
-                            ng-model="vm.installForm.auth.githubKeys.data.clientId" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.githubKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -340,7 +340,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="githubClientSecret"
-                            ng-model="vm.installForm.auth.githubKeys.data.clientSecret" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.githubKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -382,7 +382,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="githubEnterpriseClientId"
-                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientId" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -391,7 +391,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="githubEnterpriseClientSecret"
-                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientSecret" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -400,7 +400,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="githubEnterpriseUrl"
-                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -433,7 +433,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="gitlabClientId"
-                            ng-model="vm.installForm.auth.gitlabKeys.data.clientId" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.gitlabKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -442,7 +442,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="gitlabClientSecret"
-                            ng-model="vm.installForm.auth.gitlabKeys.data.clientSecret" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.auth.gitlabKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -477,7 +477,7 @@
                     <div class="col-md-2">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" ng-model="vm.installForm.filestore.amazonKeys.isEnabled" ng-disabled="vm.installing">
+                          <input type="checkbox" ng-model="vm.installForm.filestore.amazonKeys.isEnabled" ng-disabled="vm.installing || vm.saving">
                           AWS credentials for artifact upload
                         </label>
                       </div>
@@ -490,14 +490,14 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="filestoreAccessKey"
-                            ng-model="vm.installForm.filestore.amazonKeys.data.accessKey" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.filestore.amazonKeys.data.accessKey" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                         <div class="col-md-3">
                           Secret Key
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="filestoreSecretKey"
-                            ng-model="vm.installForm.filestore.amazonKeys.data.secretKey" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.filestore.amazonKeys.data.secretKey" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -519,7 +519,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="apiUrl"
-                            ng-model="vm.installForm.api.url.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.api.url.data.url" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -559,7 +559,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="stateURL"
-                            ng-model="vm.installForm.state.gitlabCreds.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.state.gitlabCreds.data.url" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -581,7 +581,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="mktgUrl"
-                            ng-model="vm.installForm.mktg.url.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.mktg.url.data.url" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -639,7 +639,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="msgRootQueueList"
-                            ng-model="vm.installForm.msg.rabbitmqCreds.data.rootQueueList" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.msg.rabbitmqCreds.data.rootQueueList" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -661,7 +661,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="redisUrl"
-                            ng-model="vm.installForm.redis.url.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.redis.url.data.url" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -683,7 +683,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="wwwUrl"
-                            ng-model="vm.installForm.www.url.data.url" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.www.url.data.url" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -701,7 +701,7 @@
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.notification.gmailCreds.isEnabled"
-                            ng-disabled="vm.installing || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.smtpCreds.isEnabled">
+                            ng-disabled="vm.installing || vm.saving || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.smtpCreds.isEnabled">
                           Gmail
                         </label>
                       </div>
@@ -714,7 +714,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="gmailUsername"
-                            ng-model="vm.installForm.notification.gmailCreds.data.username" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.gmailCreds.data.username" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -723,7 +723,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="gmailPassword"
-                            ng-model="vm.installForm.notification.gmailCreds.data.password" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.gmailCreds.data.password" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -732,7 +732,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="gmailProxy"
-                            ng-model="vm.installForm.notification.gmailCreds.data.proxy" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.gmailCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -741,7 +741,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="gmailEmailSender"
-                            ng-model="vm.installForm.notification.gmailCreds.data.emailSender" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.gmailCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -749,7 +749,7 @@
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.notification.mailgunCreds.isEnabled"
-                            ng-disabled="vm.installing || vm.installForm.notification.smtpCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
+                            ng-disabled="vm.installing || vm.saving || vm.installForm.notification.smtpCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
                           Mailgun
                         </label>
                       </div>
@@ -762,7 +762,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="mailgunApiKey"
-                            ng-model="vm.installForm.notification.mailgunCreds.data.apiKey" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.mailgunCreds.data.apiKey" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -771,7 +771,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="mailgunDomain"
-                            ng-model="vm.installForm.notification.mailgunCreds.data.domain" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.mailgunCreds.data.domain" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -780,7 +780,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="mailgunProxy"
-                            ng-model="vm.installForm.notification.mailgunCreds.data.proxy" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.mailgunCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -789,7 +789,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="mailgunEmailSender"
-                            ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -799,7 +799,7 @@
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.notification.smtpCreds.isEnabled"
-                            ng-disabled="vm.installing || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
+                            ng-disabled="vm.installing || vm.saving || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
                           SMTP
                         </label>
                       </div>
@@ -812,7 +812,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="smtpEmailAuthUser"
-                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthUser" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthUser" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -821,7 +821,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="smtpEmailAuthPassword"
-                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthPassword" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthPassword" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -830,7 +830,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="smtpEmailSender"
-                            ng-model="vm.installForm.notification.smtpCreds.data.emailSender" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -839,7 +839,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="smtpHost"
-                            ng-model="vm.installForm.notification.smtpCreds.data.host" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.smtpCreds.data.host" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -848,7 +848,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="smtpPort"
-                            ng-model="vm.installForm.notification.smtpCreds.data.port" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.smtpCreds.data.port" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -857,7 +857,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="smtpSecure"
-                            ng-model="vm.installForm.notification.smtpCreds.data.secure" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.smtpCreds.data.secure" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -866,7 +866,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="smtpHostname"
-                            ng-model="vm.installForm.notification.smtpCreds.data.hostname" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.smtpCreds.data.hostname" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -875,7 +875,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="smtpProxy"
-                            ng-model="vm.installForm.notification.smtpCreds.data.proxy" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.notification.smtpCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -897,7 +897,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="{{setting.type}}" ng-class="{'form-control': setting.type !== 'checkbox'}"  name="settings{{key}}"
-                            ng-model="setting.value" ng-disabled="vm.installing"/>
+                            ng-model="setting.value" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -915,7 +915,7 @@
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.provision.amazonKeys.isEnabled"
-                            ng-disabled="vm.installing">
+                            ng-disabled="vm.installing || vm.saving">
                           AWS credentials for provisioning dynamic nodes
                         </label>
                       </div>
@@ -928,7 +928,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="provisionAccessKey"
-                            ng-model="vm.installForm.provision.amazonKeys.data.accessKey" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.provision.amazonKeys.data.accessKey" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                       <div class="row">
@@ -937,7 +937,7 @@
                         </div>
                         <div class="col-md-9">
                           <input type="text" class="form-control" name="provisionSecretKey"
-                            ng-model="vm.installForm.provision.amazonKeys.data.secretKey" ng-disabled="vm.installing"/>
+                            ng-model="vm.installForm.provision.amazonKeys.data.secretKey" ng-disabled="vm.installing || vm.saving"/>
                         </div>
                       </div>
                     </div>
@@ -954,7 +954,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageExternalId"
-                              ng-model="vm.installForm.defaultSystemMachineImage.externalId" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.externalId" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -963,7 +963,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageProvider"
-                              ng-model="vm.installForm.defaultSystemMachineImage.provider" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.provider" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -972,7 +972,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageName"
-                              ng-model="vm.installForm.defaultSystemMachineImage.name" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.name" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -981,7 +981,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageDescription"
-                              ng-model="vm.installForm.defaultSystemMachineImage.description" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.description" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -1008,7 +1008,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageRegion"
-                              ng-model="vm.installForm.defaultSystemMachineImage.region" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.region" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -1017,7 +1017,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageKeyName"
-                              ng-model="vm.installForm.defaultSystemMachineImage.keyName" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.keyName" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -1026,7 +1026,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageRunShImage"
-                              ng-model="vm.installForm.defaultSystemMachineImage.runShImage" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.runShImage" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -1035,7 +1035,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageSecurityGroup"
-                              ng-model="vm.installForm.defaultSystemMachineImage.securityGroup" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.securityGroup" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -1044,7 +1044,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageSubnetId"
-                              ng-model="vm.installForm.defaultSystemMachineImage.subnetId" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.subnetId" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -1053,7 +1053,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageDrydockTag"
-                              ng-model="vm.installForm.defaultSystemMachineImage.drydockTag" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.drydockTag" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                         <div class="row">
@@ -1062,7 +1062,7 @@
                           </div>
                           <div class="col-md-9">
                             <input type="text" class="form-control" name="defaultMachineImageDrydockFamily"
-                              ng-model="vm.installForm.defaultSystemMachineImage.drydockFamily" ng-disabled="vm.installing"/>
+                              ng-model="vm.installForm.defaultSystemMachineImage.drydockFamily" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
                       </div>
@@ -1113,7 +1113,7 @@
                   <p>
                     &nbsp;
                   </p>
-                  <button ng-if="!vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing" ng-click="vm.install()">
+                  <button ng-if="!vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving" ng-click="vm.install()">
                     <div ng-if="vm.installing">
                       Installing...
                     </div>
@@ -1121,15 +1121,15 @@
                       Install
                     </div>
                   </button>
-                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing">
-                    <div ng-if="vm.installing">
+                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving" ng-click="vm.showSaveModal()">
+                    <div ng-if="vm.saving">
                       Saving...
                     </div>
-                    <div ng-if="!vm.installing">
+                    <div ng-if="!vm.saving">
                       Save
                     </div>
                   </button>
-                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing">
+                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving">
                     <div ng-if="vm.installing">
                       Restarting...
                     </div>
@@ -1408,6 +1408,36 @@
           </div>
         </div>
         <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Save Modal -->
+  <div class="modal fade" id="saveModal"
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            Restart Required
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            A restart is required for your changes to take effect.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-md btn-primary" type="submit" ng-click="vm.save()">
+            Save
+          </button>
+          <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
+            Cancel
+          </button>
         </div>
       </div>
     </div>
