@@ -92,11 +92,7 @@
       // logs
       getServiceLogs: function (component, callback) {
         return API.get('/api/' + component + '/logs', callback);
-      },
-      // Versions Routes
-      getVersion: function (callback) {
-        return API.get('/api/version', callback);
-      },
+      }
     };
   }
 }());

@@ -156,7 +156,7 @@
             </div>
           </div>
         </div>
-        <div class="panel panel-default" ng-if="vm.initialized && vm.systemSettings.releaseVersion !== vm.installerVersion">
+        <div class="panel panel-default" ng-if="vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE">
           <div class="panel-heading">
             <h3 class="panel-title">
               <a data-toggle="collapse" href="#upgradepanel">2. Upgrade</a>
@@ -172,7 +172,7 @@
                   Current version: {{vm.systemSettings.releaseVersion}}
                 </div>
                 <div>
-                  Available version: {{vm.installerVersion}}
+                  Available version: {{vm.admiralEnv.RELEASE}}
                 </div>
                 <div class="text-right">
                   <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.upgrading" ng-click="vm.upgrade()">
@@ -192,7 +192,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">
               <a data-toggle="collapse" href="#installpanel">
-                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.installerVersion) ? '3.' : '2.'}} Install
+                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '3.' : '2.'}} Install
               </a>
             </h3>
           </div>
@@ -1146,7 +1146,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">
               <a data-toggle="collapse" href="#addonpanel">
-                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.installerVersion) ? '4.' : '3.'}} Add-ons
+                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '4.' : '3.'}} Add-ons
               </a>
             </h3>
           </div>
