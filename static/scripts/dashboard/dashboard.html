@@ -1113,12 +1113,28 @@
                   <p>
                     &nbsp;
                   </p>
-                  <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing" ng-click="vm.install()">
+                  <button ng-if="!vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing" ng-click="vm.install()">
                     <div ng-if="vm.installing">
                       Installing...
                     </div>
                     <div ng-if="!vm.installing">
                       Install
+                    </div>
+                  </button>
+                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing">
+                    <div ng-if="vm.installing">
+                      Saving...
+                    </div>
+                    <div ng-if="!vm.installing">
+                      Save
+                    </div>
+                  </button>
+                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing">
+                    <div ng-if="vm.installing">
+                      Restarting...
+                    </div>
+                    <div ng-if="!vm.installing">
+                      Restart Services
                     </div>
                   </button>
                 </div>
