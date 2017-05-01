@@ -32,6 +32,7 @@
       initialized: false,
       upgrading: false,
       installing: false,
+      requireRestart: false,
       initializeForm: {
         msgPassword: '',
         statePassword: ''
@@ -844,6 +845,13 @@
             }
           );
 
+          if (!$scope.vm.installing) // Don't change this while installing
+            $scope.vm.requireRestart = _.some($scope.vm.coreServices,
+              function (service) {
+                return service.isEnabled;
+              }
+            );
+
           return next();
         }
       );
@@ -1164,10 +1172,16 @@
         ],
         function (err) {
           $scope.vm.installing = false;
-          if (err) {
+          if (err)
             horn.error(err);
-            return;
-          }
+
+          // Check if we should show "Install" or "Save" and "Restart Services"
+          getServices({},
+            function (err) {
+              if (err)
+                return horn.error(err);
+            }
+          );
         }
       );
     }
