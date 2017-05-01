@@ -9,10 +9,13 @@ var spawn = require('child_process').spawn;
 var path = require('path');
 var _ = require('underscore');
 
+var APIAdapter = require('../../common/APIAdapter.js');
+
 function cleanup(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: {},
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     tmpScript: '/tmp/cleanup.sh',
   };
 
@@ -21,6 +24,7 @@ function cleanup(req, res) {
 
   async.series([
     _checkInputParams.bind(null, bag),
+    _getReleaseVersion.bind(null, bag),
     _generateScriptEnvs.bind(null, bag),
     _generateScript.bind(null, bag),
     _writeScriptToFile.bind(null, bag),
@@ -43,6 +47,26 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
+function _getReleaseVersion(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersion.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system settings : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = systemSettings.releaseVersion;
+
+      return next();
+    }
+  );
+}
+
 function _generateScriptEnvs(bag, next) {
   var who = bag.who + '|' + _generateScriptEnvs.name;
   logger.verbose(who, 'Inside');
@@ -50,7 +74,7 @@ function _generateScriptEnvs(bag, next) {
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
-    'RELEASE': global.config.release,
+    'RELEASE': bag.releaseVersion,
     'MIGRATIONS_DIR': global.config.migrationsDir,
     'DBUSERNAME': global.config.dbUsername,
     'DBNAME': global.config.dbName,

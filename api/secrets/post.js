@@ -12,12 +12,14 @@ var spawn = require('child_process').spawn;
 
 var envHandler = require('../../common/envHandler.js');
 var configHandler = require('../../common/configHandler.js');
+var APIAdapter = require('../../common/APIAdapter.js');
 
 function post(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: [],
     params: {},
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     skipStatusChange: false,
     component: 'secrets',
     tmpScript: '/tmp/secrets.sh',
@@ -30,6 +32,7 @@ function post(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
+      _getReleaseVersion.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
@@ -89,6 +92,26 @@ function _get(bag, next) {
   );
 }
 
+function _getReleaseVersion(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersion.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system settings : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = systemSettings.releaseVersion;
+
+      return next();
+    }
+  );
+}
+
 function _setProcessingFlag(bag, next) {
   var who = bag.who + '|' + _setProcessingFlag.name;
   logger.verbose(who, 'Inside');
@@ -118,7 +141,7 @@ function _generateInitializeEnvs(bag, next) {
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
-    'RELEASE': global.config.release,
+    'RELEASE': bag.releaseVersion,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,

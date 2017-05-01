@@ -12,6 +12,7 @@ function nexecConfig(params, callback) {
   var bag = {
     apiAdapter: params.apiAdapter,
     config: params.config,
+    releaseVersion: params.releaseVersion,
     name: params.name,
     registry: params.registry,
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
@@ -132,7 +133,7 @@ function _generateImage(bag, next) {
   logger.verbose(who, 'Inside');
 
   bag.config.image = util.format('%s/%s:%s',
-    bag.registry, bag.config.serviceName, global.config.release);
+    bag.registry, bag.config.serviceName, bag.releaseVersion);
 
   return next();
 }

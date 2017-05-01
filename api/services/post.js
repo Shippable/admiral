@@ -36,6 +36,7 @@ function post(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
+      _getReleaseVersion.bind(null, bag),
       _getServiceConfig.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
@@ -82,6 +83,26 @@ function _checkInputParams(bag, next) {
   bag.replicas = bag.reqBody.replicas;
 
   return next();
+}
+
+function _getReleaseVersion(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersion.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system settings : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = systemSettings.releaseVersion;
+
+      return next();
+    }
+  );
 }
 
 function _getServiceConfig(bag, next) {
@@ -153,7 +174,8 @@ function _generateServiceConfig(bag, next) {
     apiAdapter: bag.apiAdapter,
     config: bag.serviceConfig,
     name: bag.name,
-    registry: bag.registry
+    registry: bag.registry,
+    releaseVersion: bag.releaseVersion
   };
 
   if (!configGenerator)

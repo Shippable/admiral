@@ -12,6 +12,7 @@ var spawn = require('child_process').spawn;
 
 var envHandler = require('../../common/envHandler.js');
 var configHandler = require('../../common/configHandler.js');
+var APIAdapter = require('../../common/APIAdapter.js');
 
 function post(req, res) {
   var bag = {
@@ -19,6 +20,7 @@ function post(req, res) {
     resBody: {},
     skipStatusChange: false,
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     serviceUserToken: '',
     setServiceUserToken: false,
     accessKeyEnv: 'ACCESS_KEY',
@@ -30,6 +32,7 @@ function post(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
+      _getReleaseVersion.bind(null, bag),
       _upsertSystemSettings.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _generateServiceUserToken.bind(null, bag),
@@ -75,6 +78,26 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
+function _getReleaseVersion(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersion.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system settings : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = systemSettings.releaseVersion;
+
+      return next();
+    }
+  );
+}
+
 function _upsertSystemSettings(bag, next) {
   var who = bag.who + '|' + _upsertSystemSettings.name;
   logger.verbose(who, 'Inside');
@@ -91,7 +114,7 @@ function _upsertSystemSettings(bag, next) {
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName,
-        'RELEASE': global.config.release
+        'RELEASE': bag.releaseVersion
       }
     },
     function (err) {
@@ -369,7 +392,7 @@ function _startFakeAPI(bag, next) {
         'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
-        'RELEASE': global.config.release,
+        'RELEASE': bag.releaseVersion,
         'DBNAME': global.config.dbName,
         'DBUSERNAME': global.config.dbUsername,
         'DBPASSWORD': global.config.dbPassword,
@@ -477,7 +500,7 @@ function _templateDefaultSystemMachineImageFile(bag, next) {
     util.format('%s/configs/default_system_machine_image.sql.template',
       global.config.scriptsDir);
   var dataObj = {
-    releaseVersion: global.config.release
+    releaseVersion: bag.releaseVersion
   };
 
   var script = {

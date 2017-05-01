@@ -13,6 +13,7 @@ function apiConfig(params, callback) {
     config: params.config,
     name: params.name,
     registry: params.registry,
+    releaseVersion: params.releaseVersion,
     vaultUrlEnv: 'VAULT_URL',
     vaultUrl: '',
     vaultTokenEnv: 'VAULT_TOKEN',
@@ -105,7 +106,7 @@ function _generateImage(bag, next) {
   logger.verbose(who, 'Inside');
 
   bag.config.image = util.format('%s/%s:%s',
-    bag.registry, bag.config.serviceName, global.config.release);
+    bag.registry, bag.config.serviceName, bag.releaseVersion);
 
   return next();
 }
