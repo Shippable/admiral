@@ -962,6 +962,7 @@
       $scope.vm.upgrading = true;
       var bag = {};
       async.series([
+          updateReleaseVersion.bind(null, bag),
           getEnabledServices.bind(null, bag),
           deleteAddonServices.bind(null, bag),
           postDB.bind(null, bag),
@@ -977,6 +978,23 @@
           $scope.vm.upgrading = false;
           if (err)
             return horn.error(err);
+        }
+      );
+    }
+
+    function updateReleaseVersion(bag, next) {
+      if (!$scope.vm.systemSettingsId) return next();
+
+      var update = {
+        releaseVersion: $scope.vm.admiralEnv.RELEASE
+      };
+
+      admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
         }
       );
     }
