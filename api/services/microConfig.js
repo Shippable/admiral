@@ -11,6 +11,7 @@ var envHandler = require('../../common/envHandler.js');
 function microConfig(params, callback) {
   var bag = {
     apiAdapter: params.apiAdapter,
+    releaseVersion: params.releaseVersion,
     config: params.config,
     name: params.name,
     registry: params.registry,
@@ -132,7 +133,7 @@ function _generateImage(bag, next) {
   logger.verbose(who, 'Inside');
 
   bag.config.image = util.format('%s/micro:%s',
-    bag.registry, global.config.release);
+    bag.registry, bag.releaseVersion);
 
   return next();
 }

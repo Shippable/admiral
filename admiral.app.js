@@ -154,12 +154,6 @@ function _initializeConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'ADMIRAL_IP is not defined'));
 
-  if (bag.env.RELEASE)
-    bag.config.release = bag.env.RELEASE;
-  else
-    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
-      'RELEASE is not defined'));
-
   if (bag.env.PRIVATE_IMAGE_REGISTRY)
     bag.config.privateImageRegistry = bag.env.PRIVATE_IMAGE_REGISTRY;
   else

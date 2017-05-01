@@ -147,6 +147,13 @@ APIAdapter.prototype.deleteServices =
     this.delete(url, callback);
   };
 
+// systemSettings
+APIAdapter.prototype.getSystemSettings =
+  function (query, callback) {
+    var url = '/api/systemSettings?' + query;
+    this.get(url, callback);
+  };
+
 /*****************************************/
 /*              HTTP METHODS             */
 /*****************************************/
