@@ -32,11 +32,6 @@ __registry_login() {
   eval "$docker_login_cmd"
 }
 
-__pull_image() {
-  __process_msg "Pulling service image: $SERVICE_IMAGE"
-  sudo docker pull $SERVICE_IMAGE
-}
-
 __cleanup_containers() {
   __process_msg "Stopping stale container for the service"
   sudo docker rm -f $SERVICE_NAME || true
@@ -68,7 +63,6 @@ main() {
     __process_marker "Booting service: $SERVICE_NAME"
     __validate_service_configs
     __registry_login
-    __pull_image
     __cleanup_containers
     __cleanup_service
     __run_service
