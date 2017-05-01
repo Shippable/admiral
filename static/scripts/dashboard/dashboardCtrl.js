@@ -33,6 +33,7 @@
       upgrading: false,
       installing: false,
       saving: false,
+      restartingServices: false,
       requireRestart: false,
       initializeForm: {
         msgPassword: '',
@@ -337,12 +338,14 @@
       upgrade: upgrade,
       install: install,
       save: save,
+      restartServices: restartServices,
       installAddons: installAddons,
       showAdmiralEnvModal: showAdmiralEnvModal,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
       showDynamicNodeSettings: showDynamicNodeSettings,
       showSaveModal: showSaveModal,
+      showRestartServicesModal: showRestartServicesModal,
       refreshLogs: refreshLogs,
       logOutOfAdmiral: logOutOfAdmiral
     };
@@ -1228,6 +1231,36 @@
       );
     }
 
+    function restartServices() {
+      $scope.vm.restartingServices = true;
+      hideRestartServicesModal();
+
+      var bag = {};
+      async.series([
+          getEnabledServices.bind(null, bag),
+          deleteAddonServices.bind(null, bag),
+          deleteCoreServices.bind(null, bag),
+          startAPIService.bind(null, bag),
+          startCoreServices.bind(null, bag),
+          startAddonServices.bind(null, bag)
+        ],
+        function (err) {
+          $scope.vm.restartingServices = false;
+          if (err)
+            horn.error(err);
+
+          // Check if we should show "Install" or "Save" and "Restart Services"
+          getServices({},
+            function (err) {
+              if (err)
+                return horn.error(err);
+            }
+          );
+        }
+      );
+    }
+
+
     function updateFilestoreSystemIntegration(next) {
       var bag = {
         name: 'filestore',
@@ -1866,6 +1899,14 @@
 
     function hideSaveModal() {
       $('#saveModal').modal('hide');
+    }
+
+    function showRestartServicesModal() {
+      $('#restartServicesModal').modal('show');
+    }
+
+    function hideRestartServicesModal() {
+      $('#restartServicesModal').modal('hide');
     }
 
     function refreshLogs() {

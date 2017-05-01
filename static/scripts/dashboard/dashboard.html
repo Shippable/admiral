@@ -1113,7 +1113,7 @@
                   <p>
                     &nbsp;
                   </p>
-                  <button ng-if="!vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving" ng-click="vm.install()">
+                  <button ng-if="!vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.install()">
                     <div ng-if="vm.installing">
                       Installing...
                     </div>
@@ -1121,7 +1121,7 @@
                       Install
                     </div>
                   </button>
-                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving" ng-click="vm.showSaveModal()">
+                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showSaveModal()">
                     <div ng-if="vm.saving">
                       Saving...
                     </div>
@@ -1129,11 +1129,11 @@
                       Save
                     </div>
                   </button>
-                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving">
-                    <div ng-if="vm.installing">
+                  <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showRestartServicesModal()">
+                    <div ng-if="vm.restartingServices">
                       Restarting...
                     </div>
-                    <div ng-if="!vm.installing">
+                    <div ng-if="!vm.restartingServices">
                       Restart Services
                     </div>
                   </button>
@@ -1434,6 +1434,36 @@
         <div class="modal-footer">
           <button class="btn btn-md btn-primary" type="submit" ng-click="vm.save()">
             Save
+          </button>
+          <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Restart Services Modal -->
+  <div class="modal fade" id="restartServicesModal"
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            Restart Services
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            This will restart all your services. Are you sure?
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-md btn-primary" type="submit" ng-click="vm.restartServices()">
+            Yes
           </button>
           <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
             Cancel
