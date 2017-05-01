@@ -27,7 +27,6 @@
 
     $scope.vm = {
       isLoaded: false,
-      installerVersion: null,
       initializing: false,
       initialized: false,
       upgrading: false,
@@ -361,7 +360,6 @@
           setBreadcrumb.bind(null, bag),
           getSystemSettings.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
-          getInstallerVersion.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
           getMasterIntegrations.bind(null, bag),
@@ -448,20 +446,6 @@
           }
 
           $scope.vm.admiralEnv = admiralEnv;
-          return next();
-        }
-      );
-    }
-
-    function getInstallerVersion(bag, next) {
-      admiralApiAdapter.getVersion(
-        function (err, response) {
-          if (err) {
-            horn.error(err);
-            return next();
-          }
-
-          $scope.vm.installerVersion = response.version;
           return next();
         }
       );
