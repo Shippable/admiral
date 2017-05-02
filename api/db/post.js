@@ -32,8 +32,10 @@ function post(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
-      _getReleaseVersion.bind(null, bag),
+      _getReleaseVersionFromAdmiralEnv.bind(null, bag),
+      _templateSystemSettingsFile.bind(null, bag),
       _upsertSystemSettings.bind(null, bag),
+      _getReleaseVersionFromSystemSettings.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
@@ -78,20 +80,51 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-function _getReleaseVersion(bag, next) {
-  var who = bag.who + '|' + _getReleaseVersion.name;
+function _getReleaseVersionFromAdmiralEnv(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersionFromAdmiralEnv.name;
   logger.verbose(who, 'Inside');
 
-  var query = '';
-  bag.apiAdapter.getSystemSettings(query,
-    function (err, systemSettings) {
+  // This releaseVersion will be used if there aren't any systemSettings yet.
+
+  bag.apiAdapter.getAdmiralEnv(
+    function (err, admiralEnv) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get system settings : ' + util.inspect(err))
+            'Failed to get admiralEnv : ' + util.inspect(err))
         );
 
-      bag.releaseVersion = systemSettings.releaseVersion;
+      bag.admiralEnvReleaseVersion = admiralEnv.RELEASE;
+
+      return next();
+    }
+  );
+}
+
+function _templateSystemSettingsFile(bag, next) {
+  var who = bag.who + '|' + _templateServiceUserAccountFile.name;
+  logger.verbose(who, 'Inside');
+
+  var filePath = util.format('%s/db/system_settings.sql',
+    global.config.configDir);
+  var templatePath =
+    util.format('%s/configs/system_settings.sql.template',
+      global.config.scriptsDir);
+  var dataObj = {
+    defaultReleaseVersion: bag.admiralEnvReleaseVersion
+  };
+
+  var script = {
+    tmpScriptFilename: filePath,
+    script: __applyTemplate(templatePath, dataObj)
+  };
+
+  _writeScriptToFile(script,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, 'Failed to write script', err)
+        );
 
       return next();
     }
@@ -110,17 +143,34 @@ function _upsertSystemSettings(bag, next) {
       tmpScriptFilename: '/tmp/systemSettings.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
-        'CONFIG_DIR': global.config.configDir,
-        'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName,
-        'RELEASE': bag.releaseVersion
+        'DBNAME': global.config.dbName
       }
     },
     function (err) {
       if (err)
         bag.skipStatusChange = true;
       return next(err);
+    }
+  );
+}
+
+function _getReleaseVersionFromSystemSettings(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersionFromSystemSettings.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system settings : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = systemSettings.releaseVersion;
+
+      return next();
     }
   );
 }
