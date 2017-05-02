@@ -55,6 +55,7 @@ do $$
             "rootS3Bucket",
             "nodeScriptsLocation",
             "allowedSystemImageFamily",
+            "releaseVersion",
             "defaultMinionInstanceSize",
             "createdAt",
             "updatedAt"
@@ -66,6 +67,7 @@ do $$
             '',
             '/home/shippable/scripts/node',
             'shippable/minv2|drydock/',
+            '<%= obj.defaultReleaseVersion %>',
             'c4.large',
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP

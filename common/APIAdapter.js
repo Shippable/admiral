@@ -22,6 +22,12 @@ function APIAdapter(token) {
 /* Sorted alphabetically by folder name. */
 /*****************************************/
 
+// Admiral Env
+APIAdapter.prototype.getAdmiralEnv =
+  function (callback) {
+    var url = '/api/admiral';
+    this.get(url, callback);
+  };
 
 // db
 APIAdapter.prototype.postDB =
