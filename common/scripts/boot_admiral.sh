@@ -4,9 +4,9 @@ __stop_admiral() {
   __process_msg "Checking if admiral is running"
   local admiral_container=$(sudo docker ps | grep admiral | awk '{print $1}')
   if [ "$admiral_container" != "" ]; then
-    __process_msg "Stopping running admiral container"
-    sudo docker stop -t=0 admiral
-    sudo docker rm -v admiral
+    __process_msg "Stopping running admiral container: $admiral_container"
+    sudo docker stop -t=0 $admiral_container
+    sudo docker rm -v $admiral_container
   fi
 }
 
@@ -21,7 +21,6 @@ __boot_admiral() {
     -e RUN_MODE=$RUN_MODE \
     -e LOGIN_TOKEN=$LOGIN_TOKEN \
     -e ADMIRAL_IP=$ADMIRAL_IP \
-    -e RELEASE=$RELEASE \
     -e INSTALL_MODE=$INSTALL_MODE \
     -e PRIVATE_IMAGE_REGISTRY=$PRIVATE_IMAGE_REGISTRY \
     -e CONFIG_DIR=$CONFIG_DIR \
