@@ -37,13 +37,6 @@ __boot_admiral() {
 
   local admiral_image="$PUBLIC_IMAGE_REGISTRY/admiral:$RELEASE"
 
-  local pull_cmd="sudo docker pull $admiral_image"
-
-  __process_msg "Executing: $pull_cmd"
-
-  eval "$pull_cmd"
-  __process_msg "Admiral image successfully pulled"
-
   local boot_cmd="sudo docker run -d \
     $envs \
     $mounts \

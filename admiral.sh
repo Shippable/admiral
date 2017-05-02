@@ -32,6 +32,7 @@ readonly DOCKER_VERSION=1.13
 readonly AWSCLI_VERSION=1.10.63
 readonly API_TIMEOUT=600
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
+declare -a PUBLIC_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
 export LC_ALL=C
 
 # Installation default values #############################
