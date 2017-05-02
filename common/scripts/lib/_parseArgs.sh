@@ -19,13 +19,13 @@ __validate_runtime() {
   export OS_TYPE=docker
 
   ################## check release   #############################
-  #local git_ref=$(git symbolic-ref HEAD --short -q)
-  local latest_tag=$(git describe --tags --abbrev=0)
-
-  if [ "$latest_tag" == "" ]; then
-    export RELEASE=master
+  local head_sha=$(git symbolic-ref HEAD --short -q)
+  if [ "$head_sha" == "" ]; then
+    ## user has checked out a tag, find latest tag
+    export RELEASE=$(git describe --tags)
   else
-    export RELEASE=$latest_tag
+    ## no tag has been checked out, use master
+    export RELEASE=master
   fi
 
   __process_msg "Using release: $RELEASE"
