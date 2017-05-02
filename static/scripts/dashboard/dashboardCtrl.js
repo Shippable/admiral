@@ -789,12 +789,6 @@
           });
 
           settings.push({
-            name: 'releaseVersion',
-            value: systemSettings.releaseVersion,
-            type: 'text'
-          });
-
-          settings.push({
             name: 'defaultMinionInstanceSize',
             value: systemSettings.defaultMinionInstanceSize,
             type: 'text'
