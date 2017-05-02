@@ -153,3 +153,13 @@ $$;
 update builds set "endedAt" = "buildJobs"."endedAt" from "buildJobs" where builds.id = "buildJobs"."buildId" and builds."endedAt" is null;
 
 \echo "Sucessfully completed post_install migrations"
+
+-- Migrations to populate "isPaid" column in subscriptions table
+\echo 'Updating subscriptions.isPaid = true where subscriptions.braintreeSubscriptionId is not null'
+update subscriptions set "isPaid" = true where "braintreeSubscriptionId" is not null and "isPaid" is null;
+
+\echo 'Updating subscriptions.isPaid = false where subscriptions.braintreeSubscriptionId is null'
+update subscriptions set "isPaid" = false where "braintreeSubscriptionId" is null and "isPaid" is null;
+
+\echo 'Updating subscriptions.isPaid = true if payment systemIntegration doesnt exist(for server installation)'
+update subscriptions set "isPaid" = true where not exists (select 1 from "systemIntegrations" where name = 'payment' and "isEnabled" = true) and "isPaid" is not true;

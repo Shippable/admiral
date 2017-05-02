@@ -20,6 +20,8 @@ do $$
         "truck" BOOLEAN DEFAULT false NOT NULL,
         "hubspotListId" INTEGER,
         "hubspotShouldSimulate" BOOLEAN,
+        "hubspotProjectsLastSyncTime" timestamp with time zone,
+        "hubspotRSyncLastSyncTime" timestamp with time zone,
         "rootS3Bucket" VARCHAR(64) NOT NULL,
         "nodeScriptsLocation" VARCHAR(255) NOT NULL,
         "enforcePrivateJobQuota" BOOLEAN DEFAULT false NOT NULL,
