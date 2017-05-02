@@ -168,15 +168,13 @@ __set_access_key() {
   __process_success "Setting the installer access key to: $response, enter Y to confirm"
   read confirmation
   if [[ "$confirmation" =~ "Y" ]]; then
-    access_key=$response
+    sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$response'"/g' $ADMIRAL_ENV
+    export ACCESS_KEY=$response
+    __process_msg "Successfully set installer access key to $response"
   else
     __process_error "Invalid response, please enter your installer access key and confirm"
     __set_access_key
   fi
-
-  sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$access_key'"/g' $ADMIRAL_ENV
-  export ACCESS_KEY=$access_key
-  __process_msg "Successfully set installer access key to $access_key"
 }
 
 __set_secret_key() {
@@ -188,16 +186,16 @@ __set_secret_key() {
   __process_success "Setting the installer secret key to: $response, enter Y to confirm"
   read confirmation
   if [[ "$confirmation" =~ "Y" ]]; then
-    secret_key=$response
+    escaped_secret_key=$(echo $response | sed -e 's/[\/&]/\\&/g')
+    sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$escaped_secret_key'"/g' $ADMIRAL_ENV
+    export SECRET_KEY="$response"
+    __process_msg "Successfully set installer secret key to $response"
   else
     __process_error "Invalid response, please enter your installer secret key and confirm"
     __set_secret_key
   fi
 
-  escaped_secret_key=$(echo $secret_key | sed -e 's/[\/&]/\\&/g')
-  sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$escaped_secret_key'"/g' $ADMIRAL_ENV
-  export SECRET_KEY="$secret_key"
-  __process_msg "Successfully set installer secret key to $secret_key"
+
 }
 
 __set_admiral_ip() {
@@ -212,14 +210,18 @@ __set_admiral_ip() {
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
       admiral_ip=$response
+      sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$admiral_ip'"/g' $ADMIRAL_ENV
+      export ADMIRAL_IP=$admiral_ip
+      __process_msg "Successfully set admiral IP to $admiral_ip"
     else
       __process_error "Invalid response, please enter a valid IP and confirm"
       __set_admiral_ip
     fi
+  else
+    sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$admiral_ip'"/g' $ADMIRAL_ENV
+    export ADMIRAL_IP=$admiral_ip
+    __process_msg "Successfully set admiral IP to $admiral_ip"
   fi
-  sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$admiral_ip'"/g' $ADMIRAL_ENV
-  export ADMIRAL_IP=$admiral_ip
-  __process_msg "Successfully set admiral IP to $admiral_ip"
 }
 
 __set_db_ip() {
@@ -234,21 +236,23 @@ __set_db_ip() {
       read confirmation
       if [[ "$confirmation" =~ "Y" ]]; then
         db_ip=$response
+        sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
+        export DB_IP=$db_ip
+        __process_msg "Successfully set DB_IP to $db_ip"
       else
         __process_error "Invalid response, please enter a valid IP and continue"
         __set_db_ip
       fi
     fi
+  else
+    sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
+    export DB_IP=$db_ip
+    __process_msg "Successfully set DB_IP to $db_ip"
   fi
-
-  sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
-  export DB_IP=$db_ip
-  __process_msg "Successfully set DB_IP to $db_ip"
 }
 
 __set_db_password() {
   __process_msg "Setting database password"
-  local db_password=""
 
   __process_success "Please enter a password for your database."
   read response
@@ -257,20 +261,17 @@ __set_db_password() {
     __process_success "Setting the database password to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
-      db_password=$response
+      sed -i 's#.*DB_PASSWORD=.*#DB_PASSWORD="'$response'"#g' $ADMIRAL_ENV
+      __process_msg "Successfully set database password"
     else
       __process_error "Invalid response, please enter a valid database password and continue"
       __set_db_password
     fi
   fi
-
-  sed -i 's#.*DB_PASSWORD=.*#DB_PASSWORD="'$db_password'"#g' $ADMIRAL_ENV
-  __process_msg "Successfully set database password"
 }
 
 __set_public_image_registry() {
   __process_msg "Setting public image registry"
-  local public_image_registry=""
 
   __process_success "Please enter the value of the Shippable public image registry."
   read response
@@ -279,15 +280,13 @@ __set_public_image_registry() {
     __process_success "Setting the public image registry to: $response, enter Y to confirm"
     read confirmation
     if [[ "$confirmation" =~ "Y" ]]; then
-      public_image_registry=$response
+      sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$response'"#g' $ADMIRAL_ENV
+      __process_msg "Successfully set public image registry"
     else
       __process_error "Invalid response, please enter a valid public image registry and continue"
       __set_public_image_registry
     fi
   fi
-
-  sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$public_image_registry'"#g' $ADMIRAL_ENV
-  __process_msg "Successfully set public image registry"
 }
 
 __copy_script_remote() {
