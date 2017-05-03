@@ -53,6 +53,7 @@ $ sudo apt-get install git-core
 ```
 $ sudo apt-get update
 $ sudo apt-get install linux-generic-lts-vivid
+$ sudo reboot //restart is required after kernel upgrade
 ```
 
 #### Clone the installer
