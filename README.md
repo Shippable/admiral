@@ -24,14 +24,36 @@
     - 8 Gb memory
     - 100 Gb disk
     - Ubuntu 14.04 LTS
-- The following ports must be exposed on this instance: 22, 80, 443, 2222, 5432,
-  5672, 6379, 8200, 15672, 50000, 50001, 50002, and 50003.
+- The following ports must be exposed on this instance:
+    - 22: ssh into the machine
+    - 80: internal gitlab server api endpoint
+    - 443: internal gitlab server secure api endpoint
+    - 2222: internal gitlab server ssh port
+    - 5432: database
+    - 5672: amqp
+    - 15672: amqp admin
+    - 6379: redis
+    - 8200: vault
+    - 50000: Shippable api
+    - 50001: Shippable front end
+    - 50002: Shippable marketing ui
+    - 50003: Shippable admin panel
 
 ### Running the installer
 #### Log into the instance and install `git`
 ```
 $ sudo apt-get update
 $ sudo apt-get install git-core
+```
+
+#### Upgrade kernel
+- If installer is running on AWS ubuntu 14.04 ami, then the kernel needs to be
+  updated. Run following commands to update kernel to 3.19
+
+```
+$ sudo apt-get update
+$ sudo apt-get install linux-generic-lts-vivid
+$ sudo reboot //restart is required after kernel upgrade
 ```
 
 #### Clone the installer
