@@ -87,6 +87,13 @@ __check_dependencies() {
     pip install awscli==$AWSCLI_VERSION
   fi
 
+  if type psql &> /dev/null && true; then
+    __process_msg "'psql' already installed"
+  else
+    __process_msg "Installing 'psql'"
+    ./$SCRIPTS_DIR/install_psql.sh
+  fi
+
 }
 
 __registry_login() {
