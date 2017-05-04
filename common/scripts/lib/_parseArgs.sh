@@ -86,6 +86,7 @@ __validate_runtime() {
   if [ "$DB_IP" == "" ]; then
     __process_msg "DB_IP is not set"
     __set_db_ip
+    __add_ssh_key_to_db
   else
     __process_msg "DB_IP already set, skipping"
   fi

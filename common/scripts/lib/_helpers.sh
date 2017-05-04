@@ -251,6 +251,24 @@ __set_db_ip() {
   fi
 }
 
+__add_ssh_key_to_db() {
+  if [ "$DB_IP" != "$ADMIRAL_IP" ]; then
+    local public_ssh_key=$(cat $SSH_PUBLIC_KEY)
+    __process_success "Run the following command on $DB_IP to allow SSH access:"
+
+    echo 'sudo useradd -d /home/shippable -m -s /bin/bash -p shippablepwd shippable && sudo echo '"'"'shippable ALL=(ALL) NOPASSWD:ALL'"'"' | sudo tee -a /etc/sudoers; sudo mkdir -p /home/shippable/.ssh/; sudo chown -R $USER:$USER /home/shippable/; echo '$public_ssh_key' >> /home/shippable/.ssh/authorized_keys; sudo chown -R shippable:shippable /home/shippable/'
+
+    __process_success "Enter Y to confirm that you have run this command"
+    read confirmation
+    if [[ "$confirmation" =~ "Y" ]]; then
+      __process_msg "Confirmation received"
+    else
+      __process_error "Invalid response, please run the command to allow access and continue"
+      __add_ssh_key_to_db
+    fi
+  fi
+}
+
 __set_db_password() {
   __process_msg "Setting database password"
 
