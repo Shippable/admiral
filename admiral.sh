@@ -26,6 +26,7 @@ readonly LOCAL_SCRIPTS_DIR="$SCRIPTS_DIR/local"
 readonly ADMIRAL_ENV="$CONFIG_DIR/admiral.env"
 readonly SSH_PRIVATE_KEY=$CONFIG_DIR/machinekey
 readonly SSH_PUBLIC_KEY=$CONFIG_DIR/machinekey.pub
+readonly SCRIPTS_DIR_REMOTE="/tmp/shippable"
 readonly MAX_DEFAULT_LOG_COUNT=6
 readonly SSH_USER="root"
 readonly DOCKER_VERSION=1.13
@@ -40,7 +41,6 @@ export LC_ALL=C
 export IS_UPGRADE=false
 export NO_PROMPT=false
 export KEYS_GENERATED=false
-export OS_TYPE="Ubuntu_14.04"
 export INSTALL_MODE="local"
 ###########################################################
 
@@ -56,7 +56,7 @@ main() {
   __pull_images
   {
     __print_runtime
-    source "$SCRIPTS_DIR/$OS_TYPE/installDb.sh"
+    source "$SCRIPTS_DIR/installDb.sh"
     source "$SCRIPTS_DIR/create_vault_table.sh"
     source "$SCRIPTS_DIR/boot_admiral.sh"
   } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )

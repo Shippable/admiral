@@ -14,30 +14,29 @@ __validate_vault_store() {
   fi
 }
 
-__copy_script() {
-  __process_msg "Copying vault sql to configs dir $CONFIG_DIR/db"
-  local vault_script_host_location="$SCRIPTS_DIR/configs/vault_kv_store.sql"
-
-  sudo cp -vr $SCRIPTS_DIR/configs/vault_kv_store.sql $CONFIG_DIR/db
-}
-
 __upsert_vault_store() {
   __process_msg "Upserting vault store in db"
 
-  local vault_script_location="/etc/postgresql/config/vault_kv_store.sql"
-  local upsert_cmd="sudo docker exec db \
-    psql -U $DB_USER -d $DB_NAME \
+  local vault_script_host_location="$SCRIPTS_DIR/configs/vault_kv_store.sql"
+
+  local upsert_cmd="PG_HOST=$DB_IP \
+    PGDATABASE=$DB_NAME \
+    PGUSER=$DB_USER \
+    PGPASSWORD=$DB_PASSWORD \
+    psql \
+    -U $DB_USER \
+    -d $DB_NAME \
+    -h $DB_IP \
     -v ON_ERROR_STOP=1 \
-    -f $vault_script_location"
+    -f $vault_script_host_location"
 
   __process_msg "Executing: $upsert_cmd"
-	eval "$upsert_cmd"
+  eval "$upsert_cmd"
 }
 
 main() {
   __process_marker "Creating vault table in database"
   __validate_vault_store
-  __copy_script
   __upsert_vault_store
 }
 
