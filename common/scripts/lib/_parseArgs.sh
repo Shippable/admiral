@@ -210,6 +210,7 @@ __parse_args() {
       install)
         shift
         __bootstrap_admiral_env
+        __generate_ssh_keys
         __parse_args_install "$@"
         ;;
       status)
