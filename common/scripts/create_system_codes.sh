@@ -25,9 +25,15 @@ __copy_system_codes() {
 __upsert_system_codes() {
   __process_msg "Upserting system codes in db"
 
-  local system_codes_location="/etc/postgresql/config/system_codes.sql"
-  local upsert_cmd="sudo docker exec db \
-    psql -U $DBUSERNAME -d $DBNAME \
+  local system_codes_location="$DB_CONFIG_DIR/system_codes.sql"
+  local upsert_cmd="PG_HOST=$DBHOST \
+    PGDATABASE=$DBNAME \
+    PGUSER=$DBUSERNAME \
+    PGPASSWORD=$DBPASSWORD \
+    psql \
+    -U $DBUSERNAME \
+    -d $DBNAME \
+    -h $DBHOST \
     -v ON_ERROR_STOP=1 \
     -f $system_codes_location"
 

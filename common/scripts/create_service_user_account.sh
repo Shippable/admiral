@@ -16,9 +16,15 @@ __validate_db_envs() {
 }
 __upsert_service_user_account() {
   __process_msg "Upserting the service user account in db"
-  local service_user_account_location="/etc/postgresql/config/service_user_account.sql"
-  local upsert_cmd="sudo docker exec db \
-    psql -U $DBUSERNAME -d $DBNAME \
+  local service_user_account_location="$DB_CONFIG_DIR/service_user_account.sql"
+  local upsert_cmd="PG_HOST=$DBHOST \
+    PGDATABASE=$DBNAME \
+    PGUSER=$DBUSERNAME \
+    PGPASSWORD=$DBPASSWORD \
+    psql \
+    -U $DBUSERNAME \
+    -d $DBNAME \
+    -h $DBHOST \
     -v ON_ERROR_STOP=1 \
     -f $service_user_account_location"
 
