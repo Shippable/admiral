@@ -19,7 +19,8 @@ __upsert_vault_store() {
 
   local vault_script_host_location="$SCRIPTS_DIR/configs/vault_kv_store.sql"
 
-  local upsert_cmd="PG_HOST=$DB_IP \
+  local upsert_cmd="PGHOST=$DB_IP \
+    PGPORT=$DB_PORT \
     PGDATABASE=$DB_NAME \
     PGUSER=$DB_USER \
     PGPASSWORD=$DB_PASSWORD \

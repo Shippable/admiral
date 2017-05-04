@@ -28,7 +28,8 @@ __upsert_system_integrations() {
   __process_msg "Upserting system integrations in db"
 
   local system_integrations_location="$DB_CONFIG_DIR/system_integrations.sql"
-  local upsert_cmd="PG_HOST=$DBHOST \
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DB_PORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

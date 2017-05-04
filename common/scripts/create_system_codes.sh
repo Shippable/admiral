@@ -26,7 +26,8 @@ __upsert_system_codes() {
   __process_msg "Upserting system codes in db"
 
   local system_codes_location="$DB_CONFIG_DIR/system_codes.sql"
-  local upsert_cmd="PG_HOST=$DBHOST \
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DB_PORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

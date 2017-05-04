@@ -28,7 +28,8 @@ __upsert_master_integration_fields() {
   __process_msg "Upserting master integration fields in db"
 
   local master_integration_fields_location="$DB_CONFIG_DIR/master_integration_fields.sql"
-  local upsert_cmd="PG_HOST=$DBHOST \
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DB_PORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

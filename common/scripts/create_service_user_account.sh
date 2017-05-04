@@ -17,7 +17,8 @@ __validate_db_envs() {
 __upsert_service_user_account() {
   __process_msg "Upserting the service user account in db"
   local service_user_account_location="$DB_CONFIG_DIR/service_user_account.sql"
-  local upsert_cmd="PG_HOST=$DBHOST \
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DB_PORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

@@ -17,7 +17,8 @@ __validate_db_envs() {
 __upsert_default_system_machine_image() {
   __process_msg "Upserting the default system machine image in db"
   local machine_image_location="$DB_CONFIG_DIR/default_system_machine_image.sql"
-  local upsert_cmd="PG_HOST=$DBHOST \
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DB_PORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

@@ -147,6 +147,7 @@ function _upsertSystemSettings(bag, next) {
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName,
         'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
         'DBPASSWORD': global.config.dbPassword
       }
     },
@@ -265,6 +266,7 @@ function _upsertSystemCodes(bag, next) {
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName,
         'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
         'DBPASSWORD': global.config.dbPassword
       }
     },
@@ -291,6 +293,7 @@ function _upsertMasterIntegrations(bag, next) {
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName,
         'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
         'DBPASSWORD': global.config.dbPassword
       }
     },
@@ -317,6 +320,7 @@ function _upsertMasterIntegrationFields(bag, next) {
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName,
         'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
         'DBPASSWORD': global.config.dbPassword
       }
     },
@@ -343,6 +347,7 @@ function _upsertSystemIntegrations(bag, next) {
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName,
         'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
         'DBPASSWORD': global.config.dbPassword
       }
     },
@@ -433,7 +438,10 @@ function _runMigrationsBeforeAPIStart(bag, next) {
         'SCRIPTS_DIR': global.config.scriptsDir,
         'MIGRATIONS_DIR': global.config.migrationsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -546,6 +554,7 @@ function _upsertServiceUserAccount(bag, next) {
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName,
         'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
         'DBPASSWORD': global.config.dbPassword
       }
     },
@@ -603,6 +612,7 @@ function _upsertDefaultSystemMachineImage(bag, next) {
         'DBUSERNAME': global.config.dbUsername,
         'DBNAME': global.config.dbName,
         'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
         'DBPASSWORD': global.config.dbPassword
       }
     },
