@@ -27,9 +27,16 @@ __copy_master_integrations() {
 __upsert_master_integrations() {
   __process_msg "Upserting master integrations in db"
 
-  local master_integrations_location="/etc/postgresql/config/master_integrations.sql"
-  local upsert_cmd="sudo docker exec db \
-    psql -U $DBUSERNAME -d $DBNAME \
+  local master_integrations_location="$DB_CONFIG_DIR/master_integrations.sql"
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DBPORT \
+    PGDATABASE=$DBNAME \
+    PGUSER=$DBUSERNAME \
+    PGPASSWORD=$DBPASSWORD \
+    psql \
+    -U $DBUSERNAME \
+    -d $DBNAME \
+    -h $DBHOST \
     -v ON_ERROR_STOP=1 \
     -f $master_integrations_location"
 

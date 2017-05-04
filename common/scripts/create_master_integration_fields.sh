@@ -27,9 +27,16 @@ __copy_master_integration_fields() {
 __upsert_master_integration_fields() {
   __process_msg "Upserting master integration fields in db"
 
-  local master_integration_fields_location="/etc/postgresql/config/master_integration_fields.sql"
-  local upsert_cmd="sudo docker exec db \
-    psql -U $DBUSERNAME -d $DBNAME \
+  local master_integration_fields_location="$DB_CONFIG_DIR/master_integration_fields.sql"
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DBPORT \
+    PGDATABASE=$DBNAME \
+    PGUSER=$DBUSERNAME \
+    PGPASSWORD=$DBPASSWORD \
+    psql \
+    -U $DBUSERNAME \
+    -d $DBNAME \
+    -h $DBHOST \
     -v ON_ERROR_STOP=1 \
     -f $master_integration_fields_location"
 

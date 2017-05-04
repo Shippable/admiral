@@ -27,9 +27,16 @@ __copy_system_integrations() {
 __upsert_system_integrations() {
   __process_msg "Upserting system integrations in db"
 
-  local system_integrations_location="/etc/postgresql/config/system_integrations.sql"
-  local upsert_cmd="sudo docker exec db \
-    psql -U $DBUSERNAME -d $DBNAME \
+  local system_integrations_location="$DB_CONFIG_DIR/system_integrations.sql"
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DBPORT \
+    PGDATABASE=$DBNAME \
+    PGUSER=$DBUSERNAME \
+    PGPASSWORD=$DBPASSWORD \
+    psql \
+    -U $DBUSERNAME \
+    -d $DBNAME \
+    -h $DBHOST \
     -v ON_ERROR_STOP=1 \
     -f $system_integrations_location"
 

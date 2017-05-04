@@ -27,9 +27,17 @@ __copy_migrations() {
 __migrate() {
   __process_msg "Running post installation migrations"
 
-  local migrations_location="/etc/postgresql/config/post_install.sql"
-  local upsert_cmd="sudo docker exec db \
-    psql -U $DBUSERNAME -d $DBNAME \
+  local migrations_location="$DB_CONFIG_DIR/post_install.sql"
+
+  local upsert_cmd="PGHOST=$DBHOST \
+    PGPORT=$DBPORT \
+    PGDATABASE=$DBNAME \
+    PGUSER=$DBUSERNAME \
+    PGPASSWORD=$DBPASSWORD \
+    psql \
+    -U $DBUSERNAME \
+    -d $DBNAME \
+    -h $DBHOST \
     -v ON_ERROR_STOP=1 \
     -f $migrations_location"
 

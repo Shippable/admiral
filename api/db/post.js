@@ -143,8 +143,12 @@ function _upsertSystemSettings(bag, next) {
       tmpScriptFilename: '/tmp/systemSettings.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
+        'CONFIG_DIR': global.config.configDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -260,7 +264,10 @@ function _upsertSystemCodes(bag, next) {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -284,7 +291,10 @@ function _upsertMasterIntegrations(bag, next) {
         'RUNTIME_DIR': global.config.runtimeDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -308,7 +318,10 @@ function _upsertMasterIntegrationFields(bag, next) {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -332,7 +345,10 @@ function _upsertSystemIntegrations(bag, next) {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -422,7 +438,10 @@ function _runMigrationsBeforeAPIStart(bag, next) {
         'SCRIPTS_DIR': global.config.scriptsDir,
         'MIGRATIONS_DIR': global.config.migrationsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -479,7 +498,10 @@ function _runMigrations(bag, next) {
         'SCRIPTS_DIR': global.config.scriptsDir,
         'MIGRATIONS_DIR': global.config.migrationsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -533,7 +555,10 @@ function _upsertServiceUserAccount(bag, next) {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
@@ -588,7 +613,10 @@ function _upsertDefaultSystemMachineImage(bag, next) {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {

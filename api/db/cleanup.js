@@ -76,9 +76,12 @@ function _generateScriptEnvs(bag, next) {
     'CONFIG_DIR': global.config.configDir,
     'RELEASE': bag.releaseVersion,
     'MIGRATIONS_DIR': global.config.migrationsDir,
+    'SCRIPTS_DIR': global.config.scriptsDir,
     'DBUSERNAME': global.config.dbUsername,
     'DBNAME': global.config.dbName,
-    'SCRIPTS_DIR': global.config.scriptsDir
+    'DBHOST': global.config.dbHost,
+    'DBPORT': global.config.dbPort,
+    'DBPASSWORD': global.config.dbPassword
   };
 
   return next();
