@@ -264,7 +264,7 @@ __add_ssh_key_to_db() {
     local public_ssh_key=$(cat $SSH_PUBLIC_KEY)
     __process_success "Run the following command on $DB_IP to allow SSH access:"
 
-    echo 'sudo useradd -d /home/shippable -m -s /bin/bash -p shippablepwd shippable && sudo echo '"'"'shippable ALL=(ALL) NOPASSWD:ALL'"'"' | sudo tee -a /etc/sudoers; sudo mkdir -p /home/shippable/.ssh/; sudo chown -R $USER:$USER /home/shippable/; echo '$public_ssh_key' >> /home/shippable/.ssh/authorized_keys; sudo chown -R shippable:shippable /home/shippable/'
+    echo 'sudo mkdir -p /root/.ssh; echo '$public_ssh_key' >> /root/.ssh/authorized_keys;'
 
     __process_success "Enter Y to confirm that you have run this command"
     read confirmation
@@ -315,6 +315,16 @@ __set_public_image_registry() {
   fi
 }
 
+__check_connection() {
+  if [ "$#" -ne 1 ]; then
+    __process_error "At least one host name required to check connection"
+    exit 1
+  fi
+  local host="$1"
+  __process_msg "Checking connection status for : $host"
+  __exec_cmd_remote "$host" "echo 'Successfully pinged $host'"
+}
+
 __copy_script_remote() {
   if [ "$#" -ne 3 ]; then
     __process_msg "The number of arguments expected by _copy_script_remote is 3"
@@ -341,7 +351,7 @@ __copy_script_remote() {
   }
 
   __process_msg "Copying $script_path_local to remote host: $script_path_remote"
-  _exec_remote_cmd $host "mkdir -p $script_dir_remote"
+  __exec_cmd_remote $host "mkdir -p $script_dir_remote"
   copy_cmd="rsync -avz -e \
     'ssh \
       -o StrictHostKeyChecking=no \
@@ -387,8 +397,8 @@ __copy_script_local() {
 }
 
 ## syntax for calling this function
-## __exec_remote_cmd "user" "192.156.6.4" "key" "ls -al"
-__exec_remote_cmd() {
+## __exec_cmd_remote "user" "192.156.6.4" "key" "ls -al"
+__exec_cmd_remote() {
   local user="$SSH_USER"
   local key="$SSH_PRIVATE_KEY"
   local timeout=10
@@ -415,7 +425,7 @@ __exec_remote_cmd() {
   }
 }
 
-__exec_remote_cmd_proxyless() {
+__exec_cmd_remote_proxyless() {
   local user="$SSH_USER"
   local key="$SSH_PRIVATE_KEY"
   local timeout=10
