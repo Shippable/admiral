@@ -229,22 +229,20 @@ __set_admiral_ip() {
 __set_db_ip() {
   __process_msg "Setting value of database IP address"
   local db_ip=$ADMIRAL_IP
-  if [ "INSTALL_MODE" == "cluster" ]; then
-    __process_success "Please enter the IP address where you would like the database installed."
-    read response
+  __process_success "Please enter the IP address where you would like the database installed or D to set the default ($db_ip)."
+  read response
 
-    if [ "$response" != "" ]; then
-      __process_success "Setting the database IP address to: $response, enter Y to confirm"
-      read confirmation
-      if [[ "$confirmation" =~ "Y" ]]; then
-        db_ip=$response
-        sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
-        export DB_IP=$db_ip
-        __process_msg "Successfully set DB_IP to $db_ip"
-      else
-        __process_error "Invalid response, please enter a valid IP and continue"
-        __set_db_ip
-      fi
+  if [ "$response" != "D" ]; then
+    __process_success "Setting the database IP address to: $response, enter Y to confirm"
+    read confirmation
+    if [[ "$confirmation" =~ "Y" ]]; then
+      db_ip=$response
+      sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
+      export DB_IP=$db_ip
+      __process_msg "Successfully set DB_IP to $db_ip"
+    else
+      __process_error "Invalid response, please enter a valid IP and continue"
+      __set_db_ip
     fi
   else
     sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
