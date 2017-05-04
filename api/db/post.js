@@ -180,6 +180,9 @@ function _setProcessingFlag(bag, next) {
   logger.verbose(who, 'Inside');
 
   var update = {
+    address: global.config.dbHost,
+    port: global.config.dbPort,
+    username: global.config.dbUsername,
     isProcessing: true,
     isFailed: false
   };
