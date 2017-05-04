@@ -18,7 +18,7 @@ __upsert_default_system_machine_image() {
   __process_msg "Upserting the default system machine image in db"
   local machine_image_location="$DB_CONFIG_DIR/default_system_machine_image.sql"
   local upsert_cmd="PGHOST=$DBHOST \
-    PGPORT=$DB_PORT \
+    PGPORT=$DBPORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

@@ -29,7 +29,7 @@ __upsert_master_integrations() {
 
   local master_integrations_location="$DB_CONFIG_DIR/master_integrations.sql"
   local upsert_cmd="PGHOST=$DBHOST \
-    PGPORT=$DB_PORT \
+    PGPORT=$DBPORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

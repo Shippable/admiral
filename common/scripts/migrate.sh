@@ -30,7 +30,7 @@ __migrate() {
   local migrations_location="$DB_CONFIG_DIR/migrations.sql"
 
   local upsert_cmd="PGHOST=$DBHOST \
-    PGPORT=$DB_PORT \
+    PGPORT=$DBPORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

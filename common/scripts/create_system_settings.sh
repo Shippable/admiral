@@ -18,7 +18,7 @@ __upsert_system_settings() {
 
   local system_settings_location="$DB_CONFIG_DIR/system_settings.sql"
   local upsert_cmd="PGHOST=$DBHOST \
-    PGPORT=$DB_PORT \
+    PGPORT=$DBPORT \
     PGDATABASE=$DBNAME \
     PGUSER=$DBUSERNAME \
     PGPASSWORD=$DBPASSWORD \

@@ -498,7 +498,10 @@ function _runMigrations(bag, next) {
         'SCRIPTS_DIR': global.config.scriptsDir,
         'MIGRATIONS_DIR': global.config.migrationsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
