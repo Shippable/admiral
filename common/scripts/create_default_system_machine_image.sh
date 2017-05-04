@@ -16,9 +16,15 @@ __validate_db_envs() {
 }
 __upsert_default_system_machine_image() {
   __process_msg "Upserting the default system machine image in db"
-  local machine_image_location="/etc/postgresql/config/default_system_machine_image.sql"
-  local upsert_cmd="sudo docker exec db \
-    psql -U $DBUSERNAME -d $DBNAME \
+  local machine_image_location="$DB_CONFIG_DIR/default_system_machine_image.sql"
+  local upsert_cmd="PG_HOST=$DBHOST \
+    PGDATABASE=$DBNAME \
+    PGUSER=$DBUSERNAME \
+    PGPASSWORD=$DBPASSWORD \
+    psql \
+    -U $DBUSERNAME \
+    -d $DBNAME \
+    -h $DBHOST \
     -v ON_ERROR_STOP=1 \
     -f $machine_image_location"
 

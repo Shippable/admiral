@@ -588,7 +588,9 @@ function _upsertDefaultSystemMachineImage(bag, next) {
         'CONFIG_DIR': global.config.configDir,
         'SCRIPTS_DIR': global.config.scriptsDir,
         'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPASSWORD': global.config.dbPassword
       }
     },
     function (err) {
