@@ -51,7 +51,7 @@ __validate_db_envs() {
 }
 
 __update_sources() {
-	echo "Updating source repo information"
+  echo "Updating source repo information"
   wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key add -
 
   postgresql_deb="deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main"
