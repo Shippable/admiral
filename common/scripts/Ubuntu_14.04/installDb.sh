@@ -203,8 +203,8 @@ main() {
     return
   fi
 
-	__validate_db_envs
-	__update_sources
+  __validate_db_envs
+  __update_sources
   __install_postgres
   __configure_data_dirs
   __update_ownership
