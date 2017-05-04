@@ -5,7 +5,7 @@ main() {
 	sudo apt-get update
 
 	echo "Installing wget"
-	sudo apt-get install wget
+	sudo apt-get -yy install wget
 
 	echo "Updating apt repo"
 	echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
@@ -16,7 +16,7 @@ main() {
 	sudo apt-get update
 
 	echo "Running installation"
-	sudo apt-get install postgresql-client-9.5
+	sudo apt-get -yy install postgresql-client-9.5
 
 	echo "psql 9.5 successfully installed"
 }
