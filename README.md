@@ -40,10 +40,10 @@
     - 50003: Shippable admin panel
 
 ### Running the installer
-#### Log into the instance and install `git`
+#### Log into the instance and install `git` and `ssh`
 ```
 $ sudo apt-get update
-$ sudo apt-get install git-core
+$ sudo apt-get install git-core ssh
 ```
 
 #### Upgrade kernel

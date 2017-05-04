@@ -39,14 +39,6 @@ __check_dependencies() {
     apt-get install -y ssh-client
   fi
 
-  ################## Generate SSH keys  ##################################
-  if [ -f "$SSH_PRIVATE_KEY" ] && [ -f $SSH_PUBLIC_KEY ]; then
-    __process_msg "SSH keys already present, skipping"
-  else
-    __process_msg "SSH keys not available, generating"
-    __generate_ssh_keys
-  fi
-
   ################## Install jq  #########################################
   if type jq &> /dev/null && true; then
     __process_msg "'jq' already installed"
@@ -153,9 +145,13 @@ __print_runtime() {
 }
 
 __generate_ssh_keys() {
-  __process_msg "Generating SSH keys"
-  local keygen_exec=$(ssh-keygen -t rsa -P "" -f $SSH_PRIVATE_KEY)
-  __process_msg "SSH keys successfully generated"
+  if [ -f "$SSH_PRIVATE_KEY" ] && [ -f $SSH_PUBLIC_KEY ]; then
+    __process_msg "SSH keys already present, skipping"
+  else
+    __process_msg "SSH keys not available, generating"
+    local keygen_exec=$(ssh-keygen -t rsa -P "" -f $SSH_PRIVATE_KEY)
+    __process_msg "SSH keys successfully generated"
+  fi
 }
 
 __generate_login_token() {
