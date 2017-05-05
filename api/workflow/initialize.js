@@ -31,6 +31,7 @@ function initialize(req, res) {
       _postMsg.bind(null, bag),
       _initializeMsg.bind(null, bag),
       _getState.bind(null, bag),
+      _postState.bind(null, bag),
       _initializeState.bind(null, bag),
       _getRedis.bind(null, bag),
       _initializeRedis.bind(null, bag)
@@ -217,17 +218,36 @@ function _getState(bag, next) {
   );
 }
 
+function _postState(bag, next) {
+  if (bag.stateInitialized) return next();
+
+  var who = bag.who + '|' + _postState.name;
+  logger.verbose(who, 'Inside');
+
+  var postObj = {
+    rootPassword: bag.reqBody.statePassword
+  };
+
+  bag.apiAdapter.postState(postObj,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to initialize state provider', err)
+        );
+
+      return next();
+    }
+  );
+}
+
 function _initializeState(bag, next) {
   if (bag.stateInitialized) return next();
 
   var who = bag.who + '|' + _initializeState.name;
   logger.verbose(who, 'Inside');
 
-  var postObj = {
-    password: bag.reqBody.statePassword
-  };
-
-  bag.apiAdapter.postState(postObj,
+  bag.apiAdapter.initializeState({},
     function (err) {
       if (err)
         return next(

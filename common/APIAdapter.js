@@ -138,6 +138,12 @@ APIAdapter.prototype.postState =
     this.post(url, body, callback);
   };
 
+APIAdapter.prototype.initializeState =
+  function (body, callback) {
+    var url = '/api/state/initialize';
+    this.post(url, body, callback);
+  };
+
 // systemIntegrations
 APIAdapter.prototype.getSystemIntegrations =
   function (query, callback) {
