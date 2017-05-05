@@ -326,6 +326,8 @@ function _getUnsealKeys(bag, next) {
 }
 
 function _saveUnsealKeys(bag, next) {
+  if (bag.config.isInitialized) return next();
+
   var who = bag.who + '|' + _saveUnsealKeys.name;
   logger.verbose(who, 'Inside');
 
@@ -476,7 +478,6 @@ function _updatePolicy(bag, next) {
   var params = {
     policy: new Buffer(policyFilePath).toString('base64')
   };
-
 
   client.putPolicy('shippable', params,
     function (err) {
