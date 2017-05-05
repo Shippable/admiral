@@ -30,6 +30,10 @@
       postDBCleanup: function (body, callback) {
         return API.post('/api/db/cleanup', body, callback);
       },
+      // Machine Keys Routes
+      getMachineKeys: function (callback) {
+        return API.get('/api/machineKeys', callback);
+      },
       // Master Integrations Routes
       getMasterIntegrations: function (callback) {
         return API.get('/api/masterIntegrations', callback);

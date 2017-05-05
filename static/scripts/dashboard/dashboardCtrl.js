@@ -204,6 +204,16 @@
             }
           }
         },
+        sshKeys: {
+          'ssh-key': {
+            isEnabled: true,
+            masterName: 'ssh-key',
+            data: {
+              publicKey: '',
+              privateKey: ''
+            }
+          }
+        },
         www: {
           url: {
             isEnabled: true,
@@ -360,6 +370,7 @@
           setBreadcrumb.bind(null, bag),
           getSystemSettings.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
+          getMachineKeys.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
           getMasterIntegrations.bind(null, bag),
@@ -446,6 +457,20 @@
           }
 
           $scope.vm.admiralEnv = admiralEnv;
+          return next();
+        }
+      );
+    }
+
+    function getMachineKeys(bag, next) {
+      admiralApiAdapter.getMachineKeys(
+        function (err, machineKeys) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          $scope.vm.machineKeys = machineKeys;
           return next();
         }
       );
@@ -545,6 +570,12 @@
         redis: {
           url: {
             url: ''
+          }
+        },
+        sshKeys: {
+          'ssh-key': {
+            publicKey: '',
+            privateKey: ''
           }
         },
         state: {
@@ -1140,6 +1171,7 @@
       $scope.vm.installing = true;
 
       async.series([
+          updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
@@ -1194,6 +1226,7 @@
       hideSaveModal();
 
       async.series([
+          updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
@@ -1271,6 +1304,27 @@
         }
       );
     }
+
+    function updateSSHKeysSystemIntegration(next) {
+      if (!$scope.vm.machineKeys) return next();
+
+      var bag = {
+        name: 'sshKeys',
+        masterName: $scope.vm.installForm.sshKeys['ssh-key'].masterName,
+        data: {
+          publicKey: $scope.vm.machineKeys.publicKey,
+          privateKey: $scope.vm.machineKeys.privateKey
+        },
+        isEnabled: true
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
 
     function updateAPISystemIntegration(next) {
       var bag = {
