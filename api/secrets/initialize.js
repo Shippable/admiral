@@ -257,11 +257,7 @@ function _checkInitStatus(bag, next) {
   var who = bag.who + '|' + _checkInitStatus.name;
   logger.verbose(who, 'Inside');
 
-  var url = util.format('http://%s:%s',
-    bag.config.address,
-    bag.config.port);
-
-  var client = new VaultAdapter(url);
+  var client = new VaultAdapter(bag.vaultUrl);
 
   client.getInitializedStatus(
     function (err, response) {
@@ -303,11 +299,7 @@ function _getUnsealKeys(bag, next) {
   var who = bag.who + '|' + _getUnsealKeys.name;
   logger.verbose(who, 'Inside');
 
-  var url = util.format('http://%s:%s',
-    bag.config.address,
-    bag.config.port);
-
-  var client = new VaultAdapter(url);
+  var client = new VaultAdapter(bag.vaultUrl);
   var params = {
     secret_shares: 5,
     secret_threshold: 3
@@ -374,16 +366,13 @@ function _unsealVaultStep1(bag, next) {
   var who = bag.who + '|' + _unsealVaultStep1.name;
   logger.verbose(who, 'Inside');
 
-  var url = util.format('http://%s:%s',
-    bag.config.address,
-    bag.config.port);
+  var client = new VaultAdapter(bag.vaultUrl);
 
   var params = {
     secret_shares: 3,
     key: bag.config.unsealKey1
   };
 
-  var client = new VaultAdapter(url);
   client.unseal(params,
     function (err, response) {
       if (err)
@@ -408,11 +397,8 @@ function _unsealVaultStep2(bag, next) {
     key: bag.config.unsealKey2
   };
 
-  var url = util.format('http://%s:%s',
-    bag.config.address,
-    bag.config.port);
+  var client = new VaultAdapter(bag.vaultUrl);
 
-  var client = new VaultAdapter(url);
   client.unseal(params,
     function (err, response) {
       if (err)
@@ -437,11 +423,8 @@ function _unsealVaultStep3(bag, next) {
     key: bag.config.unsealKey3
   };
 
-  var url = util.format('http://%s:%s',
-    bag.config.address,
-    bag.config.port);
+  var client = new VaultAdapter(bag.vaultUrl);
 
-  var client = new VaultAdapter(url);
   client.unseal(params,
     function (err, response) {
       if (err)
@@ -460,10 +443,7 @@ function _createSecretsMount(bag, next) {
   var who = bag.who + '|' + _createSecretsMount.name;
   logger.verbose(who, 'Inside');
 
-  var url = util.format('http://%s:%s',
-    bag.config.address,
-    bag.config.port);
-  var client = new VaultAdapter(url, bag.config.rootToken);
+  var client = new VaultAdapter(bag.vaultUrl, bag.config.rootToken);
 
   var params = {
     type: 'generic',
@@ -487,10 +467,7 @@ function _updatePolicy(bag, next) {
   var who = bag.who + '|' + _updatePolicy.name;
   logger.verbose(who, 'Inside');
 
-  var url = util.format('http://%s:%s',
-    bag.config.address,
-    bag.config.port);
-  var client = new VaultAdapter(url, bag.config.rootToken);
+  var client = new VaultAdapter(bag.vaultUrl, bag.config.rootToken);
 
   var policyFilePath =
     path.join(global.config.scriptsDir, 'configs/policy.hcl');
@@ -549,6 +526,7 @@ function _updateVaultUrl(bag, next) {
             'Cannot set env: ' + bag.vaultUrlEnv + ' err: ' + err)
         );
 
+      bag.vaultUrl = vaultUrl;
       return next();
     }
   );
