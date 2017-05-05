@@ -5,8 +5,6 @@ module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
-var path = require('path');
-var fs = require('fs-extra');
 
 var APIAdapter = require('../../common/APIAdapter.js');
 
@@ -30,6 +28,7 @@ function initialize(req, res) {
       _getSecrets.bind(null, bag),
       _initializeSecrets.bind(null, bag),
       _getMsg.bind(null, bag),
+      _postMsg.bind(null, bag),
       _initializeMsg.bind(null, bag),
       _getState.bind(null, bag),
       _initializeState.bind(null, bag),
@@ -155,10 +154,10 @@ function _getMsg(bag, next) {
   );
 }
 
-function _initializeMsg(bag, next) {
+function _postMsg(bag, next) {
   if (bag.msgInitialized) return next();
 
-  var who = bag.who + '|' + _initializeMsg.name;
+  var who = bag.who + '|' + _postMsg.name;
   logger.verbose(who, 'Inside');
 
   var postObj = {
@@ -174,6 +173,27 @@ function _initializeMsg(bag, next) {
         );
 
       return next();
+    }
+  );
+}
+
+function _initializeMsg(bag, next) {
+  if (bag.msgInitialized) return next();
+
+  var who = bag.who + '|' + _initializeMsg.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.initializeMsg({},
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, err.id || ActErr.OperationFailed,
+            'Failed to initialize messaging provider', err)
+        );
+
+      // temporary timeout until this route is retired
+      logger.debug('Waiting 30 seconds for RabbitMQ to boot');
+      setTimeout(next, 30000);
     }
   );
 }
