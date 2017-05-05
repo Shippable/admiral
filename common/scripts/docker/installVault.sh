@@ -58,8 +58,6 @@ __update_vault_config() {
   __process_msg "Generating vault config"
   cp -vr $SCRIPTS_DIR/configs/vault_config.hcl.template $VAULT_CONFIG_DIR/config.hcl
   cp -vr $SCRIPTS_DIR/configs/policy.hcl $VAULT_CONFIG_DIR/scripts/policy.hcl
-  cp -vr $SCRIPTS_DIR/configs/vaultToken.json.template $VAULT_CONFIG_DIR/scripts/vaultToken.json.template
-  cp -vr $SCRIPTS_DIR/docker/initializeVault.sh $VAULT_CONFIG_DIR/scripts/initializeVault.sh
 }
 
 __update_vault_creds() {

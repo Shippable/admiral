@@ -99,6 +99,8 @@ function _get(bag, next) {
       }
 
       bag.config = secrets;
+      bag.vaultUrl = util.format('http://%s:%s',
+        bag.config.address, bag.config.port);
       return next();
     }
   );
@@ -515,10 +517,7 @@ function _updateVaultUrl(bag, next) {
   var who = bag.who + '|' +  _updateVaultUrl.name;
   logger.verbose(who, 'Inside');
 
-  var vaultUrl = util.format('http://%s:%s',
-    bag.config.address, bag.config.port);
-
-  envHandler.put(bag.vaultUrlEnv, vaultUrl,
+  envHandler.put(bag.vaultUrlEnv, bag.vaultUrl,
     function (err) {
       if (err)
         return next(
@@ -526,7 +525,6 @@ function _updateVaultUrl(bag, next) {
             'Cannot set env: ' + bag.vaultUrlEnv + ' err: ' + err)
         );
 
-      bag.vaultUrl = vaultUrl;
       return next();
     }
   );
