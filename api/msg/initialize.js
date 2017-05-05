@@ -108,6 +108,8 @@ function _checkConfig(bag, next) {
     missingConfigFields.push('uiUsername');
   if (!_.has(bag.config, 'uiPassword') || _.isEmpty(bag.config.uiPassword))
     missingConfigFields.push('uiPassword');
+  if (!_.has(bag.config, 'address') || _.isEmpty(bag.config.address))
+    missingConfigFields.push('address');
   if (!_.has(bag.config, 'amqpPort') || !bag.config.amqpPort)
     missingConfigFields.push('amqpPort');
   if (!_.has(bag.config, 'adminPort') || !bag.config.adminPort)

@@ -7,45 +7,39 @@ var async = require('async');
 var _ = require('underscore');
 var path = require('path');
 var fs = require('fs');
-var readline = require('readline');
 var spawn = require('child_process').spawn;
 
-var envHandler = require('../../common/envHandler.js');
-var configHandler = require('../../common/configHandler.js');
 var APIAdapter = require('../../common/APIAdapter.js');
+var configHandler = require('../../common/configHandler.js');
 
 function initialize(req, res) {
   var bag = {
-    reqQuery: req.query,
+    reqBody: req.body,
     resBody: [],
     res: res,
-    params: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     skipStatusChange: false,
-    isResponseSent: false,
-    component: 'secrets',
-    tmpScript: '/tmp/secrets.sh',
-    vaultUrlEnv: 'VAULT_URL'
+    params: {},
+    component: 'state',
+    tmpScript: '/tmp/state.sh'
   };
 
-  bag.who = util.format('secrets|%s', self.name);
+  bag.who = util.format('state|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
       _checkConfig.bind(null, bag),
-      _getReleaseVersion.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _sendResponse.bind(null, bag),
+      _getReleaseVersion.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
-      _initializeVault.bind(null, bag),
-      _getUnsealKeys.bind(null, bag),
-      _getVaultRootToken.bind(null, bag),
-      _post.bind(null, bag),
-      _updateVaultUrl.bind(null, bag)
+      _initializeState.bind(null, bag),
+      _postSystemIntegration.bind(null, bag),
+      _post.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -75,7 +69,7 @@ function _get(bag, next) {
   logger.verbose(who, 'Inside');
 
   configHandler.get(bag.component,
-    function (err, secrets) {
+    function (err, state) {
       if (err) {
         bag.skipStatusChange = true;
         return next(
@@ -84,7 +78,7 @@ function _get(bag, next) {
         );
       }
 
-      if (_.isEmpty(secrets)) {
+      if (_.isEmpty(state)) {
         bag.skipStatusChange = true;
         return next(
           new ActErr(who, ActErr.DataNotFound,
@@ -92,7 +86,8 @@ function _get(bag, next) {
         );
       }
 
-      bag.config = secrets;
+      bag.config = state;
+
       return next();
     }
   );
@@ -105,10 +100,16 @@ function _checkConfig(bag, next) {
 
   var missingConfigFields = [];
 
+  if (!_.has(bag.config, 'rootPassword') || _.isEmpty(bag.config.rootPassword))
+    missingConfigFields.push('rootPassword');
   if (!_.has(bag.config, 'address') || _.isEmpty(bag.config.address))
     missingConfigFields.push('address');
   if (!_.has(bag.config, 'port') || !_.isNumber(bag.config.port))
     missingConfigFields.push('port');
+  if (!_.has(bag.config, 'sshPort') || !_.isNumber(bag.config.sshPort))
+    missingConfigFields.push('sshPort');
+  if (!_.has(bag.config, 'securePort') || !_.isNumber(bag.config.securePort))
+    missingConfigFields.push('securePort');
 
   if (missingConfigFields.length)
     return next(
@@ -117,26 +118,6 @@ function _checkConfig(bag, next) {
     );
 
   return next();
-}
-
-function _getReleaseVersion(bag, next) {
-  var who = bag.who + '|' + _getReleaseVersion.name;
-  logger.verbose(who, 'Inside');
-
-  var query = '';
-  bag.apiAdapter.getSystemSettings(query,
-    function (err, systemSettings) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to get system settings : ' + util.inspect(err))
-        );
-
-      bag.releaseVersion = systemSettings.releaseVersion;
-
-      return next();
-    }
-  );
 }
 
 function _setProcessingFlag(bag, next) {
@@ -173,6 +154,26 @@ function _sendResponse(bag, next) {
   return next();
 }
 
+function _getReleaseVersion(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersion.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system settings : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = systemSettings.releaseVersion;
+
+      return next();
+    }
+  );
+}
+
 function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
@@ -181,16 +182,14 @@ function _generateInitializeEnvs(bag, next) {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
     'RELEASE': bag.releaseVersion,
+    'STATE_HOST': bag.config.address,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
-    'DBUSERNAME': global.config.dbUsername,
-    'DBPASSWORD': global.config.dbPassword,
-    'DBHOST': global.config.dbHost,
-    'DBPORT': global.config.dbPort,
-    'DBNAME': global.config.dbName,
-    'VAULT_HOST': bag.config.address,
-    'VAULT_PORT': bag.config.port
+    'STATE_PASS': bag.config.rootPassword,
+    'STATE_PORT': bag.config.port,
+    'SSH_PORT': bag.config.sshPort,
+    'SECURE_PORT': bag.config.securePort
   };
 
   return next();
@@ -206,7 +205,7 @@ function _generateInitializeScript(bag, next) {
   headerScript = headerScript.concat(__applyTemplate(filePath, bag.params));
 
   var initializeScript = headerScript;
-  filePath = path.join(global.config.scriptsDir, 'docker/installVault.sh');
+  filePath = path.join(global.config.scriptsDir, 'docker/installState.sh');
   initializeScript = headerScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
@@ -233,9 +232,8 @@ function _writeScriptToFile(bag, next) {
   );
 }
 
-
-function _initializeVault(bag, next) {
-  var who = bag.who + '|' + _initializeVault.name;
+function _initializeState(bag, next) {
+  var who = bag.who + '|' + _initializeState.name;
   logger.verbose(who, 'Inside');
 
   var exec = spawn('/bin/bash',
@@ -269,62 +267,30 @@ function _initializeVault(bag, next) {
   );
 }
 
-function _getUnsealKeys(bag, next) {
-  var who = bag.who + '|' + _getUnsealKeys.name;
+function _postSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _postSystemIntegration.name;
   logger.verbose(who, 'Inside');
 
-  var keyIndex = 1;
-  var unsealKeysFile = path.join(
-    global.config.configDir, bag.component, 'scripts/keys.txt');
-
-  var filereader = readline.createInterface({
-    input: fs.createReadStream(unsealKeysFile),
-    console: false
-  });
-
-  filereader.on('line',
-    function (line) {
-      // this is the format in which unseal keys are stored
-      var keyString = util.format('Unseal Key %s:', keyIndex);
-      if (!_.isEmpty(line) && line.indexOf(keyString) >= 0) {
-        var value = line.split(' ')[3];
-        var keyNameInConfig = 'unsealKey' + keyIndex;
-
-        // set the unseal key in config object
-        bag.config[keyNameInConfig] = value;
-
-        // parse next key
-        keyIndex ++;
-      }
+  var postObject = {
+    name: 'state',
+    masterName: 'gitlabCreds',
+    data: {
+      username: 'root',
+      password: bag.scriptEnvs.STATE_PASS,
+      url: util.format('http://%s/api/v3', bag.scriptEnvs.STATE_HOST),
+      sshPort: util.format('%s', bag.scriptEnvs.SSH_PORT),
+      subscriptionProjectLimit: '100'
     }
-  );
+  };
 
-  filereader.on('close',
-    function () {
-      return next(null);
-    }
-  );
-}
-
-function _getVaultRootToken(bag, next) {
-  var who = bag.who + '|' + _getVaultRootToken.name;
-  logger.verbose(who, 'Inside');
-
-  envHandler.get('VAULT_TOKEN',
-    function (err, value) {
+  bag.apiAdapter.postSystemIntegration(postObject,
+    function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get VAULT_TOKEN with error: ' + err)
+            'Failed to create system integration: ' + util.inspect(err))
         );
 
-      if (_.isEmpty(value))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'empty VAULT_TOKEN in admiral.env')
-        );
-
-      bag.config.rootToken = value;
       return next();
     }
   );
@@ -334,36 +300,17 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  // The keys have been added to bag.config
-  bag.config.isInstalled = true;
-  bag.config.isInitialized = true;
+  var update = {
+    isInstalled: true,
+    isInitialized: true
+  };
 
-  configHandler.put(bag.component, bag.config,
+  configHandler.put(bag.component, update,
     function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to update config for ' + bag.component, err)
-        );
-
-      return next();
-    }
-  );
-}
-
-function _updateVaultUrl(bag, next) {
-  var who = bag.who + '|' +  _updateVaultUrl.name;
-  logger.verbose(who, 'Inside');
-
-  var vaultUrl = util.format('http://%s:%s',
-    bag.config.address, bag.config.port);
-
-  envHandler.put(bag.vaultUrlEnv, vaultUrl,
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Cannot set env: ' + bag.vaultUrlEnv + ' err: ' + err)
         );
 
       return next();
