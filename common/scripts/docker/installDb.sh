@@ -4,7 +4,6 @@ export COMPONENT="db"
 export DB_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export DB_CONFIG_DIR="$CONFIG_DIR/$COMPONENT/"
 export DB_IMAGE="drydock/postgres:$RELEASE"
-export DB_MOUNTS=""
 export TIMEOUT=120
 
 __validate_db_envs() {
@@ -37,24 +36,6 @@ __validate_db_envs() {
   if [ "$DB_DIALECT" == "" ]; then
     __process_error "DB_DIALECT cannot be empty, exiting"
     exit 1
-  fi
-}
-
-__validate_db_mounts() {
-  __process_msg "Validating db data mounts from host"
-
-  if [ ! -d "$DB_DATA_DIR" ]; then
-    __process_msg "Creating data directory $DB_DATA_DIR"
-    sudo mkdir -p $DB_DATA_DIR
-  else
-    __process_msg "Data directory already present: $DB_DATA_DIR"
-  fi
-
-  if [ ! -d "$DB_CONFIG_DIR" ]; then
-    __process_msg "Creating config directory $DB_CONFIG_DIR"
-    sudo mkdir -p $DB_CONFIG_DIR
-  else
-    __process_msg "Config directory already present: $DB_CONFIG_DIR"
   fi
 }
 
@@ -119,7 +100,6 @@ main() {
     __process_msg "Database already installed, skipping"
   else
     __validate_db_envs
-    __validate_db_mounts
     __run_db
     __process_msg "Database container successfully running"
   fi
