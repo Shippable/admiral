@@ -100,6 +100,11 @@ APIAdapter.prototype.postRedis =
     var url = '/api/redis';
     this.post(url, body, callback);
   };
+APIAdapter.prototype.initializeRedis =
+  function (body, callback) {
+    var url = '/api/redis/initialize';
+    this.post(url, body, callback);
+  };
 
 // secrets
 APIAdapter.prototype.getSecrets =
