@@ -9,7 +9,10 @@ var pg = require('pg');
 function getStatus(req, res) {
   var bag = {
     reqQuery: req.query,
-    resBody: {}
+    resBody: {
+      isReachable: false,
+      error: null
+    }
   };
 
   bag.who = util.format('db|%s', self.name);
@@ -52,8 +55,13 @@ function _createClient(bag, next) {
   var testClient = new pg.Client(connectionString);
   testClient.connect(
     function (err) {
-      logger.error(util.inspect(arguments))
-      return next(err);
+      if (err) {
+        logger.error('Error while connecting to database. ' +
+          util.inspect(err));
+        bag.resBody.isReachable = false;
+        bag.resBody.error = util.inspect(err);
+      }
+      return next();
     }
   );
 }
