@@ -92,7 +92,9 @@ function _initializeDatabase(bag, next) {
             'Failed to initialize database.', err)
         );
 
-      return next();
+      // temporary timeout until this route is retired
+      logger.debug('Waiting 30 seconds for Postgres to boot');
+      setTimeout(next, 30000);
     }
   );
 }
