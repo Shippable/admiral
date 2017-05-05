@@ -69,6 +69,12 @@ APIAdapter.prototype.postMsg =
     this.post(url, body, callback);
   };
 
+APIAdapter.prototype.initializeMsg =
+  function (body, callback) {
+    var url = '/api/msg/initialize';
+    this.post(url, body, callback);
+  };
+
 // providers
 APIAdapter.prototype.getProviders =
   function (query, callback) {

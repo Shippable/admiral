@@ -7,4 +7,5 @@ function msgRoutes(app) {
   app.get('/api/msg', validateAccount, require('./get.js'));
   app.get('/api/msg/logs', validateAccount, require('./getLogs.js'));
   app.post('/api/msg', validateAccount, require('./post.js'));
+  app.post('/api/msg/initialize', validateAccount, require('./initialize.js'));
 }

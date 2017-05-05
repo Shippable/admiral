@@ -7,44 +7,39 @@ var async = require('async');
 var _ = require('underscore');
 var path = require('path');
 var fs = require('fs');
-var readline = require('readline');
 var spawn = require('child_process').spawn;
 
-var envHandler = require('../../common/envHandler.js');
-var configHandler = require('../../common/configHandler.js');
 var APIAdapter = require('../../common/APIAdapter.js');
+var configHandler = require('../../common/configHandler.js');
 
 function initialize(req, res) {
   var bag = {
-    reqQuery: req.query,
     resBody: [],
     res: res,
-    params: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
+    params: {},
     skipStatusChange: false,
     isResponseSent: false,
-    component: 'secrets',
-    tmpScript: '/tmp/secrets.sh',
-    vaultUrlEnv: 'VAULT_URL'
+    component: 'msg',
+    tmpScript: '/tmp/msg.sh'
   };
 
-  bag.who = util.format('secrets|%s', self.name);
+  bag.who = util.format('msg|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
-      _getReleaseVersion.bind(null, bag),
+      _checkConfig.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _sendResponse.bind(null, bag),
+      _getReleaseVersion.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
-      _initializeVault.bind(null, bag),
-      _getUnsealKeys.bind(null, bag),
-      _getVaultRootToken.bind(null, bag),
-      _post.bind(null, bag),
-      _updateVaultUrl.bind(null, bag)
+      _initializeMsg.bind(null, bag),
+      _postSystemIntegration.bind(null, bag),
+      _post.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -58,6 +53,7 @@ function initialize(req, res) {
         else
           logger.warn(err);
       }
+      //TODO: remove tmp file
     }
   );
 }
@@ -74,7 +70,7 @@ function _get(bag, next) {
   logger.verbose(who, 'Inside');
 
   configHandler.get(bag.component,
-    function (err, secrets) {
+    function (err, msg) {
       if (err) {
         bag.skipStatusChange = true;
         return next(
@@ -83,7 +79,7 @@ function _get(bag, next) {
         );
       }
 
-      if (_.isEmpty(secrets)) {
+      if (_.isEmpty(msg)) {
         bag.skipStatusChange = true;
         return next(
           new ActErr(who, ActErr.DataNotFound,
@@ -91,30 +87,39 @@ function _get(bag, next) {
         );
       }
 
-      bag.config = secrets;
+      bag.config = msg;
       return next();
     }
   );
 }
 
-function _getReleaseVersion(bag, next) {
-  var who = bag.who + '|' + _getReleaseVersion.name;
+function _checkConfig(bag, next) {
+  /* jshint maxcomplexity:15 */
+  var who = bag.who + '|' + _checkConfig.name;
   logger.verbose(who, 'Inside');
 
-  var query = '';
-  bag.apiAdapter.getSystemSettings(query,
-    function (err, systemSettings) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to get system settings : ' + util.inspect(err))
-        );
+  var missingConfigFields = [];
 
-      bag.releaseVersion = systemSettings.releaseVersion;
+  if (!_.has(bag.config, 'username') || _.isEmpty(bag.config.username))
+    missingConfigFields.push('username');
+  if (!_.has(bag.config, 'password') || _.isEmpty(bag.config.password))
+    missingConfigFields.push('password');
+  if (!_.has(bag.config, 'uiUsername') || _.isEmpty(bag.config.uiUsername))
+    missingConfigFields.push('uiUsername');
+  if (!_.has(bag.config, 'uiPassword') || _.isEmpty(bag.config.uiPassword))
+    missingConfigFields.push('uiPassword');
+  if (!_.has(bag.config, 'amqpPort') || !bag.config.amqpPort)
+    missingConfigFields.push('amqpPort');
+  if (!_.has(bag.config, 'adminPort') || !bag.config.adminPort)
+    missingConfigFields.push('adminPort');
 
-      return next();
-    }
-  );
+  if (missingConfigFields.length)
+    return next(
+      new ActErr(who, ActErr.DataNotFound,
+        'Missing config data: ' + missingConfigFields.join())
+    );
+
+  return next();
 }
 
 function _setProcessingFlag(bag, next) {
@@ -151,6 +156,26 @@ function _sendResponse(bag, next) {
   return next();
 }
 
+function _getReleaseVersion(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersion.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system settings : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = systemSettings.releaseVersion;
+
+      return next();
+    }
+  );
+}
+
 function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
@@ -159,16 +184,18 @@ function _generateInitializeEnvs(bag, next) {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
     'RELEASE': bag.releaseVersion,
+    'MSG_HOST': global.config.admiralIP,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
-    'DBUSERNAME': global.config.dbUsername,
-    'DBPASSWORD': global.config.dbPassword,
-    'DBHOST': global.config.dbHost,
-    'DBPORT': global.config.dbPort,
-    'DBNAME': global.config.dbName,
-    'VAULT_HOST': global.config.admiralIP,
-    'VAULT_PORT': bag.config.port
+    'MSG_UI_USER': bag.config.uiUsername,
+    'MSG_UI_PASS': bag.config.uiPassword,
+    'MSG_USER': bag.config.username,
+    'MSG_PASS': bag.config.password,
+    'AMQP_PORT': bag.config.amqpPort,
+    'ADMIN_PORT': bag.config.adminPort,
+    'RABBITMQ_ADMIN':
+      path.join(global.config.scriptsDir, '/docker/rabbitmqadmin')
   };
 
   return next();
@@ -184,7 +211,7 @@ function _generateInitializeScript(bag, next) {
   headerScript = headerScript.concat(__applyTemplate(filePath, bag.params));
 
   var initializeScript = headerScript;
-  filePath = path.join(global.config.scriptsDir, 'docker/installVault.sh');
+  filePath = path.join(global.config.scriptsDir, 'docker/installMsg.sh');
   initializeScript = headerScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
@@ -212,8 +239,8 @@ function _writeScriptToFile(bag, next) {
 }
 
 
-function _initializeVault(bag, next) {
-  var who = bag.who + '|' + _initializeVault.name;
+function _initializeMsg(bag, next) {
+  var who = bag.who + '|' + _initializeMsg.name;
   logger.verbose(who, 'Inside');
 
   var exec = spawn('/bin/bash',
@@ -247,62 +274,42 @@ function _initializeVault(bag, next) {
   );
 }
 
-function _getUnsealKeys(bag, next) {
-  var who = bag.who + '|' + _getUnsealKeys.name;
+function _postSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _postSystemIntegration.name;
   logger.verbose(who, 'Inside');
 
-  var keyIndex = 1;
-  var unsealKeysFile = path.join(
-    global.config.configDir, bag.component, 'scripts/keys.txt');
+  var amqpAddress = (bag.config.isSecure ? 'amqps://' : 'amqp://') +
+    bag.scriptEnvs.MSG_USER + ':' + bag.scriptEnvs.MSG_PASS +
+    '@' + bag.scriptEnvs.MSG_HOST + ':' + bag.config.amqpPort;
+  var httpAddress = (bag.config.isSecure ? 'https://' : 'http://') +
+    bag.scriptEnvs.MSG_USER + ':' + bag.scriptEnvs.MSG_PASS +
+    '@' + bag.scriptEnvs.MSG_HOST + ':' + bag.config.adminPort;
 
-  var filereader = readline.createInterface({
-    input: fs.createReadStream(unsealKeysFile),
-    console: false
-  });
-
-  filereader.on('line',
-    function (line) {
-      // this is the format in which unseal keys are stored
-      var keyString = util.format('Unseal Key %s:', keyIndex);
-      if (!_.isEmpty(line) && line.indexOf(keyString) >= 0) {
-        var value = line.split(' ')[3];
-        var keyNameInConfig = 'unsealKey' + keyIndex;
-
-        // set the unseal key in config object
-        bag.config[keyNameInConfig] = value;
-
-        // parse next key
-        keyIndex ++;
-      }
+  var postObject = {
+    name: 'msg',
+    masterName: 'rabbitmqCreds',
+    data: {
+      amqpUrl: amqpAddress + '/shippable',
+      amqpUrlRoot: amqpAddress + '/shippableRoot',
+      amqpUrlAdmin: httpAddress,
+      amqpDefaultExchange: 'shippableEx',
+      rootQueueList: 'core.charon|versions.trigger|core.nf|nf.email|' +
+        'nf.hipchat|nf.irc|nf.slack|nf.webhook|core.braintree|core.certgen|' +
+        'core.hubspotSync|core.marshaller|marshaller.ec2|core.sync|' +
+        'job.request|job.trigger|cluster.init|steps.deploy|steps.manifest|' +
+        'steps.provision|steps.rSync|steps.release|core.logup|www.signals|' +
+        'core.segment'
     }
-  );
+  };
 
-  filereader.on('close',
-    function () {
-      return next(null);
-    }
-  );
-}
-
-function _getVaultRootToken(bag, next) {
-  var who = bag.who + '|' + _getVaultRootToken.name;
-  logger.verbose(who, 'Inside');
-
-  envHandler.get('VAULT_TOKEN',
-    function (err, value) {
+  bag.apiAdapter.postSystemIntegration(postObject,
+    function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get VAULT_TOKEN with error: ' + err)
+            'Failed to create system integration: ' + util.inspect(err))
         );
 
-      if (_.isEmpty(value))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'empty VAULT_TOKEN in admiral.env')
-        );
-
-      bag.config.rootToken = value;
       return next();
     }
   );
@@ -312,36 +319,21 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  // The keys have been added to bag.config
-  bag.config.isInstalled = true;
-  bag.config.isInitialized = true;
+  var update = {
+    isInstalled: true,
+    isInitialized: true,
+    uiUsername: bag.scriptEnvs.MSG_UI_USER,
+    uiPassword: bag.scriptEnvs.MSG_UI_PASS,
+    username: bag.scriptEnvs.MSG_USER,
+    password: bag.scriptEnvs.MSG_PASS
+  };
 
-  configHandler.put(bag.component, bag.config,
+  configHandler.put(bag.component, update,
     function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to update config for ' + bag.component, err)
-        );
-
-      return next();
-    }
-  );
-}
-
-function _updateVaultUrl(bag, next) {
-  var who = bag.who + '|' +  _updateVaultUrl.name;
-  logger.verbose(who, 'Inside');
-
-  var vaultUrl = util.format('http://%s:%s',
-    bag.config.address, bag.config.port);
-
-  envHandler.put(bag.vaultUrlEnv, vaultUrl,
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Cannot set env: ' + bag.vaultUrlEnv + ' err: ' + err)
         );
 
       return next();
