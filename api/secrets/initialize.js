@@ -284,9 +284,8 @@ function _checkInitStatus(bag, next) {
               'Vault needs 5 unseal keys. One(or more) unseal keys are ' +
               ' missing. Reset vault server or make sure keys are present')
           );
-        } else {
-          bag.config.isInitialized = true;
         }
+        bag.config.isInitialized = response.initialized;
       } else {
         bag.config.isInitialized = false;
       }
@@ -380,7 +379,7 @@ function _unsealVaultStep1(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to unseal  vault: ' + util.inspect(err))
+            'Failed to unseal vault: ' + util.inspect(err))
         );
       logger.debug('Unseal response: ' + util.inspect(response));
       return next();
@@ -406,7 +405,7 @@ function _unsealVaultStep2(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to unseal  vault: ' + util.inspect(err))
+            'Failed to unseal vault: ' + util.inspect(err))
         );
 
       logger.debug('Unseal response: ' + util.inspect(response));
@@ -432,7 +431,7 @@ function _unsealVaultStep3(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to unseal  vault: ' + util.inspect(err))
+            'Failed to unseal vault: ' + util.inspect(err))
         );
 
       logger.debug('Unseal response: ' + util.inspect(response));
