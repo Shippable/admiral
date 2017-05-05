@@ -108,6 +108,12 @@ APIAdapter.prototype.postSecrets =
     this.post(url, body, callback);
   };
 
+APIAdapter.prototype.initializeSecrets =
+  function (body, callback) {
+    var url = '/api/secrets/initialize';
+    this.post(url, body, callback);
+  };
+
 // state
 APIAdapter.prototype.getState =
   function (callback) {

@@ -7,4 +7,6 @@ function secretsRoutes(app) {
   app.get('/api/secrets', validateAccount, require('./get.js'));
   app.get('/api/secrets/logs', validateAccount, require('./getLogs.js'));
   app.post('/api/secrets', validateAccount, require('./post.js'));
+  app.post('/api/secrets/initialize', validateAccount,
+    require('./initialize.js'));
 }

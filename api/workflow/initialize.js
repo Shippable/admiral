@@ -125,7 +125,7 @@ function _initializeSecrets(bag, next) {
   var who = bag.who + '|' + _initializeSecrets.name;
   logger.verbose(who, 'Inside');
 
-  bag.apiAdapter.postSecrets({},
+  bag.apiAdapter.initializeSecrets({},
     function (err) {
       if (err)
         return next(
@@ -133,7 +133,9 @@ function _initializeSecrets(bag, next) {
             'Failed to initialize secrets provider', err)
         );
 
-      return next();
+      // temporary timeout until this route is retired
+      logger.debug('Waiting 30 seconds for vault to boot');
+      setTimeout(next, 30000);
     }
   );
 }
