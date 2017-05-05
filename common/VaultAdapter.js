@@ -171,6 +171,26 @@ VaultAdapter.prototype.postToken = function (body, callback) {
   this.post('/v1/auth/token/create', body, callback);
 };
 
+VaultAdapter.prototype.init = function (body, callback) {
+  this.put('/v1/sys/init', body, callback);
+};
+
+VaultAdapter.prototype.createMount = function (path, body, callback) {
+  this.post('/v1/sys/mounts/' + path, body, callback);
+};
+
+VaultAdapter.prototype.unseal = function (body, callback) {
+  this.put('/v1/sys/unseal', body, callback);
+};
+
+VaultAdapter.prototype.getSealStatus = function (callback) {
+  this.get('/v1/sys/seal-status', callback);
+};
+
+VaultAdapter.prototype.getInitializedStatus = function (callback) {
+  this.get('/v1/sys/init', callback);
+};
+
 //
 // Helper methods
 //
