@@ -58,8 +58,6 @@ __update_vault_config() {
   __process_msg "Generating vault config"
   cp -vr $SCRIPTS_DIR/configs/vault_config.hcl.template $VAULT_CONFIG_DIR/config.hcl
   cp -vr $SCRIPTS_DIR/configs/policy.hcl $VAULT_CONFIG_DIR/scripts/policy.hcl
-  cp -vr $SCRIPTS_DIR/configs/vaultToken.json.template $VAULT_CONFIG_DIR/scripts/vaultToken.json.template
-  cp -vr $SCRIPTS_DIR/docker/initializeVault.sh $VAULT_CONFIG_DIR/scripts/initializeVault.sh
 }
 
 __update_vault_creds() {
@@ -125,31 +123,6 @@ __check_vault() {
   fi
 }
 
-__initialize_vault() {
-  __process_msg "Initialize vault"
-
-  local bootstrap_cmd="sudo docker exec \
-    $COMPONENT sh -c '/vault/config/scripts/initializeVault.sh'"
-  __process_msg "Executing: $bootstrap_cmd"
-  eval "$bootstrap_cmd"
-
-  local vault_token_file="$VAULT_CONFIG_DIR/scripts/vaultToken.json"
-  if [ ! -f "$vault_token_file" ]; then
-    __process_error "No vault token file present, exiting"
-    exit 1
-  else
-    local vault_token=$(cat "$vault_token_file" \
-      | jq -r '.vaultToken')
-    __process_msg "Generated vault token: $vault_token"
-  fi
-
-  local admiral_env="$CONFIG_DIR/admiral.env"
-  __process_msg "Updating vault token in admiral env"
-  sed -i 's#.*VAULT_TOKEN=.*#VAULT_TOKEN="'$vault_token'"#g' $admiral_env
-
-  __process_msg "Bootstrap vault complete"
-}
-
 main() {
   __process_marker "Booting Vault"
   if [ "$IS_INSTALLED" == true ]; then
@@ -163,14 +136,6 @@ main() {
     __update_vault_creds
     __run_vault
     __check_vault
-  fi
-
-  if [ "$IS_INITIALIZED" == true ]; then
-    __process_msg "Vault already initialized, skipping"
-  else
-    __process_msg "Vault not initialized"
-    __check_vault
-    __initialize_vault
   fi
   __process_msg "Vault container successfully running"
 }
