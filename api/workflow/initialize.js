@@ -267,7 +267,7 @@ function _initializeRedis(bag, next) {
 
   var postObj = {};
 
-  bag.apiAdapter.postRedis(postObj,
+  bag.apiAdapter.initializeRedis(postObj,
     function (err) {
       if (err)
         return next(
@@ -275,7 +275,9 @@ function _initializeRedis(bag, next) {
             'Failed to initialize Redis', err)
         );
 
-      return next();
+      // temporary timeout until this route is retired
+      logger.debug('Waiting 10 seconds for Redis to boot');
+      setTimeout(next, 10000);
     }
   );
 }
