@@ -1,62 +1,7 @@
 #!/bin/bash -e
 
-export COMPONENT="db"
-export DB_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
-export DB_CONFIG_DIR="$CONFIG_DIR/$COMPONENT/"
 export DB_IMAGE="drydock/postgres:$RELEASE"
-export DB_MOUNTS=""
 export TIMEOUT=120
-
-__validate_db_envs() {
-  __process_msg "Validating db ENV variables"
-  if [ "$DB_IP" == "" ]; then
-    __process_error "DB_IP cannot be empty, exiting"
-    exit 1
-  fi
-
-  if [ "$DB_PORT" == "" ]; then
-    __process_error "DB_PORT cannot be empty, exiting"
-    exit 1
-  fi
-
-  if [ "$DB_USER" == "" ]; then
-    __process_error "DB_USER cannot be empty, exiting"
-    exit 1
-  fi
-
-  if [ "$DB_NAME" == "" ]; then
-    __process_error "DB_NAME cannot be empty, exiting"
-    exit 1
-  fi
-
-  if [ "$DB_PASSWORD" == "" ]; then
-    __process_error "DB_PASSWORD cannot be empty, exiting"
-    exit 1
-  fi
-
-  if [ "$DB_DIALECT" == "" ]; then
-    __process_error "DB_DIALECT cannot be empty, exiting"
-    exit 1
-  fi
-}
-
-__validate_db_mounts() {
-  __process_msg "Validating db data mounts from host"
-
-  if [ ! -d "$DB_DATA_DIR" ]; then
-    __process_msg "Creating data directory $DB_DATA_DIR"
-    sudo mkdir -p $DB_DATA_DIR
-  else
-    __process_msg "Data directory already present: $DB_DATA_DIR"
-  fi
-
-  if [ ! -d "$DB_CONFIG_DIR" ]; then
-    __process_msg "Creating config directory $DB_CONFIG_DIR"
-    sudo mkdir -p $DB_CONFIG_DIR
-  else
-    __process_msg "Config directory already present: $DB_CONFIG_DIR"
-  fi
-}
 
 __check_db() {
   __process_msg "Checking database container status on: $DB_IP:$DB_PORT"
@@ -118,8 +63,6 @@ main() {
   if [ "$DB_INSTALLED" == true ]; then
     __process_msg "Database already installed, skipping"
   else
-    __validate_db_envs
-    __validate_db_mounts
     __run_db
     __process_msg "Database container successfully running"
   fi
