@@ -1071,7 +1071,24 @@
         function (err) {
           if (err)
             return next(err);
-          return next();
+
+          var promise = $interval(function () {
+            getSystemSettings({},
+              function (err) {
+                if (err) {
+                  $interval.cancel(promise);
+                  return next(err);
+                }
+
+                var db = $scope.vm.systemSettings.db;
+
+                if (!db.isProcessing && (db.isFailed || db.isInitialized)) {
+                  $interval.cancel(promise);
+                  return next();
+                }
+              }
+            );
+          }, 3000);
         }
       );
     }

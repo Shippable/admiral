@@ -18,7 +18,9 @@ function post(req, res) {
   var bag = {
     reqQuery: req.query,
     resBody: {},
+    res: res,
     skipStatusChange: false,
+    isResponseSent: false,
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     serviceUserToken: '',
@@ -37,6 +39,7 @@ function post(req, res) {
       _upsertSystemSettings.bind(null, bag),
       _getReleaseVersionFromSystemSettings.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
+      _sendResponse.bind(null, bag),
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
       _upsertSystemCodes.bind(null, bag),
@@ -59,16 +62,16 @@ function post(req, res) {
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
-      if (!bag.skipStatusChange) {
+      if (!bag.skipStatusChange)
         _setCompleteStatus(bag, err);
+
+      if (err) {
+        // only send a response if we haven't already
+        if (!bag.isResponseSent)
+          respondWithError(bag.res, err);
+        else
+          logger.warn(err);
       }
-
-      if (err)
-        return respondWithError(res, err);
-
-
-
-      sendJSONResponse(res, bag.resBody);
     }
   );
 }
@@ -192,16 +195,29 @@ function _setProcessingFlag(bag, next) {
   };
 
   configHandler.put('db', update,
-    function (err) {
+    function (err, config) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to update db config', err)
         );
 
+      bag.resBody = config;
       return next();
     }
   );
+}
+
+function _sendResponse(bag, next) {
+  var who = bag.who + '|' + _sendResponse.name;
+  logger.verbose(who, 'Inside');
+
+  // We reply early so the request won't time out while
+  // waiting for the service to start.
+
+  sendJSONResponse(bag.res, bag.resBody, 202);
+  bag.isResponseSent = true;
+  return next();
 }
 
 function _generateServiceUserToken(bag, next) {
