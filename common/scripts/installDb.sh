@@ -4,6 +4,39 @@ export COMPONENT="db"
 export DB_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export DB_CONFIG_DIR="$CONFIG_DIR/$COMPONENT/"
 
+__validate_db_envs() {
+  __process_msg "Validating db ENV variables"
+  if [ "$DB_IP" == "" ]; then
+    __process_error "DB_IP cannot be empty, exiting"
+    exit 1
+  fi
+
+  if [ "$DB_PORT" == "" ]; then
+    __process_error "DB_PORT cannot be empty, exiting"
+    exit 1
+  fi
+
+  if [ "$DB_USER" == "" ]; then
+    __process_error "DB_USER cannot be empty, exiting"
+    exit 1
+  fi
+
+  if [ "$DB_NAME" == "" ]; then
+    __process_error "DB_NAME cannot be empty, exiting"
+    exit 1
+  fi
+
+  if [ "$DB_PASSWORD" == "" ]; then
+    __process_error "DB_PASSWORD cannot be empty, exiting"
+    exit 1
+  fi
+
+  if [ "$DB_DIALECT" == "" ]; then
+    __process_error "DB_DIALECT cannot be empty, exiting"
+    exit 1
+  fi
+}
+
 __validate_db_mounts() {
   __process_msg "Validating db data mounts from host"
 
@@ -45,6 +78,7 @@ __install_db() {
 
 main() {
   __process_marker "Installing database"
+  __validate_db_envs
   __validate_db_mounts
   __install_db
 }
