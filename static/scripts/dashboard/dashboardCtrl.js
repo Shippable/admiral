@@ -35,8 +35,16 @@
       restartingServices: false,
       requireRestart: false,
       initializeForm: {
-        msgPassword: '',
-        statePassword: ''
+        secrets: {
+        },
+        msg: {
+          password: '',
+        },
+        state: {
+          rootPassword: ''
+        },
+        redis: {
+        }
       },
       // map by systemInt name, then masterName
       installForm: {
@@ -430,11 +438,11 @@
             systemSettings.releaseVersion;
 
           if ($scope.vm.systemSettings.msg.password)
-            $scope.vm.initializeForm.msgPassword =
+            $scope.vm.initializeForm.msg.password =
               $scope.vm.systemSettings.msg.password;
 
           if ($scope.vm.systemSettings.state.rootPassword)
-            $scope.vm.initializeForm.statePassword =
+            $scope.vm.initializeForm.state.rootPassword =
               $scope.vm.systemSettings.state.rootPassword;
 
           $scope.vm.initialized = $scope.vm.systemSettings.db.isInitialized &&
@@ -900,26 +908,88 @@
 
     function initialize() {
       $scope.vm.initializing = true;
-      var bag = {};
+
+      admiralApiAdapter.postDB({},
+        function (err) {
+          if (err) {
+            $scope.vm.initializing = false;
+            return horn.error(err);
+          }
+
+          var promise = $interval(function () {
+            getSystemSettings({},
+              function (err) {
+                if (err) {
+                  $interval.cancel(promise);
+                  $scope.vm.initializing = false;
+                  return horn.error(err);
+                }
+
+                var db = $scope.vm.systemSettings.db;
+
+                if (!db.isProcessing && (db.isFailed || db.isInitialized)) {
+                  $interval.cancel(promise);
+                  postServicesAndInitSecrets();
+                }
+              }
+            );
+          }, 3000);
+        }
+      );
+    }
+
+    function postServicesAndInitSecrets() {
       async.series([
-          postInitialize.bind(null, bag),
-          getSystemSettings.bind(null, bag),
-          getAdmiralEnv.bind(null, bag)
+          // get secrets, msg, state, redis
+          getCoreServices,
+          postSecrets,
+          postMsg,
+          postState,
+          postRedis,
+          initSecrets
         ],
         function (err) {
           if (err) {
             $scope.vm.initializing = false;
-            horn.error(err);
-            return;
+            return horn.error(err);
           }
-          pollSystemSettings();
+
+          var promise = $interval(function () {
+            getSystemSettings({},
+              function (err) {
+                if (err) {
+                  $interval.cancel(promise);
+                  $scope.vm.initializing = false;
+                  return horn.error(err);
+                }
+
+                var secrets = $scope.vm.systemSettings.secrets;
+
+                if (!secrets.isProcessing &&
+                  (secrets.isFailed || secrets.isInitialized)) {
+                  $interval.cancel(promise);
+                  initCoreServices();
+                }
+              }
+            );
+          }, 3000);
         }
       );
     }
-    function postInitialize(bag, next) {
-      admiralApiAdapter.postInitialize($scope.vm.initializeForm,
+
+    function initCoreServices() {
+      async.series([
+          initMsg,
+          initState,
+          initRedis
+        ],
         function (err) {
-          return next(err);
+          if (err) {
+            $scope.vm.initializing = false;
+            return horn.error(err);
+          }
+
+          pollSystemSettings();
         }
       );
     }
@@ -981,6 +1051,115 @@
           }
         );
       }, 3000);
+    }
+
+    function getCoreServices(next) {
+      var coreServices = ['secrets', 'msg', 'state', 'redis'];
+      async.each(coreServices,
+        function (service, done) {
+          admiralApiAdapter.getCoreService(service,
+            function (err) {
+              if (err)
+                return done(err);
+              done();
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function postSecrets(next) {
+      admiralApiAdapter.postSecrets({},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function postMsg(next) {
+      var update = {
+        password: $scope.vm.initializeForm.msg.password,
+        uiPassword: $scope.vm.initializeForm.msg.password
+      };
+
+      admiralApiAdapter.postMsg(update,
+        function (err, msg) {
+          if (err)
+            return next(err);
+          $scope.vm.initializeForm.msg.password = msg.password;
+          return next();
+        }
+      );
+    }
+
+    function postState(next) {
+      var update = {
+        rootPassword: $scope.vm.initializeForm.state.rootPassword,
+      };
+
+      admiralApiAdapter.postState(update,
+        function (err, state) {
+          if (err)
+            return next(err);
+          $scope.vm.initializeForm.state.rootPassword = state.rootPassword;
+          return next();
+        }
+      );
+    }
+
+    function postRedis(next) {
+      admiralApiAdapter.postRedis({},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function initSecrets(next) {
+      admiralApiAdapter.initSecrets({},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function initMsg(next) {
+      admiralApiAdapter.initMsg({},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function initState(next) {
+      admiralApiAdapter.initState({},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function initRedis(next) {
+      admiralApiAdapter.initRedis({},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
     }
 
     function upgrade() {
@@ -1922,7 +2101,7 @@
     function showConfigModal(service) {
       $scope.vm.selectedService = $scope.vm.systemSettings[service];
 
-      admiralApiAdapter.getService(service,
+      admiralApiAdapter.getCoreService(service,
         function (err, configs) {
           if (err)
             return horn.error(err);
