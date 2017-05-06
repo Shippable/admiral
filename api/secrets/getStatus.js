@@ -91,10 +91,8 @@ function _getStatus(bag, next) {
         bag.resBody.isReachable = false;
         bag.resBody.error = util.inspect(err);
       } else if (err) {
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to check status for ' + bag.component, err)
-        );
+        bag.resBody.isReachable = true;
+        bag.resBody.error = util.inspect(err);
       } else {
         bag.resBody.isReachable = true;
         bag.resBody = _.extend(bag.resBody, response);
