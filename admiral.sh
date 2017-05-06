@@ -28,7 +28,6 @@ readonly SSH_PRIVATE_KEY=$CONFIG_DIR/machinekey
 readonly SSH_PUBLIC_KEY=$CONFIG_DIR/machinekey.pub
 readonly SCRIPTS_DIR_REMOTE="/tmp/shippable"
 readonly MAX_DEFAULT_LOG_COUNT=6
-readonly SSH_USER="root"
 readonly DOCKER_VERSION=1.13
 readonly AWSCLI_VERSION=1.10.63
 readonly API_TIMEOUT=600
