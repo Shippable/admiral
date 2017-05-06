@@ -197,7 +197,7 @@ function _generateInitializeEnvs(bag, next) {
     'AMQP_PORT': bag.config.amqpPort,
     'ADMIN_PORT': bag.config.adminPort,
     'RABBITMQ_ADMIN':
-      path.join(global.config.scriptsDir, '/docker/rabbitmqadmin')
+      path.join(global.config.scriptsDir, '/rabbitmqadmin')
   };
 
   return next();
