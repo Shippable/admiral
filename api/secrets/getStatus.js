@@ -89,7 +89,7 @@ function _getStatus(bag, next) {
     function (err, response) {
       if (err && err.code === 'ECONNREFUSED') {
         bag.resBody.isReachable = false;
-        bag.resBody = _.extend(bag.resBody, err);
+        bag.resBody.error = util.inspect(err);
       } else if (err) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
