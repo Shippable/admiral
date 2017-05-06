@@ -49,7 +49,9 @@
         },
         state: {
           initType: 'admiral',
-          rootPassword: ''
+          rootPassword: '',
+          address: '',
+          confirmCommand: false
         },
         redis: {
           initType: 'admiral'
@@ -982,6 +984,9 @@
 
       if ($scope.vm.initializeForm.msg.initType === 'new')
         msgUpdate.address = $scope.vm.initializeForm.msg.address;
+
+      if ($scope.vm.initializeForm.state.initType === 'new')
+        stateUpdate.address = $scope.vm.initializeForm.state.address;
 
       async.series([
           // get secrets, msg, state, redis
