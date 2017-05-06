@@ -28,7 +28,7 @@ function post(req, res) {
       if (err)
         return respondWithError(res, err);
 
-      sendJSONResponse(res, bag.resBody, 202);
+      sendJSONResponse(res, bag.resBody);
     }
   );
 }
