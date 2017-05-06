@@ -44,6 +44,8 @@
         msg: {
           initType: 'admiral',
           password: '',
+          address: '',
+          confirmCommand: false
         },
         state: {
           initType: 'admiral',
@@ -359,7 +361,6 @@
       },
       systemSettingsId: null,
       selectedService: {},
-      saveSecrets: saveSecrets,
       initialize: initialize,
       upgrade: upgrade,
       install: install,
@@ -387,6 +388,7 @@
           setBreadcrumb.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
           getSystemSettings.bind(null, bag),
+          updateInitializeForm.bind(null, bag),
           getMachineKeys.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
@@ -445,24 +447,6 @@
               (systemSettings.redis && JSON.parse(systemSettings.redis)));
           $scope.vm.systemSettings.releaseVersion =
             systemSettings.releaseVersion;
-          _.each($scope.vm.initializeForm,
-            function (obj, service) {
-              if (!_.isObject(obj)) return;
-              _.each(obj,
-                function (value, key) {
-                  if ($scope.vm.systemSettings[service][key])
-                    $scope.vm.initializeForm[service][key] =
-                      $scope.vm.systemSettings[service][key];
-                }
-              );
-              if (_.has(obj, 'address')) {
-                if (obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
-                  $scope.vm.initializeForm[service].initType = 'admiral';
-                else
-                  $scope.vm.initializeForm[service].initType = 'new';
-              }
-            }
-          );
 
           $scope.vm.initialized = $scope.vm.systemSettings.db.isInitialized &&
             $scope.vm.systemSettings.secrets.isInitialized &&
@@ -473,6 +457,29 @@
           return next();
         }
       );
+    }
+
+    function updateInitializeForm(bag, next) {
+      _.each($scope.vm.initializeForm,
+        function (obj, service) {
+          if (!_.isObject(obj)) return;
+          _.each(obj,
+            function (value, key) {
+              if ($scope.vm.systemSettings[service][key])
+                $scope.vm.initializeForm[service][key] =
+                  $scope.vm.systemSettings[service][key];
+            }
+          );
+          if (obj.address) {
+            if (obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
+              $scope.vm.initializeForm[service].initType = 'admiral';
+            else
+              $scope.vm.initializeForm[service].initType = 'new';
+          }
+        }
+      );
+
+      return next();
     }
 
     function getAdmiralEnv(bag, next) {
@@ -928,22 +935,6 @@
       );
     }
 
-    function saveSecrets() {
-      var update = {
-        address: $scope.vm.initializeForm.secrets.address
-      };
-
-      async.series([
-          postSecrets.bind(null, update),
-          getSystemSettings.bind(null, {})
-        ],
-        function (err) {
-          if (err)
-            horn.error(err);
-        }
-      );
-    }
-
     function initialize() {
       $scope.vm.initializing = true;
 
@@ -977,27 +968,30 @@
     }
 
     function postServicesAndInitSecrets() {
-      var msgUpdate = {};
-      var stateUpdate = {};
+      var secretsUpdate = {};
+      var msgUpdate = {
+        password: $scope.vm.initializeForm.msg.password,
+        uiPassword: $scope.vm.initializeForm.msg.password
+      };
+      var stateUpdate = {
+        rootPassword: $scope.vm.initializeForm.state.rootPassword
+      };
 
-      if ($scope.vm.initializeForm.msg.initType === 'admiral')
-        msgUpdate = {
-          password: $scope.vm.initializeForm.msg.password,
-          uiPassword: $scope.vm.initializeForm.msg.password
-        };
+      if ($scope.vm.initializeForm.secrets.initType === 'new')
+        secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
 
-      if ($scope.vm.initializeForm.state.initType === 'admiral')
-        stateUpdate = {
-          rootPassword: $scope.vm.initializeForm.state.rootPassword
-        };
+      if ($scope.vm.initializeForm.msg.initType === 'new')
+        msgUpdate.address = $scope.vm.initializeForm.msg.address;
 
       async.series([
           // get secrets, msg, state, redis
           getCoreServices,
-          postSecrets.bind(null, {}),
+          postSecrets.bind(null, secretsUpdate),
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
           postRedis.bind(null, {}),
+          getSystemSettings.bind(null, {}),
+          updateInitializeForm.bind(null, {}),
           initSecrets
         ],
         function (err) {
@@ -1095,6 +1089,12 @@
               );
               getMasterIntegrations({},
                 function (err) {
+                  if (err)
+                    horn.error(err);
+                }
+              );
+              updateInitializeForm({},
+                function (err)  {
                   if (err)
                     horn.error(err);
                 }
