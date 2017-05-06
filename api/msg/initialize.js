@@ -186,10 +186,14 @@ function _generateInitializeEnvs(bag, next) {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
     'RELEASE': bag.releaseVersion,
-    'MSG_HOST': global.config.admiralIP,
+    'SSH_USER': global.config.sshUser,
+    'SSH_PRIVATE_KEY': path.join(global.config.configDir, 'machinekey'),
+    'SSH_PUBLIC_KEY': path.join(global.config.configDir, 'machinekey.pub'),
+    'MSG_HOST': bag.config.address,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
+    'ADMIRAL_IP': global.config.admiralIP,
     'MSG_UI_USER': bag.config.uiUsername,
     'MSG_UI_PASS': bag.config.uiPassword,
     'MSG_USER': bag.config.username,
@@ -212,9 +216,13 @@ function _generateInitializeScript(bag, next) {
   var headerScript = '';
   headerScript = headerScript.concat(__applyTemplate(filePath, bag.params));
 
-  var initializeScript = headerScript;
-  filePath = path.join(global.config.scriptsDir, 'docker/installMsg.sh');
-  initializeScript = headerScript.concat(__applyTemplate(filePath, bag.params));
+  var helpers = headerScript;
+  filePath = path.join(global.config.scriptsDir, '/lib/_helpers.sh');
+  helpers = headerScript.concat(__applyTemplate(filePath, bag.params));
+
+  var initializeScript = helpers;
+  filePath = path.join(global.config.scriptsDir, 'installMsg.sh');
+  initializeScript = initializeScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
   return next();
