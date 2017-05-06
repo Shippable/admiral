@@ -5,6 +5,7 @@ export STATE_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
 export STATE_LOGS_DIR="$RUNTIME_DIR/$COMPONENT/logs"
 export STATE_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
 export SCRIPTS_DIR="$SCRIPTS_DIR"
+export SCRIPTS_DIR_REMOTE="/tmp/shippable"
 
 export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
 
@@ -70,6 +71,8 @@ __update_state_config() {
 __copy_configs() {
   __process_msg "Copying config files to host"
 
+  local state_config_path="$STATE_CONFIG_DIR/gitlab.rb"
+  __copy_script_remote "$STATE_HOST" "$state_config_path" "/etc/gitlab"
 }
 
 main() {
