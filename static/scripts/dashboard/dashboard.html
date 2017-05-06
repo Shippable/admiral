@@ -25,14 +25,14 @@
                   <span class="col-md-7">Choose a password for RabbitMQ (the message bus):</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="msgPassword"
-                    ng-model="vm.initializeForm.msgPassword" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                    ng-model="vm.initializeForm.msg.password" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
                   </div>
                 </div>
                 <div ng-if="!vm.initialized" class="row">
                   <span class="col-md-7">Choose a password for Gitlab (this stores job state):</span>
                   <div class="col-md-5">
                     <input type="text" class="form-control" name="statePassword"
-                    ng-model="vm.initializeForm.statePassword" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
+                    ng-model="vm.initializeForm.state.rootPassword" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
                   </div>
                 </div>
                 <div class="row">

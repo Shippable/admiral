@@ -73,29 +73,46 @@
         return API.delete('/api/systemIntegrations/' +
           systemIntegrationId, {}, callback);
       },
-      // Service Routes
-      postInitialize: function (body, callback) {
-        return API.post('/api/workflow/initialize', body, callback);
+      // Core Services Routes (secrets, msg, state, redis)
+      getCoreService: function (coreService, callback) {
+        return API.get('/api/' + coreService, callback);
       },
       postSecrets: function (body, callback) {
         return API.post('/api/secrets', body, callback);
       },
-      getService: function (component, callback) {
-        return API.get('/api/' + component, callback);
+      initSecrets: function (body, callback) {
+        return API.post('/api/secrets/initialize', body, callback);
+      },
+      postMsg: function (body, callback) {
+        return API.post('/api/msg', body, callback);
+      },
+      initMsg: function (body, callback) {
+        return API.post('/api/msg/initialize', body, callback);
+      },
+      postState: function (body, callback) {
+        return API.post('/api/state', body, callback);
+      },
+      initState: function (body, callback) {
+        return API.post('/api/state/initialize', body, callback);
+      },
+      postRedis: function (body, callback) {
+        return API.post('/api/redis', body, callback);
+      },
+      initRedis: function (body, callback) {
+        return API.post('/api/redis/initialize', body, callback);
+      },
+      getServiceLogs: function (component, callback) {
+        return API.get('/api/' + component + '/logs', callback);
+      },
+      // Component Services Routes
+      getServices: function (query, callback) {
+        return API.get('/api/services?' + query, callback);
       },
       postService: function (body, callback) {
         return API.post('/api/services', body, callback);
       },
       deleteService: function (serviceName, body, callback) {
         return API.delete('/api/services/' + serviceName, body, callback);
-      },
-      // Services Routes
-      getServices: function (query, callback) {
-        return API.get('/api/services?' + query, callback);
-      },
-      // logs
-      getServiceLogs: function (component, callback) {
-        return API.get('/api/' + component + '/logs', callback);
       }
     };
   }
