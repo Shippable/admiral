@@ -199,7 +199,7 @@ function _generateInitializeEnvs(bag, next) {
     'DBPORT': global.config.dbPort,
     'DBNAME': global.config.dbName,
     'VAULT_HOST': bag.config.address,
-    'SSH_USER': 'root',
+    'SSH_USER': global.config.sshUser,
     'SSH_PRIVATE_KEY': path.join(global.config.configDir, 'machinekey'),
     'SSH_PUBLIC_KEY': path.join(global.config.configDir, 'machinekey.pub'),
     'VAULT_PORT': bag.config.port
