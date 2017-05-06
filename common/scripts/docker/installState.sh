@@ -1,60 +1,12 @@
 #!/bin/bash -e
 
-export COMPONENT="state"
-export STATE_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
-export STATE_LOGS_DIR="$RUNTIME_DIR/$COMPONENT/logs"
-export STATE_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
-export SCRIPTS_DIR="$SCRIPTS_DIR"
 export STATE_IMAGE="drydock/gitlab:$RELEASE"
 
-export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
 export TIMEOUT=120
-
-## Write logs of this script to component specific file
-exec &> >(tee -a "$LOGS_FILE")
-
-__validate_state_envs() {
-  __process_msg "Initializing state environment variables"
-  __process_msg "STATE_IMAGE: $STATE_IMAGE"
-  __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
-  __process_msg "STATE_DATA_DIR: $STATE_DATA_DIR"
-  __process_msg "STATE_CONFIG_DIR: $STATE_CONFIG_DIR"
-  __process_msg "STATE_HOST: $STATE_HOST"
-  __process_msg "STATE_PASS: $STATE_PASS"
-  __process_msg "STATE_PORT: $STATE_PORT"
-  __process_msg "SSH_PORT: $SSH_PORT"
-  __process_msg "SECURE_PORT: $SECURE_PORT"
-}
 
 __cleanup() {
   __process_msg "Removing stale containers"
   sudo docker rm -f $COMPONENT || true
-}
-
-__validate_state_mounts() {
-  __process_msg "Validating state mounts"
-  if [ ! -d "$STATE_DATA_DIR" ]; then
-    __process_msg "Creating data directory $STATE_DATA_DIR"
-    sudo mkdir -p $STATE_DATA_DIR
-  else
-    __process_msg "Data directory already present: $STATE_DATA_DIR"
-  fi
-
-  if [ ! -d "$STATE_LOGS_DIR" ]; then
-    __process_msg "Creating logs directory $STATE_LOGS_DIR"
-    sudo mkdir -p $STATE_LOGS_DIR
-  else
-    __process_msg "Logs directory already present: $STATE_LOGS_DIR"
-  fi
-
-  if [ ! -d "$STATE_CONFIG_DIR" ]; then
-    __process_msg "Creating config directory $STATE_CONFIG_DIR"
-    sudo mkdir -p $STATE_CONFIG_DIR
-  else
-    __process_msg "Config directory already present: $STATE_CONFIG_DIR"
-  fi
-
-  sudo mkdir -p $STATE_CONFIG_DIR/scripts
 }
 
 __run_state() {
@@ -114,24 +66,10 @@ __check_state() {
 }
 
 main() {
-  __process_marker "Booting Gitlab"
-  if [ "$IS_INSTALLED" == true ]; then
-    __process_msg "Gitlab already installed, skipping"
-  else
-    __process_msg "Gitlab not installed"
-    __validate_state_envs
-    __cleanup
-    __validate_state_mounts
-    __run_state
-  fi
-
-  if [ "$IS_INITIALIZED" == true ]; then
-    __process_msg "Gitlab already initialized, skipping"
-  else
-    __process_msg "Gitlab not initialized"
-    __check_state
-  fi
-  __process_msg "Gitlab container successfully running"
+  __process_marker "Installing Gitlab"
+  __cleanup
+  __run_state
+  __check_state
 }
 
 main
