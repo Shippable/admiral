@@ -87,14 +87,19 @@ function _getStatus(bag, next) {
 
   bag.vaultAdapter.getHealth(
     function (err, response) {
-      if (err)
+      if (err && err.code === 'ECONNREFUSED') {
+        bag.resBody.isReachable = false;
+        bag.resBody = _.extend(bag.resBody, err);
+      } else if (err) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to check status for ' + bag.component, err)
         );
+      } else {
+        bag.resBody.isReachable = true;
+        bag.resBody = _.extend(bag.resBody, response);
+      }
 
-      bag.resBody.isReachable = true;
-      bag.resBody = _.extend(bag.resBody, response);
       return next();
     }
   );
