@@ -19,6 +19,7 @@ __boot_admiral() {
     -e DBHOST=$DB_IP \
     -e DBPORT=$DB_PORT \
     -e RUN_MODE=$RUN_MODE \
+    -e SSH_USER=$SSH_USER \
     -e LOGIN_TOKEN=$LOGIN_TOKEN \
     -e ADMIRAL_IP=$ADMIRAL_IP \
     -e INSTALL_MODE=$INSTALL_MODE \

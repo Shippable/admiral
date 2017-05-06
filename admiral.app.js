@@ -136,6 +136,12 @@ function _initializeConfig(bag, next) {
     configErrors.push(new ActErr(who, ActErr.ParamNotFound,
       'LOGIN_TOKEN is not defined'));
 
+  if (bag.env.SSH_USER)
+    bag.config.sshUser = bag.env.SSH_USER;
+  else
+    configErrors.push(new ActErr(who, ActErr.ParamNotFound,
+      'SSH_USER is not defined'));
+
   if (bag.env.CONFIG_DIR)
     bag.config.configDir = bag.env.CONFIG_DIR;
   else
