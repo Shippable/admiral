@@ -316,6 +316,7 @@ function _checkInitStatus(bag, next) {
           );
         }
         bag.config.isInitialized = response.initialized;
+        bag.config.isSealed = response.sealed;
       } else {
         bag.config.isInitialized = false;
       }
@@ -394,7 +395,7 @@ function _setVaultRootToken(bag, next) {
 }
 
 function _unsealVaultStep1(bag, next) {
-  if (bag.config.isInitialized) return next();
+  if (bag.config.isSealed) return next();
 
   var who = bag.who + '|' + _unsealVaultStep1.name;
   logger.verbose(who, 'Inside');
@@ -420,7 +421,7 @@ function _unsealVaultStep1(bag, next) {
 }
 
 function _unsealVaultStep2(bag, next) {
-  if (bag.config.isInitialized) return next();
+  if (bag.config.isSealed) return next();
 
   var who = bag.who + '|' + _unsealVaultStep2.name;
   logger.verbose(who, 'Inside');
@@ -447,7 +448,7 @@ function _unsealVaultStep2(bag, next) {
 }
 
 function _unsealVaultStep3(bag, next) {
-  if (bag.config.isInitialized) return next();
+  if (bag.config.isSealed) return next();
 
   var who = bag.who + '|' + _unsealVaultStep3.name;
   logger.verbose(who, 'Inside');
