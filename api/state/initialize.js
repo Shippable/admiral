@@ -182,6 +182,10 @@ function _generateInitializeEnvs(bag, next) {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
     'RELEASE': bag.releaseVersion,
+    'ADMIRAL_IP': global.config.admiralIP,
+    'SSH_USER': global.config.sshUser,
+    'SSH_PRIVATE_KEY': path.join(global.config.configDir, 'machinekey'),
+    'SSH_PUBLIC_KEY': path.join(global.config.configDir, 'machinekey.pub'),
     'STATE_HOST': bag.config.address,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
@@ -204,9 +208,13 @@ function _generateInitializeScript(bag, next) {
   var headerScript = '';
   headerScript = headerScript.concat(__applyTemplate(filePath, bag.params));
 
-  var initializeScript = headerScript;
-  filePath = path.join(global.config.scriptsDir, 'docker/installState.sh');
-  initializeScript = headerScript.concat(__applyTemplate(filePath, bag.params));
+  var helpers = headerScript;
+  filePath = path.join(global.config.scriptsDir, '/lib/_helpers.sh');
+  helpers = headerScript.concat(__applyTemplate(filePath, bag.params));
+
+  var initializeScript = helpers;
+  filePath = path.join(global.config.scriptsDir, 'installState.sh');
+  initializeScript = initializeScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
   return next();
