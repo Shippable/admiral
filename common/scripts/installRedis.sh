@@ -39,6 +39,19 @@ __validate_redis_mounts() {
   sudo mkdir -p $REDIS_CONFIG_DIR/scripts
 }
 
+__update_redis_config() {
+  __process_msg "Updating redis config files"
+  cp -vr $SCRIPTS_DIR/configs/redis.conf $REDIS_CONFIG_DIR/redis.conf
+}
+
+__copy_configs() {
+  __process_msg "Copying redis config files"
+
+  local redis_config="$REDIS_CONFIG_DIR/redis.conf"
+  __copy_script_remote "$REDIS_HOST" "$redis_config" "/etc/redis"
+
+}
+
 main() {
   __process_marker "Installing Redis"
   local script_name="installRedis.sh"
@@ -48,6 +61,7 @@ main() {
     __process_msg "Redis not installed"
     __validate_redis_envs
     __validate_redis_mounts
+    __update_redis_config
 
     if [ "$ADMIRAL_IP" == "$REDIS_HOST" ]; then
       source "$SCRIPTS_DIR/docker/$script_name"
