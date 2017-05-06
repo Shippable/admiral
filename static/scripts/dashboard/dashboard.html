@@ -20,23 +20,8 @@
                 Loading...
               </div>
               <div class="col-md-offset-1 col-md-10" ng-if="vm.isLoaded">
-                <div ng-if="!vm.initialized"
-                  class="row">
-                  <span class="col-md-7">Choose a password for RabbitMQ (the message bus):</span>
-                  <div class="col-md-5">
-                    <input type="text" class="form-control" name="msgPassword"
-                    ng-model="vm.initializeForm.msg.password" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
-                  </div>
-                </div>
-                <div ng-if="!vm.initialized" class="row">
-                  <span class="col-md-7">Choose a password for Gitlab (this stores job state):</span>
-                  <div class="col-md-5">
-                    <input type="text" class="form-control" name="statePassword"
-                    ng-model="vm.initializeForm.state.rootPassword" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
-                  </div>
-                </div>
                 <div class="row">
-                  <table class="table table-condensed table-striped">
+                  <table class="table table-condensed">
                     <thead>
                       <tr ng-if="vm.initializeResponse">
                         <th colspan=3>
@@ -47,19 +32,27 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr class="active">
                         <td>
                           <b>Admiral Environment:</b>
                         </td>
-                        <td>
+                        <td colspan="5">
                         </td>
                         <td>
                           <button class="btn btn-sm btn-default" ng-click="vm.showAdmiralEnvModal()">config</button>
+                        </td>
+                        <td>
                         </td>
                       </tr>
                       <tr>
                         <td>
                           <b>Database:</b>
+                        </td>
+                        <td colspan="5">
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('db')">logs</button>
                         </td>
                         <td>
                           <span ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
@@ -68,14 +61,29 @@
                           </span>
                           <span ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
                         </td>
-                        <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('db')">logs</button>
-                        </td>
                       </tr>
-                      <tr>
+                      <tr class="active">
                         <td>
                           <b>Secrets:</b>
+                        </td>
+                        <td colspan="5">
+                          Install Type:
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.secrets.installType" value="admiral">
+                            Admiral Node
+                          </span>
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.secrets.installType" value="new" ng-disabled="true">
+                            New Node
+                          </span>
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.secrets.installType" value="existing" ng-disabled="true">
+                            Existing
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')">logs</button>
                         </td>
                         <td>
                           <span ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
@@ -84,14 +92,29 @@
                           </span>
                           <span ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
                         </td>
-                        <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" >config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')">logs</button>
-                        </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td rowspan="2">
                           <b>Messaging:</b>
+                        </td>
+                        <td colspan="5">
+                          Install Type:
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.msg.installType" value="admiral">
+                            Admiral Node
+                          </span>
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.msg.installType" value="new" ng-disabled="true">
+                            New Node
+                          </span>
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.msg.installType" value="existing" ng-disabled="true">
+                            Existing
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')">logs</button>
                         </td>
                         <td>
                           <span ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
@@ -100,14 +123,42 @@
                           </span>
                           <span ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
                         </td>
-                        <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')">logs</button>
-                        </td>
                       </tr>
                       <tr>
+                        <td colspan="3">
+                          <span>Choose a password for RabbitMQ:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="msgPassword"
+                            ng-model="vm.initializeForm.msg.password" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                          </div>
+                        </td>
                         <td>
+                        </td>
+                      </tr>
+                      <tr class="active">
+                        <td rowspan="2">
                           <b>State:</b>
+                        </td>
+                        <td colspan="5">
+                          Install Type:
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.state.installType" value="admiral">
+                            Admiral Node
+                          </span>
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.state.installType" value="new" ng-disabled="true">
+                            New Node
+                          </span>
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.state.installType" value="existing" ng-disabled="true">
+                            Existing
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')">logs</button>
                         </td>
                         <td>
                           <span ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
@@ -116,14 +167,42 @@
                           </span>
                           <span ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
                         </td>
+                      </tr>
+                      <tr class="active">
+                        <td colspan="3">
+                          <span>Choose a password for Gitlab:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="statePassword"
+                            ng-model="vm.initializeForm.state.rootPassword" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
+                          </div>
+                        </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')">logs</button>
                         </td>
                       </tr>
                       <tr>
                         <td>
                           <b>Redis:</b>
+                        </td>
+                        <td colspan="5">
+                          Install Type:
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.redis.installType" value="admiral">
+                            Admiral Node
+                          </span>
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.redis.installType" value="new" ng-disabled="true">
+                            New Node
+                          </span>
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.redis.installType" value="existing" ng-disabled="true">
+                            Existing
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')">logs</button>
                         </td>
                         <td>
                           <span ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
@@ -132,13 +211,9 @@
                           </span>
                           <span ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
                         </td>
-                        <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')">logs</button>
-                        </td>
                       </tr>
                       <tr>
-                        <td colspan=3 class="text-right">
+                        <td colspan=8 class="text-right">
                           <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.initializing" ng-click="vm.initialize()">
                             <div ng-if="vm.initializing">
                               Initializing...

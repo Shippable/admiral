@@ -36,14 +36,19 @@
       requireRestart: false,
       initializeForm: {
         secrets: {
+          //install type can be admiral (same node as admiral), new, or existing
+          installType: 'admiral'
         },
         msg: {
+          installType: 'admiral',
           password: '',
         },
         state: {
+          installType: 'admiral',
           rootPassword: ''
         },
         redis: {
+          installType: 'admiral'
         }
       },
       // map by systemInt name, then masterName
