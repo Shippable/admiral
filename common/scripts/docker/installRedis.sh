@@ -1,49 +1,11 @@
 #!/bin/bash -e
 
-export COMPONENT="redis"
-export REDIS_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
-export REDIS_CONFIG_DIR="$CONFIG_DIR/$COMPONENT"
-export SCRIPTS_DIR="$SCRIPTS_DIR"
 export REDIS_IMAGE="drydock/redis:$RELEASE"
-export REDIS_PORT=6379
-export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
 export TIMEOUT=120
-
-## Write logs of this script to component specific file
-exec &> >(tee -a "$LOGS_FILE")
-
-__validate_redis_envs() {
-  __process_msg "Initializing redis environment variables"
-  __process_msg "REDIS_IMAGE: $REDIS_IMAGE"
-  __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
-  __process_msg "STATE_DATA_DIR: $STATE_DATA_DIR"
-  __process_msg "STATE_CONFIG_DIR: $STATE_CONFIG_DIR"
-  __process_msg "REDIS_HOST: $REDIS_HOST"
-  __process_msg "REDIS_PORT: $REDIS_PORT"
-}
 
 __cleanup() {
   __process_msg "Removing stale containers"
   sudo docker rm -f $COMPONENT || true
-}
-
-__validate_redis_mounts() {
-  __process_msg "Validating redis mounts"
-  if [ ! -d "$REDIS_DATA_DIR" ]; then
-    __process_msg "Creating data directory $REDIS_DATA_DIR"
-    sudo mkdir -p $REDIS_DATA_DIR
-  else
-    __process_msg "Data directory already present: $REDIS_DATA_DIR"
-  fi
-
-  if [ ! -d "$REDIS_CONFIG_DIR" ]; then
-    __process_msg "Creating config directory $REDIS_CONFIG_DIR"
-    sudo mkdir -p $REDIS_CONFIG_DIR
-  else
-    __process_msg "Config directory already present: $REDIS_CONFIG_DIR"
-  fi
-
-  sudo mkdir -p $REDIS_CONFIG_DIR/scripts
 }
 
 __run_redis() {
@@ -92,24 +54,9 @@ __check_redis() {
 }
 
 main() {
-  __process_marker "Booting redis"
-  if [ "$IS_INSTALLED" == true ]; then
-    __process_msg "Redis already installed, skipping"
-  else
-    __process_msg "Redis not installed"
-    __validate_redis_envs
-    __cleanup
-    __validate_redis_mounts
-    __run_redis
-  fi
-
-  if [ "$IS_INITIALIZED" == true ]; then
-    __process_msg "Redis already initialized, skipping"
-  else
-    __process_msg "Redis not initialized"
-    __check_redis
-  fi
-  __process_msg "Redis container successfully running"
+  __process_marker "Installing redis"
+  __cleanup
+  __run_redis
 }
 
 main
