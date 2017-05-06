@@ -24,7 +24,7 @@
                   <table class="table table-condensed">
                     <thead>
                       <tr ng-if="vm.initializeResponse">
-                        <th colspan=3>
+                        <th colspan=8>
                           <div class="alert alert-danger">
                             {{vm.errorMessage}}
                           </div>
@@ -33,7 +33,7 @@
                     </thead>
                     <tbody>
                       <tr class="active">
-                        <td>
+                        <td style="width: 12.5%;">
                           <b>Admiral Environment:</b>
                         </td>
                         <td colspan="5">
@@ -45,7 +45,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td style="width: 12.5%;">
                           <b>Database:</b>
                         </td>
                         <td colspan="5">
@@ -54,7 +54,7 @@
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')">config</button>
                           <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('db')">logs</button>
                         </td>
-                        <td>
+                        <td class="text-center">
                           <span ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
                           <span ng-if="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed">
                             {{vm.systemSettings.db.isInitialized ? 'initialized' : 'not initialized'}}
@@ -63,21 +63,24 @@
                         </td>
                       </tr>
                       <tr class="active">
-                        <td>
+                        <td ng-if="vm.initializeForm.secrets.initType === 'admiral'">
+                          <b>Secrets:</b>
+                        </td>
+                        <td rowspan="5" style="width: 12.5%;" ng-if="vm.initializeForm.secrets.initType === 'new'">
                           <b>Secrets:</b>
                         </td>
                         <td colspan="5">
                           Install Type:
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.secrets.installType" value="admiral">
+                            <input type="radio" ng-model="vm.initializeForm.secrets.initType" value="admiral">
                             Admiral Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.secrets.installType" value="new" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.secrets.initType" value="new">
                             New Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.secrets.installType" value="existing" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.secrets.initType" value="existing" ng-disabled="true">
                             Existing
                           </span>
                         </td>
@@ -85,12 +88,51 @@
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')">config</button>
                           <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')">logs</button>
                         </td>
-                        <td>
+                        <td style="width: 12.5%;" class="text-center">
                           <span ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
                           <span ng-if="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed">
                             {{vm.systemSettings.secrets.isInitialized ? 'initialized' : 'not initialized'}}
                           </span>
                           <span ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                        <td colspan="3">
+                          <span>IP address for your new Vault installation:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="secretsAddress"
+                            ng-model="vm.initializeForm.secrets.address"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                        <td colspan="7">
+                          Please run this command on your node to authorize SSH access:
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                        <td colspan="6">
+                          <div class="ss-action"></div>
+                          <div class="ship-console">
+                            <span style="word-break: break-all;">
+                              {{vm.initializeForm.sshCommand}}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                        <td colspan="6">
+                          <input type="checkbox" ng-model="vm.initializeForm.secrets.confirmCommand"/>
+                          Click here once you have run the above command on your node
+                        </td>
+                        <td>
+                          <button class="btn btn-info pull-right" ng-click="vm.saveSecrets()" ng-disabled="!vm.initializeForm.secrets.confirmCommand">
+                            Save
+                          </button>
                         </td>
                       </tr>
                       <tr>
@@ -100,15 +142,15 @@
                         <td colspan="5">
                           Install Type:
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.msg.installType" value="admiral">
+                            <input type="radio" ng-model="vm.initializeForm.msg.initType" value="admiral">
                             Admiral Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.msg.installType" value="new" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.msg.initType" value="new" ng-disabled="true">
                             New Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.msg.installType" value="existing" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.msg.initType" value="existing" ng-disabled="true">
                             Existing
                           </span>
                         </td>
@@ -116,7 +158,7 @@
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')">config</button>
                           <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')">logs</button>
                         </td>
-                        <td>
+                        <td class="text-center">
                           <span ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
                           <span ng-if="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed">
                             {{vm.systemSettings.msg.isInitialized ? 'initialized' : 'not initialized'}}
@@ -144,15 +186,15 @@
                         <td colspan="5">
                           Install Type:
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.state.installType" value="admiral">
+                            <input type="radio" ng-model="vm.initializeForm.state.initType" value="admiral">
                             Admiral Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.state.installType" value="new" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.state.initType" value="new" ng-disabled="true">
                             New Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.state.installType" value="existing" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.state.initType" value="existing" ng-disabled="true">
                             Existing
                           </span>
                         </td>
@@ -160,7 +202,7 @@
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')">config</button>
                           <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')">logs</button>
                         </td>
-                        <td>
+                        <td class="text-center">
                           <span ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
                           <span ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
                             {{vm.systemSettings.state.isInitialized ? 'initialized' : 'not initialized'}}
@@ -188,15 +230,15 @@
                         <td colspan="5">
                           Install Type:
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.redis.installType" value="admiral">
+                            <input type="radio" ng-model="vm.initializeForm.redis.initType" value="admiral">
                             Admiral Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.redis.installType" value="new" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.redis.initType" value="new" ng-disabled="true">
                             New Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.redis.installType" value="existing" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.redis.initType" value="existing" ng-disabled="true">
                             Existing
                           </span>
                         </td>
@@ -204,7 +246,7 @@
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')">config</button>
                           <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')">logs</button>
                         </td>
-                        <td>
+                        <td class="text-center">
                           <span ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
                           <span ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
                             {{vm.systemSettings.redis.isInitialized ? 'initialized' : 'not initialized'}}

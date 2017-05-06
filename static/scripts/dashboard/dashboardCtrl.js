@@ -37,19 +37,22 @@
       initializeForm: {
         secrets: {
           //install type can be admiral (same node as admiral), new, or existing
-          installType: 'admiral'
+          initType: 'admiral',
+          address: '',
+          confirmCommand: false
         },
         msg: {
-          installType: 'admiral',
+          initType: 'admiral',
           password: '',
         },
         state: {
-          installType: 'admiral',
+          initType: 'admiral',
           rootPassword: ''
         },
         redis: {
-          installType: 'admiral'
-        }
+          initType: 'admiral'
+        },
+        sshCommand: ''
       },
       // map by systemInt name, then masterName
       installForm: {
@@ -356,6 +359,7 @@
       },
       systemSettingsId: null,
       selectedService: {},
+      saveSecrets: saveSecrets,
       initialize: initialize,
       upgrade: upgrade,
       install: install,
@@ -381,8 +385,8 @@
 
       async.series([
           setBreadcrumb.bind(null, bag),
-          getSystemSettings.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
+          getSystemSettings.bind(null, bag),
           getMachineKeys.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
@@ -441,14 +445,24 @@
               (systemSettings.redis && JSON.parse(systemSettings.redis)));
           $scope.vm.systemSettings.releaseVersion =
             systemSettings.releaseVersion;
-
-          if ($scope.vm.systemSettings.msg.password)
-            $scope.vm.initializeForm.msg.password =
-              $scope.vm.systemSettings.msg.password;
-
-          if ($scope.vm.systemSettings.state.rootPassword)
-            $scope.vm.initializeForm.state.rootPassword =
-              $scope.vm.systemSettings.state.rootPassword;
+          _.each($scope.vm.initializeForm,
+            function (obj, service) {
+              if (!_.isObject(obj)) return;
+              _.each(obj,
+                function (value, key) {
+                  if ($scope.vm.systemSettings[service][key])
+                    $scope.vm.initializeForm[service][key] =
+                      $scope.vm.systemSettings[service][key];
+                }
+              );
+              if (_.has(obj, 'address')) {
+                if (obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
+                  $scope.vm.initializeForm[service].initType = 'admiral';
+                else
+                  $scope.vm.initializeForm[service].initType = 'new';
+              }
+            }
+          );
 
           $scope.vm.initialized = $scope.vm.systemSettings.db.isInitialized &&
             $scope.vm.systemSettings.secrets.isInitialized &&
@@ -484,6 +498,9 @@
           }
 
           $scope.vm.machineKeys = machineKeys;
+          $scope.vm.initializeForm.sshCommand =
+            'sudo mkdir -p /root/.ssh; echo ' + machineKeys.publicKey +
+            ' >> /root/.ssh/authorized_keys;';
           return next();
         }
       );
@@ -911,6 +928,22 @@
       );
     }
 
+    function saveSecrets() {
+      var update = {
+        address: $scope.vm.initializeForm.secrets.address
+      };
+
+      async.series([
+          postSecrets.bind(null, update),
+          getSystemSettings.bind(null, {})
+        ],
+        function (err) {
+          if (err)
+            horn.error(err);
+        }
+      );
+    }
+
     function initialize() {
       $scope.vm.initializing = true;
 
@@ -944,13 +977,27 @@
     }
 
     function postServicesAndInitSecrets() {
+      var msgUpdate = {};
+      var stateUpdate = {};
+
+      if ($scope.vm.initializeForm.msg.initType === 'admiral')
+        msgUpdate = {
+          password: $scope.vm.initializeForm.msg.password,
+          uiPassword: $scope.vm.initializeForm.msg.password
+        };
+
+      if ($scope.vm.initializeForm.state.initType === 'admiral')
+        stateUpdate = {
+          rootPassword: $scope.vm.initializeForm.state.rootPassword
+        };
+
       async.series([
           // get secrets, msg, state, redis
           getCoreServices,
-          postSecrets,
-          postMsg,
-          postState,
-          postRedis,
+          postSecrets.bind(null, {}),
+          postMsg.bind(null, msgUpdate),
+          postState.bind(null, stateUpdate),
+          postRedis.bind(null, {}),
           initSecrets
         ],
         function (err) {
@@ -1076,8 +1123,8 @@
       );
     }
 
-    function postSecrets(next) {
-      admiralApiAdapter.postSecrets({},
+    function postSecrets(update, next) {
+      admiralApiAdapter.postSecrets(update,
         function (err) {
           if (err)
             return next(err);
@@ -1086,12 +1133,7 @@
       );
     }
 
-    function postMsg(next) {
-      var update = {
-        password: $scope.vm.initializeForm.msg.password,
-        uiPassword: $scope.vm.initializeForm.msg.password
-      };
-
+    function postMsg(update, next) {
       admiralApiAdapter.postMsg(update,
         function (err, msg) {
           if (err)
@@ -1102,11 +1144,7 @@
       );
     }
 
-    function postState(next) {
-      var update = {
-        rootPassword: $scope.vm.initializeForm.state.rootPassword,
-      };
-
+    function postState(update, next) {
       admiralApiAdapter.postState(update,
         function (err, state) {
           if (err)
@@ -1117,8 +1155,8 @@
       );
     }
 
-    function postRedis(next) {
-      admiralApiAdapter.postRedis({},
+    function postRedis(update, next) {
+      admiralApiAdapter.postRedis(update,
         function (err) {
           if (err)
             return next(err);
