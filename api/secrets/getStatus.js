@@ -93,6 +93,7 @@ function _getStatus(bag, next) {
       } else if (err) {
         bag.resBody.isReachable = true;
         bag.resBody.error = util.inspect(err);
+        bag.resBody = _.extend(bag.resBody, response);
       } else {
         bag.resBody.isReachable = true;
         bag.resBody = _.extend(bag.resBody, response);
