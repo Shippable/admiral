@@ -215,7 +215,10 @@
                       </tr>
                       <!-- GitLab -->
                       <tr class="active">
-                        <td rowspan="2">
+                        <td ng-if="vm.initializeForm.state.initType === 'admiral'" rowspan="2">
+                          <b>State:</b>
+                        </td>
+                        <td ng-if="vm.initializeForm.state.initType === 'new'" rowspan="6" style="width: 12.5%;">
                           <b>State:</b>
                         </td>
                         <td colspan="5">
@@ -225,7 +228,7 @@
                             Admiral Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.state.initType" value="new" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.state.initType" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing" value="new">
                             New Node
                           </span>
                           <span>
@@ -237,7 +240,7 @@
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')">config</button>
                           <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')">logs</button>
                         </td>
-                        <td class="text-center">
+                        <td style="width: 12.5%;" class="text-center">
                           <span ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
                           <span ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
                             {{vm.systemSettings.state.isInitialized ? 'initialized' : 'not initialized'}}
@@ -247,13 +250,47 @@
                       </tr>
                       <tr class="active">
                         <td colspan="3">
-                          <span>Choose a password for Gitlab:</span>
+                          <span>Choose a password for GitLab:</span>
                         </td>
                         <td colspan="3">
                           <div>
                             <input type="text" class="form-control" name="statePassword"
                             ng-model="vm.initializeForm.state.rootPassword" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
                           </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.state.initType === 'new'">
+                        <td colspan="3">
+                          <span>IP address for your new GitLab installation:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="stateAddress" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.state.address"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.state.initType === 'new'">
+                        <td colspan="7">
+                          Please run this command on your node to authorize SSH access:
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.state.initType === 'new'">
+                        <td colspan="6">
+                          <div class="ss-action"></div>
+                          <div class="ship-console" style="word-break: break-all;">
+                            {{vm.initializeForm.sshCommand}}
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.state.initType === 'new'">
+                        <td colspan="6">
+                          <input type="checkbox" ng-model="vm.initializeForm.state.confirmCommand"/>
+                          Click here once you have run the above command on your node
                         </td>
                         <td>
                         </td>
@@ -293,7 +330,7 @@
                       <tr>
                         <td colspan=8 class="text-right">
                           <button class="btn btn-md btn-primary" type="submit" ng-click="vm.initialize()"
-                            ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand)">
+                            ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand)">
                             <div ng-if="vm.initializing">
                               Initializing...
                             </div>
