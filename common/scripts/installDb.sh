@@ -59,6 +59,26 @@ __install_db() {
   local script_name="installDb.sh"
   if [ "$DB_INSTALLED" == "true" ]; then
     __process_msg "Skipping database installation"
+    local create_table_cmd="PGPASSWORD=$DB_PASSWORD \
+      psql \
+      -U $DB_USER \
+      -d $DB_NAME \
+      -h $DB_IP \
+      -p $DB_PORT \
+      -v ON_ERROR_STOP=1 \
+      -c 'CREATE TABLE \"testTable\" (\"testColumn\" integer PRIMARY KEY);'"
+    local drop_table_cmd="PGPASSWORD=$DB_PASSWORD \
+      psql \
+      -U $DB_USER \
+      -d $DB_NAME \
+      -h $DB_IP \
+      -p $DB_PORT \
+      -v ON_ERROR_STOP=1 \
+      -c 'DROP TABLE \"testTable\";'"
+     __process_msg "Creating a test table"
+     eval "$create_table_cmd"
+     __process_msg "Dropping test table"
+     eval "$drop_table_cmd"
   elif [ "$ADMIRAL_IP" == "$DB_IP" ]; then
     source "$SCRIPTS_DIR/docker/$script_name"
   else
