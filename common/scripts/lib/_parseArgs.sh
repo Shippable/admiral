@@ -86,10 +86,26 @@ __validate_runtime() {
   if [ "$DB_IP" == "" ]; then
     __process_msg "DB_IP is not set"
     __set_db_ip
-    __set_install_db
+    __set_db_installed
     __add_ssh_key_to_db
   else
     __process_msg "DB_IP already set, skipping"
+  fi
+
+  ################## check db port ##################################
+  if [ "$DB_PORT" == "" ]; then
+    __process_msg "DB_PORT is not set"
+    __set_db_port
+  else
+    __process_msg "DB_PORT already set, skipping"
+  fi
+
+  ################## check db username ##################################
+  if [ "$DB_USER" == "" ]; then
+    __process_msg "DB_USER is not set"
+    __set_db_username
+  else
+    __process_msg "DB_USER already set, skipping"
   fi
 
   ################## check database password ###############################

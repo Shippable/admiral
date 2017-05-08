@@ -259,26 +259,28 @@ __set_db_ip() {
   fi
 }
 
-__set_install_db() {
+__set_db_installed() {
   if [ "$DB_IP" != "$ADMIRAL_IP" ]; then
     __process_success "Enter I to install a new database or E to use an existing one."
     read response
 
     if [ "$response" == "I" ]; then
       __process_msg "A new database will be installed"
-      export DB_INSTALL=true
+      sed -i 's/.*DB_INSTALLED=.*/DB_INSTALLED=false/g' $ADMIRAL_ENV
+      export DB_INSTALLED=false
     elif [ "$response" == "E" ]; then
       __process_msg "An existing database will be used for this installation"
-      export DB_INSTALL=false
+      sed -i 's/.*DB_INSTALLED=.*/DB_INSTALLED=true/g' $ADMIRAL_ENV
+      export DB_INSTALLED=true
     else
       __process_error "Invalid response, please enter I or E"
-      __set_install_db
+      __set_db_installed
     fi
   fi
 }
 
 __add_ssh_key_to_db() {
-  if [ "$DB_IP" != "$ADMIRAL_IP" ] && [ "$DB_INSTALL" == "true" ]; then
+  if [ "$DB_IP" != "$ADMIRAL_IP" ] && [ "$DB_INSTALLED" == "false" ]; then
     local public_ssh_key=$(cat $SSH_PUBLIC_KEY)
     __process_success "Run the following command on $DB_IP to allow SSH access:"
 
@@ -291,6 +293,70 @@ __add_ssh_key_to_db() {
     else
       __process_error "Invalid response, please run the command to allow access and continue"
       __add_ssh_key_to_db
+    fi
+  fi
+}
+
+__set_db_port() {
+  __process_msg "Setting value of database port"
+  local db_port="5432"
+
+  if [ "$DB_INSTALLED" == "false" ]; then
+    sed -i 's/.*DB_PORT=.*/DB_PORT="'$db_port'"/g' $ADMIRAL_ENV
+    export DB_PORT=$db_port
+  __process_msg "Successfully set DB_PORT to $db_port"
+  else
+    __process_success "Please enter the database port or D to set the default ($db_port)."
+    read response
+
+    if [ "$response" != "D" ]; then
+      __process_success "Setting the database port to: $response, enter Y to confirm"
+        read confirmation
+      if [[ "$confirmation" =~ "Y" ]]; then
+        db_port=$response
+        sed -i 's/.*DB_PORT=.*/DB_PORT="'$db_port'"/g' $ADMIRAL_ENV
+        export DB_PORT=$db_port
+        __process_msg "Successfully set DB_PORT to $db_port"
+      else
+        __process_error "Invalid response, please enter a valid port and continue"
+        __set_db_port
+      fi
+    else
+      sed -i 's/.*DB_PORT=.*/DB_PORT="'$db_port'"/g' $ADMIRAL_ENV
+      export DB_PORT=$db_port
+      __process_msg "Successfully set DB_PORT to $db_port"
+    fi
+  fi
+}
+
+__set_db_username() {
+  __process_msg "Setting value of database username"
+  local db_user="apiuser"
+
+  if [ "$DB_INSTALLED" == "false" ]; then
+    sed -i 's/.*DB_USER=.*/DB_USER="'$db_user'"/g' $ADMIRAL_ENV
+    export DB_USER=$db_user
+    __process_msg "Successfully set DB_USER to $db_user"
+  else
+    __process_success "Please enter the username for the database or D to set the default ($db_user)."
+    read response
+
+    if [ "$response" != "D" ]; then
+      __process_success "Setting the database user to: $response, enter Y to confirm"
+      read confirmation
+      if [[ "$confirmation" =~ "Y" ]]; then
+        db_user=$response
+        sed -i 's/.*DB_USER=.*/DB_USER="'$db_user'"/g' $ADMIRAL_ENV
+        export DB_USER=$db_user
+        __process_msg "Successfully set DB_USER to $db_user"
+      else
+        __process_error "Invalid response, please enter a valid username and continue"
+        __set_db_username
+      fi
+    else
+      sed -i 's/.*DB_USER=.*/DB_USER="'$db_user'"/g' $ADMIRAL_ENV
+      export DB_USER=$db_user
+      __process_msg "Successfully set DB_USER to $db_user"
     fi
   fi
 }
