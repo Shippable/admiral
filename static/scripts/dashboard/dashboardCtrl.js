@@ -988,8 +988,10 @@
       if ($scope.vm.initializeForm.msg.initType === 'new')
         msgUpdate.address = $scope.vm.initializeForm.msg.address;
 
-      if ($scope.vm.initializeForm.state.initType === 'new')
+      if ($scope.vm.initializeForm.state.initType === 'new') {
         stateUpdate.address = $scope.vm.initializeForm.state.address;
+        stateUpdate.sshPort = 22;
+      }
 
       if ($scope.vm.initializeForm.redis.initType === 'new')
         redisUpdate.address = $scope.vm.initializeForm.redis.address;
