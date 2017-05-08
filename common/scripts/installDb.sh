@@ -57,7 +57,7 @@ __validate_db_mounts() {
 
 __install_db() {
   local script_name="installDb.sh"
-  if [ "$DB_INSTALL" == "false" ]; then
+  if [ "$DB_INSTALLED" == "true" ]; then
     __process_msg "Skipping database installation"
   elif [ "$ADMIRAL_IP" == "$DB_IP" ]; then
     source "$SCRIPTS_DIR/docker/$script_name"
