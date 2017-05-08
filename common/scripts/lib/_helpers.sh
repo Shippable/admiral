@@ -329,42 +329,10 @@ __set_db_port() {
   fi
 }
 
-__set_db_username() {
-  __process_msg "Setting value of database username"
-  local db_user="apiuser"
-
-  if [ "$DB_INSTALLED" == "false" ]; then
-    sed -i 's/.*DB_USER=.*/DB_USER="'$db_user'"/g' $ADMIRAL_ENV
-    export DB_USER=$db_user
-    __process_msg "Successfully set DB_USER to $db_user"
-  else
-    __process_success "Please enter the username for the database or D to set the default ($db_user)."
-    read response
-
-    if [ "$response" != "D" ]; then
-      __process_success "Setting the database user to: $response, enter Y to confirm"
-      read confirmation
-      if [[ "$confirmation" =~ "Y" ]]; then
-        db_user=$response
-        sed -i 's/.*DB_USER=.*/DB_USER="'$db_user'"/g' $ADMIRAL_ENV
-        export DB_USER=$db_user
-        __process_msg "Successfully set DB_USER to $db_user"
-      else
-        __process_error "Invalid response, please enter a valid username and continue"
-        __set_db_username
-      fi
-    else
-      sed -i 's/.*DB_USER=.*/DB_USER="'$db_user'"/g' $ADMIRAL_ENV
-      export DB_USER=$db_user
-      __process_msg "Successfully set DB_USER to $db_user"
-    fi
-  fi
-}
-
 __set_db_password() {
   __process_msg "Setting database password"
 
-  __process_success "Please enter a password for your database."
+  __process_success "Please enter the password for your database."
   read response
 
   if [ "$response" != "" ]; then

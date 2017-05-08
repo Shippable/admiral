@@ -100,14 +100,6 @@ __validate_runtime() {
     __process_msg "DB_PORT already set, skipping"
   fi
 
-  ################## check db username ##################################
-  if [ "$DB_USER" == "" ]; then
-    __process_msg "DB_USER is not set"
-    __set_db_username
-  else
-    __process_msg "DB_USER already set, skipping"
-  fi
-
   ################## check database password ###############################
   if [ "$DB_PASSWORD" == "" ]; then
     __process_msg "DB_PASSWORD is not set"
