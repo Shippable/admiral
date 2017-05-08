@@ -12,15 +12,16 @@ function post(req, res) {
   var bag = {
     reqBody: req.body,
     resBody: {},
-    component: 'master'
+    component: 'workers'
   };
 
-  bag.who = util.format('master|%s', self.name);
+  bag.who = util.format('workers|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
+      _updateWorker.bind(null, bag),
       _post.bind(null, bag)
     ],
     function (err) {
@@ -37,6 +38,17 @@ function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
 
+  if (!_.has(bag.reqBody, 'address') || _.isEmpty(bag.reqBody.address))
+    return next(
+      new ActErr(who, ActErr.DataNotFound,
+        'Missing body data :address')
+    );
+
+  bag.workerAddress = bag.reqBody.address;
+
+  if (_.has(bag.reqBody, 'name'))
+    bag.workerName = bag.reqBody.name;
+
   return next();
 }
 
@@ -45,39 +57,58 @@ function _get(bag, next) {
   logger.verbose(who, 'Inside');
 
   configHandler.get(bag.component,
-    function (err, master) {
+    function (err, workers) {
       if (err)
         return next(
           new ActErr(who, ActErr.DataNotFound,
             'Failed to get ' + bag.component, err)
         );
 
-      if (_.isEmpty(master))
+      if (_.isEmpty(workers))
         return next(
           new ActErr(who, ActErr.DataNotFound,
             'No configuration in database for ' + bag.component)
         );
 
-      bag.config = master;
+      bag.config = workers;
       return next();
     }
   );
+}
+
+function _updateWorker(bag, next) {
+  var who = bag.who + '|' + _updateWorker.name;
+  logger.verbose(who, 'Inside');
+
+  var newWorker = {
+    address: bag.workerAddress,
+    name: bag.workerName,
+    isInitialized: false,
+    isInstalled: false,
+    port: 2377
+  };
+
+  var workerExists = false;
+  _.each(bag.config,
+    function (worker) {
+      if (worker.address === bag.workerAddress) {
+        workerExists = true;
+        _.extend(worker, newWorker);
+      }
+    }
+  );
+
+  if (!workerExists)
+    bag.config.push(newWorker);
+
+  return next();
 }
 
 function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  var update = {};
-
-  if (_.has(bag.reqBody, 'address'))
-    update.address = bag.reqBody.address;
-  if (_.has(bag.reqBody, 'port'))
-    update.port = bag.reqBody.port;
-  if (_.has(bag.reqBody, 'workerJoinToken'))
-    update.workerJoinToken = bag.reqBody.workerJoinToken;
-
-  configHandler.put(bag.component, update,
+  configHandler.put(bag.component, bag.config,
     function (err, response) {
       if (err)
         return next(
