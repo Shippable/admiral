@@ -234,10 +234,28 @@ __set_admiral_ip() {
   fi
 }
 
+__set_install_db() {
+  __process_msg "Determining database type"
+
+  __process_success "Enter I to install a new database or E to use an existing one."
+  read response
+
+  if [ "$response" == "I" ]; then
+    __process_msg "A new database will be installed"
+    export DB_INSTALL=true
+  elif [ "$response" == "E" ]; then
+    __process_msg "An existing database will be used for this installation"
+    export DB_INSTALL=false
+  else
+    __process_error "Invalid response, please enter I or E"
+    __set_install_db
+  fi
+}
+
 __set_db_ip() {
   __process_msg "Setting value of database IP address"
   local db_ip=$ADMIRAL_IP
-  __process_success "Please enter the IP address where you would like the database installed or D to set the default ($db_ip)."
+  __process_success "Please enter the IP address of the database or D to set the default ($db_ip)."
   read response
 
   if [ "$response" != "D" ]; then
@@ -260,7 +278,7 @@ __set_db_ip() {
 }
 
 __add_ssh_key_to_db() {
-  if [ "$DB_IP" != "$ADMIRAL_IP" ]; then
+  if [ "$DB_IP" != "$ADMIRAL_IP" ] && [ "$DB_INSTALL" == "true" ]; then
     local public_ssh_key=$(cat $SSH_PUBLIC_KEY)
     __process_success "Run the following command on $DB_IP to allow SSH access:"
 
