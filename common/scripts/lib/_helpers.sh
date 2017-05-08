@@ -234,24 +234,6 @@ __set_admiral_ip() {
   fi
 }
 
-__set_install_db() {
-  __process_msg "Determining database type"
-
-  __process_success "Enter I to install a new database or E to use an existing one."
-  read response
-
-  if [ "$response" == "I" ]; then
-    __process_msg "A new database will be installed"
-    export DB_INSTALL=true
-  elif [ "$response" == "E" ]; then
-    __process_msg "An existing database will be used for this installation"
-    export DB_INSTALL=false
-  else
-    __process_error "Invalid response, please enter I or E"
-    __set_install_db
-  fi
-}
-
 __set_db_ip() {
   __process_msg "Setting value of database IP address"
   local db_ip=$ADMIRAL_IP
@@ -274,6 +256,24 @@ __set_db_ip() {
     sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
     export DB_IP=$db_ip
     __process_msg "Successfully set DB_IP to $db_ip"
+  fi
+}
+
+__set_install_db() {
+  if [ "$DB_IP" != "$ADMIRAL_IP" ]; then
+    __process_success "Enter I to install a new database or E to use an existing one."
+    read response
+
+    if [ "$response" == "I" ]; then
+      __process_msg "A new database will be installed"
+      export DB_INSTALL=true
+    elif [ "$response" == "E" ]; then
+      __process_msg "An existing database will be used for this installation"
+      export DB_INSTALL=false
+    else
+      __process_error "Invalid response, please enter I or E"
+      __set_install_db
+    fi
   fi
 }
 
