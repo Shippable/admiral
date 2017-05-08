@@ -54,7 +54,9 @@
           confirmCommand: false
         },
         redis: {
-          initType: 'admiral'
+          initType: 'admiral',
+          address: '',
+          confirmCommand: false
         },
         sshCommand: ''
       },
@@ -978,6 +980,7 @@
       var stateUpdate = {
         rootPassword: $scope.vm.initializeForm.state.rootPassword
       };
+      var redisUpdate = {};
 
       if ($scope.vm.initializeForm.secrets.initType === 'new')
         secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
@@ -988,13 +991,16 @@
       if ($scope.vm.initializeForm.state.initType === 'new')
         stateUpdate.address = $scope.vm.initializeForm.state.address;
 
+      if ($scope.vm.initializeForm.redis.initType === 'new')
+        redisUpdate.address = $scope.vm.initializeForm.redis.address;
+
       async.series([
           // get secrets, msg, state, redis
           getCoreServices,
           postSecrets.bind(null, secretsUpdate),
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
-          postRedis.bind(null, {}),
+          postRedis.bind(null, redisUpdate),
           getSystemSettings.bind(null, {}),
           updateInitializeForm.bind(null, {}),
           initSecrets
