@@ -75,10 +75,11 @@ __install_db() {
       -p $DB_PORT \
       -v ON_ERROR_STOP=1 \
       -c 'DROP TABLE \"testTable\";'"
-     __process_msg "Creating a test table"
+     __process_msg "Creating a test table to verify database connection"
      eval "$create_table_cmd"
-     __process_msg "Dropping test table"
+     __process_msg "Dropping a test table"
      eval "$drop_table_cmd"
+     __process_msg "Successfully tested connection to $DB_IP $DB_PORT"
   elif [ "$ADMIRAL_IP" == "$DB_IP" ]; then
     source "$SCRIPTS_DIR/docker/$script_name"
   else
