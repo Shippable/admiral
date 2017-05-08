@@ -85,6 +85,7 @@ __validate_runtime() {
   ################## check db url ##################################
   if [ "$DB_IP" == "" ]; then
     __process_msg "DB_IP is not set"
+    __set_install_db
     __set_db_ip
     __add_ssh_key_to_db
   else
