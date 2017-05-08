@@ -71,7 +71,7 @@ function _getConfigs(bag, next) {
             'Failed to get config for component: ' + bag.component, err)
         );
 
-      if (!_.isObject(bag.update)) {
+      if (!_.isArray(bag.update)) {
         bag.update = _.extend(config, bag.update);
       }
 
