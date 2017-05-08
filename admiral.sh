@@ -21,7 +21,6 @@ readonly LIB_DIR="$SCRIPTS_DIR/lib"
 readonly LOGS_DIR="$RUNTIME_DIR/logs"
 readonly TIMESTAMP="$(date +%Y%m%d%H%M)"
 readonly LOG_FILE="$LOGS_DIR/${TIMESTAMP}_cli.txt"
-readonly REMOTE_SCRIPTS_DIR="$SCRIPTS_DIR/remote"
 readonly LOCAL_SCRIPTS_DIR="$SCRIPTS_DIR/local"
 readonly ADMIRAL_ENV="$CONFIG_DIR/admiral.env"
 readonly SSH_PRIVATE_KEY=$CONFIG_DIR/machinekey
