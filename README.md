@@ -93,3 +93,14 @@ $ sudo ./admiral.sh install
 
 - Open this address in a web browser and use the login token to
   continue the installation.
+
+## Installing with Existing Services
+
+### Database
+- Existing Postgres installations may be used with Shippable.  The requirements
+  are as follows:
+    - Postgres 9.5,
+    - a database named `shipdb`,
+    - a user `apiuser` that has superuser permissions on `shipdb`, and
+    - a different address than is used for the installer.
+- Enter the password for `apiuser` when prompted for a password.
