@@ -19,7 +19,7 @@ configure_and_start() {
 }
 
 check_state() {
-  __process_msg "Checking gitlab container status on: $STATE_HOST:$STATE_PORT"
+  echo "Checking gitlab container status on: $STATE_HOST:$STATE_PORT"
   local interval=3
   local counter=0
   local is_booted=false
