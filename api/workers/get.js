@@ -13,17 +13,18 @@ function get(req, res) {
     reqQuery: req.query,
     resBody: {},
     initializeDefault: false,
-    component: 'master',
-    defaultConfig: {
-      address: global.config.admiralIP,
-      workerJoinToken: '',
-      port: 2377,
-      isInstalled: false,
-      isInitialized: false
-    }
+    component: 'workers',
+    defaultConfig: [
+      {
+        address: global.config.admiralIP,
+        port: 2377,
+        isInstalled: false,
+        isInitialized: false
+      }
+    ]
   };
 
-  bag.who = util.format('master|%s', self.name);
+  bag.who = util.format('workers|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
@@ -53,20 +54,20 @@ function _get(bag, next) {
   logger.verbose(who, 'Inside');
 
   configHandler.get(bag.component,
-    function (err, master) {
+    function (err, workers) {
       if (err)
         return next(
           new ActErr(who, ActErr.DBOperationFailed,
             'Failed to get ' + bag.component, err)
         );
 
-      if (_.isEmpty(master)) {
+      if (_.isEmpty(workers)) {
         logger.debug('No configuration in database for ' + bag.component);
         bag.initializeDefault = true;
         return next();
       }
 
-      bag.resBody = master;
+      bag.resBody = workers;
       return next();
     }
   );
