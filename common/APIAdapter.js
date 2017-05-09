@@ -101,11 +101,18 @@ APIAdapter.prototype.getRedis =
     this.get(url, callback);
   };
 
+APIAdapter.prototype.getRedisStatus =
+  function (callback) {
+    var url = '/api/redis/status';
+    this.get(url, callback);
+  };
+
 APIAdapter.prototype.postRedis =
   function (body, callback) {
     var url = '/api/redis';
     this.post(url, body, callback);
   };
+
 APIAdapter.prototype.initializeRedis =
   function (body, callback) {
     var url = '/api/redis/initialize';

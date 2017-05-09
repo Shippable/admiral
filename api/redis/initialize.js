@@ -39,7 +39,10 @@ function initialize(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeRedis.bind(null, bag),
+      _getSystemIntegration.bind(null, bag),
+      _putSystemIntegration.bind(null, bag),
       _postSystemIntegration.bind(null, bag),
+      _checkCredentials.bind(null, bag),
       _post.bind(null, bag)
     ],
     function (err) {
@@ -169,6 +172,8 @@ function _getReleaseVersion(bag, next) {
 }
 
 function _generateInitializeEnvs(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
@@ -191,6 +196,8 @@ function _generateInitializeEnvs(bag, next) {
 }
 
 function _generateInitializeScript(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _generateInitializeScript.name;
   logger.verbose(who, 'Inside');
 
@@ -205,13 +212,16 @@ function _generateInitializeScript(bag, next) {
 
   var initializeScript = helpers;
   filePath = path.join(global.config.scriptsDir, 'installRedis.sh');
-  initializeScript = initializeScript.concat(__applyTemplate(filePath, bag.params));
+  initializeScript =
+    initializeScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
   return next();
 }
 
 function _writeScriptToFile(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _writeScriptToFile.name;
   logger.debug(who, 'Inside');
 
@@ -233,6 +243,8 @@ function _writeScriptToFile(bag, next) {
 
 
 function _initializeRedis(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _initializeRedis.name;
   logger.verbose(who, 'Inside');
 
@@ -267,7 +279,57 @@ function _initializeRedis(bag, next) {
   );
 }
 
+function _getSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getSystemIntegrations('name=redis&masterName=url',
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system integration: ' + util.inspect(err))
+        );
+
+      if (!_.isEmpty(systemIntegrations))
+        bag.systemIntegration = systemIntegrations[0];
+
+      return next();
+    }
+  );
+}
+
+function _putSystemIntegration(bag, next) {
+  if (!bag.systemIntegration) return next();
+
+  var who = bag.who + '|' + _putSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var putObject = {
+    name: 'redis',
+    masterName: 'url',
+    data: {
+      url: bag.config.address + ':' + bag.config.port
+    }
+  };
+
+  bag.apiAdapter.putSystemIntegration(bag.systemIntegration.id, putObject,
+    function (err, systemIntegration) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update system integration: ' + util.inspect(err))
+        );
+
+      bag.systemIntegration = systemIntegration;
+      return next();
+    }
+  );
+}
+
 function _postSystemIntegration(bag, next) {
+  if (bag.systemIntegration) return next();
+
   var who = bag.who + '|' + _postSystemIntegration.name;
   logger.verbose(who, 'Inside');
 
@@ -275,7 +337,7 @@ function _postSystemIntegration(bag, next) {
     name: 'redis',
     masterName: 'url',
     data: {
-      url: bag.scriptEnvs.REDIS_HOST + ':' + bag.scriptEnvs.REDIS_PORT
+      url: bag.config.address + ':' + bag.config.port
     }
   };
 
@@ -285,6 +347,31 @@ function _postSystemIntegration(bag, next) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _checkCredentials(bag, next) {
+  if (bag.config.isShippableManaged) return next();
+
+  var who = bag.who + '|' + _checkCredentials.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getRedisStatus(
+    function (err, status) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to check Redis status: ' + util.inspect(err))
+        );
+
+      if (status.error)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Invalid Redis configuration: ' + status.error)
         );
 
       return next();
