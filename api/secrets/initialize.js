@@ -51,6 +51,7 @@ function initialize(req, res) {
       _unsealVaultStep3.bind(null, bag),
       _createSecretsMount.bind(null, bag),
       _updatePolicy.bind(null, bag),
+      _checkCredentials.bind(null, bag),
       _post.bind(null, bag),
       _updateVaultUrl.bind(null, bag)
     ],
@@ -183,6 +184,8 @@ function _sendResponse(bag, next) {
 }
 
 function _generateInitializeEnvs(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
@@ -209,6 +212,8 @@ function _generateInitializeEnvs(bag, next) {
 }
 
 function _generateInitializeScript(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _generateInitializeScript.name;
   logger.verbose(who, 'Inside');
 
@@ -223,13 +228,16 @@ function _generateInitializeScript(bag, next) {
 
   var initializeScript = helpers;
   filePath = path.join(global.config.scriptsDir, 'installVault.sh');
-  initializeScript = initializeScript.concat(__applyTemplate(filePath, bag.params));
+  initializeScript =
+    initializeScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
   return next();
 }
 
 function _writeScriptToFile(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _writeScriptToFile.name;
   logger.debug(who, 'Inside');
 
@@ -251,6 +259,8 @@ function _writeScriptToFile(bag, next) {
 
 
 function _installVault(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _installVault.name;
   logger.verbose(who, 'Inside');
 
@@ -302,19 +312,24 @@ function _checkInitStatus(bag, next) {
       if (response.initialized === true) {
         logger.debug('Vault already initialized');
 
-        if (_.isEmpty(bag.config.unsealKey1) ||
-          _.isEmpty(bag.config.unsealKey2) ||
-            _.isEmpty(bag.config.unsealKey3) ||
-              _.isEmpty(bag.config.unsealKey4) ||
-                _.isEmpty(bag.config.unsealKey5) ||
-                  _.isEmpty(bag.config.rootToken)) {
-
+        if (_.isEmpty(bag.config.rootToken))
           return next(
             new ActErr(who, ActErr.OperationFailed,
-              'Vault needs 5 unseal keys. One(or more) unseal keys are ' +
+              'Vault is missing a root token.')
+          );
+
+        if (bag.config.isShippableManaged &&
+          (_.isEmpty(bag.config.unsealKey1) ||
+          _.isEmpty(bag.config.unsealKey2) ||
+          _.isEmpty(bag.config.unsealKey3) ||
+          _.isEmpty(bag.config.unsealKey4) ||
+          _.isEmpty(bag.config.unsealKey5)))
+          return next(
+            new ActErr(who, ActErr.OperationFailed,
+              'Vault needs 5 unseal keys. One (or more) unseal keys are ' +
               ' missing. Reset vault server or make sure keys are present')
           );
-        }
+
         bag.config.isInitialized = response.initialized;
         bag.config.isSealed = response.sealed;
       } else {
@@ -326,15 +341,17 @@ function _checkInitStatus(bag, next) {
 }
 
 function _getUnsealKeys(bag, next) {
-  if (bag.config.isInitialized) return next();
+  if (bag.config.isInitialized || !bag.config.isShippableManaged) return next();
 
   var who = bag.who + '|' + _getUnsealKeys.name;
   logger.verbose(who, 'Inside');
 
   var client = new VaultAdapter(bag.vaultUrl);
   var params = {
+    /* jshint camelcase:false */
     secret_shares: 5,
     secret_threshold: 3
+    /* jshint camelcase:true */
   };
   client.init(params,
     function (err, response) {
@@ -348,7 +365,9 @@ function _getUnsealKeys(bag, next) {
       bag.config.unsealKey3 = response.keys[2];
       bag.config.unsealKey4 = response.keys[3];
       bag.config.unsealKey5 = response.keys[4];
+      /* jshint camelcase:false */
       bag.config.rootToken  = response.root_token;
+      /* jshint camelcase:true */
 
       logger.debug('Successfully fetched unseal keys for vault');
       return next();
@@ -357,7 +376,7 @@ function _getUnsealKeys(bag, next) {
 }
 
 function _saveUnsealKeys(bag, next) {
-  if (bag.config.isInitialized) return next();
+  if (bag.config.isInitialized || !bag.config.isShippableManaged) return next();
 
   var who = bag.who + '|' + _saveUnsealKeys.name;
   logger.verbose(who, 'Inside');
@@ -376,7 +395,7 @@ function _saveUnsealKeys(bag, next) {
 }
 
 function _setVaultRootToken(bag, next) {
-  if (bag.config.isInitialized) return next();
+  if (bag.config.isInitialized && bag.config.isShippableManaged) return next();
 
   var who = bag.who + '|' + _setVaultRootToken.name;
   logger.verbose(who, 'Inside');
@@ -395,7 +414,7 @@ function _setVaultRootToken(bag, next) {
 }
 
 function _unsealVaultStep1(bag, next) {
-  if (bag.config.isSealed) return next();
+  if (bag.config.isSealed || !bag.config.isShippableManaged) return next();
 
   var who = bag.who + '|' + _unsealVaultStep1.name;
   logger.verbose(who, 'Inside');
@@ -403,7 +422,9 @@ function _unsealVaultStep1(bag, next) {
   var client = new VaultAdapter(bag.vaultUrl);
 
   var params = {
+    /* jshint camelcase:false */
     secret_shares: 3,
+    /* jshint camelcase:true */
     key: bag.config.unsealKey1
   };
 
@@ -421,13 +442,15 @@ function _unsealVaultStep1(bag, next) {
 }
 
 function _unsealVaultStep2(bag, next) {
-  if (bag.config.isSealed) return next();
+  if (bag.config.isSealed || !bag.config.isShippableManaged) return next();
 
   var who = bag.who + '|' + _unsealVaultStep2.name;
   logger.verbose(who, 'Inside');
 
   var params = {
+    /* jshint camelcase:false */
     secret_shares: 3,
+    /* jshint camelcase:true */
     key: bag.config.unsealKey2
   };
 
@@ -448,12 +471,14 @@ function _unsealVaultStep2(bag, next) {
 }
 
 function _unsealVaultStep3(bag, next) {
-  if (bag.config.isSealed) return next();
+  if (bag.config.isSealed || !bag.config.isShippableManaged) return next();
 
   var who = bag.who + '|' + _unsealVaultStep3.name;
   logger.verbose(who, 'Inside');
   var params = {
+    /* jshint camelcase:false */
     secret_shares: 3,
+    /* jshint camelcase:true */
     key: bag.config.unsealKey3
   };
 
@@ -516,6 +541,93 @@ function _updatePolicy(bag, next) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to create policy: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _checkCredentials(bag, next) {
+  if (bag.config.isShippableManaged) return next();
+
+  var who = bag.who + '|' + _checkCredentials.name;
+  logger.verbose(who, 'Inside');
+
+  var seriesBag = {
+    who: who,
+    client: new VaultAdapter(bag.vaultUrl, bag.config.rootToken),
+    testKey: 'shippable/testPermissions',
+    testSecret: {
+      testValue: 'testSecret'
+    }
+  };
+
+  async.series([
+      _postSecret.bind(null, seriesBag),
+      _getSecret.bind(null, seriesBag),
+      _deleteSecret.bind(null, seriesBag)
+    ],
+    function (err) {
+      if (err)
+        return next(err);
+
+      return next(err);
+    }
+  );
+}
+
+function _postSecret(seriesBag, next) {
+  var who = seriesBag.who + '|' + _postSecret.name;
+  logger.debug(who, 'Inside');
+
+  seriesBag.client.postSecret(seriesBag.testKey, seriesBag.testSecret,
+    function (err, body) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to :postSecret with error ' + err + util.inspect(body))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getSecret(seriesBag, next) {
+  var who = seriesBag.who + '|' + _getSecret.name;
+  logger.debug(who, 'Inside');
+
+  seriesBag.client.getSecret(seriesBag.testKey,
+    function (err, body) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to :getSecret with error ' + err + ' ' + util.inspect(body))
+        );
+
+      if (seriesBag.testSecret.testValue !== body.data.testValue)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Wrong value found getting ' + seriesBag.testKey + ' from vault')
+        );
+
+      return next();
+    }
+  );
+}
+
+function _deleteSecret(seriesBag, next) {
+  var who = seriesBag.who + '|' + _deleteSecret.name;
+  logger.verbose(who, 'Inside');
+
+  seriesBag.client.deleteSecret(seriesBag.testKey,
+    function (err, body) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to :deleteSecret ' + seriesBag.testKey +
+            ' with error ' + err + ' ' + util.inspect(body))
         );
 
       return next();
