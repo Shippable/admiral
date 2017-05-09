@@ -13,7 +13,6 @@ var APIAdapter = require('../../common/APIAdapter.js');
 
 function getStatus(req, res) {
   var bag = {
-    reqBody: req.body,
     resBody: {
       isReachable: false,
       error: null

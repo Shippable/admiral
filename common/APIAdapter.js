@@ -63,6 +63,12 @@ APIAdapter.prototype.getMsg =
     this.get(url, callback);
   };
 
+APIAdapter.prototype.getMsgStatus =
+  function (callback) {
+    var url = '/api/msg/status';
+    this.get(url, callback);
+  };
+
 APIAdapter.prototype.postMsg =
   function (body, callback) {
     var url = '/api/msg';
@@ -149,6 +155,12 @@ APIAdapter.prototype.getSystemIntegrations =
   function (query, callback) {
     var url = '/api/systemIntegrations?' + query;
     this.get(url, callback);
+  };
+
+APIAdapter.prototype.putSystemIntegration =
+  function (systemIntegrationId, body, callback) {
+    var url = '/api/systemIntegrations/' + systemIntegrationId;
+    this.put(url, body, callback);
   };
 
 APIAdapter.prototype.postSystemIntegration =
