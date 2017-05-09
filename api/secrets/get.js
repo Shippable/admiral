@@ -23,6 +23,7 @@ function get(req, res) {
       unsealKey3: '',
       unsealKey4: '',
       unsealKey5: '',
+      isShippableManaged: true,
       isInstalled: false,
       isInitialized: false
     }

@@ -20,6 +20,7 @@ function get(req, res) {
       sshPort: 2222,
       securePort: 443,
       rootPassword: '',
+      isShippableManaged: true,
       isInstalled: false,
       isInitialized: false
     }

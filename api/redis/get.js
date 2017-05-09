@@ -17,6 +17,7 @@ function get(req, res) {
     defaultConfig: {
       address: global.config.admiralIP,
       port: 6379,
+      isShippableManaged: true,
       isInstalled: false,
       isInitialized: false
     }

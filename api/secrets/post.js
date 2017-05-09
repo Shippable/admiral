@@ -77,6 +77,9 @@ function _post(bag, next) {
   if (_.has(bag.reqBody, 'rootToken'))
     bag.config.rootToken = bag.reqBody.rootToken;
 
+  if (_.has(bag.reqBody, 'isShippableManaged'))
+    bag.config.isShippableManaged = bag.reqBody.isShippableManaged;
+
   configHandler.put(bag.component, bag.config,
     function (err, config) {
       if (err)
