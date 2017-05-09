@@ -27,6 +27,7 @@ main() {
   if [ "$IS_INSTALLED" == true ]; then
     __process_msg "Swarm master already installed, skipping"
   else
+    __validate_master_envs
     __init_swarm_master
   fi
   __process_msg "Swarm master installed successfully"

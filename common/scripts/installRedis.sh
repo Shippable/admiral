@@ -72,10 +72,10 @@ main() {
       __exec_cmd_remote "$REDIS_HOST" "mkdir -p $SCRIPTS_DIR_REMOTE"
       __copy_script_remote "$REDIS_HOST" "$script_path" "$SCRIPTS_DIR_REMOTE"
 
-      local vault_install_cmd="REDIS_HOST=$REDIS_HOST \
+      local redis_install_cmd="REDIS_HOST=$REDIS_HOST \
         REDIS_PORT=$REDIS_PORT \
         $SCRIPTS_DIR_REMOTE/$script_name"
-      __exec_cmd_remote "$REDIS_HOST" "$vault_install_cmd"
+      __exec_cmd_remote "$REDIS_HOST" "$redis_install_cmd"
     fi
   fi
   __process_msg "Redis installed successfully"
