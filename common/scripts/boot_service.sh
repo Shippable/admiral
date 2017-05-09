@@ -16,22 +16,6 @@ __validate_service_configs() {
   __process_msg "LOGS_FILE:$LOGS_FILE"
 }
 
-__registry_login() {
-  __process_msg "Updating docker credentials to pull Shippable images"
-
-  local credentials_template="$SCRIPTS_DIR/configs/credentials.template"
-  local credentials_file="/tmp/credentials"
-
-  sed "s#{{ACCESS_KEY}}#$ACCESS_KEY#g" $credentials_template > $credentials_file
-  sed -i "s#{{SECRET_KEY}}#$SECRET_KEY#g" $credentials_file
-
-  mkdir -p ~/.aws
-  mv -v $credentials_file ~/.aws
-  local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
-  __process_msg "Docker login generated, logging into ecr"
-  eval "$docker_login_cmd"
-}
-
 __cleanup_containers() {
   __process_msg "Stopping stale container for the service"
   sudo docker rm -f $SERVICE_NAME || true
@@ -42,7 +26,7 @@ __cleanup_service() {
   sudo docker service rm $SERVICE_NAME || true
 }
 
-__run_service() {
+__run_service1() {
   __process_msg "Running service: $SERVICE_NAME"
   local run_cmd="sudo docker run -d \
     $SERVICE_ENV \
@@ -55,6 +39,13 @@ __run_service() {
   __process_msg "Docker run returned: $run_output"
 }
 
+__run_service() {
+  __process_msg "Running service: $SERVICE_NAME"
+  __process_msg "Executing: $RUN_COMMAND"
+  local run_output=$($RUN_COMMAND)
+  __process_msg "Docker run returned: $run_output"
+}
+
 main() {
   if [ -z "$SERVICE_NAME" ] || [ "$SERVICE_NAME" == "" ]; then
     __process_error "'SERVICE_NAME' env not present, exiting"
@@ -62,10 +53,13 @@ main() {
   else
     __process_marker "Booting service: $SERVICE_NAME"
     __validate_service_configs
-    __registry_login
     __cleanup_containers
     __cleanup_service
-    __run_service
+    if [ "$RUN_COMMAND" == "" ]; then
+      __run_service1
+    else
+      __run_service
+    fi
   fi
 }
 

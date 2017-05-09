@@ -13,6 +13,7 @@ function nexecConfig(params, callback) {
     apiAdapter: params.apiAdapter,
     config: params.config,
     releaseVersion: params.releaseVersion,
+    isSwarmClusterInitialized: params.isSwarmClusterInitialized,
     name: params.name,
     registry: params.registry,
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
@@ -30,7 +31,8 @@ function nexecConfig(params, callback) {
       _generateImage.bind(null, bag),
       _generateEnvs.bind(null, bag),
       _generateMounts.bind(null, bag),
-      _generateOpts.bind(null, bag)
+      _generateRunCommandOnebox.bind(null, bag),
+      _generateRunCommandCluster.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -191,13 +193,50 @@ function _generateMounts(bag, next) {
   return next();
 }
 
-function _generateOpts(bag, next) {
-  var who = bag.who + '|' + _generateOpts.name;
+function _generateRunCommandOnebox(bag, next) {
+  if (bag.isSwarmClusterInitialized) return next();
+
+  var who = bag.who + '|' + _generateRunCommandOnebox.name;
   logger.verbose(who, 'Inside');
 
   var opts = ' --network=host' +
     ' --privileged=true';
 
-  bag.config.opts = opts;
+  var runCommand = util.format('docker run -d ' +
+    ' %s %s %s --name %s %s',
+    bag.config.envs,
+    bag.config.mounts,
+    opts,
+    bag.config.serviceName,
+    bag.config.image);
+
+  bag.config.runCommand = runCommand;
+  return next();
+}
+
+function _generateRunCommandCluster(bag, next) {
+  if (!bag.isSwarmClusterInitialized) return next();
+
+  var who = bag.who + '|' + _generateRunCommandCluster.name;
+  logger.verbose(who, 'Inside');
+
+  var replicas = util.format(' --replicas %s', bag.config.replicas);
+  if (bag.replicas === 'global')
+    replicas = ' --mode global';
+
+  var opts = ' --network ingress' +
+    ' --with-registry-auth' +
+    ' --endpoint-mode vip';
+
+  var runCommand = util.format('docker service create ' +
+    ' %s %s --name %s %s',
+    bag.config.envs,
+    opts,
+    replicas,
+    bag.config.serviceName,
+    bag.config.image
+  );
+
+  bag.config.runCommand = runCommand;
   return next();
 }

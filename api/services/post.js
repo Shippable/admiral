@@ -38,6 +38,8 @@ function post(req, res) {
       _checkInputParams.bind(null, bag),
       _getReleaseVersion.bind(null, bag),
       _getServiceConfig.bind(null, bag),
+      _getMaster.bind(null, bag),
+      _getWorkers.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
       _getRegistry.bind(null, bag),
@@ -134,6 +136,65 @@ function _getServiceConfig(bag, next) {
   );
 }
 
+function _getMaster(bag, next) {
+  var who = bag.who + '|' + _getMaster.name;
+  logger.verbose(who, 'Inside');
+
+  configHandler.get('master',
+    function (err, master) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'Failed to get master', err)
+        );
+
+      if (_.isEmpty(master))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No configuration in database for master')
+        );
+
+      bag.master = master;
+      return next();
+    }
+  );
+}
+
+function _getWorkers(bag, next) {
+  var who = bag.who + '|' + _getWorkers.name;
+  logger.verbose(who, 'Inside');
+
+  configHandler.get('workers',
+    function (err, workers) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'Failed to get ' + bag.component, err)
+        );
+
+      if (_.isEmpty(workers))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No configuration in database for ' + bag.component)
+        );
+
+      bag.isSwarmClusterInitialized = false;
+
+      // if even one worker has external IP then swarm cluster is initialized
+      _.each(bag.workers,
+        function (worker) {
+          if (worker.address !== bag.master.address)
+            bag.isSwarmClusterInitialized = true;
+        }
+      );
+
+      bag.isSwarmClusterInitialized = true;
+
+      return next();
+    }
+  );
+}
+
 function _getRegistry(bag, next) {
   var who = bag.who + '|' + _getRegistry.name;
   logger.verbose(who, 'Inside');
@@ -175,7 +236,8 @@ function _generateServiceConfig(bag, next) {
     config: bag.serviceConfig,
     name: bag.name,
     registry: bag.registry,
-    releaseVersion: bag.releaseVersion
+    releaseVersion: bag.releaseVersion,
+    isSwarmClusterInitialized: bag.isSwarmClusterInitialized
   };
 
   if (!configGenerator)
@@ -243,7 +305,6 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
-  var runCommand = '';
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
     'SCRIPTS_DIR': global.config.scriptsDir,
@@ -254,7 +315,7 @@ function _generateInitializeEnvs(bag, next) {
     'SERVICE_MOUNTS': bag.serviceConfig.mounts,
     'ACCESS_KEY': bag.accessKey,
     'SECRET_KEY': bag.secretKey,
-    'RUN_COMMAND': runCommand
+    'RUN_COMMAND': bag.serviceConfig.runCommand
   };
 
   return next();
