@@ -25,7 +25,7 @@ check_redis() {
     fi
   done
   if [ $is_booted = false ]; then
-    echo "Failed to boot redis container"
+    echo "Failed to boot redis"
     exit 1
   fi
 }

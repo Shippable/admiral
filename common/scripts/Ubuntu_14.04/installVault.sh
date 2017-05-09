@@ -29,7 +29,7 @@ start_vault() {
 }
 
 check_vault() {
-  echo "Checking vault container status on $VAULT_HOST:$VAULT_PORT"
+  echo "Checking vault status on $VAULT_HOST:$VAULT_PORT"
   local interval=3
   local counter=0
   local is_booted=false
@@ -46,7 +46,7 @@ check_vault() {
     fi
   done
   if [ $is_booted = false ]; then
-    echo "Failed to boot vault container"
+    echo "Failed to boot vault"
     exit 1
   fi
 }

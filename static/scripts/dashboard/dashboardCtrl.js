@@ -474,12 +474,14 @@
                   $scope.vm.systemSettings[service][key];
             }
           );
-          if (obj.address) {
-            if (obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
-              $scope.vm.initializeForm[service].initType = 'admiral';
-            else
-              $scope.vm.initializeForm[service].initType = 'new';
-          }
+
+          if (!obj.address || obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
+            $scope.vm.initializeForm[service].initType = 'admiral';
+          else
+            $scope.vm.initializeForm[service].initType = 'new';
+
+          if ($scope.vm.systemSettings[service].isInitialized)
+            $scope.vm.initializeForm[service].confirmCommand = true;
         }
       );
 
@@ -949,26 +951,35 @@
             return horn.error(err);
           }
 
-          var promise = $interval(function () {
-            getSystemSettings({},
-              function (err) {
-                if (err) {
-                  $interval.cancel(promise);
-                  $scope.vm.initializing = false;
-                  return horn.error(err);
-                }
-
-                var db = $scope.vm.systemSettings.db;
-
-                if (!db.isProcessing && (db.isFailed || db.isInitialized)) {
-                  $interval.cancel(promise);
-                  postServicesAndInitSecrets();
-                }
-              }
-            );
-          }, 3000);
+          pollService('db', postServicesAndInitSecrets);
         }
       );
+    }
+
+    function pollService(serviceName, callback) {
+      var promise = $interval(function () {
+        getSystemSettings({},
+          function (err) {
+            if (err) {
+              $interval.cancel(promise);
+              $scope.vm.initializing = false;
+              return horn.error(err);
+            }
+
+            var service = $scope.vm.systemSettings[serviceName];
+
+            if (!service.isProcessing &&
+              (service.isFailed || service.isInitialized)) {
+              $interval.cancel(promise);
+              if (service.isFailed &&
+                (serviceName === 'db' || serviceName === 'secrets'))
+                $scope.vm.initializing = false;
+              else
+                callback();
+            }
+          }
+        );
+      }, 3000);
     }
 
     function postServicesAndInitSecrets() {
@@ -1013,109 +1024,9 @@
             return horn.error(err);
           }
 
-          var promise = $interval(function () {
-            getSystemSettings({},
-              function (err) {
-                if (err) {
-                  $interval.cancel(promise);
-                  $scope.vm.initializing = false;
-                  return horn.error(err);
-                }
-
-                var secrets = $scope.vm.systemSettings.secrets;
-
-                if (!secrets.isProcessing &&
-                  (secrets.isFailed || secrets.isInitialized)) {
-                  $interval.cancel(promise);
-                  initCoreServices();
-                }
-              }
-            );
-          }, 3000);
+          pollService('secrets', initMsg);
         }
       );
-    }
-
-    function initCoreServices() {
-      async.series([
-          initMsg,
-          initState,
-          initRedis
-        ],
-        function (err) {
-          if (err) {
-            $scope.vm.initializing = false;
-            return horn.error(err);
-          }
-
-          pollSystemSettings();
-        }
-      );
-    }
-
-    function pollSystemSettings() {
-      var promise = $interval(function () {
-        getSystemSettings({},
-          function (err) {
-            if (err) {
-              horn.error(err);
-              $scope.vm.initializing = false;
-              $interval.cancel(promise);
-            }
-
-            var configs = $scope.vm.systemSettings;
-
-            var processing = configs.db.isProcessing ||
-              configs.secrets.isProcessing || configs.msg.isProcessing ||
-              configs.state.isProcessing || configs.redis.isProcessing;
-
-            var failed = configs.db.isFailed || configs.secrets.isFailed ||
-              configs.msg.isFailed || configs.state.isFailed ||
-              configs.redis.isFailed;
-
-            if (!processing && (failed || $scope.vm.initialized)) {
-              $scope.vm.initializing = false;
-              $interval.cancel(promise);
-              getSystemIntegrations({},
-                function (err) {
-                  if (err)
-                    horn.error(err);
-                }
-              );
-              getSystemSettingsForInstallPanel({},
-                function (err) {
-                  if (err)
-                    horn.error(err);
-                }
-              );
-              getServices({},
-                function (err) {
-                  if (err)
-                    horn.error(err);
-                }
-              );
-              getDefaultSystemMachineImage({},
-                function (err) {
-                  if (err)
-                    horn.error(err);
-                }
-              );
-              getMasterIntegrations({},
-                function (err) {
-                  if (err)
-                    horn.error(err);
-                }
-              );
-              updateInitializeForm({},
-                function (err)  {
-                  if (err)
-                    horn.error(err);
-                }
-              );
-            }
-          }
-        );
-      }, 3000);
     }
 
     function getCoreServices(next) {
@@ -1188,32 +1099,52 @@
       );
     }
 
-    function initMsg(next) {
+    function initMsg() {
       admiralApiAdapter.initMsg({},
         function (err) {
           if (err)
-            return next(err);
-          return next();
+            return horn.error(err);
+
+          pollService('msg', initState);
         }
       );
     }
 
-    function initState(next) {
+    function initState() {
       admiralApiAdapter.initState({},
         function (err) {
           if (err)
-            return next(err);
-          return next();
+            return horn.error(err);
+
+          pollService('state', initRedis);
         }
       );
     }
 
-    function initRedis(next) {
+    function initRedis() {
       admiralApiAdapter.initRedis({},
         function (err) {
           if (err)
-            return next(err);
-          return next();
+            return horn.error(err);
+
+          pollService('redis', postInitFlow);
+        }
+      );
+    }
+
+    function postInitFlow() {
+      async.parallel([
+          getSystemIntegrations.bind(null, {}),
+          getSystemSettingsForInstallPanel.bind(null, {}),
+          getServices.bind(null, {}),
+          getDefaultSystemMachineImage.bind(null, {}),
+          getMasterIntegrations.bind(null, {}),
+          updateInitializeForm.bind(null, {})
+        ],
+        function (err) {
+          if (err)
+            horn.error(err);
+          $scope.vm.initializing = false;
         }
       );
     }
