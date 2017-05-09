@@ -402,6 +402,9 @@
                         <td ng-if="vm.initializeForm.redis.initType === 'new'" rowspan="5" style="width: 12.5%;">
                           <b>Redis:</b>
                         </td>
+                        <td ng-if="vm.initializeForm.redis.initType === 'existing'" rowspan="2" style="width: 12.5%;">
+                          <b>Redis:</b>
+                        </td>
                         <td colspan="5">
                           Install Location:
                           <span>
@@ -413,7 +416,7 @@
                             New Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.redis.initType" value="existing" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.redis.initType" value="existing" ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing">
                             Existing
                           </span>
                         </td>
@@ -429,7 +432,7 @@
                           <span ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
                         </td>
                       </tr>
-                      <tr class="active" ng-if="vm.initializeForm.redis.initType === 'new'">
+                      <tr ng-if="vm.initializeForm.redis.initType === 'new'">
                         <td colspan="3">
                           <span>IP address for your new Redis installation:</span>
                         </td>
@@ -442,12 +445,12 @@
                         <td>
                         </td>
                       </tr>
-                      <tr class="active" ng-if="vm.initializeForm.redis.initType === 'new'">
+                      <tr ng-if="vm.initializeForm.redis.initType === 'new'">
                         <td colspan="7">
                           Please run this command on your node to authorize SSH access:
                         </td>
                       </tr>
-                      <tr class="active" ng-if="vm.initializeForm.redis.initType === 'new'">
+                      <tr ng-if="vm.initializeForm.redis.initType === 'new'">
                         <td colspan="6">
                           <div class="ss-action"></div>
                           <div class="ship-console" style="word-break: break-all;">
@@ -457,7 +460,7 @@
                         <td>
                         </td>
                       </tr>
-                      <tr class="active" ng-if="vm.initializeForm.redis.initType === 'new'">
+                      <tr ng-if="vm.initializeForm.redis.initType === 'new'">
                         <td colspan="6">
                           <input type="checkbox" ng-model="vm.initializeForm.redis.confirmCommand"/>
                           Click here once you have run the above command on your node
@@ -465,7 +468,19 @@
                         <td>
                         </td>
                       </tr>
-                      <tr>
+                      <tr ng-if="vm.initializeForm.redis.initType === 'existing'">
+                        <td colspan="3">
+                          <span>IP address of your existing Redis installation:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="redisAddress" ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.redis.address"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
                         <td colspan=8 class="text-right">
                           <button class="btn btn-md btn-primary" type="submit" ng-click="vm.initialize()"
                             ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand)">

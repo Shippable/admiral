@@ -1046,6 +1046,11 @@
         stateUpdate.isShippableManaged = false;
       }
 
+      if ($scope.vm.initializeForm.redis.initType === 'existing') {
+        redisUpdate.address = $scope.vm.initializeForm.redis.address;
+        redisUpdate.isShippableManaged = false;
+      }
+
       async.series([
           // get secrets, msg, state, redis
           getCoreServices,

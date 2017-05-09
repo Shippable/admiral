@@ -74,14 +74,18 @@ function _post(bag, next) {
     update.address = bag.reqBody.address;
   if (_.has(bag.reqBody, 'port'))
     update.port = bag.reqBody.port;
+  if (_.has(bag.reqBody, 'isShippableManaged'))
+    update.isShippableManaged = bag.reqBody.isShippableManaged;
 
   configHandler.put(bag.component, update,
-    function (err) {
+    function (err, config) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to update config for ' + bag.component, err)
         );
+
+      bag.resBody = config;
 
       return next();
     }
