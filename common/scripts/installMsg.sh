@@ -135,6 +135,11 @@ main() {
       local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
       __check_connection "$MSG_HOST"
       __copy_configs
+
+      local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
+      __copy_script_remote "$MSG_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
+      __exec_cmd_remote "$MSG_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
+
       __exec_cmd_remote "$MSG_HOST" "mkdir -p $SCRIPTS_DIR_REMOTE"
       __copy_script_remote "$MSG_HOST" "$script_path" "$SCRIPTS_DIR_REMOTE"
 

@@ -83,8 +83,13 @@ __install_db() {
   elif [ "$ADMIRAL_IP" == "$DB_IP" ]; then
     source "$SCRIPTS_DIR/docker/$script_name"
   else
-    local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
     __check_connection "$DB_IP"
+
+    local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
+    __copy_script_remote "$DB_IP" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
+    __exec_cmd_remote "$DB_IP" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
+
+    local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
     __exec_cmd_remote "$DB_IP" "mkdir -p $SCRIPTS_DIR_REMOTE"
     __copy_script_remote "$DB_IP" "$script_path" "$SCRIPTS_DIR_REMOTE"
     local db_install_cmd="DB_IP=$DB_IP \
