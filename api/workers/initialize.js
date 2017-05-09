@@ -394,7 +394,7 @@ function _getMasterNodeId(bag, next) {
   var who = bag.who + '|' + _getMasterNodeId.name;
   logger.verbose(who, 'Inside');
 
-  var command = 'sudo docker node ls -f "role=manater" -q';
+  var command = 'sudo docker node ls -f "role=manager" -q';
   var exec = spawn('/bin/bash',
     ['-c', command]
   );
