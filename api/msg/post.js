@@ -86,6 +86,8 @@ function _post(bag, next) {
     update.password = bag.reqBody.password;
   if (_.has(bag.reqBody, 'isSecure'))
     update.isSecure = bag.reqBody.isSecure;
+  if (_.has(bag.reqBody, 'isShippableManaged'))
+    update.isShippableManaged = bag.reqBody.isShippableManaged;
 
   // If 'password' was provided and there's no 'uiPassword' set both
   if (!bag.config.uiPassword && !update.uiPassword && bag.reqBody.password)
