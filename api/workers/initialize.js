@@ -45,7 +45,8 @@ function initialize(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeWorker.bind(null, bag),
-      _post.bind(null, bag)
+      _post.bind(null, bag),
+      _drainMaster.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -108,7 +109,7 @@ function _get(bag, next) {
           new ActErr(who, ActErr.DataNotFound,
             'No entry in workers list for ' + bag.address)
         );
-
+      bag.workers = workers;
       return next();
     }
   );
@@ -162,12 +163,16 @@ function _setProcessingFlag(bag, next) {
   var who = bag.who + '|' + _setProcessingFlag.name;
   logger.verbose(who, 'Inside');
 
-  var update = {
-    isProcessing: true,
-    isFailed: false
-  };
+  _.each(bag.workers,
+    function (worker) {
+      if (worker.address === bag.config.address) {
+        worker.isProcessing = true;
+        worker.isFailed = false;
+      }
+    }
+  );
 
-  configHandler.put(bag.component, update,
+  configHandler.put(bag.component, bag.workers,
     function (err) {
       if (err)
         return next(
@@ -361,13 +366,16 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  var update = {
-    isInstalled: true,
-    isInitialized: true,
-    workerJoinToken: bag.workerJoinToken
-  };
+  _.each(bag.workers,
+    function (worker) {
+      if (worker.address === bag.config.address) {
+        worker.isInstalled = true;
+        worker.isInitialized = true;
+      }
+    }
+  );
 
-  configHandler.put(bag.component, update,
+  configHandler.put(bag.component, bag.workers,
     function (err, response) {
       if (err)
         return next(
@@ -381,19 +389,60 @@ function _post(bag, next) {
   );
 }
 
+function _drainMaster(bag, next) {
+  var who = bag.who + '|' + _drainMaster.name;
+  logger.verbose(who, 'Inside');
+
+  var command =
+    util.format(
+      'sudo docker node update --availability drain %s', bag.master.address);
+  var exec = spawn('/bin/bash',
+    ['-c', command]
+  );
+
+  exec.stdout.on('data',
+    function (data)  {
+      console.log(data.toString());
+      bag.workerJoinToken = data.toString();
+      bag.workerJoinToken = bag.workerJoinToken.trim();
+    }
+  );
+
+  exec.stderr.on('data',
+    function (data)  {
+      console.log(data.toString());
+    }
+  );
+
+  exec.on('close',
+    function (exitCode)  {
+      if (exitCode > 0)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Script returned code: ' + exitCode)
+        );
+      return next();
+    }
+  );
+}
+
 function _setCompleteStatus(bag, err) {
   var who = bag.who + '|' + _setCompleteStatus.name;
   logger.verbose(who, 'Inside');
 
-  var update = {
-    isProcessing: false
-  };
-  if (err)
-    update.isFailed = true;
-  else
-    update.isFailed = false;
+  _.each(bag.workers,
+    function (worker) {
+      if (worker.address === bag.config.address) {
+        worker.isProcessing = false;
+        if (err)
+          worker.isFailed = true;
+        else
+          worker.isFailed = false;
+      }
+    }
+  );
 
-  configHandler.put(bag.component, update,
+  configHandler.put(bag.component, bag.workers,
     function (err) {
       if (err)
         logger.warn(err);
