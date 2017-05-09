@@ -79,10 +79,6 @@ main() {
       local docker_auth_binary="$WORKERS_CONFIG_DIR/docker-credential-ecr-login"
       __copy_script_remote "$WORKER_HOST" "$docker_auth_binary" "/usr/bin"
 
-      __process_msg "Copying docker login configuration"
-      local docker_auth_config="$WORKERS_CONFIG_DIR/config.json"
-      __copy_script_remote "$WORKER_HOST" "$docker_auth_config" "/root/.docker"
-
       __process_msg "copying ecr credentials file"
       local credentials_file="$WORKERS_CONFIG_DIR/credentials"
       __copy_script_remote "$WORKER_HOST" "$credentials_file" "/root/.aws"
