@@ -24,7 +24,11 @@ __init_swarm_master() {
 
 main() {
   __process_marker "Installing swarm master"
-  __init_swarm_master
+  if [ "$IS_INSTALLED" == true ]; then
+    __process_msg "Swarm master already installed, skipping"
+  else
+    __init_swarm_master
+  fi
   __process_msg "Swarm master installed successfully"
 }
 
