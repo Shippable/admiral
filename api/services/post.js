@@ -177,19 +177,12 @@ function _getWorkers(bag, next) {
           new ActErr(who, ActErr.DataNotFound,
             'No configuration in database for ' + bag.component)
         );
-
-      bag.isSwarmClusterInitialized = false;
-
       // if even one worker has external IP then swarm cluster is initialized
-      _.each(bag.workers,
+      bag.isSwarmClusterInitialized = _.some(bag.workers,
         function (worker) {
-          if (worker.address !== bag.master.address)
-            bag.isSwarmClusterInitialized = true;
+          return worker.address !== bag.master.address;
         }
       );
-
-      bag.isSwarmClusterInitialized = true;
-
       return next();
     }
   );
@@ -311,7 +304,6 @@ function _generateInitializeEnvs(bag, next) {
     'SERVICE_NAME': bag.serviceConfig.serviceName,
     'SERVICE_IMAGE': bag.serviceConfig.image,
     'SERVICE_ENV': bag.serviceConfig.envs,
-    'SERVICE_OPTS': bag.serviceConfig.opts,
     'SERVICE_MOUNTS': bag.serviceConfig.mounts,
     'ACCESS_KEY': bag.accessKey,
     'SECRET_KEY': bag.secretKey,
