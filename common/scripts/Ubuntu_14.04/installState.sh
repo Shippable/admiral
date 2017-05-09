@@ -19,7 +19,7 @@ configure_and_start() {
 }
 
 check_state() {
-  echo "Checking gitlab container status on: $STATE_HOST:$STATE_PORT"
+  echo "Checking gitlab status on: $STATE_HOST:$STATE_PORT"
   local interval=3
   local counter=0
   local is_booted=false
@@ -36,7 +36,7 @@ check_state() {
     fi
   done
   if [ $is_booted = false ]; then
-    echo "Failed to boot gitlab container"
+    echo "Failed to boot gitlab"
     exit 1
   fi
 }
