@@ -19,6 +19,10 @@ __validate_master_envs() {
 
 __init_swarm_master() {
   __process_msg "Initializing swarm cluster"
+  if [ "$MASTER_HOST" == "localhost" ]; then
+    ## swarm does not accept 'localhost' as the ip address of master
+    MASTER_HOST="127.0.0.1"
+  fi
   sudo docker swarm init --advertise-addr $MASTER_HOST || true
 }
 
