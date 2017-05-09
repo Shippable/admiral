@@ -24,8 +24,8 @@ __install_docker() {
 }
 
 __install_ecr() {
-  apt-get -y install python-pip
-  pip install awscli==1.10.63
+  sudo apt-get -y install python-pip
+  sudo pip install awscli==1.10.63
 }
 
 __initialize_worker() {
