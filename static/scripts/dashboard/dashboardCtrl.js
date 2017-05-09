@@ -61,6 +61,9 @@
           address: '',
           confirmCommand: false
         },
+        master: {
+          initType: 'admiral'
+        },
         sshCommand: ''
       },
       // map by systemInt name, then masterName
@@ -364,6 +367,9 @@
         },
         redis: {
           displayName: 'Redis'
+        },
+        master: {
+          displayName: 'Swarm Master'
         }
       },
       systemSettingsId: null,
@@ -427,6 +433,20 @@
       return next();
     }
 
+    function getAdmiralEnv(bag, next) {
+      admiralApiAdapter.getAdmiralEnv(
+        function (err, admiralEnv) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          $scope.vm.admiralEnv = admiralEnv;
+          return next();
+        }
+      );
+    }
+
     function getSystemSettings(bag, next) {
       admiralApiAdapter.getSystemSettings(
         function (err, systemSettings) {
@@ -452,6 +472,9 @@
           $scope.vm.systemSettings.redis =
             _.extend($scope.vm.systemSettings.redis,
               (systemSettings.redis && JSON.parse(systemSettings.redis)));
+          $scope.vm.systemSettings.master =
+            _.extend($scope.vm.systemSettings.master,
+              (systemSettings.master && JSON.parse(systemSettings.master)));
           $scope.vm.systemSettings.releaseVersion =
             systemSettings.releaseVersion;
 
@@ -459,7 +482,8 @@
             $scope.vm.systemSettings.secrets.isInitialized &&
             $scope.vm.systemSettings.msg.isInitialized &&
             $scope.vm.systemSettings.state.isInitialized &&
-            $scope.vm.systemSettings.redis.isInitialized;
+            $scope.vm.systemSettings.redis.isinitialized &&
+            $scope.vm.systemSettings.master.isinitialized;
 
           return next();
         }
@@ -478,14 +502,17 @@
             }
           );
 
-          if (!_.has($scope.vm.systemSettings[service], 'isShippableManaged') ||
-            !obj.address ||
+          if (!_.has($scope.vm.systemSettings[service],
+            'isShippableManaged') ||
+            $scope.vm.systemSettings[service].isShippableManaged) {
+            if (!obj.address ||
             obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
-            $scope.vm.initializeForm[service].initType = 'admiral';
-          else if (!$scope.vm.systemSettings[service].isShippableManaged)
+              $scope.vm.initializeForm[service].initType = 'admiral';
+            else
+              $scope.vm.initializeForm[service].initType = 'new';
+          } else {
             $scope.vm.initializeForm[service].initType = 'existing';
-          else
-            $scope.vm.initializeForm[service].initType = 'new';
+          }
 
           if ($scope.vm.systemSettings[service].isInitialized)
             $scope.vm.initializeForm[service].confirmCommand = true;
@@ -493,20 +520,6 @@
       );
 
       return next();
-    }
-
-    function getAdmiralEnv(bag, next) {
-      admiralApiAdapter.getAdmiralEnv(
-        function (err, admiralEnv) {
-          if (err) {
-            horn.error(err);
-            return next();
-          }
-
-          $scope.vm.admiralEnv = admiralEnv;
-          return next();
-        }
-      );
     }
 
     function getMachineKeys(bag, next) {
@@ -1012,6 +1025,9 @@
         address: $scope.vm.admiralEnv.ADMIRAL_IP,
         isShippableManaged: true
       };
+      var masterUpdate = {
+        address: $scope.vm.admiralEnv.ADMIRAL_IP
+      };
 
       if ($scope.vm.initializeForm.secrets.initType === 'new')
         secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
@@ -1052,12 +1068,13 @@
       }
 
       async.series([
-          // get secrets, msg, state, redis
+          // get secrets, msg, state, redis, master
           getCoreServices,
           postSecrets.bind(null, secretsUpdate),
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
           postRedis.bind(null, redisUpdate),
+          postMaster.bind(null, masterUpdate),
           getSystemSettings.bind(null, {}),
           updateInitializeForm.bind(null, {}),
           initSecrets
@@ -1074,7 +1091,7 @@
     }
 
     function getCoreServices(next) {
-      var coreServices = ['secrets', 'msg', 'state', 'redis'];
+      var coreServices = ['secrets', 'msg', 'state', 'redis', 'master'];
       async.each(coreServices,
         function (service, done) {
           admiralApiAdapter.getCoreService(service,
@@ -1125,6 +1142,16 @@
 
     function postRedis(update, next) {
       admiralApiAdapter.postRedis(update,
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function postMaster(update, next) {
+      admiralApiAdapter.postMaster(update,
         function (err) {
           if (err)
             return next(err);
@@ -1187,7 +1214,22 @@
             return horn.error(err);
           }
 
-          pollService('redis', postInitFlow);
+          pollService('redis', initMaster);
+        }
+      );
+    }
+
+    function initMaster() {
+      $scope.vm.systemSettings.master.isProcessing = true;
+      admiralApiAdapter.initMaster({},
+        function (err) {
+          if (err) {
+            $scope.vm.systemSettings.master.isProcessing = false;
+            $scope.vm.initializing = false;
+            return horn.error(err);
+          }
+
+          pollService('master', postInitFlow);
         }
       );
     }

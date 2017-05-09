@@ -481,6 +481,31 @@
                         <td>
                         </td>
                       </tr>
+                      <!-- Swarm -->
+                      <tr class="active">
+                        <td>
+                          <b>Swarm Master:</b>
+                        </td>
+                        <td colspan="5">
+                          Install Location:
+                          <span>
+                            <input type="radio" ng-model="vm.initializeForm.master.initType" ng-disabled="vm.systemSettings.master.isInitialized || vm.initializing" value="admiral">
+                            This Node
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')">logs</button>
+                        </td>
+                        <td style="width: 12.5%;" class="text-center">
+                          <span ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
+                          <span ng-if="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed">
+                            {{vm.systemSettings.master.isInitialized ? 'initialized' : 'not initialized'}}
+                          </span>
+                          <span ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
+                        </td>
+                      </tr>
+                      <tr>
                         <td colspan=8 class="text-right">
                           <button class="btn btn-md btn-primary" type="submit" ng-click="vm.initialize()"
                             ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand)">
