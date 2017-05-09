@@ -1040,6 +1040,12 @@
         msgUpdate.isShippableManaged = false;
       }
 
+      if ($scope.vm.initializeForm.state.initType === 'existing') {
+        stateUpdate.address = $scope.vm.initializeForm.state.address;
+        stateUpdate.sshPort = 22;
+        stateUpdate.isShippableManaged = false;
+      }
+
       async.series([
           // get secrets, msg, state, redis
           getCoreServices,
@@ -1126,8 +1132,11 @@
       $scope.vm.systemSettings.secrets.isProcessing = true;
       admiralApiAdapter.initSecrets({},
         function (err) {
-          if (err)
+          if (err) {
+            $scope.vm.systemSettings.secrets.isProcessing = false;
+            $scope.vm.initializing = false;
             return next(err);
+          }
           return next();
         }
       );
@@ -1137,8 +1146,11 @@
       $scope.vm.systemSettings.msg.isProcessing = true;
       admiralApiAdapter.initMsg({},
         function (err) {
-          if (err)
+          if (err) {
+            $scope.vm.systemSettings.msg.isProcessing = false;
+            $scope.vm.initializing = false;
             return horn.error(err);
+          }
 
           pollService('msg', initState);
         }
@@ -1149,8 +1161,11 @@
       $scope.vm.systemSettings.state.isProcessing = true;
       admiralApiAdapter.initState({},
         function (err) {
-          if (err)
+          if (err) {
+            $scope.vm.systemSettings.state.isProcessing = false;
+            $scope.vm.initializing = false;
             return horn.error(err);
+          }
 
           pollService('state', initRedis);
         }
@@ -1161,8 +1176,11 @@
       $scope.vm.systemSettings.redis.isProcessing = true;
       admiralApiAdapter.initRedis({},
         function (err) {
-          if (err)
+          if (err) {
+            $scope.vm.systemSettings.redis.isProcessing = false;
+            $scope.vm.initializing = false;
             return horn.error(err);
+          }
 
           pollService('redis', postInitFlow);
         }

@@ -83,6 +83,9 @@ function _post(bag, next) {
   if (_.has(bag.reqBody, 'securePort'))
     bag.config.securePort = bag.reqBody.securePort;
 
+  if (_.has(bag.reqBody, 'isShippableManaged'))
+    bag.config.isShippableManaged = bag.reqBody.isShippableManaged;
+
   configHandler.put(bag.component, bag.config,
     function (err, config) {
       if (err)

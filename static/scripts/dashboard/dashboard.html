@@ -301,6 +301,9 @@
                         <td ng-if="vm.initializeForm.state.initType === 'new'" rowspan="6" style="width: 12.5%;">
                           <b>State:</b>
                         </td>
+                        <td ng-if="vm.initializeForm.state.initType === 'existing'" rowspan="3" style="width: 12.5%;">
+                          <b>State:</b>
+                        </td>
                         <td colspan="5">
                           Install Location:
                           <span>
@@ -312,7 +315,7 @@
                             New Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.state.initType" value="existing" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.state.initType" value="existing" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing">
                             Existing
                           </span>
                         </td>
@@ -330,7 +333,8 @@
                       </tr>
                       <tr class="active">
                         <td colspan="3">
-                          <span>Choose a password for GitLab:</span>
+                          <span ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for GitLab:</span>
+                          <span ng-if="vm.initializeForm.state.initType === 'existing'">Password for GitLab root user:</span>
                         </td>
                         <td colspan="3">
                           <div>
@@ -373,6 +377,19 @@
                         <td colspan="6">
                           <input type="checkbox" ng-model="vm.initializeForm.state.confirmCommand"/>
                           Click here once you have run the above command on your node
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.state.initType === 'existing'">
+                        <td colspan="3">
+                          <span>IP address for your existing GitLab installation:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="stateAddress" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.state.address"/>
+                          </div>
                         </td>
                         <td>
                         </td>
