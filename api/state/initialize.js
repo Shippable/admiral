@@ -38,7 +38,10 @@ function initialize(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeState.bind(null, bag),
+      _getSystemIntegration.bind(null, bag),
+      _putSystemIntegration.bind(null, bag),
       _postSystemIntegration.bind(null, bag),
+      _checkCredentials.bind(null, bag),
       _post.bind(null, bag)
     ],
     function (err) {
@@ -175,6 +178,8 @@ function _getReleaseVersion(bag, next) {
 }
 
 function _generateInitializeEnvs(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
@@ -200,6 +205,8 @@ function _generateInitializeEnvs(bag, next) {
 }
 
 function _generateInitializeScript(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _generateInitializeScript.name;
   logger.verbose(who, 'Inside');
 
@@ -214,13 +221,16 @@ function _generateInitializeScript(bag, next) {
 
   var initializeScript = helpers;
   filePath = path.join(global.config.scriptsDir, 'installState.sh');
-  initializeScript = initializeScript.concat(__applyTemplate(filePath, bag.params));
+  initializeScript =
+    initializeScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
   return next();
 }
 
 function _writeScriptToFile(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _writeScriptToFile.name;
   logger.debug(who, 'Inside');
 
@@ -241,6 +251,8 @@ function _writeScriptToFile(bag, next) {
 }
 
 function _initializeState(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _initializeState.name;
   logger.verbose(who, 'Inside');
 
@@ -275,20 +287,62 @@ function _initializeState(bag, next) {
   );
 }
 
+function _getSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getSystemIntegrations('name=state&masterName=gitlabCreds',
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system integration: ' + util.inspect(err))
+        );
+
+      if (!_.isEmpty(systemIntegrations))
+        bag.systemIntegration = systemIntegrations[0];
+
+      return next();
+    }
+  );
+}
+
+function _putSystemIntegration(bag, next) {
+  if (!bag.systemIntegration) return next();
+
+  var who = bag.who + '|' + _putSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var putObject = {
+    name: 'state',
+    masterName: 'gitlabCreds',
+    data: _generateSystemIntegrationData(bag)
+  };
+
+  bag.apiAdapter.putSystemIntegration(bag.systemIntegration.id, putObject,
+    function (err, systemIntegration) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update system integration: ' + util.inspect(err))
+        );
+
+      bag.systemIntegration = systemIntegration;
+      return next();
+    }
+  );
+}
+
 function _postSystemIntegration(bag, next) {
+  if (bag.systemIntegration) return next();
+
   var who = bag.who + '|' + _postSystemIntegration.name;
   logger.verbose(who, 'Inside');
 
   var postObject = {
     name: 'state',
     masterName: 'gitlabCreds',
-    data: {
-      username: 'root',
-      password: bag.scriptEnvs.STATE_PASS,
-      url: util.format('http://%s/api/v3', bag.scriptEnvs.STATE_HOST),
-      sshPort: util.format('%s', bag.scriptEnvs.SSH_PORT),
-      subscriptionProjectLimit: '100'
-    }
+    data: _generateSystemIntegrationData(bag)
   };
 
   bag.apiAdapter.postSystemIntegration(postObject,
@@ -297,6 +351,43 @@ function _postSystemIntegration(bag, next) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _generateSystemIntegrationData(bag) {
+  var data = {
+    username: 'root',
+    password: bag.config.rootPassword,
+    url: util.format('http://%s/api/v3', bag.config.address),
+    sshPort: util.format('%s', bag.config.sshPort),
+    subscriptionProjectLimit: '100'
+  };
+
+  return data;
+}
+
+function _checkCredentials(bag, next) {
+  if (bag.config.isShippableManaged) return next();
+
+  var who = bag.who + '|' + _checkCredentials.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getStateStatus(
+    function (err, status) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to check GitLab credentials: ' + util.inspect(err))
+        );
+
+      if (status.error)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Invalid GitLab credentials: ' + status.error)
         );
 
       return next();

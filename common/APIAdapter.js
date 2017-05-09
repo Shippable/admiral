@@ -138,6 +138,12 @@ APIAdapter.prototype.getState =
     this.get(url, callback);
   };
 
+APIAdapter.prototype.getStateStatus =
+  function (callback) {
+    var url = '/api/state/status';
+    this.get(url, callback);
+  };
+
 APIAdapter.prototype.postState =
   function (body, callback) {
     var url = '/api/state';
