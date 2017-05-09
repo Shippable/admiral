@@ -20,6 +20,7 @@ function initialize(req, res) {
     params: {},
     skipStatusChange: false,
     isResponseSent: false,
+    systemIntegration: null,
     component: 'msg',
     tmpScript: '/tmp/msg.sh'
   };
@@ -38,7 +39,10 @@ function initialize(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeMsg.bind(null, bag),
+      _getSystemIntegration.bind(null, bag),
+      _putSystemIntegration.bind(null, bag),
       _postSystemIntegration.bind(null, bag),
+      _checkCredentials.bind(null, bag),
       _post.bind(null, bag)
     ],
     function (err) {
@@ -94,7 +98,7 @@ function _get(bag, next) {
 }
 
 function _checkConfig(bag, next) {
-  /* jshint maxcomplexity:15 */
+  /* jshint maxcomplexity:20 */
   var who = bag.who + '|' + _checkConfig.name;
   logger.verbose(who, 'Inside');
 
@@ -179,6 +183,8 @@ function _getReleaseVersion(bag, next) {
 }
 
 function _generateInitializeEnvs(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
@@ -208,6 +214,8 @@ function _generateInitializeEnvs(bag, next) {
 }
 
 function _generateInitializeScript(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _generateInitializeScript.name;
   logger.verbose(who, 'Inside');
 
@@ -222,13 +230,16 @@ function _generateInitializeScript(bag, next) {
 
   var initializeScript = helpers;
   filePath = path.join(global.config.scriptsDir, 'installMsg.sh');
-  initializeScript = initializeScript.concat(__applyTemplate(filePath, bag.params));
+  initializeScript =
+    initializeScript.concat(__applyTemplate(filePath, bag.params));
 
   bag.script = initializeScript;
   return next();
 }
 
 function _writeScriptToFile(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _writeScriptToFile.name;
   logger.debug(who, 'Inside');
 
@@ -250,6 +261,8 @@ function _writeScriptToFile(bag, next) {
 
 
 function _initializeMsg(bag, next) {
+  if (!bag.config.isShippableManaged) return next();
+
   var who = bag.who + '|' + _initializeMsg.name;
   logger.verbose(who, 'Inside');
 
@@ -284,32 +297,62 @@ function _initializeMsg(bag, next) {
   );
 }
 
-function _postSystemIntegration(bag, next) {
-  var who = bag.who + '|' + _postSystemIntegration.name;
+function _getSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegration.name;
   logger.verbose(who, 'Inside');
 
-  var amqpAddress = (bag.config.isSecure ? 'amqps://' : 'amqp://') +
-    bag.scriptEnvs.MSG_USER + ':' + bag.scriptEnvs.MSG_PASS +
-    '@' + bag.scriptEnvs.MSG_HOST + ':' + bag.config.amqpPort;
-  var httpAddress = (bag.config.isSecure ? 'https://' : 'http://') +
-    bag.scriptEnvs.MSG_USER + ':' + bag.scriptEnvs.MSG_PASS +
-    '@' + bag.scriptEnvs.MSG_HOST + ':' + bag.config.adminPort;
+  bag.apiAdapter.getSystemIntegrations('name=msg&masterName=rabbitmqCreds',
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system integration: ' + util.inspect(err))
+        );
+
+      if (!_.isEmpty(systemIntegrations))
+        bag.systemIntegration = systemIntegrations[0];
+
+      return next();
+    }
+  );
+}
+
+function _putSystemIntegration(bag, next) {
+  if (!bag.systemIntegration) return next();
+
+  var who = bag.who + '|' + _putSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var putObject = {
+    name: 'msg',
+    masterName: 'rabbitmqCreds',
+    data: _generateSystemIntegrationData(bag)
+  };
+
+  bag.apiAdapter.putSystemIntegration(bag.systemIntegration.id, putObject,
+    function (err, systemIntegration) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update system integration: ' + util.inspect(err))
+        );
+
+      bag.systemIntegration = systemIntegration;
+      return next();
+    }
+  );
+}
+
+function _postSystemIntegration(bag, next) {
+  if (bag.systemIntegration) return next();
+
+  var who = bag.who + '|' + _postSystemIntegration.name;
+  logger.verbose(who, 'Inside');
 
   var postObject = {
     name: 'msg',
     masterName: 'rabbitmqCreds',
-    data: {
-      amqpUrl: amqpAddress + '/shippable',
-      amqpUrlRoot: amqpAddress + '/shippableRoot',
-      amqpUrlAdmin: httpAddress,
-      amqpDefaultExchange: 'shippableEx',
-      rootQueueList: 'core.charon|versions.trigger|core.nf|nf.email|' +
-        'nf.hipchat|nf.irc|nf.slack|nf.webhook|core.braintree|core.certgen|' +
-        'core.hubspotSync|core.marshaller|marshaller.ec2|core.sync|' +
-        'job.request|job.trigger|cluster.init|steps.deploy|steps.manifest|' +
-        'steps.provision|steps.rSync|steps.release|core.logup|www.signals|' +
-        'core.segment'
-    }
+    data: _generateSystemIntegrationData(bag)
   };
 
   bag.apiAdapter.postSystemIntegration(postObject,
@@ -325,17 +368,62 @@ function _postSystemIntegration(bag, next) {
   );
 }
 
+function _generateSystemIntegrationData(bag) {
+  var amqpAddress = (bag.config.isSecure ? 'amqps://' : 'amqp://') +
+    bag.config.username + ':' + bag.config.password +
+    '@' + bag.config.address + ':' + bag.config.amqpPort;
+  var httpAddress = (bag.config.isSecure ? 'https://' : 'http://') +
+    bag.config.username + ':' + bag.config.password +
+    '@' + bag.config.address + ':' + bag.config.adminPort;
+
+  var data = {
+    amqpUrl: amqpAddress + '/shippable',
+    amqpUrlRoot: amqpAddress + '/shippableRoot',
+    amqpUrlAdmin: httpAddress,
+    amqpDefaultExchange: 'shippableEx',
+    rootQueueList: 'core.charon|versions.trigger|core.nf|nf.email|' +
+      'nf.hipchat|nf.irc|nf.slack|nf.webhook|core.braintree|core.certgen|' +
+      'core.hubspotSync|core.marshaller|marshaller.ec2|core.sync|' +
+      'job.request|job.trigger|cluster.init|steps.deploy|steps.manifest|' +
+      'steps.provision|steps.rSync|steps.release|core.logup|www.signals|' +
+      'core.segment'
+  };
+
+  return data;
+}
+
+function _checkCredentials(bag, next) {
+  if (bag.config.isShippableManaged) return next();
+
+  var who = bag.who + '|' + _checkCredentials.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getMsgStatus(
+    function (err, status) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to check RabbitMQ credentials: ' + util.inspect(err))
+        );
+
+      if (status.error)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Invalid RabbitMQ credentials: ' + status.error)
+        );
+
+      return next();
+    }
+  );
+}
+
 function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
   var update = {
     isInstalled: true,
-    isInitialized: true,
-    uiUsername: bag.scriptEnvs.MSG_UI_USER,
-    uiPassword: bag.scriptEnvs.MSG_UI_PASS,
-    username: bag.scriptEnvs.MSG_USER,
-    password: bag.scriptEnvs.MSG_PASS
+    isInitialized: true
   };
 
   configHandler.put(bag.component, update,
