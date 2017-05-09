@@ -70,18 +70,21 @@
                         <td rowspan="5" style="width: 12.5%;" ng-if="vm.initializeForm.secrets.initType === 'new'">
                           <b>Secrets:</b>
                         </td>
+                        <td rowspan="3" style="width: 12.5%;" ng-if="vm.initializeForm.secrets.initType === 'existing'">
+                          <b>Secrets:</b>
+                        </td>
                         <td colspan="5">
-                          Install Type:
+                          Install Location:
                           <span>
                             <input type="radio" ng-model="vm.initializeForm.secrets.initType" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing" value="admiral">
-                            Admiral Node
+                            This Node
                           </span>
                           <span>
                             <input type="radio" ng-model="vm.initializeForm.secrets.initType" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing" value="new">
                             New Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.secrets.initType" value="existing" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.secrets.initType" value="existing" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing">
                             Existing
                           </span>
                         </td>
@@ -99,7 +102,7 @@
                       </tr>
                       <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'new'">
                         <td colspan="3">
-                          <span>IP address for your new Vault installation:</span>
+                          <span>IP address where you would like Vault installed:</span>
                         </td>
                         <td colspan="3">
                           <div>
@@ -133,6 +136,32 @@
                         <td>
                         </td>
                       </tr>
+                      <tr class="active" ng-if=" vm.initializeForm.secrets.initType === 'existing'">
+                        <td colspan="3">
+                          <span>IP address of your existing Vault installation:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="secretsAddress" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.secrets.address"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'existing'">
+                        <td colspan="3">
+                          <span>Root token for your Vault installation:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="secretsAddress" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.secrets.rootToken"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
                       <!-- RabbitMQ -->
                       <tr>
                         <td ng-if="vm.initializeForm.msg.initType === 'admiral'" rowspan="2">
@@ -142,10 +171,10 @@
                           <b>Messaging:</b>
                         </td>
                         <td colspan="5">
-                          Install Type:
+                          Install Location:
                           <span>
                             <input type="radio" ng-model="vm.initializeForm.msg.initType" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" value="admiral">
-                            Admiral Node
+                            This Node
                           </span>
                           <span>
                             <input type="radio" ng-model="vm.initializeForm.msg.initType" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" value="new">
@@ -224,10 +253,10 @@
                           <b>State:</b>
                         </td>
                         <td colspan="5">
-                          Install Type:
+                          Install Location:
                           <span>
                             <input type="radio" ng-model="vm.initializeForm.state.initType" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing" value="admiral">
-                            Admiral Node
+                            This Node
                           </span>
                           <span>
                             <input type="radio" ng-model="vm.initializeForm.state.initType" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing" value="new">
@@ -308,10 +337,10 @@
                           <b>Redis:</b>
                         </td>
                         <td colspan="5">
-                          Install Type:
+                          Install Location:
                           <span>
                             <input type="radio" ng-model="vm.initializeForm.redis.initType" ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing" value="admiral">
-                            Admiral Node
+                            This Node
                           </span>
                           <span>
                             <input type="radio" ng-model="vm.initializeForm.redis.initType" value="new" ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing">

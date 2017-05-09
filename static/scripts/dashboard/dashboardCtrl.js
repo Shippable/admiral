@@ -39,6 +39,7 @@
           //install type can be admiral (same node as admiral), new, or existing
           initType: 'admiral',
           address: '',
+          rootToken: '',
           confirmCommand: false
         },
         msg: {
@@ -475,8 +476,12 @@
             }
           );
 
-          if (!obj.address || obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
+          if (!_.has($scope.vm.systemSettings[service], 'isShippableManaged') ||
+            !obj.address ||
+            obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
             $scope.vm.initializeForm[service].initType = 'admiral';
+          else if (!$scope.vm.systemSettings[service].isShippableManaged)
+            $scope.vm.initializeForm[service].initType = 'existing';
           else
             $scope.vm.initializeForm[service].initType = 'new';
 
@@ -983,15 +988,26 @@
     }
 
     function postServicesAndInitSecrets() {
-      var secretsUpdate = {};
+      var secretsUpdate = {
+        address: $scope.vm.admiralEnv.ADMIRAL_IP,
+        isShippableManaged: true
+      };
       var msgUpdate = {
         password: $scope.vm.initializeForm.msg.password,
-        uiPassword: $scope.vm.initializeForm.msg.password
+        uiPassword: $scope.vm.initializeForm.msg.password,
+        address: $scope.vm.admiralEnv.ADMIRAL_IP,
+        isShippableManaged: true
       };
       var stateUpdate = {
-        rootPassword: $scope.vm.initializeForm.state.rootPassword
+        rootPassword: $scope.vm.initializeForm.state.rootPassword,
+        address: $scope.vm.admiralEnv.ADMIRAL_IP,
+        sshPort: 2222,
+        isShippableManaged: true
       };
-      var redisUpdate = {};
+      var redisUpdate = {
+        address: $scope.vm.admiralEnv.ADMIRAL_IP,
+        isShippableManaged: true
+      };
 
       if ($scope.vm.initializeForm.secrets.initType === 'new')
         secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
@@ -1006,6 +1022,12 @@
 
       if ($scope.vm.initializeForm.redis.initType === 'new')
         redisUpdate.address = $scope.vm.initializeForm.redis.address;
+
+      if ($scope.vm.initializeForm.secrets.initType === 'existing') {
+        secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
+        secretsUpdate.rootToken = $scope.vm.initializeForm.secrets.rootToken;
+        secretsUpdate.isShippableManaged = false;
+      }
 
       async.series([
           // get secrets, msg, state, redis

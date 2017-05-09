@@ -23,6 +23,7 @@ function get(req, res) {
       username: 'shippableRoot',
       password: '',
       isSecure: false,
+      isShippableManaged: true,
       isInstalled: false,
       isInitialized: false
     }
