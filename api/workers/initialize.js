@@ -153,7 +153,7 @@ function _checkConfig(bag, next) {
   if (missingConfigFields.length)
     return next(
       new ActErr(who, ActErr.DataNotFound,
-        'Missing config data: ' + missingConfigFields.join())
+        'Missing worker config data: ' + missingConfigFields.join())
     );
 
   return next();

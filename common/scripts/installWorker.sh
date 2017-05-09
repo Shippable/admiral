@@ -11,7 +11,7 @@ export SCRIPTS_DIR_REMOTE="/tmp/shippable"
 exec &> >(tee -a "$LOGS_FILE")
 
 __validate_worker_envs() {
-  __process_msg "Initializing redis environment variables"
+  __process_msg "Initializing worker environment variables"
   __process_msg "RELEASE: $RELEASE"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "WORKER_HOST: $WORKER_HOST"
