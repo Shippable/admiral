@@ -170,6 +170,9 @@
                         <td ng-if="vm.initializeForm.msg.initType === 'new'" rowspan="6" style="width: 12.5%;">
                           <b>Messaging:</b>
                         </td>
+                        <td ng-if="vm.initializeForm.msg.initType === 'existing'" rowspan="5" style="width: 12.5%;">
+                          <b>Messaging:</b>
+                        </td>
                         <td colspan="5">
                           Install Location:
                           <span>
@@ -181,7 +184,7 @@
                             New Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.msg.initType" value="existing" ng-disabled="true">
+                            <input type="radio" ng-model="vm.initializeForm.msg.initType" value="existing" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing">
                             Existing
                           </span>
                         </td>
@@ -197,9 +200,23 @@
                           <span ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
                         </td>
                       </tr>
+                      <tr ng-if="vm.initializeForm.msg.initType === 'existing'">
+                        <td colspan="3">
+                          <span>RabbitMQ Username:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="msgUsername"
+                            ng-model="vm.initializeForm.msg.username" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
                       <tr>
                         <td colspan="3">
-                          <span>Choose a password for RabbitMQ:</span>
+                          <span ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</span>
+                          <span ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</span>
                         </td>
                         <td colspan="3">
                           <div>
@@ -212,7 +229,7 @@
                       </tr>
                       <tr ng-if="vm.initializeForm.msg.initType === 'new'">
                         <td colspan="3">
-                          <span>IP address for your new RabbitMQ installation:</span>
+                          <span>IP address where you would like RabbitMQ installed:</span>
                         </td>
                         <td colspan="3">
                           <div>
@@ -240,6 +257,38 @@
                         <td colspan="6">
                           <input type="checkbox" ng-model="vm.initializeForm.msg.confirmCommand"/>
                           Click here once you have run the above command on your node
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr ng-if="vm.initializeForm.msg.initType === 'existing'">
+                        <td colspan="3">
+                          <span>IP address of your existing RabbitMQ installation:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <input type="text" class="form-control" name="msgAddress" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.msg.address"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr ng-if="vm.initializeForm.msg.initType === 'existing'">
+                        <td colspan="3">
+                          <span>Protocol used to connect to your RabbitMQ installation:</span>
+                        </td>
+                        <td colspan="3">
+                          <div>
+                            <span>
+                              <input type="radio" ng-model="vm.initializeForm.msg.isSecure" ng-value=false ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing">
+                              amqp
+                            </span>
+                            <span>
+                              <input type="radio" ng-model="vm.initializeForm.msg.isSecure" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" ng-value=true>
+                              amqps
+                            </span>
+                          </div>
                         </td>
                         <td>
                         </td>

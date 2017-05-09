@@ -46,6 +46,8 @@
           initType: 'admiral',
           password: '',
           address: '',
+          isSecure: false,
+          username: '',
           confirmCommand: false
         },
         state: {
@@ -995,7 +997,9 @@
       var msgUpdate = {
         password: $scope.vm.initializeForm.msg.password,
         uiPassword: $scope.vm.initializeForm.msg.password,
+        username: 'shippableRoot',
         address: $scope.vm.admiralEnv.ADMIRAL_IP,
+        isSecure: false,
         isShippableManaged: true
       };
       var stateUpdate = {
@@ -1027,6 +1031,13 @@
         secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
         secretsUpdate.rootToken = $scope.vm.initializeForm.secrets.rootToken;
         secretsUpdate.isShippableManaged = false;
+      }
+
+      if ($scope.vm.initializeForm.msg.initType === 'existing') {
+        msgUpdate.address = $scope.vm.initializeForm.msg.address;
+        msgUpdate.username = $scope.vm.initializeForm.msg.username;
+        msgUpdate.isSecure = $scope.vm.initializeForm.msg.isSecure;
+        msgUpdate.isShippableManaged = false;
       }
 
       async.series([
@@ -1112,6 +1123,7 @@
     }
 
     function initSecrets(next) {
+      $scope.vm.systemSettings.secrets.isProcessing = true;
       admiralApiAdapter.initSecrets({},
         function (err) {
           if (err)
@@ -1122,6 +1134,7 @@
     }
 
     function initMsg() {
+      $scope.vm.systemSettings.msg.isProcessing = true;
       admiralApiAdapter.initMsg({},
         function (err) {
           if (err)
@@ -1133,6 +1146,7 @@
     }
 
     function initState() {
+      $scope.vm.systemSettings.state.isProcessing = true;
       admiralApiAdapter.initState({},
         function (err) {
           if (err)
@@ -1144,6 +1158,7 @@
     }
 
     function initRedis() {
+      $scope.vm.systemSettings.redis.isProcessing = true;
       admiralApiAdapter.initRedis({},
         function (err) {
           if (err)
