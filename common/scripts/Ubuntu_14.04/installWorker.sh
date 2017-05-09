@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 __create_exec_file() {
+  echo "Creating docker install script"
   rm -f installDockerScript.sh
   touch installDockerScript.sh
   echo '#!/bin/bash' >> installDockerScript.sh
@@ -8,6 +9,7 @@ __create_exec_file() {
   echo 'readonly KEY_STORE_LOCATION="/tmp/ssh"' >> installDockerScript.sh
   echo 'readonly BUILD_LOCATION="/build"' >> installDockerScript.sh
   # Fetch the installation script and headers
+  echo "Downloading installation scripts from 'node' repo"
   curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/lib/logger.sh >> installDockerScript.sh
   curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/lib/headers.sh >> installDockerScript.sh
   curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/scripts/Ubuntu_14.04_Docker_1.13.sh >> installDockerScript.sh
@@ -38,6 +40,7 @@ __registry_login() {
 }
 
 main() {
+  echo "Installing docker on worker node: $WORKER_HOST"
   __create_exec_file
   __install_docker
   __initialize_worker
