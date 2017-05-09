@@ -19,7 +19,7 @@ __validate_master_envs() {
 
 __init_swarm_master() {
   __process_msg "Initializing swarm cluster"
-  sudo docker swarm init || true
+  sudo docker swarm init --advertise-addr $MASTER_HOST || true
 }
 
 main() {
