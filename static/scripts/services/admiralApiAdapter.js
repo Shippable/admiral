@@ -73,7 +73,7 @@
         return API.delete('/api/systemIntegrations/' +
           systemIntegrationId, {}, callback);
       },
-      // Core Services Routes (secrets, msg, state, redis)
+      // Core Services Routes (secrets, msg, state, redis, master)
       getCoreService: function (coreService, callback) {
         return API.get('/api/' + coreService, callback);
       },
@@ -100,6 +100,12 @@
       },
       initRedis: function (body, callback) {
         return API.post('/api/redis/initialize', body, callback);
+      },
+      postMaster: function (body, callback) {
+        return API.post('/api/master', body, callback);
+      },
+      initMaster: function (body, callback) {
+        return API.post('/api/master/initialize', body, callback);
       },
       getServiceLogs: function (component, callback) {
         return API.get('/api/' + component + '/logs', callback);
