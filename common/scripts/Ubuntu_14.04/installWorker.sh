@@ -48,6 +48,7 @@ main() {
   echo "Installing docker on worker node: $WORKER_HOST"
   __create_exec_file
   __install_docker
+  __install_ecr
   __initialize_worker
   __registry_login
 }
