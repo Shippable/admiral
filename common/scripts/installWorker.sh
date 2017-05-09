@@ -75,6 +75,10 @@ main() {
       __check_connection "$WORKER_HOST"
       __copy_configs
 
+      local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
+      __copy_script_remote "$WORKER_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
+      __exec_cmd_remote "$WORKER_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
+
       __process_msg "Copying docker credential binary"
       local docker_auth_binary="$WORKERS_CONFIG_DIR/docker-credential-ecr-login"
       __copy_script_remote "$WORKER_HOST" "$docker_auth_binary" "/usr/bin"
