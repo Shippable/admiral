@@ -20,9 +20,9 @@ function getLogs(req, res) {
   logger.info(bag.who, 'Starting');
 
   async.series([
-    _checkInputParams.bind(null, bag),
-    _checkFile.bind(null, bag),
-    _get.bind(null, bag)
+      _checkInputParams.bind(null, bag),
+      _checkFile.bind(null, bag),
+      _get.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
