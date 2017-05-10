@@ -482,8 +482,8 @@
             $scope.vm.systemSettings.secrets.isInitialized &&
             $scope.vm.systemSettings.msg.isInitialized &&
             $scope.vm.systemSettings.state.isInitialized &&
-            $scope.vm.systemSettings.redis.isinitialized &&
-            $scope.vm.systemSettings.master.isinitialized;
+            $scope.vm.systemSettings.redis.isInitialized &&
+            $scope.vm.systemSettings.master.isInitialized;
 
           return next();
         }
