@@ -8,4 +8,6 @@ function workerRoutes(app) {
   app.post('/api/workers', validateAccount, require('./post.js'));
   app.post('/api/workers/initialize', validateAccount,
     require('./initialize.js'));
+  app.delete('/api/workers/:name', validateAccount,
+    require('./deleteByName.js'));
 }

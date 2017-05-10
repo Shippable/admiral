@@ -1,6 +1,6 @@
 'use strict';
 
-var self = get;
+var self = deleteByName;
 module.exports = self;
 
 var async = require('async');
@@ -8,31 +8,22 @@ var _ = require('underscore');
 
 var configHandler = require('../../common/configHandler.js');
 
-function get(req, res) {
+function deleteByName(req, res) {
   var bag = {
-    reqQuery: req.query,
+    reqBody: req.body,
+    inputParams: req.params,
     resBody: {},
-    initializeDefault: false,
-    component: 'workers',
-    defaultConfig: [
-      {
-        address: global.config.admiralIP,
-        port: 2377,
-        name: 'worker',
-        isInstalled: false,
-        isInitialized: false
-      }
-    ]
+    component: 'workers'
   };
 
-  bag.who = util.format('workers|%s', self.name);
+  bag.who = util.format('deleteByName|%s', self.name);
   logger.info(bag.who, 'Starting');
 
   async.series([
-    _checkInputParams.bind(null, bag),
-    _get.bind(null, bag),
-    _setDefault.bind(null, bag)
-  ],
+      _checkInputParams.bind(null, bag),
+      _get.bind(null, bag),
+      _delete.bind(null, bag)
+    ],
     function (err) {
       logger.info(bag.who, 'Completed');
       if (err)
@@ -47,6 +38,14 @@ function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
 
+  if (_.isEmpty(bag.inputParams.name))
+    return next(
+      new ActErr(who, ActErr.DataNotFound,
+        'Missing body data :name')
+    );
+
+  bag.workerName = bag.inputParams.name;
+
   return next();
 }
 
@@ -58,37 +57,38 @@ function _get(bag, next) {
     function (err, workers) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed,
+          new ActErr(who, ActErr.DataNotFound,
             'Failed to get ' + bag.component, err)
         );
 
-      if (_.isEmpty(workers)) {
-        logger.debug('No configuration in database for ' + bag.component);
-        bag.initializeDefault = true;
-        return next();
-      }
+      if (_.isEmpty(workers))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No configuration in database for ' + bag.component)
+        );
 
-      bag.resBody = workers;
+      bag.workers = workers;
       return next();
     }
   );
 }
 
-function _setDefault(bag, next) {
-  if (!bag.initializeDefault) return next();
-
-  var who = bag.who + '|' + _setDefault.name;
+function _delete(bag, next) {
+  var who = bag.who + '|' + _delete.name;
   logger.verbose(who, 'Inside');
 
-  configHandler.put(bag.component, bag.defaultConfig,
-    function (err) {
+  bag.workers = _.without(bag.workers,
+    _.findWhere(bag.workers, {name: bag.workerName}));
+
+  configHandler.put(bag.component, bag.workers,
+    function (err, response) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to update config for ' + bag.component, err)
         );
 
-      bag.resBody = bag.defaultConfig;
+      bag.resBody = response;
       return next();
     }
   );

@@ -46,8 +46,13 @@ function _checkInputParams(bag, next) {
 
   bag.workerAddress = bag.reqBody.address;
 
-  if (_.has(bag.reqBody, 'name'))
-    bag.workerName = bag.reqBody.name;
+  if (!_.has(bag.reqBody, 'name'))
+    return next(
+      new ActErr(who, ActErr.DataNotFound,
+        'Missing body data :name')
+    );
+
+  bag.workerName = bag.reqBody.name;
 
   return next();
 }
