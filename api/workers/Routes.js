@@ -5,6 +5,7 @@ var validateAccount = require('../../common/auth/validateAccount.js');
 
 function workerRoutes(app) {
   app.get('/api/workers', validateAccount, require('./get.js'));
+  app.get('/api/workers/logs', validateAccount, require('./getLogs.js'));
   app.post('/api/workers', validateAccount, require('./post.js'));
   app.post('/api/workers/initialize', validateAccount,
     require('./initialize.js'));
