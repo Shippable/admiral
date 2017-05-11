@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = authRoutes;
+module.exports = admiralRoutes;
 var validateAccount = require('../../common/auth/validateAccount.js');
 
-function authRoutes(app) {
+function admiralRoutes(app) {
   app.get('/api/admiral', validateAccount, require('./get.js'));
 }
