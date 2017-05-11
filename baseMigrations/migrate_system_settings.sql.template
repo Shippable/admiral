@@ -1,0 +1,35 @@
+do $$
+  begin
+    update "systemSettings" set
+      "defaultMinionCount"=<%= obj.defaultMinionCount %>,
+      "autoSelectBuilderToken"=<%= obj.autoSelectBuilderToken %>,
+      "buildTimeoutMS"=<%= obj.buildTimeoutMS %>,
+      "defaultPrivateJobQuota"=<%= obj.defaultPrivateJobQuota %>,
+      "serviceUserToken"='<%= obj.serviceUserToken %>',
+      "runMode"='<%= obj.runMode %>',
+      "allowSystemNodes"=<%= obj.allowSystemNodes %>,
+      "allowDynamicNodes"=<%= obj.allowDynamicNodes %>,
+      "allowCustomNodes"=<%= obj.allowCustomNodes %>,
+      "awsAccountId"=<%= (obj.awsAccountId === null) ? "NULL" : ("'" + obj.awsAccountId + "'") %>,
+      "jobConsoleBatchSize"=<%= obj.jobConsoleBatchSize %>,
+      "jobConsoleBufferTimeIntervalMS"=<%= obj.jobConsoleBufferTimeIntervalMS %>,
+      "apiRetryIntervalMS"=<%= obj.apiRetryIntervalMS %>,
+      "truck"=<%= obj.truck %>,
+      "hubspotListId"=<%= (obj.hubspotListId === null) ? "NULL" : obj.hubspotListId %>,
+      "hubspotShouldSimulate"=<%= (obj.hubspotShouldSimulate === null) ? "NULL" : obj.hubspotShouldSimulate %>,
+      "hubspotProjectsLastSyncTime"=<%= (obj.hubspotProjectsLastSyncTime === null) ? "NULL" : ("'" + new Date(obj.hubspotProjectsLastSyncTime).toISOString() + "'") %>,
+      "hubspotRSyncLastSyncTime"=<%= (obj.hubspotRSyncLastSyncTime === null) ? "NULL" : ("'" + new Date(obj.hubspotRSyncLastSyncTime).toISOString() + "'") %>,
+      "rootS3Bucket"='<%= obj.rootS3Bucket %>',
+      "nodeScriptsLocation"='<%= obj.nodeScriptsLocation %>',
+      "enforcePrivateJobQuota"=<%= obj.enforcePrivateJobQuota %>,
+      "technicalSupportAvailable"=<%= obj.technicalSupportAvailable %>,
+      "customNodesAdminOnly"=<%= obj.customNodesAdminOnly %>,
+      "allowedSystemImageFamily"='<%= obj.allowedSystemImageFamily %>',
+      "releaseVersion"='<%= obj.releaseVersion %>',
+      "mktgPageAggsLastDtTm"=<%= (obj.mktgPageAggsLastDtTm === null) ? "NULL" : ("'" + obj.mktgPageAggsLastDtTm + "'") %>,
+      "mktgCTAAggsLastDtTm"=<%= (obj.mktgCTAAggsLastDtTm === null) ? "NULL" : ("'" + obj.mktgCTAAggsLastDtTm + "'") %>,
+      "defaultMinionInstanceSize"=<%= (obj.defaultMinionInstanceSize === null) ? "NULL" : ("'" + obj.defaultMinionInstanceSize + "'") %>,
+      "createdAt"='<%= new Date(obj.createdAt).toISOString() %>',
+      "updatedAt"='<%= new Date(obj.updatedAt).toISOString() %>';
+  end
+$$;

@@ -35,7 +35,8 @@ process.on('uncaughtException',
 function migrate() {
   var bag = {
     stateJson: null,
-    postgresClient: null
+    postgresClient: null,
+    systemConfig: {}
   };
 
   bag.who = util.format('migrate|%s', migrate.name);
@@ -46,7 +47,10 @@ function migrate() {
       _createEtcShippable.bind(null, bag),
       _installPsql.bind(null, bag),
       _templateSystemSettingsFile.bind(null, bag),
-      _createSystemSettings.bind(null, bag)
+      _createSystemSettings.bind(null, bag),
+      _getSystemConfig.bind(null, bag),
+      _getValuesForSystemSettings.bind(null, bag),
+      _migrateSystemSettings.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -175,6 +179,146 @@ function _createSystemSettings(bag, next) {
       return next();
     }
   );
+}
+
+function _getSystemConfig(bag, next) {
+  var who = bag.who + '|' + _getSystemConfig.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'SELECT * from "systemConfigs";';
+  bag.postgresClient.query(query,
+    function (err, res) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get systemConfigs with error: ' + util.inspect(err))
+        );
+
+      if (!_.isEmpty(res.rows))
+        bag.systemConfig = res.rows[0];
+
+      return next();
+    }
+  );
+}
+
+function _getValuesForSystemSettings(bag, next) {
+  var who = bag.who + '|' + _getValuesForSystemSettings.name;
+  logger.verbose(who, 'Inside');
+
+  var settings = {
+    defaultMinionCount:
+      __getValueForSystemSettings(bag, 'defaultMinionCount', 1),
+    autoSelectBuilderToken:
+      __getValueForSystemSettings(bag, 'autoSelectBuilderToken', false),
+    buildTimeoutMS:
+      __getValueForSystemSettings(bag, 'buildTimeoutMS', 3600000),
+    defaultPrivateJobQuota:
+      __getValueForSystemSettings(bag, 'defaultPrivateJobQuota', 150),
+    serviceUserToken:
+      __getValueForSystemSettings(bag, 'serviceUserToken', ''),
+    runMode:
+      __getValueForSystemSettings(bag, 'runMode', 'production'),
+    allowSystemNodes:
+      __getValueForSystemSettings(bag, 'allowSystemNodes', false),
+    allowDynamicNodes:
+      __getValueForSystemSettings(bag, 'allowDynamicNodes', false),
+    allowCustomNodes:
+      __getValueForSystemSettings(bag, 'allowCustomNodes', false),
+    awsAccountId:
+      __getValueForSystemSettings(bag, 'awsAccountId', ''),
+    jobConsoleBatchSize:
+      __getValueForSystemSettings(bag, 'jobConsoleBatchSize', 10),
+    jobConsoleBufferTimeIntervalMS:
+      __getValueForSystemSettings(bag, 'jobConsoleBufferTimeInterval', 3000),
+    apiRetryIntervalMS:
+      __getValueForSystemSettings(bag, 'apiRetryInterval', 3),
+    truck: __getValueForSystemSettings(bag, 'truck', false),
+    hubspotListId: __getValueForSystemSettings(bag, 'hubspotListId', null),
+    hubspotShouldSimulate:
+      __getValueForSystemSettings(bag, 'hubspotShouldSimulate', null),
+    hubspotProjectsLastSyncTime:
+      __getValueForSystemSettings(bag, 'hubspotProjectsLastSyncTime', null),
+    hubspotRSyncLastSyncTime:
+      __getValueForSystemSettings(bag, 'hubspotRSyncLastSyncTime', null),
+    rootS3Bucket:
+      __getValueForSystemSettings(bag, 'rootS3Bucket', ''),
+    nodeScriptsLocation:
+      __getValueForSystemSettings(bag, 'nodeScriptsLocation',
+        '/home/shippable/scripts/node'),
+    enforcePrivateJobQuota:
+      __getValueForSystemSettings(bag, 'enforcePrivateJobQuota', false),
+    technicalSupportAvailable:
+      __getValueForSystemSettings(bag, 'technicalSupportAvailable', false),
+    customNodesAdminOnly:
+      __getValueForSystemSettings(bag, 'customNodesAdminOnly', false),
+    allowedSystemImageFamily:
+      __getValueForSystemSettings(bag, 'allowedSystemImageFamily', ''),
+    releaseVersion:
+      bag.systemConfig.release || bag.stateJson.relase || 'master',
+    mktgPageAggsLastDtTm: bag.systemConfig.mktgPageAggsLastDtTm || null,
+    mktgCTAAggsLastDtTm: bag.systemConfig.mktgCTAAggsLastDtTm || null,
+    defaultMinionInstanceSize:
+      __getValueForSystemSettings(bag, 'defaultMinionInstanceSize', null),
+    createdAt: bag.systemConfig.createdAt,
+    updatedAt: bag.systemConfig.updatedAt
+  };
+
+  // These may be seconds or milliseconds in systemConfigs.
+  if (settings.jobConsoleBufferTimeIntervalMS < 1000)
+    settings.jobConsoleBufferTimeIntervalMS =
+      settings.jobConsoleBufferTimeIntervalMS * 1000;
+  if (settings.apiRetryIntervalMS < 1000)
+    settings.apiRetryIntervalMS = settings.apiRetryIntervalMS * 1000;
+
+  _templateScript({
+      who: who,
+      templatePath: './migrate_system_settings.sql.template',
+      dataObj: settings,
+      outputFilename: '/etc/shippable/db/migrate_system_settings.sql'
+    },
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed, 'Failed to write script', err)
+        );
+      return next();
+    }
+  );
+}
+
+function _migrateSystemSettings(bag, next) {
+  var who = bag.who + '|' + _migrateSystemSettings.name;
+  logger.verbose(who, 'Inside');
+
+  // Update the systemSettings table
+
+  _runSQLScript({
+      who: who,
+      sqlFile: '/etc/shippable/db/migrate_system_settings.sql',
+      stateJson: bag.stateJson
+    },
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update systemSettings', err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function __getValueForSystemSettings(bag, name, defaultValue) {
+  if (_.has(bag.systemConfig, name) && bag.systemConfig[name] !== null)
+    return bag.systemConfig[name];
+
+  if (_.has(bag.stateJson.systemSettings, name) &&
+    bag.stateJson.systemSettings[name] !== null)
+    return bag.stateJson.systemSettings[name];
+
+  return defaultValue;
 }
 
 function _templateScript(params, next) {
