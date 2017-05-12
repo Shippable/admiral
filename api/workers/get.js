@@ -14,15 +14,7 @@ function get(req, res) {
     resBody: {},
     initializeDefault: false,
     component: 'workers',
-    defaultConfig: [
-      {
-        address: global.config.admiralIP,
-        port: 2377,
-        name: 'worker',
-        isInstalled: false,
-        isInitialized: false
-      }
-    ]
+    defaultConfig: []
   };
 
   bag.who = util.format('workers|%s', self.name);
