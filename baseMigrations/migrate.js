@@ -75,7 +75,10 @@ function migrate() {
       _createSSHKeysSystemIntegration.bind(null, bag),
       _createAPISystemIntegration.bind(null, bag),
       _createWWWSystemIntegration.bind(null, bag),
-      _createMktgSystemIntegration.bind(null, bag)
+      _createMktgSystemIntegration.bind(null, bag),
+      _createAdmiralEnv.bind(null, bag),
+      _writePublicMachineKey.bind(null, bag),
+      _writePrivateMachineKey.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -970,6 +973,91 @@ function _createMktgSystemIntegration(bag, next) {
             'Failed to create system integration: ' + util.inspect(err))
         );
 
+      return next();
+    }
+  );
+}
+
+function _createAdmiralEnv(bag, next) {
+  /* jshint maxcomplexity:12 */
+  var who = bag.who + '|' + _createAdmiralEnv.name;
+  logger.verbose(who, 'Inside');
+
+  var admiralEnvValues = {
+    loginToken: '',
+    dbIP: bag.stateJson.systemSettings.dbHost,
+    admiralIP: '',
+    accessKey: bag.systemConfig.accessKey ||
+      bag.stateJson.systemSettings.installerAccessKey || '',
+    secretKey: bag.systemConfig.secretKey ||
+      bag.stateJson.systemSettings.installerSecretKey || '',
+    serviceUserToken: bag.systemConfig.serviceUserToken ||
+      bag.stateJson.systemSettings.serviceUserToken || '',
+    release: bag.systemConfig.release || bag.stateJson.relase || 'master',
+    dbPort: bag.stateJson.systemSettings.dbPort,
+    dbUser: bag.stateJson.systemSettings.dbUsername,
+    dbName: bag.stateJson.systemSettings.dbname,
+    dbPassword: bag.stateJson.systemSettings.dbPassword,
+    dbDialect: bag.stateJson.systemSettings.dbDialect,
+    runMode: bag.systemConfig.runMode || bag.stateJson.systemSettings.runMode ||
+      'production',
+    sshUser: 'root',
+    vaultUrl: bag.vaultUrl,
+    vaultToken: bag.vaultToken
+  };
+
+  var admiralEnv = __applyTemplate('./admiral.env.template', admiralEnvValues);
+
+  fs.writeFile('/etc/shippable/admiral.env', admiralEnv,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to write admiral.env', err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _writePublicMachineKey(bag, next) {
+  var who = bag.who + '|' + _writePublicMachineKey.name;
+  logger.verbose(who, 'Inside');
+
+  var publicKey = bag.systemConfig.systemNodePublicKey ||
+    bag.stateJson.systemSettings.systemNodePublicKey;
+
+  fs.writeFile('/etc/shippable/machinekey.pub', publicKey,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            util.format('%s, Failed with error: %s', who, err))
+        );
+
+      fs.chmodSync('/etc/shippable/machinekey.pub', '644');
+      return next();
+    }
+  );
+}
+
+function _writePrivateMachineKey(bag, next) {
+  var who = bag.who + '|' + _writePrivateMachineKey.name;
+  logger.verbose(who, 'Inside');
+
+  var privateKey = bag.systemConfig.systemNodePrivateKey ||
+    bag.stateJson.systemSettings.systemNodePrivateKey;
+
+  fs.writeFile('/etc/shippable/machinekey', privateKey,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            util.format('%s, Failed with error: %s', who, err))
+        );
+
+      fs.chmodSync('/etc/shippable/machinekey', '600');
       return next();
     }
   );
