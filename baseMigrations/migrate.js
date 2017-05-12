@@ -11,7 +11,13 @@ var fs = require('fs-extra');
 var pg = require('pg');
 var spawn = require('child_process').spawn;
 var _ = require('underscore');
-var util = require('util');
+var url = require('url');
+
+global.util = require('util');
+
+var VaultAdapter = require('../common/VaultAdapter.js');
+var createOrUpdateSystemIntegration =
+  require('./createOrUpdateSystemIntegration.js');
 
 process.on('uncaughtException',
   function (err) {
@@ -50,7 +56,26 @@ function migrate() {
       _createSystemSettings.bind(null, bag),
       _getSystemConfig.bind(null, bag),
       _getValuesForSystemSettings.bind(null, bag),
-      _migrateSystemSettings.bind(null, bag)
+      _migrateSystemSettings.bind(null, bag),
+      _updateDBConfig.bind(null, bag),
+      _updateMsgConfig.bind(null, bag),
+      _updateRedisConfig.bind(null, bag),
+      _updateSecretsConfig.bind(null, bag),
+      _getStateSystemIntegration.bind(null, bag),
+      _getStateSystemIntegrationValues.bind(null, bag),
+      _updateStateConfig.bind(null, bag),
+      _updateMasterConfig.bind(null, bag),
+      _updateWorkersConfig.bind(null, bag),
+      _readServicesJson.bind(null, bag),
+      _updateServicesConfig.bind(null, bag),
+      _updateMasterIntegrations.bind(null, bag),
+      _updateMasterIntegrationFields.bind(null, bag),
+      _createMsgSystemIntegration.bind(null, bag),
+      _createRedisSystemIntegration.bind(null, bag),
+      _createSSHKeysSystemIntegration.bind(null, bag),
+      _createAPISystemIntegration.bind(null, bag),
+      _createWWWSystemIntegration.bind(null, bag),
+      _createMktgSystemIntegration.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -319,6 +344,635 @@ function __getValueForSystemSettings(bag, name, defaultValue) {
     return bag.stateJson.systemSettings[name];
 
   return defaultValue;
+}
+
+function _updateDBConfig(bag, next) {
+  var who = bag.who + '|' + _updateDBConfig.name;
+  logger.verbose(who, 'Inside');
+
+  var db = {
+    address: bag.stateJson.systemSettings.dbHost,
+    port: bag.stateJson.systemSettings.dbPort,
+    username: bag.stateJson.systemSettings.dbUsername,
+    isProcessing: false,
+    isFailed: false,
+    isInstalled: true,
+    isInitialized: true
+  };
+
+  var query = util.format('UPDATE "systemSettings" SET "db"=\'%s\';',
+    JSON.stringify(db));
+
+  bag.postgresClient.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update database configs ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _updateMsgConfig(bag, next) {
+  var who = bag.who + '|' + _updateMsgConfig.name;
+  logger.verbose(who, 'Inside');
+
+  var rabbitMQRootUrl = url.parse(bag.systemConfig.amqpUrlRoot ||
+    bag.stateJson.systemSettings.amqpUrlRoot);
+
+  var msg = {
+    address: rabbitMQRootUrl.hostname,
+    amqpPort: rabbitMQRootUrl.port,
+    adminPort: url.parse(bag.systemConfig.amqpUrlAdmin ||
+      bag.stateJson.systemSettings.amqpUrlAdmin).port,
+    uiUsername: 'shippable',
+    uiPassword: 'abc123',
+    username: rabbitMQRootUrl.auth.split(':')[0],
+    password: rabbitMQRootUrl.auth.split(':')[1],
+    isSecure: (rabbitMQRootUrl.protocol === 'amqp:') ? false : true,
+    isShippableManaged: true,
+    isProcessing: false,
+    isFailed: false,
+    isInstalled: true,
+    isInitialized: true
+  };
+
+  var query = util.format('UPDATE "systemSettings" SET "msg"=\'%s\';',
+    JSON.stringify(msg));
+
+  bag.postgresClient.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update msg config: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _updateRedisConfig(bag, next) {
+  var who = bag.who + '|' + _updateRedisConfig.name;
+  logger.verbose(who, 'Inside');
+
+  var redisUrl = bag.systemConfig.redisUrl ||
+    bag.stateJson.systemSettings.redisUrl;
+
+  var redis = {
+    address: redisUrl.split(':')[0],
+    port: redisUrl.split(':')[1],
+    isShippableManaged: true,
+    isProcessing: false,
+    isFailed: false,
+    isInstalled: true,
+    isInitialized: true
+  };
+
+  var query = util.format('UPDATE "systemSettings" SET "redis"=\'%s\';',
+    JSON.stringify(redis));
+
+  bag.postgresClient.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update redis config: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _updateSecretsConfig(bag, next) {
+  var who = bag.who + '|' + _updateSecretsConfig.name;
+  logger.verbose(who, 'Inside');
+
+  bag.vaultUrl = bag.systemConfig.vaultUrl ||
+    bag.stateJson.systemSettings.vaultUrl;
+  bag.vaultToken = bag.systemConfig.vaultToken ||
+    bag.stateJson.systemSettings.vaultToken;
+  var parsedVaultUrl = url.parse(bag.vaultUrl);
+
+  var secrets = {
+    address: parsedVaultUrl.hostname,
+    port: parsedVaultUrl.port,
+    rootToken: bag.vaultToken,
+    unsealKey1: '',
+    unsealKey2: '',
+    unsealKey3: '',
+    unsealKey4: '',
+    unsealKey5: '',
+    isShippableManaged: true,
+    isProcessing: false,
+    isFailed: false,
+    isInstalled: true,
+    isInitialized: true
+  };
+
+
+  var query = util.format('UPDATE "systemSettings" SET "secrets"=\'%s\';',
+    JSON.stringify(secrets));
+
+  bag.postgresClient.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update secrets config: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getStateSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getStateSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'SELECT * FROM "systemIntegrations" WHERE name=\'state\' AND ' +
+    '"masterName"=\'gitlabCreds\';';
+
+  bag.postgresClient.query(query,
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get state systemIntegration with error: ' +
+            util.inspect(err))
+        );
+
+      if (!_.isEmpty(systemIntegrations.rows))
+        bag.stateSystemIntegration = systemIntegrations.rows[0];
+
+      return next();
+    }
+  );
+}
+
+function _getStateSystemIntegrationValues(bag, next) {
+  if (!bag.stateSystemIntegration) return next();
+
+  var who = bag.who + '|' + _getStateSystemIntegrationValues.name;
+  logger.verbose(who, 'Inside');
+
+  var vaultAdapter = new VaultAdapter(bag.vaultUrl, bag.vaultToken);
+
+  var key = util.format('shippable/systemIntegrations/%s',
+    bag.stateSystemIntegration.id);
+  vaultAdapter.getSecret(key,
+    function (err, body) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to :getSecret for systemIntegrationId: ' +
+            bag.stateSystemIntegration.id + ' with status code ' + err, body)
+        );
+
+      bag.stateSystemIntegration.data = body.data.data || {};
+      return next();
+    }
+  );
+}
+
+function _updateStateConfig(bag, next) {
+  var who = bag.who + '|' + _updateStateConfig.name;
+  logger.verbose(who, 'Inside');
+
+  var stateUrl;
+  var sshPort;
+  var password;
+
+  if (bag.stateSystemIntegration) {
+    stateUrl = bag.stateSystemIntegration.data.url;
+    sshPort = bag.stateSystemIntegration.data.sshPort;
+    password = bag.stateSystemIntegration.data.password;
+  }
+
+  var stateJsonStateIntegration = _.findWhere(bag.stateJson.systemIntegrations,
+    {name: 'state', masterName: 'gitlabCreds'});
+
+  if (stateJsonStateIntegration && !stateUrl) {
+    var stateUrlField = _.findWhere(stateJsonStateIntegration.formJSONValues,
+      {label: 'url'});
+    stateUrl = stateUrlField.value;
+  }
+
+  if (stateJsonStateIntegration && !sshPort) {
+    var stateSSHPortField =
+      _.findWhere(stateJsonStateIntegration.formJSONValues, {label: 'sshPort'});
+    sshPort = stateSSHPortField.value;
+  }
+
+  if (stateJsonStateIntegration && !password) {
+    var statePasswordField =
+      _.findWhere(stateJsonStateIntegration.formJSONValues,
+      {label: 'password'});
+    password = statePasswordField.value;
+  }
+
+  var parsedStateUrl = url.parse(stateUrl);
+
+  var state = {
+    address: parsedStateUrl.hostname,
+    port: (parsedStateUrl.protocol === 'http:' && parsedStateUrl.port) ?
+      parsedStateUrl.port : 80,
+    sshPort: sshPort,
+    securePort:
+      (parsedStateUrl.protocol === 'https:' && parsedStateUrl.port) ?
+      parsedStateUrl.port : 443,
+    rootPassword: password,
+    isShippableManaged: true,
+    isProcessing: false,
+    isFailed: false,
+    isInstalled: true,
+    isInitialized: true
+  };
+
+  var query = util.format('UPDATE "systemSettings" SET "state"=\'%s\';',
+    JSON.stringify(state));
+
+  bag.postgresClient.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update state config: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _updateMasterConfig(bag, next) {
+  var who = bag.who + '|' + _updateMasterConfig.name;
+  logger.verbose(who, 'Inside');
+
+  var swarmMaster = _.find(bag.stateJson.machines,
+    function (machine) {
+      return machine.group === 'core' &&
+        (machine.name === 'swarm' || machine.name === 'localhost');
+    }
+  );
+
+  var master = {
+    address: swarmMaster.ip,
+    workerJoinToken: bag.stateJson.systemSettings.swarmWorkerToken || '',
+    port: 2377,
+    isInstalled: true,
+    isInitialized: true
+  };
+
+  var query = util.format('UPDATE "systemSettings" SET "master"=\'%s\';',
+    JSON.stringify(master));
+
+  bag.postgresClient.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update master config: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _updateWorkersConfig(bag, next) {
+  var who = bag.who + '|' + _updateWorkersConfig.name;
+  logger.verbose(who, 'Inside');
+
+  var workers = [];
+
+  _.each(bag.stateJson.machines,
+    function (machine) {
+      if (machine.group !== 'services')
+        return;
+
+      workers.push({
+        address: machine.ip,
+        port: 2377,
+        name: machine.name,
+        isInstalled: true,
+        isInitialized: true
+      });
+    }
+  );
+
+  var query = util.format('UPDATE "systemSettings" SET "workers"=\'%s\';',
+    JSON.stringify(workers));
+
+  bag.postgresClient.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update workers config: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _readServicesJson(bag, next) {
+  var who = bag.who + '|' + _readServicesJson.name;
+  logger.debug(who, 'Inside');
+
+  fs.readJson('../common/scripts/configs/services.json',
+    function (err, servicesJson) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to read services.json with error: ' + util.inspect(err))
+        );
+
+      bag.servicesJson = servicesJson;
+      return next();
+    }
+  );
+}
+
+function _updateServicesConfig(bag, next) {
+  var who = bag.who + '|' + _updateServicesConfig.name;
+  logger.verbose(who, 'Inside');
+
+  var services = {};
+
+  _.each(bag.servicesJson.serviceConfigs,
+    function (serviceConfig) {
+      var stateJsonService = _.findWhere(bag.stateJson.services,
+        {name: serviceConfig.name});
+
+      if (!stateJsonService) {
+        services[serviceConfig.name] = {
+          serviceName: serviceConfig.name,
+          mounts: '',
+          envs: '',
+          opts: '',
+          isCore: serviceConfig.isCore,
+          replicas: serviceConfig.isGlobal ? 'global' : 1,
+          isEnabled: false
+        };
+        return;
+      }
+
+      var replicas;
+      if (serviceConfig.isGlobal)
+        replicas = 'global';
+      else if (_.has(stateJsonService, 'replicas'))
+        replicas = stateJsonService.replicas;
+      else
+        replicas = 1;
+
+      services[serviceConfig.name] = {
+        serviceName: serviceConfig.name,
+        mounts: '',
+        envs: stateJsonService.env || '',
+        opts: '',
+        image: stateJsonService.image,
+        runCommand: '',
+        isCore: serviceConfig.isCore,
+        replicas: replicas,
+        isEnabled: true
+      };
+    }
+  );
+
+  var query = util.format('UPDATE "systemSettings" SET "services"=\'%s\';',
+    JSON.stringify(services));
+
+  bag.postgresClient.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to update services config: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _updateMasterIntegrations(bag, next) {
+  var who = bag.who + '|' + _updateMasterIntegrations.name;
+  logger.verbose(who, 'Inside');
+
+  _runSQLScript({
+      who: who,
+      sqlFile: '/home/shippable/admiral/common/scripts/configs/' +
+        'master_integrations.sql',
+      stateJson: bag.stateJson
+    },
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update masterIntegrations', err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _updateMasterIntegrationFields(bag, next) {
+  var who = bag.who + '|' + _updateMasterIntegrationFields.name;
+  logger.verbose(who, 'Inside');
+
+  _runSQLScript({
+      who: who,
+      sqlFile: '/home/shippable/admiral/common/scripts/configs/' +
+        'master_integration_fields.sql',
+      stateJson: bag.stateJson
+    },
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update masterIntegrationFields', err)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _createMsgSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _createMsgSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var systemIntegration = {
+    name: 'msg',
+    masterName: 'rabbitmqCreds',
+    data: {
+      amqpUrl:
+        bag.systemConfig.amqpUrl || bag.stateJson.systemSettings.amqpUrl,
+      amqpUrlRoot: bag.systemConfig.amqpUrlRoot ||
+        bag.stateJson.systemSettings.amqpUrlRoot,
+      amqpUrlAdmin: bag.systemConfig.amqpUrlAdmin ||
+        bag.stateJson.systemSettings.amqpUrlAdmin,
+      amqpDefaultExchange: bag.systemConfig.amqpDefaultExchange ||
+        bag.stateJson.systemSettings.amqpDefaultExchange,
+      rootQueueList: bag.systemConfig.rootQueueList ||
+        bag.stateJson.systemSettings.rootQueueList
+    }
+  };
+
+  createOrUpdateSystemIntegration(bag.postgresClient, bag.vaultUrl,
+    bag.vaultToken, systemIntegration,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _createRedisSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _createRedisSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var systemIntegration = {
+    name: 'redis',
+    masterName: 'url',
+    data: {
+      url: bag.systemConfig.redisUrl || bag.stateJson.systemSettings.redisUrl
+    }
+  };
+
+  createOrUpdateSystemIntegration(bag.postgresClient, bag.vaultUrl,
+    bag.vaultToken, systemIntegration,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _createSSHKeysSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _createSSHKeysSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var systemIntegration = {
+    name: 'sshKeys',
+    masterName: 'ssh-key',
+    data: {
+      publicKey: bag.systemConfig.systemNodePublicKey ||
+        bag.stateJson.systemSettings.systemNodePublicKey,
+      privateKey: bag.systemConfig.systemNodePrivateKey ||
+        bag.stateJson.systemSettings.systemNodePrivateKey
+    }
+  };
+
+  createOrUpdateSystemIntegration(bag.postgresClient, bag.vaultUrl,
+    bag.vaultToken, systemIntegration,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _createAPISystemIntegration(bag, next) {
+  var who = bag.who + '|' + _createAPISystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var systemIntegration = {
+    name: 'api',
+    masterName: 'url',
+    data: {
+      url: bag.systemConfig.apiUrl || bag.stateJson.systemSettings.apiUrl
+    }
+  };
+
+  createOrUpdateSystemIntegration(bag.postgresClient, bag.vaultUrl,
+    bag.vaultToken, systemIntegration,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _createWWWSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _createWWWSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var systemIntegration = {
+    name: 'www',
+    masterName: 'url',
+    data: {
+      url: bag.systemConfig.wwwUrl || bag.stateJson.systemSettings.wwwUrl
+    }
+  };
+
+  createOrUpdateSystemIntegration(bag.postgresClient, bag.vaultUrl,
+    bag.vaultToken, systemIntegration,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _createMktgSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _createMktgSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var systemIntegration = {
+    name: 'mktg',
+    masterName: 'url',
+    data: {
+      url: bag.systemConfig.mktgUrl || bag.stateJson.systemSettings.mktgUrl
+    }
+  };
+
+  createOrUpdateSystemIntegration(bag.postgresClient, bag.vaultUrl,
+    bag.vaultToken, systemIntegration,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
 }
 
 function _templateScript(params, next) {

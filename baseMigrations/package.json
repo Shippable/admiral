@@ -52,7 +52,8 @@
     "maxstatements": 40,
     "predef": [
       "ActErr",
-      "logger"
+      "logger",
+      "util"
     ]
   }
 }
