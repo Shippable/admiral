@@ -486,7 +486,7 @@
                         <td ng-if="vm.initializeForm.workers.initType === 'admiral'">
                           <b>Swarm:</b>
                         </td>
-                        <td ng-if="vm.initializeForm.workers.initType === 'new'" rowspan="8">
+                        <td ng-if="vm.initializeForm.workers.initType === 'new'" rowspan="9">
                           <b>Swarm:</b>
                         </td>
                         <td colspan="5" style="width: 45%">
@@ -551,6 +551,22 @@
                           <b>
                             Swarm workers
                           </b>
+                        </td>
+                      </tr>
+                      <tr ng-if="vm.initializeForm.workers.initType === 'new'" class="active">
+                        <td>
+                        </td>
+                        <td colspan="2">
+                          <i>
+                            Worker names must be unique
+                          </i>
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showWorkersLogModal('workers')">worker init logs</button>
+                        </td>
+                        <td style="width: 12.5%;" class="text-center">
                         </td>
                       </tr>
                       <tr ng-if="vm.initializeForm.workers.initType === 'new'" class="active">

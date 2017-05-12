@@ -93,6 +93,13 @@ function _updateWorker(bag, next) {
     port: 2377
   };
 
+  var nameInUse = _.findWhere(bag.config, {name: bag.workerName});
+  if (nameInUse && (nameInUse.address !== bag.workerAddress))
+    return next(
+      new ActErr(who, ActErr.OperationFailed,
+        'Worker name ' + bag.workerName + ' is already in use.')
+    );
+
   var workerExists = false;
   _.each(bag.config,
     function (worker) {

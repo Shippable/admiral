@@ -396,6 +396,7 @@
       showAdmiralEnvModal: showAdmiralEnvModal,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
+      showWorkersLogModal: showWorkersLogModal,
       showDynamicNodeSettings: showDynamicNodeSettings,
       showSaveModal: showSaveModal,
       showRestartServicesModal: showRestartServicesModal,
@@ -1430,6 +1431,32 @@
     }
 
     function addWorker(worker) {
+      var nameInUse = _.some($scope.vm.initializeForm.workers.workers,
+        function (existingWorker) {
+          return existingWorker.name === worker.name;
+        }
+      );
+
+      if (nameInUse) {
+        horn.error('A swarm worker already exists with that name. ' +
+          'Worker names must be unique.'
+        );
+        return;
+      }
+
+      var addressInUse = _.some($scope.vm.initializeForm.workers.workers,
+        function (existingWorker) {
+          return existingWorker.address === worker.address;
+        }
+      );
+
+      if (addressInUse) {
+        horn.error('A swarm worker already exists with that address. ' +
+          'Worker addresses must be unique.'
+        );
+        return;
+      }
+
       $scope.vm.initializeForm.workers.workers.push(worker);
       $scope.vm.initializeForm.workers.newWorker = {
         name: '',
@@ -2409,6 +2436,24 @@
     function showLogModal(service) {
       $scope.vm.selectedService = $scope.vm.systemSettings[service];
       $scope.vm.selectedService.serviceName = service;
+      $scope.vm.selectedService.logs = [];
+
+      admiralApiAdapter.getServiceLogs(service,
+        function (err, logs) {
+          if (err)
+            return horn.error(err);
+
+          $scope.vm.selectedService.logs = logs;
+
+          $('#logsModal').modal('show');
+        }
+      );
+    }
+
+    function showWorkersLogModal(service) {
+      $scope.vm.selectedService = {};
+      $scope.vm.selectedService.serviceName = service;
+      $scope.vm.selectedService.displayName = 'Swarm Worker';
       $scope.vm.selectedService.logs = [];
 
       admiralApiAdapter.getServiceLogs(service,
