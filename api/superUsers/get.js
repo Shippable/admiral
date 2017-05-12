@@ -1,16 +1,15 @@
 'use strict';
 
-var self = postSuperUsers;
+var self = get;
 module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
 
-function postSuperUsers(req, res) {
+function get(req, res) {
   var bag = {
     reqQuery: req.query,
-    reqBody: req.body,
-    resBody: {}
+    resBody: []
   };
 
   bag.who = util.format('superUsers|%s', self.name);
@@ -19,7 +18,7 @@ function postSuperUsers(req, res) {
   async.series([
     _checkInputParams.bind(null, bag),
     _getSuperUserRoleCode.bind(null, bag),
-    _post.bind(null, bag)
+    _get.bind(null, bag)
   ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -34,12 +33,6 @@ function postSuperUsers(req, res) {
 function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
-
-  if (_.isEmpty(bag.reqBody) || !bag.reqBody.accountId)
-    return next(
-      new ActErr(who, ActErr.ParamNotFound,
-        'Missing parameter in request body: accountId')
-    );
 
   return next();
 }
@@ -71,27 +64,25 @@ function _getSuperUserRoleCode(bag, next) {
   );
 }
 
-function _post(bag, next) {
-  var who = bag.who + '|' + _post.name;
+function _get(bag, next) {
+  var who = bag.who + '|' + _get.name;
   logger.verbose(who, 'Inside');
 
-  var query = util.format('INSERT INTO  "accountRoles" ' +
-    '("accountId", "roleCode", "createdAt", "updatedAt") ' +
-    'values (\'%s\', \'%s\', \'%s\', \'%s\')',
-    bag.reqBody.accountId, bag.superUserRoleCode,
-    new Date().toISOString(), new Date().toISOString());
+  var query = util.format('SELECT "accountId" FROM "accountRoles" ' +
+    'WHERE "roleCode"=\'%s\'', bag.superUserRoleCode);
 
   global.config.client.query(query,
-    function (err) {
+    function (err, results) {
       if (err)
         return next(
           new ActErr(who, ActErr.DBOperationFailed,
-            'Failed to create superUser from accountId: ' +
-            bag.reqBody.accountId, err
-          )
+            'Failed to get superUsers', err)
         );
-      logger.debug('successfully added superUser for accountId: ' +
-        bag.reqBody.accountId);
+      if (!_.isEmpty(results.rows))
+        bag.resBody = _.pluck(results.rows, 'accountId');
+
+      logger.debug(util.format('successfully fetched %s superUsers',
+        bag.resBody.length));
 
       return next();
     }
