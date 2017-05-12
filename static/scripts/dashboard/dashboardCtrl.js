@@ -64,6 +64,16 @@
         master: {
           initType: 'admiral'
         },
+        workers: {
+          initType: 'admiral',
+          newWorker: {
+            name: '',
+            address: ''
+          },
+          workers: [],
+          deletedWorkers: [],
+          confirmCommand: false
+        },
         sshCommand: ''
       },
       // map by systemInt name, then masterName
@@ -370,11 +380,14 @@
         },
         master: {
           displayName: 'Swarm Master'
-        }
+        },
+        workers: []
       },
       systemSettingsId: null,
       selectedService: {},
       initialize: initialize,
+      addWorker: addWorker,
+      removeWorker: removeWorker,
       upgrade: upgrade,
       install: install,
       save: save,
@@ -475,6 +488,23 @@
           $scope.vm.systemSettings.master =
             _.extend($scope.vm.systemSettings.master,
               (systemSettings.master && JSON.parse(systemSettings.master)));
+          var workers = systemSettings.workers &&
+            JSON.parse(systemSettings.workers);
+          if (_.isArray(workers)) {
+            $scope.vm.systemSettings.workers = workers;
+            _.each(workers,
+              function (systemSettingsWorker) {
+                var index =
+                  _.findIndex($scope.vm.initializeForm.workers.workers,
+                    function (initFormWorker) {
+                      return initFormWorker.name === systemSettingsWorker.name;
+                    }
+                  );
+                _.extend($scope.vm.initializeForm.workers.workers[index],
+                  systemSettingsWorker);
+              }
+            );
+          }
           $scope.vm.systemSettings.releaseVersion =
             systemSettings.releaseVersion;
 
@@ -483,7 +513,13 @@
             $scope.vm.systemSettings.msg.isInitialized &&
             $scope.vm.systemSettings.state.isInitialized &&
             $scope.vm.systemSettings.redis.isInitialized &&
-            $scope.vm.systemSettings.master.isInitialized;
+            $scope.vm.systemSettings.master.isInitialized &&
+            $scope.vm.systemSettings.workers.length &&
+            _.every($scope.vm.systemSettings.workers,
+              function (worker) {
+                return worker.isInitialized;
+              }
+            );
 
           return next();
         }
@@ -494,18 +530,39 @@
       _.each($scope.vm.initializeForm,
         function (obj, service) {
           if (!_.isObject(obj)) return;
-          _.each(obj,
-            function (value, key) {
-              if ($scope.vm.systemSettings[service][key])
-                $scope.vm.initializeForm[service][key] =
-                  $scope.vm.systemSettings[service][key];
-            }
-          );
+
+          if (service === 'workers')
+            $scope.vm.initializeForm.workers.workers =
+              $scope.vm.systemSettings.workers;
+          else
+            _.each(obj,
+              function (value, key) {
+                if ($scope.vm.systemSettings[service][key])
+                  $scope.vm.initializeForm[service][key] =
+                    $scope.vm.systemSettings[service][key];
+              }
+            );
 
           if (!_.has($scope.vm.systemSettings[service],
             'isShippableManaged') ||
             $scope.vm.systemSettings[service].isShippableManaged) {
-            if (!obj.address ||
+            if (service === 'workers') {
+              var nonAdmiralWorkerIP = _.some($scope.vm.systemSettings.workers,
+                function (worker) {
+                  return worker.address !== $scope.vm.admiralEnv.ADMIRAL_IP;
+                }
+              );
+              if (nonAdmiralWorkerIP) {
+                $scope.vm.initializeForm.workers.initType = 'new';
+                var allWorkersInitialized = _.every($scope.vm.systemSettings.workers,
+                  function (worker) {
+                    return worker.isInitialized;
+                  }
+                );
+                if (allWorkersInitialized)
+                  $scope.vm.initializeForm.workers.confirmCommand = true;
+              }
+            } else if (!obj.address ||
             obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
               $scope.vm.initializeForm[service].initType = 'admiral';
             else
@@ -1028,6 +1085,22 @@
       var masterUpdate = {
         address: $scope.vm.admiralEnv.ADMIRAL_IP
       };
+      var workersList = [
+        {
+          address: $scope.vm.admiralEnv.ADMIRAL_IP,
+          name: 'worker'
+        }
+      ];
+      // if the user had tried to add a new worker, then switched to
+      // an admiral initType, remove any non-admiral workers
+      var deletedWorkers =
+        $scope.vm.initializeForm.workers.deletedWorkers.concat(
+          _.filter($scope.vm.initializeForm.workers.workers,
+            function (worker) {
+              return worker.address !== $scope.vm.admiralEnv.ADMIRAL_IP;
+            }
+          )
+        );
 
       if ($scope.vm.initializeForm.secrets.initType === 'new')
         secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
@@ -1042,6 +1115,11 @@
 
       if ($scope.vm.initializeForm.redis.initType === 'new')
         redisUpdate.address = $scope.vm.initializeForm.redis.address;
+
+      if ($scope.vm.initializeForm.workers.initType === 'new') {
+        workersList = $scope.vm.initializeForm.workers.workers;
+        deletedWorkers = $scope.vm.initializeForm.workers.deletedWorkers;
+      }
 
       if ($scope.vm.initializeForm.secrets.initType === 'existing') {
         secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
@@ -1068,13 +1146,15 @@
       }
 
       async.series([
-          // get secrets, msg, state, redis, master
+          // get secrets, msg, state, redis, master, workers
           getCoreServices,
           postSecrets.bind(null, secretsUpdate),
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
           postRedis.bind(null, redisUpdate),
           postMaster.bind(null, masterUpdate),
+          postWorkers.bind(null, workersList),
+          deleteWorkers.bind(null, deletedWorkers),
           getSystemSettings.bind(null, {}),
           updateInitializeForm.bind(null, {}),
           initSecrets
@@ -1091,7 +1171,8 @@
     }
 
     function getCoreServices(next) {
-      var coreServices = ['secrets', 'msg', 'state', 'redis', 'master'];
+      var coreServices =
+        ['secrets', 'msg', 'state', 'redis', 'master', 'workers'];
       async.each(coreServices,
         function (service, done) {
           admiralApiAdapter.getCoreService(service,
@@ -1152,6 +1233,44 @@
 
     function postMaster(update, next) {
       admiralApiAdapter.postMaster(update,
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function postWorkers(workers, next) {
+      async.eachSeries(workers,
+        function (worker, done) {
+          admiralApiAdapter.postWorker(worker,
+            function (err) {
+              if (err)
+                return done(err);
+              return done();
+            }
+          );
+        },
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function deleteWorkers(workers, next) {
+      async.eachSeries(workers,
+        function (worker, done) {
+          admiralApiAdapter.deleteWorker(worker.name, {},
+            function (err) {
+              if (err)
+                return done(err);
+              return done();
+            }
+          );
+        },
         function (err) {
           if (err)
             return next(err);
@@ -1229,9 +1348,68 @@
             return horn.error(err);
           }
 
-          pollService('master', postInitFlow);
+          pollService('master', initWorkers);
         }
       );
+    }
+
+    function initWorkers() {
+      async.eachSeries($scope.vm.initializeForm.workers.workers,
+        function (worker, done) {
+
+          async.series([
+              initializeWorker.bind(null, worker),
+              pollWorker.bind(null, worker)
+            ],
+            function (err) {
+              if (err)
+                return done(err);
+              return done();
+            }
+          );
+        },
+        function (err) {
+          if (err) {
+            $scope.vm.initializing = false;
+            return horn.error(err);
+          }
+          postInitFlow();
+        }
+      );
+    }
+
+    function initializeWorker(worker, next) {
+      admiralApiAdapter.initWorker(worker,
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function pollWorker(worker, next) {
+      var promise = $interval(function () {
+        getSystemSettings({},
+          function (err) {
+            if (err) {
+              $interval.cancel(promise);
+              $scope.vm.initializing = false;
+              return next(err);
+            }
+
+            var systemSettingsWorker =
+              _.findWhere($scope.vm.systemSettings.workers, {name:worker.name});
+
+            if (!systemSettingsWorker.isProcessing &&
+              (systemSettingsWorker.isFailed ||
+              systemSettingsWorker.isInitialized)) {
+              $interval.cancel(promise);
+              return next();
+            }
+          }
+        );
+      }, 3000);
     }
 
     function postInitFlow() {
@@ -1249,6 +1427,23 @@
           $scope.vm.initializing = false;
         }
       );
+    }
+
+    function addWorker(worker) {
+      $scope.vm.initializeForm.workers.workers.push(worker);
+      $scope.vm.initializeForm.workers.newWorker = {
+        name: '',
+        address: ''
+      };
+    }
+
+    function removeWorker (worker) {
+      $scope.vm.initializeForm.workers.deletedWorkers.push(worker);
+      $scope.vm.initializeForm.workers.workers =
+        _.without($scope.vm.initializeForm.workers.workers,
+          _.findWhere($scope.vm.initializeForm.workers.workers,
+            {name: worker.name})
+        );
     }
 
     function upgrade() {

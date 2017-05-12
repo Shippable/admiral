@@ -69,7 +69,7 @@ function _get(bag, next) {
             'Failed to get ' + bag.component, err)
         );
 
-      if (_.isEmpty(workers))
+      if (!_.isArray(workers))
         return next(
           new ActErr(who, ActErr.DataNotFound,
             'No configuration in database for ' + bag.component)

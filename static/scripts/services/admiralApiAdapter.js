@@ -107,6 +107,15 @@
       initMaster: function (body, callback) {
         return API.post('/api/master/initialize', body, callback);
       },
+      postWorker: function (body, callback) {
+        return API.post('/api/workers', body, callback);
+      },
+      initWorker: function (body, callback) {
+        return API.post('/api/workers/initialize', body, callback);
+      },
+      deleteWorker: function (name, body, callback) {
+        return API.delete('/api/workers/' + name, body, callback);
+      },
       getServiceLogs: function (component, callback) {
         return API.get('/api/' + component + '/logs', callback);
       },
