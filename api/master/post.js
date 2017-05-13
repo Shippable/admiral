@@ -74,8 +74,6 @@ function _post(bag, next) {
     update.address = bag.reqBody.address;
   if (_.has(bag.reqBody, 'port'))
     update.port = bag.reqBody.port;
-  if (_.has(bag.reqBody, 'workerJoinToken'))
-    update.workerJoinToken = bag.reqBody.workerJoinToken;
 
   configHandler.put(bag.component, update,
     function (err, response) {

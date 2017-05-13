@@ -7,6 +7,7 @@ var async = require('async');
 var _ = require('underscore');
 
 var configHandler = require('../../common/configHandler.js');
+var envHandler = require('../../common/envHandler.js');
 var VaultAdapter = require('../../common/VaultAdapter.js');
 
 function getStatus(req, res) {
@@ -16,6 +17,7 @@ function getStatus(req, res) {
       isReachable: false,
       error: null
     },
+    vaultTokenEnv: 'VAULT_TOKEN',
     component: 'secrets'
   };
 
@@ -25,6 +27,7 @@ function getStatus(req, res) {
   async.series([
     _checkInputParams.bind(null, bag),
     _get.bind(null, bag),
+    _getVaultToken.bind(null, bag),
     _createClient.bind(null, bag),
     _getStatus.bind(null, bag)
   ],
@@ -63,9 +66,32 @@ function _get(bag, next) {
             'No configuration in database for ' + bag.component)
         );
 
-      bag.config = secrets;
-      bag.vaultUrl = util.format('http://%s:%s',
-        bag.config.address, bag.config.port);
+      bag.vaultUrl = util.format('http://%s:%s', secrets.address, secrets.port);
+      return next();
+    }
+  );
+}
+
+function _getVaultToken(bag, next) {
+  var who = bag.who + '|' + _getVaultToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.vaultTokenEnv,
+    function (err, vaultToken) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.vaultTokenEnv)
+        );
+
+      if (_.isEmpty(vaultToken))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No vault token found')
+        );
+
+      logger.debug('Found vault token');
+      bag.vaultToken = vaultToken;
       return next();
     }
   );
@@ -75,8 +101,7 @@ function _createClient(bag, next) {
   var who = bag.who + '|' + _createClient.name;
   logger.debug(who, 'Inside');
 
-  bag.vaultAdapter = new VaultAdapter(
-    bag.vaultUrl, bag.config.rootToken);
+  bag.vaultAdapter = new VaultAdapter(bag.vaultUrl, bag.vaultToken);
 
   return next();
 }

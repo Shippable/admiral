@@ -17,6 +17,7 @@ var VaultAdapter = require('../../common/VaultAdapter.js');
 function initialize(req, res) {
   var bag = {
     reqQuery: req.query,
+    reqBody: req.body,
     resBody: [],
     res: res,
     params: {},
@@ -25,7 +26,8 @@ function initialize(req, res) {
     isResponseSent: false,
     component: 'secrets',
     tmpScript: '/tmp/secrets.sh',
-    vaultUrlEnv: 'VAULT_URL'
+    vaultUrlEnv: 'VAULT_URL',
+    vaultTokenEnv: 'VAULT_TOKEN'
   };
 
   bag.who = util.format('secrets|%s', self.name);
@@ -42,6 +44,8 @@ function initialize(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _installVault.bind(null, bag),
+      _getVaultToken.bind(null, bag),
+      _getVaultUnsealKeys.bind(null, bag),
       _checkInitStatus.bind(null, bag),
       _getUnsealKeys.bind(null, bag),
       _saveUnsealKeys.bind(null, bag),
@@ -295,6 +299,51 @@ function _installVault(bag, next) {
   );
 }
 
+function _getVaultToken(bag, next) {
+  var who = bag.who + '|' + _getVaultToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.vaultTokenEnv,
+    function (err, token) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.vaultTokenEnv)
+        );
+
+      if (!_.isEmpty(token))
+        bag.rootToken = token;
+
+      return next();
+    }
+  );
+}
+
+function _getVaultUnsealKeys(bag, next) {
+  var who = bag.who + '|' + _getVaultUnsealKeys.name;
+  logger.verbose(who, 'Inside');
+
+  async.times(5,
+    function (number, done) {
+      envHandler.get('VAULT_UNSEAL_KEY' + number,
+        function (err, key) {
+          if (err)
+            return done(
+              new ActErr(who, ActErr.OperationFailed,
+                'Cannot get env: ' + 'VAULT_UNSEAL_KEY' + number)
+            );
+
+          bag['unsealKey' + number] = key;
+          return done();
+        }
+      );
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
 function _checkInitStatus(bag, next) {
   var who = bag.who + '|' + _checkInitStatus.name;
   logger.verbose(who, 'Inside');
@@ -312,18 +361,16 @@ function _checkInitStatus(bag, next) {
       if (response.initialized === true) {
         logger.debug('Vault already initialized');
 
-        if (_.isEmpty(bag.config.rootToken))
+        if (_.isEmpty(bag.rootToken))
           return next(
             new ActErr(who, ActErr.OperationFailed,
               'Vault is missing a root token.')
           );
 
-        if (bag.config.isShippableManaged &&
-          (_.isEmpty(bag.config.unsealKey1) ||
-          _.isEmpty(bag.config.unsealKey2) ||
-          _.isEmpty(bag.config.unsealKey3) ||
-          _.isEmpty(bag.config.unsealKey4) ||
-          _.isEmpty(bag.config.unsealKey5)))
+        if (response.sealed && bag.config.isShippableManaged &&
+          (_.isEmpty(bag.unsealKey1) || _.isEmpty(bag.unsealKey2) ||
+          _.isEmpty(bag.unsealKey3) || _.isEmpty(bag.unsealKey4) ||
+          _.isEmpty(bag.unsealKey5)))
           return next(
             new ActErr(who, ActErr.OperationFailed,
               'Vault needs 5 unseal keys. One (or more) unseal keys are ' +
@@ -360,13 +407,13 @@ function _getUnsealKeys(bag, next) {
           new ActErr(who, ActErr.OperationFailed,
             'Failed to initialize vault: ' + util.inspect(err))
         );
-      bag.config.unsealKey1 = response.keys[0];
-      bag.config.unsealKey2 = response.keys[1];
-      bag.config.unsealKey3 = response.keys[2];
-      bag.config.unsealKey4 = response.keys[3];
-      bag.config.unsealKey5 = response.keys[4];
+      bag.unsealKey1 = response.keys[0];
+      bag.unsealKey2 = response.keys[1];
+      bag.unsealKey3 = response.keys[2];
+      bag.unsealKey4 = response.keys[3];
+      bag.unsealKey5 = response.keys[4];
       /* jshint camelcase:false */
-      bag.config.rootToken  = response.root_token;
+      bag.rootToken  = response.root_token;
       /* jshint camelcase:true */
 
       logger.debug('Successfully fetched unseal keys for vault');
@@ -381,15 +428,23 @@ function _saveUnsealKeys(bag, next) {
   var who = bag.who + '|' + _saveUnsealKeys.name;
   logger.verbose(who, 'Inside');
 
-  configHandler.put(bag.component, bag.config,
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to save unseal keys: ' + util.inspect(err))
-        );
+  async.times(5,
+    function (number, done) {
+      envHandler.put('VAULT_UNSEAL_KEY' + number, bag['unsealKey' + number],
+        function (err) {
+          if (err)
+            return done(
+              new ActErr(who, ActErr.OperationFailed,
+                'Failed to set ' + 'VAULT_UNSEAL_KEY' + number +
+                ' with error: ' + err)
+            );
 
-      return next();
+          return done();
+        }
+      );
+    },
+    function (err) {
+      return next(err);
     }
   );
 }
@@ -400,12 +455,12 @@ function _setVaultRootToken(bag, next) {
   var who = bag.who + '|' + _setVaultRootToken.name;
   logger.verbose(who, 'Inside');
 
-  envHandler.put('VAULT_TOKEN', bag.config.rootToken,
+  envHandler.put('VAULT_TOKEN', bag.rootToken,
     function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get VAULT_TOKEN with error: ' + err)
+            'Failed to set VAULT_TOKEN with error: ' + err)
         );
 
       return next();
@@ -425,7 +480,7 @@ function _unsealVaultStep1(bag, next) {
     /* jshint camelcase:false */
     secret_shares: 3,
     /* jshint camelcase:true */
-    key: bag.config.unsealKey1
+    key: bag.unsealKey1
   };
 
   client.unseal(params,
@@ -451,7 +506,7 @@ function _unsealVaultStep2(bag, next) {
     /* jshint camelcase:false */
     secret_shares: 3,
     /* jshint camelcase:true */
-    key: bag.config.unsealKey2
+    key: bag.unsealKey2
   };
 
   var client = new VaultAdapter(bag.vaultUrl);
@@ -479,7 +534,7 @@ function _unsealVaultStep3(bag, next) {
     /* jshint camelcase:false */
     secret_shares: 3,
     /* jshint camelcase:true */
-    key: bag.config.unsealKey3
+    key: bag.unsealKey3
   };
 
   var client = new VaultAdapter(bag.vaultUrl);
@@ -502,7 +557,7 @@ function _createSecretsMount(bag, next) {
   var who = bag.who + '|' + _createSecretsMount.name;
   logger.verbose(who, 'Inside');
 
-  var client = new VaultAdapter(bag.vaultUrl, bag.config.rootToken);
+  var client = new VaultAdapter(bag.vaultUrl, bag.rootToken);
 
   var params = {
     type: 'generic',
@@ -526,7 +581,7 @@ function _updatePolicy(bag, next) {
   var who = bag.who + '|' + _updatePolicy.name;
   logger.verbose(who, 'Inside');
 
-  var client = new VaultAdapter(bag.vaultUrl, bag.config.rootToken);
+  var client = new VaultAdapter(bag.vaultUrl, bag.rootToken);
 
   var policyFilePath =
     path.join(global.config.scriptsDir, 'configs/policy.hcl');
@@ -556,7 +611,7 @@ function _checkCredentials(bag, next) {
 
   var seriesBag = {
     who: who,
-    client: new VaultAdapter(bag.vaultUrl, bag.config.rootToken),
+    client: new VaultAdapter(bag.vaultUrl, bag.rootToken),
     testKey: 'shippable/testPermissions',
     testSecret: {
       testValue: 'testSecret'

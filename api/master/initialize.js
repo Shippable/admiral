@@ -10,6 +10,7 @@ var fs = require('fs');
 var spawn = require('child_process').spawn;
 
 var configHandler = require('../../common/configHandler.js');
+var envHandler = require('../../common/envHandler.js');
 var APIAdapter = require('../../common/APIAdapter.js');
 
 function initialize(req, res) {
@@ -39,6 +40,7 @@ function initialize(req, res) {
       _writeScriptToFile.bind(null, bag),
       _initializeMaster.bind(null, bag),
       _getWorkerJoinToken.bind(null, bag),
+      _setSwarmWorkerJoinToken.bind(null, bag),
       _post.bind(null, bag)
     ],
     function (err) {
@@ -275,14 +277,30 @@ function _getWorkerJoinToken(bag, next) {
   );
 }
 
+function _setSwarmWorkerJoinToken(bag, next) {
+  var who = bag.who + '|' + _setSwarmWorkerJoinToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.put('SWARM_WORKER_JOIN_TOKEN', bag.workerJoinToken,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to set SWARM_WORKER_JOIN_TOKEN with error: ' + err)
+        );
+
+      return next();
+    }
+  );
+}
+
 function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
   var update = {
     isInstalled: true,
-    isInitialized: true,
-    workerJoinToken: bag.workerJoinToken
+    isInitialized: true
   };
 
   configHandler.put(bag.component, update,

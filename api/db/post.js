@@ -189,7 +189,6 @@ function _setProcessingFlag(bag, next) {
   var update = {
     address: global.config.dbHost,
     port: global.config.dbPort,
-    username: global.config.dbUsername,
     isProcessing: true,
     isFailed: false
   };
