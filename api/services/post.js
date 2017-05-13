@@ -178,7 +178,7 @@ function _getWorkers(bag, next) {
             'No configuration in database for ' + bag.component)
         );
       // if even one worker has external IP then swarm cluster is initialized
-      bag.isSwarmClusterInitialized = _.some(bag.workers,
+      bag.isSwarmClusterInitialized = _.some(workers,
         function (worker) {
           return worker.address !== bag.master.address;
         }
