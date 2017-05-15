@@ -38,15 +38,6 @@ __validate_runtime() {
     sed -i 's/.*RELEASE=.*/RELEASE="'$RELEASE'"/g' $ADMIRAL_ENV
   fi
 
-  ################## check install mode ##########################
-  if [ "$INSTALL_MODE" == "" ]; then
-    __process_error "No INSTALL_MODE env present, exiting"
-    exit 1
-  else
-    __process_msg "Updating INSTALL_MODE in ADMIRAL_ENV file"
-    sed -i 's/.*INSTALL_MODE=.*/INSTALL_MODE="'$INSTALL_MODE'"/g' $ADMIRAL_ENV
-  fi
-
   ################## check login token  ##########################
   if [ "$LOGIN_TOKEN" == "" ]; then
     __process_msg "LOGIN_TOKEN not defined, generating"
