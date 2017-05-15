@@ -39,7 +39,6 @@ export LC_ALL=C
 export IS_UPGRADE=false
 export NO_PROMPT=false
 export KEYS_GENERATED=false
-export INSTALL_MODE="local"
 ###########################################################
 
 source "$LIB_DIR/_logger.sh"

@@ -135,7 +135,6 @@ __pull_images() {
 __print_runtime() {
   __process_marker "Installer runtime variables"
   __process_msg "RELEASE: $RELEASE"
-  __process_msg "INSTALL_MODE: $INSTALL_MODE"
   __process_msg "IS_UPGRADE: $IS_UPGRADE"
 
   if [ $NO_PROMPT == true ]; then
