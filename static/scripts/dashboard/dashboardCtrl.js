@@ -72,6 +72,7 @@
           },
           workers: [],
           deletedWorkers: [],
+          enableLogsButton: false,
           confirmCommand: false
         },
         sshCommand: ''
@@ -555,13 +556,23 @@
               );
               if (nonAdmiralWorkerIP) {
                 $scope.vm.initializeForm.workers.initType = 'new';
-                var allWorkersInitialized = _.every($scope.vm.systemSettings.workers,
+                var allWorkersInitialized = _.every(
+                  $scope.vm.systemSettings.workers,
                   function (worker) {
                     return worker.isInitialized;
                   }
                 );
                 if (allWorkersInitialized)
                   $scope.vm.initializeForm.workers.confirmCommand = true;
+                var workerInitAttempted = _.some(
+                  $scope.vm.systemSettings.workers,
+                  function (worker) {
+                    return worker.isProcessing || worker.isFailed ||
+                      worker.isInitialized;
+                  }
+                );
+                if (workerInitAttempted)
+                  $scope.vm.initializeForm.workers.enableLogsButton = true;
               }
             } else if (!obj.address ||
             obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
@@ -1355,6 +1366,7 @@
     }
 
     function initWorkers() {
+      $scope.vm.initializeForm.workers.enableLogsButton = true;
       async.eachSeries($scope.vm.initializeForm.workers.workers,
         function (worker, done) {
 
@@ -2407,7 +2419,6 @@
         }
       );
     }
-
 
     function showConfigModal(service) {
       $scope.vm.selectedService = $scope.vm.systemSettings[service];

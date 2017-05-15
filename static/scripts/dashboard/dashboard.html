@@ -52,7 +52,7 @@
                         </td>
                         <td>
                           <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('db')">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('db')" ng-disabled="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed && !vm.systemSettings.db.isInitialized">logs</button>
                         </td>
                         <td class="text-center">
                           <span ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
@@ -89,8 +89,8 @@
                           </span>
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized">logs</button>
                         </td>
                         <td style="width: 12.5%;" class="text-center">
                           <span ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
@@ -189,8 +189,8 @@
                           </span>
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')" ng-disabled="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed && !vm.systemSettings.msg.isInitialized">logs</button>
                         </td>
                         <td style="width: 12.5%;" class="text-center">
                           <span ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
@@ -320,8 +320,8 @@
                           </span>
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')" ng-disabled="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed && !vm.systemSettings.state.isInitialized">logs</button>
                         </td>
                         <td style="width: 12.5%;" class="text-center">
                           <span ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
@@ -421,8 +421,8 @@
                           </span>
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')" ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">logs</button>
                         </td>
                         <td style="width: 12.5%;" class="text-center">
                           <span ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
@@ -501,8 +501,8 @@
                           </span>
                         </td>
                         <td ng-if="vm.initializeForm.workers.initType === 'admiral'">
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')" ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">logs</button>
                         </td>
                         <td ng-if="vm.initializeForm.workers.initType === 'admiral'" style="width: 12.5%;" class="text-center">
                           <span ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
@@ -535,8 +535,8 @@
                         <td colspan="2">
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')">config</button>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')">logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')" ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">logs</button>
                         </td>
                         <td style="width: 12.5%;" class="text-center">
                           <span ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
@@ -564,7 +564,7 @@
                         <td colspan="2">
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-default" ng-click="vm.showWorkersLogModal('workers')">worker init logs</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showWorkersLogModal('workers')" ng-disabled="!vm.initializeForm.workers.enableLogsButton">worker init logs</button>
                         </td>
                         <td style="width: 12.5%;" class="text-center">
                         </td>
