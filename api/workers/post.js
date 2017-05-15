@@ -88,8 +88,6 @@ function _updateWorker(bag, next) {
   var newWorker = {
     address: bag.workerAddress,
     name: bag.workerName,
-    isInitialized: false,
-    isInstalled: false,
     port: 2377
   };
 
@@ -110,8 +108,11 @@ function _updateWorker(bag, next) {
     }
   );
 
-  if (!workerExists)
+  if (!workerExists) {
+    newWorker.isInitialized = false;
+    newWorker.isInstalled = false;
     bag.config.push(newWorker);
+  }
 
   return next();
 }
