@@ -5,6 +5,7 @@ module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
+var spawn = require('child_process').spawn;
 
 var configHandler = require('../../common/configHandler.js');
 
@@ -22,7 +23,8 @@ function deleteByName(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
-      _delete.bind(null, bag)
+      _delete.bind(null, bag),
+      _removeFromCluster.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -89,6 +91,40 @@ function _delete(bag, next) {
         );
 
       bag.resBody = response;
+      return next();
+    }
+  );
+}
+
+function _removeFromCluster(bag, next) {
+  var who = bag.who + '|' + _removeFromCluster.name;
+  logger.verbose(who, 'Inside');
+  var removeCommand = util.format('sudo docker node rm %s || true',
+    bag.workerName);
+
+  var exec = spawn('/bin/bash',
+    ['-c', removeCommand]
+  );
+
+  exec.stdout.on('data',
+    function (data)  {
+      console.log(data.toString());
+    }
+  );
+
+  exec.stderr.on('data',
+    function (data)  {
+      console.log(data.toString());
+    }
+  );
+
+  exec.on('close',
+    function (exitCode)  {
+      if (exitCode > 0)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Script returned code: ' + exitCode)
+        );
       return next();
     }
   );
