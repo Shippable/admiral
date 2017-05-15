@@ -77,21 +77,20 @@ function _delete(bag, next) {
   logger.verbose(who, 'Inside');
 
   var query = util.format('DELETE FROM "accountRoles" ' +
-    '("accountId", "roleCode") ' +
-    'values (\'%s\', \'%s\')',
-    bag.reqBody.accountId, bag.superUserRoleCode);
+    ' where "accountId" = \'%s\' and "roleCode" = \'%s\'',
+    bag.superUserId, bag.superUserRoleCode);
 
   global.config.client.query(query,
     function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.DBOperationFailed,
-            'Failed to create superUser from accountId: ' +
-            bag.reqBody.accountId, err
+            'Failed to delete superUser with accountId: ' +
+            bag.superUserId, err
           )
         );
       logger.debug('successfully deleted superUser for accountId: ' +
-        bag.reqBody.accountId);
+        bag.superUserId);
 
       return next();
     }
