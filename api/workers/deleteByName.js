@@ -99,7 +99,7 @@ function _delete(bag, next) {
 function _removeFromCluster(bag, next) {
   var who = bag.who + '|' + _removeFromCluster.name;
   logger.verbose(who, 'Inside');
-  var removeCommand = util.format('sudo docker node rm %s || true',
+  var removeCommand = util.format('sudo docker node rm -f %s || true',
     bag.workerName);
 
   var exec = spawn('/bin/bash',
