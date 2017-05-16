@@ -42,6 +42,17 @@
         return API.put('/api/masterIntegrations/' +
           masterIntegrationId, body, callback);
       },
+      // superUser Routes
+      getSuperUsers: function (callback) {
+        return API.get('/api/superUsers', callback);
+      },
+      postSuperUser: function (body, callback) {
+        return API.post('/api/superUsers', body, callback);
+      },
+      deleteSuperUser: function (accountId, callback) {
+        return API.delete('/api/superUsers/' +
+          accountId, {}, callback);
+      },
       // System Machine Image Routes
       getSystemMachineImages: function (query, callback) {
         return API.get('/api/systemMachineImages?' + query, callback);

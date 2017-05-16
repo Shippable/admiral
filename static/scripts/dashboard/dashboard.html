@@ -11,7 +11,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <a data-toggle="collapse" href="#initpanel">1. Initialize</a>
+              <a data-toggle="collapse" href="#initpanel">1. Initialize Infrastructure</a>
             </h3>
           </div>
           <div id="initpanel" class="panel-collapse collapse in">
@@ -492,11 +492,11 @@
                         <td colspan="5" style="width: 45%">
                           Worker Install Location:
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.workers.initType" ng-disabled="(vm.initializeForm.workers.initType === 'admiral' && vm.initializeForm.workers.workers[0] && vm.initializeForm.workers.workers[0].isInitialized) || vm.initializing" value="admiral">
+                            <input type="radio" ng-model="vm.initializeForm.workers.initType" ng-disabled="vm.initializing" value="admiral">
                             This Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.workers.initType" ng-disabled="(vm.initializeForm.workers.initType === 'admiral' && vm.initializeForm.workers.workers[0] && vm.initializeForm.workers.workers[0].isInitialized) || vm.initializing" value="new">
+                            <input type="radio" ng-model="vm.initializeForm.workers.initType" ng-disabled="vm.initializing" value="new">
                             New Node(s)
                           </span>
                         </td>
@@ -719,7 +719,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">
               <a data-toggle="collapse" href="#installpanel">
-                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '3.' : '2.'}} Install
+                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '3.' : '2.'}} Install Services
               </a>
             </h3>
           </div>
@@ -1861,6 +1861,62 @@
                       Install Add-ons
                     </div>
                   </button>
+                </div>
+                  <div class="col-md-11" style="border-bottom: 1px solid #DDDDDD;">
+                    &nbsp;
+                  </div>
+                </div>
+                <div class="col-md-10">
+                  &nbsp;
+                  <p>
+                    Manage System SuperUsers:
+                  </p>
+                </div>
+                <div class="col-md-offset-1">
+                  <div class="row">
+                    <div class="col-md-10">
+                      Add superUser:
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2 text-right">
+                      Account ID:
+                    </div>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control input-sm" name="superUserAccountID" placeholder="abcdef0123456789abcdef01" ng-disabled="vm.installingAddons"
+                      ng-model="vm.superUsers.newSuperUser"/>
+                    </div>
+                    <div class="col-md-5">
+                      <button ng-click="vm.addSuperUser()" ng-disabled="vm.superUsers.addingSuperUser">
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    &nbsp;
+                  </div>
+                  <div class="row">
+                    <div class="col-md-10">
+                      Current SuperUsers:
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div ng-if="!vm.superUsers.superUsers.length" class="col-md-offset-2 col-md-10">
+                      <i>No current SuperUsers</i>
+                    </div>
+                    <div ng-if="vm.superUsers.superUsers.length">
+                      <div ng-repeat="superUser in vm.superUsers.superUsers">
+                        <div class="col-md-offset-2 col-md-3">
+                          {{superUser}}
+                        </div>
+                        <div class="col-md-5">
+                          <button ng-click="vm.removeSuperUser(superUser)" ng-disabled="vm.superUsers.deletingSuperUser">
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
