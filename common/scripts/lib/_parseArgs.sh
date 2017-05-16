@@ -170,6 +170,16 @@ __show_status() {
   __process_msg "All good !!!"
 }
 
+__print_info() {
+  echo "
+  Release Version:  $RELEASE
+  UI Address:       $ADMIRAL_IP
+  Login Token:      $LOGIN_TOKEN
+  Database Address: $DB_IP
+  "
+  exit 0
+}
+
 __wipe_clean() {
   __process_marker "Cleaning installation"
 
@@ -216,6 +226,10 @@ __parse_args() {
         ;;
       status)
         __show_status
+        ;;
+      info)
+        __bootstrap_admiral_env
+        __print_info
         ;;
       help)
         __print_help
