@@ -363,6 +363,12 @@
           isEnabled: false
         }
       },
+      superUsers: {
+        addingSuperUser: false,
+        deletingSuperUser: false,
+        newSuperUser: '',
+        superUsers: []
+      },
       installingAddons: false,
       systemSettings: {
         db: {
@@ -396,6 +402,8 @@
       save: save,
       restartServices: restartServices,
       installAddons: installAddons,
+      addSuperUser: addSuperUser,
+      removeSuperUser: removeSuperUser,
       showAdmiralEnvModal: showAdmiralEnvModal,
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
@@ -425,7 +433,8 @@
           getMasterIntegrations.bind(null, bag),
           getSystemSettingsForInstallPanel.bind(null, bag),
           getServices.bind(null, bag),
-          getDefaultSystemMachineImage.bind(null, bag)
+          getDefaultSystemMachineImage.bind(null, bag),
+          getSuperUsers
         ],
         function (err) {
           $scope.vm.isLoaded = true;
@@ -1780,6 +1789,12 @@
                 return horn.error(err);
             }
           );
+          getSuperUsers(
+            function (err) {
+              if (err)
+                return horn.error(err);
+            }
+          );
         }
       );
     }
@@ -1814,6 +1829,12 @@
 
           // Check if we should show "Install" or "Save" and "Restart Services"
           getServices({},
+            function (err) {
+              if (err)
+                return horn.error(err);
+            }
+          );
+          getSuperUsers(
             function (err) {
               if (err)
                 return horn.error(err);
@@ -2569,7 +2590,7 @@
           };
 
           admiralApiAdapter.putMasterIntegration(masterInt.id, update,
-            function (err, MI) {
+            function (err) {
               return done(err);
             }
           );
@@ -2578,7 +2599,78 @@
           $scope.vm.installingAddons = false;
           getMasterIntegrations({}, function () {});
           if (err)
-            return horn.error(err);
+            horn.error(err);
+        }
+      );
+    }
+
+    function addSuperUser() {
+      $scope.vm.superUsers.addingSuperUser = true;
+
+      async.series([
+          postSuperUser,
+          getSuperUsers
+        ],
+        function (err) {
+          $scope.vm.superUsers.addingSuperUser = false;
+          $scope.vm.superUsers.newSuperUser = '';
+          if (err)
+            horn.error(err);
+        }
+      );
+    }
+
+    function removeSuperUser(removedSuperUser) {
+      $scope.vm.superUsers.deletingSuperUser = true;
+
+      var bag = {
+        accountId: removedSuperUser
+      };
+
+      async.series([
+          deleteSuperUsers.bind(null, bag),
+          getSuperUsers
+        ],
+        function (err) {
+          $scope.vm.superUsers.deletingSuperUser = false;
+          if (err)
+            horn.error(err);
+        }
+      );
+    }
+
+    function postSuperUser(next) {
+      var newSuperUser = {
+        accountId: $scope.vm.superUsers.newSuperUser
+      };
+      admiralApiAdapter.postSuperUser(newSuperUser,
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function getSuperUsers(next) {
+      if (!$scope.vm.systemSettings.db.isInitialized) return next();
+
+      admiralApiAdapter.getSuperUsers(
+        function (err, superUsers) {
+          if (err)
+            horn.error(err);
+          $scope.vm.superUsers.superUsers = superUsers;
+          return next();
+        }
+      );
+    }
+
+    function deleteSuperUsers(bag, next) {
+      admiralApiAdapter.deleteSuperUser(bag.accountId,
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
         }
       );
     }

@@ -93,6 +93,8 @@ function _post(bag, next) {
       logger.debug('successfully added superUser for accountId: ' +
         bag.reqBody.accountId);
 
+      bag.resBody.accountId = bag.reqBody.accountId;
+
       return next();
     }
   );
