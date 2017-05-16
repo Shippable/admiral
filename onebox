@@ -8,7 +8,7 @@ export ONEBOX_NAME="admiral_onebox"
 export LATEST_MICROBASE_TAG="master"
 export ADMIRAL_ENV="/etc/shippable/admiral.env"
 export CONFIG_DIR="/etc/shippable"
-export RUNTIME_DIR="/var/run/shippable"
+export RUNTIME_DIR="/var/lib/shippable"
 export MIGRATIONS_DIR="$ROOT_DIR/migrations"
 
 stop_component() {
