@@ -40,23 +40,22 @@
     - 50003: Shippable admin panel
 
 ### Load balancers
-- The usual(and recommended) way of exposing Shippable service end points is
-  via loadbalancers. The LB's are not required to be exposed to the public
+- The usual (and recommended) way of exposing Shippable service end points is
+  via loadbalancers. The LBs are not required to be exposed to the public
   facing internet but should be accessible to all users in a VPN. A typical
   setup creates following routing
 
-  User (shippable.mycompany.com) -> Route 53 -> internal LB -> Shippable API
+  User (shippable.mycompany.com) -> Route 53 -> Internal LB -> Shippable API
   (running on one or more machines)
 
-  Shippable requires following 3 loadbalancers with listeners on specified
-  ports.
+  Shippable requires 4 loadbalancers with listeners on these ports.
     - **API, port 50000**: Shippable api will be used by all the microservices
         and should be available via IP/DNS.
     - **WWW, port 50001**: This service is what users access to use Shippable.
     - **Admin, port 50003**: This is where the Shippable admin panel runs
     - **Message queue, ports 443, 5671 and 15671**: required to access the
       message queue admin panel and for build nodes to connect if they belong
-      to a different VPC than the one in which message queue is provisioned.
+      to a different VPC than the one in which the message queue is provisioned.
 
 ### Running the installer
 #### Log into the instance and install `git` and `ssh`
