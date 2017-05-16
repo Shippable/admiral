@@ -20,6 +20,7 @@
 
   function dashboardCtrl($scope, $stateParams, $q, $state, $interval,
     admiralApiAdapter, horn) {
+    /* jshint maxstatements:125 */
     var dashboardCtrlDefer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -347,10 +348,6 @@
           isEnabled: false
         },
         Slack: {
-          displayName: '',
-          isEnabled: false
-        },
-        'ssh-key': {
           displayName: '',
           isEnabled: false
         },
@@ -704,6 +701,7 @@
     function updateInitializeForm(bag, next) {
       _.each($scope.vm.initializeForm,
         function (obj, service) {
+          /* jshint maxcomplexity:20 */
           if (!_.isObject(obj)) return;
 
           if (service === 'workers')
@@ -2197,7 +2195,7 @@
       };
 
       admiralApiAdapter.putMasterIntegration(masterInt.id, update,
-        function (err, masterInt) {
+        function (err) {
           if (err)
             return callback(err);
 
@@ -2569,7 +2567,7 @@
           };
 
           admiralApiAdapter.putMasterIntegration(masterInt.id, update,
-            function (err, MI) {
+            function (err) {
               return done(err);
             }
           );
