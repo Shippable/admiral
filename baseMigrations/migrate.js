@@ -356,7 +356,6 @@ function _updateDBConfig(bag, next) {
   var db = {
     address: bag.stateJson.systemSettings.dbHost,
     port: bag.stateJson.systemSettings.dbPort,
-    username: bag.stateJson.systemSettings.dbUsername,
     isProcessing: false,
     isFailed: false,
     isInstalled: true,
@@ -391,10 +390,6 @@ function _updateMsgConfig(bag, next) {
     amqpPort: rabbitMQRootUrl.port,
     adminPort: url.parse(bag.systemConfig.amqpUrlAdmin ||
       bag.stateJson.systemSettings.amqpUrlAdmin).port,
-    uiUsername: 'shippable',
-    uiPassword: 'abc123',
-    username: rabbitMQRootUrl.auth.split(':')[0],
-    password: rabbitMQRootUrl.auth.split(':')[1],
     isSecure: (rabbitMQRootUrl.protocol === 'amqp:') ? false : true,
     isShippableManaged: true,
     isProcessing: false,
@@ -465,12 +460,6 @@ function _updateSecretsConfig(bag, next) {
   var secrets = {
     address: parsedVaultUrl.hostname,
     port: parsedVaultUrl.port,
-    rootToken: bag.vaultToken,
-    unsealKey1: '',
-    unsealKey2: '',
-    unsealKey3: '',
-    unsealKey4: '',
-    unsealKey5: '',
     isShippableManaged: true,
     isProcessing: false,
     isFailed: false,
@@ -590,7 +579,6 @@ function _updateStateConfig(bag, next) {
     securePort:
       (parsedStateUrl.protocol === 'https:' && parsedStateUrl.port) ?
       parsedStateUrl.port : 443,
-    rootPassword: password,
     isShippableManaged: true,
     isProcessing: false,
     isFailed: false,
@@ -627,7 +615,6 @@ function _updateMasterConfig(bag, next) {
 
   var master = {
     address: swarmMaster.ip,
-    workerJoinToken: bag.stateJson.systemSettings.swarmWorkerToken || '',
     port: 2377,
     isInstalled: true,
     isInitialized: true
@@ -718,9 +705,6 @@ function _updateServicesConfig(bag, next) {
       if (!stateJsonService) {
         services[serviceConfig.name] = {
           serviceName: serviceConfig.name,
-          mounts: '',
-          envs: '',
-          opts: '',
           isCore: serviceConfig.isCore,
           replicas: serviceConfig.isGlobal ? 'global' : 1,
           isEnabled: false
@@ -738,11 +722,7 @@ function _updateServicesConfig(bag, next) {
 
       services[serviceConfig.name] = {
         serviceName: serviceConfig.name,
-        mounts: '',
-        envs: stateJsonService.env || '',
-        opts: '',
         image: stateJsonService.image,
-        runCommand: '',
         isCore: serviceConfig.isCore,
         replicas: replicas,
         isEnabled: true
@@ -1003,7 +983,8 @@ function _createAdmiralEnv(bag, next) {
       'production',
     sshUser: 'root',
     vaultUrl: bag.vaultUrl,
-    vaultToken: bag.vaultToken
+    vaultToken: bag.vaultToken,
+    workerJoinToken: bag.stateJson.systemSettings.swarmWorkerToken || '',
   };
 
   var admiralEnv = __applyTemplate('./admiral.env.template', admiralEnvValues);

@@ -29,6 +29,7 @@
       isLoaded: false,
       initializing: false,
       initialized: false,
+      dbInitialized: false,
       upgrading: false,
       installing: false,
       saving: false,
@@ -266,6 +267,7 @@
         systemSettings: [],
         coreServices: []
       },
+      systemIntegrations: [],
       masterIntegrations: [],
       addonsForm: {
         artifactory: {
@@ -416,10 +418,10 @@
           setBreadcrumb.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
           getSystemSettings.bind(null, bag),
-          updateInitializeForm.bind(null, bag),
-          getMachineKeys.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
+          updateInitializeForm.bind(null, bag),
+          getMachineKeys.bind(null, bag),
           getMasterIntegrations.bind(null, bag),
           getSystemSettingsForInstallPanel.bind(null, bag),
           getServices.bind(null, bag),
@@ -510,6 +512,8 @@
           $scope.vm.systemSettings.releaseVersion =
             systemSettings.releaseVersion;
 
+          $scope.vm.dbInitialized = $scope.vm.systemSettings.db.isInitialized;
+
           $scope.vm.initialized = $scope.vm.systemSettings.db.isInitialized &&
             $scope.vm.systemSettings.secrets.isInitialized &&
             $scope.vm.systemSettings.msg.isInitialized &&
@@ -523,86 +527,6 @@
               }
             );
 
-          return next();
-        }
-      );
-    }
-
-    function updateInitializeForm(bag, next) {
-      _.each($scope.vm.initializeForm,
-        function (obj, service) {
-          if (!_.isObject(obj)) return;
-
-          if (service === 'workers')
-            $scope.vm.initializeForm.workers.workers =
-              $scope.vm.systemSettings.workers;
-          else
-            _.each(obj,
-              function (value, key) {
-                if ($scope.vm.systemSettings[service][key])
-                  $scope.vm.initializeForm[service][key] =
-                    $scope.vm.systemSettings[service][key];
-              }
-            );
-
-          if (!_.has($scope.vm.systemSettings[service],
-            'isShippableManaged') ||
-            $scope.vm.systemSettings[service].isShippableManaged) {
-            if (service === 'workers') {
-              var nonAdmiralWorkerIP = _.some($scope.vm.systemSettings.workers,
-                function (worker) {
-                  return worker.address !== $scope.vm.admiralEnv.ADMIRAL_IP;
-                }
-              );
-              if (nonAdmiralWorkerIP) {
-                $scope.vm.initializeForm.workers.initType = 'new';
-                var allWorkersInitialized = _.every(
-                  $scope.vm.systemSettings.workers,
-                  function (worker) {
-                    return worker.isInitialized;
-                  }
-                );
-                if (allWorkersInitialized)
-                  $scope.vm.initializeForm.workers.confirmCommand = true;
-                var workerInitAttempted = _.some(
-                  $scope.vm.systemSettings.workers,
-                  function (worker) {
-                    return worker.isProcessing || worker.isFailed ||
-                      worker.isInitialized;
-                  }
-                );
-                if (workerInitAttempted)
-                  $scope.vm.initializeForm.workers.enableLogsButton = true;
-              }
-            } else if (!obj.address ||
-            obj.address === $scope.vm.admiralEnv.ADMIRAL_IP)
-              $scope.vm.initializeForm[service].initType = 'admiral';
-            else
-              $scope.vm.initializeForm[service].initType = 'new';
-          } else {
-            $scope.vm.initializeForm[service].initType = 'existing';
-          }
-
-          if ($scope.vm.systemSettings[service].isInitialized)
-            $scope.vm.initializeForm[service].confirmCommand = true;
-        }
-      );
-
-      return next();
-    }
-
-    function getMachineKeys(bag, next) {
-      admiralApiAdapter.getMachineKeys(
-        function (err, machineKeys) {
-          if (err) {
-            horn.error(err);
-            return next();
-          }
-
-          $scope.vm.machineKeys = machineKeys;
-          $scope.vm.initializeForm.sshCommand =
-            'sudo mkdir -p /root/.ssh; echo ' + machineKeys.publicKey +
-            ' >> /root/.ssh/authorized_keys;';
           return next();
         }
       );
@@ -729,7 +653,8 @@
     }
 
     function getSystemIntegrations(bag, next) {
-      if (!$scope.vm.initialized) return next();
+      if (!$scope.vm.dbInitialized) return next();
+      if (!$scope.vm.systemSettings.secrets.isInitialized) return next();
 
       // reset all systemIntegrations to their defaults
       _.each($scope.vm.installForm,
@@ -751,6 +676,8 @@
             horn.error(err);
             return next();
           }
+
+          $scope.vm.systemIntegrations = systemIntegrations;
 
           // override defaults with actual systemInt values
           _.each(systemIntegrations,
@@ -774,8 +701,108 @@
       );
     }
 
+    function updateInitializeForm(bag, next) {
+      _.each($scope.vm.initializeForm,
+        function (obj, service) {
+          if (!_.isObject(obj)) return;
+
+          if (service === 'workers')
+            $scope.vm.initializeForm.workers.workers =
+              $scope.vm.systemSettings.workers;
+          else
+            _.each(obj,
+              function (value, key) {
+                if ($scope.vm.systemSettings[service][key])
+                  $scope.vm.initializeForm[service][key] =
+                    $scope.vm.systemSettings[service][key];
+              }
+            );
+
+          if (service === 'secrets') {
+            $scope.vm.initializeForm[service].rootToken =
+              $scope.vm.admiralEnv.VAULT_TOKEN || '';
+          } else if (service === 'msg') {
+            var msgSystemIntegration = _.findWhere($scope.vm.systemIntegrations,
+              {name: 'msg', masterName: 'rabbitmqCreds'});
+            if (msgSystemIntegration) {
+              var auth = msgSystemIntegration.data.amqpUrlRoot.
+                split('@')[0].split('//')[1];
+              $scope.vm.initializeForm[service].username = auth.split(':')[0];
+              $scope.vm.initializeForm[service].password = auth.split(':')[1];
+            }
+          } else if (service === 'state') {
+            var stateSystemIntegration =
+              _.findWhere($scope.vm.systemIntegrations,
+                {name: 'state', masterName: 'gitlabCreds'});
+            if (stateSystemIntegration)
+              $scope.vm.initializeForm[service].rootPassword =
+                stateSystemIntegration.data.password;
+          }
+
+          if (!_.has($scope.vm.systemSettings[service], 'isShippableManaged') ||
+            $scope.vm.systemSettings[service].isShippableManaged) {
+            if (service === 'workers') {
+              var nonAdmiralWorkerIP = _.some($scope.vm.systemSettings.workers,
+                function (worker) {
+                  return worker.address !== $scope.vm.admiralEnv.ADMIRAL_IP;
+                }
+              );
+              if (nonAdmiralWorkerIP) {
+                $scope.vm.initializeForm.workers.initType = 'new';
+                var allWorkersInitialized = _.every(
+                  $scope.vm.systemSettings.workers,
+                  function (worker) {
+                    return worker.isInitialized;
+                  }
+                );
+                if (allWorkersInitialized)
+                  $scope.vm.initializeForm.workers.confirmCommand = true;
+                var workerInitAttempted = _.some(
+                  $scope.vm.systemSettings.workers,
+                  function (worker) {
+                    return worker.isProcessing || worker.isFailed ||
+                      worker.isInitialized;
+                  }
+                );
+                if (workerInitAttempted)
+                  $scope.vm.initializeForm.workers.enableLogsButton = true;
+              }
+            } else if (!obj.address ||
+            obj.address === $scope.vm.admiralEnv.ADMIRAL_IP) {
+              $scope.vm.initializeForm[service].initType = 'admiral';
+            } else {
+              $scope.vm.initializeForm[service].initType = 'new';
+            }
+          } else {
+            $scope.vm.initializeForm[service].initType = 'existing';
+          }
+          if ($scope.vm.systemSettings[service].isInitialized)
+            $scope.vm.initializeForm[service].confirmCommand = true;
+        }
+      );
+
+      return next();
+    }
+
+    function getMachineKeys(bag, next) {
+      admiralApiAdapter.getMachineKeys(
+        function (err, machineKeys) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          $scope.vm.machineKeys = machineKeys;
+          $scope.vm.initializeForm.sshCommand =
+            'sudo mkdir -p /root/.ssh; echo ' + machineKeys.publicKey +
+            ' >> /root/.ssh/authorized_keys;';
+          return next();
+        }
+      );
+    }
+
     function getMasterIntegrations(bag, next) {
-      if (!$scope.vm.initialized) return next();
+      if (!$scope.vm.dbInitialized) return next();
 
       admiralApiAdapter.getMasterIntegrations(
         function (err, masterIntegrations) {
@@ -1040,7 +1067,7 @@
             return horn.error(err);
           }
 
-          pollService('db', postServicesAndInitSecrets);
+          pollService('db', postAndInitSecrets);
         }
       );
     }
@@ -1071,67 +1098,15 @@
       }, 3000);
     }
 
-    function postServicesAndInitSecrets() {
+
+    function postAndInitSecrets() {
       var secretsUpdate = {
         address: $scope.vm.admiralEnv.ADMIRAL_IP,
         isShippableManaged: true
       };
-      var msgUpdate = {
-        password: $scope.vm.initializeForm.msg.password,
-        uiPassword: $scope.vm.initializeForm.msg.password,
-        username: 'shippableRoot',
-        address: $scope.vm.admiralEnv.ADMIRAL_IP,
-        isSecure: false,
-        isShippableManaged: true
-      };
-      var stateUpdate = {
-        rootPassword: $scope.vm.initializeForm.state.rootPassword,
-        address: $scope.vm.admiralEnv.ADMIRAL_IP,
-        sshPort: 2222,
-        isShippableManaged: true
-      };
-      var redisUpdate = {
-        address: $scope.vm.admiralEnv.ADMIRAL_IP,
-        isShippableManaged: true
-      };
-      var masterUpdate = {
-        address: $scope.vm.admiralEnv.ADMIRAL_IP
-      };
-      var workersList = [
-        {
-          address: $scope.vm.admiralEnv.ADMIRAL_IP,
-          name: 'worker'
-        }
-      ];
-      // if the user had tried to add a new worker, then switched to
-      // an admiral initType, remove any non-admiral workers
-      var deletedWorkers =
-        $scope.vm.initializeForm.workers.deletedWorkers.concat(
-          _.filter($scope.vm.initializeForm.workers.workers,
-            function (worker) {
-              return worker.address !== $scope.vm.admiralEnv.ADMIRAL_IP;
-            }
-          )
-        );
 
       if ($scope.vm.initializeForm.secrets.initType === 'new')
         secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
-
-      if ($scope.vm.initializeForm.msg.initType === 'new')
-        msgUpdate.address = $scope.vm.initializeForm.msg.address;
-
-      if ($scope.vm.initializeForm.state.initType === 'new') {
-        stateUpdate.address = $scope.vm.initializeForm.state.address;
-        stateUpdate.sshPort = 22;
-      }
-
-      if ($scope.vm.initializeForm.redis.initType === 'new')
-        redisUpdate.address = $scope.vm.initializeForm.redis.address;
-
-      if ($scope.vm.initializeForm.workers.initType === 'new') {
-        workersList = $scope.vm.initializeForm.workers.workers;
-        deletedWorkers = $scope.vm.initializeForm.workers.deletedWorkers;
-      }
 
       if ($scope.vm.initializeForm.secrets.initType === 'existing') {
         secretsUpdate.address = $scope.vm.initializeForm.secrets.address;
@@ -1139,37 +1114,12 @@
         secretsUpdate.isShippableManaged = false;
       }
 
-      if ($scope.vm.initializeForm.msg.initType === 'existing') {
-        msgUpdate.address = $scope.vm.initializeForm.msg.address;
-        msgUpdate.username = $scope.vm.initializeForm.msg.username;
-        msgUpdate.isSecure = $scope.vm.initializeForm.msg.isSecure;
-        msgUpdate.isShippableManaged = false;
-      }
-
-      if ($scope.vm.initializeForm.state.initType === 'existing') {
-        stateUpdate.address = $scope.vm.initializeForm.state.address;
-        stateUpdate.sshPort = 22;
-        stateUpdate.isShippableManaged = false;
-      }
-
-      if ($scope.vm.initializeForm.redis.initType === 'existing') {
-        redisUpdate.address = $scope.vm.initializeForm.redis.address;
-        redisUpdate.isShippableManaged = false;
-      }
-
       async.series([
           // get secrets, msg, state, redis, master, workers
           getCoreServices,
           postSecrets.bind(null, secretsUpdate),
-          postMsg.bind(null, msgUpdate),
-          postState.bind(null, stateUpdate),
-          postRedis.bind(null, redisUpdate),
-          postMaster.bind(null, masterUpdate),
-          postWorkers.bind(null, workersList),
-          deleteWorkers.bind(null, deletedWorkers),
-          getSystemSettings.bind(null, {}),
-          updateInitializeForm.bind(null, {}),
-          initSecrets
+          initSecrets,
+          getAdmiralEnv.bind(null, {})
         ],
         function (err) {
           if (err) {
@@ -1177,7 +1127,7 @@
             return horn.error(err);
           }
 
-          pollService('secrets', initMsg);
+          pollService('secrets', postServices);
         }
       );
     }
@@ -1211,12 +1161,119 @@
       );
     }
 
+    function initSecrets(next) {
+      $scope.vm.systemSettings.secrets.isProcessing = true;
+
+      admiralApiAdapter.initSecrets({},
+        function (err) {
+          if (err) {
+            $scope.vm.systemSettings.secrets.isProcessing = false;
+            $scope.vm.initializing = false;
+            return next(err);
+          }
+          return next();
+        }
+      );
+    }
+
+    function postServices() {
+      var msgUpdate = {
+        address: $scope.vm.admiralEnv.ADMIRAL_IP,
+        username: 'shippableRoot',
+        password: $scope.vm.initializeForm.msg.password,
+        isSecure: false,
+        isShippableManaged: true
+      };
+      var stateUpdate = {
+        address: $scope.vm.admiralEnv.ADMIRAL_IP,
+        rootPassword: $scope.vm.initializeForm.state.rootPassword,
+        sshPort: 2222,
+        isShippableManaged: true
+      };
+      var redisUpdate = {
+        address: $scope.vm.admiralEnv.ADMIRAL_IP,
+        isShippableManaged: true
+      };
+      var masterUpdate = {
+        address: $scope.vm.admiralEnv.ADMIRAL_IP
+      };
+      var workersList = [
+        {
+          address: $scope.vm.admiralEnv.ADMIRAL_IP,
+          name: 'worker'
+        }
+      ];
+      // if the user had tried to add a new worker, then switched to
+      // an admiral initType, remove any non-admiral workers
+      var deletedWorkers =
+        $scope.vm.initializeForm.workers.deletedWorkers.concat(
+          _.filter($scope.vm.initializeForm.workers.workers,
+            function (worker) {
+              return worker.address !== $scope.vm.admiralEnv.ADMIRAL_IP;
+            }
+          )
+        );
+
+      if ($scope.vm.initializeForm.msg.initType === 'new')
+        msgUpdate.address = $scope.vm.initializeForm.msg.address;
+
+      if ($scope.vm.initializeForm.state.initType === 'new') {
+        stateUpdate.address = $scope.vm.initializeForm.state.address;
+        stateUpdate.sshPort = 22;
+      }
+
+      if ($scope.vm.initializeForm.redis.initType === 'new')
+        redisUpdate.address = $scope.vm.initializeForm.redis.address;
+
+      if ($scope.vm.initializeForm.workers.initType === 'new') {
+        workersList = $scope.vm.initializeForm.workers.workers;
+        deletedWorkers = $scope.vm.initializeForm.workers.deletedWorkers;
+      }
+
+      if ($scope.vm.initializeForm.msg.initType === 'existing') {
+        msgUpdate.address = $scope.vm.initializeForm.msg.address;
+        msgUpdate.username = $scope.vm.initializeForm.msg.username;
+        msgUpdate.isSecure = $scope.vm.initializeForm.msg.isSecure;
+        msgUpdate.isShippableManaged = false;
+      }
+
+      if ($scope.vm.initializeForm.state.initType === 'existing') {
+        stateUpdate.address = $scope.vm.initializeForm.state.address;
+        stateUpdate.sshPort = 22;
+        stateUpdate.isShippableManaged = false;
+      }
+
+      if ($scope.vm.initializeForm.redis.initType === 'existing') {
+        redisUpdate.address = $scope.vm.initializeForm.redis.address;
+        redisUpdate.isShippableManaged = false;
+      }
+
+      async.series([
+          postMsg.bind(null, msgUpdate),
+          postState.bind(null, stateUpdate),
+          postRedis.bind(null, redisUpdate),
+          postMaster.bind(null, masterUpdate),
+          postWorkers.bind(null, workersList),
+          deleteWorkers.bind(null, deletedWorkers),
+          getSystemSettings.bind(null, {}),
+          updateInitializeForm.bind(null, {})
+        ],
+        function (err) {
+          if (err) {
+            $scope.vm.initializing = false;
+            return horn.error(err);
+          }
+
+          initMsg();
+        }
+      );
+    }
+
     function postMsg(update, next) {
       admiralApiAdapter.postMsg(update,
-        function (err, msg) {
+        function (err) {
           if (err)
             return next(err);
-          $scope.vm.initializeForm.msg.password = msg.password;
           return next();
         }
       );
@@ -1224,10 +1281,9 @@
 
     function postState(update, next) {
       admiralApiAdapter.postState(update,
-        function (err, state) {
+        function (err) {
           if (err)
             return next(err);
-          $scope.vm.initializeForm.state.rootPassword = state.rootPassword;
           return next();
         }
       );
@@ -1291,22 +1347,9 @@
       );
     }
 
-    function initSecrets(next) {
-      $scope.vm.systemSettings.secrets.isProcessing = true;
-      admiralApiAdapter.initSecrets({},
-        function (err) {
-          if (err) {
-            $scope.vm.systemSettings.secrets.isProcessing = false;
-            $scope.vm.initializing = false;
-            return next(err);
-          }
-          return next();
-        }
-      );
-    }
-
     function initMsg() {
       $scope.vm.systemSettings.msg.isProcessing = true;
+
       admiralApiAdapter.initMsg({},
         function (err) {
           if (err) {
@@ -1322,6 +1365,7 @@
 
     function initState() {
       $scope.vm.systemSettings.state.isProcessing = true;
+
       admiralApiAdapter.initState({},
         function (err) {
           if (err) {

@@ -240,7 +240,7 @@ function _generateServiceConfig(bag, next) {
     );
 
   configGenerator(params,
-    function (err, config) {
+    function (err, config, runCommand) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
@@ -249,6 +249,7 @@ function _generateServiceConfig(bag, next) {
         );
 
       bag.serviceConfig = config;
+      bag.runCommand = runCommand;
       return next();
     }
   );
@@ -303,11 +304,9 @@ function _generateInitializeEnvs(bag, next) {
     'SCRIPTS_DIR': global.config.scriptsDir,
     'SERVICE_NAME': bag.serviceConfig.serviceName,
     'SERVICE_IMAGE': bag.serviceConfig.image,
-    'SERVICE_ENV': bag.serviceConfig.envs,
-    'SERVICE_MOUNTS': bag.serviceConfig.mounts,
     'ACCESS_KEY': bag.accessKey,
     'SECRET_KEY': bag.secretKey,
-    'RUN_COMMAND': bag.serviceConfig.runCommand
+    'RUN_COMMAND': bag.runCommand
   };
 
   return next();

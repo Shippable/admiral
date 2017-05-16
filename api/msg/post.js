@@ -5,13 +5,16 @@ module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
+var url = require('url');
 
 var configHandler = require('../../common/configHandler.js');
+var APIAdapter = require('../../common/APIAdapter.js');
 
 function post(req, res) {
   var bag = {
     reqBody: req.body,
     resBody: {},
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     component: 'msg',
   };
 
@@ -21,7 +24,10 @@ function post(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
-      _post.bind(null, bag)
+      _post.bind(null, bag),
+      _getSystemIntegration.bind(null, bag),
+      _putSystemIntegration.bind(null, bag),
+      _postSystemIntegration.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -76,22 +82,10 @@ function _post(bag, next) {
     update.amqpPort = bag.reqBody.amqpPort;
   if (_.has(bag.reqBody, 'adminPort'))
     update.adminPort = bag.reqBody.adminPort;
-  if (_.has(bag.reqBody, 'uiUsername'))
-    update.uiUsername = bag.reqBody.uiUsername;
-  if (_.has(bag.reqBody, 'uiPassword'))
-    update.uiPassword = bag.reqBody.uiPassword;
-  if (_.has(bag.reqBody, 'username'))
-    update.username = bag.reqBody.username;
-  if (_.has(bag.reqBody, 'password'))
-    update.password = bag.reqBody.password;
   if (_.has(bag.reqBody, 'isSecure'))
     update.isSecure = bag.reqBody.isSecure;
   if (_.has(bag.reqBody, 'isShippableManaged'))
     update.isShippableManaged = bag.reqBody.isShippableManaged;
-
-  // If 'password' was provided and there's no 'uiPassword' set both
-  if (!bag.config.uiPassword && !update.uiPassword && bag.reqBody.password)
-    update.uiPassword = bag.reqBody.password;
 
   configHandler.put(bag.component, update,
     function (err, config) {
@@ -105,4 +99,119 @@ function _post(bag, next) {
       return next();
     }
   );
+}
+
+function _getSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getSystemIntegrations('name=msg&masterName=rabbitmqCreds',
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system integration: ' + util.inspect(err))
+        );
+
+      // Return an error if we don't have a system integration or a password
+      if (_.isEmpty(systemIntegrations) &&
+       (!_.has(bag.reqBody, 'username') || _.isEmpty(bag.reqBody.username) ||
+       !_.has(bag.reqBody, 'password') || _.isEmpty(bag.reqBody.password)))
+        return next(
+          new ActErr(who, ActErr.ParamNotFound,
+            'Username and password are required for RabbitMQ')
+        );
+
+      bag.systemIntegration = systemIntegrations[0];
+      return next();
+    }
+  );
+}
+
+function _putSystemIntegration(bag, next) {
+  if (!bag.systemIntegration) return next();
+
+  var who = bag.who + '|' + _putSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var putObject = {
+    name: 'msg',
+    masterName: 'rabbitmqCreds',
+    data: _generateSystemIntegrationData(bag)
+  };
+
+  bag.apiAdapter.putSystemIntegration(bag.systemIntegration.id, putObject,
+    function (err, systemIntegration) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update system integration: ' + util.inspect(err))
+        );
+
+      bag.systemIntegration = systemIntegration;
+      return next();
+    }
+  );
+}
+
+function _postSystemIntegration(bag, next) {
+  if (bag.systemIntegration) return next();
+
+  var who = bag.who + '|' + _postSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var postObject = {
+    name: 'msg',
+    masterName: 'rabbitmqCreds',
+    data: _generateSystemIntegrationData(bag)
+  };
+
+  bag.apiAdapter.postSystemIntegration(postObject,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _generateSystemIntegrationData(bag) {
+  var username = bag.reqBody.username;
+  var password = bag.reqBody.password;
+  var existingAuth;
+
+  if (bag.systemIntegration)
+    existingAuth = url.parse(bag.systemIntegration.data.amqpUrl).auth;
+
+  if (!username && existingAuth)
+    username = existingAuth.split(':')[0];
+
+  if (!password && existingAuth)
+    password = existingAuth.split(':')[1];
+
+  var amqpAddress = (bag.resBody.isSecure ? 'amqps://' : 'amqp://') +
+    username + ':' + password +
+    '@' + bag.resBody.address + ':' + bag.resBody.amqpPort;
+  var httpAddress = (bag.resBody.isSecure ? 'https://' : 'http://') +
+    username + ':' + password +
+    '@' + bag.resBody.address + ':' + bag.resBody.adminPort;
+
+  var data = {
+    amqpUrl: amqpAddress + '/shippable',
+    amqpUrlRoot: amqpAddress + '/shippableRoot',
+    amqpUrlAdmin: httpAddress,
+    amqpDefaultExchange: 'shippableEx',
+    rootQueueList: 'core.charon|versions.trigger|core.nf|nf.email|' +
+      'nf.hipchat|nf.irc|nf.slack|nf.webhook|core.braintree|core.certgen|' +
+      'core.hubspotSync|core.marshaller|marshaller.ec2|core.sync|' +
+      'job.request|job.trigger|cluster.init|steps.deploy|steps.manifest|' +
+      'steps.provision|steps.rSync|steps.release|core.logup|www.signals|' +
+      'core.segment'
+  };
+
+  return data;
 }

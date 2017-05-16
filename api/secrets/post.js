@@ -7,6 +7,7 @@ var async = require('async');
 var _ = require('underscore');
 
 var configHandler = require('../../common/configHandler.js');
+var envHandler = require('../../common/envHandler.js');
 
 function post(req, res) {
   var bag = {
@@ -21,7 +22,8 @@ function post(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
-      _post.bind(null, bag)
+      _post.bind(null, bag),
+      _setVaultRootToken.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -74,9 +76,6 @@ function _post(bag, next) {
   if (_.has(bag.reqBody, 'port'))
     bag.config.port = bag.reqBody.port;
 
-  if (_.has(bag.reqBody, 'rootToken'))
-    bag.config.rootToken = bag.reqBody.rootToken;
-
   if (_.has(bag.reqBody, 'isShippableManaged'))
     bag.config.isShippableManaged = bag.reqBody.isShippableManaged;
 
@@ -89,6 +88,25 @@ function _post(bag, next) {
         );
 
       bag.resBody = config;
+
+      return next();
+    }
+  );
+}
+
+function _setVaultRootToken(bag, next) {
+  if (!bag.reqBody.rootToken) return next();
+
+  var who = bag.who + '|' + _setVaultRootToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.put('VAULT_TOKEN', bag.reqBody.rootToken,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to set VAULT_TOKEN with error: ' + err)
+        );
 
       return next();
     }

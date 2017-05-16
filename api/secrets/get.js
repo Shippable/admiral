@@ -17,12 +17,6 @@ function get(req, res) {
     defaultConfig: {
       address: global.config.admiralIP,
       port: 8200,
-      rootToken: '',
-      unsealKey1: '',
-      unsealKey2: '',
-      unsealKey3: '',
-      unsealKey4: '',
-      unsealKey5: '',
       isShippableManaged: true,
       isInstalled: false,
       isInitialized: false

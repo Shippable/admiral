@@ -8,12 +8,14 @@ var _ = require('underscore');
 var path = require('path');
 var fs = require('fs');
 var spawn = require('child_process').spawn;
+var url = require('url');
 
 var APIAdapter = require('../../common/APIAdapter.js');
 var configHandler = require('../../common/configHandler.js');
 
 function initialize(req, res) {
   var bag = {
+    reqBody: req.body,
     resBody: [],
     res: res,
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
@@ -32,6 +34,7 @@ function initialize(req, res) {
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
       _checkConfig.bind(null, bag),
+      _getSystemIntegration.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _sendResponse.bind(null, bag),
       _getReleaseVersion.bind(null, bag),
@@ -39,9 +42,6 @@ function initialize(req, res) {
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
       _initializeMsg.bind(null, bag),
-      _getSystemIntegration.bind(null, bag),
-      _putSystemIntegration.bind(null, bag),
-      _postSystemIntegration.bind(null, bag),
       _checkCredentials.bind(null, bag),
       _post.bind(null, bag)
     ],
@@ -104,14 +104,6 @@ function _checkConfig(bag, next) {
 
   var missingConfigFields = [];
 
-  if (!_.has(bag.config, 'username') || _.isEmpty(bag.config.username))
-    missingConfigFields.push('username');
-  if (!_.has(bag.config, 'password') || _.isEmpty(bag.config.password))
-    missingConfigFields.push('password');
-  if (!_.has(bag.config, 'uiUsername') || _.isEmpty(bag.config.uiUsername))
-    missingConfigFields.push('uiUsername');
-  if (!_.has(bag.config, 'uiPassword') || _.isEmpty(bag.config.uiPassword))
-    missingConfigFields.push('uiPassword');
   if (!_.has(bag.config, 'address') || _.isEmpty(bag.config.address))
     missingConfigFields.push('address');
   if (!_.has(bag.config, 'amqpPort') || !bag.config.amqpPort)
@@ -126,6 +118,36 @@ function _checkConfig(bag, next) {
     );
 
   return next();
+}
+
+function _getSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getSystemIntegrations('name=msg&masterName=rabbitmqCreds',
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system integration: ' + util.inspect(err))
+        );
+
+      if (_.isEmpty(systemIntegrations))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No systemIntegration found for RabbitMQ. ' +
+            'Please POST a username and password.')
+        );
+
+      bag.systemIntegration = systemIntegrations[0];
+
+      var auth = url.parse(bag.systemIntegration.data.amqpUrl).auth;
+      bag.username = auth.split(':')[0];
+      bag.password = auth.split(':')[1];
+
+      return next();
+    }
+  );
 }
 
 function _setProcessingFlag(bag, next) {
@@ -200,10 +222,10 @@ function _generateInitializeEnvs(bag, next) {
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
     'ADMIRAL_IP': global.config.admiralIP,
-    'MSG_UI_USER': bag.config.uiUsername,
-    'MSG_UI_PASS': bag.config.uiPassword,
-    'MSG_USER': bag.config.username,
-    'MSG_PASS': bag.config.password,
+    'MSG_UI_USER': bag.reqBody.uiUsername || 'shippable',
+    'MSG_UI_PASS': bag.reqBody.uiPassword || bag.password,
+    'MSG_USER': bag.username,
+    'MSG_PASS': bag.password,
     'AMQP_PORT': bag.config.amqpPort,
     'ADMIN_PORT': bag.config.adminPort,
     'RABBITMQ_ADMIN':
@@ -295,101 +317,6 @@ function _initializeMsg(bag, next) {
       return next();
     }
   );
-}
-
-function _getSystemIntegration(bag, next) {
-  var who = bag.who + '|' + _getSystemIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  bag.apiAdapter.getSystemIntegrations('name=msg&masterName=rabbitmqCreds',
-    function (err, systemIntegrations) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to get system integration: ' + util.inspect(err))
-        );
-
-      if (!_.isEmpty(systemIntegrations))
-        bag.systemIntegration = systemIntegrations[0];
-
-      return next();
-    }
-  );
-}
-
-function _putSystemIntegration(bag, next) {
-  if (!bag.systemIntegration) return next();
-
-  var who = bag.who + '|' + _putSystemIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  var putObject = {
-    name: 'msg',
-    masterName: 'rabbitmqCreds',
-    data: _generateSystemIntegrationData(bag)
-  };
-
-  bag.apiAdapter.putSystemIntegration(bag.systemIntegration.id, putObject,
-    function (err, systemIntegration) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to update system integration: ' + util.inspect(err))
-        );
-
-      bag.systemIntegration = systemIntegration;
-      return next();
-    }
-  );
-}
-
-function _postSystemIntegration(bag, next) {
-  if (bag.systemIntegration) return next();
-
-  var who = bag.who + '|' + _postSystemIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  var postObject = {
-    name: 'msg',
-    masterName: 'rabbitmqCreds',
-    data: _generateSystemIntegrationData(bag)
-  };
-
-  bag.apiAdapter.postSystemIntegration(postObject,
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to create system integration: ' + util.inspect(err))
-        );
-
-      return next();
-    }
-  );
-}
-
-function _generateSystemIntegrationData(bag) {
-  var amqpAddress = (bag.config.isSecure ? 'amqps://' : 'amqp://') +
-    bag.config.username + ':' + bag.config.password +
-    '@' + bag.config.address + ':' + bag.config.amqpPort;
-  var httpAddress = (bag.config.isSecure ? 'https://' : 'http://') +
-    bag.config.username + ':' + bag.config.password +
-    '@' + bag.config.address + ':' + bag.config.adminPort;
-
-  var data = {
-    amqpUrl: amqpAddress + '/shippable',
-    amqpUrlRoot: amqpAddress + '/shippableRoot',
-    amqpUrlAdmin: httpAddress,
-    amqpDefaultExchange: 'shippableEx',
-    rootQueueList: 'core.charon|versions.trigger|core.nf|nf.email|' +
-      'nf.hipchat|nf.irc|nf.slack|nf.webhook|core.braintree|core.certgen|' +
-      'core.hubspotSync|core.marshaller|marshaller.ec2|core.sync|' +
-      'job.request|job.trigger|cluster.init|steps.deploy|steps.manifest|' +
-      'steps.provision|steps.rSync|steps.release|core.logup|www.signals|' +
-      'core.segment'
-  };
-
-  return data;
 }
 
 function _checkCredentials(bag, next) {

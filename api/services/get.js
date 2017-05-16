@@ -126,9 +126,6 @@ function _setDefault(bag, next) {
 
       bag.defaultService[service.name] = {
         serviceName: service.name,
-        mounts: '',
-        envs: '',
-        opts: '',
         isCore: service.isCore,
         replicas: service.isGlobal ? 'global' : 1,
         isEnabled: false

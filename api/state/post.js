@@ -7,11 +7,13 @@ var async = require('async');
 var _ = require('underscore');
 
 var configHandler = require('../../common/configHandler.js');
+var APIAdapter = require('../../common/APIAdapter.js');
 
 function post(req, res) {
   var bag = {
     reqBody: req.body,
     resBody: {},
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     component: 'state'
   };
 
@@ -21,7 +23,10 @@ function post(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _get.bind(null, bag),
-      _post.bind(null, bag)
+      _post.bind(null, bag),
+      _getSystemIntegration.bind(null, bag),
+      _putSystemIntegration.bind(null, bag),
+      _postSystemIntegration.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -68,9 +73,6 @@ function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
 
-  if (_.has(bag.reqBody, 'rootPassword'))
-    bag.config.rootPassword = bag.reqBody.rootPassword;
-
   if (_.has(bag.reqBody, 'address'))
     bag.config.address = bag.reqBody.address;
 
@@ -99,4 +101,97 @@ function _post(bag, next) {
       return next();
     }
   );
+}
+
+function _getSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getSystemIntegrations('name=state&masterName=gitlabCreds',
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system integration: ' + util.inspect(err))
+        );
+
+      if (_.isEmpty(systemIntegrations) &&
+        (!_.has(bag.reqBody, 'rootPassword') ||
+       _.isEmpty(bag.reqBody.rootPassword)))
+        return next(
+          new ActErr(who, ActErr.ParamNotFound,
+            'rootPassword is required for GitLab')
+        );
+
+      bag.systemIntegration = systemIntegrations[0];
+      return next();
+    }
+  );
+}
+
+function _putSystemIntegration(bag, next) {
+  if (!bag.systemIntegration) return next();
+
+  var who = bag.who + '|' + _putSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var putObject = {
+    name: 'state',
+    masterName: 'gitlabCreds',
+    data: _generateSystemIntegrationData(bag)
+  };
+
+  bag.apiAdapter.putSystemIntegration(bag.systemIntegration.id, putObject,
+    function (err, systemIntegration) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update system integration: ' + util.inspect(err))
+        );
+
+      bag.systemIntegration = systemIntegration;
+      return next();
+    }
+  );
+}
+
+function _postSystemIntegration(bag, next) {
+  if (bag.systemIntegration) return next();
+
+  var who = bag.who + '|' + _postSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var postObject = {
+    name: 'state',
+    masterName: 'gitlabCreds',
+    data: _generateSystemIntegrationData(bag)
+  };
+
+  bag.apiAdapter.postSystemIntegration(postObject,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to create system integration: ' + util.inspect(err))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _generateSystemIntegrationData(bag) {
+  var rootPassword = bag.reqBody.rootPassword;
+  if (!rootPassword && bag.systemIntegration)
+    rootPassword = bag.systemIntegration.data.password;
+
+  var data = {
+    username: 'root',
+    password: rootPassword,
+    url: util.format('http://%s/api/v3', bag.resBody.address),
+    sshPort: util.format('%s', bag.resBody.sshPort),
+    subscriptionProjectLimit: '100'
+  };
+
+  return data;
 }

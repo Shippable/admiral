@@ -15,6 +15,9 @@ function apiConfig(params, callback) {
     registry: params.registry,
     releaseVersion: params.releaseVersion,
     isSwarmClusterInitialized: params.isSwarmClusterInitialized,
+    envs: '',
+    mounts: '',
+    runCommand: '',
     vaultUrlEnv: 'VAULT_URL',
     vaultUrl: '',
     vaultTokenEnv: 'VAULT_TOKEN',
@@ -38,7 +41,7 @@ function apiConfig(params, callback) {
       logger.info(bag.who, 'Completed');
       if (err)
         return callback(err);
-      callback(null, bag.config);
+      callback(null, bag.config, bag.runCommand);
     }
   );
 }
@@ -135,7 +138,7 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'VAULT_TOKEN', bag.vaultToken);
 
-  bag.config.envs = envs;
+  bag.envs = envs;
   return next();
 }
 
@@ -143,7 +146,7 @@ function _generateMounts(bag, next) {
   var who = bag.who + '|' + _generateMounts.name;
   logger.verbose(who, 'Inside');
 
-  bag.config.mounts = '';
+  bag.mounts = '';
   return next();
 }
 
@@ -159,13 +162,13 @@ function _generateRunCommandOnebox(bag, next) {
 
   var runCommand = util.format('docker run -d ' +
     ' %s %s %s --name %s %s',
-    bag.config.envs,
-    bag.config.mounts,
+    bag.envs,
+    bag.mounts,
     opts,
     bag.config.serviceName,
     bag.config.image);
 
-  bag.config.runCommand = runCommand;
+  bag.runCommand = runCommand;
   return next();
 }
 
@@ -183,12 +186,12 @@ function _generateRunCommandCluster(bag, next) {
 
   var runCommand = util.format('docker service create ' +
     ' %s %s --name %s %s',
-    bag.config.envs,
+    bag.envs,
     opts,
     bag.config.serviceName,
     bag.config.image
   );
 
-  bag.config.runCommand = runCommand;
+  bag.runCommand = runCommand;
   return next();
 }

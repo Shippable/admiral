@@ -19,7 +19,6 @@ function get(req, res) {
       port: 80,
       sshPort: 2222,
       securePort: 443,
-      rootPassword: '',
       isShippableManaged: true,
       isInstalled: false,
       isInitialized: false

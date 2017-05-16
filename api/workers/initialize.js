@@ -40,6 +40,7 @@ function initialize(req, res) {
       _sendResponse.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
+      _getSwarmWorkerJoinToken.bind(null, bag),
       _getReleaseVersion.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
@@ -238,6 +239,24 @@ function _getSecretKey(bag, next) {
   );
 }
 
+function _getSwarmWorkerJoinToken(bag, next) {
+  var who = bag.who + '|' + _getSwarmWorkerJoinToken.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.swarmWorkerTokenEnv,
+    function (err, swarmWorkerJoinToken) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.swarmWorkerTokenEnv)
+        );
+
+      bag.swarmWorkerJoinToken = swarmWorkerJoinToken;
+      return next();
+    }
+  );
+}
+
 function _getReleaseVersion(bag, next) {
   var who = bag.who + '|' + _getReleaseVersion.name;
   logger.verbose(who, 'Inside');
@@ -277,7 +296,7 @@ function _generateInitializeEnvs(bag, next) {
     'WORKER_PORT': bag.config.port,
     'MASTER_HOST': bag.master.address,
     'MASTER_PORT': bag.master.port,
-    'WORKER_JOIN_TOKEN': bag.master.workerJoinToken,
+    'WORKER_JOIN_TOKEN': bag.swarmWorkerJoinToken,
     'ACCESS_KEY': bag.accessKey,
     'SECRET_KEY': bag.secretKey
   };
@@ -403,7 +422,7 @@ function _getMasterNodeId(bag, next) {
     function (data)  {
       console.log(data.toString());
       bag.master.nodeId = data.toString();
-      bag.master.nodeId= bag.master.nodeId.trim();
+      bag.master.nodeId = bag.master.nodeId.trim();
     }
   );
 

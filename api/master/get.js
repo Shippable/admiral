@@ -16,7 +16,6 @@ function get(req, res) {
     component: 'master',
     defaultConfig: {
       address: global.config.admiralIP,
-      workerJoinToken: '',
       port: 2377,
       isInstalled: false,
       isInitialized: false
