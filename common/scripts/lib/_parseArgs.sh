@@ -301,6 +301,7 @@ __print_help() {
     install         Run Shippable installation
     help            Print this message
     clean           Remove shippable containers and configurations
+    info            Print information about current installation
   "
   exit 0
 }
