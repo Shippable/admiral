@@ -43,12 +43,12 @@
 - The usual (and recommended) way of exposing Shippable service end points is
   via loadbalancers. The LBs are not required to be exposed to the public
   facing internet but should be accessible to all users in a VPN. A typical
-  setup creates following routing
+  setup creates following routing,
 
   User (shippable.mycompany.com) -> Route 53 -> Internal LB -> Shippable API
   (running on one or more machines)
 
-  Shippable requires 4 loadbalancers with listeners on these ports.
+  Shippable requires 4 loadbalancers with listeners on these ports,
     - **API, port 50000**: Shippable api will be used by all the microservices
         and should be available via IP/DNS.
     - **WWW, port 50001**: This service is what users access to use Shippable.
