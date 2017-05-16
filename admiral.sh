@@ -13,7 +13,7 @@
 readonly IFS=$'\n\t'
 readonly ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly CONFIG_DIR="/etc/shippable"
-readonly RUNTIME_DIR="/var/run/shippable"
+readonly RUNTIME_DIR="/var/lib/shippable"
 readonly MIGRATIONS_DIR="$ROOT_DIR/migrations"
 readonly POST_INSTALL_MIGRATIONS_DIR="$MIGRATIONS_DIR/post_install"
 readonly SCRIPTS_DIR="$ROOT_DIR/common/scripts"
