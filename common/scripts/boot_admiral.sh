@@ -51,7 +51,7 @@ __boot_admiral() {
   eval "$boot_cmd"
   __process_msg "Admiral container successfully running"
 
-  __process_success "Go to $ADMIRAL_IP:50003 to access Admiral"
+  __process_success "Go to $ADMIRAL_IP:50003 to access the admin panel"
   __process_success "Login Token: $LOGIN_TOKEN"
 }
 
