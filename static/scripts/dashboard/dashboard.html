@@ -105,8 +105,8 @@
                           <span>IP address where you would like Vault installed:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="secretsAddress" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                          <div ng-class="vm.validateIP(vm.initializeForm.secrets.address)">
+                            <input type="text" class="form-control input-sm" name="secretsAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
                             ng-model="vm.initializeForm.secrets.address"/>
                           </div>
                         </td>
@@ -129,9 +129,11 @@
                         </td>
                       </tr>
                       <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'new'">
-                        <td colspan="6">
-                          <input type="checkbox" ng-model="vm.initializeForm.secrets.confirmCommand"/>
-                          Click here once you have run the above command on your node
+                        <td colspan="6" ng-class="vm.initializeForm.secrets.confirmCommand ? '' : 'has-error'">
+                          <div class="checkbox">
+                            <input type="checkbox" ng-model="vm.initializeForm.secrets.confirmCommand"/>
+                            Click here once you have run the above command on your node
+                          </div>
                         </td>
                         <td>
                         </td>
@@ -141,8 +143,8 @@
                           <span>IP address of your existing Vault installation:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="secretsAddress" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                          <div ng-class="vm.validateIP(vm.initializeForm.secrets.address)">
+                            <input type="text" class="form-control input-sm" name="secretsAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
                             ng-model="vm.initializeForm.secrets.address"/>
                           </div>
                         </td>
@@ -154,8 +156,8 @@
                           <span>Root token for your Vault installation:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="secretsAddress" ng-disabled="vm.initializing"
+                          <div ng-class="vm.initializeForm.secrets.rootToken.length ? '' : 'has-error'">
+                            <input type="text" class="form-control input-sm" name="secretsRootToken" placeholder="root token" ng-disabled="vm.initializing"
                             ng-model="vm.initializeForm.secrets.rootToken"/>
                           </div>
                         </td>
@@ -205,9 +207,9 @@
                           <span>RabbitMQ Username:</span>
                         </td>
                         <td colspan="3">
-                          <div>
+                          <div ng-class="vm.initializeForm.msg.username.length ? '' : 'has-error'">
                             <input type="text" class="form-control input-sm" name="msgUsername"
-                            ng-model="vm.initializeForm.msg.username" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                            ng-model="vm.initializeForm.msg.username" placeholder="username" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
                           </div>
                         </td>
                         <td>
@@ -219,9 +221,9 @@
                           <span ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</span>
                         </td>
                         <td colspan="3">
-                          <div>
+                          <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)">
                             <input type="text" class="form-control input-sm" name="msgPassword"
-                            ng-model="vm.initializeForm.msg.password" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                            ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
                           </div>
                         </td>
                         <td>
@@ -232,8 +234,8 @@
                           <span>IP address where you would like RabbitMQ installed:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="msgAddress" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                          <div ng-class="vm.validateIP(vm.initializeForm.msg.address)">
+                            <input type="text" class="form-control input-sm" name="msgAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
                             ng-model="vm.initializeForm.msg.address"/>
                           </div>
                         </td>
@@ -254,9 +256,11 @@
                         </td>
                       </tr>
                       <tr ng-if="vm.initializeForm.msg.initType === 'new'">
-                        <td colspan="6">
-                          <input type="checkbox" ng-model="vm.initializeForm.msg.confirmCommand"/>
-                          Click here once you have run the above command on your node
+                        <td colspan="6" ng-class="vm.initializeForm.msg.confirmCommand ? '' : 'has-error'">
+                          <div class="checkbox">
+                            <input type="checkbox" ng-model="vm.initializeForm.msg.confirmCommand"/>
+                            Click here once you have run the above command on your node
+                          </div>
                         </td>
                         <td>
                         </td>
@@ -266,8 +270,8 @@
                           <span>IP address of your existing RabbitMQ installation:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="msgAddress" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                          <div ng-class="vm.validateIP(vm.initializeForm.msg.address)">
+                            <input type="text" class="form-control input-sm" name="msgAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
                             ng-model="vm.initializeForm.msg.address"/>
                           </div>
                         </td>
@@ -337,9 +341,9 @@
                           <span ng-if="vm.initializeForm.state.initType === 'existing'">Password for GitLab root user:</span>
                         </td>
                         <td colspan="3">
-                          <div>
+                          <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)">
                             <input type="text" class="form-control input-sm" name="statePassword"
-                            ng-model="vm.initializeForm.state.rootPassword" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
+                            ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
                           </div>
                         </td>
                         <td>
@@ -350,8 +354,8 @@
                           <span>IP address for your new GitLab installation:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="stateAddress" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                          <div ng-class="vm.validateIP(vm.initializeForm.state.address)">
+                            <input type="text" class="form-control input-sm" name="stateAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
                             ng-model="vm.initializeForm.state.address"/>
                           </div>
                         </td>
@@ -374,9 +378,11 @@
                         </td>
                       </tr>
                       <tr class="active" ng-if="vm.initializeForm.state.initType === 'new'">
-                        <td colspan="6">
-                          <input type="checkbox" ng-model="vm.initializeForm.state.confirmCommand"/>
-                          Click here once you have run the above command on your node
+                        <td colspan="6" ng-class="vm.initializeForm.state.confirmCommand ? '' : 'has-error'">
+                          <div class="checkbox">
+                            <input type="checkbox" ng-model="vm.initializeForm.state.confirmCommand"/>
+                            Click here once you have run the above command on your node
+                          </div>
                         </td>
                         <td>
                         </td>
@@ -386,8 +392,8 @@
                           <span>IP address for your existing GitLab installation:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="stateAddress" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                          <div ng-class="vm.validateIP(vm.initializeForm.state.address)">
+                            <input type="text" class="form-control input-sm" name="stateAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
                             ng-model="vm.initializeForm.state.address"/>
                           </div>
                         </td>
@@ -437,8 +443,8 @@
                           <span>IP address for your new Redis installation:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="redusAddress" ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                          <div ng-class="vm.validateIP(vm.initializeForm.redis.address)">
+                            <input type="text" class="form-control input-sm" name="redisAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
                             ng-model="vm.initializeForm.redis.address"/>
                           </div>
                         </td>
@@ -461,9 +467,11 @@
                         </td>
                       </tr>
                       <tr ng-if="vm.initializeForm.redis.initType === 'new'">
-                        <td colspan="6">
-                          <input type="checkbox" ng-model="vm.initializeForm.redis.confirmCommand"/>
-                          Click here once you have run the above command on your node
+                        <td colspan="6" ng-class="vm.initializeForm.redis.confirmCommand ? '' : 'has-error'">
+                          <div class="checkbox">
+                            <input type="checkbox" ng-model="vm.initializeForm.redis.confirmCommand"/>
+                            Click here once you have run the above command on your node
+                          </div>
                         </td>
                         <td>
                         </td>
@@ -473,8 +481,8 @@
                           <span>IP address of your existing Redis installation:</span>
                         </td>
                         <td colspan="3">
-                          <div>
-                            <input type="text" class="form-control input-sm" name="redisAddress" ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                          <div ng-class="vm.validateIP(vm.initializeForm.redis.address)">
+                            <input type="text" class="form-control input-sm" name="redisAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
                             ng-model="vm.initializeForm.redis.address"/>
                           </div>
                         </td>
@@ -580,15 +588,15 @@
                             <div class="col-md-1 text-right">
                               Name:
                             </div>
-                            <div class="col-md-3">
-                              <input type="text" class="form-control input-sm" name="workerName" ng-disabled="vm.initializing"
+                            <div class="col-md-3" ng-class="!vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.newWorker.name.length ? 'has-error' : ''">
+                              <input type="text" class="form-control input-sm" name="workerName" placeholder="worker name" ng-disabled="vm.initializing"
                               ng-model="vm.initializeForm.workers.newWorker.name"/>
                             </div>
                             <div class="col-md-1 text-right">
                               IP:
                             </div>
-                            <div class="col-md-2">
-                              <input type="text" class="form-control input-sm" name="workerAddress" ng-disabled="vm.initializing"
+                            <div class="col-md-2" ng-class="vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)">
+                              <input type="text" class="form-control input-sm" name="workerAddress" placeholder="0.0.0.0" ng-disabled="vm.initializing"
                               ng-model="vm.initializeForm.workers.newWorker.address"/>
                             </div>
                             <div class="col-md-1">
@@ -654,10 +662,12 @@
                       <tr ng-if="vm.initializeForm.workers.initType === 'new'" class="active">
                         <td>
                         </td>
-                        <td colspan="5">
-                          <input type="checkbox" ng-model="vm.initializeForm.workers.confirmCommand"/>
-                          Click here once you have run the above command on
-                          {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} worker node
+                        <td colspan="5" ng-class="vm.initializeForm.workers.confirmCommand ? '' : 'has-error'">
+                          <div class="checkbox">
+                            <input type="checkbox" ng-model="vm.initializeForm.workers.confirmCommand"/>
+                            Click here once you have run the above command on
+                            {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} worker node
+                          </div>
                         </td>
                         <td>
                         </td>
@@ -1679,6 +1689,12 @@
           </div>
           <div id="addonpanel" class="panel-collapse collapse">
             <div class="panel-body">
+              <div ng-if="!vm.isLoaded">
+                Loading...
+              </div>
+              <div ng-if="!vm.initialized">
+                Please initialize first.
+              </div>
               <div ng-if="vm.isLoaded && vm.initialized">
                 <div class="col-md-10">
                   &nbsp;
@@ -1862,9 +1878,8 @@
                     </div>
                   </button>
                 </div>
-                  <div class="col-md-11" style="border-bottom: 1px solid #DDDDDD;">
-                    &nbsp;
-                  </div>
+                <div class="col-md-11" style="border-bottom: 1px solid #DDDDDD;">
+                  &nbsp;
                 </div>
                 <div class="col-md-10">
                   &nbsp;
