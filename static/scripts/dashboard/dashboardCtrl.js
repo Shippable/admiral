@@ -392,6 +392,9 @@
       systemSettingsId: null,
       selectedService: {},
       initialize: initialize,
+      validatePassword: validatePassword,
+      validateIP: validateIP,
+      validateWorkerAddress: validateWorkerAddress,
       addWorker: addWorker,
       removeWorker: removeWorker,
       upgrade: upgrade,
@@ -1062,6 +1065,36 @@
           return next();
         }
       );
+    }
+
+    function validatePassword(password) {
+      if (password.length < 8)
+        return 'has-error';
+    }
+
+    function validateIP(ip) {
+      var nums = ip.split('.');
+      var numsValues = _.every(nums,
+        function (num) {
+          return num;
+        }
+      );
+      if (!nums || !numsValues || nums.length !== 4)
+        return 'has-error';
+    }
+
+    function validateWorkerAddress(ip) {
+      var validWorkerIP = $scope.vm.validateIP(ip);
+
+      if ($scope.vm.initializeForm.workers.newWorker.address.length &&
+        (validWorkerIP !== 'has-error'))
+        return '';
+
+      if ($scope.vm.initializeForm.workers.workers.length &&
+        !$scope.vm.initializeForm.workers.newWorker.address.length)
+        return '';
+
+      return 'has-error';
     }
 
     function initialize() {
