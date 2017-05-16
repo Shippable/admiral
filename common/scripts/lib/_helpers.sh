@@ -173,17 +173,7 @@ __set_access_key() {
 
   __process_success "Please enter the provided installer access key."
   read response
-
-  __process_success "Setting the installer access key to: $response, enter Y to confirm"
-  read confirmation
-  if [[ "$confirmation" =~ "Y" ]]; then
-    sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$response'"/g' $ADMIRAL_ENV
-    export ACCESS_KEY=$response
-    __process_msg "Successfully set installer access key to $response"
-  else
-    __process_error "Invalid response, please enter your installer access key and confirm"
-    __set_access_key
-  fi
+  export ACCESS_KEY=$response
 }
 
 __set_secret_key() {
@@ -191,20 +181,7 @@ __set_secret_key() {
 
   __process_success "Please enter the provided installer secret key."
   read response
-
-  __process_success "Setting the installer secret key to: $response, enter Y to confirm"
-  read confirmation
-  if [[ "$confirmation" =~ "Y" ]]; then
-    escaped_secret_key=$(echo $response | sed -e 's/[\/&]/\\&/g')
-    sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$escaped_secret_key'"/g' $ADMIRAL_ENV
-    export SECRET_KEY="$response"
-    __process_msg "Successfully set installer secret key to $response"
-  else
-    __process_error "Invalid response, please enter your installer secret key and confirm"
-    __set_secret_key
-  fi
-
-
+  export SECRET_KEY="$response"
 }
 
 __set_admiral_ip() {
@@ -215,21 +192,9 @@ __set_admiral_ip() {
   read response
 
   if [ "$response" != "D" ]; then
-    __process_success "Setting the admiral IP address to: $response, enter Y to confirm"
-    read confirmation
-    if [[ "$confirmation" =~ "Y" ]]; then
-      admiral_ip=$response
-      sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$admiral_ip'"/g' $ADMIRAL_ENV
-      export ADMIRAL_IP=$admiral_ip
-      __process_msg "Successfully set admiral IP to $admiral_ip"
-    else
-      __process_error "Invalid response, please enter a valid IP and confirm"
-      __set_admiral_ip
-    fi
+    export ADMIRAL_IP=$response
   else
-    sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$admiral_ip'"/g' $ADMIRAL_ENV
     export ADMIRAL_IP=$admiral_ip
-    __process_msg "Successfully set admiral IP to $admiral_ip"
   fi
 }
 
@@ -240,21 +205,9 @@ __set_db_ip() {
   read response
 
   if [ "$response" != "D" ]; then
-    __process_success "Setting the database IP address to: $response, enter Y to confirm"
-    read confirmation
-    if [[ "$confirmation" =~ "Y" ]]; then
-      db_ip=$response
-      sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
-      export DB_IP=$db_ip
-      __process_msg "Successfully set DB_IP to $db_ip"
-    else
-      __process_error "Invalid response, please enter a valid IP and continue"
-      __set_db_ip
-    fi
+    export DB_IP=$response
   else
-    sed -i 's/.*DB_IP=.*/DB_IP="'$db_ip'"/g' $ADMIRAL_ENV
     export DB_IP=$db_ip
-    __process_msg "Successfully set DB_IP to $db_ip"
   fi
 }
 
@@ -265,11 +218,9 @@ __set_db_installed() {
 
     if [ "$response" == "I" ]; then
       __process_msg "A new database will be installed"
-      sed -i 's/.*DB_INSTALLED=.*/DB_INSTALLED=false/g' $ADMIRAL_ENV
       export DB_INSTALLED=false
     elif [ "$response" == "E" ]; then
       __process_msg "An existing database will be used for this installation"
-      sed -i 's/.*DB_INSTALLED=.*/DB_INSTALLED=true/g' $ADMIRAL_ENV
       export DB_INSTALLED=true
     else
       __process_error "Invalid response, please enter I or E"
@@ -301,29 +252,15 @@ __set_db_port() {
   local db_port="5432"
 
   if [ "$DB_INSTALLED" == "false" ]; then
-    sed -i 's/.*DB_PORT=.*/DB_PORT="'$db_port'"/g' $ADMIRAL_ENV
     export DB_PORT=$db_port
-  __process_msg "Successfully set DB_PORT to $db_port"
   else
     __process_success "Please enter the database port or D to set the default ($db_port)."
     read response
 
     if [ "$response" != "D" ]; then
-      __process_success "Setting the database port to: $response, enter Y to confirm"
-        read confirmation
-      if [[ "$confirmation" =~ "Y" ]]; then
-        db_port=$response
-        sed -i 's/.*DB_PORT=.*/DB_PORT="'$db_port'"/g' $ADMIRAL_ENV
-        export DB_PORT=$db_port
-        __process_msg "Successfully set DB_PORT to $db_port"
-      else
-        __process_error "Invalid response, please enter a valid port and continue"
-        __set_db_port
-      fi
+      export DB_PORT=$response
     else
-      sed -i 's/.*DB_PORT=.*/DB_PORT="'$db_port'"/g' $ADMIRAL_ENV
       export DB_PORT=$db_port
-      __process_msg "Successfully set DB_PORT to $db_port"
     fi
   fi
 }
@@ -335,15 +272,7 @@ __set_db_password() {
   read response
 
   if [ "$response" != "" ]; then
-    __process_success "Setting the database password to: $response, enter Y to confirm"
-    read confirmation
-    if [[ "$confirmation" =~ "Y" ]]; then
-      sed -i 's#.*DB_PASSWORD=.*#DB_PASSWORD="'$response'"#g' $ADMIRAL_ENV
-      __process_msg "Successfully set database password"
-    else
-      __process_error "Invalid response, please enter a valid database password and continue"
-      __set_db_password
-    fi
+    export DB_PASSWORD=$response
   fi
 }
 
@@ -354,15 +283,20 @@ __set_public_image_registry() {
   read response
 
   if [ "$response" != "" ]; then
-    __process_success "Setting the public image registry to: $response, enter Y to confirm"
-    read confirmation
-    if [[ "$confirmation" =~ "Y" ]]; then
-      sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$response'"#g' $ADMIRAL_ENV
-      __process_msg "Successfully set public image registry"
-    else
-      __process_error "Invalid response, please enter a valid public image registry and continue"
-      __set_public_image_registry
-    fi
+    export PUBLIC_IMAGE_REGISTRY=$response
+  fi
+}
+
+__require_confirmation() {
+  read confirmation
+  if [[ "$confirmation" =~ "Y" ]]; then
+    __process_msg "Confirmation received"
+    export INSTALL_INPUTS_CONFIRMED=true
+  elif [[ "$confirmation" =~ "N" ]]; then
+    export INSTALL_INPUTS_CONFIRMED=false
+  else
+    __process_error "Invalid response, please enter Y or N"
+    __require_confirmation
   fi
 }
 
