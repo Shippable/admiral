@@ -1538,6 +1538,7 @@
           deleteCoreServices.bind(null, bag),
           startAPIService.bind(null, bag),
           startCoreServices.bind(null, bag),
+          startNexecService.bind(null, bag),
           startAddonServices.bind(null, bag),
           runPostMigrationScripts.bind(null, bag),
           getSystemSettings.bind(null, bag),
@@ -1681,6 +1682,9 @@
           if (coreService.serviceName === 'api') // Started in previous function
             return done();
 
+          if (coreService.serviceName === 'nexec') // Will start last
+            return done();
+
           var body = {
             name: coreService.serviceName,
             replicas: coreService.replicas
@@ -1696,6 +1700,28 @@
           return next(err);
         }
       );
+    }
+
+    function startNexecService(bag, next) {
+      var nexec = _.findWhere(bag.enabledCoreServices, {serviceName: 'nexec'});
+      if (!nexec)
+        return next();
+
+      var body = {
+        name: nexec.serviceName,
+        replicas: nexec.replicas
+      };
+
+      // Allow ten seconds for API
+      var promise = $interval(function () {
+        $interval.cancel(promise);
+
+        admiralApiAdapter.postService(body,
+          function (err) {
+            return next(err);
+          }
+        );
+      }, 10000);
     }
 
     function startAddonServices(bag, next) {
@@ -1751,7 +1777,6 @@
           startWWW,
           startSync,
           startMktg,
-          startNexec,
           startJobRequest,
           startJobTrigger,
           updateFilestoreSystemIntegration,
@@ -1764,7 +1789,8 @@
           startRSync,
           startTimeTrigger,
           startVersionTrigger,
-          startCron
+          startCron,
+          startNexec
         ],
         function (err) {
           $scope.vm.installing = false;
@@ -1832,6 +1858,7 @@
           deleteCoreServices.bind(null, bag),
           startAPIService.bind(null, bag),
           startCoreServices.bind(null, bag),
+          startNexecService.bind(null, bag),
           startAddonServices.bind(null, bag)
         ],
         function (err) {
@@ -2284,17 +2311,6 @@
       );
     }
 
-    function startNexec(next) {
-      startService('nexec',
-        function (err) {
-          if (err)
-            return next(err);
-
-          return next();
-        }
-      );
-    }
-
     function startJobRequest(next) {
       startService('jobRequest',
         function (err) {
@@ -2414,6 +2430,22 @@
           return next();
         }
       );
+    }
+
+    function startNexec(next) {
+      // Allow ten seconds for API
+      var promise = $interval(function () {
+        $interval.cancel(promise);
+
+        startService('nexec',
+          function (err) {
+            if (err)
+              return next(err);
+
+            return next();
+          }
+        );
+      }, 10000);
     }
 
     function startService(serviceName, callback) {
