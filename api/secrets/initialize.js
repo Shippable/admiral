@@ -323,17 +323,18 @@ function _getVaultUnsealKeys(bag, next) {
   var who = bag.who + '|' + _getVaultUnsealKeys.name;
   logger.verbose(who, 'Inside');
 
-  async.times(5,
+  async.timesSeries(5,
     function (number, done) {
-      envHandler.get('VAULT_UNSEAL_KEY' + number,
+      var index = number + 1;
+      envHandler.get('VAULT_UNSEAL_KEY' + index,
         function (err, key) {
           if (err)
             return done(
               new ActErr(who, ActErr.OperationFailed,
-                'Cannot get env: ' + 'VAULT_UNSEAL_KEY' + number)
+                'Cannot get env: ' + 'VAULT_UNSEAL_KEY' + index)
             );
 
-          bag['unsealKey' + number] = key;
+          bag['unsealKey' + index] = key;
           return done();
         }
       );
@@ -428,14 +429,15 @@ function _saveUnsealKeys(bag, next) {
   var who = bag.who + '|' + _saveUnsealKeys.name;
   logger.verbose(who, 'Inside');
 
-  async.times(5,
+  async.timesSeries(5,
     function (number, done) {
-      envHandler.put('VAULT_UNSEAL_KEY' + number, bag['unsealKey' + number],
+      var index = number + 1;
+      envHandler.put('VAULT_UNSEAL_KEY' + index, bag['unsealKey' + index],
         function (err) {
           if (err)
             return done(
               new ActErr(who, ActErr.OperationFailed,
-                'Failed to set ' + 'VAULT_UNSEAL_KEY' + number +
+                'Failed to set ' + 'VAULT_UNSEAL_KEY' + index +
                 ' with error: ' + err)
             );
 
