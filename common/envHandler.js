@@ -43,13 +43,13 @@ envHandler.put = function (envName, envValue, cb) {
 
   exec.stdout.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.debug(self.name, data.toString());
     }
   );
 
   exec.stderr.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.error(self.name, data.toString());
     }
   );
 

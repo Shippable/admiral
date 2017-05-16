@@ -108,13 +108,13 @@ function _removeFromCluster(bag, next) {
 
   exec.stdout.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.debug(who, data.toString());
     }
   );
 
   exec.stderr.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.error(who, data.toString());
     }
   );
 

@@ -220,13 +220,13 @@ function _initializeMaster(bag, next) {
 
   exec.stdout.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.debug(who, data.toString());
     }
   );
 
   exec.stderr.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.error(who, data.toString());
     }
   );
 
@@ -253,7 +253,7 @@ function _getWorkerJoinToken(bag, next) {
 
   exec.stdout.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.debug(who, data.toString());
       bag.workerJoinToken = data.toString();
       bag.workerJoinToken = bag.workerJoinToken.trim();
     }
@@ -261,7 +261,7 @@ function _getWorkerJoinToken(bag, next) {
 
   exec.stderr.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.error(who, data.toString());
     }
   );
 

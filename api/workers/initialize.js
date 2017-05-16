@@ -360,13 +360,13 @@ function _initializeWorker(bag, next) {
 
   exec.stdout.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.debug(who, data.toString());
     }
   );
 
   exec.stderr.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.error(who, data.toString());
     }
   );
 
@@ -420,7 +420,7 @@ function _getMasterNodeId(bag, next) {
 
   exec.stdout.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.debug(who, data.toString());
       bag.master.nodeId = data.toString();
       bag.master.nodeId = bag.master.nodeId.trim();
     }
@@ -428,7 +428,7 @@ function _getMasterNodeId(bag, next) {
 
   exec.stderr.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.error(who, data.toString());
     }
   );
 
@@ -457,7 +457,7 @@ function _drainMaster(bag, next) {
 
   exec.stdout.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.debug(who, data.toString());
       bag.workerJoinToken = data.toString();
       bag.workerJoinToken = bag.workerJoinToken.trim();
     }
@@ -465,7 +465,7 @@ function _drainMaster(bag, next) {
 
   exec.stderr.on('data',
     function (data)  {
-      console.log(data.toString());
+      logger.error(who, data.toString());
     }
   );
 
