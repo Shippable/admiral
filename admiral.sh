@@ -51,6 +51,7 @@ main() {
   __validate_runtime
   __check_dependencies
   __pull_images
+  __pull_images_workers
   {
     __print_runtime
     source "$SCRIPTS_DIR/installDb.sh"
