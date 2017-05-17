@@ -16,7 +16,6 @@ __validate_worker_envs() {
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "WORKER_HOST: $WORKER_HOST"
   __process_msg "WORKER_PORT: $WORKER_PORT"
-  __process_msg "WORKER_JOIN_TOKEN: $WORKER_JOIN_TOKEN"
   __process_msg "MASTER_HOST: $MASTER_HOST"
   __process_msg "MASTER_PORT: $MASTER_PORT"
   __process_msg "WORKER_JOIN_TOKEN: $WORKER_JOIN_TOKEN"

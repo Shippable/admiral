@@ -132,6 +132,63 @@ __pull_images() {
   done
 }
 
+__pull_images_workers() {
+  __process_marker "Pulling latest service images on workers"
+
+  if [ $DB_INSTALLED == false ]; then
+    __process_msg "DB not installed, skipping"
+    return
+  else
+    __process_msg "DB installed, checking initialize status"
+  fi
+
+  local system_settings="PGPASSWORD=$DB_PASSWORD \
+    psql \
+    -U $DB_USER \
+    -d $DB_NAME \
+    -h $DB_IP \
+    -p $DB_PORT \
+    -v ON_ERROR_STOP=1 \
+    -tc 'SELECT workers from \"systemSettings\"; '"
+
+  {
+    system_settings=`eval $system_settings` &&
+    __process_msg "'systemSettings' table exists, finding workers"
+  } || {
+    __process_msg "'systemSettings' table does not exist, skipping"
+    return
+  }
+
+  local workers=$(echo $system_settings | jq '.')
+  local workers_count=$(echo $workers | jq '. | length')
+
+  __process_msg "Found $workers_count workers"
+  for i in $(seq 1 $workers_count); do
+    local worker=$(echo $workers | jq '.['"$i-1"']')
+    local host=$(echo $worker | jq -r '.address')
+    local is_initialized=$(echo $worker | jq -r '.isInitialized')
+    if [ $is_initialized == false ]; then
+      __process_msg "worker $host not initialized, skipping"
+      continue
+    fi
+
+    if [ $host == $ADMIRAL_IP ];then
+      __process_msg "Images already pulled on admiral host, skipping"
+      continue
+    fi
+
+    local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+      __exec_cmd_remote "$host" "$docker_login_cmd"
+
+    for image in "${SERVICE_IMAGES[@]}"; do
+      image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
+      __process_msg "Pulling $image on $host"
+      local pull_cmd="sudo docker pull $image"
+      __exec_cmd_remote "$host" "$pull_cmd"
+    done
+  done
+}
+
 __print_runtime() {
   __process_marker "Installer runtime variables"
   __process_msg "RELEASE: $RELEASE"

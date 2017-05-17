@@ -26,6 +26,7 @@ function initialize(req, res) {
     tmpScript: '/tmp/workers.sh',
     accessKeyEnv: 'ACCESS_KEY',
     secretKeyEnv: 'SECRET_KEY',
+    swarmWorkerTokenEnv: 'SWARM_WORKER_JOIN_TOKEN'
   };
 
   bag.who = util.format('workers|%s', self.name);
@@ -249,6 +250,12 @@ function _getSwarmWorkerJoinToken(bag, next) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Cannot get env: ' + bag.swarmWorkerTokenEnv)
+        );
+
+      if (_.isEmpty(swarmWorkerJoinToken))
+        return next(
+          new ActErr(who, ActErr.ParamNotFound,
+            'empty env: ' + bag.swarmWorkerTokenEnv)
         );
 
       bag.swarmWorkerJoinToken = swarmWorkerJoinToken;
