@@ -1108,6 +1108,11 @@ do $$
     );
 
     -- set buildJobs routeRoles
+    perform set_route_role(
+      routePattern := '/buildJobs/:buildJobId/artifactUrl',
+      httpVerb := 'GET',
+      roleCode := 6110
+    );
 
     perform set_route_role(
       routePattern := '/buildJobs',
@@ -1870,6 +1875,12 @@ do $$
       routePattern := '/jobs/:jobId/artifactUrl',
       httpVerb := 'GET',
       roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/jobs/:jobId/artifactUrl',
+      httpVerb := 'GET',
+      roleCode := 6040
     );
 
     perform set_route_role(
@@ -3971,9 +3982,9 @@ do $$
       alter table "systemNodes" add column "execImage" varchar(80);
     end if;
 
-    -- Add earlyAdopterMinionCount to subscriptions
-    if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'earlyAdopterMinionCount') then
-      alter table "subscriptions" add column "earlyAdopterMinionCount" INTEGER;
+    -- Drop earlyAdopterMinionCount from subscriptions
+    if exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'earlyAdopterMinionCount') then
+      alter table "subscriptions" drop column "earlyAdopterMinionCount";
     end if;
 
     -- Add minionInstanceSize to subscriptions
