@@ -26,8 +26,8 @@ do $$
       "customNodesAdminOnly"=<%= obj.customNodesAdminOnly %>,
       "allowedSystemImageFamily"='<%= obj.allowedSystemImageFamily %>',
       "releaseVersion"='<%= obj.releaseVersion %>',
-      "mktgPageAggsLastDtTm"=<%= (obj.mktgPageAggsLastDtTm === null) ? "NULL" : ("'" + obj.mktgPageAggsLastDtTm + "'") %>,
-      "mktgCTAAggsLastDtTm"=<%= (obj.mktgCTAAggsLastDtTm === null) ? "NULL" : ("'" + obj.mktgCTAAggsLastDtTm + "'") %>,
+      "mktgPageAggsLastDtTm"=<%= (obj.mktgPageAggsLastDtTm === null) ? "NULL" : ("'" + new Date(obj.mktgPageAggsLastDtTm).toISOString() + "'") %>,
+      "mktgCTAAggsLastDtTm"=<%= (obj.mktgCTAAggsLastDtTm === null) ? "NULL" : ("'" + new Date(obj.mktgCTAAggsLastDtTm).toISOString() + "'") %>,
       "defaultMinionInstanceSize"=<%= (obj.defaultMinionInstanceSize === null) ? "NULL" : ("'" + obj.defaultMinionInstanceSize + "'") %>,
       "createdAt"='<%= new Date(obj.createdAt).toISOString() %>',
       "updatedAt"='<%= new Date(obj.updatedAt).toISOString() %>';
