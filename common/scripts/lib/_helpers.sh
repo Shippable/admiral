@@ -115,18 +115,19 @@ __registry_login() {
 
 __pull_images() {
   __process_marker "Pulling latest service images"
-  __process_msg "Registry: $PRIVATE_IMAGE_REGISTRY"
+  __process_msg "Registry: $PUBLIC_IMAGE_REGISTRY"
 
-  __registry_login
-
-  for image in "${SERVICE_IMAGES[@]}"; do
-    image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
+  for image in "${PUBLIC_REGISTRY_IMAGES[@]}"; do
+    image="$PUBLIC_IMAGE_REGISTRY/$image:$RELEASE"
     __process_msg "Pulling $image"
     sudo docker pull $image
   done
 
-  for image in "${PUBLIC_REGISTRY_IMAGES[@]}"; do
-    image="$PUBLIC_IMAGE_REGISTRY/$image:$RELEASE"
+  __process_msg "Registry: $PRIVATE_IMAGE_REGISTRY"
+  __registry_login
+
+  for image in "${SERVICE_IMAGES[@]}"; do
+    image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
     __process_msg "Pulling $image"
     sudo docker pull $image
   done
