@@ -384,12 +384,15 @@ function _updateMsgConfig(bag, next) {
 
   var rabbitMQRootUrl = url.parse(bag.systemConfig.amqpUrlRoot ||
     bag.stateJson.systemSettings.amqpUrlRoot);
+  var rabbitMQAdminUrl = url.parse(bag.systemConfig.amqpUrlAdmin ||
+    bag.stateJson.systemSettings.amqpUrlAdmin);
 
   var msg = {
     address: rabbitMQRootUrl.hostname,
-    amqpPort: rabbitMQRootUrl.port,
-    adminPort: url.parse(bag.systemConfig.amqpUrlAdmin ||
-      bag.stateJson.systemSettings.amqpUrlAdmin).port,
+    amqpPort: rabbitMQRootUrl.port ||
+      ((rabbitMQRootUrl.protocol === 'amqp:') ? 5672 : 5671),
+    adminPort: rabbitMQAdminUrl.port ||
+      ((rabbitMQAdminUrl.protocol === 'http:') ? 15672 : 15671),
     isSecure: (rabbitMQRootUrl.protocol === 'amqp:') ? false : true,
     isShippableManaged: true,
     isProcessing: false,
