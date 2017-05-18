@@ -30,6 +30,7 @@ readonly MAX_DEFAULT_LOG_COUNT=6
 readonly DOCKER_VERSION=1.13
 readonly AWSCLI_VERSION=1.10.63
 readonly API_TIMEOUT=600
+readonly ADMIRAL_PORT=50003
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
 declare -a PUBLIC_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
 export LC_ALL=C
@@ -44,6 +45,7 @@ export KEYS_GENERATED=false
 source "$LIB_DIR/_logger.sh"
 source "$LIB_DIR/_helpers.sh"
 source "$LIB_DIR/_parseArgs.sh"
+source "$LIB_DIR/_admiralAdapter.sh"
 
 main() {
   __check_logsdir
@@ -57,6 +59,7 @@ main() {
     source "$SCRIPTS_DIR/installDb.sh"
     source "$SCRIPTS_DIR/create_vault_table.sh"
     source "$SCRIPTS_DIR/boot_admiral.sh"
+    source "$SCRIPTS_DIR/upgrade.sh"
   } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )
 
   __process_msg "Installation successfully completed !!!"
