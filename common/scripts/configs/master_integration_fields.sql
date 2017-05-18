@@ -729,54 +729,92 @@ do $$
       values (203, '58a160e8c2845c9d5fb82042', 'envs', 'object', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
     end if;
 
-    -- these masterIntegrationFields (rabbitmq, url, and additional gitlabCreds fields) are not in base
-
-    -- masterIntegrationFields for rabbitmqCreds
+    -- masterIntegrationFields for Google Cloud
     if not exists (select 1 from "masterIntegrationFields" where "id" = 208) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (208, '589528a99ce3dd1000a94b06', 'amqpUrl', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (208, '58ecb1a8f318373d7f5645f5', 'projectName', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 209) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (209, '589528a99ce3dd1000a94b06', 'amqpUrlRoot', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (209, '58ecb1a8f318373d7f5645f5', 'serviceAccountEmail', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 210) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (210, '589528a99ce3dd1000a94b06', 'amqpUrlAdmin', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (210, '58ecb1a8f318373d7f5645f5', 'credentialFile', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    -- masterIntegrationFields for Microsoft Azure
     if not exists (select 1 from "masterIntegrationFields" where "id" = 211) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (211, '589528a99ce3dd1000a94b06', 'amqpDefaultExchange', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (211, '58ecb1a8f318373d7f5645f6', 'subscriptionId', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 212) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (212, '589528a99ce3dd1000a94b06', 'rootQueueList', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (212, '58ecb1a8f318373d7f5645f6', 'username', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- masterIntegrationFields for url
     if not exists (select 1 from "masterIntegrationFields" where "id" = 213) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (213, '589528aa9ce3dd1000a94b1c', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (213, '58ecb1a8f318373d7f5645f6', 'password', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    -- masterIntegrationFields for Digital Ocean
     if not exists (select 1 from "masterIntegrationFields" where "id" = 214) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (214, '589528aa9ce3dd1000a94b1c', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (214, '58ecb1a8f318373d7f5645f7', 'apiToken', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    -- additional masterIntegrationFields for gitlabCreds
+    -- these masterIntegrationFields (rabbitmq, url, and additional gitlabCreds fields) are not in base
+
+    -- masterIntegrationFields for rabbitmqCreds
     if not exists (select 1 from "masterIntegrationFields" where "id" = 215) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (215, '574ee696d49b091400b71112', 'sshPort', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (215, '589528a99ce3dd1000a94b06', 'amqpUrl', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 216) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (216, '574ee696d49b091400b71112', 'subscriptionProjectLimit', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (216, '589528a99ce3dd1000a94b06', 'amqpUrlRoot', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 217) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (217, '589528a99ce3dd1000a94b06', 'amqpUrlAdmin', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 218) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (218, '589528a99ce3dd1000a94b06', 'amqpDefaultExchange', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 219) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (219, '589528a99ce3dd1000a94b06', 'rootQueueList', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    -- masterIntegrationFields for url
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 220) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (220, '589528aa9ce3dd1000a94b1c', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 221) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (221, '589528aa9ce3dd1000a94b1c', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    -- additional masterIntegrationFields for gitlabCreds
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 222) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (222, '574ee696d49b091400b71112', 'sshPort', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 223) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (223, '574ee696d49b091400b71112', 'subscriptionProjectLimit', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- END adding master integration fields
