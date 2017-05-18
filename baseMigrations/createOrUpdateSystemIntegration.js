@@ -146,7 +146,7 @@ function _getExistingProvider(bag, next) {
         );
 
       if (!_.isEmpty(providers.rows) && !_.isEmpty(providers.rows[0]))
-        bag.providerId = providers.rows[0];
+        bag.providerId = providers.rows[0].id;
 
       return next();
     }
