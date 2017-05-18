@@ -9,6 +9,8 @@ __check_db() {
   local counter=0
   local db_booted=false
 
+  sleep $interval
+
   while [ $db_booted != true ] && [ $counter -lt $TIMEOUT ]; do
     if nc -vz $DB_IP $DB_PORT &>/dev/null; then
       __process_msg "Database found"
