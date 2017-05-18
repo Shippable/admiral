@@ -1015,9 +1015,9 @@
                 </div>
                 <div class="col-md-10">
                   &nbsp;
-                  <p>
-                    Review/edit your system's configurations.
-                  </p>
+                  <h4 class="panel-title">
+                    Service Addresses
+                  </h4>
                 </div>
                 <div class="col-md-offset-1 col-md-10">
                   <div class="row">
@@ -1050,7 +1050,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.api.url.isEnabled" ng-disabled="true">
@@ -1058,21 +1058,22 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="apiUrl"
-                            ng-model="vm.installForm.api.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                    <div class="row">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            URL
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="apiUrl"
+                              ng-model="vm.installForm.api.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.state.gitlabCreds.isEnabled" ng-disabled="true">
@@ -1080,39 +1081,40 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Password
+                    <div class="row">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            Password
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="statePassword"
+                              ng-model="vm.installForm.state.gitlabCreds.data.password" ng-disabled="true"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="statePassword"
-                            ng-model="vm.installForm.state.gitlabCreds.data.password" ng-disabled="true"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Username
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="stateURL"
+                              ng-model="vm.installForm.state.gitlabCreds.data.username" ng-disabled="true"/>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Username
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="stateURL"
-                            ng-model="vm.installForm.state.gitlabCreds.data.username" ng-disabled="true"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="stateURL"
-                            ng-model="vm.installForm.state.gitlabCreds.data.url" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            URL
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="stateURL"
+                              ng-model="vm.installForm.state.gitlabCreds.data.url" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.mktg.url.isEnabled" ng-disabled="true">
@@ -1120,21 +1122,22 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="mktgUrl"
-                            ng-model="vm.installForm.mktg.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                    <div class="row">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            URL
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="mktgUrl"
+                              ng-model="vm.installForm.mktg.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.msg.rabbitmqCreds.isEnabled" ng-disabled="true">
@@ -1142,57 +1145,58 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          amqp URL
+                    <div class="row">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            amqp URL
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="msgAmqpUrl"
+                              ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrl" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="msgAmqpUrl"
-                            ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrl" ng-disabled="true"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            amqp Root Url
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="msgAmqpUrlRoot"
+                              ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          amqp Root Url
+                        <div class="row">
+                          <div class="col-md-3">
+                            amqp Admin URL
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="msgAmqpUrlAdmin"
+                              ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="msgAmqpUrlRoot"
-                            ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot" ng-disabled="true"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            amqp Default Exchange
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="msgAmqpDefaultExchange"
+                              ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange" ng-disabled="true"/>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          amqp Admin URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="msgAmqpUrlAdmin"
-                            ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin" ng-disabled="true"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          amqp Default Exchange
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="msgAmqpDefaultExchange"
-                            ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange" ng-disabled="true"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Root Queue List
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="msgRootQueueList"
-                            ng-model="vm.installForm.msg.rabbitmqCreds.data.rootQueueList" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Root Queue List
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="msgRootQueueList"
+                              ng-model="vm.installForm.msg.rabbitmqCreds.data.rootQueueList" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.redis.url.isEnabled" ng-disabled="true">
@@ -1200,21 +1204,22 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="redisUrl"
-                            ng-model="vm.installForm.redis.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                    <div class="row">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            URL
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="redisUrl"
+                              ng-model="vm.installForm.redis.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.www.url.isEnabled" ng-disabled="true">
@@ -1222,15 +1227,16 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          URL
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="wwwUrl"
-                            ng-model="vm.installForm.www.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                    <div class="row">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            URL
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="wwwUrl"
+                              ng-model="vm.installForm.www.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1238,13 +1244,13 @@
                 </div>
                 <div class="col-md-10">
                   &nbsp;
-                  <p>
-                    Select your email provider.
-                  </p>
+                  <h4 class="panel-title">
+                    Email Provider
+                  </h4>
                 </div>
                 <div class="col-md-offset-1 col-md-10">
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.notification.gmailCreds.isEnabled"
@@ -1253,46 +1259,47 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Username
+                    <div class="row" ng-if="vm.installForm.notification.gmailCreds.isEnabled">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            Username
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="gmailUsername"
+                              ng-model="vm.installForm.notification.gmailCreds.data.username" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="gmailUsername"
-                            ng-model="vm.installForm.notification.gmailCreds.data.username" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Password
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="gmailPassword"
+                              ng-model="vm.installForm.notification.gmailCreds.data.password" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Password
+                        <div class="row">
+                          <div class="col-md-3">
+                            Proxy
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="gmailProxy"
+                              ng-model="vm.installForm.notification.gmailCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="gmailPassword"
-                            ng-model="vm.installForm.notification.gmailCreds.data.password" ng-disabled="vm.installing || vm.saving"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Proxy
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="gmailProxy"
-                            ng-model="vm.installForm.notification.gmailCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Email Sender
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="gmailEmailSender"
-                            ng-model="vm.installForm.notification.gmailCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Email Sender
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="gmailEmailSender"
+                              ng-model="vm.installForm.notification.gmailCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.notification.mailgunCreds.isEnabled"
@@ -1301,48 +1308,49 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          API Key
+                    <div class="row" ng-if="vm.installForm.notification.mailgunCreds.isEnabled">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            API Key
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="mailgunApiKey"
+                              ng-model="vm.installForm.notification.mailgunCreds.data.apiKey" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="mailgunApiKey"
-                            ng-model="vm.installForm.notification.mailgunCreds.data.apiKey" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Domain
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="mailgunDomain"
+                              ng-model="vm.installForm.notification.mailgunCreds.data.domain" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Domain
+                        <div class="row">
+                          <div class="col-md-3">
+                            Proxy
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="mailgunProxy"
+                              ng-model="vm.installForm.notification.mailgunCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="mailgunDomain"
-                            ng-model="vm.installForm.notification.mailgunCreds.data.domain" ng-disabled="vm.installing || vm.saving"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Proxy
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="mailgunProxy"
-                            ng-model="vm.installForm.notification.mailgunCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Email Sender
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="mailgunEmailSender"
-                            ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Email Sender
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="mailgunEmailSender"
+                              ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-10">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" ng-model="vm.installForm.notification.smtpCreds.isEnabled"
@@ -1351,78 +1359,79 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-md-10">
-                      <div>&nbsp;</div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Email Auth User
+                    <div class="row" ng-if="vm.installForm.notification.smtpCreds.isEnabled">
+                      <div class="col-md-offset-1 col-md-10">
+                        <div class="row">
+                          <div class="col-md-3">
+                            Email Auth User
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="smtpEmailAuthUser"
+                              ng-model="vm.installForm.notification.smtpCreds.data.emailAuthUser" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="smtpEmailAuthUser"
-                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthUser" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Email Auth Password
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="smtpEmailAuthPassword"
+                              ng-model="vm.installForm.notification.smtpCreds.data.emailAuthPassword" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Email Auth Password
+                        <div class="row">
+                          <div class="col-md-3">
+                            Email Sender
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="smtpEmailSender"
+                              ng-model="vm.installForm.notification.smtpCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="smtpEmailAuthPassword"
-                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthPassword" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Host
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="smtpHost"
+                              ng-model="vm.installForm.notification.smtpCreds.data.host" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Email Sender
+                        <div class="row">
+                          <div class="col-md-3">
+                            Port
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="smtpPort"
+                              ng-model="vm.installForm.notification.smtpCreds.data.port" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="smtpEmailSender"
-                            ng-model="vm.installForm.notification.smtpCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Secure
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="smtpSecure"
+                              ng-model="vm.installForm.notification.smtpCreds.data.secure" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Host
+                        <div class="row">
+                          <div class="col-md-3">
+                            Hostname
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="smtpHostname"
+                              ng-model="vm.installForm.notification.smtpCreds.data.hostname" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="smtpHost"
-                            ng-model="vm.installForm.notification.smtpCreds.data.host" ng-disabled="vm.installing || vm.saving"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Port
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="smtpPort"
-                            ng-model="vm.installForm.notification.smtpCreds.data.port" ng-disabled="vm.installing || vm.saving"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Secure
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="smtpSecure"
-                            ng-model="vm.installForm.notification.smtpCreds.data.secure" ng-disabled="vm.installing || vm.saving"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Hostname
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="smtpHostname"
-                            ng-model="vm.installForm.notification.smtpCreds.data.hostname" ng-disabled="vm.installing || vm.saving"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3">
-                          Proxy
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control input-sm" name="smtpProxy"
-                            ng-model="vm.installForm.notification.smtpCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
+                        <div class="row">
+                          <div class="col-md-3">
+                            Proxy
+                          </div>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control input-sm" name="smtpProxy"
+                              ng-model="vm.installForm.notification.smtpCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
+                          </div>
                         </div>
                       </div>
                     </div>
