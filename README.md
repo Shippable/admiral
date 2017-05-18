@@ -18,7 +18,7 @@
 ## Installing Shippable Enterprise with GitHub Auth
 
 ### Provisioning
-- All services and core components will run on a single instance. The minimum
+- All services and core components will run on a single instance. The
   requirements for the instance are:
     - 4 core (min)
     - 8 Gb memory
