@@ -135,16 +135,25 @@ _shippable_get_systemSettings() {
 }
 
 _shippable_get_services() {
+  local service="$1"
   local services_get_endpoint="services"
+  if [ "$service" != "" ]; then
+    services_get_endpoint="services?name=$service"
+  fi
   __shippable_get $services_get_endpoint
 }
 
-_shippable_get_systemIntegrations() {
-  local system_integrations_get_endpoint="systemIntegrations"
-  __shippable_get $system_integrations_get_endpoint
+_shippable_get_db() {
+  local db_get_endpoint="db"
+  __shippable_get $db_get_endpoint
 }
 
 ### POST
+_shippable_post_db() {
+  local body="{}"
+  local db_post_endpoint="db"
+  __shippable_post $db_post_endpoint "$body"
+}
 
 ### PUT
 

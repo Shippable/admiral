@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+readonly MAX_ERROR_LOG_COUNT=100
+
 __check_release() {
   __process_msg "Validating release version"
   _shippable_get_systemSettings
@@ -54,6 +56,17 @@ __stop_stateless_services() {
 
       __process_msg "Stopping service: $service_name"
       _shippable_delete_service "$service_name"
+      if [ $response_status_code -gt 299 ]; then
+        __process_error "Error stopping service $service_name: $response"
+        __process_error "Status code: $response_status_code"
+        __process_error "==================== Error Logs ====================="
+        local logs_file="$LOGS_DIR/$service_name.log"
+        tail -$MAX_ERROR_LOG_COUNT $logs_file
+        __process_error "====================================================="
+        exit 1
+      else
+        __process_msg "Successfully ran migrations for release: $RELEASE"
+      fi
     done
   else
     __process_msg "No stateless services running"
@@ -62,7 +75,42 @@ __stop_stateless_services() {
 
 __run_migrations() {
   __process_msg "Running migrations"
-  # call POST /api/db route to run migrations
+
+  _shippable_post_db
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error running migrations: $response"
+    __process_error "Status code: $response_status_code"
+    __process_error "==================== Error Logs ====================="
+    local logs_file="$LOGS_DIR/db.log"
+    tail -$MAX_ERROR_LOG_COUNT $logs_file
+    __process_error "====================================================="
+    exit 1
+  else
+    __process_msg "Successfully ran migrations for release: $RELEASE"
+  fi
+
+  __process_msg "Checking db processing state"
+  local is_processing=true
+  while true; do
+    sleep 5
+    _shippable_get_db
+    if [ $response_status_code -gt 299 ]; then
+      __process_error "Error checking db status: $response"
+      __process_error "Status code: $response_status_code"
+      exit 1
+    else
+      is_processing=$(echo $response | jq -r '.isProcessing')
+    fi
+
+    if [ $is_processing == false ]; then
+      __process_msg "Migrations processing complete. "
+      break
+    else
+      __process_msg "Processing migrations"
+      local logs_file="$LOGS_DIR/db.log"
+      tail -$MAX_ERROR_LOG_COUNT $logs_file
+    fi
+  done
 }
 
 __remove_stateful_services() {

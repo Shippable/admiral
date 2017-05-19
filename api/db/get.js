@@ -4,6 +4,9 @@ var self = get;
 module.exports = self;
 
 var async = require('async');
+var _ = require('underscore');
+
+var configHandler = require('../../common/configHandler.js');
 
 function get(req, res) {
   var bag = {
@@ -14,7 +17,8 @@ function get(req, res) {
       dbName: '',
       dbUser: '',
       dbPassword: ''
-    }
+    },
+    component: 'db'
   };
 
   bag.who = util.format('db|%s', self.name);
@@ -22,7 +26,8 @@ function get(req, res) {
 
   async.series([
     _checkInputParams.bind(null, bag),
-    _get.bind(null, bag)
+    _get.bind(null, bag),
+    _getSettings.bind(null, bag)
   ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -55,4 +60,27 @@ function _get(bag, next) {
   };
 
   return next();
+}
+
+function _getSettings(bag, next) {
+  var who = bag.who + '|' + _getSettings.name;
+  logger.verbose(who, 'Inside');
+
+  configHandler.get(bag.component,
+    function (err, db) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get ' + bag.component, err)
+        );
+
+      if (_.isEmpty(db)) {
+        logger.debug('No db settings present');
+      } else {
+        bag.resBody = _.extend(bag.resBody, db);
+      }
+
+      return next();
+    }
+  );
 }
