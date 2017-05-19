@@ -27,7 +27,37 @@ __update_release() {
 
 __stop_stateless_services() {
   __process_msg "Stopping stateless services"
-  # stop all stateless services using admiral route
+
+  __process_msg "Getting all stateless services"
+  local services=""
+  _shippable_get_services
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error getting services list: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully fetched services list"
+    services=$(echo $response | jq '.')
+    services=$(echo $services \
+      | jq '[ .[] | select (.isEnabled==true) | select (.isCore!=true)]')
+  fi
+
+  local services_count=$(echo $services | jq '. | length')
+  if [ $services_count -ne 0 ]; then
+    __process_msg "Stopping $services_count stateless services"
+
+    for i in $(seq 1 $services_count); do
+      local service=$(echo $services \
+        | jq '.['"$i-1"']')
+      local service_name=$(echo $service \
+        | jq -r '.serviceName')
+
+      __process_msg "Stopping service: $service_name"
+      _shippable_delete_service "$service_name"
+    done
+  else
+    __process_msg "No stateless services running"
+  fi
 }
 
 __run_migrations() {

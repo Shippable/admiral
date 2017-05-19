@@ -129,19 +129,19 @@ __shippable_delete() {
 
 ### GET
 
-_shippable_get_masterIntegrations() {
-  local master_integrations_get_endpoint="masterIntegrations"
-  __shippable_get $master_integrations_get_endpoint
+_shippable_get_systemSettings() {
+  local system_settings_get_endpoint="systemSettings"
+  __shippable_get $system_settings_get_endpoint
+}
+
+_shippable_get_services() {
+  local services_get_endpoint="services"
+  __shippable_get $services_get_endpoint
 }
 
 _shippable_get_systemIntegrations() {
   local system_integrations_get_endpoint="systemIntegrations"
   __shippable_get $system_integrations_get_endpoint
-}
-
-_shippable_get_systemSettings() {
-  local system_settings_get_endpoint="systemSettings"
-  __shippable_get $system_settings_get_endpoint
 }
 
 ### POST
@@ -156,3 +156,8 @@ _shippable_put_system_settings() {
 }
 
 ### DELETE
+_shippable_delete_service() {
+  local serviceName=$1
+  local service_delete_by_name_endpoint="services/$serviceName"
+  __shippable_delete $service_delete_by_name_endpoint
+}
