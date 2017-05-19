@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 readonly MAX_ERROR_LOG_COUNT=100
+export SERVICES=""
 
 __check_release() {
   __process_msg "Validating release version"
@@ -65,7 +66,7 @@ __stop_stateless_services() {
         __process_error "====================================================="
         exit 1
       else
-        __process_msg "Successfully ran migrations for release: $RELEASE"
+        __process_msg "Successfully stopped service: $service_name"
       fi
     done
   else
@@ -115,16 +116,124 @@ __run_migrations() {
 
 __remove_stateful_services() {
   __process_msg "Removing stateful services"
-  # call DELETE /api/services on stateful services
+
+  __process_msg "Getting all stateful services"
+  local services=""
+  _shippable_get_services
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error getting services list: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully fetched services list"
+    services=$(echo $response | jq '.')
+    services=$(echo $services \
+      | jq '[ .[] | select (.isEnabled==true) | select (.isCore==true)]')
+  fi
+
+  local services_count=$(echo $services | jq '. | length')
+  if [ $services_count -ne 0 ]; then
+    __process_msg "Stopping $services_count stateful services"
+
+    for i in $(seq 1 $services_count); do
+      local service=$(echo $services \
+        | jq '.['"$i-1"']')
+      local service_name=$(echo $service \
+        | jq -r '.serviceName')
+
+      __process_msg "Stopping service: $service_name"
+      _shippable_delete_service "$service_name"
+      if [ $response_status_code -gt 299 ]; then
+        __process_error "Error stopping service $service_name: $response"
+        __process_error "Status code: $response_status_code"
+        __process_error "==================== Error Logs ====================="
+        local logs_file="$LOGS_DIR/$service_name.log"
+        tail -$MAX_ERROR_LOG_COUNT $logs_file
+        __process_error "====================================================="
+        exit 1
+      else
+        __process_msg "Successfully stopped service: $service_name"
+      fi
+    done
+  else
+    __process_msg "Stateful services already stopped"
+  fi
 }
 
 __start_api() {
   __process_msg "Starting api"
-  # call POST /api/services to start api
+  __process_msg "Getting api config"
+  local service=""
+  _shippable_get_services "api"
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error getting api config: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully fetched api service"
+    service=$(echo $response | jq '.[0]')
+    local service_name=$(echo $service | jq -r '.serviceName')
+    local service_replicas=$(echo $service | jq -r '.replicas')
+    service='{"name": "'$service_name'", "replicas": "'$service_replicas'"}'
+  fi
+
+  _shippable_post_services "$service"
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error starting api: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully started api"
+  fi
 }
 
 __start_stateful_services() {
   __process_msg "Starting stateful services"
+  __process_msg "Getting all stateful services"
+  local services=""
+  _shippable_get_services
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error getting services list: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully fetched services list"
+    services=$(echo $response | jq '.')
+    services=$(echo $services \
+      | jq '[ .[] | select (.isCore==true)]')
+  fi
+
+  local services_count=$(echo $services | jq '. | length')
+  if [ $services_count -ne 0 ]; then
+    __process_msg "Stopping $services_count stateful services"
+
+    for i in $(seq 1 $services_count); do
+      local service=$(echo $services \
+        | jq '.['"$i-1"']')
+      local service_name=$(echo $service \
+        | jq -r '.serviceName')
+      local service_replicas=$(echo $service \
+        | jq -r '.replicas')
+
+      __process_msg "Starting service: $service_name"
+      service='{"name": "'$service_name'", "replicas": "'$service_replicas'"}'
+      _shippable_post_services "$service"
+      if [ $response_status_code -gt 299 ]; then
+        __process_error "Error starting service $service_name: $response"
+        __process_error "Status code: $response_status_code"
+        __process_error "==================== Error Logs ====================="
+        local logs_file="$LOGS_DIR/$service_name.log"
+        tail -$MAX_ERROR_LOG_COUNT $logs_file
+        __process_error "====================================================="
+        exit 1
+      else
+        __process_msg "Successfully started service: $service_name"
+      fi
+    done
+  else
+    __process_error "No stateful services available"
+    exit 1
+  fi
 
 }
 

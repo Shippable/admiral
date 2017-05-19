@@ -155,6 +155,12 @@ _shippable_post_db() {
   __shippable_post $db_post_endpoint "$body"
 }
 
+_shippable_post_services() {
+  local body="$1"
+  local db_post_endpoint="services"
+  __shippable_post $db_post_endpoint "$body"
+}
+
 ### PUT
 
 _shippable_put_system_settings() {
