@@ -52,13 +52,13 @@ main() {
   __parse_args "$@"
   __validate_runtime
   __check_dependencies
-  __pull_images
-  __pull_images_workers
+  #__pull_images
+  #__pull_images_workers
   {
     __print_runtime
-    source "$SCRIPTS_DIR/installDb.sh"
-    source "$SCRIPTS_DIR/create_vault_table.sh"
-    source "$SCRIPTS_DIR/boot_admiral.sh"
+    #source "$SCRIPTS_DIR/installDb.sh"
+    #source "$SCRIPTS_DIR/create_vault_table.sh"
+    #source "$SCRIPTS_DIR/boot_admiral.sh"
     source "$SCRIPTS_DIR/upgrade.sh"
   } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )
 

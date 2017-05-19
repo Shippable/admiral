@@ -1,7 +1,9 @@
 #!/bin/bash -e
 
+readonly API_RESPONSE_FILE="$RUNTIME_DIR/.api_response"
+
 __initialize() {
-  ADMIRAL_URL="http://$ADMIRAL_IP:$ADMIRAL_PORT"
+  ADMIRAL_URL="http://$ADMIRAL_IP:$ADMIRAL_PORT/api"
   ADMIRAL_TOKEN=$LOGIN_TOKEN
   RESPONSE_CODE=404
   RESPONSE_DATA=""
@@ -137,52 +139,20 @@ _shippable_get_systemIntegrations() {
   __shippable_get $system_integrations_get_endpoint
 }
 
-_shippable_get_systemMachineImages() {
-  local system_machine_images_get_endpoint="systemMachineImages"
-  __shippable_get $system_machine_images_get_endpoint
+_shippable_get_systemSettings() {
+  local system_settings_get_endpoint="systemSettings"
+  __shippable_get $system_settings_get_endpoint
 }
 
 ### POST
 
-_shippable_post_systemIntegrations() {
-  local body="$1"
-  local system_integrations_post_endpoint="systemIntegrations"
-  __shippable_post $system_integrations_post_endpoint "$body"
-}
-
-_shippable_post_systemMachineImages() {
-  local body="$1"
-  local system_machine_images_post_endpoint="systemMachineImages"
-  __shippable_post $system_machine_images_post_endpoint "$body"
-}
-
 ### PUT
 
-_shippable_putById_masterIntegrations() {
-  local masterIntegrationId=$1
-  local update="$2"
-  local master_integrations_putById_endpoint="masterIntegrations/$masterIntegrationId"
-  __shippable_put $master_integrations_putById_endpoint "$update"
-}
-
-_shippable_putById_systemIntegrations() {
-  local systemIntegrationId=$1
-  local update="$2"
-  local system_integrations_putById_endpoint="systemIntegrations/$systemIntegrationId"
-  __shippable_put $system_integrations_putById_endpoint "$update"
-}
-
-_shippable_putById_systemMachineImages() {
-  local systemMachineImageId=$1
-  local update="$2"
-  local system_machine_images_putById_endpoint="systemMachineImages/$systemMachineImageId"
-  __shippable_put $system_machine_images_putById_endpoint "$update"
+_shippable_put_system_settings() {
+  local systemSettingsId=1
+  local update="$1"
+  local system_settings_put_endpoint="systemSettings/$systemSettingsId"
+  __shippable_put $system_settings_put_endpoint "$update"
 }
 
 ### DELETE
-
-_shippable_deleteById_systemIntegrations() {
-  local systemIntegrationId=$1
-  local system_integrations_deleteById_endpoint="systemIntegrations/$systemIntegrationId"
-  __shippable_delete $system_integrations_deleteById_endpoint
-}

@@ -2,13 +2,27 @@
 
 __check_release() {
   __process_msg "Validating release version"
-  # print new release version
-  # print running release version, from db
+  _shippable_get_systemSettings
+  local current_release=$(echo $response \
+    | jq -r '.releaseVersion')
+
+  __process_msg "Current release: $current_release"
+  __process_msg "New release: $RELEASE"
 }
 
 __update_release() {
   __process_msg "Updating release version in DB"
-  # release version from db will be used in routes
+  local system_settings_update='{"releaseVersion": "'$RELEASE'"}'
+  system_settings_update=$(echo $system_settings_update | jq '.')
+
+  _shippable_put_system_settings "$system_settings_update"
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error updating release version: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully updated release version to: $RELEASE"
+  fi
 }
 
 __stop_stateless_services() {
