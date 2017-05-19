@@ -265,7 +265,7 @@
           }
         },
         defaultSystemMachineImage: {},
-        systemSettings: [],
+        systemSettings: {},
         coreServices: []
       },
       systemIntegrations: [],
@@ -408,7 +408,6 @@
       showConfigModal: showConfigModal,
       showLogModal: showLogModal,
       showWorkersLogModal: showWorkersLogModal,
-      showDynamicNodeSettings: showDynamicNodeSettings,
       showSaveModal: showSaveModal,
       showRestartServicesModal: showRestartServicesModal,
       refreshLogs: refreshLogs,
@@ -854,159 +853,37 @@
 
           $scope.vm.systemSettingsId = systemSettings.id;
 
-          var settings = [];
+          // services are mapped to $scope.vm.systemSettings
+          // don't also map services to the install form
+          var installPanelSystemSettings = [
+            'defaultMinionCount',
+            'autoSelectBuilderToken',
+            'buildTimeoutMS',
+            'defaultPrivateJobQuota',
+            'serviceUserToken',
+            'runMode',
+            'allowSystemNodes',
+            'allowDynamicNodes',
+            'allowCustomNodes',
+            'awsAccountId',
+            'jobConsoleBatchSize',
+            'jobConsoleBufferTimeIntervalMS',
+            'apiRetryIntervalMS',
+            'rootS3Bucket',
+            'nodeScriptsLocation',
+            'enforcePrivateJobQuota',
+            'technicalSupportAvailable',
+            'customNodesAdminOnly',
+            'allowedSystemImageFamily',
+            'defaultMinionInstanceSize'
+          ];
 
-          settings.push({
-            name: 'defaultMinionCount',
-            value: systemSettings.defaultMinionCount,
-            type: 'number'
-          });
-
-          settings.push({
-            name: 'autoSelectBuilderToken',
-            value: systemSettings.autoSelectBuilderToken,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'buildTimeoutMS',
-            value: systemSettings.buildTimeoutMS,
-            type: 'number'
-          });
-
-          settings.push({
-            name: 'defaultPrivateJobQuota',
-            value: systemSettings.defaultPrivateJobQuota,
-            type: 'number'
-          });
-
-          settings.push({
-            name: 'serviceUserToken',
-            value: systemSettings.serviceUserToken,
-            type: 'text'
-          });
-
-          settings.push({
-            name: 'runMode',
-            value: systemSettings.runMode,
-            type: 'text'
-          });
-
-          settings.push({
-            name: 'allowSystemNodes',
-            value: systemSettings.allowSystemNodes,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'allowDynamicNodes',
-            value: systemSettings.allowDynamicNodes,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'allowCustomNodes',
-            value: systemSettings.allowCustomNodes,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'awsAccountId',
-            value: systemSettings.awsAccountId,
-            type: 'text'
-          });
-
-          settings.push({
-            name: 'jobConsoleBatchSize',
-            value: systemSettings.jobConsoleBatchSize,
-            type: 'number'
-          });
-
-          settings.push({
-            name: 'jobConsoleBufferTimeIntervalMS',
-            value: systemSettings.jobConsoleBufferTimeIntervalMS,
-            type: 'number'
-          });
-
-          settings.push({
-            name: 'apiRetryIntervalMS',
-            value: systemSettings.apiRetryIntervalMS,
-            type: 'number'
-          });
-
-          settings.push({
-            name: 'truck',
-            value: systemSettings.truck,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'hubspotListId',
-            value: systemSettings.hubspotListId,
-            type: 'number'
-          });
-
-          settings.push({
-            name: 'hubspotShouldSimulate',
-            value: systemSettings.hubspotShouldSimulate,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'rootS3Bucket',
-            value: systemSettings.rootS3Bucket,
-            type: 'text'
-          });
-
-          settings.push({
-            name: 'nodeScriptsLocation',
-            value: systemSettings.nodeScriptsLocation,
-            type: 'text'
-          });
-
-          settings.push({
-            name: 'enforcePrivateJobQuota',
-            value: systemSettings.enforcePrivateJobQuota,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'technicalSupportAvailable',
-            value: systemSettings.technicalSupportAvailable,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'customNodesAdminOnly',
-            value: systemSettings.customNodesAdminOnly,
-            type: 'checkbox'
-          });
-
-          settings.push({
-            name: 'allowedSystemImageFamily',
-            value: systemSettings.allowedSystemImageFamily,
-            type: 'text'
-          });
-
-          settings.push({
-            name: 'defaultMinionInstanceSize',
-            value: systemSettings.defaultMinionInstanceSize,
-            type: 'text'
-          });
-
-          settings.push({
-            name: 'mktgPageAggsLastDtTm',
-            value: systemSettings.mktgPageAggsLastDtTm,
-            type: 'datetime'
-          });
-
-          settings.push({
-            name: 'mktgCTAAggsLastDtTm',
-            value: systemSettings.mktgCTAAggsLastDtTm,
-            type: 'datetime'
-          });
-
-          $scope.vm.installForm.systemSettings = settings;
+          _.each(installPanelSystemSettings,
+            function (key) {
+              $scope.vm.installForm.systemSettings[key] =
+                systemSettings[key];
+            }
+          );
 
           return next();
         }
@@ -1812,7 +1689,7 @@
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
           enableEmailMasterIntegration,
-          updateSystemSettings,
+          updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
           updateDefaultSystemMachineImage,
           startAPI,
@@ -1873,7 +1750,7 @@
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
           enableEmailMasterIntegration,
-          updateSystemSettings,
+          updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
           updateDefaultSystemMachineImage,
           updateFilestoreSystemIntegration,
@@ -1966,7 +1843,6 @@
         }
       );
     }
-
 
     function updateAPISystemIntegration(next) {
       var bag = {
@@ -2285,16 +2161,10 @@
       );
     }
 
-    function updateSystemSettings(next) {
+    function updateInstallPanelSystemSettings(next) {
       if (!$scope.vm.systemSettingsId) return next();
 
-      var update = {};
-
-      _.each($scope.vm.installForm.systemSettings,
-        function (setting) {
-          update[setting.name] = setting.value;
-        }
-      );
+      var update = $scope.vm.installForm.systemSettings;
 
       admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
         function (err) {
@@ -2736,14 +2606,6 @@
           return next();
         }
       );
-    }
-
-    function showDynamicNodeSettings() {
-      var allowDynamicNodes =
-        _.findWhere($scope.vm.installForm.systemSettings,
-          {name: 'allowDynamicNodes'}
-        );
-      return allowDynamicNodes && allowDynamicNodes.value;
     }
 
     function logOutOfAdmiral(e) {
