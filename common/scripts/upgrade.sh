@@ -221,7 +221,7 @@ __start_stateful_services() {
 
   local services_count=$(echo $services | jq '. | length')
   if [ $services_count -ne 0 ]; then
-    __process_msg "Stopping $services_count stateful services"
+    __process_msg "Starting $services_count stateful services"
 
     for i in $(seq 1 $services_count); do
       local service=$(echo $services \
@@ -270,7 +270,7 @@ __start_stateless_services() {
 
   local services_count=$(echo $services | jq '. | length')
   if [ $services_count -ne 0 ]; then
-    __process_msg "Stopping $services_count stateful services"
+    __process_msg "Starting $services_count stateful services"
 
     for i in $(seq 1 $services_count); do
       local service=$(echo $services \
