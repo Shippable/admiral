@@ -296,7 +296,6 @@ __run_post_migrations() {
 }
 
 main() {
-  #TODO: create helper functions for POST, PUT, GET
   if [ $IS_UPGRADE == true ]; then
     __process_marker "Upgrading Shippable installation"
     __check_release
