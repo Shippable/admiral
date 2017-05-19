@@ -299,6 +299,7 @@ __print_help() {
 
   Commmands:
     install         Run Shippable installation
+    upgrade         Run silent upgrade without any prompts
     help            Print this message
     clean           Remove shippable containers and configurations
     info            Print information about current installation
@@ -352,7 +353,6 @@ __wipe_clean() {
 
 }
 
-
 __parse_args() {
   if [[ $# -gt 0 ]]; then
     key="$1"
@@ -363,6 +363,10 @@ __parse_args() {
         __bootstrap_admiral_env
         __generate_ssh_keys
         __parse_args_install "$@"
+        ;;
+      upgrade)
+        __bootstrap_admiral_env
+        export IS_UPGRADE=true
         ;;
       status)
         __show_status
