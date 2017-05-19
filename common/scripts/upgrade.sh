@@ -177,6 +177,7 @@ __start_api() {
   __process_marker "Starting api"
   __process_msg "Getting api config"
   local service=""
+  local wait_time=15
   _shippable_get_services "api"
   if [ $response_status_code -gt 299 ]; then
     __process_error "Error getting api config: $response"
@@ -197,6 +198,8 @@ __start_api() {
     exit 1
   else
     __process_msg "Successfully started api"
+    __process_msg "Waiting $wait_time seconds before starting other services"
+    sleep $wait_time
   fi
 }
 
