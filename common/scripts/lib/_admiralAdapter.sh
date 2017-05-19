@@ -164,6 +164,12 @@ _shippable_post_db() {
   __shippable_post $db_post_endpoint "$body"
 }
 
+_shippable_post_cleanup() {
+  local body="{}"
+  local db_cleanup_endpoint="db/cleanup"
+  __shippable_post $db_cleanup_endpoint "$body"
+}
+
 _shippable_post_services() {
   local body="$1"
   local db_post_endpoint="services"

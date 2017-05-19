@@ -250,7 +250,6 @@ __start_stateless_services() {
     master_integrations=$(echo $response | jq '.')
   fi
 
-  echo "$master_integrations"
   local integrations_count=$(echo $master_integrations | jq '. | length')
   if [ $integrations_count -ne 0 ]; then
     __process_msg "Enabling $integrations_count integrations to boot services"
@@ -283,6 +282,18 @@ __start_stateless_services() {
 __run_post_migrations() {
   __process_msg "Running post install migrations"
 
+  _shippable_post_cleanup
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error running migrations: $response"
+    __process_error "Status code: $response_status_code"
+    __process_error "==================== Error Logs ====================="
+    local logs_file="$LOGS_DIR/db.log"
+    tail -$MAX_ERROR_LOG_COUNT $logs_file
+    __process_error "====================================================="
+    exit 1
+  else
+    __process_msg "Successfully ran post install migration for release: $RELEASE"
+  fi
 }
 
 main() {
