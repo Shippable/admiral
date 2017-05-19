@@ -232,7 +232,7 @@ function _generateRunCommandCluster(bag, next) {
     ' --endpoint-mode vip';
 
   var runCommand = util.format('docker service create ' +
-    ' %s %s --name %s %s',
+    ' %s %s %s --name %s %s',
     bag.envs,
     opts,
     replicas,
