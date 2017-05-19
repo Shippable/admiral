@@ -234,12 +234,50 @@ __start_stateful_services() {
     __process_error "No stateful services available"
     exit 1
   fi
-
 }
 
 __start_stateless_services() {
   __process_msg "Starting stateless services"
+  __process_msg "Getting enabled master integrations"
+  local master_integrations=""
+  _shippable_get_masterIntegrations "isEnabled=true"
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error getting master integrations list: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully fetched master integrations list"
+    master_integrations=$(echo $response | jq '.')
+  fi
 
+  echo "$master_integrations"
+  local integrations_count=$(echo $master_integrations | jq '. | length')
+  if [ $integrations_count -ne 0 ]; then
+    __process_msg "Enabling $integrations_count integrations to boot services"
+
+    for i in $(seq 1 $integrations_count); do
+      local integration=$(echo $master_integrations \
+        | jq '.['"$i-1"']')
+      local integration_id=$(echo $integration \
+        | jq -r '.id')
+      local integration_name=$(echo $integration \
+        | jq -r '.name')
+
+      __process_msg "Enabling integration: $integration_name"
+      integration='{"isEnabled": true}'
+      _shippable_put_masterIntegrations "$integration_id" "$integration"
+      if [ $response_status_code -gt 299 ]; then
+        __process_error "Error enabling integration $integration_name: $response"
+        __process_error "Status code: $response_status_code"
+        exit 1
+      else
+        __process_msg "Successfully enabled integration: $integration_name"
+      fi
+    done
+  else
+    __process_error "No master integrtaions enabled"
+    exit 1
+  fi
 }
 
 __run_post_migrations() {

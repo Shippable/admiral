@@ -148,6 +148,15 @@ _shippable_get_db() {
   __shippable_get $db_get_endpoint
 }
 
+_shippable_get_masterIntegrations() {
+  local query="$1"
+  local masterIntegrations_get_endpoint="masterIntegrations"
+  if [ "$query" != "" ]; then
+    masterIntegrations_get_endpoint="masterIntegrations?$query"
+  fi
+  __shippable_get $masterIntegrations_get_endpoint
+}
+
 ### POST
 _shippable_post_db() {
   local body="{}"
@@ -168,6 +177,13 @@ _shippable_put_system_settings() {
   local update="$1"
   local system_settings_put_endpoint="systemSettings/$systemSettingsId"
   __shippable_put $system_settings_put_endpoint "$update"
+}
+
+_shippable_put_masterIntegrations() {
+  local master_integration_id="$1"
+  local update="$2"
+  local master_integrations_put_endpoint="masterIntegrations/$master_integration_id"
+  __shippable_put $master_integrations_put_endpoint "$update"
 }
 
 ### DELETE
