@@ -74,11 +74,10 @@ function _getSettings(bag, next) {
             'Failed to get ' + bag.component, err)
         );
 
-      if (_.isEmpty(db)) {
+      if (_.isEmpty(db))
         logger.debug('No db settings present');
-      } else {
+      else
         bag.resBody = _.extend(bag.resBody, db);
-      }
 
       return next();
     }

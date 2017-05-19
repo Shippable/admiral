@@ -2,6 +2,19 @@
 
 readonly MAX_ERROR_LOG_COUNT=100
 
+__check_admiral() {
+  __process_msg "Checking if admiral container is running"
+  local wait_time=3
+  _shippable_get_admiral
+  if [ $response_status_code -eq 503 ]; then
+    __process_msg "Admiral not running, retrying in $wait_time seconds"
+    sleep $wait_time
+    __check_admiral
+  else
+    __process_msg "Admiral successfully running"
+  fi
+}
+
 __check_release() {
   __process_msg "Validating release version"
   _shippable_get_systemSettings
@@ -28,9 +41,9 @@ __update_release() {
 }
 
 __stop_stateless_services() {
-  __process_msg "Stopping stateless services"
+  __process_marker "Stopping stateless services"
 
-  __process_msg "Getting all stateless services"
+  __process_msg "Getting all enabled stateless services"
   local services=""
   _shippable_get_services
   if [ $response_status_code -gt 299 ]; then
@@ -55,7 +68,8 @@ __stop_stateless_services() {
         | jq -r '.serviceName')
 
       __process_msg "Stopping service: $service_name"
-      _shippable_delete_service "$service_name"
+      local body='{"isEnabled": true}'
+      _shippable_delete_service "$service_name" "$body"
       if [ $response_status_code -gt 299 ]; then
         __process_error "Error stopping service $service_name: $response"
         __process_error "Status code: $response_status_code"
@@ -74,7 +88,7 @@ __stop_stateless_services() {
 }
 
 __run_migrations() {
-  __process_msg "Running migrations"
+  __process_marker "Running migrations"
 
   _shippable_post_db
   if [ $response_status_code -gt 299 ]; then
@@ -114,7 +128,7 @@ __run_migrations() {
 }
 
 __remove_stateful_services() {
-  __process_msg "Removing stateful services"
+  __process_marker "Removing stateful services"
 
   __process_msg "Getting all stateful services"
   local services=""
@@ -160,7 +174,7 @@ __remove_stateful_services() {
 }
 
 __start_api() {
-  __process_msg "Starting api"
+  __process_marker "Starting api"
   __process_msg "Getting api config"
   local service=""
   _shippable_get_services "api"
@@ -187,7 +201,7 @@ __start_api() {
 }
 
 __start_stateful_services() {
-  __process_msg "Starting stateful services"
+  __process_marker "Starting stateful services"
   __process_msg "Getting all stateful services"
   local services=""
   _shippable_get_services
@@ -236,50 +250,55 @@ __start_stateful_services() {
 }
 
 __start_stateless_services() {
-  __process_msg "Starting stateless services"
-  __process_msg "Getting enabled master integrations"
-  local master_integrations=""
-  _shippable_get_masterIntegrations "isEnabled=true"
+  __process_marker "Starting stateless services"
+  __process_msg "Getting all stateless services"
+  local services=""
+  _shippable_get_services
   if [ $response_status_code -gt 299 ]; then
-    __process_error "Error getting master integrations list: $response"
+    __process_error "Error getting services list: $response"
     __process_error "Status code: $response_status_code"
     exit 1
   else
-    __process_msg "Successfully fetched master integrations list"
-    master_integrations=$(echo $response | jq '.')
+    __process_msg "Successfully fetched services list"
+    services=$(echo $response | jq '.')
+    services=$(echo $services \
+      | jq '[ .[] | select (.isEnabled==true) | select (.isCore!=true)]')
   fi
 
-  local integrations_count=$(echo $master_integrations | jq '. | length')
-  if [ $integrations_count -ne 0 ]; then
-    __process_msg "Enabling $integrations_count integrations to boot services"
+  local services_count=$(echo $services | jq '. | length')
+  if [ $services_count -ne 0 ]; then
+    __process_msg "Stopping $services_count stateful services"
 
-    for i in $(seq 1 $integrations_count); do
-      local integration=$(echo $master_integrations \
+    for i in $(seq 1 $services_count); do
+      local service=$(echo $services \
         | jq '.['"$i-1"']')
-      local integration_id=$(echo $integration \
-        | jq -r '.id')
-      local integration_name=$(echo $integration \
-        | jq -r '.name')
+      local service_name=$(echo $service \
+        | jq -r '.serviceName')
+      local service_replicas=$(echo $service \
+        | jq -r '.replicas')
 
-      __process_msg "Enabling integration: $integration_name"
-      integration='{"isEnabled": true}'
-      _shippable_put_masterIntegrations "$integration_id" "$integration"
+      __process_msg "Starting service: $service_name"
+      service='{"name": "'$service_name'", "replicas": "'$service_replicas'"}'
+      _shippable_post_services "$service"
       if [ $response_status_code -gt 299 ]; then
-        __process_error "Error enabling integration $integration_name: $response"
+        __process_error "Error starting service $service_name: $response"
         __process_error "Status code: $response_status_code"
+        __process_error "==================== Error Logs ====================="
+        local logs_file="$LOGS_DIR/$service_name.log"
+        tail -$MAX_ERROR_LOG_COUNT $logs_file
+        __process_error "====================================================="
         exit 1
       else
-        __process_msg "Successfully enabled integration: $integration_name"
+        __process_msg "Successfully started service: $service_name"
       fi
     done
   else
-    __process_error "No master integrtaions enabled"
-    exit 1
+    __process_msg "No stateless services available"
   fi
 }
 
 __run_post_migrations() {
-  __process_msg "Running post install migrations"
+  __process_marker "Running post install migrations"
 
   _shippable_post_cleanup
   if [ $response_status_code -gt 299 ]; then
@@ -298,6 +317,7 @@ __run_post_migrations() {
 main() {
   if [ $IS_UPGRADE == true ]; then
     __process_marker "Upgrading Shippable installation"
+    __check_admiral
     __check_release
     __update_release
     __stop_stateless_services

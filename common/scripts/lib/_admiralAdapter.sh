@@ -103,11 +103,13 @@ __shippable_delete() {
   __initialize
 
   local url="$ADMIRAL_URL/$1"
+  local body="$2"
   {
     RESPONSE_CODE=$(curl \
       -H "Content-Type: application/json" \
       -H "Authorization: apiToken $ADMIRAL_TOKEN" \
       -X DELETE $url \
+      -d "$body" \
       --write-out "%{http_code}\n" \
       --silent \
       --output $API_RESPONSE_FILE)
@@ -128,6 +130,11 @@ __shippable_delete() {
 }
 
 ### GET
+
+_shippable_get_admiral() {
+  local admiral_get_endpoint="admiral"
+  __shippable_get $admiral_get_endpoint
+}
 
 _shippable_get_systemSettings() {
   local system_settings_get_endpoint="systemSettings"
@@ -195,6 +202,7 @@ _shippable_put_masterIntegrations() {
 ### DELETE
 _shippable_delete_service() {
   local serviceName=$1
+  local body=$2
   local service_delete_by_name_endpoint="services/$serviceName"
-  __shippable_delete $service_delete_by_name_endpoint
+  __shippable_delete $service_delete_by_name_endpoint $body
 }
