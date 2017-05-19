@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 readonly MAX_ERROR_LOG_COUNT=100
-export SERVICES=""
 
 __check_release() {
   __process_msg "Validating release version"
