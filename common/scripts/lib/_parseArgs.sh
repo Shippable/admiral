@@ -19,6 +19,7 @@ __validate_runtime() {
   export OS_TYPE=docker
 
   ################## set release   ###############################
+  cd $ROOT_DIR
   local head_sha=$(git symbolic-ref HEAD --short -q)
   if [ "$head_sha" == "" ]; then
     ## user has checked out a tag, find latest tag
