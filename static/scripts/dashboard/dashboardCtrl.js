@@ -323,6 +323,10 @@
           displayName: '',
           isEnabled: false
         },
+        hubspotToken: {
+          displayName: '',
+          isEnabled: false
+        },
         irc: {
           displayName: '',
           isEnabled: false
@@ -358,7 +362,8 @@
         webhook: {
           displayName: '',
           isEnabled: false
-        }
+        },
+        systemSettings: {}
       },
       superUsers: {
         addingSuperUser: false,
@@ -433,6 +438,7 @@
           getSystemSettingsForInstallPanel.bind(null, bag),
           getServices.bind(null, bag),
           getDefaultSystemMachineImage.bind(null, bag),
+          getSystemSettingsForAddonsPanel.bind(null, bag),
           getSuperUsers
         ],
         function (err) {
@@ -865,7 +871,6 @@
             'allowSystemNodes',
             'allowDynamicNodes',
             'allowCustomNodes',
-            'awsAccountId',
             'jobConsoleBatchSize',
             'jobConsoleBufferTimeIntervalMS',
             'apiRetryIntervalMS',
@@ -938,6 +943,41 @@
 
           $scope.vm.installForm.defaultSystemMachineImage =
             systemMachineImages[0];
+
+          return next();
+        }
+      );
+    }
+
+    function getSystemSettingsForAddonsPanel(bag, next) {
+      if (!$scope.vm.initialized) return next();
+
+      admiralApiAdapter.getSystemSettings(
+        function (err, systemSettings) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          if (!systemSettings)
+            return next();
+
+          $scope.vm.systemSettingsId = systemSettings.id;
+
+          // services are mapped to $scope.vm.systemSettings
+          // don't also map services to the install form
+          var addonsPanelSystemSettings = [
+            'hubspotListId',
+            'hubspotShouldSimulate',
+            'awsAccountId'
+          ];
+
+          _.each(addonsPanelSystemSettings,
+            function (key) {
+              $scope.vm.addonsForm.systemSettings[key] =
+                systemSettings[key];
+            }
+          );
 
           return next();
         }
@@ -2507,8 +2547,22 @@
     function installAddons() {
       $scope.vm.installingAddons = true;
 
+      async.series([
+          updateMasterIntegrations,
+          updateAddonsPanelSystemSettings
+        ],
+        function (err) {
+          $scope.vm.installingAddons = false;
+          getMasterIntegrations({}, function () {});
+        }
+      );
+    }
+
+    function updateMasterIntegrations(next) {
       async.eachOfSeries($scope.vm.addonsForm,
         function (addonsMasterInt, masterIntName, done) {
+          if (masterIntName === 'systemSettings') return done();
+
           var masterInt = _.find($scope.vm.masterIntegrations,
             function (masterInt) {
               return masterInt.name === masterIntName;
@@ -2529,10 +2583,24 @@
           );
         },
         function (err) {
-          $scope.vm.installingAddons = false;
-          getMasterIntegrations({}, function () {});
           if (err)
             horn.error(err);
+          return next();
+        }
+      );
+    }
+
+    function updateAddonsPanelSystemSettings(next) {
+      if (!$scope.vm.systemSettingsId) return next();
+
+      var update = $scope.vm.addonsForm.systemSettings;
+
+      admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
         }
       );
     }
