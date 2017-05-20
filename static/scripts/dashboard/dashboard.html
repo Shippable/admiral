@@ -1337,7 +1337,7 @@
                     </div>
                     <!-- Service Addresses -->
                     <div class="row">
-                      <div class="col-md-10">
+                      <div class="col-md-12">
                         &nbsp;
                         <h4 class="panel-title">
                           Service Addresses
@@ -1756,7 +1756,7 @@
                     </div>
                     <!-- Core Services -->
                     <div class="row">
-                      <div class="col-md-10" ng-if="vm.isLoaded && vm.initialized">
+                      <div class="col-md-12" ng-if="vm.isLoaded && vm.initialized">
                         &nbsp;
                         <h4 class="panel-title">
                           Core services to be installed:
@@ -1851,240 +1851,306 @@
               <div ng-if="vm.isLoaded && vm.initialized">
                 <div class="row">
                   <div class="col-md-offset-1 col-md-10">
-                    <div class="col-md-10">
-                      &nbsp;
-                      <h4 class="panel-title">
-                        Enable account integrations for your users:
-                      </h4>
-                      &nbsp;
-                    </div>
-                    <div class="col-md-offset-1 col-md-10">
-                      <b>Cloud Providers</b>
-                      <div class="row">
-                        <div class="col-md-10">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.AWS.isEnabled">
-                              {{vm.addonsForm.AWS.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.AWS_IAM.isEnabled">
-                              {{vm.addonsForm.AWS_IAM.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.AZURE_DCOS.isEnabled">
-                              {{vm.addonsForm.AZURE_DCOS.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.CLUSTER.isEnabled">
-                              {{vm.addonsForm.CLUSTER.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.DCL.isEnabled">
-                              {{vm.addonsForm.DCL.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.DDC.isEnabled">
-                              {{vm.addonsForm.DDC.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.GKE.isEnabled">
-                              {{vm.addonsForm.GKE.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.KUBERNETES.isEnabled">
-                              {{vm.addonsForm.KUBERNETES.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.TRIPUB.isEnabled">
-                              {{vm.addonsForm.TRIPUB.displayName}}
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-offset-1 col-md-10">
-                      <b>Notifications</b>
-                      <div class="row">
-                        <div class="col-md-10">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.webhook.isEnabled">
-                              {{vm.addonsForm.webhook.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.hipchat.isEnabled">
-                              {{vm.addonsForm.hipchat.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.irc.isEnabled">
-                              {{vm.addonsForm.irc.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.Slack.isEnabled">
-                              {{vm.addonsForm.Slack.displayName}}
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-offset-1 col-md-10">
-                      <b>Registries</b>
-                      <div class="row">
-                        <div class="col-md-10">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.ECR.isEnabled">
-                              {{vm.addonsForm.ECR.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.Docker.isEnabled">
-                              {{vm.addonsForm.Docker.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm['Docker Trusted Registry'].isEnabled">
-                              {{vm.addonsForm['Docker Trusted Registry'].displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.GCR.isEnabled">
-                              {{vm.addonsForm.GCR.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.artifactory.isEnabled">
-                              {{vm.addonsForm.artifactory.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm['Private Docker Registry'].isEnabled">
-                              {{vm.addonsForm['Private Docker Registry'].displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm['Quay.io'].isEnabled">
-                              {{vm.addonsForm['Quay.io'].displayName}}
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-offset-1 col-md-10">
-                      <b>Other</b>
-                      <div class="row">
-                        <div class="col-md-10">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm.Jenkins.isEnabled">
-                              {{vm.addonsForm.Jenkins.displayName}}
-                            </label>
-                          </div>
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" ng-model="vm.addonsForm['pem-key'].isEnabled">
-                              {{vm.addonsForm['pem-key'].displayName}}
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      &nbsp;
-                    </div>
-                    <div class="col-md-offset-1 col-md-10 text-right">
-                      <p>
+                    <!-- Account/Master integrations -->
+                    <div class="row">
+                      <div class="col-md-12">
                         &nbsp;
-                      </p>
-                      <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installingAddons" ng-click="vm.installAddons()">
-                        <div ng-if="vm.installingAddons">
-                          Installing Add-ons...
-                        </div>
-                        <div ng-if="!vm.installingAddons">
-                          Install Add-ons
-                        </div>
-                      </button>
-                    </div>
-                    <div class="col-md-11" style="border-bottom: 1px solid #DDDDDD;">
-                      &nbsp;
-                    </div>
-                    <div class="col-md-10">
-                      &nbsp;
-                      <h4 class="panel-title">
-                        Manage System SuperUsers:
-                      </h4>
-                      &nbsp;
-                    </div>
-                    <div class="col-md-offset-1">
-                      <div class="row">
-                        <div class="col-md-10">
-                          Add superUser:
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-2 text-right">
-                          Account ID:
-                        </div>
-                        <div class="col-md-3">
-                          <input type="text" class="form-control input-sm" name="superUserAccountID" placeholder="abcdef0123456789abcdef01"
-                          ng-model="vm.superUsers.newSuperUser" ng-disabled="vm.superUsers.addingSuperUser"/>
-                        </div>
-                        <div class="col-md-5">
-                          <button ng-click="vm.addSuperUser()" ng-disabled="vm.superUsers.addingSuperUser">
-                            Add
-                          </button>
-                        </div>
-                      </div>
-                      <div class="row">
+                        <h4 class="panel-title">
+                          Enable account integrations for your users:
+                        </h4>
                         &nbsp;
                       </div>
-                      <div class="row">
-                        <div class="col-md-10">
-                          Current SuperUsers:
+                      <!-- Cloud Providers -->
+                      <div class="col-md-offset-1 col-md-11">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <b>Cloud Providers</b>
+                          </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div ng-if="!vm.superUsers.superUsers.length" class="col-md-offset-2 col-md-10">
-                          <i>No current SuperUsers</i>
-                        </div>
-                        <div ng-if="vm.superUsers.superUsers.length">
-                          <div ng-repeat="superUser in vm.superUsers.superUsers">
-                            <div class="col-md-offset-2 col-md-3">
-                              {{superUser}}
+                      <div class="col-md-offset-2 col-md-10">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.AWS.isEnabled">
+                                {{vm.addonsForm.AWS.displayName}}
+                              </label>
                             </div>
-                            <div class="col-md-5">
-                              <button ng-click="vm.removeSuperUser(superUser)" ng-disabled="vm.superUsers.deletingSuperUser">
-                                Remove
-                              </button>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.AWS_IAM.isEnabled">
+                                {{vm.addonsForm.AWS_IAM.displayName}}
+                              </label>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.AWS_IAM.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                AWS Account ID:
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="awsAccountId"
+                                  ng-model="vm.addonsForm.systemSettings.awsAccountId" ng-disabled="vm.installingAddons"/>
+                              </div>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.AZURE_DCOS.isEnabled">
+                                {{vm.addonsForm.AZURE_DCOS.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.CLUSTER.isEnabled">
+                                {{vm.addonsForm.CLUSTER.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.DCL.isEnabled">
+                                {{vm.addonsForm.DCL.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.DDC.isEnabled">
+                                {{vm.addonsForm.DDC.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.GKE.isEnabled">
+                                {{vm.addonsForm.GKE.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.KUBERNETES.isEnabled">
+                                {{vm.addonsForm.KUBERNETES.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.TRIPUB.isEnabled">
+                                {{vm.addonsForm.TRIPUB.displayName}}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Notifications -->
+                      <div class="col-md-offset-1 col-md-11">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <b>Notifications</b>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-offset-2 col-md-10">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.webhook.isEnabled">
+                                {{vm.addonsForm.webhook.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.hipchat.isEnabled">
+                                {{vm.addonsForm.hipchat.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.irc.isEnabled">
+                                {{vm.addonsForm.irc.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.Slack.isEnabled">
+                                {{vm.addonsForm.Slack.displayName}}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Registries -->
+                      <div class="col-md-offset-1 col-md-11">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <b>Registries</b>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-offset-2 col-md-10">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.ECR.isEnabled">
+                                {{vm.addonsForm.ECR.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.Docker.isEnabled">
+                                {{vm.addonsForm.Docker.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm['Docker Trusted Registry'].isEnabled">
+                                {{vm.addonsForm['Docker Trusted Registry'].displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.GCR.isEnabled">
+                                {{vm.addonsForm.GCR.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.artifactory.isEnabled">
+                                {{vm.addonsForm.artifactory.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm['Private Docker Registry'].isEnabled">
+                                {{vm.addonsForm['Private Docker Registry'].displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm['Quay.io'].isEnabled">
+                                {{vm.addonsForm['Quay.io'].displayName}}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Other -->
+                      <div class="col-md-offset-1 col-md-11">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <b>Other</b>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-offset-2 col-md-10">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.Jenkins.isEnabled">
+                                {{vm.addonsForm.Jenkins.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm['pem-key'].isEnabled">
+                                {{vm.addonsForm['pem-key'].displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.hubspotToken.isEnabled">
+                                Hubspot
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" ng-if="vm.addonsForm.hubspotToken.isEnabled">
+                          <div class="col-md-offset-1 col-md-3">
+                            hubspotListId
+                          </div>
+                          <div class="col-md-8">
+                            <input type="number" class="form-control input-sm" name="hubspotListId"
+                              ng-model="vm.addonsForm.systemSettings.hubspotListId" ng-disabled="vm.installingAddons"/>
+                          </div>
+                          <div class="col-md-offset-1 col-md-11">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.systemSettings.hubspotShouldSimulate">
+                                hubspotShouldSimulate
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        &nbsp;
+                      </div>
+                      <div class="col-md-offset-1 col-md-10 text-right">
+                        <p>
+                          &nbsp;
+                        </p>
+                        <button class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installingAddons" ng-click="vm.installAddons()">
+                          <div ng-if="vm.installingAddons">
+                            Installing Add-ons...
+                          </div>
+                          <div ng-if="!vm.installingAddons">
+                            Install Add-ons
+                          </div>
+                        </button>
+                      </div>
+                      <div class="col-md-11" style="border-bottom: 1px solid #DDDDDD;">
+                        &nbsp;
+                      </div>
+                    </div>
+                  <!-- SuperUsers -->
+                    <div class="row">
+                      <div class="col-md-10">
+                        &nbsp;
+                        <h4 class="panel-title">
+                          Manage System SuperUsers:
+                        </h4>
+                        &nbsp;
+                      </div>
+                      <div class="col-md-offset-1">
+                        <div class="row">
+                          <div class="col-md-10">
+                            Add superUser:
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-2 text-right">
+                            Account ID:
+                          </div>
+                          <div class="col-md-3">
+                            <input type="text" class="form-control input-sm" name="superUserAccountID" placeholder="abcdef0123456789abcdef01"
+                            ng-model="vm.superUsers.newSuperUser" ng-disabled="vm.superUsers.addingSuperUser"/>
+                          </div>
+                          <div class="col-md-5">
+                            <button ng-click="vm.addSuperUser()" ng-disabled="vm.superUsers.addingSuperUser">
+                              Add
+                            </button>
+                          </div>
+                        </div>
+                        <div class="row">
+                          &nbsp;
+                        </div>
+                        <div class="row">
+                          <div class="col-md-10">
+                            Current SuperUsers:
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div ng-if="!vm.superUsers.superUsers.length" class="col-md-offset-2 col-md-10">
+                            <i>No current SuperUsers</i>
+                          </div>
+                          <div ng-if="vm.superUsers.superUsers.length">
+                            <div ng-repeat="superUser in vm.superUsers.superUsers">
+                              <div class="col-md-offset-2 col-md-3">
+                                {{superUser}}
+                              </div>
+                              <div class="col-md-5">
+                                <button ng-click="vm.removeSuperUser(superUser)" ng-disabled="vm.superUsers.deletingSuperUser">
+                                  Remove
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
