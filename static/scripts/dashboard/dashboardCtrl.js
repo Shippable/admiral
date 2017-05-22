@@ -56,6 +56,7 @@
           initType: 'admiral',
           rootPassword: '',
           address: '',
+          sshPort: 0,
           confirmCommand: false
         },
         redis: {
@@ -1305,6 +1306,7 @@
           name: 'worker'
         }
       ];
+
       // if the user had tried to add a new worker, then switched to
       // an admiral initType, remove any non-admiral workers
       var deletedWorkers =
@@ -1349,6 +1351,21 @@
         redisUpdate.address = $scope.vm.initializeForm.redis.address;
         redisUpdate.isShippableManaged = false;
       }
+
+      // Set the correct password if RabbitMQ has already been initialized,
+      // even if it's Shippable managed:
+      if ($scope.vm.systemSettings.msg.isInitialized) {
+        msgUpdate.username = $scope.vm.initializeForm.msg.username ||
+          'shippableRoot';
+        msgUpdate.isSecure = $scope.vm.initializeForm.msg.isSecure || false;
+      }
+
+      // Set the correct port if GitLab has already been initialized,
+      // even if it's Shippable managed:
+      if ($scope.vm.systemSettings.state.isInitialized)
+        stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
+          ($scope.vm.initializeForm.state.initType === 'admiral' ? 2222 : 22);
+
 
       async.series([
           postMsg.bind(null, msgUpdate),
