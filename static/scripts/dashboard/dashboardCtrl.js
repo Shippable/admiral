@@ -363,7 +363,74 @@
           displayName: '',
           isEnabled: false
         },
-        systemSettings: {}
+        systemSettings: {},
+        systemIntegrations: {
+          clearbit: {
+            isEnabled: false,
+            name: 'clearbit',
+            masterName: 'keyValuePair',
+            data: {
+              envs: {
+                clearbitApiKey: ''
+              }
+            }
+          },
+          deploy: {
+            isEnabled: false,
+            name: 'deploy',
+            masterName: 'amazonKeys',
+            data: {
+              accessKey: '',
+              secretKey: ''
+            }
+          },
+          mktg: {
+            isEnabled: false,
+            name: 'mktg',
+            masterName: 'hubspotToken',
+            data: {
+              hubspotApiEndPoint: '',
+              hubspotApiToken: ''
+            }
+          },
+          mktgDB: {
+            isEnabled: false,
+            name: 'mktgDB',
+            masterName: 'keyValuePair',
+            data: {
+              envs: {
+                dbName: '',
+                dbUsername: '',
+                dbPassword: '',
+                dbHost: '',
+                dbPort: '',
+                dbDialect: ''
+              }
+            }
+          },
+          payment: {
+            isEnabled: false,
+            name: 'payment',
+            masterName: 'braintreeKeys',
+            data: {
+              braintreeMerchantId: '',
+              braintreePrivateKey: '',
+              braintreeEnvironment: '',
+              braintreePublicKey: ''
+            }
+          },
+          segment: {
+            isEnabled: false,
+            name: 'segment',
+            masterName: 'keyValuePair',
+            data: {
+              envs: {
+                segmentApiKey: '',
+                segmentMktgKey: ''
+              }
+            }
+          }
+        }
       },
       superUsers: {
         addingSuperUser: false,
@@ -439,6 +506,7 @@
           getServices.bind(null, bag),
           getDefaultSystemMachineImage.bind(null, bag),
           getSystemSettingsForAddonsPanel.bind(null, bag),
+          updateAddonsFormSystemIntegrations,
           getSuperUsers
         ],
         function (err) {
@@ -596,6 +664,10 @@
           url: {
             url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
               ':50002'
+          },
+          hubspotToken: {
+            hubspotApiEndPoint: '',
+            hubspotApiToken: ''
           }
         },
         msg: {
@@ -659,6 +731,48 @@
           url: {
             url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
               ':50001'
+          }
+        },
+        // Addons integrations
+        clearbit: {
+          keyValuePair: {
+            envs: {
+              clearbitApiKey: ''
+            }
+          }
+        },
+        deploy: {
+          amazonKeys: {
+            accessKey: '',
+            secretKey: ''
+          }
+        },
+        mktgDB: {
+          keyValuePair: {
+            envs: {
+              dbName: '',
+              dbUsername: '',
+              dbPassword: '',
+              dbHost: '',
+              dbPort: '',
+              dbDialect: ''
+            }
+          }
+        },
+        payment: {
+          braintreeKeys: {
+            braintreeMerchantId: '',
+            braintreePrivateKey: '',
+            braintreeEnvironment: '',
+            braintreePublicKey: ''
+          }
+        },
+        segment: {
+          keyValuePair: {
+            envs: {
+              segmentApiKey: '',
+              segmentMktgKey: ''
+            }
           }
         }
       };
@@ -795,6 +909,37 @@
             $scope.vm.initializeForm[service].confirmCommand = true;
         }
       );
+
+      return next();
+    }
+
+    function updateAddonsFormSystemIntegrations(next) {
+
+      // reset all systemIntegrations to their defaults
+      _.each($scope.vm.addonsForm.systemIntegrations,
+        function (systemIntegration, sysIntName) {
+          if (!sysIntName || !systemIntegration.masterName) return;
+          _.extend($scope.vm.addonsForm.systemIntegrations[sysIntName].data,
+            systemIntDataDefaults[sysIntName][systemIntegration.masterName]);
+        }
+      );
+
+      // override defaults with actual systemInt values
+      _.each($scope.vm.systemIntegrations,
+          function (systemIntegration) {
+            var sysIntName = systemIntegration.name;
+            if ($scope.vm.addonsForm.systemIntegrations[sysIntName] &&
+              $scope.vm.addonsForm.systemIntegrations[sysIntName].masterName ===
+              systemIntegration.masterName) {
+              _.extend(
+                $scope.vm.addonsForm.systemIntegrations[sysIntName].data,
+                systemIntegration.data
+              );
+              $scope.vm.addonsForm.systemIntegrations[sysIntName].isEnabled =
+                true;
+            }
+          }
+        );
 
       return next();
     }
@@ -1433,7 +1578,8 @@
           getServices.bind(null, {}),
           getDefaultSystemMachineImage.bind(null, {}),
           getMasterIntegrations.bind(null, {}),
-          updateInitializeForm.bind(null, {})
+          updateInitializeForm.bind(null, {}),
+          updateAddonsFormSystemIntegrations
         ],
         function (err) {
           if (err)
@@ -2165,8 +2311,18 @@
 
           if (!sysIntName || ! masterName) return next();
 
-          resetSystemIntegration(sysIntName, masterName);
-          $scope.vm.installForm[sysIntName][masterName].isEnabled = false;
+          if ($scope.vm.installForm[sysIntName] &&
+            $scope.vm.installForm[sysIntName][masterName]) {
+            resetSystemIntegration(sysIntName, masterName);
+            $scope.vm.installForm[sysIntName][masterName].isEnabled = false;
+          } else if ($scope.vm.addonsForm.systemIntegrations[sysIntName] &&
+            $scope.vm.addonsForm.systemIntegrations[sysIntName].masterName ===
+            masterName) {
+            _.extend($scope.vm.addonsForm.systemIntegrations[sysIntName].data,
+              systemIntDataDefaults[sysIntName][masterName]);
+            $scope.vm.addonsForm.systemIntegrations[sysIntName].isEnabled =
+              false;
+          }
 
           return next();
         }
@@ -2549,10 +2705,13 @@
 
       async.series([
           updateMasterIntegrations,
-          updateAddonsPanelSystemSettings
+          updateAddonsPanelSystemSettings,
+          updateAddonsPanelSystemIntegrations
         ],
         function (err) {
           $scope.vm.installingAddons = false;
+          if (err)
+            return horn.error(err);
           getMasterIntegrations({}, function () {});
         }
       );
@@ -2561,7 +2720,9 @@
     function updateMasterIntegrations(next) {
       async.eachOfSeries($scope.vm.addonsForm,
         function (addonsMasterInt, masterIntName, done) {
-          if (masterIntName === 'systemSettings') return done();
+          if (masterIntName === 'systemSettings' ||
+            masterIntName === 'systemIntegrations')
+            return done();
 
           var masterInt = _.find($scope.vm.masterIntegrations,
             function (masterInt) {
@@ -2583,9 +2744,7 @@
           );
         },
         function (err) {
-          if (err)
-            horn.error(err);
-          return next();
+          return next(err);
         }
       );
     }
@@ -2600,6 +2759,30 @@
           if (err)
             return next(err);
 
+          return next();
+        }
+      );
+    }
+
+    function updateAddonsPanelSystemIntegrations(next) {
+      async.eachSeries($scope.vm.addonsForm.systemIntegrations,
+        function (systemIntegration, done) {
+          var bag = {
+            name: systemIntegration.name,
+            masterName: systemIntegration.masterName,
+            data: systemIntegration.data,
+            isEnabled: systemIntegration.isEnabled
+          };
+
+          updateSystemIntegration(bag,
+            function (err) {
+              return done(err);
+            }
+          );
+        },
+        function (err) {
+          if (err)
+            horn.error(err);
           return next();
         }
       );
