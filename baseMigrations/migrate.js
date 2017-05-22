@@ -353,9 +353,13 @@ function _updateDBConfig(bag, next) {
   var who = bag.who + '|' + _updateDBConfig.name;
   logger.verbose(who, 'Inside');
 
+  var port = bag.stateJson.systemSettings.dbPort;
+  if (!_.isNumber(port))
+    port = parseInt(port, 10);
+
   var db = {
     address: bag.stateJson.systemSettings.dbHost,
-    port: bag.stateJson.systemSettings.dbPort,
+    port: port,
     isProcessing: false,
     isFailed: false,
     isInstalled: true,
@@ -387,11 +391,19 @@ function _updateMsgConfig(bag, next) {
   var rabbitMQAdminUrl = url.parse(bag.systemConfig.amqpUrlAdmin ||
     bag.stateJson.systemSettings.amqpUrlAdmin);
 
+  var rabbitMQRootPort = rabbitMQRootUrl.port;
+  if (rabbitMQRootPort && !_.isNumber(rabbitMQRootPort))
+    rabbitMQRootPort = parseInt(rabbitMQRootPort, 10);
+
+  var rabbitMQAdminPort = rabbitMQAdminUrl.port;
+  if (rabbitMQAdminPort && !_.isNumber(rabbitMQAdminPort))
+    rabbitMQAdminPort = parseInt(rabbitMQAdminPort, 10);
+
   var msg = {
     address: rabbitMQRootUrl.hostname,
-    amqpPort: rabbitMQRootUrl.port ||
+    amqpPort: rabbitMQRootPort ||
       ((rabbitMQRootUrl.protocol === 'amqp:') ? 5672 : 5671),
-    adminPort: rabbitMQAdminUrl.port ||
+    adminPort: rabbitMQAdminPort ||
       ((rabbitMQAdminUrl.protocol === 'http:') ? 15672 : 15671),
     isSecure: (rabbitMQRootUrl.protocol === 'amqp:') ? false : true,
     isShippableManaged: true,
@@ -424,9 +436,13 @@ function _updateRedisConfig(bag, next) {
   var redisUrl = bag.systemConfig.redisUrl ||
     bag.stateJson.systemSettings.redisUrl;
 
+  var port = redisUrl.split(':')[1];
+  if (!_.isNumber(port))
+    port = parseInt(port, 10);
+
   var redis = {
     address: redisUrl.split(':')[0],
-    port: redisUrl.split(':')[1],
+    port: port,
     isShippableManaged: true,
     isProcessing: false,
     isFailed: false,
@@ -460,9 +476,13 @@ function _updateSecretsConfig(bag, next) {
     bag.stateJson.systemSettings.vaultToken;
   var parsedVaultUrl = url.parse(bag.vaultUrl);
 
+  var port = parsedVaultUrl.port;
+  if (!_.isNumber(port))
+    port = parseInt(port, 10);
+
   var secrets = {
     address: parsedVaultUrl.hostname,
-    port: parsedVaultUrl.port,
+    port: port,
     isShippableManaged: true,
     isProcessing: false,
     isFailed: false,
@@ -530,7 +550,7 @@ function _getStateSystemIntegrationValues(bag, next) {
             bag.stateSystemIntegration.id + ' with status code ' + err, body)
         );
 
-      bag.stateSystemIntegration.data = body.data.data || {};
+      bag.stateSystemIntegration.data = body.data.data;
       return next();
     }
   );
@@ -574,14 +594,30 @@ function _updateStateConfig(bag, next) {
 
   var parsedStateUrl = url.parse(stateUrl);
 
+  var port = 80;
+  if (parsedStateUrl.protocol === 'http:' && parsedStateUrl.port) {
+    if (_.isNumber(parsedStateUrl.port))
+      port = parsedStateUrl.port;
+    else
+      port = parseInt(parsedStateUrl.port, 10);
+  }
+
+  var securePort = 443;
+  if (parsedStateUrl.protocol === 'https:' && parsedStateUrl.port) {
+    if (_.isNumber(parsedStateUrl.port))
+      securePort = parsedStateUrl.port;
+    else
+      securePort = parseInt(parsedStateUrl.port, 10);
+  }
+
+  if (sshPort && !_.isNumber(sshPort))
+    sshPort = parseInt(sshPort, 10);
+
   var state = {
     address: parsedStateUrl.hostname,
-    port: (parsedStateUrl.protocol === 'http:' && parsedStateUrl.port) ?
-      parsedStateUrl.port : 80,
+    port: port,
     sshPort: sshPort,
-    securePort:
-      (parsedStateUrl.protocol === 'https:' && parsedStateUrl.port) ?
-      parsedStateUrl.port : 443,
+    securePort: securePort,
     isShippableManaged: true,
     isProcessing: false,
     isFailed: false,
