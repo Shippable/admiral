@@ -1744,7 +1744,7 @@
                               ng-model="vm.installForm.systemSettings.apiRetryIntervalMS" ng-disabled="vm.installing || vm.saving"/>
                           </div>
                         </div>
-                        <div class="row">
+                        <div class="row" ng-if="vm.admiralEnv.IS_SERVER === false">
                           <div class="col-md-12">
                             <div class="checkbox">
                               <input type="checkbox" ng-model="vm.installForm.systemSettings.technicalSupportAvailable" ng-disabled="vm.installing || vm.saving"/>
@@ -2054,31 +2054,206 @@
                                 {{vm.addonsForm['pem-key'].displayName}}
                               </label>
                             </div>
-                            <div class="checkbox">
+                            <!-- hubspot -->
+                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
                               <label>
-                                <input type="checkbox" ng-model="vm.addonsForm.hubspotToken.isEnabled">
+                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.mktg.isEnabled">
                                 Hubspot
                               </label>
                             </div>
-                          </div>
-                        </div>
-                        <div class="row" ng-if="vm.addonsForm.hubspotToken.isEnabled">
-                          <div class="col-md-offset-1 col-md-3">
-                            hubspotListId
-                          </div>
-                          <div class="col-md-8">
-                            <input type="number" class="form-control input-sm" name="hubspotListId"
-                              ng-model="vm.addonsForm.systemSettings.hubspotListId" ng-disabled="vm.installingAddons"/>
-                          </div>
-                          <div class="col-md-offset-1 col-md-11">
-                            <div class="checkbox">
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                hubspotListId
+                              </div>
+                              <div class="col-md-8">
+                                <input type="number" class="form-control input-sm" name="hubspotListId"
+                                  ng-model="vm.addonsForm.systemSettings.hubspotListId" ng-disabled="vm.installingAddons"/>
+                              </div>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled">
+                              <div class="col-md-offset-1 col-md-11">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.addonsForm.systemSettings.hubspotShouldSimulate">
+                                    hubspotShouldSimulate
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled">
+                              <div class="col-md-12" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled">
+                                <div class="row">
+                                  <div class="col-md-offset-1 col-md-3">
+                                    Hubspot API Endpoint
+                                  </div>
+                                  <div class="col-md-8">
+                                    <input type="text" class="form-control input-sm" name="hubspotApiEndPoint"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktg.data.hubspotApiEndPoint" ng-disabled="vm.installingAddons"/>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-offset-1 col-md-3">
+                                    Hubspot API Token
+                                  </div>
+                                  <div class="col-md-8">
+                                    <input type="text" class="form-control input-sm" name="hubspotApiToken"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktg.data.hubspotApiToken" ng-disabled="vm.installingAddons"/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- clearbit -->
+                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.clearbit.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
                               <label>
-                                <input type="checkbox" ng-model="vm.addonsForm.systemSettings.hubspotShouldSimulate">
-                                hubspotShouldSimulate
+                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.clearbit.isEnabled">
+                                Clearbit
                               </label>
                             </div>
-                          </div>
-                        </div>
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.clearbit.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                API Key
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="clearbitApiKey"
+                                  ng-model="vm.addonsForm.systemIntegrations.clearbit.data.envs.clearbitApiKey" ng-disabled="vm.installingAddons"/>
+                              </div>
+                            </div>
+                            <!-- deploy -->
+                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.deploy.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.deploy.isEnabled">
+                                AWS Deploy Integration
+                              </label>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.deploy.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                Access Key
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="deployAccessKey"
+                                  ng-model="vm.addonsForm.systemIntegrations.deploy.data.accessKey" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                Secret Key
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="deploySecretKey"
+                                  ng-model="vm.addonsForm.systemIntegrations.deploy.data.secretKey" ng-disabled="vm.installingAddons"/>
+                              </div>
+                            </div>
+                            <!-- mktgDB -->
+                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.mktgDB.isEnabled">
+                                Mktg DB
+                              </label>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                DB Name
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="mktgDBName"
+                                  ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbName" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                DB Username
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="mktgDBUsername"
+                                  ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbUsername" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                DB Password
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="mktgDBPassword"
+                                  ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbPassword" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                DB Host
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="mktgDBHost"
+                                  ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbHost" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                DB Port
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="mktgDBPort"
+                                  ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbPort" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                DB Dialect
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="mktgDBDialect"
+                                  ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbDialect" ng-disabled="vm.installingAddons"/>
+                              </div>
+                            </div>
+                            <!-- payment -->
+                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.payment.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.payment.isEnabled">
+                                Braintree
+                              </label>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.payment.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                Merchant ID
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="braintreeMerchantId"
+                                  ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreeMerchantId" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                Public Key
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="braintreePublicKey"
+                                  ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreePublicKey" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                Private Key
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="braintreePrivateKey"
+                                  ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreePrivateKey" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                Environment
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="braintreeEnvironment"
+                                  ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreeEnvironment" ng-disabled="vm.installingAddons"/>
+                              </div>
+                            </div>
+                            <!-- segment -->
+                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.segment.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.segment.isEnabled">
+                                Segment
+                              </label>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.segment.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                API Key
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="segmentApiKey"
+                                  ng-model="vm.addonsForm.systemIntegrations.segment.data.envs.segmentApiKey" ng-disabled="vm.installingAddons"/>
+                              </div>
+                              <div class="col-md-offset-1 col-md-3">
+                                Mktg Key
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="segmentMktgKey"
+                                  ng-model="vm.addonsForm.systemIntegrations.segment.data.envs.segmentMktgKey" ng-disabled="vm.installingAddons"/>
+                              </div>
+                           </div>
+                         </div>
+                       </div>
                       </div>
                       <div>
                         &nbsp;
