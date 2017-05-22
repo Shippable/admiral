@@ -179,7 +179,7 @@ __pull_images_workers() {
     fi
 
     local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
-      __exec_cmd_remote "$host" "$docker_login_cmd"
+    __exec_cmd_remote "$host" "$docker_login_cmd"
 
     for image in "${SERVICE_IMAGES[@]}"; do
       image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
