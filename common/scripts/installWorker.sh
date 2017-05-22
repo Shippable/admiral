@@ -52,9 +52,6 @@ __copy_configs() {
   __process_msg "Copying docker login binary"
   local docker_credentials_binary="$SCRIPTS_DIR/Ubuntu_14.04/docker-credential-ecr-login"
   sudo cp -vr $docker_credentials_binary $WORKERS_CONFIG_DIR/
-
-  __process_msg "Copying docker login configuration"
-  sudo cp -vr "$SCRIPTS_DIR/configs/config.json" $WORKERS_CONFIG_DIR/
 }
 
 main() {
