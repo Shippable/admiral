@@ -16,6 +16,7 @@ var APIAdapter = require('../../common/APIAdapter.js');
 function cleanup(req, res) {
   var bag = {
     resBody: {},
+    reqBody: req.body,
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     component: 'workers',
     tmpScript: '/tmp/workers.sh',
