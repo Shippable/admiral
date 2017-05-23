@@ -458,7 +458,7 @@ __exec_cmd_remote() {
     -p $port \
     -i $key \
     $user@$host \
-    $cmd"
+    \"$cmd\""
 
   {
     __process_msg "Executing on host: $host ==> '$cmd'" && eval "sudo -E $remote_cmd"
