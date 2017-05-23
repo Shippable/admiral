@@ -19,6 +19,7 @@ function cleanup(req, res) {
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     component: 'master',
     tmpScript: '/tmp/master.sh',
+    config: {}
   };
 
   bag.who = util.format('master|%s', self.name);
@@ -66,7 +67,6 @@ function _get(bag, next) {
 
       if (_.isEmpty(master)) {
         logger.debug('No configuration in database for ' + bag.component);
-        bag.initializeDefault = true;
         return next();
       }
 

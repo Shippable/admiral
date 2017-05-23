@@ -200,6 +200,26 @@ function _sendResponse(bag, next) {
   return next();
 }
 
+function _getAccessKey(bag, next) {
+  var who = bag.who + '|' + _getAccessKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.accessKeyEnv,
+    function (err, accessKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.accessKeyEnv)
+        );
+
+      bag.accessKey = accessKey;
+      logger.debug('Found access key');
+
+      return next();
+    }
+  );
+}
+
 function _getSecretKey(bag, next) {
   var who = bag.who + '|' + _getSecretKey.name;
   logger.verbose(who, 'Inside');

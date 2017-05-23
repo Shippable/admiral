@@ -11,7 +11,7 @@ export SCRIPTS_DIR_REMOTE="/tmp/shippable"
 exec &> >(tee -a "$LOGS_FILE")
 
 __validate_master_envs() {
-  __process_msg "Initializing redis environment variables"
+  __process_msg "Initializing swarm master environment variables"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "MASTER_HOST: $MASTER_HOST"
   __process_msg "MASTER_PORT: $MASTER_PORT"
