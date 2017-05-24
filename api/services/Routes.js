@@ -9,5 +9,5 @@ function servicesRoutes(app) {
   app.delete('/api/services/:serviceName', validateAccount,
     require('./deleteByName.js'));
   app.put('/api/services/:serviceName', validateAccount,
-    require('./deleteByName.js'));
+    require('./put.js'));
 }
