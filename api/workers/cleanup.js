@@ -67,19 +67,30 @@ function _get(bag, next) {
   logger.verbose(who, 'Inside');
 
   configHandler.get(bag.component,
-    function (err, master) {
+    function (err, workers) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DBOperationFailed,
+          new ActErr(who, ActErr.DataNotFound,
             'Failed to get ' + bag.component, err)
         );
 
-      if (_.isEmpty(master)) {
-        logger.debug('No configuration in database for ' + bag.component);
-        return next();
-      }
+      if (_.isEmpty(workers))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No configuration in database for ' + bag.component)
+        );
 
-      bag.config = master;
+      bag.config = _.find(workers,
+        function (worker) {
+          return worker.address === bag.address;
+        }
+      );
+
+      if (_.isEmpty(bag.config))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No entry in workers list for ' + bag.address)
+        );
       return next();
     }
   );
