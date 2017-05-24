@@ -137,6 +137,9 @@
       postService: function (body, callback) {
         return API.post('/api/services', body, callback);
       },
+      putService: function (serviceName, body, callback) {
+        return API.put('/api/services/' + serviceName, body, callback);
+      },
       deleteService: function (serviceName, body, callback) {
         return API.delete('/api/services/' + serviceName, body, callback);
       }

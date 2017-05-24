@@ -1831,8 +1831,11 @@
                             <td class="text-right">
                               Replicas:
                             </td>
-                            <td>
+                            <td ng-if="vm.isGlobalService(service.serviceName)">
                               {{service.replicas}}
+                            </td>
+                            <td ng-if="!vm.isGlobalService(service.serviceName)">
+                              <input type=number ng-model="service.replicas" />
                             </td>
                           </tr>
                         </tbody>
@@ -1849,20 +1852,12 @@
                     <p>
                       &nbsp;
                     </p>
-                    <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showSaveModal()">
+                    <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showSaveServicesModal()">
                       <div ng-if="vm.saving">
                         Saving...
                       </div>
                       <div ng-if="!vm.saving">
                         Save
-                      </div>
-                    </button>
-                    <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showRestartServicesModal()">
-                      <div ng-if="vm.restartingServices">
-                        Restarting...
-                      </div>
-                      <div ng-if="!vm.restartingServices">
-                        Restart Services
                       </div>
                     </button>
                   </div>
@@ -2439,6 +2434,36 @@
           </div>
         </div>
         <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Save Services Modal -->
+  <div class="modal fade" id="saveServicesModal"
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            Save Services
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            Saving will immediately update your services.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-md btn-primary" type="submit" ng-click="vm.saveServices()">
+            Save
+          </button>
+          <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
+            Cancel
+          </button>
         </div>
       </div>
     </div>
