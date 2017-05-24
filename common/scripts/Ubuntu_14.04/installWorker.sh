@@ -51,7 +51,6 @@ main() {
   __install_ecr
   __initialize_worker
   __registry_login
-  __pull_images_workers
 }
 
 main

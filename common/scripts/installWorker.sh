@@ -91,6 +91,16 @@ main() {
         RELEASE=$RELEASE \
         $SCRIPTS_DIR_REMOTE/$script_name"
       __exec_cmd_remote "$WORKER_HOST" "$worker_install_cmd"
+
+      local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+      __exec_cmd_remote "$WORKER_HOST" "$docker_login_cmd"
+
+      for image in "${SERVICE_IMAGES[@]}"; do
+        image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
+        __process_msg "Pulling $image on $WORKER_HOST"
+        local pull_cmd="sudo docker pull $image"
+        __exec_cmd_remote "$WORKER_HOST" "$pull_cmd"
+      done
     fi
   fi
   __process_msg "Swarm worker installed successfully"

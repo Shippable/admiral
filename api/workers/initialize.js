@@ -304,6 +304,7 @@ function _generateInitializeEnvs(bag, next) {
     'MASTER_HOST': bag.master.address,
     'MASTER_PORT': bag.master.port,
     'WORKER_JOIN_TOKEN': bag.swarmWorkerJoinToken,
+    'PRIVATE_IMAGE_REGISTRY': global.config.privateImageRegistry,
     'ACCESS_KEY': bag.accessKey,
     'SECRET_KEY': bag.secretKey
   };
