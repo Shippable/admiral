@@ -36,9 +36,14 @@
       saving: false,
       restartingServices: false,
       requireRestart: false,
+      globalServices: [
+        'api',
+        'mktg',
+        'www'
+      ],
       initializeForm: {
         secrets: {
-          //install type can be admiral (same node as admiral), new, or existing
+          // install type can be admiral (same node as admiral), new, or existing
           initType: 'admiral',
           address: '',
           rootToken: '',
@@ -473,6 +478,7 @@
       upgrade: upgrade,
       install: install,
       save: save,
+      saveServices: saveServices,
       restartServices: restartServices,
       installAddons: installAddons,
       addSuperUser: addSuperUser,
@@ -482,8 +488,10 @@
       showLogModal: showLogModal,
       showWorkersLogModal: showWorkersLogModal,
       showSaveModal: showSaveModal,
+      showSaveServicesModal: showSaveServicesModal,
       showRestartServicesModal: showRestartServicesModal,
       refreshLogs: refreshLogs,
+      isGlobalService: isGlobalService,
       logOutOfAdmiral: logOutOfAdmiral
     };
 
@@ -2011,6 +2019,27 @@
       );
     }
 
+    function saveServices() {
+      $scope.vm.saving = true;
+      hideSaveServicesModal();
+
+      async.eachLimit($scope.vm.coreServices, 10,
+        function (service, done) {
+          admiralApiAdapter.putService(service.serviceName, service,
+            function (err) {
+              if (err)
+                horn.error(err);
+              return done();
+            }
+          );
+        },
+        function (err) {
+          $scope.vm.saving = false;
+          if (err)
+            return horn.error(err);
+        }
+      );
+    }
 
     function updateFilestoreSystemIntegration(next) {
       var bag = {
@@ -2698,6 +2727,14 @@
       $('#saveModal').modal('hide');
     }
 
+    function showSaveServicesModal() {
+      $('#saveServicesModal').modal('show');
+    }
+
+    function hideSaveServicesModal() {
+      $('#saveServicesModal').modal('hide');
+    }
+
     function showRestartServicesModal() {
       $('#restartServicesModal').modal('show');
     }
@@ -2887,6 +2924,10 @@
           window.scrollTo(0, 0);
         }
       );
+    }
+
+    function isGlobalService(service) {
+      return _.contains($scope.vm.globalServices, service);
     }
   }
 }());
