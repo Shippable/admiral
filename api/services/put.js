@@ -9,7 +9,6 @@ var _ = require('underscore');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 
-var APIAdapter = require('../../common/APIAdapter.js');
 var configHandler = require('../../common/configHandler.js');
 
 function put(req, res) {
@@ -17,7 +16,6 @@ function put(req, res) {
     inputParams: req.params,
     reqBody: req.body,
     resBody: {},
-    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     params: {},
     tmpScript: '/tmp/update_service.sh',
     isSwarmClusterInitialized: false
@@ -136,13 +134,13 @@ function _getWorkers(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.DataNotFound,
-            'Failed to get ' + bag.component, err)
+            'Failed to get workers', err)
         );
 
       if (_.isEmpty(workers))
         return next(
           new ActErr(who, ActErr.DataNotFound,
-            'No configuration in database for ' + bag.component)
+            'No configuration in database for workers')
         );
       // if even one worker has external IP then swarm cluster is initialized
       bag.isSwarmClusterInitialized = _.some(workers,
