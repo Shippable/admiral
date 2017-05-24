@@ -100,7 +100,6 @@
           bitbucketKeys: {
             isEnabled: false,
             masterName: 'bitbucketKeys',
-            scmMasterName: 'bitbucket',
             data: {
               clientId: '',
               clientSecret: '',
@@ -111,7 +110,6 @@
           bitbucketServerKeys: {
             isEnabled: false,
             masterName: 'bitbucketServerKeys',
-            scmMasterName: 'bitbucketServer',
             data: {
               clientId: '',
               clientSecret: '',
@@ -122,7 +120,6 @@
           githubKeys: {
             isEnabled: false,
             masterName: 'githubKeys',
-            scmMasterName: 'github',
             data: {
               clientId: '',
               clientSecret: '',
@@ -133,7 +130,6 @@
           githubEnterpriseKeys: {
             isEnabled: false,
             masterName: 'githubEnterpriseKeys',
-            scmMasterName: 'githubEnterprise',
             data: {
               clientId: '',
               clientSecret: '',
@@ -144,13 +140,29 @@
           gitlabKeys: {
             isEnabled: false,
             masterName: 'gitlabKeys',
-            scmMasterName: 'gitlab',
             data: {
               clientId: '',
               clientSecret: '',
               wwwUrl: '',
               url: ''
             }
+          }
+        },
+        scm: {
+          bitbucket: {
+            isEnabled: false
+          },
+          bitbucketServer: {
+            isEnabled: false
+          },
+          github: {
+            isEnabled: false
+          },
+          githubEnterprise: {
+            isEnabled: false
+          },
+          gitlab: {
+            isEnabled: false
           }
         },
         filestore: {
@@ -271,9 +283,9 @@
           }
         },
         defaultSystemMachineImage: {},
-        systemSettings: {},
-        allServices: []
+        systemSettings: {}
       },
+      allServices: [],
       systemIntegrations: [],
       masterIntegrations: [],
       addonsForm: {
@@ -793,11 +805,13 @@
       if (!$scope.vm.dbInitialized) return next();
       if (!$scope.vm.systemSettings.secrets.isInitialized) return next();
 
+      var installFormNonSystemInts = ['defaultSystemMachineImage',
+        'scm', 'systemSettings'];
+
       // reset all systemIntegrations to their defaults
       _.each($scope.vm.installForm,
         function (systemInts, systemIntName) {
-          if (systemIntName !== 'systemSettings' &&
-            systemIntName !== 'defaultSystemMachineImage') {
+          if (!_.contains(installFormNonSystemInts, systemIntName)) {
             _.each(systemInts,
               function (value, masterName) {
                 resetSystemIntegration(systemIntName, masterName);
@@ -984,6 +998,10 @@
 
           _.each(masterIntegrations,
             function (masterInt) {
+              if (_.has($scope.vm.installForm.scm, masterInt.name))
+                $scope.vm.installForm.scm[masterInt.name].isEnabled =
+                  masterInt.isEnabled;
+
               if (_.has($scope.vm.addonsForm, masterInt.name)) {
                 $scope.vm.addonsForm[masterInt.name].isEnabled =
                   masterInt.isEnabled;
@@ -1888,6 +1906,7 @@
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
+          enableSCMMasterIntegrations,
           updateMktgSystemIntegration,
           updateMsgSystemIntegration,
           updateRedisSystemIntegration,
@@ -1949,6 +1968,7 @@
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
+          enableSCMMasterIntegrations,
           updateMktgSystemIntegration,
           updateMsgSystemIntegration,
           updateRedisSystemIntegration,
@@ -2108,17 +2128,13 @@
           var bag = {
             name: 'auth',
             masterName: systemInt.masterName,
-            scmMasterName: systemInt.scmMasterName,
             data: systemInt.data,
             isEnabled: systemInt.isEnabled
           };
 
           bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
 
-          async.series([
-              updateSystemIntegration.bind(null, bag),
-              enableSCMMasterIntegration.bind(null, bag)
-            ],
+          updateSystemIntegration(bag,
             function (err) {
               return done(err);
             }
@@ -2377,24 +2393,33 @@
         systemIntDataDefaults[sysIntName][masterName]);
     }
 
-    function enableSCMMasterIntegration(bag, callback) {
-      var masterInt =
-        _.findWhere($scope.vm.masterIntegrations, {name: bag.scmMasterName});
+    function enableSCMMasterIntegrations(next) {
+      async.eachOfSeries($scope.vm.installForm.scm,
+        function (scmObject, scmName, done) {
+          var masterInt =
+            _.findWhere($scope.vm.masterIntegrations, {name: scmName});
 
-      if (!masterInt)
-        return callback('No scm masterIntegration found for ' +
-          bag.scmMasterName);
+          if (!masterInt)
+            return next('No scm masterIntegration found for ' +
+              scmName);
 
-      var update = {
-        isEnabled: bag.isEnabled
-      };
+          var update = {
+            isEnabled: scmObject.isEnabled
+          };
 
-      admiralApiAdapter.putMasterIntegration(masterInt.id, update,
+          admiralApiAdapter.putMasterIntegration(masterInt.id, update,
+            function (err) {
+              if (err)
+                return done(err);
+
+              return done();
+            }
+          );
+        },
         function (err) {
           if (err)
-            return callback(err);
-
-          return callback();
+            return next(err);
+          return next();
         }
       );
     }
