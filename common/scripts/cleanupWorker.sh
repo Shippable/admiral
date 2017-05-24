@@ -27,7 +27,7 @@ __cleanup_swarm_worker() {
   __copy_script_remote "$WORKER_HOST" "$node_cleanup_script" "$SCRIPTS_DIR_REMOTE"
   __exec_cmd_remote "$WORKER_HOST" "$SCRIPTS_DIR_REMOTE/cleanupWorker.sh"
 
-  local worker_install_cmd="WORKER_HOST=$WORKER_HOST \
+  local worker_cleanup_cmd="WORKER_HOST=$WORKER_HOST \
     WORKER_JOIN_TOKEN=$WORKER_JOIN_TOKEN \
     WORKER_PORT=$WORKER_PORT \
     MASTER_HOST=$MASTER_HOST \
@@ -35,7 +35,7 @@ __cleanup_swarm_worker() {
     PUBLIC_IMAGE_REGISTRY=$PUBLIC_IMAGE_REGISTRY \
     RELEASE=$RELEASE \
     $SCRIPTS_DIR_REMOTE/cleanupWorker.sh"
-  __exec_cmd_remote "$WORKER_HOST" "$worker_install_cmd"
+  __exec_cmd_remote "$WORKER_HOST" "$worker_cleanup_cmd"
 
 }
 

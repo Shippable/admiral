@@ -27,16 +27,16 @@ function cleanup(req, res) {
   logger.info(bag.who, 'Starting');
 
   async.series([
-    _checkInputParams.bind(null, bag),
-    _get.bind(null, bag),
-    _getReleaseVersion.bind(null, bag),
-    _getPublicImageRegistry.bind(null, bag),
-    _getPrivateImageRegistry.bind(null, bag),
-    _generateEnvs.bind(null, bag),
-    _generateInitializeScript.bind(null, bag),
-    _writeScriptToFile.bind(null, bag),
-    _cleanupMaster.bind(null, bag)
-  ],
+      _checkInputParams.bind(null, bag),
+      _get.bind(null, bag),
+      _getReleaseVersion.bind(null, bag),
+      _getPublicImageRegistry.bind(null, bag),
+      _getPrivateImageRegistry.bind(null, bag),
+      _generateEnvs.bind(null, bag),
+      _generateInitializeScript.bind(null, bag),
+      _writeScriptToFile.bind(null, bag),
+      _cleanupWorker.bind(null, bag)
+    ],
     function (err) {
       logger.info(bag.who, 'Completed');
       if (err)
@@ -221,8 +221,8 @@ function _writeScriptToFile(bag, next) {
 }
 
 
-function _cleanupMaster(bag, next) {
-  var who = bag.who + '|' + _cleanupMaster.name;
+function _cleanupWorker(bag, next) {
+  var who = bag.who + '|' + _cleanupWorker.name;
   logger.verbose(who, 'Inside');
 
   var exec = spawn('/bin/bash',
