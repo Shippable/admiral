@@ -34,8 +34,8 @@ function put(req, res) {
       _generateEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
-      _deleteService.bind(null, bag),
-      _delete.bind(null, bag),
+      _updateService.bind(null, bag),
+      _put.bind(null, bag),
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -207,8 +207,8 @@ function _writeScriptToFile(bag, next) {
   );
 }
 
-function _deleteService(bag, next) {
-  var who = bag.who + '|' + _deleteService.name;
+function _updateService(bag, next) {
+  var who = bag.who + '|' + _updateService.name;
   logger.verbose(who, 'Inside');
 
   var exec = spawn('/bin/bash',
@@ -242,11 +242,11 @@ function _deleteService(bag, next) {
   );
 }
 
-function _delete(bag, next) {
-  var who = bag.who + '|' + _delete.name;
+function _put(bag, next) {
+  var who = bag.who + '|' + _put.name;
   logger.verbose(who, 'Inside');
 
-  bag.serviceConfig.isEnabled = bag.reqBody.isEnabled || false;
+  bag.serviceConfig.replicas = bag.replicas;
   bag.services[bag.name] = bag.serviceConfig;
 
   configHandler.put('services', bag.services,
