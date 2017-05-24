@@ -345,7 +345,7 @@ __cleanup_workers() {
   else
     __process_msg "Successfully fetched workers list"
     workers=$(echo $response | jq '.')
-    workers=$(echo $services \
+    workers=$(echo $workers \
       | jq '[ .[] | select (.isInitialized==true) | select (.isProcessing==false)]')
   fi
 
