@@ -374,9 +374,12 @@ function _checkInitStatus(bag, next) {
               'Vault is missing a root token.')
           );
 
-        bag.config.isInitialized = response.initialized;
+        // 'isInitialized' flag stores vault status as defined by shippable
+        // 'isVaultInitialized' flag implies whether vault server has been
+        // initialized or not.
+        bag.isVaultInitialized = response.initialized;
       } else {
-        bag.config.isInitialized = false;
+        bag.isVaultInitialized = false;
       }
       return next();
     }
@@ -385,8 +388,9 @@ function _checkInitStatus(bag, next) {
 
 function _initialize(bag, next) {
   if (!bag.config.isShippableManaged) return next();
-  // skip if already initialized
-  if (bag.config.isInitialized) return next();
+
+  // skip if vault already initialized
+  if (bag.isVaultInitialized) return next();
 
   var who = bag.who + '|' + _initialize.name;
   logger.verbose(who, 'Inside');
@@ -414,6 +418,7 @@ function _initialize(bag, next) {
       bag.rootToken  = response.root_token;
       /* jshint camelcase:true */
 
+      bag.isVaultInitialized = true;
       logger.debug('Successfully fetched unseal keys for vault');
       return next();
     }
@@ -475,7 +480,7 @@ function _setVaultRootToken(bag, next) {
 function _unsealVaultStep1(bag, next) {
   if (!bag.config.isShippableManaged) return next();
   // cannot unseal if vault is not initialized
-  if (!bag.config.isInitialized) return next();
+  if (!bag.isVaultInitialized) return next();
 
   // do not  unseal if key is not present
   if (_.isEmpty(bag.unsealKey1)) return next();
@@ -508,7 +513,7 @@ function _unsealVaultStep1(bag, next) {
 function _unsealVaultStep2(bag, next) {
   if (!bag.config.isShippableManaged) return next();
   // cannot unseal if vault is not initialized
-  if (!bag.config.isInitialized) return next();
+  if (!bag.isVaultInitialized) return next();
 
   // do not  unseal if key is not present
   if (_.isEmpty(bag.unsealKey1)) return next();
@@ -542,7 +547,7 @@ function _unsealVaultStep2(bag, next) {
 function _unsealVaultStep3(bag, next) {
   if (!bag.config.isShippableManaged) return next();
   // cannot unseal if vault is not initialized
-  if (!bag.config.isInitialized) return next();
+  if (!bag.isVaultInitialized) return next();
 
   // do not  unseal if key is not present
   if (_.isEmpty(bag.unsealKey1)) return next();

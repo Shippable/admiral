@@ -8,4 +8,6 @@ function servicesRoutes(app) {
   app.post('/api/services', validateAccount, require('./post.js'));
   app.delete('/api/services/:serviceName', validateAccount,
     require('./deleteByName.js'));
+  app.put('/api/services/:serviceName', validateAccount,
+    require('./put.js'));
 }
