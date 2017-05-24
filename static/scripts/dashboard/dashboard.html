@@ -729,7 +729,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">
               <a data-toggle="collapse" href="#installpanel">
-                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '3.' : '2.'}} Configure & Install Services
+                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '3.' : '2.'}} Configure & Install
               </a>
             </h3>
           </div>
@@ -1754,46 +1754,7 @@
                         </div>
                       </div>
                     </div>
-                    <!-- Core Services -->
-                    <div class="row">
-                      <div class="col-md-12" ng-if="vm.isLoaded && vm.initialized">
-                        &nbsp;
-                        <h4 class="panel-title">
-                          Core services to be installed:
-                        </h4>
-                        &nbsp;
-                      </div>
-                      <div class="col-md-offset-2 col-md-10">
-                        <div class="row">
-                          <table class="table table-condensed table-striped">
-                            <thead>
-                            </thead>
-                            <tbody>
-                              <tr ng-repeat="service in vm.coreServices">
-                                <td>
-                                  <b>{{service.serviceName}}</b>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td class="text-right">
-                                  Replicas:
-                                </td>
-                                <td>
-                                  {{service.replicas}}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div>
-                        &nbsp;
-                      </div>
-                    </div>
+
                     <!-- Install and Save Buttons -->
                     <div class="row">
                       <div class="col-md-offset-1 col-md-10 text-right">
@@ -1835,8 +1796,86 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
+              <a data-toggle="collapse" href="#servicespanel">
+                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '4.' : '3.'}} Services
+              </a>
+            </h3>
+          </div>
+          <div id="servicespanel" class="panel-collapse collapse">
+            <div class="panel-body">
+              <div ng-if="!vm.isLoaded">
+                Loading...
+              </div>
+              <div ng-if="!vm.initialized">
+                Please initialize first.
+              </div>
+              <div ng-if="vm.isLoaded && vm.initialized">
+                <!-- Core Services -->
+                <div class="row">
+                  <div class="col-md-offset-1 col-md-10">
+                    <div class="row">
+                      <table class="table table-condensed table-striped">
+                        <thead>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="service in vm.coreServices">
+                            <td>
+                              <b>{{service.serviceName}}</b>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td class="text-right">
+                              Replicas:
+                            </td>
+                            <td>
+                              {{service.replicas}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div>
+                    &nbsp;
+                  </div>
+                </div>
+                <!-- Save and Restart Buttons -->
+                <div class="row">
+                  <div class="col-md-offset-1 col-md-10 text-right">
+                    <p>
+                      &nbsp;
+                    </p>
+                    <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showSaveModal()">
+                      <div ng-if="vm.saving">
+                        Saving...
+                      </div>
+                      <div ng-if="!vm.saving">
+                        Save
+                      </div>
+                    </button>
+                    <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showRestartServicesModal()">
+                      <div ng-if="vm.restartingServices">
+                        Restarting...
+                      </div>
+                      <div ng-if="!vm.restartingServices">
+                        Restart Services
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
               <a data-toggle="collapse" href="#addonpanel">
-                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '4.' : '3.'}} Add-ons
+                {{(vm.initialized && vm.systemSettings.releaseVersion !== vm.admiralEnv.RELEASE) ? '5.' : '4.'}} Add-ons
               </a>
             </h3>
           </div>
