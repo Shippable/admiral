@@ -272,7 +272,7 @@
         },
         defaultSystemMachineImage: {},
         systemSettings: {},
-        coreServices: []
+        allServices: []
       },
       systemIntegrations: [],
       masterIntegrations: [],
@@ -1059,15 +1059,11 @@
             return next();
           }
 
-          $scope.vm.coreServices = _.filter(services,
-            function (service) {
-              return service.isCore;
-            }
-          );
+          $scope.vm.allServices = services;
 
           if (!$scope.vm.installing && !$scope.vm.saving)
             // Don't change this while installing
-            $scope.vm.requireRestart = _.some($scope.vm.coreServices,
+            $scope.vm.requireRestart = _.some($scope.vm.allServices,
               function (service) {
                 return service.isEnabled;
               }
@@ -2023,7 +2019,7 @@
       $scope.vm.saving = true;
       hideSaveServicesModal();
 
-      async.eachLimit($scope.vm.coreServices, 10,
+      async.eachLimit($scope.vm.allServices, 10,
         function (service, done) {
           admiralApiAdapter.putService(service.serviceName, service,
             function (err) {
@@ -2615,7 +2611,7 @@
     }
 
     function startService(serviceName, callback) {
-      var serviceConfig = _.find($scope.vm.coreServices,
+      var serviceConfig = _.find($scope.vm.allServices,
         function (service) {
           return service.serviceName === serviceName;
         }
@@ -2760,7 +2756,8 @@
       async.series([
           updateMasterIntegrations,
           updateAddonsPanelSystemSettings,
-          updateAddonsPanelSystemIntegrations
+          updateAddonsPanelSystemIntegrations,
+          getServices.bind(null, {})
         ],
         function (err) {
           $scope.vm.installingAddons = false;
