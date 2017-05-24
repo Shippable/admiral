@@ -2039,7 +2039,7 @@
       $scope.vm.saving = true;
       hideSaveServicesModal();
 
-      async.eachLimit($scope.vm.allServices, 10,
+      async.eachSeries($scope.vm.allServices,
         function (service, done) {
           admiralApiAdapter.putService(service.serviceName, service,
             function (err) {
