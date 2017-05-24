@@ -93,10 +93,8 @@ do $$
       (
          SELECT "id", "projectId", "createdAt", "createdBy", "updatedBy", "name", "typeCode", "isJob", "lastVersionName", "lastVersionNumber" FROM resources WHERE "isJob" = true and "typeCode" in (2010,2000,2005,2007,2012,2011,2009)
       )
-      SELECT "id", "projectId" as rpid, "createdAt", "createdBy", "updatedBy", "name" as "contextValue", "typeCode" as "contextTypeCode", "lastVersionName" as "contextDetail", "lastVersionNumber"
+      SELECT "id", "projectId" as rpid, "createdAt", "createdBy", "updatedBy", "name" as "contextValue", "typeCode" as "contextTypeCode", "lastVersionName" as "contextDetail"
       FROM cte;
-
-      update rtjsm set "contextDetail" = rtjsm."lastVersionNumber" where "contextDetail" is null;
 
       -- add required columns to temp table tjsm
       alter table tjsm add column "contextValue" varchar(255), add column "contextTypeCode" int, add column "contextDetail" varchar(255), add column "lastSuccessfulJobId" varchar(24), add column "lastFailedJobId" varchar(24), add column "createdBy" varchar(24), add column "updatedBy" varchar(24);
