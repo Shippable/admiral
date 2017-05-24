@@ -1818,7 +1818,7 @@
                         <thead>
                         </thead>
                         <tbody>
-                          <tr ng-repeat="service in vm.coreServices">
+                          <tr ng-repeat="service in vm.allServices" ng-if="service.isEnabled">
                             <td>
                               <b>{{service.serviceName}}</b>
                             </td>
