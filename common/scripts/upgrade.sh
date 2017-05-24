@@ -333,6 +333,52 @@ __cleanup_master() {
   fi
 }
 
+__cleanup_workers() {
+  __process_marker "Cleaning up swarm worker node"
+  __process_msg "Getting swarm workers"
+  local workers=""
+  _shippable_get_workers
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error getting workers list: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully fetched workers list"
+    workers=$(echo $response | jq '.')
+    workers=$(echo $services \
+      | jq '[ .[] | select (.isInitialized==true) | select (.isProcessing==false)]')
+  fi
+
+  local workers_count=$(echo $workers | jq '. | length')
+  if [ $workers_count -ne 0 ]; then
+    __process_msg "Cleaning up $workers_count workers"
+
+    for i in $(seq 1 $workers_count); do
+      local worker=$(echo $workers \
+        | jq '.['"$i-1"']')
+      local worker_address=$(echo $worker \
+        | jq -r '.address')
+
+      __process_msg "Cleaning up worker: $worker_address"
+      local body='{"address": "'$worker_address'"}'
+      _shippable_post_worker_cleanup "$body"
+      if [ $response_status_code -gt 299 ]; then
+        __process_error "Error cleaning up worker $worker_address: $response"
+        __process_error "Status code: $response_status_code"
+        __process_error "==================== Error Logs ====================="
+        local logs_file="$LOGS_DIR/workers.log"
+        tail -$MAX_ERROR_LOG_COUNT $logs_file
+        __process_error "====================================================="
+        exit 1
+      else
+        __process_msg "Successfully cleaned up worker: $worker_address"
+      fi
+    done
+  else
+    __process_msg "No workers available"
+  fi
+}
+
 main() {
   if [ $IS_UPGRADE == true ]; then
     __process_marker "Upgrading Shippable installation"
@@ -347,6 +393,7 @@ main() {
     __start_stateless_services
     __run_post_migrations
     __cleanup_master
+    __cleanup_workers
   fi
 }
 

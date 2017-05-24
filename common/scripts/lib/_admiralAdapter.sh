@@ -141,6 +141,11 @@ _shippable_get_systemSettings() {
   __shippable_get $system_settings_get_endpoint
 }
 
+_shippable_get_workers() {
+  local workers_get_endpoint="workers"
+  __shippable_get $workers_get_endpoint
+}
+
 _shippable_get_services() {
   local service="$1"
   local services_get_endpoint="services"
