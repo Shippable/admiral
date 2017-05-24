@@ -317,6 +317,22 @@ __run_post_migrations() {
   fi
 }
 
+__cleanup_master() {
+  __process_marker "Cleaning up swarm master node"
+  _shippable_post_master_cleanup
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error running master cleanup: $response"
+    __process_error "Status code: $response_status_code"
+    __process_error "==================== Error Logs ====================="
+    local logs_file="$LOGS_DIR/master.log"
+    tail -$MAX_ERROR_LOG_COUNT $logs_file
+    __process_error "====================================================="
+    exit 1
+  else
+    __process_msg "Successfully ran swarm master cleanup for release: $RELEASE"
+  fi
+}
+
 main() {
   if [ $IS_UPGRADE == true ]; then
     __process_marker "Upgrading Shippable installation"
@@ -330,6 +346,7 @@ main() {
     __start_stateful_services
     __start_stateless_services
     __run_post_migrations
+    __cleanup_master
   fi
 }
 

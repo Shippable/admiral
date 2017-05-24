@@ -183,6 +183,17 @@ _shippable_post_services() {
   __shippable_post $db_post_endpoint "$body"
 }
 
+_shippable_post_master_cleanup() {
+  local master_post_endpoint="master/cleanup"
+  __shippable_post $master_post_endpoint
+}
+
+_shippable_post_worker_cleanup() {
+  local body="$1"
+  local worker_post_endpoint="workers/cleanup"
+  __shippable_post $worker_post_endpoint "$body"
+}
+
 ### PUT
 
 _shippable_put_system_settings() {
