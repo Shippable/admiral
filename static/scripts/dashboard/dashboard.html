@@ -749,7 +749,7 @@
                       <div class="col-md-12">
                         &nbsp;
                         <h4 class="panel-title">
-                          Authorization Providers
+                          Authorization and Source Control Management (SCM) Providers
                         </h4>
                       </div>
                       <div class="col-md-offset-1 col-md-11">
@@ -759,15 +759,46 @@
                           </span>
                         </div>
                       </div>
+                      <div class="col-md-offset-1 col-md-11">
+                        <div class="row">
+                          <div class="col-md-1">
+                            <div class="row">
+                              <div class="col-md-6">
+                                Auth
+                              </div>
+                              <div class="col-md-6">
+                                SCM
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-1 col-md-11">
+                          </div>
+                        </div>
+                      </div>
                       <!-- Bitbucket -->
                       <div class="col-md-offset-1 col-md-11">
                         <div class="row">
-                          <div class="col-md-12">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" ng-model="vm.installForm.auth.bitbucketKeys.isEnabled"/>
-                                Bitbucket
-                              </label>
+                          <div class="col-md-1">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.bitbucketKeys.isEnabled" ng-change="vm.installForm.scm.bitbucket.isEnabled = vm.installForm.auth.bitbucketKeys.isEnabled" />
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.scm.bitbucket.isEnabled" ng-disabled="vm.installForm.auth.bitbucketKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-11">
+                            <div class="checkbox" style="padding-left: 5px;">
+                              Bitbucket
                             </div>
                           </div>
                         </div>
@@ -813,12 +844,27 @@
                         <!-- Bitbucket Server -->
                       <div class="col-md-offset-1 col-md-11">
                         <div class="row">
-                          <div class="col-md-12">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled"/>
-                                Bitbucket Server
-                              </label>
+                          <div class="col-md-1">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled" ng-change="vm.installForm.scm.bitbucketServer.isEnabled = vm.installForm.auth.bitbucketServerKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.scm.bitbucketServer.isEnabled" ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-11">
+                            <div class="checkbox" style="padding-left: 5px;">
+                              Bitbucket Server
                             </div>
                           </div>
                         </div>
@@ -864,12 +910,27 @@
                       <!-- GitHub -->
                       <div class="col-md-offset-1 col-md-11">
                         <div class="row">
-                          <div class="col-md-12">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" ng-model="vm.installForm.auth.githubKeys.isEnabled"/>
-                                GitHub
-                              </label>
+                          <div class="col-md-1">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.githubKeys.isEnabled" ng-change="vm.installForm.scm.github.isEnabled = vm.installForm.auth.githubKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.scm.github.isEnabled" ng-disabled="vm.installForm.auth.githubKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-11">
+                            <div class="checkbox" style="padding-left: 5px;">
+                              GitHub
                             </div>
                           </div>
                         </div>
@@ -915,12 +976,27 @@
                       <!-- GitHub Enterprise -->
                       <div class="col-md-offset-1 col-md-11">
                         <div class="row">
-                          <div class="col-md-12">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled"/>
-                                GitHub Enterprise
-                              </label>
+                          <div class="col-md-1">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled" ng-change="vm.installForm.scm.githubEnterprise.isEnabled = vm.installForm.auth.githubEnterpriseKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.scm.githubEnterprise.isEnabled" ng-disabled="vm.installForm.auth.githubEnterpriseKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-11">
+                            <div class="checkbox" style="padding-left: 5px;">
+                              GitHub Enterprise
                             </div>
                           </div>
                         </div>
@@ -966,12 +1042,27 @@
                         <!-- GitLab -->
                       <div class="col-md-offset-1 col-md-11">
                         <div class="row">
-                          <div class="col-md-12">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" ng-model="vm.installForm.auth.gitlabKeys.isEnabled"/>
-                                GitLab
-                              </label>
+                          <div class="col-md-1">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.gitlabKeys.isEnabled" ng-change="vm.installForm.scm.gitlab.isEnabled = vm.installForm.auth.gitlabKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" ng-model="vm.installForm.scm.gitlab.isEnabled" ng-disabled="vm.installForm.auth.gitlabKeys.isEnabled"/>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-11">
+                            <div class="checkbox" style="padding-left: 5px;">
+                              GitLab
                             </div>
                           </div>
                         </div>
