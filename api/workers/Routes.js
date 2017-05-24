@@ -11,4 +11,6 @@ function workerRoutes(app) {
     require('./initialize.js'));
   app.delete('/api/workers/:name', validateAccount,
     require('./deleteByName.js'));
+  app.post('/api/workers/cleanup', validateAccount,
+    require('./cleanup.js'));
 }
