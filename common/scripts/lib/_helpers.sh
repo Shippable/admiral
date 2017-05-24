@@ -6,6 +6,9 @@
 # TODO: break up this file into smaller, logically-grouped
 # files after we add release and re-install features
 
+declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
+declare -a PUBLIC_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
+
 __cleanup() {
   if [ -d $CONFIG_DIR ]; then
     __process_msg "Removing previously created $CONFIG_DIR"
