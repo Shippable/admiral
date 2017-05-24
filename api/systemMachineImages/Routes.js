@@ -8,4 +8,6 @@ function systemMachineImageRoutes(app) {
   app.get('/api/systemMachineImages', validateAccount, require('./get.js'));
   app.put('/api/systemMachineImages/:systemMachineImageId', validateAccount,
     require('./put.js'));
+  app.delete('/api/systemMachineImages/:systemMachineImageId', validateAccount,
+    require('./deleteById.js'));
 }
