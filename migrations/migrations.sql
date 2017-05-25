@@ -4013,5 +4013,9 @@ do $$
       alter table "jobStatesMap" add column "contextDetail" varchar(255);
     end if;
 
+    -- Updates jobStatesMap datatype from varchar to integer
+    if exists (select 1 from information_schema.columns where table_name = 'jobStatesMap' and column_name = 'resourceId' and data_type = 'character varying') then
+      alter table "jobStatesMap" alter column "resourceId" type integer using "resourceId"::integer;
+    end if;
   end
 $$;
