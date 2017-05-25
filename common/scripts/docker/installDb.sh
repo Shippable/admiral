@@ -9,7 +9,9 @@ __check_db() {
   local counter=0
   local db_booted=false
 
-  sleep $interval
+
+  __process_msg "Waiting 10 seconds for db boot"
+  sleep 10
 
   while [ $db_booted != true ] && [ $counter -lt $TIMEOUT ]; do
     if nc -vz $DB_IP $DB_PORT &>/dev/null; then
