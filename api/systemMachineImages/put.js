@@ -117,8 +117,12 @@ function _put(bag, next) {
     updates.push(
       util.format('"securityGroup"=\'%s\'', bag.reqBody.securityGroup));
 
-  if (_.has(bag.reqBody, 'subnetId'))
-    updates.push(util.format('"subnetId"=\'%s\'', bag.reqBody.subnetId));
+  if (_.has(bag.reqBody, 'subnetId')) {
+    if (bag.reqBody.subnetId === null)
+      updates.push('"subnetId"=NULL');
+    else
+      updates.push(util.format('"subnetId"=\'%s\'', bag.reqBody.subnetId));
+  }
 
   if (_.has(bag.reqBody, 'drydockTag'))
     updates.push(util.format('"drydockTag"=\'%s\'', bag.reqBody.drydockTag));

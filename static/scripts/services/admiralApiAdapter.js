@@ -57,9 +57,16 @@
       getSystemMachineImages: function (query, callback) {
         return API.get('/api/systemMachineImages?' + query, callback);
       },
+      postSystemMachineImage: function (body, callback) {
+        return API.post('/api/systemMachineImages', body, callback);
+      },
       putSystemMachineImage: function (systemMachineImageId, body, callback) {
         return API.put('/api/systemMachineImages/' + systemMachineImageId,
           body, callback);
+      },
+      deleteSystemMachineImage: function (systemMachineImageId, callback) {
+        return API.delete('/api/systemMachineImages/' + systemMachineImageId,
+          {}, callback);
       },
       // System Settings Routes
       getSystemSettings: function (callback) {

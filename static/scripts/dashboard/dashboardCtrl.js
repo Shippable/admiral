@@ -282,8 +282,8 @@
             }
           }
         },
-        defaultSystemMachineImage: {},
-        systemSettings: {}
+        systemMachineImages: [],
+        systemSettings: {},
       },
       allServices: [],
       systemIntegrations: [],
@@ -487,6 +487,8 @@
       validateWorkerAddress: validateWorkerAddress,
       addWorker: addWorker,
       removeWorker: removeWorker,
+      addSystemMachineImage: addSystemMachineImage,
+      removeSystemMachineImage: removeSystemMachineImage,
       upgrade: upgrade,
       install: install,
       save: save,
@@ -504,6 +506,7 @@
       showRestartServicesModal: showRestartServicesModal,
       refreshLogs: refreshLogs,
       isGlobalService: isGlobalService,
+      hasDefaultSystemMachineImage: hasDefaultSystemMachineImage,
       logOutOfAdmiral: logOutOfAdmiral
     };
 
@@ -525,7 +528,7 @@
           getMasterIntegrations.bind(null, bag),
           getSystemSettingsForInstallPanel.bind(null, bag),
           getServices.bind(null, bag),
-          getDefaultSystemMachineImage.bind(null, bag),
+          getSystemMachineImages,
           getSystemSettingsForAddonsPanel.bind(null, bag),
           updateAddonsFormSystemIntegrations,
           getSuperUsers
@@ -805,7 +808,7 @@
       if (!$scope.vm.dbInitialized) return next();
       if (!$scope.vm.systemSettings.secrets.isInitialized) return next();
 
-      var installFormNonSystemInts = ['defaultSystemMachineImage',
+      var installFormNonSystemInts = ['systemMachineImages',
         'scm', 'systemSettings'];
 
       // reset all systemIntegrations to their defaults
@@ -1092,11 +1095,10 @@
       );
     }
 
-    function getDefaultSystemMachineImage(bag, next) {
+    function getSystemMachineImages(next) {
       if (!$scope.vm.initialized) return next();
 
-      admiralApiAdapter.getSystemMachineImages(
-        'isDefault=true&isAvailable=true',
+      admiralApiAdapter.getSystemMachineImages('',
         function (err, systemMachineImages) {
           if (err) {
             horn.error(err);
@@ -1109,8 +1111,14 @@
             return next();
           }
 
-          $scope.vm.installForm.defaultSystemMachineImage =
-            systemMachineImages[0];
+          $scope.vm.installForm.systemMachineImages =
+            _.map(systemMachineImages,
+              function (image) {
+                if (image.subnetId === null)
+                  image.subnetId = '';
+                return image;
+              }
+            );
 
           return next();
         }
@@ -1615,7 +1623,7 @@
           getSystemIntegrations.bind(null, {}),
           getSystemSettingsForInstallPanel.bind(null, {}),
           getServices.bind(null, {}),
-          getDefaultSystemMachineImage.bind(null, {}),
+          getSystemMachineImages,
           getMasterIntegrations.bind(null, {}),
           updateInitializeForm.bind(null, {}),
           updateAddonsFormSystemIntegrations
@@ -1669,6 +1677,31 @@
           _.findWhere($scope.vm.initializeForm.workers.workers,
             {name: worker.name})
         );
+    }
+
+    function addSystemMachineImage() {
+      var newSystemMachineImage = {
+        externalId: '',
+        provider: 'AWS',
+        name: '',
+        description: '',
+        isAvailable: true,
+        isDefault: false,
+        region: '',
+        keyName: '',
+        runShImage: '',
+        securityGroup: '',
+        subnetId: '',
+        drydockTag: '',
+        drydockFamily: ''
+      };
+
+      $scope.vm.installForm.systemMachineImages.push(newSystemMachineImage);
+    }
+
+    function removeSystemMachineImage(image) {
+      $scope.vm.installForm.systemMachineImages =
+        _.without($scope.vm.installForm.systemMachineImages, image);
     }
 
     function upgrade() {
@@ -1917,7 +1950,7 @@
           enableEmailMasterIntegration,
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
-          updateDefaultSystemMachineImage,
+          updateSystemMachineImages,
           startAPI,
           startWWW,
           startSync,
@@ -1979,7 +2012,7 @@
           enableEmailMasterIntegration,
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
-          updateDefaultSystemMachineImage,
+          updateSystemMachineImages,
           updateFilestoreSystemIntegration,
           updateProvisionSystemIntegration
         ],
@@ -2439,17 +2472,121 @@
       );
     }
 
-    function updateDefaultSystemMachineImage(next) {
-      var image = $scope.vm.installForm.defaultSystemMachineImage;
+    function updateSystemMachineImages(next) {
+      if (!$scope.vm.installForm.systemMachineImages) return next();
 
-      if (!image) return next();
+      var bag = {
+        updatedSystemMachineImages: $scope.vm.installForm.systemMachineImages,
+        currentSystemMachineImages: []
+      };
 
-      admiralApiAdapter.putSystemMachineImage(image.id, image,
+      async.series([
+          getCurrentSystemMachineImages.bind(null, bag),
+          deleteSystemMachineImages.bind(null, bag),
+          putSystemMachineImages.bind(null, bag),
+          postSystemMachineImages.bind(null, bag),
+          getSystemMachineImages
+        ],
         function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function getCurrentSystemMachineImages(bag, next) {
+      admiralApiAdapter.getSystemMachineImages('',
+        function (err, systemMachineImages) {
           if (err)
             return next(err);
 
+          bag.currentSystemMachineImages = systemMachineImages;
           return next();
+        }
+      );
+    }
+
+    function deleteSystemMachineImages(bag, next) {
+      var deletedSystemMachineImages = _.filter(bag.currentSystemMachineImages,
+        function (currentImage) {
+          var exists =
+            _.findWhere(bag.updatedSystemMachineImages, {id: currentImage.id});
+          return !exists;
+        }
+      );
+
+      async.eachSeries(deletedSystemMachineImages,
+        function (deletedImage, done) {
+          admiralApiAdapter.deleteSystemMachineImage(deletedImage.id,
+            function (err) {
+              if (err)
+                return done(err);
+
+              return done();
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function putSystemMachineImages(bag, next) {
+      var updatedSystemMachineImages = _.filter(bag.updatedSystemMachineImages,
+        function (updatedImage) {
+          var exists =
+            _.findWhere(bag.currentSystemMachineImages, {id: updatedImage.id});
+          return exists;
+        }
+      );
+
+      async.eachSeries(updatedSystemMachineImages,
+        function (updatedImage, done) {
+          var body = _.clone(updatedImage);
+          if (body.subnetId === '')
+            body.subnetId = null;
+
+          admiralApiAdapter.putSystemMachineImage(updatedImage.id, body,
+            function (err) {
+              if (err)
+                return done(err);
+
+              return done();
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function postSystemMachineImages(bag, next) {
+      var newSystemMachineImages = _.filter(bag.updatedSystemMachineImages,
+        function (image) {
+          var exists =
+            _.findWhere(bag.currentSystemMachineImages, {id: image.id});
+          return !exists;
+        }
+      );
+
+      async.eachSeries(newSystemMachineImages,
+        function (newImage, done) {
+          var body = _.clone(newImage);
+          if (body.subnetId === '')
+            body.subnetId = null;
+
+          admiralApiAdapter.postSystemMachineImage(body,
+            function (err) {
+              if (err)
+                return done(err);
+
+              return done();
+            }
+          );
+        },
+        function (err) {
+          return next(err);
         }
       );
     }
@@ -2950,6 +3087,17 @@
 
     function isGlobalService(service) {
       return _.contains($scope.vm.globalServices, service);
+    }
+
+    function hasDefaultSystemMachineImage() {
+      if (!$scope.vm.installForm.systemMachineImages ||
+        !$scope.vm.installForm.systemMachineImages.length)
+        return false;
+      return _.some($scope.vm.installForm.systemMachineImages,
+        function (systemMachineImage) {
+          return systemMachineImage.isDefault;
+        }
+      );
     }
   }
 }());
