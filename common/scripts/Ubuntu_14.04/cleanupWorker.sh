@@ -23,7 +23,7 @@ __remove_stale_images() {
       if [ "$image_tag" != "$RELEASE" ]; then
         local stale_image=$image_repository:$image_tag
         echo "Stale image $stale_image found, attempting to remove..."
-        sudo docker rmi $image_id || true
+        sudo docker rmi $stale_image || true
       fi
     fi
   done
