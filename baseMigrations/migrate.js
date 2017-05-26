@@ -691,7 +691,8 @@ function _updateWorkersConfig(bag, next) {
         port: 2377,
         name: machine.name,
         isInstalled: true,
-        isInitialized: true
+        isInitialized: true,
+        isProcessing: false
       });
     }
   );
