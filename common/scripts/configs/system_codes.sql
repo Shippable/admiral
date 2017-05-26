@@ -217,6 +217,10 @@ do $$
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (4008, 'skipped', 'status', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
+    if not exists (select 1 from "systemCodes" where code = 4009) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (4009, 'timeout', 'status', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
 
     if not exists (select 1 from "systemCodes" where code = 5000) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
