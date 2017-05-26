@@ -1,0 +1,315 @@
+SHIPPABLE SERVER SOFTWARE LICENSE AGREEMENT
+
+This Software License Agreement (the “Agreement”) is made by and between
+Shippable, Inc., a Delaware company, with offices at 111 South Jackson, Suite
+500, Seattle, WA 98104, on behalf of it and its global Affiliates and
+subsidiaries (collectively, “Shippable”), and the company or entity
+downloading, installing and/or using certain of Shippable’s Licensed Property
+(“Customer”). This Agreement is effective immediately upon installation of the
+Licensed Property (the “Effective Date”). 
+
+WHEREAS, Shippable has developed and is the owner of certain software products
+and apps (the Software, as defined below); 
+
+WHEREAS, Customer desires a non-exclusive license to use some of the products
+of the Software known as the Licensed Property (as defined below); and 
+
+WHEREAS, Shippable is willing to grant such a license on the terms and
+conditions set forth below. 
+
+NOW, THEREFORE, in consideration of the foregoing and of the mutual promises
+contained in this Agreement, Shippable and Customer agree as follows: 
+
+1. DEFINITIONS For purposes of this Agreement, 1.1  “Affiliate” shall mean,
+with respect to any person, any other person that controls or is controlled by
+or under common control with such Person; provided, that a person shall be
+deemed to be an Affiliate only so long as such control exists. For the purposes
+of this definition, “person” means any individual, corporation, partnership, or
+limited liability company; and “control,” when used with respect to any Person,
+means ownership of at least fifty percent (50%) of the voting stock, shares or
+other equity interest in the controlled Person and possession of the power to
+direct or cause the direction of the management and policies of the controlled
+Person. 
+
+1.2  “Authorized Users” shall mean Customer’s employees, and those consultants
+who have agreed to maintain the Licensed Property in confidence and use it only
+for the benefit of Customer. 
+
+1.3  “Documentation” shall mean the end user documentation delivered with the
+Software, if any. 
+
+1.4  “Internal Use” means use of the Licensed Property by employees of Customer
+in Customer’s internal operations but does not include access of the Licensed
+Property by, or use of the Licensed Property in the provisions of services to,
+Customer’s clients or customers. Internal Use also includes use of the Licensed
+Property by contractors of Customer, including contractors providing
+outsourcing or hosting services, as long as Customer assumes full
+responsibility for the compliance with this Agreement in such use. Use of the
+Licensed Property (or any part thereof) for the benefit of others, whether by
+means of a software as a service offering, service bureau application,
+application service provider, outsourcing or other means of providing service
+to any third party shall not be considered Internal Use. 
+
+1.5  “Licensed Property” shall mean the portion of the Software and the
+Documentation, if any, to which Customer has received and installed a License.
+Licensed Property shall include any updates or upgrades to the Licensed
+Property that Shippable may at its discretion deliver to Customer. 
+
+1.6  “Software” shall mean the object code (machine readable) version of any
+computer programs or apps offered by Shippable and any Updates thereto,
+including and any ancillary data files, modules, libraries, tutorial or
+demonstration programs or other components and copies of any of the foregoing
+or portions thereof. 
+
+1.7  “Update” means a revision of the Software to provide bug fixes,
+corrections and minor enhancements.
+
+2. GRANT OF LICENSE 2.1  Grant; Limitations. Subject to the observance by
+Customer of the terms and conditions of this Agreement, Shippable hereby grants
+to Customer, during the term of this Agreement, a non-exclusive,
+non-transferable (except as set forth in Section 8.4) license to use the
+Licensed Property solely for Customer’s Internal Use. Customer may grant
+sublicenses hereunder to its Affiliates for use in accordance with the terms of
+this Agreement, as long as Customer assumes full responsibility for the
+compliance of such Affiliate with this Agreement.  No other sublicensing of use
+or access is permitted. Each license permits the deployment of a single
+instance of the software in a production environment.  Each license permits
+deployment of non-production instances for use in testing and development of
+the Shippable software (e.g. version upgrades, customizations to the software,
+etc) that should not be done on a live production instance. This can also be
+used for non-production instances of the software deployed on a cold stand-by
+server. Non-production instances are provided free of charge and the
+maintenance expiration will be synchronized to the maintenance expiration date
+of your product.
+
+2.2  Data Collection. To the extent that the Licensed Property is used by
+Customer to collect data of Authorized Users, Customer shall be responsible for
+determining the site(s) for such data storage. Customer shall be solely
+responsible for and will provide any and all notices and collect any and all
+consents required under applicable laws in connection with Customer’s
+collection of such data. Shippable hereby disclaims responsibility for the
+collection, storage and management of Authorized User data and any liability
+therewith. Any such data collected by the Licensed Property shall be
+automatically delivered to such data storage site(s) as determined in
+Customer's sole discretion. 
+
+2.3  License Restrictions. Any use of the Licensed Property not expressly
+permitted by this Agreement is prohibited. Without limiting the generality of
+the foregoing, Customer shall not: (a)  permit persons other than Authorized
+Users to access or use the Licensed Property (or any part thereof); or (b)
+remove or modify any program markings or any notice of Shippable or its
+licensors’ proprietary rights; or (c)  cause or permit reverse engineering
+(unless required by law for interoperability), disassembly or decompilation of
+the programs; or (d) use the Licensed Property (or any part thereof) in breach
+of any applicable laws or regulations. 
+
+2.4  No Other License. Except as expressly set forth in this Agreement, no
+license is granted and none shall be deemed granted by implication, estoppel or
+otherwise. 
+
+2.5  Delivery. Shippable shall make the Licensed Property available to Customer
+on the applicable app store by electronic download. The Licensed Software will
+be deemed accepted upon delivery.
+
+2.6  Maintenance. During the term of this Agreement, Shippable will provide:
+(i) support services in accordance with Shippable’s standard support policy, as
+may be updated by Shippable upon notice from time to time; and (ii) Updates to
+the Software which are commercially released during the term of this Agreement
+for no additional license fee(s); however, any installation, education or other
+services provided by Shippable will be subject to additional charges. Updates
+may not include or accommodate customized Software. Nothing in this Agreement
+obligates Shippable to develop or create Updates.  Licensee acknowledges that
+Shippable may offer premium support for an additional fee, the terms of which
+shall be set forth in a separate mutually agreed upon writing.
+
+2.7 Services. Shippable is under no obligation to provide any services to
+Customer with respect to the Licensed Property (including, without limitation,
+any installation of the Software or Licensed Property, or training). Shippable
+may offer or provide services to Customer hereunder in Shippable's sole
+discretion, the terms and fees for which shall be set forth in writing between
+the parties. 
+
+2.8  Fees. Customer will pay any and all license fees as set forth in writing
+between the parties, within thirty (30) days of the date of such writing.
+Customer agrees to pay any sales, value-added or other similar taxes imposed by
+applicable law that Shippable must pay based on the Licensed Property and/or
+services ordered by Customer, except for taxes based on Shippable’s income.
+Customer agrees to indemnify Shippable as to all such taxes. 
+
+3.	PROPERTY RIGHTS; PROHIBITIONS AS TO LICENSED PROPERTY 3.1  Property Rights.
+Shippable or its licensors retain all ownership and intellectual property
+rights to the Software and Licensed Property. Third party technology that may
+be appropriate or necessary for use with the Licensed Property is specified in
+the Documentation. Such third party technology is licensed to you under the
+terms of the third party technology license agreement specified in the program
+documentation and not under the terms of this Agreement. Any Authorized User
+data collected by the Customer using the Licensed Property shall remain the
+property of Customer. 
+
+3.2  Trade Secrets. Customer agrees that the Software and all associated trade
+secrets, including but not limited to the Licensed Property, its
+configurations, architecture, communications and performance benchmarks, are
+the exclusive property of Shippable. Customer agrees not to disclose,
+disseminate, transmit via any medium whatsoever, or make available the
+Software, Licensed Property or any associated trade secrets to any third party
+without Shippable’s prior written consent. 
+
+4.	NO WARRANTY AND DISCLAIMER. THE LICENSED PROPERTY, INCLUDING WITHOUT
+LIMITATION THE SOFTWARE, IS PROVIDED TO CUSTOMER ON AN “AS IS” “WHERE IS” BASIS
+WITHOUT WARRANTY AND CUSTOMER’S USE THEREOF IS AT ITS OWN RISK. SHIPPABLE DOES
+NOT MAKE, AND HEREBY SPECIFICALLY DISCLAIMS, AND CUSTOMER RELEASES AND WAIVES,
+ANY AND ALL WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING, WITHOUT
+LIMITATION, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR USE AND
+PURPOSE, NON-INFRINGEMENT, TITLE, OR ANY WARRANTY ARISING UNDER STATUTE OR
+OTHERWISE IN LAW OR FROM A COURSE OF DEALING, COURSE OF PERFORMANCE, USAGE OR
+TRADE PRACTICE. WITHOUT LIMITING THE GENERALITY OF THE FOREGOING, SHIPPABLE
+DOES NOT WARRANT THAT THE LICENSED PROPERTY IS ACCURATE OR WILL MEET CUSTOMER’S
+REQUIREMENTS, WILL OPERATE IN ANY COMBINATION THAT MAY BE SELECTED FOR USE BY
+CUSTOMER OR IN COMBINATION WITH OTHER SOFTWARE, OR WILL OPERATE UNINTERRUPTED
+OR ERROR FREE. FURTHERMORE, SHIPPABLE DOES NOT WARRANT THAT ANY SOFTWARE
+ERRORS, DEFECTS OR INEFFICIENCIES WILL BE CORRECTED, NOR DOES SHIPPABLE ASSUME
+ANY LIABILITY FOR FAILURE TO CORRECT ANY SUCH ERROR, DEFECT OR INEFFICIENCY.
+SHIPPABLE MAKES NO WARRANTY, AND CUSTOMER ASSUMES THE ENTIRE RISK, AS TO THE
+INTEGRITY OF ANY DATA AND THE RESULTS, CAPABILITIES, SUITABILITY, USE, NON-USE
+OR PERFORMANCE OF THE LICENSED PROPERTY. IN NO EVENT SHALL SHIPPABLE BE LIABLE
+TO CUSTOMER FOR ANY DAMAGES RESULTING FROM OR RELATED TO THE USE OR PERFORMANCE
+OF THE LICENSED PROPERTY. 
+
+5.	LIMITATION OF LIABILITY. EXCEPT WITH RESPECT TO A BREACH OF SECTION 2 OR 3,
+UNDER NO CIRCUMSTANCES SHALL EITHER PARTY BE LIABLE FOR ANY INDIRECT, SPECIAL,
+INCIDENTAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES SUFFERED BY THE OTHER
+PARTY, ANY PARTY CLAIMING ON BEHALF OF OR THROUGH THE OTHER PARTY, OR ANY OTHER
+THIRD PARTY RESULTING FROM OR ARISING OUT OF OR RELATED TO THIS AGREEMENT, ANY
+ADDENDUM HERETO OR THE PERFORMANCE OR BREACH THEREOF, INCLUDING WITHOUT
+LIMITATION, DAMAGES FOR LOSS OF BUSINESS OR PROFITS, BUSINESS INTERRUPTION,
+DAMAGE OR LOSS OR DESTRUCTION OF DATA OR LOSS OF USE OF THE LICENSED PROPERTY,
+EVEN IF SUCH PARTY HAS BEEN PREVIOUSLY ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES. IN NO EVENT SHALL SHIPPABLE HAVE ANY LIABILITY TO CUSTOMER IN EXCESS
+OF THE AMOUNTS PAID BY CUSTOMER TO SHIPPABLE UNDER THIS AGREEMENT. 
+
+6.	TERM AND TERMINATION. Term. This Agreement commence as of the Effective
+Date and continue for a period of one year (the “Initial Term”), unless
+terminated sooner pursuant to this Section.  Following the expiration of the
+Initial Term, this Agreement shall renew for successive one year periods (each,
+a “Renewal Period”), unless either party provides at least thirty (30) days
+prior written notice of its intent not to renew before the end of the
+then-current term.
+
+6.1 Termination of License. Shippable may terminate this Agreement and the
+License and other rights granted hereunder in the event Customer breaches any
+of the provisions of this Agreement and does not remedy such breach within ten
+(10) days of receipt of notice from Shippable declaring and setting forth the
+nature of such breach. 
+
+6.2  Effect of Termination of License. Immediately upon any termination,
+cancellation or expiration of this Agreement or of any License granted
+hereunder for any reason: (a)  all rights and Licenses granted to Customer
+under this Agreement shall cease and terminate and Customer shall have no right
+thereafter to use, and shall cease the use of, the Licensed Property or any
+portion thereof; and (b)  Customer shall remove all Licenses of the Licensed
+Property (including all copies thereof). 
+
+6.3  Survival Provisions of the Agreement. The provisions of Section 3 through
+9 of this Agreement shall survive the termination, cancellation or expiration
+of this Agreement for any reason. 
+
+7.	EXPORT REGULATIONS; U.S. GOVERNMENT RESTRICTIONS. Customer acknowledges
+that the Licensed Property may be subject to United States export laws,
+statutes and regulations and to export laws, statutes and regulations of other
+countries, and that Customer will at all times comply with the provisions of
+such laws, statutes and regulations including obtaining any necessary or
+required licenses. Customer shall not export or re-export or otherwise
+transmit, directly or indirectly, the Licensed Property or any direct products
+thereof into, or use the Licensed Property or any direct products thereof in,
+any country prohibited or restricted under United States export laws, statutes
+or regulations or any other applicable laws. 
+
+8.	MISCELLANEOUS PROVISIONS 8.1  Binding Effect. This Agreement and all of the
+provisions hereof shall be binding upon and shall inure to the benefit of the
+parties hereto and their respective successors and permitted assigns. 
+
+8.2  Notices. All notices, requests, demands, consents, authorizations, claims,
+and other communications (each a “Notice”) hereunder must be in writing and
+sent to the other party by overnight delivery. Any Notice shall be deemed duly
+given one (1) business day following the date sent when sent by overnight
+delivery. No party may send any Notice to the intended recipient using any
+other means. Notices to Shippable shall be sent to Shippable, Inc., 1932 1st
+Avenue, Suite 420, Seattle, WA 98101, Attn: General Counsel. Unless otherwise
+specified by Customer in writing, Notices to Customer shall be sent to the
+registered agent of the Customer in the jurisdiction in which the Customer is
+organized or incorporated. Any party may change the address to which Notices
+are to be delivered by giving the other parties Notice in the manner herein set
+forth. 
+
+8.3  Governing Law. The validity and construction of this Agreement and all
+matters pertaining thereto are to be determined in accordance with the laws of
+the state of Washington, without reference to the conflicts of laws provisions
+thereof. Customer agrees that any proceedings related to this Agreement,
+including any suit filed against Shippable, shall be brought in the Courts of
+the state of Washington located in the City of Seattle, Washington. Customer
+waives any objections to personal jurisdiction and venue to that forum. The
+parties specifically direct and agree that the CISG (UN-Convention on Contracts
+for the International Sale of Goods) and the Uniform Computer Information
+Transactions Act (UCITA) are specifically excluded and neither shall apply to
+this Agreement or to the performance hereof by the parties hereto. 
+
+8.4  Assignment. Customer may not, directly or indirectly, sell, assign,
+sublicense, lease, rent, distribute, or otherwise transfer the License, the
+Licensed Property, or any rights therein, or any rights or obligations under
+this Agreement, to any other person or entity, unless Customer first obtains
+the written consent of Shippable, except in conjunction with the sale of all or
+substantially all of the stock or assets of Customer. 
+
+8.5  Waiver. No party to this Agreement shall be deemed to have waived any of
+its rights, powers or remedies under this Agreement unless such waiver is
+expressly set forth in a writing signed by the waiving party. No written waiver
+of any provision of this Agreement shall be deemed to be, or shall constitute,
+(i) a waiver of any other provision of this Agreement, whether or not similar,
+or (ii) a continuing or subsequent waiver of the same or another provision of
+this Agreement. The failure of either party to enforce at any time any of the
+provisions of this Agreement, or the failure to require at any time performance
+by the other party of any of the provisions of this Agreement, will in no way
+be construed to be a present or future waiver of any such provisions, or in any
+way affect the validity of either party to enforce each and every such
+provision thereafter. 
+
+8.6  Captions. The captions and headings of Sections and subsections contained
+in this Agreement are provided for convenience of reference only and shall not
+be considered a part hereof for purposes of interpreting this Agreement, and,
+way the meaning or intent of this Agreement or any of its terms or provisions. 
+
+8.7  Severability. If any Section or other provision of this Agreement, or the
+application of such Section or provision, is held invalid, then the remainder
+of this Agreement, and the application of such Section or provision to persons
+or circumstances other than those with respect to which it is held invalid,
+shall not in any way be affected or impaired thereby. In the event that any
+provision of this Agreement becomes or is declared by a court of competent
+jurisdiction or panel of arbitrators to be illegal, unenforceable or void, this
+Agreement shall continue in full force and effect without said provision. The
+parties agree to negotiate in good faith a substitute valid and enforceable
+provision that most nearly effects the parties’ intent and to be bound by the
+mutually agreed substitute provision. 
+
+8.8  Counterparts. This Agreement may be executed in one or more counterparts,
+each of which shall be deemed an original but all of which together will
+constitute one and the same instrument. 
+
+8.9  Remedies. All remedies shall be cumulative and not alternative and in
+addition to all other rights and remedies available in law and in equity. 
+
+8.10  Attorney’s Fees. Customer agrees to pay any costs incurred by Shippable
+in enforcing any provision of this Agreement in the event of the initiation of
+any legal action or proceedings for such purpose, including but not limited to
+all court costs and reasonable attorney’s fees, which costs shall bear interest
+at the rate of 11⁄2% per month from the date of judgment. 
+
+8.11  Entire Agreement. This Agreement constitutes the entire agreement between
+the parties hereto pertaining to the subject matter hereof, and supersedes,
+supplants, and renders null and void any and all prior and contemporaneous
+negotiations, discussions, proposals, agreements, understandings,
+representations or communications, oral or written, of the parties hereto with
+respect to the subject matter hereof. There are no representations, agreements,
+arrangements or understandings, oral or written, between the parties hereto
+relating to the subject matter of the Agreement which are not fully expressed
+herein. 
+
