@@ -4031,5 +4031,10 @@ do $$
     if exists (select 1 from information_schema.columns where table_name = 'jobStatesMap' and column_name = 'resourceId' and data_type = 'character varying') then
       alter table "jobStatesMap" alter column "resourceId" type integer using "resourceId"::integer;
     end if;
+
+    -- change type of "operationResourceName" to varchar(255) in jobDependencies table
+    if not exists (select 1 from information_schema.columns where table_name = 'jobDependencies' and column_name = 'operationResourceName' and data_type = 'character varying' and character_maximum_length = 255) then
+      alter table "jobDependencies" alter column "operationResourceName" type varchar(255);
+    end if;
   end
 $$;
