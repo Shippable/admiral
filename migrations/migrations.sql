@@ -641,6 +641,20 @@ do $$
       create unique index "subsAccSubsIdAccIdRoleCodeU" on "subscriptionAccounts" using btree("accountId", "subscriptionId", "roleCode");
     end if;
 
+    -- Reindex viewObjectsViewIdObjectIdU to viewObjectsViewIdObjectIdTypeCodeU in viewObjects table
+    if exists (select 1 from pg_indexes where tablename = 'viewObjects' and indexname = 'viewObjectsViewIdObjectIdU') then
+      drop index "viewObjectsViewIdObjectIdU";
+    end if;
+
+    if not exists (select 1 from pg_indexes where tablename = 'viewObjects' and indexname = 'viewObjectsViewIdObjectIdTypeCodeU') then
+      create unique index "viewObjectsViewIdObjectIdTypeCodeU" on "viewObjects" using btree("viewId", "objectId", "typeCode");
+    end if;
+
+    -- Add new coloumn  subscriptionId in views table
+    if not exists (select 1 from information_schema.columns where table_name = 'views' and column_name = 'subscriptionId') then
+      alter table "views" add column "subscriptionId" varchar(24);
+    end if;
+
     -- drop column isShippableNode from clusterNodes table
     if exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'isShippableNode') then
       alter table "clusterNodes" drop column "isShippableNode";
