@@ -17,7 +17,7 @@ do $$
       -- Migration Script to populate jobstatesMap for runs
       create temp table tjsm as WITH cte AS (
         SELECT "id", "projectId", "branchName", "runNumber", "createdAt", "statusCode", "isGitTag", "isPullRequest", "pullRequestNumber", "isRelease", "gitTagName", "releaseName", "subscriptionId", "createdBy", "commitSha", "updatedBy", "updatedAt", ROW_NUMBER() OVER (PARTITION BY "projectId", "branchName", "statusCode", "isGitTag", "isPullRequest", "isRelease" ORDER BY "createdAt" desc)
-          AS rn FROM runs WHERE "statusCode" in (30, 50, 60, 80) and "branchName" is not null
+          AS rn FROM runs WHERE "statusCode" in (30, 40, 50, 60, 70, 80) and "branchName" is not null
       )
       SELECT "id", "projectId" as pid, "branchName" as bn, "runNumber", "createdAt", "statusCode", "isGitTag", "isPullRequest", "pullRequestNumber", "isRelease", "gitTagName", "releaseName", "subscriptionId", "commitSha", "createdBy", "updatedBy", "updatedAt"
       FROM cte
@@ -34,7 +34,7 @@ do $$
 
       -- update contextTypeCode, contextValue
       update tjsm set "contextTypeCode" = 302, "contextValue" = tjsm."gitTagName", "contextDetail" = tjsm."commitSha" where "isGitTag" = true;
-      update tjsm set "contextTypeCode" = 303, "contextValue" = tjsm."releaseName", "contextDetail" = tjsm."gitTagName" where "isRelease" = true;
+      update tjsm set "contextTypeCode" = 314, "contextValue" = tjsm."releaseName", "contextDetail" = tjsm."gitTagName" where "isRelease" = true;
       update tjsm set "contextTypeCode" = 304, "contextValue" = tjsm."pullRequestNumber", "contextDetail" = tjsm.bn where "isPullRequest" = true;
       update tjsm set "contextTypeCode" = 301, "contextValue" = tjsm.bn, "contextDetail" = tjsm."commitSha" where "isPullRequest" = false and "isGitTag" = false and "isRelease" = false;
       update tjsm set "updatedBy" = tjsm."createdBy" where "updatedBy" is null;
@@ -85,7 +85,7 @@ do $$
           ROW_NUMBER() OVER (PARTITION BY "projectId", "resourceId", "statusCode" ORDER BY "createdAt" desc)
           AS rn
           FROM builds
-          WHERE "statusCode" in (4002,4003)
+          WHERE "statusCode" in (4002, 4003, 4004, 4006, 4008)
       )
       SELECT "id", "projectId" as pid, "resourceId" as rid, "createdAt", "statusCode", "subscriptionId", "updatedAt"
       FROM cte
