@@ -4051,5 +4051,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'viewObjects' and column_name = 'objectId' and data_type = 'character varying' and character_maximum_length = 255) then
       alter table "viewObjects" alter column "objectId" type varchar(255);
     end if;
+
+    -- Add buildsCreatedAtI Index on builds
+    if not exists (select 1 from pg_indexes where tablename = 'builds' and indexname = 'buildsCreatedAtI') then
+      create index "buildsCreatedAtI" on "builds" using btree("createdAt");
+    end if;
   end
 $$;
