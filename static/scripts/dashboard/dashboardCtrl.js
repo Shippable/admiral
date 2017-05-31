@@ -1398,7 +1398,6 @@
 
 
       async.series([
-          getMsg.bind(null, msgUpdate),
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
           postRedis.bind(null, redisUpdate),
@@ -1419,20 +1418,8 @@
       );
     }
 
-    function getMsg(update, next) {
-      admiralApiAdapter.getCoreService('msg',
-        function (err, configs) {
-          if (err)
-            return horn.error(err);
-
-          update.isInitialized = configs.isInitialized;
-          return next();
-        }
-      );
-    }
-
     function postMsg(update, next) {
-      if (update.isInitialized) return next();
+      if ($scope.vm.systemSettings.msg.isInitialized) return next();
 
       admiralApiAdapter.postMsg(update,
         function (err) {
