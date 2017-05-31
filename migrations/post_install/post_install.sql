@@ -85,7 +85,7 @@ do $$
           ROW_NUMBER() OVER (PARTITION BY "projectId", "resourceId", "statusCode" ORDER BY "createdAt" desc)
           AS rn
           FROM builds
-          WHERE "statusCode" in (4002,4003)
+          WHERE "statusCode" in (4002, 4003, 4004, 4006, 4008)
       )
       SELECT "id", "projectId" as pid, "resourceId" as rid, "createdAt", "statusCode", "subscriptionId", "updatedAt"
       FROM cte
