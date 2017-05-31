@@ -103,17 +103,33 @@ __check_dependencies() {
 __registry_login() {
   __process_msg "Updating docker credentials to pull Shippable images"
 
-  local credentials_template="$SCRIPTS_DIR/configs/credentials.template"
-  local credentials_file="/tmp/credentials"
+  local skip_login=false
 
-  sed "s#{{ACCESS_KEY}}#$ACCESS_KEY#g" $credentials_template > $credentials_file
-  sed -i "s#{{SECRET_KEY}}#$SECRET_KEY#g" $credentials_file
+  if [ -z "$ACCESS_KEY" ] || [ "$ACCESS_KEY" == "" ]; then
+    __process_error "ACCESS_KEY not defined"
+    skip_login=true
+  fi
 
-  mkdir -p ~/.aws
-  mv -v $credentials_file ~/.aws
-  local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
-  __process_msg "Docker login generated, logging into ecr"
-  eval "$docker_login_cmd"
+  if [ -z "$SECRET_KEY" ] || [ "$SECRET_KEY" == "" ]; then
+    __process_error "SECRET_KEY not defined"
+    skip_login=true
+  fi
+
+  if [ $skip_login == false ]; then
+    local credentials_template="$SCRIPTS_DIR/configs/credentials.template"
+    local credentials_file="/tmp/credentials"
+
+    sed "s#{{ACCESS_KEY}}#$ACCESS_KEY#g" $credentials_template > $credentials_file
+    sed -i "s#{{SECRET_KEY}}#$SECRET_KEY#g" $credentials_file
+
+    mkdir -p ~/.aws
+    mv -v $credentials_file ~/.aws
+    local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
+    __process_msg "Docker login generated, logging into ecr"
+    eval "$docker_login_cmd"
+  else
+    __process_error "Registry credentials not available, skipping docker login"
+  fi
 }
 
 __pull_images() {
