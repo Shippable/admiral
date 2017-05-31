@@ -4022,6 +4022,11 @@ do $$
       update "subscriptionIntegrations" set "masterIntegrationId" = "accountIntegrations"."masterIntegrationId" from "accountIntegrations" where "subscriptionIntegrations"."accountIntegrationId" = "accountIntegrations"."id" and "subscriptionIntegrations"."masterIntegrationId" is null;
     end if;
 
+    -- Set not null constraint on subscriptionIntegrations.masterIntegrationId
+    if exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'masterIntegrationId'  and is_nullable = 'YES') then
+      alter table "subscriptionIntegrations" alter column "masterIntegrationId" SET NOT NULL;
+    end if;
+
     -- Add contextDetail to jobStatesMap
     if not exists (select 1 from information_schema.columns where table_name = 'jobStatesMap' and column_name = 'contextDetail') then
       alter table "jobStatesMap" add column "contextDetail" varchar(255);
