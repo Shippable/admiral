@@ -17,7 +17,7 @@ do $$
       -- Migration Script to populate jobstatesMap for runs
       create temp table tjsm as WITH cte AS (
         SELECT "id", "projectId", "branchName", "runNumber", "createdAt", "statusCode", "isGitTag", "isPullRequest", "pullRequestNumber", "isRelease", "gitTagName", "releaseName", "subscriptionId", "createdBy", "commitSha", "updatedBy", "updatedAt", ROW_NUMBER() OVER (PARTITION BY "projectId", "branchName", "statusCode", "isGitTag", "isPullRequest", "isRelease" ORDER BY "createdAt" desc)
-          AS rn FROM runs WHERE "statusCode" in (30, 50, 60, 80) and "branchName" is not null
+          AS rn FROM runs WHERE "statusCode" in (30, 40, 50, 60, 70, 80) and "branchName" is not null
       )
       SELECT "id", "projectId" as pid, "branchName" as bn, "runNumber", "createdAt", "statusCode", "isGitTag", "isPullRequest", "pullRequestNumber", "isRelease", "gitTagName", "releaseName", "subscriptionId", "commitSha", "createdBy", "updatedBy", "updatedAt"
       FROM cte
