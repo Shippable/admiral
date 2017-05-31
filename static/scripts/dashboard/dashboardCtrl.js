@@ -1398,7 +1398,7 @@
 
 
       async.series([
-          getMsgSystemIntegration.bind(null, msgUpdate),
+          getMsg.bind(null, msgUpdate),
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
           postRedis.bind(null, redisUpdate),
@@ -1419,18 +1419,13 @@
       );
     }
 
-    function getMsgSystemIntegration(update, next) {
-      var query = 'name=msg';
-      admiralApiAdapter.getSystemIntegrations(query,
-        function (err, integration) {
+    function getMsg(update, next) {
+      admiralApiAdapter.getCoreService('msg',
+        function (err, configs) {
           if (err)
             return horn.error(err);
 
-          if (!_.isEmpty(integration) && !_.isEmpty(integration[0].data)) {
-            var configs = integration[0].data;
-            if(configs.amqpUrl && configs.amqpUrlRoot && configs.amqpUrlAdmin)
-              update.isInitialized = true;
-          }
+          update.isInitialized = configs.isInitialized;
           return next();
         }
       );
