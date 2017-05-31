@@ -981,7 +981,7 @@
           $scope.vm.machineKeys = machineKeys;
           $scope.vm.initializeForm.sshCommand =
             'sudo mkdir -p /root/.ssh; echo ' + machineKeys.publicKey +
-            ' sudo tee -a /root/.ssh/authorized_keys;';
+            '| sudo tee -a /root/.ssh/authorized_keys;';
           return next();
         }
       );
