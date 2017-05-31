@@ -4041,5 +4041,15 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'jobDependencies' and column_name = 'operationResourceName' and data_type = 'character varying' and character_maximum_length = 255) then
       alter table "jobDependencies" alter column "operationResourceName" type varchar(255);
     end if;
+
+    -- change size of "displayName" to varchar(255) in views table
+    if not exists (select 1 from information_schema.columns where table_name = 'views' and column_name = 'displayName' and data_type = 'character varying' and character_maximum_length = 255) then
+      alter table "views" alter column "displayName" type varchar(255);
+    end if;
+
+    -- change size of "objectId" to varchar(255) in viewObjects table
+    if not exists (select 1 from information_schema.columns where table_name = 'viewObjects' and column_name = 'objectId' and data_type = 'character varying' and character_maximum_length = 255) then
+      alter table "viewObjects" alter column "objectId" type varchar(255);
+    end if;
   end
 $$;
