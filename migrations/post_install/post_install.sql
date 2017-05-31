@@ -17,7 +17,7 @@ do $$
       -- Migration Script to populate jobstatesMap for runs
       create temp table tjsm as WITH cte AS (
         SELECT "id", "projectId", "branchName", "runNumber", "createdAt", "statusCode", "isGitTag", "isPullRequest", "pullRequestNumber", "isRelease", "gitTagName", "releaseName", "subscriptionId", "createdBy", "commitSha", "updatedBy", "updatedAt", ROW_NUMBER() OVER (PARTITION BY "projectId", "branchName", "statusCode", "isGitTag", "isPullRequest", "isRelease" ORDER BY "createdAt" desc)
-          AS rn FROM runs WHERE "statusCode" in (30, 50, 60, 80) and "branchName" is not null
+          AS rn FROM runs WHERE "statusCode" in (30, 50, 60, 70, 80, 90) and "branchName" is not null
       )
       SELECT "id", "projectId" as pid, "branchName" as bn, "runNumber", "createdAt", "statusCode", "isGitTag", "isPullRequest", "pullRequestNumber", "isRelease", "gitTagName", "releaseName", "subscriptionId", "commitSha", "createdBy", "updatedBy", "updatedAt"
       FROM cte
@@ -133,7 +133,7 @@ do $$
       SELECT T1.pid, T1."subscriptionId", T1.rid, 202, T1."contextTypeCode", T1."contextValue", T1."contextDetail", T1."lastSuccessfulJobId", T1."lastFailedJobId", T1.id, T1."createdBy", T1."updatedBy", T1."updatedAt", T1."createdAt"
       FROM temptjsm T1
       left join "jobStatesMap" T2
-      on T1.pid = T2."projectId" and T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue"
+      on T1.pid = T2."projectId" and T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T2."jobTypeCode" = 202
       where T2."projectId" IS NULL and T2."contextTypeCode" is null and T2."contextValue" is null;
 
       -- update if present
