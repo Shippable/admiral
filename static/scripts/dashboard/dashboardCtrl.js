@@ -1419,6 +1419,8 @@
     }
 
     function postMsg(update, next) {
+      if ($scope.vm.systemSettings.msg.isInitialized) return next();
+
       admiralApiAdapter.postMsg(update,
         function (err) {
           if (err)
