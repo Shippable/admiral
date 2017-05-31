@@ -1398,6 +1398,7 @@
 
 
       async.series([
+          getMsgSystemIntegration.bind(null, msgUpdate),
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
           postRedis.bind(null, redisUpdate),
@@ -1418,7 +1419,26 @@
       );
     }
 
+    function getMsgSystemIntegration(update, next) {
+      var query = 'name=msg';
+      admiralApiAdapter.getSystemIntegrations(query,
+        function (err, integration) {
+          if (err)
+            return horn.error(err);
+
+          if (!_.isEmpty(integration) && !_.isEmpty(integration[0].data)) {
+            var configs = integration[0].data;
+            if(configs.amqpUrl && configs.amqpUrlRoot && configs.amqpUrlAdmin)
+              update.isInitialized = true;
+          }
+          return next();
+        }
+      );
+    }
+
     function postMsg(update, next) {
+      if (update.isInitialized) return next();
+
       admiralApiAdapter.postMsg(update,
         function (err) {
           if (err)
