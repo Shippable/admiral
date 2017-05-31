@@ -16,6 +16,9 @@
       getAdmiralEnv: function (callback) {
         return API.get('/api/admiral', callback);
       },
+      putAdmiralEnv: function (body, callback) {
+        return API.put('/api/admiral', body, callback);
+      },
       //  Auth Routes
       postAuth: function (body, callback) {
         return API.post('/api/auth', body, callback);

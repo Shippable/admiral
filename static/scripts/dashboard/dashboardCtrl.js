@@ -83,7 +83,9 @@
           enableLogsButton: false,
           confirmCommand: false
         },
-        sshCommand: ''
+        sshCommand: '',
+        installerAccessKey: '',
+        installerSecretKey: ''
       },
       // map by systemInt name, then masterName
       installForm: {
@@ -856,6 +858,13 @@
     }
 
     function updateInitializeForm(bag, next) {
+      if ($scope.vm.admiralEnv) {
+        $scope.vm.initializeForm.installerAccessKey =
+          $scope.vm.admiralEnv.ACCESS_KEY;
+        $scope.vm.initializeForm.installerSecretKey =
+          $scope.vm.admiralEnv.SECRET_KEY;
+      }
+
       _.each($scope.vm.initializeForm,
         function (obj, service) {
           /* jshint maxcomplexity:20 */
@@ -1193,7 +1202,10 @@
     function initialize() {
       $scope.vm.initializing = true;
 
-      admiralApiAdapter.postDB({},
+      async.series([
+          saveInstallerKeys,
+          postDBInitialize
+        ],
         function (err) {
           if (err) {
             $scope.vm.initializing = false;
@@ -1201,6 +1213,30 @@
           }
 
           pollService('db', postAndInitSecrets);
+        }
+      );
+    }
+
+    function saveInstallerKeys(next) {
+      admiralApiAdapter.putAdmiralEnv({
+          ACCESS_KEY: $scope.vm.initializeForm.installerAccessKey,
+          SECRET_KEY: $scope.vm.initializeForm.installerSecretKey
+        },
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
+    function postDBInitialize(next) {
+      admiralApiAdapter.postDB({},
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
         }
       );
     }
