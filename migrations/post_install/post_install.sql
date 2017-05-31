@@ -34,7 +34,7 @@ do $$
 
       -- update contextTypeCode, contextValue
       update tjsm set "contextTypeCode" = 302, "contextValue" = tjsm."gitTagName", "contextDetail" = tjsm."commitSha" where "isGitTag" = true;
-      update tjsm set "contextTypeCode" = 303, "contextValue" = tjsm."releaseName", "contextDetail" = tjsm."gitTagName" where "isRelease" = true;
+      update tjsm set "contextTypeCode" = 314, "contextValue" = tjsm."releaseName", "contextDetail" = tjsm."gitTagName" where "isRelease" = true;
       update tjsm set "contextTypeCode" = 304, "contextValue" = tjsm."pullRequestNumber", "contextDetail" = tjsm.bn where "isPullRequest" = true;
       update tjsm set "contextTypeCode" = 301, "contextValue" = tjsm.bn, "contextDetail" = tjsm."commitSha" where "isPullRequest" = false and "isGitTag" = false and "isRelease" = false;
       update tjsm set "updatedBy" = tjsm."createdBy" where "updatedBy" is null;
