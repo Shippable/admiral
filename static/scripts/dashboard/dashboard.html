@@ -530,11 +530,11 @@
                         <td colspan="5" style="width: 45%">
                           Worker Install Location:
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.workers.initType" ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || vm.initializing" value="admiral">
+                            <input type="radio" ng-model="vm.initializeForm.workers.initType" ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing" value="admiral">
                             This Node
                           </span>
                           <span>
-                            <input type="radio" ng-model="vm.initializeForm.workers.initType" ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || vm.initializing" value="new">
+                            <input type="radio" ng-model="vm.initializeForm.workers.initType" ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing" value="new">
                             New Node(s)
                           </span>
                         </td>
