@@ -33,6 +33,36 @@
                     </thead>
                     <tbody>
                       <tr class="active">
+                        <td colspan="3">
+                          <b>Installer Access Key:</b>
+                        </td>
+                        <td colspan="3">
+                        </td>
+                        <td>
+                          <div ng-class="vm.initializeForm.installerAccessKey.length ? '' : 'has-error'">
+                            <input type="text" class="form-control input-sm" name="installerAccessKey" placeholder="Access Key" ng-disabled="vm.initializing"
+                            ng-model="vm.initializeForm.installerAccessKey"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="3">
+                          <b>Installer Secret Key:</b>
+                        </td>
+                        <td colspan="3">
+                        </td>
+                        <td>
+                          <div ng-class="vm.initializeForm.installerSecretKey.length ? '' : 'has-error'">
+                            <input type="text" class="form-control input-sm" name="installerSecretKey" placeholder="Secret Key" ng-disabled="vm.initializing"
+                            ng-model="vm.initializeForm.installerSecretKey"/>
+                          </div>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      <tr class="active">
                         <td style="width: 12.5%;">
                           <b>Admiral Environment:</b>
                         </td>
