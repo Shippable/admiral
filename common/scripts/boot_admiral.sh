@@ -2,7 +2,7 @@
 
 __stop_admiral() {
   __process_msg "Checking if admiral is running"
-  local admiral_container=$(sudo docker ps | grep admiral | awk '{print $1}')
+  local admiral_container=$(sudo docker ps -a | grep admiral | awk '{print $1}')
   if [ "$admiral_container" != "" ]; then
     __process_msg "Stopping running admiral container: $admiral_container"
     sudo docker stop -t=0 $admiral_container

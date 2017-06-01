@@ -59,7 +59,11 @@ __validate_runtime() {
     __process_msg "Services: $services_path"
   fi
 
-  __prompt_for_inputs
+  if [ $NO_PROMPT == true ]; then
+    __process_msg "Running in silent mode, suppressing all prompts"
+  else
+    __prompt_for_inputs
+  fi
 
   source $ADMIRAL_ENV
 }
@@ -267,6 +271,9 @@ __parse_args_install() {
       key="$1"
 
       case $key in
+        -s|--silent)
+         export NO_PROMPT=true
+         ;;
         -h|help|--help)
           __print_help_install
           ;;
