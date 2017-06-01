@@ -67,6 +67,15 @@ __set_ip() {
     echo "DB_IP already set, skipping"
   fi
 
+  local db_port=5432
+  if [ -z "$DB_PORT" ] || [ "$DB_PORT" == "" ]; then
+    echo "DB_PORT empty in admiral.env, setting it to: $db_port"
+    sed -i 's/.*DB_PORT=.*/DB_PORT="'$db_port'"/g' $ADMIRAL_ENV
+    export DB_PORT=$db_port
+  else
+    echo "DB_PORT already set, skipping"
+  fi
+
 }
 
 __start() {
