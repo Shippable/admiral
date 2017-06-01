@@ -53,7 +53,7 @@ __set_ip() {
 
   if [ -z "$ADMIRAL_IP" ] || [ "$ADMIRAL_IP" == "" ]; then
     echo "ADMIRAL_IP empty in admiral.env, setting it to: $admiral_ip"
-    sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$ADMIRAL_IP'"/g' $ADMIRAL_ENV
+    sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$admiral_ip'"/g' $ADMIRAL_ENV
     export ADMIRAL_IP=$admiral_ip
   else
     echo "ADMIRAL_IP already set, skipping"
