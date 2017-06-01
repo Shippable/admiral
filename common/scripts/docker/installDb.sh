@@ -32,7 +32,7 @@ __check_db() {
 __run_db() {
   __process_msg "Running database container"
 
-  local db_container=$(sudo docker ps -f "name=$COMPONENT" | awk '{print $1}')
+  local db_container=$(sudo docker ps -q -f "name=$COMPONENT" | awk '{print $1}')
   if [ "$db_container" != "" ]; then
     __process_msg "Database container already running"
   else
