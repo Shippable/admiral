@@ -43,7 +43,6 @@ __set_db_password() {
     echo "DB_PASSWORD already set, skipping"
   fi
 
-  #docker exec db psql -U postgres -c "ALTER USER \"$DB_USER\" WITH PASSWORD '$DB_PASSWORD';"
 }
 
 __set_ip() {
