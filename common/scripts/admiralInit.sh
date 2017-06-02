@@ -3,6 +3,7 @@
 readonly LOGS_FILE="/var/log/upstart/admiralInit.log"
 readonly ADMIRAL_ENV="/etc/shippable/admiral.env"
 readonly ADMIRAL_HOME="/home/ubuntu/admiral"
+readonly RUN_MODE=production
 
 export UUID=""
 export IP_ADDR=""
@@ -76,6 +77,13 @@ __set_ip() {
 
 }
 
+__set_run_mode() {
+  echo "Setting runmode"
+  echo "Setting RUN_MODE to: $RUN_MODE"
+  sed -i 's/.*RUN_MODE=.*/RUN_MODE="'$RUN_MODE'"/g' $ADMIRAL_ENV
+  export RUN_MODE=$RUN_MODE
+}
+
 __start() {
   echo "Starting admiral"
   local start_cmd="/bin/bash $ADMIRAL_HOME/admiral.sh install --silent"
@@ -95,6 +103,7 @@ main() {
     __set_login_token
     __set_db_password
     __set_ip
+    __set_run_mode
     __start
     echo "Admiral init complete"
   else
