@@ -655,6 +655,11 @@ do $$
       alter table "views" add column "subscriptionId" varchar(24);
     end if;
 
+    -- Add new column  projectId in views table
+    if not exists (select 1 from information_schema.columns where table_name = 'views' and column_name = 'projectId') then
+      alter table "views" add column "projectId" varchar(24);
+    end if;
+
     -- drop column isShippableNode from clusterNodes table
     if exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'isShippableNode') then
       alter table "clusterNodes" drop column "isShippableNode";
