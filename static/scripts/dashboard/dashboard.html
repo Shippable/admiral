@@ -39,8 +39,8 @@
                         <td colspan="3">
                         </td>
                         <td>
-                          <div ng-class="vm.initializeForm.installerAccessKey.length ? '' : 'has-error'">
-                            <input type="text" class="form-control input-sm" name="installerAccessKey" placeholder="Access Key" ng-disabled="vm.initializing"
+                          <div>
+                            <input type="text" class="form-control input-sm" name="installerAccessKey" placeholder="Access Key (Optional)" ng-disabled="vm.initializing"
                             ng-model="vm.initializeForm.installerAccessKey"/>
                           </div>
                         </td>
@@ -54,8 +54,8 @@
                         <td colspan="3">
                         </td>
                         <td>
-                          <div ng-class="vm.initializeForm.installerSecretKey.length ? '' : 'has-error'">
-                            <input type="text" class="form-control input-sm" name="installerSecretKey" placeholder="Secret Key" ng-disabled="vm.initializing"
+                          <div>
+                            <input type="text" class="form-control input-sm" name="installerSecretKey" placeholder="Secret Key (Optional)" ng-disabled="vm.initializing"
                             ng-model="vm.initializeForm.installerSecretKey"/>
                           </div>
                         </td>
