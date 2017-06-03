@@ -1589,7 +1589,7 @@
                         </div>
                       </div>
                       <!-- mktg -->
-                      <div class="col-md-offset-1 col-md-11">
+                      <div class="col-md-offset-1 col-md-11" ng-if="!vm.admiralEnv.IS_SERVER">
                         <div>&nbsp;</div>
                         <div class="row">
                           <div class="col-md-12">
@@ -1597,7 +1597,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-offset-2 col-md-10">
+                      <div class="col-md-offset-2 col-md-10" ng-if="!vm.admiralEnv.IS_SERVER">
                         <div class="row">
                           <div class="col-md-4">
                             URL
@@ -2009,7 +2009,7 @@
                         <thead>
                         </thead>
                         <tbody>
-                          <tr ng-repeat="service in vm.allServices" ng-if="service.isEnabled">
+                          <tr ng-repeat="service in vm.allServices" ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">
                             <td>
                               <b>{{service.serviceName}}</b>
                             </td>
