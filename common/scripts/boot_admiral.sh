@@ -46,8 +46,6 @@ __boot_admiral() {
     --name=admiral \
     $admiral_image"
 
-  __process_msg "Executing: $boot_cmd"
-
   eval "$boot_cmd"
   __process_msg "Admiral container successfully running"
 

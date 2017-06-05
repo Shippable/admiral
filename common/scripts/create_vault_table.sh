@@ -31,7 +31,6 @@ __upsert_vault_store() {
     -v ON_ERROR_STOP=1 \
     -f $vault_script_host_location"
 
-  __process_msg "Executing: $upsert_cmd"
   eval "$upsert_cmd"
 }
 

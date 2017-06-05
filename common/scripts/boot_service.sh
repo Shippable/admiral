@@ -10,8 +10,8 @@ __validate_service_configs() {
   __process_msg "Service $SERVICE_NAME configuration"
   __process_msg "SERVICE: $SERVICE_NAME"
   __process_msg "SERVICE_IMAGE: $SERVICE_IMAGE"
-  __process_msg "ACCESS_KEY: $ACCESS_KEY"
-  __process_msg "SECRET_KEY: $SECRET_KEY"
+  __process_msg "ACCESS_KEY: ${#ACCESS_KEY}"
+  __process_msg "SECRET_KEY: ${#SECRET_KEY}"
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "LOGS_FILE:$LOGS_FILE"
 }
@@ -28,7 +28,6 @@ __cleanup_service() {
 
 __run_service() {
   __process_msg "Running service: $SERVICE_NAME"
-  __process_msg "Executing: $RUN_COMMAND"
   local run_output=$($RUN_COMMAND)
   __process_msg "Docker run returned: $run_output"
 }

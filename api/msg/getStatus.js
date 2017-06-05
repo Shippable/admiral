@@ -103,9 +103,7 @@ function _connectToShippableAMQP(bag, next) {
 
   bag.shippableConnection.on('ready',
     function () {
-      logger.verbose(
-        util.format('Connected to %s', bag.amqpUrl)
-      );
+      logger.verbose('Connected to RabbitMQ');
       return next();
     }
   );
@@ -113,8 +111,8 @@ function _connectToShippableAMQP(bag, next) {
   bag.shippableConnection.on('error',
     function (err) {
       if (bag.shippableConnection) {
-        var message = util.format('Failed to connect to %s with error: %s',
-          bag.amqpUrl, util.inspect(err));
+        var message = util.format(
+          'Failed to connect to RabbitMQ with error: %s', util.inspect(err));
         logger.error(message);
         bag.resBody.error = message;
         return next();
@@ -134,17 +132,13 @@ function _disconnectShippableAMQP(bag, next) {
   try {
     bag.shippableConnection.disconnect();
   } catch (ex) {
-    logger.warn(
-      util.format('Failed to close connection to %s', bag.amqpUrl)
-    );
+    logger.warn('Failed to close connection to RabbitMQ');
     error = ex;
   }
 
   if (!error) {
     bag.shippableConnection = null;
-    logger.verbose(
-      util.format('Closed connection to %s', bag.amqpUrl)
-    );
+    logger.verbose('Closed connection to RabbitMQ');
   }
 
   return next();
@@ -166,9 +160,7 @@ function _connectToShippableRootAMQP(bag, next) {
 
   bag.shippableRootConnection.on('ready',
     function () {
-      logger.verbose(
-        util.format('Connected to %s', bag.amqpUrlRoot)
-      );
+      logger.verbose('Connected to RabbitMQ');
       return next();
     }
   );
@@ -176,8 +168,8 @@ function _connectToShippableRootAMQP(bag, next) {
   bag.shippableRootConnection.on('error',
     function (err) {
       if (bag.shippableRootConnection) {
-        var message = util.format('Failed to connect to %s with error: %s',
-          bag.amqpUrlRoot, util.inspect(err));
+        var message = util.format(
+          'Failed to connect to RabbitMQ with error: %s', util.inspect(err));
         logger.error(message);
         bag.resBody.error = message;
         return next();
@@ -197,17 +189,13 @@ function _disconnectShippableRootAMQP(bag, next) {
   try {
     bag.shippableRootConnection.disconnect();
   } catch (ex) {
-    logger.warn(
-      util.format('Failed to close connection to %s', bag.amqpUrlRoot)
-    );
+    logger.warn('Failed to close connection to RabbitMQ');
     error = ex;
   }
 
   if (!error) {
     bag.shippableRootConnection = null;
-    logger.verbose(
-      util.format('Closed connection to %s', bag.amqpUrlRoot)
-    );
+    logger.verbose('Closed connection to RabbitMQ');
   }
   return next();
 }

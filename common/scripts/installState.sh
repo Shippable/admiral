@@ -19,7 +19,7 @@ __validate_state_envs() {
   __process_msg "STATE_DATA_DIR: $STATE_DATA_DIR"
   __process_msg "STATE_CONFIG_DIR: $STATE_CONFIG_DIR"
   __process_msg "STATE_HOST: $STATE_HOST"
-  __process_msg "STATE_PASS: $STATE_PASS"
+  __process_msg "STATE_PASS: ${#STATE_PASS}"
   __process_msg "STATE_PORT: $STATE_PORT"
   __process_msg "SSH_PORT: $SSH_PORT"
   __process_msg "SECURE_PORT: $SECURE_PORT"

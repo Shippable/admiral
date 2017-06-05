@@ -155,10 +155,14 @@ __prompt_for_inputs() {
   if $setAccessKey || $setSecretKey || $setAdmiralIP || $setDBIP || $setDBPort || $setDBPassword || $setPublicImageRegistry ; then
     __process_success "These values are easy to set now, but hard to change later! Please confirm that they are correct:"
     if $setAccessKey ; then
-      echo "Installer Access Key:     $ACCESS_KEY"
+      local escaped_access_key=$(echo $ACCESS_KEY | sed -e 's/[\/&]/\\&/g')
+      local displayed_value=$(echo $escaped_access_key | sed -e 's/\(.\)/\*/g')
+      echo "Installer Access Key:     $displayed_value"
     fi
     if $setSecretKey ; then
-      echo "Installer Secret Key:     $SECRET_KEY"
+      local escaped_secret_key=$(echo $SECRET_KEY | sed -e 's/[\/&]/\\&/g')
+      local displayed_value=$(echo $escaped_secret_key | sed -e 's/\(.\)/\*/g')
+      echo "Installer Secret Key:     $displayed_value"
     fi
     if $setAdmiralIP ; then
       echo "Admin Panel Address:      $ADMIRAL_IP"
@@ -177,7 +181,9 @@ __prompt_for_inputs() {
       echo "Database Port:            $DB_PORT"
     fi
     if $setDBPassword ; then
-      echo "Database Password:        $DB_PASSWORD"
+      local escaped_password=$(echo $DB_PASSWORD | sed -e 's/[\/&]/\\&/g')
+      local displayed_value=$(echo $escaped_password | sed -e 's/\(.\)/\*/g')
+      echo "Database Password:        $displayed_value"
     fi
     if $setPublicImageRegistry ; then
       echo "Public Image Registry:    $PUBLIC_IMAGE_REGISTRY"

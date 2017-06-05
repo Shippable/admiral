@@ -29,7 +29,6 @@ __upsert_system_settings() {
     -v ON_ERROR_STOP=1 \
     -f $system_settings_location"
 
-  __process_msg "Executing: $upsert_cmd"
 	eval "$upsert_cmd"
 }
 

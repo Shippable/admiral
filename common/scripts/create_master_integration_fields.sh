@@ -40,7 +40,6 @@ __upsert_master_integration_fields() {
     -v ON_ERROR_STOP=1 \
     -f $master_integration_fields_location"
 
-  __process_msg "Executing: $upsert_cmd"
   eval "$upsert_cmd"
 }
 

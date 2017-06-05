@@ -38,7 +38,6 @@ __upsert_system_codes() {
     -v ON_ERROR_STOP=1 \
     -f $system_codes_location"
 
-  __process_msg "Executing: $upsert_cmd"
   eval "$upsert_cmd"
 }
 
