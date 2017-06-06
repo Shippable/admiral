@@ -85,7 +85,7 @@ do $$
           ROW_NUMBER() OVER (PARTITION BY "projectId", "resourceId", "statusCode" ORDER BY "createdAt" desc)
           AS rn
           FROM builds
-          WHERE "statusCode" in (4002, 4003, 4004, 4006, 4008)
+          WHERE "statusCode" in (4002, 4003, 4004, 4006, 4007, 4008, 4009)
       )
       SELECT "id", "projectId" as pid, "resourceId" as rid, "createdAt", "statusCode", "subscriptionId", "updatedAt"
       FROM cte
@@ -100,7 +100,7 @@ do $$
       FROM cte;
 
       -- add required columns to temp table tjsm
-      alter table tjsm add column "contextValue" varchar(255), add column "contextTypeCode" int, add column "contextDetail" varchar(255), add column "lastSuccessfulJobId" varchar(24), add column "lastFailedJobId" varchar(24), add column "createdBy" varchar(24), add column "updatedBy" varchar(24);
+      alter table tjsm add column "contextValue" varchar(255), add column "contextTypeCode" int, add column "contextDetail" varchar(255), add column "lastSuccessfulJobId" varchar(24), add column "lastFailedJobId" varchar(24), add column "lastUnstableJobId" varchar(24), add column "lastTimedoutJobId" varchar(24), add column "createdBy" varchar(24), add column "updatedBy" varchar(24);
 
       -- update contextTypeCode, contextValue
 
@@ -113,18 +113,22 @@ do $$
 
       update tjsm T1 set "contextValue" = T2."contextValue", "contextTypeCode" = T2."contextTypeCode", "createdBy" = T2."createdBy", "updatedBy" = T2."updatedBy", "contextDetail" = T2."contextDetail" from rtjsm T2 where T1.rid = T2.id;
 
-      -- update lastSuccessfulJobId, lastFailedJobId
+      -- update lastSuccessfulJobId, lastUnstableJobId, lastTimedoutJobId, lastFailedJobId
       update tjsm T1 set "lastSuccessfulJobId" = T2.id from tjsm T2 where T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1.pid = T2.pid and T2."statusCode" = 4002 and T1.rid = T2.rid;
 
       update tjsm T1 set "lastFailedJobId" = T2.id from tjsm T2 where T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1.pid = T2.pid and T2."statusCode" = 4003 and T1.rid = T2.rid;
 
+      update tjsm T1 set "lastUnstableJobId" = T2.id from tjsm T2 where T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1.pid = T2.pid and T2."statusCode" = 4007 and T1.rid = T2.rid;
+
+      update tjsm T1 set "lastTimedoutJobId" = T2.id from tjsm T2 where T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1.pid = T2.pid and T2."statusCode" = 4009 and T1.rid = T2.rid;
+
       -- creating a temp table temptjsm which have only latest records
       create temp table temptjsm as WITH cte AS (
-        SELECT id, pid, rid, "createdAt", "contextTypeCode", "contextValue", "contextDetail", "statusCode", "subscriptionId", "createdBy", "updatedBy", "updatedAt", "lastSuccessfulJobId", "lastFailedJobId",
+        SELECT id, pid, rid, "createdAt", "contextTypeCode", "contextValue", "contextDetail", "statusCode", "subscriptionId", "createdBy", "updatedBy", "updatedAt", "lastSuccessfulJobId", "lastFailedJobId", "lastTimedoutJobId", "lastUnstableJobId",
           ROW_NUMBER() OVER (PARTITION BY "rid", "contextTypeCode", "contextValue" ORDER BY "createdAt" desc)
           AS rn FROM tjsm
       )
-      SELECT "id", pid, rid, "createdAt", "statusCode", "contextTypeCode", "contextValue", "contextDetail", "lastSuccessfulJobId", "lastFailedJobId", "subscriptionId", "createdBy", "updatedBy", "updatedAt"
+      SELECT "id", pid, rid, "createdAt", "statusCode", "contextTypeCode", "contextValue", "contextDetail", "lastSuccessfulJobId", "lastFailedJobId", "lastTimedoutJobId", "lastUnstableJobId", "subscriptionId", "createdBy", "updatedBy", "updatedAt"
       FROM cte
       WHERE rn = 1;
 
@@ -140,6 +144,10 @@ do $$
       update "jobStatesMap" T1 set "lastSuccessfulJobId" = T2."lastSuccessfulJobId" from temptjsm T2 where T1."jobTypeCode" = 202 and T1."resourceId" = T2.rid and T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1."lastSuccessfulJobId" is null and T2."lastSuccessfulJobId" is not null;
 
       update "jobStatesMap" T1 set "lastFailedJobId" = T2."lastFailedJobId" from temptjsm T2 where T1."jobTypeCode" = 202 and T1."resourceId" = T2.rid and T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1."lastFailedJobId" is null and T2."lastFailedJobId" is not null;
+
+      update "jobStatesMap" T1 set "lastUnstableJobId" = T2."lastUnstableJobId" from temptjsm T2 where T1."jobTypeCode" = 202 and T1."resourceId" = T2.rid and T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1."lastUnstableJobId" is null and T2."lastUnstableJobId" is not null;
+
+      update "jobStatesMap" T1 set "lastTimedoutJobId" = T2."lastTimedoutJobId" from temptjsm T2 where T1."jobTypeCode" = 202 and T1."resourceId" = T2.rid and T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1."lastTimedoutJobId" is null and T2."lastTimedoutJobId" is not null;
 
       update "jobStatesMap" T1 set "contextDetail" = T2."contextDetail" from temptjsm T2 where T1."jobTypeCode" = 202 and T1."resourceId" = T2.rid and T1."contextTypeCode" = T2."contextTypeCode" and T1."contextValue" = T2."contextValue" and T1."contextDetail" is null and T2."contextDetail" is not null;
 
