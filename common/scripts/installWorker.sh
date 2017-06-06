@@ -19,8 +19,8 @@ __validate_worker_envs() {
   __process_msg "MASTER_HOST: $MASTER_HOST"
   __process_msg "MASTER_PORT: $MASTER_PORT"
   __process_msg "WORKER_JOIN_TOKEN: $WORKER_JOIN_TOKEN"
-  __process_msg "ACCESS_KEY: $ACCESS_KEY"
-  __process_msg "SECRET_KEY: $SECRET_KEY"
+  __process_msg "ACCESS_KEY: ${#ACCESS_KEY}"
+  __process_msg "SECRET_KEY: ${#SECRET_KEY}"
 }
 
 __validate_worker_mounts() {

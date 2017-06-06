@@ -223,7 +223,7 @@ __print_runtime() {
   __process_msg "DB_IP: $DB_IP"
   __process_msg "DB_PORT: $DB_PORT"
   __process_msg "DB_USER: $DB_USER"
-  __process_msg "DB_PASSWORD: $DB_PASSWORD"
+  __process_msg "DB_PASSWORD: ${#DB_PASSWORD}"
   __process_msg "DB_NAME: $DB_NAME"
   __process_msg "Login Token: $LOGIN_TOKEN"
 }

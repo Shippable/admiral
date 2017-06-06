@@ -14,13 +14,13 @@ __validate_api_envs() {
   __process_msg "API_IMAGE: $API_IMAGE"
   __process_msg "DBNAME: $DBNAME"
   __process_msg "DBUSERNAME: $DBUSERNAME"
-  __process_msg "DBPASSWORD: $DBPASSWORD"
+  __process_msg "DBPASSWORD: ${#DBPASSWORD}"
   __process_msg "DBHOST: $DBHOST"
   __process_msg "DBPORT: $DBPORT"
   __process_msg "DBDIALECT: $DBDIALECT"
   __process_msg "LOGS_FILE: $LOGS_FILE"
-  __process_msg "ACCESS_KEY: $ACCESS_KEY"
-  __process_msg "SECRET_KEY: $SECRET_KEY"
+  __process_msg "ACCESS_KEY: ${#ACCESS_KEY}"
+  __process_msg "SECRET_KEY: ${#SECRET_KEY}"
 }
 
 __docker_login() {

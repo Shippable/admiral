@@ -10,7 +10,6 @@ __run_sql_file() {
     -v ON_ERROR_STOP=1 \
     -f $SQL_FILE"
 
-  echo "Executing: $run_cmd"
 	eval "$run_cmd"
 }
 

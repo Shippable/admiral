@@ -22,7 +22,7 @@ __validate_vault_envs() {
   __process_msg "DBPORT: $DBPORT"
   __process_msg "DBNAME: $DBNAME"
   __process_msg "DBUSERNAME: $DBUSERNAME"
-  __process_msg "DBPASSWORD: $DBPASSWORD"
+  __process_msg "DBPASSWORD: ${#DBPASSWORD}"
   __process_msg "LOGS_FILE: $LOGS_FILE"
 }
 

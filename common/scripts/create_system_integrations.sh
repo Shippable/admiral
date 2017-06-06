@@ -40,7 +40,6 @@ __upsert_system_integrations() {
     -v ON_ERROR_STOP=1 \
     -f $system_integrations_location"
 
-  __process_msg "Executing: $upsert_cmd"
   eval "$upsert_cmd"
 }
 

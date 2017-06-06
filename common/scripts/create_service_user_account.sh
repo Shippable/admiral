@@ -29,7 +29,6 @@ __upsert_service_user_account() {
     -v ON_ERROR_STOP=1 \
     -f $service_user_account_location"
 
-  __process_msg "Executing: $upsert_cmd"
   eval "$upsert_cmd"
 }
 

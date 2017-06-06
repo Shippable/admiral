@@ -20,8 +20,6 @@ __run_state() {
       gitlab_rails['rate_limit_requests_per_period'] = 1000000; \
       gitlab_rails['rate_limit_period'] = 1;"
 
-  __process_msg "$config"
-
   local run_cmd="sudo docker run \
     -d \
     -e GITLAB_OMNIBUS_CONFIG="\"$config\"" \
@@ -35,8 +33,6 @@ __run_state() {
     --name=$COMPONENT \
     $STATE_IMAGE
   "
-
-  __process_msg "Executing: $run_cmd"
 
   eval "$run_cmd"
   __process_msg "Gitlab container successfully running"
