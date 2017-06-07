@@ -2,7 +2,7 @@
 
 export STATE_IMAGE="drydock/gitlab:$RELEASE"
 
-export TIMEOUT=120
+export TIMEOUT=180
 
 __cleanup() {
   __process_msg "Removing stale containers"
