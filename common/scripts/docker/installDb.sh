@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 export DB_IMAGE="drydock/postgres:$RELEASE"
-export TIMEOUT=120
+export TIMEOUT=180
 
 __check_db() {
   __process_msg "Checking database container status on: $DB_IP:$DB_PORT"

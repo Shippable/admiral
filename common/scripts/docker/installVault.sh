@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 export VAULT_IMAGE="drydock/vault:$RELEASE"
-export TIMEOUT=120
+export TIMEOUT=180
 
 __cleanup() {
   __process_msg "Removing stale containers"
