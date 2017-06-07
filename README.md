@@ -4,16 +4,21 @@
 
 ```
   Usage:
-    $./admiral.sh <command> [flags]
+    ./admiral.sh <command> [flags]
 
   Examples:
-    $sudo ./admiral.sh install
-    $sudo ./admiral.sh --help
+    ./admiral.sh install --help
 
   Commmands:
     install         Run Shippable installation
+    upgrade         Run silent upgrade without any prompts
     help            Print this message
+    clean           Remove shippable containers and configurations
+    info            Print information about current installation
 ```
+
+## Docs
+Full documentation for all the components is available [here](http://docs.shippable.com/reference/admiral/)
 
 ## Installing Shippable Enterprise with GitHub Auth
 
