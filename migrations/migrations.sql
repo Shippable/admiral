@@ -2102,6 +2102,12 @@ do $$
     perform set_route_role(
       routePattern := '/passthrough/jobs/:jobId/reports',
       httpVerb := 'GET',
+      roleCode := 6040
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/jobs/:jobId/reports',
+      httpVerb := 'GET',
       roleCode := 6060
     );
 
