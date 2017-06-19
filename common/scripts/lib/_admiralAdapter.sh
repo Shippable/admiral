@@ -175,6 +175,11 @@ _shippable_get_db() {
   __shippable_get $db_get_endpoint
 }
 
+_shippable_get_secrets_status() {
+  local secrets_status_get_endpoint="secrets/status"
+  __shippable_get $secrets_status_get_endpoint
+}
+
 _shippable_get_masterIntegrations() {
   local query="$1"
   local masterIntegrations_get_endpoint="masterIntegrations"
@@ -212,6 +217,11 @@ _shippable_post_worker_cleanup() {
   local body="$1"
   local worker_post_endpoint="workers/cleanup"
   __shippable_post $worker_post_endpoint "$body"
+}
+
+_shippable_post_secrets_initialize() {
+  local secrets_post_initialize_endpoint="secrets/initialize"
+  __shippable_post $secrets_post_initialize_endpoint
 }
 
 ### PUT
