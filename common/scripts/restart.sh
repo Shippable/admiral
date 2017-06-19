@@ -78,7 +78,7 @@ __unseal() {
     __process_error "Status code: $response_status_code"
     exit 1
   else
-    __process_msg "Successfully called secrects unseal route"
+    __process_msg "Successfully called secrets unseal route"
   fi
 
 }
