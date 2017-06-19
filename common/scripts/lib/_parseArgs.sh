@@ -293,6 +293,24 @@ __parse_args_install() {
   fi
 }
 
+__parse_args_restart() {
+  export IS_RESTART=true
+  local db_container=$(sudo docker ps -a -q -f "name=db" | awk '{print $1}')
+
+  if [ "$DB_IP" == "$ADMIRAL_IP" ]; then
+    __process_msg "Checking database container"
+    if [ "$db_container" != "" ]; then
+      __process_msg "Found a stopped database container, starting it"
+      sudo docker start $db_container
+    else
+      __process_error "No database container found in stopped state, exiting"
+      exit 1
+    fi
+  else
+    __process_msg "DB running on a separate machine, skipping db state check"
+  fi
+}
+
 __print_help_install() {
   echo "
   usage: $0 install [flags]
@@ -314,6 +332,7 @@ __print_help() {
   Commmands:
     install         Run Shippable installation
     upgrade         Run silent upgrade without any prompts
+    restart         Restart all services
     help            Print this message
     clean           Remove shippable containers and configurations
     info            Print information about current installation
@@ -381,6 +400,10 @@ __parse_args() {
       upgrade)
         __bootstrap_admiral_env
         export IS_UPGRADE=true
+        ;;
+      restart)
+        __bootstrap_admiral_env
+        __parse_args_restart
         ;;
       status)
         __show_status
