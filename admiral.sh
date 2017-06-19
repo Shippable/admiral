@@ -36,6 +36,7 @@ export LC_ALL=C
 # Installation default values #############################
 ###########################################################
 export IS_UPGRADE=false
+export IS_RESTART=false
 export NO_PROMPT=false
 export KEYS_GENERATED=false
 ###########################################################
@@ -58,9 +59,10 @@ main() {
     source "$SCRIPTS_DIR/create_vault_table.sh"
     source "$SCRIPTS_DIR/boot_admiral.sh"
     source "$SCRIPTS_DIR/upgrade.sh"
+    source "$SCRIPTS_DIR/restart.sh"
   } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )
 
-  __process_msg "Installation successfully completed !!!"
+  __process_msg "Command successfully completed !!!"
 }
 
 main "$@"
