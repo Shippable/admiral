@@ -151,6 +151,11 @@ _shippable_get_state() {
   __shippable_get $state_get_endpoint
 }
 
+_shippable_get_redis() {
+  local redis_get_endpoint="redis"
+  __shippable_get $redis_get_endpoint
+}
+
 _shippable_get_systemSettings() {
   local system_settings_get_endpoint="systemSettings"
   __shippable_get $system_settings_get_endpoint
