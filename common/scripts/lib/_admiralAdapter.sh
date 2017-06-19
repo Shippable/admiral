@@ -136,6 +136,21 @@ _shippable_get_admiral() {
   __shippable_get $admiral_get_endpoint
 }
 
+_shippable_get_secrets() {
+  local secrets_get_endpoint="secrets"
+  __shippable_get $secrets_get_endpoint
+}
+
+_shippable_get_msg() {
+  local msg_get_endpoint="msg"
+  __shippable_get $msg_get_endpoint
+}
+
+_shippable_get_state() {
+  local state_get_endpoint="state"
+  __shippable_get $state_get_endpoint
+}
+
 _shippable_get_systemSettings() {
   local system_settings_get_endpoint="systemSettings"
   __shippable_get $system_settings_get_endpoint
