@@ -311,7 +311,7 @@ __add_ssh_key_to_db() {
     local public_ssh_key=$(cat $SSH_PUBLIC_KEY)
     __process_success "Run the following command on $DB_IP to allow SSH access:"
 
-    echo 'sudo mkdir -p /root/.ssh; echo '$public_ssh_key' >> /root/.ssh/authorized_keys;'
+    echo 'sudo mkdir -p /root/.ssh; echo '$public_ssh_key' | sudo tee -a /root/.ssh/authorized_keys;'
 
     __process_success "Enter Y to confirm that you have run this command"
     read confirmation
