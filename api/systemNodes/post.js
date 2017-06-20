@@ -23,7 +23,7 @@ function post(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
-      _getSystemSettings.bind(null, bag),
+      _getDefaultSystemMachineImage.bind(null, bag),
       _post.bind(null, bag),
       _getSystemNode.bind(null, bag)
     ],
@@ -52,40 +52,29 @@ function _checkInputParams(bag, next) {
     );
   bag.friendlyName = bag.reqBody.friendlyName;
 
-  if (!bag.reqBody.execImage)
-    return next(
-      new ActErr(who, ActErr.DataNotFound, 'Missing body data :execImage')
-    );
-  bag.execImage = bag.reqBody.execImage;
-
-  if (global.config.admiralIP !== 'localhost' &&
-    global.config.admiralIP !== '127.0.0.1')
-    return next(
-      new ActErr(who, ActErr.OperationFailed, util.format('Unable to POST '+
-        'system node on %s', global.config.admiralIP))
-    );
-
   return next();
 }
 
-function _getSystemSettings(bag, next) {
-  var who = bag.who + '|' + _getSystemSettings.name;
+function _getDefaultSystemMachineImage(bag, next) {
+  var who = bag.who + '|' + _getDefaultSystemMachineImage.name;
   logger.verbose(who, 'Inside');
 
-  bag.apiAdapter.getSystemSettings('',
-    function (err, systemSettings) {
+  var query = 'isDefault=true';
+  bag.apiAdapter.getSystemMachineImages(query,
+    function (err, systemMachineImages) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Failed to get system settings : ' + util.inspect(err))
+            'Failed to get systemMachineImages : ' + util.inspect(err))
         );
 
-      if (systemSettings.runMode !== 'dev')
+      if (_.isEmpty(systemMachineImages))
         return next(
-          new ActErr(who, ActErr.OperationFailed, util.format('Unable to ' +
-            'POST system node on run mode: %s', systemSettings.runMode))
+          new ActErr(who, ActErr.DBEntityNotFound, 'default ' +
+          'systemMachineImage not found')
         );
 
+      bag.execImage = _.first(systemMachineImages).runShImage;
       return next();
     }
   );
@@ -97,12 +86,37 @@ function _post(bag, next) {
 
   bag.systemNodeId = mongoose.Types.ObjectId().toString();
 
-  var insertStatement = util.format('INSERT INTO "systemNodes" ("id", ' +
-    '"friendlyName", "execImage", "isShippableInitialized", "createdBy", ' +
-    '"updatedBy", "createdAt", "updatedAt") values (\'%s\', \'%s\', \'%s\', ' +
-    ' true, \'54188262bc4d591ba438d62a\', \'54188262bc4d591ba438d62a\',' +
-    ' CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
-    bag.systemNodeId, bag.friendlyName, bag.execImage);
+  var newSystemNode = {
+    id: bag.systemNodeId,
+    friendlyName: bag.friendlyName,
+    sshPort: bag.reqBody.sshPort,
+    sshUser: 'shippable',
+    isShippableInitialized: !!bag.reqBody.isShippableInitialized,
+    initScript: bag.reqBody.initScript,
+    sourceId: bag.reqBody.sourceId,
+    location: bag.reqBody.location,
+    nodeTypeCode: bag.reqBody.nodeTypeCode,
+    execImage: bag.execImage,
+    createdBy: '54188262bc4d591ba438d62a',
+    updatedBy: '54188262bc4d591ba438d62a'
+  };
+
+  var insertColumns = [];
+  var insertValues = [];
+
+  _.each(_.keys(newSystemNode), function (key) {
+    if (_.isUndefined(newSystemNode[key])) return;
+    if (_.isString(newSystemNode[key]) || _.isObject(newSystemNode[key]))
+      insertValues.push(util.format('\'%s\'', newSystemNode[key]));
+    else
+      insertValues.push(util.format('%s', newSystemNode[key]));
+    insertColumns.push(util.format('"%s"', key));
+  });
+
+  var insertStatement = util.format('INSERT INTO "systemNodes" (%s' +
+    ', "statusLastUpdatedAt", "createdAt", "updatedAt") values (%s, ' +
+    'CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
+    insertColumns.join(','), insertValues.join(','));
 
   global.config.client.query(insertStatement,
     function (err) {
