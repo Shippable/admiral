@@ -870,6 +870,15 @@
                               ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                           </div>
                         </div>
+                        <div class="row" ng-if="vm.installForm.auth.bitbucketKeys.callbackUrl">
+                          <div class="col-md-4">
+                            Callback URL
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" class="form-control input-sm" name="bitbucketCallbackUrl"
+                              ng-model="vm.installForm.auth.bitbucketKeys.callbackUrl" ng-disabled="true"/>
+                          </div>
+                        </div>
                       </div>
                         <!-- Bitbucket Server -->
                       <div class="col-md-offset-1 col-md-11">
@@ -934,6 +943,15 @@
                           <div class="col-md-8">
                             <input type="text" class="form-control input-sm" name="bitbucketServerWWWUrl"
                               ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
+                          </div>
+                        </div>
+                        <div class="row" ng-if="vm.installForm.auth.bitbucketServerKeys.callbackUrl">
+                          <div class="col-md-4">
+                            Callback URL
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" class="form-control input-sm" name="bitbucketServerCallbackUrl"
+                              ng-model="vm.installForm.auth.bitbucketServerKeys.callbackUrl" ng-disabled="true"/>
                           </div>
                         </div>
                       </div>
@@ -1002,6 +1020,15 @@
                               ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                           </div>
                         </div>
+                        <div class="row" ng-if="vm.installForm.auth.githubKeys.callbackUrl">
+                          <div class="col-md-4">
+                            Callback URL
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" class="form-control input-sm" name="githubCallbackUrl"
+                              ng-model="vm.installForm.auth.githubKeys.callbackUrl" ng-disabled="true"/>
+                          </div>
+                        </div>
                       </div>
                       <!-- GitHub Enterprise -->
                       <div class="col-md-offset-1 col-md-11">
@@ -1068,6 +1095,15 @@
                               ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
                           </div>
                         </div>
+                        <div class="row" ng-if="vm.installForm.auth.githubEnterpriseKeys.callbackUrl">
+                          <div class="col-md-4">
+                            Callback URL
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" class="form-control input-sm" name="githubEnterpriseCallbackUrl"
+                              ng-model="vm.installForm.auth.githubEnterpriseKeys.callbackUrl" ng-disabled="true"/>
+                          </div>
+                        </div>
                       </div>
                         <!-- GitLab -->
                       <div class="col-md-offset-1 col-md-11">
@@ -1132,6 +1168,15 @@
                           <div class="col-md-8">
                             <input type="text" class="form-control input-sm" name="gitlabWWWUrl"
                               ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
+                          </div>
+                        </div>
+                        <div class="row" ng-if="vm.installForm.auth.gitlabKeys.callbackUrl">
+                          <div class="col-md-4">
+                            Callback URL
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" class="form-control input-sm" name="gitlabCallbackUrl"
+                              ng-model="vm.installForm.auth.gitlabKeys.callbackUrl" ng-disabled="true"/>
                           </div>
                         </div>
                       </div>

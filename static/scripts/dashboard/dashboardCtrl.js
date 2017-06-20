@@ -848,6 +848,9 @@
                   systemIntegration.data
                 );
                 $scope.vm.installForm[sysIntName][masterName].isEnabled = true;
+                if (sysIntName === 'auth')
+                  $scope.vm.installForm[sysIntName][masterName].callbackUrl =
+                    systemIntegration.data.wwwUrl + '/' + sysIntName +'/' + systemIntegration.id + '/identify';
               }
             }
           );
@@ -2207,7 +2210,13 @@
 
           updateSystemIntegration(bag,
             function (err) {
-              return done(err);
+              if (err)
+                return done(err);
+              if (bag.systemIntegrationId)
+                $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
+                  bag.data.wwwUrl + '/' + bag.name +'/' + bag.systemIntegrationId + '/identify';
+              return done();
+
             }
           );
         },
@@ -2399,9 +2408,10 @@
           masterName: bag.masterName,
           data: bag.data
         },
-        function (err) {
+        function (err, sysInt) {
           if (err)
             return next(err);
+          bag.systemIntegrationId = sysInt.id;
 
           return next();
         }
