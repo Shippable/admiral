@@ -5,6 +5,9 @@ module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
+var spawn = require('child_process').spawn;
+var fs = require('fs');
+var path = require('path');
 
 var APIAdapter = require('../../common/APIAdapter.js');
 
@@ -15,7 +18,8 @@ function initialize(req, res) {
     reqBody: req.body,
     resBody: {},
     systemNodeId: null,
-    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1])
+    apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
+    tmpScript: '/tmp/service.sh'
   };
 
   bag.who = util.format('systemNodes|%s', self.name);
@@ -26,7 +30,11 @@ function initialize(req, res) {
       _getSystemSettings.bind(null, bag),
       _getSystemNode.bind(null, bag),
       _getSystemNodeRoleCode.bind(null, bag),
-      _generateGenexecConfig.bind(null, bag)
+      _generateGenexecConfig.bind(null, bag),
+      _generateInitializeEnvs.bind(null, bag),
+      _generateScript.bind(null, bag),
+      _writeScriptToFile.bind(null, bag),
+      _bootService.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -155,8 +163,101 @@ function _generateGenexecConfig(bag, next) {
       bag.serviceConfig = config;
       bag.runCommand = runCommand;
 
-      logger.debug(util.format('Run command: %s', bag.runCommand));
       return next();
     }
   );
+}
+
+function _generateInitializeEnvs(bag, next) {
+  var who = bag.who + '|' + _generateInitializeEnvs.name;
+  logger.verbose(who, 'Inside');
+
+  bag.scriptEnvs = {
+    'RUNTIME_DIR': global.config.runtimeDir,
+    'SCRIPTS_DIR': global.config.scriptsDir,
+    'SERVICE_NAME': bag.serviceConfig.serviceName,
+    'SERVICE_IMAGE': bag.serviceConfig.image,
+    'RUN_COMMAND': bag.runCommand
+  };
+
+  return next();
+}
+
+function _generateScript(bag, next) {
+  var who = bag.who + '|' + _generateScript.name;
+  logger.verbose(who, 'Inside');
+
+  var script = '';
+  //attach header
+  var filePath = path.join(global.config.scriptsDir, '/lib/_logger.sh');
+  script = script.concat(__applyTemplate(filePath, bag.params));
+
+  filePath = path.join(global.config.scriptsDir, 'boot_service.sh');
+  script = script.concat(__applyTemplate(filePath, bag.params));
+
+  bag.script = script;
+  return next();
+}
+
+function _writeScriptToFile(bag, next) {
+  var who = bag.who + '|' + _writeScriptToFile.name;
+  logger.debug(who, 'Inside');
+
+  fs.writeFile(bag.tmpScript,
+    bag.script,
+    function (err) {
+      if (err) {
+        var msg = util.format('%s, Failed with err:%s', who, err);
+        return next(
+          new ActErr(
+            who, ActErr.OperationFailed, msg)
+        );
+      }
+      fs.chmodSync(bag.tmpScript, '755');
+      return next();
+    }
+  );
+}
+
+function _bootService(bag, next) {
+  var who = bag.who + '|' + _bootService.name;
+  logger.verbose(who, 'Inside');
+
+  var exec = spawn('/bin/bash',
+    ['-c', bag.script],
+    {
+      env: bag.scriptEnvs
+    }
+  );
+
+  exec.stdout.on('data',
+    function (data)  {
+      logger.debug(who, data.toString());
+    }
+  );
+
+  exec.stderr.on('data',
+    function (data)  {
+      logger.error(who, data.toString());
+    }
+  );
+
+  exec.on('close',
+    function (exitCode)  {
+      if (exitCode > 0)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Script returned code: ' + exitCode)
+        );
+      return next();
+    }
+  );
+}
+
+//local function to apply vars to template
+function __applyTemplate(filePath, dataObj) {
+  var fileContent = fs.readFileSync(filePath).toString();
+  var template = _.template(fileContent);
+
+  return template({obj: dataObj});
 }
