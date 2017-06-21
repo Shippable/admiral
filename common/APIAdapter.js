@@ -182,6 +182,13 @@ APIAdapter.prototype.postSystemIntegration =
     this.post(url, body, callback);
   };
 
+// systemMachineImages
+APIAdapter.prototype.getSystemMachineImages =
+  function (query, callback) {
+    var url = '/api/systemMachineImages?' + query;
+    this.get(url, callback);
+  };
+
 // services
 APIAdapter.prototype.postServices =
   function (body, callback) {
