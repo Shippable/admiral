@@ -71,6 +71,13 @@
         return API.delete('/api/systemMachineImages/' + systemMachineImageId,
           {}, callback);
       },
+      // System Nodes Routes
+      initializeSystemNode: function (body, callback) {
+        return API.post('/api/systemNodes/initialize', body, callback);
+      },
+      postSystemNode: function (body, callback) {
+        return API.post('/api/systemNodes', body, callback);
+      },
       // System Settings Routes
       getSystemSettings: function (callback) {
         return API.get('/api/systemSettings', callback);

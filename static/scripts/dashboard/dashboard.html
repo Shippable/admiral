@@ -2600,6 +2600,36 @@
                           </div>
                         </div>
                       </div>
+                      <div class="col-md-11" style="border-bottom: 1px solid #DDDDDD;">
+                        &nbsp;
+                      </div>
+                    </div>
+                    <!-- System nodes -->
+                    <div class="row"
+                      ng-if="(vm.admiralEnv.ADMIRAL_IP === 'localhost' || vm.admiralEnv.ADMIRAL_IP === '127.0.0.1') && vm.runMode === 'dev'">
+                      <div class="col-md-10">
+                        &nbsp;
+                        <h4 class="panel-title">
+                          System nodes:
+                        </h4>
+                        &nbsp;
+                      </div>
+                      <div class="col-md-offset-1">
+                        <div class="row col-md-10">
+                          <div class="col-md-2">
+                            Node friendly name:
+                          </div>
+                          <div class="col-md-3">
+                            <input type="text" class="form-control input-sm" name="systemNodeName" placeholder="system-node-dev"
+                            ng-model="vm.systemNodes.friendlyName" ng-disabled="vm.systemNodes.addingSystemNode"/>
+                          </div>
+                          <div class="col-md-5">
+                            <button ng-click="vm.addSystemNode()" ng-disabled="vm.systemNodes.addingSystemNode">
+                              Initialize system node
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

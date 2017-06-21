@@ -509,7 +509,13 @@
       refreshLogs: refreshLogs,
       isGlobalService: isGlobalService,
       hasDefaultSystemMachineImage: hasDefaultSystemMachineImage,
-      logOutOfAdmiral: logOutOfAdmiral
+      logOutOfAdmiral: logOutOfAdmiral,
+      systemNodes: {
+        friendlyName: '',
+        addingSystemNode: false
+      },
+      addSystemNode: addSystemNode,
+      runMode: 'production'
     };
 
     var systemIntDataDefaults = {};
@@ -1076,6 +1082,8 @@
                 systemSettings[key];
             }
           );
+
+          $scope.vm.runMode = systemSettings.runMode;
 
           return next();
         }
@@ -2515,6 +2523,7 @@
           if (err)
             return next(err);
 
+          $scope.vm.runMode = update.runMode;
           return next();
         }
       );
@@ -3115,6 +3124,56 @@
         function (err) {
           if (err)
             return next(err);
+          return next();
+        }
+      );
+    }
+
+    function addSystemNode() {
+      $scope.vm.systemNodes.addingSystemNode = true;
+
+      var bag = {
+        systemNode: null,
+        name: $scope.vm.systemNodes.friendlyName
+      };
+      async.series([
+          postSystemNode.bind(null, bag),
+          initializeSystemNode.bind(null, bag)
+        ],
+        function (err) {
+          $scope.vm.systemNodes.addingSystemNode = false;
+          if (err) return horn.error(err);
+
+          $scope.vm.systemNodes.friendlyName = '';
+        }
+      );
+    }
+
+    function postSystemNode(bag, next) {
+      var body = {
+        friendlyName: bag.name
+      };
+      admiralApiAdapter.postSystemNode(body,
+        function (err, systemNode) {
+          if (err) return next(err);
+
+          bag.systemNode = systemNode;
+          return next();
+        }
+      );
+    }
+
+    function initializeSystemNode(bag, next) {
+      if (_.isEmpty(bag.systemNode)) return next();
+
+      var body = {
+        id: bag.systemNode.id
+      };
+
+      admiralApiAdapter.initializeSystemNode(body,
+        function (err) {
+          if (err) return next(err);
+
           return next();
         }
       );
