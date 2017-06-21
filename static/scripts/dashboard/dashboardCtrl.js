@@ -25,6 +25,13 @@
 
     $scope._r.showCrumb = false;
     $scope.dashboardCtrlPromise = dashboardCtrlDefer.promise;
+    var providerAuthNames = {
+      bitbucketKeys: 'bitbucket',
+      bitbucketServerKeys: 'bitbucketServer',
+      githubKeys: 'github',
+      githubEnterpriseKeys: 'ghe',
+      gitlabKeys: 'gitlab'
+    };
 
     $scope.vm = {
       isLoaded: false,
@@ -848,22 +855,13 @@
                   systemIntegration.data
                 );
                 $scope.vm.installForm[sysIntName][masterName].isEnabled = true;
+
                 if (sysIntName === 'auth') {
-                  if (masterName === 'bitbucketKeys') {
+                  var providerAuthName = providerAuthNames[masterName];
+                  if (!_.isEmpty(providerAuthName)) {
                     $scope.vm.installForm[sysIntName][masterName].callbackUrl =
-                      systemIntegration.data.wwwUrl + '/auth/bitbucket/' + systemIntegration.id + '/identify';
-                  } else if (masterName === 'bitbucketServerKeys') {
-                    $scope.vm.installForm[sysIntName][masterName].callbackUrl =
-                      systemIntegration.data.wwwUrl + '/auth/bitbucketServer/' + systemIntegration.id + '/identify';
-                  } else if (masterName === 'githubKeys') {
-                    $scope.vm.installForm[sysIntName][masterName].callbackUrl =
-                      systemIntegration.data.wwwUrl + '/auth/github/' + systemIntegration.id + '/identify';
-                  } else if (masterName === 'githubEnterpriseKeys') {
-                    $scope.vm.installForm[sysIntName][masterName].callbackUrl =
-                      systemIntegration.data.wwwUrl + '/auth/ghe/' + systemIntegration.id + '/identify';
-                  } else if (masterName === 'gitlabKeys') {
-                    $scope.vm.installForm[sysIntName][masterName].callbackUrl =
-                      systemIntegration.data.wwwUrl + '/auth/gitlab/' + systemIntegration.id + '/identify';
+                      systemIntegration.data.wwwUrl + '/auth/' + providerAuthName +
+                      '/' + systemIntegration.id + '/identify';
                   }
                 }
               }
@@ -2228,21 +2226,11 @@
               if (err)
                 return done(err);
               if (bag.systemIntegrationId) {
-                if (bag.masterName === 'bitbucketKeys') {
+                var providerAuthName = providerAuthNames[bag.masterName];
+                if (!_.isEmpty(providerAuthName)) {
                   $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
-                    bag.data.wwwUrl + '/auth/bitbucket/' + bag.systemIntegrationId + '/identify';
-                } else if (bag.masterName === 'bitbucketServerKeys') {
-                  $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
-                    bag.data.wwwUrl + '/auth/bitbucketServer/' + bag.systemIntegrationId + '/identify';
-                } else if (bag.masterName === 'githubKeys') {
-                  $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
-                    bag.data.wwwUrl + '/auth/github/' + bag.systemIntegrationId + '/identify';
-                } else if (bag.masterName === 'githubEnterpriseKeys') {
-                  $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
-                    bag.data.wwwUrl + '/auth/ghe/' + bag.systemIntegrationId + '/identify';
-                } else if (bag.masterName === 'gitlabKeys') {
-                  $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
-                    bag.data.wwwUrl + '/auth/gitlab/' + bag.systemIntegrationId + '/identify';
+                    bag.data.wwwUrl + '/auth/' + providerAuthName +
+                    '/' + bag.systemIntegrationId + '/identify';
                 }
               }
               return done();
