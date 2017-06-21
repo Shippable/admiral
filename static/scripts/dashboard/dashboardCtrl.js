@@ -25,6 +25,13 @@
 
     $scope._r.showCrumb = false;
     $scope.dashboardCtrlPromise = dashboardCtrlDefer.promise;
+    var providerAuthNames = {
+      bitbucketKeys: 'bitbucket',
+      bitbucketServerKeys: 'bitbucketServer',
+      githubKeys: 'github',
+      githubEnterpriseKeys: 'ghe',
+      gitlabKeys: 'gitlab'
+    };
 
     $scope.vm = {
       isLoaded: false,
@@ -854,9 +861,15 @@
                   systemIntegration.data
                 );
                 $scope.vm.installForm[sysIntName][masterName].isEnabled = true;
-                if (sysIntName === 'auth')
-                  $scope.vm.installForm[sysIntName][masterName].callbackUrl =
-                    systemIntegration.data.wwwUrl + '/' + sysIntName +'/' + systemIntegration.id + '/identify';
+
+                if (sysIntName === 'auth') {
+                  var providerAuthName = providerAuthNames[masterName];
+                  if (!_.isEmpty(providerAuthName)) {
+                    $scope.vm.installForm[sysIntName][masterName].callbackUrl =
+                      systemIntegration.data.wwwUrl + '/auth/' + providerAuthName +
+                      '/' + systemIntegration.id + '/identify';
+                  }
+                }
               }
             }
           );
@@ -2220,9 +2233,14 @@
             function (err) {
               if (err)
                 return done(err);
-              if (bag.systemIntegrationId)
-                $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
-                  bag.data.wwwUrl + '/' + bag.name +'/' + bag.systemIntegrationId + '/identify';
+              if (bag.systemIntegrationId) {
+                var providerAuthName = providerAuthNames[bag.masterName];
+                if (!_.isEmpty(providerAuthName)) {
+                  $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
+                    bag.data.wwwUrl + '/auth/' + providerAuthName +
+                    '/' + bag.systemIntegrationId + '/identify';
+                }
+              }
               return done();
 
             }
