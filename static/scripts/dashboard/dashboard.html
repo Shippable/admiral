@@ -2610,25 +2610,29 @@
                       <div class="col-md-10">
                         &nbsp;
                         <h4 class="panel-title">
-                          System nodes:
+                          Manage System Nodes:
                         </h4>
                         &nbsp;
                       </div>
-                      <div class="col-md-offset-1">
-                        <div class="row col-md-10">
-                          <div class="col-md-2">
-                            Node friendly name:
-                          </div>
-                          <div class="col-md-3">
-                            <input type="text" class="form-control input-sm" name="systemNodeName" placeholder="system-node-dev"
-                            ng-model="vm.systemNodes.friendlyName" ng-disabled="vm.systemNodes.addingSystemNode"/>
-                          </div>
+                    </div>
+                    <div class="row">
+                      &nbsp;
+                    </div>
+                    <div class="col-md-offset-1">
+                      <div class="row">
+                        <div class="col-md-2 text-right">
+                          Add system node:
+                        </div>
+                        <div class="col-md-offset-2">
                           <div class="col-md-5">
                             <button ng-click="vm.addSystemNode()" ng-disabled="vm.systemNodes.addingSystemNode">
                               Initialize system node
                             </button>
                           </div>
                         </div>
+                      </div>
+                      <div class="row">
+                        &nbsp;
                       </div>
                     </div>
                   </div>
