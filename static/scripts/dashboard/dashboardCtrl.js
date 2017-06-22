@@ -518,7 +518,6 @@
       hasDefaultSystemMachineImage: hasDefaultSystemMachineImage,
       logOutOfAdmiral: logOutOfAdmiral,
       systemNodes: {
-        friendlyName: '',
         addingSystemNode: false
       },
       addSystemNode: addSystemNode,
@@ -3168,8 +3167,9 @@
     }
 
     function postSystemNode(bag, next) {
+      var time = Date.now();
       var body = {
-        friendlyName: bag.name
+        friendlyName: 'system-node-' + time
       };
       admiralApiAdapter.postSystemNode(body,
         function (err, systemNode) {
