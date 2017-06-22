@@ -23,20 +23,23 @@ __validate_worker_envs() {
 __cleanup_swarm_worker() {
   __process_msg "Cleaning up swarm worker"
 
-  local node_cleanup_script="$SCRIPTS_DIR/Ubuntu_14.04/cleanupWorker.sh"
-  __copy_script_remote "$WORKER_HOST" "$node_cleanup_script" "$SCRIPTS_DIR_REMOTE"
-  __exec_cmd_remote "$WORKER_HOST" "$SCRIPTS_DIR_REMOTE/cleanupWorker.sh"
+  if [ "$ADMIRAL_IP" == "$WORKER_HOST" ]; then
+    __process_msg "Worker is the same as master, skipping cleanup"
+  else
+    local node_cleanup_script="$SCRIPTS_DIR/Ubuntu_14.04/cleanupWorker.sh"
+    __copy_script_remote "$WORKER_HOST" "$node_cleanup_script" "$SCRIPTS_DIR_REMOTE"
+    __exec_cmd_remote "$WORKER_HOST" "$SCRIPTS_DIR_REMOTE/cleanupWorker.sh"
 
-  local worker_cleanup_cmd="WORKER_HOST=$WORKER_HOST \
-    WORKER_JOIN_TOKEN=$WORKER_JOIN_TOKEN \
-    WORKER_PORT=$WORKER_PORT \
-    MASTER_HOST=$MASTER_HOST \
-    PRIVATE_IMAGE_REGISTRY=$PRIVATE_IMAGE_REGISTRY \
-    PUBLIC_IMAGE_REGISTRY=$PUBLIC_IMAGE_REGISTRY \
-    RELEASE=$RELEASE \
-    $SCRIPTS_DIR_REMOTE/cleanupWorker.sh"
-  __exec_cmd_remote "$WORKER_HOST" "$worker_cleanup_cmd"
-
+    local worker_cleanup_cmd="WORKER_HOST=$WORKER_HOST \
+      WORKER_JOIN_TOKEN=$WORKER_JOIN_TOKEN \
+      WORKER_PORT=$WORKER_PORT \
+      MASTER_HOST=$MASTER_HOST \
+      PRIVATE_IMAGE_REGISTRY=$PRIVATE_IMAGE_REGISTRY \
+      PUBLIC_IMAGE_REGISTRY=$PUBLIC_IMAGE_REGISTRY \
+      RELEASE=$RELEASE \
+      $SCRIPTS_DIR_REMOTE/cleanupWorker.sh"
+    __exec_cmd_remote "$WORKER_HOST" "$worker_cleanup_cmd"
+  fi
 }
 
 main() {
