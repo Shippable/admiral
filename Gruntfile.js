@@ -52,7 +52,8 @@ module.exports = function (grunt) {
           'static/bower_components/angular-moment/angular-moment.min.js',
           'static/bower_components/angular-sanitize/angular-sanitize.min.js',
           'static/bower_components/angular-cookies/angular-cookies.min.js',
-          'static/bower_components/angular-ui-router/release/angular-ui-router.min.js'
+          'static/bower_components/angular-ui-router/release/angular-ui-router.min.js',
+          'static/bower_components/pure-uuid/uuid.min.js'
         ],
         dest: 'static/lib.cat.js'
       }
