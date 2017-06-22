@@ -203,6 +203,7 @@ main() {
     return
   fi
 
+  pushd /tmp
   __validate_db_envs
   __update_sources
   __install_postgres
@@ -218,6 +219,7 @@ main() {
   __start_instance
   sleep 5
   __bootstrap_db
+  popd
 }
 
 main
