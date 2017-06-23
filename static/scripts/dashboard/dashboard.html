@@ -2643,8 +2643,14 @@
                         </div>
                         <div ng-if="vm.systemNodes.systemNodes.length">
                           <div ng-repeat="systemNode in vm.systemNodes.systemNodes">
-                            <div class="col-md-offset-2 col-md-7">
+                            <div class="col-md-offset-2 col-md-3">
                               {{systemNode.friendlyName}}
+                            </div>
+                            <div class="col-md-6">
+                              <button ng-click="vm.removeSystemNode(systemNode)"
+                                ng-disabled="vm.systemNodes.deletingSystemNode">
+                                Remove
+                              </button>
                             </div>
                           </div>
                         </div>
