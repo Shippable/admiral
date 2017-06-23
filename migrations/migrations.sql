@@ -4067,5 +4067,10 @@ do $$
     if not exists (select 1 from pg_indexes where tablename = 'builds' and indexname = 'buildsCreatedAtI') then
       create index "buildsCreatedAtI" on "builds" using btree("createdAt");
     end if;
+
+    -- Add sshKeys column to accountProfiles table
+    if not exists (select 1 from information_schema.columns where table_name = 'accountProfiles' and column_name = 'sshKeys') then
+      alter table "accountProfiles" add column "sshKeys" TEXT;
+    end if;
   end
 $$;
