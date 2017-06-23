@@ -522,6 +522,7 @@
         systemNodes: []
       },
       addSystemNode: addSystemNode,
+      removeSystemNode: removeSystemNode,
       runMode: 'production'
     };
 
@@ -3239,6 +3240,40 @@
         function (err) {
           if (err) return next(err);
 
+          return next();
+        }
+      );
+    }
+
+    function removeSystemNode(systemNode) {
+      $scope.vm.systemNodes.deletingSystemNode = true;
+
+      var bag = {
+        systemNodeId: systemNode.id
+      };
+      async.series([
+          deleteSystemNode.bind(null, bag)
+        ],
+        function (err) {
+          $scope.vm.systemNodes.deletingSystemNode = false;
+          if (err) return horn.error(err);
+
+          $scope.vm.systemNodes.systemNodes = _.reject(
+            $scope.vm.systemNodes.systemNodes,
+            function (systemNode) {
+              return systemNode.id === bag.systemNodeId;
+            }
+          );
+        }
+      );
+    }
+
+    function deleteSystemNode(bag, next) {
+      admiralApiAdapter.deleteSystemNode(bag.systemNodeId,
+        function (err, systemNode) {
+          if (err) return next(err);
+
+          bag.systemNodeId = systemNode.id;
           return next();
         }
       );

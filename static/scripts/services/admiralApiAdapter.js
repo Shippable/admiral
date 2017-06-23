@@ -72,6 +72,9 @@
           {}, callback);
       },
       // System Nodes Routes
+      deleteSystemNode: function (systemNodeId, callback) {
+        return API.delete('/api/systemNodes/' + systemNodeId, {}, callback);
+      },
       getSystemNodes: function (query, callback) {
         return API.get('/api/systemNodes?' + query, callback);
       },
