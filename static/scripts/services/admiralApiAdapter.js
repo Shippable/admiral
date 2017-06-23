@@ -72,6 +72,9 @@
           {}, callback);
       },
       // System Nodes Routes
+      getSystemNodes: function (query, callback) {
+        return API.get('/api/systemNodes?' + query, callback);
+      },
       initializeSystemNode: function (body, callback) {
         return API.post('/api/systemNodes/initialize', body, callback);
       },
