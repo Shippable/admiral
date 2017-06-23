@@ -1226,6 +1226,7 @@
       $scope.vm.initializing = true;
 
       async.series([
+          validateUserInput,
           saveInstallerKeys,
           postDBInitialize
         ],
@@ -1238,6 +1239,19 @@
           pollService('db', postAndInitSecrets);
         }
       );
+    }
+
+    function validateUserInput (next) {
+      var validationErrors = [];
+
+      if ($scope.vm.initializeForm.state.rootPassword.length < 8)
+        validationErrors.push(
+          'State requires a password of 8 or more characters'
+        );
+
+      if (!_.isEmpty(validationErrors))
+        return next(validationErrors.join(','));
+      return next();
     }
 
     function saveInstallerKeys(next) {
@@ -1454,7 +1468,6 @@
       if ($scope.vm.systemSettings.state.isInitialized)
         stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
           ($scope.vm.initializeForm.state.initType === 'admiral' ? 2222 : 22);
-
 
       async.series([
           postMsg.bind(null, msgUpdate),
