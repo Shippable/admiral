@@ -1243,7 +1243,10 @@
 
     function validateUserInput (next) {
       var validationErrors = [];
-
+      if ($scope.vm.initializeForm.msg.password.length < 8)
+        validationErrors.push(
+          'Messaging requires a password of 8 or more characters'
+        );
       if ($scope.vm.initializeForm.state.rootPassword.length < 8)
         validationErrors.push(
           'State requires a password of 8 or more characters'
