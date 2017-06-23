@@ -518,7 +518,8 @@
       hasDefaultSystemMachineImage: hasDefaultSystemMachineImage,
       logOutOfAdmiral: logOutOfAdmiral,
       systemNodes: {
-        addingSystemNode: false
+        addingSystemNode: false,
+        systemNodes: []
       },
       addSystemNode: addSystemNode,
       runMode: 'production'
@@ -545,7 +546,8 @@
           getSystemMachineImages,
           getSystemSettingsForAddonsPanel.bind(null, bag),
           updateAddonsFormSystemIntegrations,
-          getSuperUsers
+          getSuperUsers,
+          getSystemNodes
         ],
         function (err) {
           $scope.vm.isLoaded = true;
@@ -3147,6 +3149,23 @@
           if (err)
             horn.error(err);
           $scope.vm.superUsers.superUsers = superUsers;
+          return next();
+        }
+      );
+    }
+
+    function getSystemNodes(next) {
+      if (!$scope.vm.systemSettings.db.isInitialized) return next();
+      if (($scope.vm.admiralEnv.ADMIRAL_IP !== 'localhost' &&
+        $scope.vm.admiralEnv.ADMIRAL_IP !== '127.0.0.1') ||
+        $scope.vm.runMode !== 'dev')
+        return next();
+
+      admiralApiAdapter.getSystemNodes('',
+        function (err, systemNodes) {
+          if (err) return horn.error(err);
+
+          $scope.vm.systemNodes.systemNodes = systemNodes;
           return next();
         }
       );
