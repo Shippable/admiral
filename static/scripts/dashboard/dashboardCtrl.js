@@ -2113,6 +2113,12 @@
                 return horn.error(err);
             }
           );
+          getSystemNodes(
+            function (err) {
+              if (err)
+                return horn.error(err);
+            }
+          );
         }
       );
     }
