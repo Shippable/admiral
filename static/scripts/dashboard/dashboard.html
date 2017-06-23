@@ -2614,43 +2614,43 @@
                         </h4>
                         &nbsp;
                       </div>
-                    </div>
-                    <div class="row">
-                      &nbsp;
-                    </div>
-                    <div class="col-md-offset-1">
-                      <div class="row">
-                        <div class="col-md-2 text-right">
-                          Add system node:
-                        </div>
-                        <div class="col-md-offset-2">
-                          <div class="col-md-5">
-                            <button ng-click="vm.addSystemNode()" ng-disabled="vm.systemNodes.addingSystemNode">
-                              Initialize system node
-                            </button>
-                          </div>
-                        </div>
-                      </div>
                       <div class="row">
                         &nbsp;
                       </div>
-                      <div class="row">
-                        Current system nodes:
-                      </div>
-                      <div class="row">
-                        <div ng-if="!vm.systemNodes.systemNodes.length" class="col-md-offset-2 col-md-10">
-                          <i>No current SystemNodes</i>
-                        </div>
-                        <div ng-if="vm.systemNodes.systemNodes.length">
-                          <div ng-repeat="systemNode in vm.systemNodes.systemNodes">
-                            <div class="col-md-offset-2 col-md-3">
-                              {{systemNode.friendlyName}}
-                            </div>
-                            <div class="col-md-6">
-                              <button ng-click="vm.removeSystemNode(systemNode)"
-                                ng-disabled="vm.systemNodes.deletingSystemNode">
-                                Remove
+                      <div class="col-md-offset-1">
+                        <div class="row">
+                          <div class="col-md-2 text-right">
+                            Add system node:
+                          </div>
+                          <div class="col-md-offset-2">
+                            <div class="col-md-5">
+                              <button ng-click="vm.addSystemNode()" ng-disabled="vm.systemNodes.addingSystemNode">
+                                Initialize system node
                               </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          &nbsp;
+                        </div>
+                        <div class="row">
+                          Current system nodes:
+                        </div>
+                        <div class="row">
+                          <div ng-if="!vm.systemNodes.systemNodes.length" class="col-md-offset-2 col-md-10">
+                            <i>No current SystemNodes</i>
+                          </div>
+                          <div ng-if="vm.systemNodes.systemNodes.length">
+                            <div ng-repeat="systemNode in vm.systemNodes.systemNodes">
+                              <div class="col-md-offset-2 col-md-3">
+                                {{systemNode.friendlyName}}
+                              </div>
+                              <div class="col-md-6">
+                                <button ng-click="vm.removeSystemNode(systemNode)"
+                                  ng-disabled="vm.systemNodes.deletingSystemNode">
+                                  Remove
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
