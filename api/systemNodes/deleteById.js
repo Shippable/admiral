@@ -24,10 +24,15 @@ function deleteById(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _getSystemNode.bind(null, bag),
+      _getStoppedRoleCode.bind(null, bag),
+      _updateSystemNode.bind(null, bag),
       _generateDeleteEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
-      _deleteService.bind(null, bag)
+      _deleteService.bind(null, bag),
+      _deleteSystemNodeConsoles.bind(null, bag),
+      _deleteSystemNodeStats.bind(null, bag),
+      _deleteSystemNode.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -78,6 +83,57 @@ function _getSystemNode(bag, next) {
       logger.debug('Found systemNode ' + bag.systemNodeId);
 
       bag.systemNode = _.first(systemNodes.rows);
+      return next();
+    }
+  );
+}
+
+function _getStoppedRoleCode(bag, next) {
+  var who = bag.who + '|' + _getStoppedRoleCode.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'SELECT "code" FROM "systemCodes" WHERE '+
+    '"group"=\'statusCodes\' AND "name"=\'STOPPED\'';
+
+  global.config.client.query(query,
+    function (err, result) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to fetch STOPPED roleCode', err)
+        );
+
+      if (_.isEmpty(result.rows) || !result.rows[0].code)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'No code found for group: statusCodes and name: STOPPED')
+        );
+      bag.stoppedRoleCode = _.first(result.rows).code;
+      logger.debug('STOPPED role code is: ' + bag.stoppedRoleCode);
+      return next();
+    }
+  );
+}
+
+// stopping system node, so that it doesn't pick up builds
+function _updateSystemNode(bag, next) {
+  if (bag.systemNode.statusCode === bag.stoppedRoleCode) return next();
+
+  var who = bag.who + '|' + _updateSystemNode.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('UPDATE "systemNodes" set "statusCode"  = \'%s\' '+
+    'WHERE id = \'%s\'', bag.stoppedRoleCode, bag.systemNode.id);
+
+  global.config.client.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            util.format('Failed to update systemNode with id: %s with STOPPED' +
+            ' statusCode with err: %s', bag.systemNode.id, err))
+        );
+
       return next();
     }
   );
@@ -163,6 +219,73 @@ function _deleteService(bag, next) {
           new ActErr(who, ActErr.OperationFailed,
             'Script returned code: ' + exitCode)
         );
+      return next();
+    }
+  );
+}
+
+function _deleteSystemNodeStats(bag, next) {
+  var who = bag.who + '|' + _deleteSystemNodeStats.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('DELETE FROM "systemNodeStats" WHERE '+
+    '"systemNodeId"=\'%s\'', bag.systemNode.id);
+
+  global.config.client.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            util.format('Failed to delete systemNodeStats for '+
+            'systemNodeId: %s with error: ', bag.systemNode.id,
+            util.inspect(err)))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _deleteSystemNodeConsoles(bag, next) {
+  var who = bag.who + '|' + _deleteSystemNodeConsoles.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('DELETE FROM "systemNodeConsoles" WHERE '+
+    '"systemNodeId"=\'%s\'', bag.systemNode.id);
+
+  global.config.client.query(query,
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            util.format('Failed to delete systemNodeConsoles for '+
+            'systemNodeId: %s with error: ', bag.systemNode.id,
+            util.inspect(err)))
+        );
+
+      return next();
+    }
+  );
+}
+
+function _deleteSystemNode(bag, next) {
+  var who = bag.who + '|' + _deleteSystemNode.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format('DELETE FROM "systemNodes" WHERE id=\'%s\'',
+    bag.systemNode.id);
+
+  global.config.client.query(query,
+    function (err, systemNode) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            util.format('Failed to delete systemNode with id: %s with error:' +
+            ' %s', bag.systemNode.id, util.inspect(err)))
+        );
+
+      if (systemNode.rowCount === 1)
+        bag.resBody.id = bag.systemNode.id;
       return next();
     }
   );
