@@ -3208,7 +3208,7 @@
           $scope.vm.systemNodes.addingSystemNode = false;
           if (err) return horn.error(err);
 
-          $scope.vm.systemNodes.friendlyName = '';
+          $scope.vm.systemNodes.systemNodes.push(bag.systemNode);
         }
       );
     }

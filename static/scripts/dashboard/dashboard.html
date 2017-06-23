@@ -2634,6 +2634,21 @@
                       <div class="row">
                         &nbsp;
                       </div>
+                      <div class="row">
+                        Current system nodes:
+                      </div>
+                      <div class="row">
+                        <div ng-if="!vm.systemNodes.systemNodes.length" class="col-md-offset-2 col-md-10">
+                          <i>No current SystemNodes</i>
+                        </div>
+                        <div ng-if="vm.systemNodes.systemNodes.length">
+                          <div ng-repeat="systemNode in vm.systemNodes.systemNodes">
+                            <div class="col-md-offset-2 col-md-7">
+                              {{systemNode.friendlyName}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
