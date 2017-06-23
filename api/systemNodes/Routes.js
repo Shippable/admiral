@@ -4,6 +4,7 @@ module.exports = systemNodesRoutes;
 var validateAccount = require('../../common/auth/validateAccount.js');
 
 function systemNodesRoutes(app) {
+  app.get('/api/systemNodes', validateAccount, require('./get.js'));
   app.post('/api/systemNodes', validateAccount, require('./post.js'));
   app.post('/api/systemNodes/initialize', validateAccount,
     require('./initialize.js'));
