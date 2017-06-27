@@ -4072,5 +4072,25 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'accountProfiles' and column_name = 'sshKeys') then
       alter table "accountProfiles" add column "sshKeys" TEXT;
     end if;
+
+    -- Add npsLatest column to accounts table
+    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'npsLatest') then
+      alter table "accounts" add column "npsLatest" INT;
+    end if;
+
+    -- Add npsCount column to accounts table
+    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'npsCount') then
+      alter table "accounts" add column "npsCount" INT DEFAULT 0;
+    end if;
+
+    -- Add npsAverage column to accounts table
+    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'npsAverage') then
+      alter table "accounts" add column "npsAverage" INT;
+    end if;
+
+    -- Add npsUpdatedAt column to accounts table
+    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'npsUpdatedAt') then
+      alter table "accounts" add column "npsUpdatedAt" TIMESTAMP WITH TIME ZONE;
+    end if;
   end
 $$;
