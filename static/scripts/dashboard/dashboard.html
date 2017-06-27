@@ -327,7 +327,7 @@
                         <td>
                         </td>
                       </tr>
-                      <!-- GitLab -->
+                      <!-- State -->
                       <tr class="active">
                         <td ng-if="vm.initializeForm.state.initType === 'admiral'" rowspan="2">
                           <b>State:</b>
@@ -367,8 +367,8 @@
                       </tr>
                       <tr class="active">
                         <td colspan="3">
-                          <span ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for GitLab:</span>
-                          <span ng-if="vm.initializeForm.state.initType === 'existing'">Password for GitLab root user:</span>
+                          <span ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</span>
+                          <span ng-if="vm.initializeForm.state.initType === 'existing'">Password for State root user:</span>
                         </td>
                         <td colspan="3">
                           <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)">
@@ -381,7 +381,7 @@
                       </tr>
                       <tr class="active" ng-if="vm.initializeForm.state.initType === 'new'">
                         <td colspan="3">
-                          <span>IP address for your new GitLab installation:</span>
+                          <span>IP address for your new State installation:</span>
                         </td>
                         <td colspan="3">
                           <div ng-class="vm.validateIP(vm.initializeForm.state.address)">
@@ -419,7 +419,7 @@
                       </tr>
                       <tr class="active" ng-if="vm.initializeForm.state.initType === 'existing'">
                         <td colspan="3">
-                          <span>IP address for your existing GitLab installation:</span>
+                          <span>IP address for your existing State installation:</span>
                         </td>
                         <td colspan="3">
                           <div ng-class="vm.validateIP(vm.initializeForm.state.address)">
