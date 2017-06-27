@@ -4097,5 +4097,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'runs' and column_name = 'isDebug') then
       alter table "runs" add column "isDebug" BOOLEAN;
     end if;
+
+    -- Add isDebug column to jobs table
+    if not exists (select 1 from information_schema.columns where table_name = 'jobs' and column_name = 'isDebug') then
+      alter table "jobs" add column "isDebug" BOOLEAN;
+    end if;
   end
 $$;
