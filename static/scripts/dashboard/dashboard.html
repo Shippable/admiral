@@ -92,7 +92,7 @@
                           <span ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
                         </td>
                       </tr>
-                      <!-- Vault -->
+                      <!-- Secrets -->
                       <tr class="active">
                         <td ng-if="vm.initializeForm.secrets.initType === 'admiral'">
                           <b>Secrets:</b>
@@ -132,7 +132,7 @@
                       </tr>
                       <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'new'">
                         <td colspan="3">
-                          <span>IP address where you would like Vault installed:</span>
+                          <span>IP address where you would like Secrets installed:</span>
                         </td>
                         <td colspan="3">
                           <div ng-class="vm.validateIP(vm.initializeForm.secrets.address)">
@@ -170,7 +170,7 @@
                       </tr>
                       <tr class="active" ng-if=" vm.initializeForm.secrets.initType === 'existing'">
                         <td colspan="3">
-                          <span>IP address of your existing Vault installation:</span>
+                          <span>IP address of your existing Secrets installation:</span>
                         </td>
                         <td colspan="3">
                           <div ng-class="vm.validateIP(vm.initializeForm.secrets.address)">
@@ -183,7 +183,7 @@
                       </tr>
                       <tr class="active" ng-if="vm.initializeForm.secrets.initType === 'existing'">
                         <td colspan="3">
-                          <span>Root token for your Vault installation:</span>
+                          <span>Root token for your Secrets installation:</span>
                         </td>
                         <td colspan="3">
                           <div ng-class="vm.initializeForm.secrets.rootToken.length ? '' : 'has-error'">
