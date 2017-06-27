@@ -4092,5 +4092,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'npsUpdatedAt') then
       alter table "accounts" add column "npsUpdatedAt" TIMESTAMP WITH TIME ZONE;
     end if;
+
+    -- Add isDebug column to runs table
+    if not exists (select 1 from information_schema.columns where table_name = 'runs' and column_name = 'isDebug') then
+      alter table "runs" add column "isDebug" BOOLEAN;
+    end if;
   end
 $$;
