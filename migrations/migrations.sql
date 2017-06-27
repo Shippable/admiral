@@ -659,6 +659,15 @@ do $$
       alter table "views" add constraint "views_accountId_fkey" foreign key ("accountId") references "accounts"(id) on update restrict on delete restrict;
     end if;
 
+    -- changes viewObjects table foreign key viewObjects_viewId_fkey constraint to RESTRICT FROM CASCADE
+    if exists (select 1 from pg_constraint where conname = 'viewObjects_viewId_fkey' and confdeltype = 'c') then
+      alter table "viewObjects" drop constraint "viewObjects_viewId_fkey";
+    end if;
+
+     if not exists (select 1 from pg_constraint where conname = 'viewObjects_viewId_fkey' and confdeltype = 'r') then
+      alter table "viewObjects" add constraint "viewObjects_viewId_fkey" foreign key ("viewId") references "views"(id) on update restrict on delete restrict;
+    end if;
+
     -- Add new coloumn  subscriptionId in views table
     if not exists (select 1 from information_schema.columns where table_name = 'views' and column_name = 'subscriptionId') then
       alter table "views" add column "subscriptionId" varchar(24);
