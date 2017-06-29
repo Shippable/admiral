@@ -19,6 +19,10 @@
       putAdmiralEnv: function (body, callback) {
         return API.put('/api/admiral', body, callback);
       },
+      // EULA Routes
+      getEULAText: function (callback) {
+        return API.get('/api/eula', callback);
+      },
       //  Auth Routes
       postAuth: function (body, callback) {
         return API.post('/api/auth', body, callback);

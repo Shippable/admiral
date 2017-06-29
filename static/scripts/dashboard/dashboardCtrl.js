@@ -513,6 +513,7 @@
       showSaveModal: showSaveModal,
       showSaveServicesModal: showSaveServicesModal,
       showRestartServicesModal: showRestartServicesModal,
+      showEULAModal: showEULAModal,
       refreshLogs: refreshLogs,
       isGlobalService: isGlobalService,
       hasDefaultSystemMachineImage: hasDefaultSystemMachineImage,
@@ -523,6 +524,7 @@
       },
       addSystemNode: addSystemNode,
       removeSystemNode: removeSystemNode,
+      eulaText: '',
       runMode: 'production'
     };
 
@@ -3005,6 +3007,20 @@
     function hideRestartServicesModal() {
       $('#restartServicesModal').modal('hide');
     }
+
+    function showEULAModal() {
+      $scope.vm.eulaText = [];
+      admiralApiAdapter.getEULAText(
+        function (err, eula) {
+          if (err)
+            return horn.error(err);
+          $scope.vm.eulaText = eula.join('\n');
+
+          $('#eulaModal').modal('show')   
+        }
+      )
+    }
+
 
     function refreshLogs() {
       admiralApiAdapter.getServiceLogs($scope.vm.selectedService.serviceName,
