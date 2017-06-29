@@ -291,6 +291,7 @@ __set_db_ip() {
 __set_db_installed() {
   if [ "$DB_IP" != "$ADMIRAL_IP" ]; then
     __process_success "Enter I to install a new database or E to use an existing one."
+    __process_msg "Existing databases must be Postgres 9.5 and have a user named apiuser with full permissions on a database named shipdb."
     read response
 
     if [ "$response" == "I" ]; then
