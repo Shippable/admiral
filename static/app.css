@@ -53,6 +53,17 @@ body {
   margin-left: 40px;
 }
 
+.ship-eula-text {
+  white-space: pre-wrap;
+  padding: 10px;
+  padding-bottom: 5px;
+  border-radius: 7px;
+}
+
+body .modal-wide {
+  width: 750px;
+}
+
 .container {
   padding-right: 15px;
   padding-left: 15px;

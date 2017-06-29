@@ -168,6 +168,7 @@ function _initializeConfig(bag, next) {
 
   bag.config.admiralEnv = util.format('%s/admiral.env', bag.config.configDir);
   bag.config.scriptsDir = '/home/shippable/admiral/common/scripts';
+  bag.config.baseDir = '/home/shippable/admiral';
   bag.config.migrationsDir = '/home/shippable/admiral/migrations';
   if (configErrors.length)
     return next(configErrors);
