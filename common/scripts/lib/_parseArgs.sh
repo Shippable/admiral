@@ -392,13 +392,18 @@ __accept_shippable_license() {
 
   __process_msg "BY INSTALLING OR USING THE SOFTWARE, YOU ARE CONFIRMING THAT YOU UNDERSTAND THE SHIPPABLE SERVER SOFTWARE LICENSE AGREEMENT, AND THAT YOU ACCEPT ALL OF ITS TERMS AND CONDITIONS."
   __process_msg "This agreement is available for you to read here: $PWD/SHIPPABLE_SERVER_LICENSE_AGREEMENT"
-  __process_success "Do you wish to continue? (Y to confirm)"
-  read confirmation
-  if [[ "$confirmation" =~ "Y" ]]; then
-    __process_msg "Thank you for accepting the Shippable Server Software License Agreement. Continuing with installation."
+
+  if [ $NO_PROMPT == true ]; then
+    __process_msg "Silent mode detected. Skipping EULA confirmation dialog."
   else
-    __process_error "Exiting Installer"
-    exit 1
+    __process_success "Do you wish to continue? (Y to confirm)"
+    read confirmation
+    if [[ "$confirmation" =~ "Y" ]]; then
+      __process_msg "Thank you for accepting the Shippable Server Software License Agreement. Continuing with installation."
+    else
+      __process_error "Exiting Installer"
+      exit 1
+    fi
   fi
 }
 
@@ -409,10 +414,10 @@ __parse_args() {
     case $key in
       install)
         shift
-        __accept_shippable_license
         __bootstrap_admiral_env
-        __generate_ssh_keys
         __parse_args_install "$@"
+        __generate_ssh_keys
+        __accept_shippable_license
         ;;
       upgrade)
         __bootstrap_admiral_env
