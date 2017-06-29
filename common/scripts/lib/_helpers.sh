@@ -388,6 +388,35 @@ __check_connection() {
   __exec_cmd_remote "$host" "echo 'Successfully pinged $host'"
 }
 
+__check_existing_database() {
+  if [ "$DB_INSTALLED" == "true" ]; then
+    __process_marker "Checking database connection"
+
+    # Install psql
+    if type psql &> /dev/null && true; then
+      __process_msg "'psql' already installed"
+    else
+      __process_msg "Installing 'psql'"
+      /bin/bash -c "$SCRIPTS_DIR/install_psql.sh"
+      __process_msg "Successfully installed psql"
+    fi
+
+    # Check connection
+    local postgres_cmd="PGPASSWORD=$DB_PASSWORD \
+      psql \
+      -U $DB_USER \
+      -d $DB_NAME \
+      -h $DB_IP \
+      -p $DB_PORT \
+      -v ON_ERROR_STOP=1 \
+      -c 'SELECT 1;'"
+
+    __process_msg "Checking connection to database"
+    postgres_output=$(eval "$postgres_cmd")
+    __process_msg "Successfully connected to database"
+  fi
+}
+
 __copy_script_remote() {
   if [ "$#" -ne 3 ]; then
     __process_msg "The number of arguments expected by _copy_script_remote is 3"

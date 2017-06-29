@@ -63,6 +63,7 @@ __validate_runtime() {
     __process_msg "Running in silent mode, suppressing all prompts"
   else
     __prompt_for_inputs
+    __check_existing_database
   fi
 
   source $ADMIRAL_ENV
