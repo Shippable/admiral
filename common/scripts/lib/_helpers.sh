@@ -408,12 +408,18 @@ __check_existing_database() {
       -d $DB_NAME \
       -h $DB_IP \
       -p $DB_PORT \
+      -t \
       -v ON_ERROR_STOP=1 \
-      -c 'SELECT 1;'"
+      -c 'SELECT version();'"
 
     __process_msg "Checking connection to database"
-    postgres_output=$(eval "$postgres_cmd")
-    __process_msg "Successfully connected to database"
+    postgres_version=$(eval "$postgres_cmd")
+    if [[ "$postgres_version" =~ PostgreSQL\ 9\.5\.(.*) ]]; then
+      __process_msg "Successfully connected to database"
+    else
+      __process_error "Postgres version 9.5 is required."
+      exit 1
+    fi
   fi
 }
 
