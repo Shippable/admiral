@@ -85,6 +85,7 @@ __prompt_for_inputs() {
   ################## check access key ###############################
   if [ "$ACCESS_KEY" == "" ]; then
     __process_msg "ACCESS_KEY is not set"
+    __process_msg "If you don't have an access key, you can obtain one by contacting us at www.shippable.com/contact.html"
     __set_access_key
     setAccessKey=true
   else
@@ -94,6 +95,7 @@ __prompt_for_inputs() {
   ################## check secret key ###############################
   if [ "$SECRET_KEY" == "" ]; then
     __process_msg "SECRET_KEY is not set"
+    __process_msg "If you don't have a secret key, you can obtain one by contacting us at www.shippable.com/contact.html"
     __set_secret_key
     setSecretKey=true
   else
