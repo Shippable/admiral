@@ -4120,5 +4120,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'jobs' and column_name = 'isDebug') then
       alter table "jobs" add column "isDebug" BOOLEAN;
     end if;
+
+    -- Add isDebug column to clusterNodes table
+    if not exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'isDebug') then
+      alter table "clusterNodes" add column "isDebug" BOOLEAN;
+    end if;
   end
 $$;
