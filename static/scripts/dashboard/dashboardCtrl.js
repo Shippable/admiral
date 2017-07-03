@@ -3156,6 +3156,20 @@
             }
           }
         );
+      } else {
+        if (systemInt.data.clientId !== '' ||
+          systemInt.data.clientSecret !== '')
+          return;
+
+        async.series([
+            getSystemIntegration.bind(null, bag),
+            deleteSystemIntegration.bind(null, bag)
+          ],
+          function (err) {
+            if (err)
+              return horn.error(err);
+          }
+        );
       }
     }
 
