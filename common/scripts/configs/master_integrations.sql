@@ -370,6 +370,11 @@ do $$
       delete from "masterIntegrations" where "id"= '58c78481e34468d32114e125';
     end if;
 
+    -- remove master integration for name AWS and type cloudproviders
+    if exists (select 1 from "masterIntegrations" where "name" = 'AWS' and "type" = 'cloudproviders' and "id" = '57467326b3cbfc0c004f9110') then
+      delete from "masterIntegrations" where "name" = 'AWS' and "type" = 'cloudproviders' and "id" = '57467326b3cbfc0c004f9110';
+    end if;
+
     -- END removing masterIntegrations
 
     -- Update integrations
