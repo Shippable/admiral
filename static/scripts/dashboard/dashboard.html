@@ -819,7 +819,7 @@
                               <div class="col-md-6">
                                 <div class="checkbox">
                                   <label>
-                                    <input type="checkbox" ng-model="vm.installForm.auth.bitbucketKeys.isEnabled" ng-change="vm.installForm.scm.bitbucket.isEnabled = vm.installForm.auth.bitbucketKeys.isEnabled" />
+                                    <input type="checkbox" ng-model="vm.installForm.auth.bitbucketKeys.isEnabled" ng-change="vm.toggleAuthProvider('bitbucket')"/>
                                   </label>
                                 </div>
                               </div>
@@ -894,7 +894,7 @@
                               <div class="col-md-6">
                                 <div class="checkbox">
                                   <label>
-                                    <input type="checkbox" ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled" ng-change="vm.installForm.scm.bitbucketServer.isEnabled = vm.installForm.auth.bitbucketServerKeys.isEnabled"/>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled" ng-change="vm.toggleAuthProvider('bitbucketServer')"/>
                                   </label>
                                 </div>
                               </div>
@@ -969,7 +969,7 @@
                               <div class="col-md-6">
                                 <div class="checkbox">
                                   <label>
-                                    <input type="checkbox" ng-model="vm.installForm.auth.githubKeys.isEnabled" ng-change="vm.installForm.scm.github.isEnabled = vm.installForm.auth.githubKeys.isEnabled"/>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.githubKeys.isEnabled" ng-change="vm.toggleAuthProvider('github')"/>
                                   </label>
                                 </div>
                               </div>
@@ -1044,7 +1044,7 @@
                               <div class="col-md-6">
                                 <div class="checkbox">
                                   <label>
-                                    <input type="checkbox" ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled" ng-change="vm.installForm.scm.githubEnterprise.isEnabled = vm.installForm.auth.githubEnterpriseKeys.isEnabled"/>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled" ng-change="vm.toggleAuthProvider('githubEnterprise')"/>
                                   </label>
                                 </div>
                               </div>
@@ -1119,7 +1119,7 @@
                               <div class="col-md-6">
                                 <div class="checkbox">
                                   <label>
-                                    <input type="checkbox" ng-model="vm.installForm.auth.gitlabKeys.isEnabled" ng-change="vm.installForm.scm.gitlab.isEnabled = vm.installForm.auth.gitlabKeys.isEnabled"/>
+                                    <input type="checkbox" ng-model="vm.installForm.auth.gitlabKeys.isEnabled" ng-change="vm.toggleAuthProvider('gitlab')"/>
                                   </label>
                                 </div>
                               </div>

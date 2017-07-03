@@ -20,7 +20,7 @@
 
   function dashboardCtrl($scope, $stateParams, $q, $state, $interval,
     admiralApiAdapter, horn) {
-    /* jshint maxstatements:125 */
+    /* jshint maxstatements:150 */
     var dashboardCtrlDefer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -504,6 +504,7 @@
       saveServices: saveServices,
       restartServices: restartServices,
       installAddons: installAddons,
+      toggleAuthProvider: toggleAuthProvider,
       addSuperUser: addSuperUser,
       removeSuperUser: removeSuperUser,
       showAdmiralEnvModal: showAdmiralEnvModal,
@@ -870,8 +871,9 @@
                   var providerAuthName = providerAuthNames[masterName];
                   if (!_.isEmpty(providerAuthName)) {
                     $scope.vm.installForm[sysIntName][masterName].callbackUrl =
-                      systemIntegration.data.wwwUrl + '/auth/' + providerAuthName +
-                      '/' + systemIntegration.id + '/identify';
+                      systemIntegration.data.wwwUrl + '/auth/' +
+                      providerAuthName + '/' + systemIntegration.id +
+                      '/identify';
                   }
                 }
               }
@@ -1391,6 +1393,7 @@
     }
 
     function postServices() {
+      /* jshint maxcomplexity:15 */
       var msgUpdate = {
         address: $scope.vm.admiralEnv.ADMIRAL_IP,
         username: 'shippableRoot',
@@ -3016,9 +3019,9 @@
             return horn.error(err);
           $scope.vm.eulaText = eula.join('\n');
 
-          $('#eulaModal').modal('show')   
+          $('#eulaModal').modal('show');
         }
-      )
+      );
     }
 
 
@@ -3120,6 +3123,40 @@
           return next();
         }
       );
+    }
+
+    function toggleAuthProvider(providerName) {
+      var systemInt = $scope.vm.installForm.auth[providerName + 'Keys'];
+
+      $scope.vm.installForm.scm[providerName].isEnabled = systemInt.isEnabled;
+
+      var bag = {
+        name: 'auth',
+        masterName: systemInt.masterName,
+        data: systemInt.data,
+        isEnabled: systemInt.isEnabled
+      };
+
+      bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
+
+      if (systemInt.isEnabled) {
+        async.series([
+            getSystemIntegration.bind(null, bag),
+            postSystemIntegration.bind(null, bag)
+          ],
+          function (err) {
+            if (err)
+              return horn.error(err);
+            if (bag.systemIntegrationId) {
+              var providerAuthName = providerAuthNames[bag.masterName];
+              if (!_.isEmpty(providerAuthName))
+                $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
+                  bag.data.wwwUrl + '/auth/' + providerAuthName +
+                  '/' + bag.systemIntegrationId + '/identify';
+            }
+          }
+        );
+      }
     }
 
     function addSuperUser() {
