@@ -1732,7 +1732,7 @@
                         <div>&nbsp;</div>
                         <div class="row">
                           <div class="col-md-12">
-                            <b>www</b>
+                            <b>Shippable UI</b>
                           </div>
                         </div>
                       </div>
@@ -1742,8 +1742,16 @@
                             URL
                           </div>
                           <div class="col-md-8">
-                            <input type="text" class="form-control input-sm" name="wwwUrl"
-                              ng-model="vm.installForm.www.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                            <input type="text" name="wwwUrl"
+                              class="col-md-12 form-control input-sm"
+                              ng-model="vm.installForm.www.url.data.url"
+                              ng-disabled="vm.installing || vm.saving"/>
+                            <div ng-if="vm.requireRestart">
+                              Click
+                              <a href="{{vm.installForm.www.url.data.url}}"
+                                target="_blank">here</a>
+                              to login
+                            </div>
                           </div>
                         </div>
                       </div>
