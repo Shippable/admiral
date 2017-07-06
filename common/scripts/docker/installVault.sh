@@ -48,6 +48,7 @@ __check_vault() {
   done
   if [ $is_booted = false ]; then
     __process_error "Failed to boot vault container"
+    __process_error "Port $VAULT_PORT not available for Secrets."
     exit 1
   fi
 }
