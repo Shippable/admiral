@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-TIMEOUT=60
+TIMEOUT=30
 
 install_log_rotate() {
   apt-get -y -q install wget logrotate
@@ -50,6 +50,12 @@ enable_management_plugin() {
 main() {
   {
     check_rabbitmq=$(service --status-all 2>&1 | grep rabbitmq-server)
+    if ! nc -vz $MSG_HOST $AMQP_PORT &>/dev/null; then
+      check_rabbitmq=""
+    fi
+    if ! nc -vz $MSG_HOST $ADMIN_PORT &>/dev/null; then
+      check_rabbitmq=""
+    fi
   } || {
     true
   }
