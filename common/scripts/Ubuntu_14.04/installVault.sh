@@ -47,6 +47,7 @@ check_vault() {
   done
   if [ $is_booted = false ]; then
     echo "Failed to boot vault"
+    echo "Port $VAULT_PORT not available for Secrets."
     exit 1
   fi
 }
