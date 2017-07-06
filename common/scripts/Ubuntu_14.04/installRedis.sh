@@ -26,6 +26,7 @@ check_redis() {
   done
   if [ $is_booted = false ]; then
     echo "Failed to boot redis"
+    echo "Port $REDIS_PORT not available for Redis"
     exit 1
   fi
 }
