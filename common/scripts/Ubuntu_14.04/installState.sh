@@ -37,6 +37,7 @@ check_state() {
   done
   if [ $is_booted = false ]; then
     echo "Failed to boot gitlab"
+    echo "Port $STATE_PORT not available for State."
     exit 1
   fi
   if ! nc -vz $STATE_HOST $SECURE_PORT &>/dev/null; then
@@ -46,9 +47,25 @@ check_state() {
 }
 
 main() {
+  check_state=""
   {
-    type gitlab-ctl &> /dev/null && echo "Gitlab already installed, skipping" && return
-  }
+    type gitlab-ctl &> /dev/null
+    check_state="state up"
+    if ! nc -vz $STATE_HOST $STATE_PORT &>/dev/null; then
+      check_state=""
+    fi
+    if ! nc -vz $STATE_HOST $SSH_PORT &>/dev/null; then
+      check_state=""
+    fi
+    if ! nc -vz $STATE_HOST $SECURE_PORT &>/dev/null; then
+      check_state=""
+    fi
+  } || true
+
+  if [ ! -z "$check_state" ]; then
+    echo "Gitlab already installed, skipping"
+    return
+  fi
 
   install_deps
   install_gitlab
