@@ -57,6 +57,7 @@ __check_state() {
   done
   if [ $is_booted = false ]; then
     __process_error "Failed to boot gitlab container"
+    __process_error "Port $STATE_PORT not available for State."
     exit 1
   fi
 }
