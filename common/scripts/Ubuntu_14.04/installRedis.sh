@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-TIMEOUT=60
+TIMEOUT=30
 
 install_redis() {
   echo "installing redis"
@@ -34,6 +34,9 @@ check_redis() {
 main() {
   {
     check_redis=$(service --status-all 2>&1 | grep redis-server)
+    if ! nc -vz $REDIS_HOST $REDIS_PORT &>/dev/null; then
+      check_redis=""
+    fi
   } || {
     true
   }
