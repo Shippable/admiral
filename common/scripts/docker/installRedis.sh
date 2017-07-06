@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 export REDIS_IMAGE="drydock/redis:$RELEASE"
-export TIMEOUT=180
+export TIMEOUT=30
 
 __cleanup() {
   __process_msg "Removing stale containers"
