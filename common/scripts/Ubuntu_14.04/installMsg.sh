@@ -47,6 +47,13 @@ enable_management_plugin() {
   /usr/sbin/rabbitmq-plugins enable rabbitmq_management
 }
 
+check_rabbitmq_management_plugin() {
+  if ! nc -vz $MSG_HOST $ADMIN_PORT &>/dev/null; then
+    echo "Port $ADMIN_PORT not available for msg"
+    exit 1
+  fi
+}
+
 main() {
   {
     check_rabbitmq=$(service --status-all 2>&1 | grep rabbitmq-server)
@@ -71,7 +78,7 @@ main() {
   check_rabbitmq
   enable_management_plugin
   start_rabbitmq
-  check_rabbitmq
+  check_rabbitmq_management_plugin
   popd
 }
 
