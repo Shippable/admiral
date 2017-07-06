@@ -3,7 +3,7 @@
 VAULTVERSION=0.6.0
 VAULTDOWNLOAD=https://releases.hashicorp.com/vault/${VAULTVERSION}/vault_${VAULTVERSION}_linux_amd64.zip
 VAULTCONFIGDIR=/etc/vault.d
-TIMEOUT=60
+TIMEOUT=30
 
 download_vault() {
   apt-get install -y zip
@@ -53,9 +53,17 @@ check_vault() {
 }
 
 main() {
+  check_vault=""
   {
-    type vault &> /dev/null && echo "Vault already installed, skipping" && return
-  }
+    type vault &> /dev/null
+    if nc -vz $VAULT_HOST $VAULT_PORT &>/dev/null; then
+      check_vault="vault up"
+    fi
+  } || true
+  if [ ! -z "$check_vault" ]; then
+    echo "Vault already installed, skipping"
+    return
+  fi
   pushd /tmp
   download_vault
   install_vault
