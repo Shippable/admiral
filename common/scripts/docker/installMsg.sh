@@ -52,6 +52,10 @@ __check_msg() {
     __process_error "Port $AMQP_PORT not available for msg"
     exit 1
   fi
+  if ! nc -vz $MSG_HOST $ADMIN_PORT &>/dev/null; then
+    __process_error "Port $ADMIN_PORT not available for msg"
+    exit 1
+  fi
 }
 
 
