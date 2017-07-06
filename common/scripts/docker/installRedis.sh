@@ -49,6 +49,7 @@ __check_redis() {
   done
   if [ $is_booted = false ]; then
     __process_error "Failed to boot redis container"
+    __process_error "Port $REDIS_PORT not available for Redis"
     exit 1
   fi
 }
