@@ -49,6 +49,7 @@ __check_msg() {
   done
   if [ $is_booted = false ]; then
     __process_error "Failed to boot rabbitmq container"
+    __process_error "Port $AMQP_PORT not available for msg"
     exit 1
   fi
 }
