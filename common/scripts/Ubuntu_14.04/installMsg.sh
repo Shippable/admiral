@@ -37,6 +37,7 @@ check_rabbitmq() {
   done
   if [ $is_booted = false ]; then
     echo "Failed to boot rabbitmq"
+    echo "Port $AMQP_PORT not available for msg"
     exit 1
   fi
 }
