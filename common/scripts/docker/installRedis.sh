@@ -58,6 +58,7 @@ main() {
   __process_marker "Installing redis"
   __cleanup
   __run_redis
+  __check_redis
 }
 
 main
