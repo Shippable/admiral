@@ -31,6 +31,7 @@ function microConfig(params, callback) {
       _getServiceUserToken.bind(null, bag),
       _getAPISystemIntegration.bind(null, bag),
       _getMsgSystemIntegration.bind(null, bag),
+      _getSystemCodes.bind(null, bag),
       _generateImage.bind(null, bag),
       _generateEnvs.bind(null, bag),
       _generateMounts.bind(null, bag),
@@ -52,6 +53,14 @@ function _checkInputParams(bag, next) {
 
   bag.config.replicas = bag.config.replicas;
   bag.config.serviceName = bag.name;
+
+  if (_.contains(['deploy', 'manifest', 'provision', 'release'],
+    bag.name))
+    bag.component = 'stepExec';
+  else if (_.contains(['rSync'], bag.name))
+    bag.component = 'genExec';
+  else
+    bag.component = bag.name;
 
   return next();
 }
@@ -133,12 +142,45 @@ function _getMsgSystemIntegration(bag, next) {
   );
 }
 
+function _getSystemCodes(bag, next) {
+  if (bag.component !== 'genExec') return next();
+
+  var who = bag.who + '|' + _getSystemCodes.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemCodes(query,
+    function (err, systemCodes) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system codes: ' + util.inspect(err))
+        );
+
+      bag.serviceNodeCode = _.findWhere(systemCodes, {
+        group: 'nodeType',
+        name: 'service'
+      });
+      if (_.isEmpty(bag.serviceNodeCode))
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'No systemCode found for node type: service. ' + util.inspect(err))
+        );
+      return next();
+    }
+  );
+}
+
 function _generateImage(bag, next) {
   var who = bag.who + '|' + _generateImage.name;
   logger.verbose(who, 'Inside');
 
-  bag.config.image = util.format('%s/micro:%s',
-    bag.registry, bag.releaseVersion);
+  if (bag.component === 'genExec')
+    bag.config.image = util.format('%s/genexec:%s',
+      'shipimg', bag.releaseVersion);
+  else
+    bag.config.image = util.format('%s/micro:%s',
+      bag.registry, bag.releaseVersion);
 
   return next();
 }
@@ -171,16 +213,8 @@ function _generateEnvs(bag, next) {
       new ActErr(who, ActErr.OperationFailed, 'No amqpDefaultExchange found.')
     );
 
-  var component;
-
-  if (_.contains(['deploy', 'manifest', 'provision', 'release', 'rSync'],
-    bag.name))
-    component = 'stepExec';
-  else
-    component = bag.name;
-
-
   var envs = '';
+
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_API_TOKEN', bag.serviceUserToken);
   envs = util.format('%s -e %s=%s',
@@ -190,14 +224,22 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_AMQP_DEFAULT_EXCHANGE', amqpDefaultExchange);
   envs = util.format('%s -e %s=%s',
-    envs, 'COMPONENT', component);
+    envs, 'COMPONENT', bag.component);
 
-  if (component === 'stepExec')
+  if (bag.component === 'stepExec') {
     envs = util.format('%s -e %s=%s',
       envs, 'JOB_TYPE', bag.name);
-  else if (component === 'irc')
+  } else if (bag.component === 'irc') {
     envs = util.format('%s -e %s=%s',
       envs, 'IRC_BOT_NICK', 'shippable');
+  } else if (bag.component === 'genExec') {
+    envs = util.format('%s -e %s=%s',
+      envs, 'SHIPPABLE_AMQP_URL', amqpUrlRoot);
+    envs = util.format('%s -e %s=%s',
+      envs, 'NODE_TYPE_CODE', bag.serviceNodeCode.code);
+    envs = util.format('%s -e %s=%s%s',
+      envs, 'LISTEN_QUEUE', 'steps.', bag.name);
+  }
 
   bag.envs = envs;
   return next();

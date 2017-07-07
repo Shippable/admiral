@@ -215,6 +215,13 @@ APIAdapter.prototype.getSystemSettings =
     this.get(url, callback);
   };
 
+// systemCodes
+APIAdapter.prototype.getSystemCodes =
+  function (query, callback) {
+    var url = '/api/systemCodes?' + query;
+    this.get(url, callback);
+  };
+
 /*****************************************/
 /*              HTTP METHODS             */
 /*****************************************/
