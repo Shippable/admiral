@@ -659,11 +659,16 @@
     }
 
     function setupSystemIntDefaults(bag, next) {
+
+      var defaultWorkerAddress = $scope.vm.admiralEnv.ADMIRAL_IP;
+      if (!_.isEmpty($scope.vm.systemSettings.workers))
+        defaultWorkerAddress =
+          _.first($scope.vm.systemSettings.workers).address;
+
       systemIntDataDefaults = {
         api: {
           url: {
-            url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
-                ':50000'
+            url: 'http://' + defaultWorkerAddress + ':50000'
           }
         },
         auth: {
@@ -706,8 +711,7 @@
         },
         mktg: {
           url: {
-            url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
-              ':50002'
+            url: 'http://' + defaultWorkerAddress + ':50002'
           },
           hubspotToken: {
             hubspotApiEndPoint: '',
@@ -773,8 +777,7 @@
         },
         www: {
           url: {
-            url: 'http://' + $scope.vm.admiralEnv.ADMIRAL_IP +
-              ':50001'
+            url: 'http://' + defaultWorkerAddress + ':50001'
           }
         },
         // Addons integrations
@@ -972,6 +975,20 @@
             $scope.vm.initializeForm[service].confirmCommand = true;
         }
       );
+
+      return next();
+    }
+
+    function updateInstallForm(workers, next) {
+      if (_.isEmpty(workers)) return next();
+
+      var defaultAddress = _.first(workers).address;
+      systemIntDataDefaults.api.url.url  =
+        'http://' + defaultAddress + ':50000';
+      systemIntDataDefaults.www.url.url  =
+        'http://' + defaultAddress + ':50001';
+      systemIntDataDefaults.mktg.url.url  =
+        'http://' + defaultAddress + ':50002';
 
       return next();
     }
@@ -1488,7 +1505,8 @@
           postWorkers.bind(null, workersList),
           deleteWorkers.bind(null, deletedWorkers),
           getSystemSettings.bind(null, {}),
-          updateInitializeForm.bind(null, {})
+          updateInitializeForm.bind(null, {}),
+          updateInstallForm.bind(null, workersList)
         ],
         function (err) {
           if (err) {
