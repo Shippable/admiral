@@ -44,6 +44,10 @@ check_state() {
     echo "Port $SECURE_PORT not available for State"
     exit 1
   fi
+  if ! nc -vz $STATE_HOST $SSH_PORT &>/dev/null; then
+    echo "Port $SSH_PORT not available for State"
+    exit 1
+  fi
 }
 
 main() {
