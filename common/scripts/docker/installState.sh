@@ -64,10 +64,6 @@ __check_state() {
     __process_error "Port $SSH_PORT not available for State"
     exit 1
   fi
-  if ! nc -vz $STATE_HOST $SECURE_PORT &>/dev/null; then
-    __process_error "Port $SECURE_PORT not available for State"
-    exit 1
-  fi
 }
 
 main() {

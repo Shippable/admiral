@@ -102,6 +102,7 @@ main() {
 
       local gitlab_install_cmd="STATE_HOST=$STATE_HOST \
         STATE_PORT=$STATE_PORT \
+        SSH_PORT=$SSH_PORT \
         $SCRIPTS_DIR_REMOTE/$script_name"
       __exec_cmd_remote "$STATE_HOST" "$gitlab_install_cmd"
     fi
