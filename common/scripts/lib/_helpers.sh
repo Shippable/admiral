@@ -142,6 +142,12 @@ __pull_images() {
     sudo docker pull $image
   done
 
+  __process_msg "Registry: shipimg"
+  
+  image="shipimg/genexec:$RELEASE"
+  __process_msg "Pulling $image"
+  sudo docker pull $image
+
   __process_msg "Registry: $PRIVATE_IMAGE_REGISTRY"
   __registry_login
 
