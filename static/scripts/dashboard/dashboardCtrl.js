@@ -979,6 +979,20 @@
       return next();
     }
 
+    function updateInstallForm(workers, next) {
+      if (_.isEmpty(workers)) return next();
+
+      var defaultAddress = _.first(workers).address;
+      systemIntDataDefaults.api.url.url  =
+        'http://' + defaultAddress + ':50000';
+      systemIntDataDefaults.www.url.url  =
+        'http://' + defaultAddress + ':50001';
+      systemIntDataDefaults.mktg.url.url  =
+        'http://' + defaultAddress + ':50002';
+
+      return next();
+    }
+
     function updateAddonsFormSystemIntegrations(next) {
 
       // reset all systemIntegrations to their defaults
@@ -1503,20 +1517,6 @@
           initMsg();
         }
       );
-    }
-
-    function updateInstallForm(workers, next) {
-      if (_.isEmpty(workers)) return next();
-
-      var defaultAddress = _.first(workers).address;
-      systemIntDataDefaults.api.url.url  =
-        'http://' + defaultAddress + ':50000';
-      systemIntDataDefaults.www.url.url  =
-        'http://' + defaultAddress + ':50001';
-      systemIntDataDefaults.mktg.url.url  =
-        'http://' + defaultAddress + ':50002';
-
-      return next();
     }
 
     function postMsg(update, next) {
