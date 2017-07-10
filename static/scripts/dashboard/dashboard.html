@@ -805,6 +805,9 @@
                           <div class="col-md-8">
                             <input type="text" class="form-control input-sm" name="apiUrl"
                               ng-model="vm.installForm.api.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                              <span ng-if="vm.systemSettings.workers.length > 1">
+                                This field requires a LoadBalanced IP/DNS
+                              </span>
                           </div>
                         </div>
                       </div>
@@ -949,6 +952,9 @@
                               class="col-md-12 form-control input-sm"
                               ng-model="vm.installForm.www.url.data.url"
                               ng-disabled="vm.installing || vm.saving"/>
+                              <span ng-if="vm.systemSettings.workers.length > 1">
+                                This field requires a LoadBalanced IP/DNS
+                              </span>
                             <div ng-if="vm.requireRestart">
                               Click
                               <a href="{{vm.installForm.www.url.data.url}}"
