@@ -1362,6 +1362,11 @@
                             <div class="row">
                               <div class="col-md-offset-2 col-md-2">
                                 isAvailable
+                                  <span>
+                                    <a title="This is available for the user to select form the dropdown in the subscription settings.">
+                                      <img src="https://shots.jotform.com/kade/Screenshots/blue_question_mark.png" height="13px" style="vertical-align: text-top !important"/>
+                                    </a>
+                                  </span>
                               </div>
                               <div class="col-md-8">
                                 <input type="checkbox" name="machineImage{{$index}}IsAvailable"
@@ -1371,6 +1376,11 @@
                             <div class="row">
                               <div class="col-md-offset-2 col-md-2">
                                 isDefault
+                                  <span>
+                                    <a title="This is the default machine image.">
+                                      <img src="images/question_mark.png" height="13px" style="vertical-align: text-top !important"/>
+                                    </a>
+                                  </span>
                               </div>
                               <div class="col-md-8">
                                 <input type="checkbox" name="machineImage{{$index}}IsDefault"
@@ -1379,7 +1389,12 @@
                             </div>
                             <div class="row">
                               <div class="col-md-offset-2 col-md-2">
-                                External ID
+                                Shippable AMI Id
+                                  <span>
+                                    <a target="_blank" href="http://docs.shippable.com/reference/machine-images-overview/" title="Please click here to see the list of all the ami with their versions">
+                                      <img src="https://shots.jotform.com/kade/Screenshots/blue_question_mark.png" height="13px" style="vertical-align: text-top !important"/>
+                                    </a>
+                                  </span>
                               </div>
                               <div class="col-md-8">
                                 <div ng-class="machineImage.externalId ? '' : 'has-error'">
@@ -1395,7 +1410,7 @@
                               <div class="col-md-8">
                                 <div ng-class="machineImage.provider ? '' : 'has-error'">
                                   <input type="text" class="form-control input-sm" name="machineImage{{$index}}Provider"
-                                    ng-model="machineImage.provider" ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="machineImage.provider" ng-disabled="true"/>
                                 </div>
                               </div>
                             </div>
@@ -1412,7 +1427,7 @@
                             </div>
                             <div class="row">
                               <div class="col-md-offset-2 col-md-2">
-                                Key Name
+                                Key pair name
                               </div>
                               <div class="col-md-8">
                                 <div ng-class="machineImage.keyName ? '' : 'has-error'">
@@ -1428,13 +1443,13 @@
                               <div class="col-md-8">
                                 <div ng-class="machineImage.runShImage ? '' : 'has-error'">
                                   <input type="text" class="form-control input-sm" name="machineImage{{$index}}RunShImage"
-                                    ng-model="machineImage.runShImage" ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="machineImage.runShImage" ng-disabled="true"/>
                                 </div>
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-offset-2 col-md-2">
-                                Security Group
+                                Security group id
                               </div>
                               <div class="col-md-8">
                                 <div ng-class="machineImage.securityGroup ? '' : 'has-error'">
