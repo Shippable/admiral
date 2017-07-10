@@ -2038,6 +2038,7 @@
       $scope.vm.installing = true;
 
       async.series([
+          validateInstallForm,
           updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
@@ -2106,6 +2107,7 @@
       hideSaveModal();
 
       async.series([
+          validateInstallForm,
           updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
           updateWWWSystemIntegration,
@@ -2218,6 +2220,23 @@
           return next(err);
         }
       );
+    }
+
+    function validateInstallForm(next) {
+      var validationErrors = [];
+      if (_.isEmpty($scope.vm.installForm.api.url.data.url)) {
+        validationErrors.push(
+          'Please provide a valid API URL'
+        );
+      }
+      if (_.isEmpty($scope.vm.installForm.www.url.data.url))
+        validationErrors.push(
+          'Please provide a valid Shippable UI URL'
+        );
+
+      if (!_.isEmpty(validationErrors))
+        return next(validationErrors.join(','));
+      return next();
     }
 
     function updateSSHKeysSystemIntegration(next) {
