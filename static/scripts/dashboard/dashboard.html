@@ -1674,6 +1674,28 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="row">
+                              <div class="col-md-offset-2 col-md-2">
+                                SSH User
+                              </div>
+                              <div class="col-md-8">
+                                <div ng-class="machineImage.sshUser ? '' : 'has-error'">
+                                  <input type="text" class="form-control input-sm" name="machineImage{{$index}}SSHUser"
+                                    ng-model="machineImage.sshUser" ng-disabled="vm.installing || vm.saving"/>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-offset-2 col-md-2">
+                                SSH Port
+                              </div>
+                              <div class="col-md-8">
+                                <div ng-class="machineImage.sshPort ? '' : 'has-error'">
+                                  <input type="number" class="form-control input-sm" name="machineImage{{$index}}SSHPort"
+                                    ng-model="machineImage.sshPort" ng-disabled="vm.installing || vm.saving"/>
+                                </div>
+                              </div>
+                            </div>
                             <div>&nbsp;</div>
                           </div>
                         </div>
