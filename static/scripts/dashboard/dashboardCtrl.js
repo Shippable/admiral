@@ -390,6 +390,10 @@
           displayName: '',
           isEnabled: false
         },
+        DOC: {
+          displayName: '',
+          isEnabled: false
+        },
         systemSettings: {},
         systemIntegrations: {
           clearbit: {
