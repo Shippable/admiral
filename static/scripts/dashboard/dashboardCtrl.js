@@ -394,6 +394,10 @@
           displayName: '',
           isEnabled: false
         },
+        MAZ: {
+          displayName: '',
+          isEnabled: false
+        },
         systemSettings: {},
         systemIntegrations: {
           clearbit: {
