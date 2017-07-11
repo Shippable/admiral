@@ -178,6 +178,11 @@
       "services": []
     },
     {
+      "name": "GCL",
+      "type": "generic",
+      "services": []
+    },
+    {
       "name": "mailgunCreds",
       "type": "generic",
       "services": [
