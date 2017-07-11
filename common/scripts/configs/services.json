@@ -163,7 +163,8 @@
       "name": "KUBERNETES",
       "type": "deploy",
       "services": [
-        "certgen"
+        "certgen",
+        "provision"
       ]
     },
     {
