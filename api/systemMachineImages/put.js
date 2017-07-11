@@ -113,6 +113,12 @@ function _put(bag, next) {
   if (_.has(bag.reqBody, 'runShImage'))
     updates.push(util.format('"runShImage"=\'%s\'', bag.reqBody.runShImage));
 
+  if (_.has(bag.reqBody, 'sshUser'))
+    updates.push(util.format('"sshUser"=\'%s\'', bag.reqBody.sshUser));
+
+  if (_.has(bag.reqBody, 'sshPort'))
+    updates.push(util.format('"sshPort"=%s', bag.reqBody.sshPort));
+
   if (_.has(bag.reqBody, 'securityGroup'))
     updates.push(
       util.format('"securityGroup"=\'%s\'', bag.reqBody.securityGroup));

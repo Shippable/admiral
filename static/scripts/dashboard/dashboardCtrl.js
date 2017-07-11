@@ -1804,7 +1804,9 @@
         securityGroup: '',
         subnetId: '',
         drydockTag: '',
-        drydockFamily: ''
+        drydockFamily: '',
+        sshUser: 'ubuntu',
+        sshPort: 22
       };
 
       $scope.vm.installForm.systemMachineImages.push(newSystemMachineImage);
