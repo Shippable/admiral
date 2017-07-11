@@ -2359,6 +2359,12 @@
                                 {{vm.addonsForm['pem-key'].displayName}}
                               </label>
                             </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.DOC.isEnabled">
+                                {{vm.addonsForm.DOC.displayName}}
+                              </label>
+                            </div>
                             <!-- hubspot -->
                             <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
                               <label>
