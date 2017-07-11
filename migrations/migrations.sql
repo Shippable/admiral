@@ -352,6 +352,11 @@ do $$
       alter table "buildJobs" alter column "projectId" set not null;
     end if;
 
+    -- Adds runs.isPipelineTriggered
+    if not exists (select 1 from information_schema.columns where table_name = 'runs' and column_name = 'isPipelineTriggered') then
+      alter table "runs" add column "isPipelineTriggered" BOOLEAN;
+    end if;
+
     -- Add projects.ownerAccountId
     if not exists (select 1 from information_schema.columns where table_name = 'projects' and column_name = 'ownerAccountId') then
       alter table "projects" add column "ownerAccountId" varchar(24);
