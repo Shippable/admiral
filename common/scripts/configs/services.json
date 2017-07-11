@@ -168,6 +168,11 @@
       ]
     },
     {
+      "name": "DOC",
+      "type": "generic",
+      "services": []
+    },
+    {
       "name": "mailgunCreds",
       "type": "generic",
       "services": [
