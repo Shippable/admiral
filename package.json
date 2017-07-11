@@ -10,6 +10,7 @@
     "amqp": "0.2.6",
     "angular-ui-bootstrap": "2.5.0",
     "async": "2.0.0",
+    "aws-sdk": "2.82.0",
     "body-parser": "1.15.2",
     "bower": "^1.7.7",
     "compression": "1.6.2",
