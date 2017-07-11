@@ -354,7 +354,7 @@ do $$
 
     -- Adds runs.isPipelineTriggered
     if not exists (select 1 from information_schema.columns where table_name = 'runs' and column_name = 'isPipelineTriggered') then
-      alter table "runs" add column "isPipelineTriggered" BOOLEAN NOT NULL DEFAULT false;
+      alter table "runs" add column "isPipelineTriggered" BOOLEAN;
     end if;
 
     -- Add projects.ownerAccountId
