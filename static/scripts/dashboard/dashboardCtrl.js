@@ -3162,6 +3162,20 @@
       );
     }
 
+    $scope.$watch('vm.installForm.www.url.data.url',
+      function () {
+        _.each($scope.vm.installForm.auth,
+          function (auth) {
+            if (auth.callbackUrl) {
+              var url = auth.callbackUrl;
+              auth.callbackUrl = $scope.vm.installForm.www.url.data.url +
+                '/auth/' + url.split('/auth/')[1];
+            }
+          }
+        );
+      }
+    );
+
     function toggleAuthProvider(providerName) {
       var systemInt = $scope.vm.installForm.auth[providerName + 'Keys'];
 
