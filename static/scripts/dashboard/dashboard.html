@@ -2371,6 +2371,12 @@
                                 {{vm.addonsForm.MAZ.displayName}}
                               </label>
                             </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.GCL.isEnabled">
+                                {{vm.addonsForm.GCL.displayName}}
+                              </label>
+                            </div>
                             <!-- hubspot -->
                             <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
                               <label>
