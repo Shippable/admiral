@@ -173,6 +173,11 @@
       "services": []
     },
     {
+      "name": "MAZ",
+      "type": "generic",
+      "services": []
+    },
+    {
       "name": "mailgunCreds",
       "type": "generic",
       "services": [
