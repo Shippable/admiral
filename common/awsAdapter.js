@@ -75,10 +75,10 @@ function bindSubAdapter(newThis, subAdapter) {
 // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html
 
 EC2.getImages =
-  function (query, callback) {
+  function (amiId, callback) {
     var params = {
       ImageIds: [
-        query
+        amiId
       ]
     };
 
