@@ -4136,5 +4136,15 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'isDebug') then
       alter table "clusterNodes" add column "isDebug" BOOLEAN;
     end if;
+
+    -- Add sshUser column to systemMachineImages table
+    if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'sshUser') then
+      alter table "systemMachineImages" add column "sshUser" VARCHAR(255) NOT NULL DEFAULT 'ubuntu';
+    end if;
+
+    -- Add sshPort column to systemMachineImages table
+    if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'sshPort') then
+      alter table "systemMachineImages" add column "sshPort" INT NOT NULL DEFAULT 22;
+    end if;
   end
 $$;
