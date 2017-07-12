@@ -157,6 +157,10 @@
       getServiceLogs: function (component, callback) {
         return API.get('/api/' + component + '/logs', callback);
       },
+      // passthrough ami
+      getImageByAmiId: function (amiId, query, callback) {
+        return API.get('/api/passthrough/ami/' + amiId + '?' + query, callback);
+      },
       // Component Services Routes
       getServices: function (query, callback) {
         return API.get('/api/services?' + query, callback);

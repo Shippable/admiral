@@ -2053,6 +2053,7 @@
           enableEmailMasterIntegration,
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
+          updateProvisionSystemIntegration,
           updateSystemMachineImages,
           startAPI,
           startWWW,
@@ -2061,7 +2062,6 @@
           startJobRequest,
           startJobTrigger,
           updateFilestoreSystemIntegration,
-          updateProvisionSystemIntegration,
           startNf,
           startCharon,
           startDeploy,
@@ -2121,9 +2121,9 @@
           enableEmailMasterIntegration,
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
+          updateProvisionSystemIntegration,
           updateSystemMachineImages,
-          updateFilestoreSystemIntegration,
-          updateProvisionSystemIntegration
+          updateFilestoreSystemIntegration
         ],
         function (err) {
           $scope.vm.saving = false;
@@ -2674,12 +2674,20 @@
           if (body.subnetId === '')
             body.subnetId = null;
 
-          admiralApiAdapter.putSystemMachineImage(updatedImage.id, body,
+          var seriesBag = {
+            id: updatedImage.id,
+            body: body,
+            accessKey: $scope.vm.installForm.provision.amazonKeys.data.accessKey,
+            secretKey: $scope.vm.installForm.provision.amazonKeys.data.secretKey,
+            region: body.region,
+            amiId: body.externalId
+          };
+          async.series([
+              __getImageByAmiId.bind(null, seriesBag),
+              __putSystemMachineImage.bind(null, seriesBag)
+            ],
             function (err) {
-              if (err)
-                return done(err);
-
-              return done();
+              return done(err);
             }
           );
         },
@@ -2690,6 +2698,7 @@
     }
 
     function postSystemMachineImages(bag, next) {
+
       var newSystemMachineImages = _.filter(bag.updatedSystemMachineImages,
         function (image) {
           var exists =
@@ -2704,17 +2713,68 @@
           if (body.subnetId === '')
             body.subnetId = null;
 
-          admiralApiAdapter.postSystemMachineImage(body,
+          var seriesBag = {
+            body: body,
+            accessKey: $scope.vm.installForm.provision.amazonKeys.data.accessKey,
+            secretKey: $scope.vm.installForm.provision.amazonKeys.data.secretKey,
+            region: body.region,
+            amiId: body.externalId
+          };
+          async.series([
+              __getImageByAmiId.bind(null, seriesBag),
+              __postSystemMachineImage.bind(null, seriesBag)
+            ],
             function (err) {
-              if (err)
-                return done(err);
-
-              return done();
+              return done(err);
             }
           );
+
         },
         function (err) {
+          if (err)
+            horn.error(err.link);
+
           return next(err);
+        }
+      );
+    }
+
+    function __getImageByAmiId(bag, next) { 
+      if (!bag.secretKey || !bag.accessKey)
+        return next();
+
+      var query = 'region=' + bag.region;
+      admiralApiAdapter.getImageByAmiId(bag.amiId, query,
+        function (err, imageId) {
+          if (err)
+            return next(err);
+
+          if (_.isEmpty(imageId))
+            return next('Error: Entered ami-id is not correct');
+
+          return next();
+        }
+      );
+    }
+
+    function __postSystemMachineImage(bag, next) { 
+      admiralApiAdapter.postSystemMachineImage(bag.body,
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function __putSystemMachineImage(bag, next) { 
+      admiralApiAdapter.putSystemMachineImage(bag.id, bag.body,
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
         }
       );
     }
