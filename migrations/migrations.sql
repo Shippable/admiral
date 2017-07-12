@@ -4151,5 +4151,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'isSwapEnabled') then
       alter table "clusterNodes" add column "isSwapEnabled" BOOLEAN NOT NULL DEFAULT false;
     end if;
+
+    -- Add isSwapEnabled column to systemNodes table
+    if not exists (select 1 from information_schema.columns where table_name = 'systemNodes' and column_name = 'isSwapEnabled') then
+      alter table "systemNodes" add column "isSwapEnabled" BOOLEAN NOT NULL DEFAULT false;
+    end if;
   end
 $$;
