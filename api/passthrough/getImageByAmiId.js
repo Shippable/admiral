@@ -94,7 +94,7 @@ function _getImageFromAmiId(bag, next) {
             util.inspect(err))
         );
 
-      var imgId = _.pluck(images, 'ImageId');
+      var imgId = _.first(_.pluck(images, 'ImageId'));
       bag.resBody = { imageId: imgId };
       return next();
     }
