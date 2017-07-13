@@ -107,7 +107,11 @@ function _getImageFromAmiId(bag, next) {
   bag.awsAdapter.EC2.getImages(bag.amiId,
     function (err, images) {
       if (err)
-        return next(err);
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Adapter call failed for EC2.getImages',
+            util.inspect(err))
+        );
 
       var imgId = _.first(_.pluck(images, 'ImageId'));
       bag.resBody = { imageId: imgId };

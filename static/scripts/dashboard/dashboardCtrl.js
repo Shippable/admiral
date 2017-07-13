@@ -2731,9 +2731,6 @@
 
         },
         function (err) {
-          if (err)
-            horn.error(err.link);
-
           return next(err);
         }
       );
