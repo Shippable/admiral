@@ -402,6 +402,10 @@
           displayName: '',
           isEnabled: false
         },
+        gitCredential: {
+          displayName: '',
+          isEnabled: false
+        },
         systemSettings: {},
         systemIntegrations: {
           clearbit: {
@@ -2769,7 +2773,7 @@
       );
     }
 
-    function __getImageByAmiId(bag, next) { 
+    function __getImageByAmiId(bag, next) {
       if (!bag.secretKey || !bag.accessKey)
         return next();
 
@@ -2787,7 +2791,7 @@
       );
     }
 
-    function __postSystemMachineImage(bag, next) { 
+    function __postSystemMachineImage(bag, next) {
       admiralApiAdapter.postSystemMachineImage(bag.body,
         function (err) {
           if (err)
@@ -2798,7 +2802,7 @@
       );
     }
 
-    function __putSystemMachineImage(bag, next) { 
+    function __putSystemMachineImage(bag, next) {
       admiralApiAdapter.putSystemMachineImage(bag.id, bag.body,
         function (err) {
           if (err)
