@@ -32,6 +32,7 @@ readonly AWSCLI_VERSION=1.10.63
 readonly API_TIMEOUT=600
 readonly ADMIRAL_PORT=50003
 export LC_ALL=C
+export docker_restart=false
 
 # Installation default values #############################
 ###########################################################
