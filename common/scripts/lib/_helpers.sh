@@ -73,6 +73,17 @@ __check_dependencies() {
     service ntp restart
   fi
 
+  ################## Setup Shippable user  ###############################
+  if id -u 'shippable' >/dev/null 2>&1; then
+    __process_msg "User shippable already exists"
+  else
+    sudo useradd -d /home/shippable -m -s /bin/bash -p shippablepwd shippable
+  fi
+
+  sudo echo 'shippable ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
+  sudo chown -R $USER:$USER /home/shippable/
+  sudo chown -R shippable:shippable /home/shippable/
+
   ################## Install Docker  #####################################
   if type docker &> /dev/null && true; then
     __process_msg "'docker' already installed, checking version"
