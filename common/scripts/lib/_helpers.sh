@@ -50,6 +50,29 @@ __check_dependencies() {
     apt-get install -y jq
   fi
 
+  ################## Install curl  #######################################
+  if type curl &> /dev/null && true; then
+    __process_msg "'curl' already installed"
+  else
+    __process_msg "Installing 'curl'"
+    apt-get install -y curl
+  fi
+
+  ################## Install NTP  ########################################
+  {
+    check_ntp=$(sudo service --status-all 2>&1 | grep ntp)
+  } || {
+    true
+  }
+
+  if [ ! -z "$check_ntp" ]; then
+    __process_msg "'ntp' already installed"
+  else
+    __process_msg "Installing 'ntp'"
+    apt-get install -y ntp
+    service ntp restart
+  fi
+
   ################## Install Docker  #####################################
   if type docker &> /dev/null && true; then
     __process_msg "'docker' already installed, checking version"
