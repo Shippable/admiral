@@ -344,6 +344,11 @@ do $$
       values ('589528aa9ce3dd1000a94b1c', 69, 'url', 'url', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    -- Add Git Credential integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'gitCredential' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('596d9b49fa1a3f979c10b5a5', 70, 'gitCredential', 'Git Credential', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
 
     -- END adding master integrations
 
