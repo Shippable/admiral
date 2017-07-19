@@ -3362,9 +3362,7 @@
 
     function getSystemNodes(next) {
       if (!$scope.vm.systemSettings.db.isInitialized) return next();
-      if (($scope.vm.admiralEnv.ADMIRAL_IP !== 'localhost' &&
-        $scope.vm.admiralEnv.ADMIRAL_IP !== '127.0.0.1') ||
-        $scope.vm.runMode !== 'dev')
+      if ($scope.vm.runMode !== 'dev')
         return next();
 
       admiralApiAdapter.getSystemNodes('',
