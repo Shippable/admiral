@@ -16,6 +16,7 @@ function microConfig(params, callback) {
     config: params.config,
     name: params.name,
     registry: params.registry,
+    publicRegistry: params.publicRegistry,
     envs: '',
     mounts: '',
     runCommand: '',
@@ -177,7 +178,7 @@ function _generateImage(bag, next) {
 
   if (bag.component === 'genExec')
     bag.config.image = util.format('%s/genexec:%s',
-      'drydock', bag.releaseVersion);
+      bag.publicRegistry, bag.releaseVersion);
   else
     bag.config.image = util.format('%s/micro:%s',
       bag.registry, bag.releaseVersion);

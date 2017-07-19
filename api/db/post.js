@@ -26,7 +26,8 @@ function post(req, res) {
     serviceUserToken: '',
     setServiceUserToken: false,
     accessKeyEnv: 'ACCESS_KEY',
-    secretKeyEnv: 'SECRET_KEY'
+    secretKeyEnv: 'SECRET_KEY',
+    publicRegistryEnv: 'PUBLIC_IMAGE_REGISTRY'
   };
 
   bag.who = util.format('db|%s', self.name);
@@ -54,6 +55,7 @@ function post(req, res) {
       _runMigrations.bind(null, bag),
       _templateServiceUserAccountFile.bind(null, bag),
       _upsertServiceUserAccount.bind(null, bag),
+      _getPublicRegistry.bind(null, bag),
       _templateDefaultSystemMachineImageFile.bind(null, bag),
       _upsertDefaultSystemMachineImage.bind(null, bag),
       _getRootBucket.bind(null, bag),
@@ -582,6 +584,25 @@ function _upsertServiceUserAccount(bag, next) {
   );
 }
 
+function _getPublicRegistry(bag, next) {
+  var who = bag.who + '|' + _getPublicRegistry.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.publicRegistryEnv,
+    function (err, pubRegistry) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.publicRegistryEnv)
+        );
+
+      bag.publicRegistry = pubRegistry;
+      logger.debug('Found public registry');
+
+      return next();
+    }
+  );
+}
 
 function _templateDefaultSystemMachineImageFile(bag, next) {
   var who = bag.who + '|' + _templateDefaultSystemMachineImageFile.name;
@@ -593,7 +614,8 @@ function _templateDefaultSystemMachineImageFile(bag, next) {
     util.format('%s/configs/default_system_machine_image.sql.template',
       global.config.scriptsDir);
   var dataObj = {
-    releaseVersion: bag.releaseVersion
+    releaseVersion: bag.releaseVersion,
+    publicRegistry: bag.publicRegistry
   };
 
   var script = {
