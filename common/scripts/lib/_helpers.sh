@@ -119,36 +119,6 @@ __check_dependencies() {
     rm installDockerScript.sh
   fi
 
-  ################## Check Docker Options  ###############################
-  __process_msg "Checking Docker options"
-
-  SHIPPABLE_DOCKER_OPTS='DOCKER_OPTS="$DOCKER_OPTS -H unix:///var/run/docker.sock -g=/data --dns 8.8.8.8 --dns 8.8.4.4"'
-  opts_exist=$(sudo sh -c "grep '$SHIPPABLE_DOCKER_OPTS' /etc/default/docker || echo ''")
-  # DOCKER_OPTS do not exist or match.
-  if [ -z "$opts_exist" ]; then
-    __process_msg "Removing existing DOCKER_OPTS in /etc/default/docker, if any"
-    sudo sed -i '/^DOCKER_OPTS/d' "/etc/default/docker"
-
-    __process_msg "Appending DOCKER_OPTS to /etc/default/docker"
-    sudo sh -c "echo '$SHIPPABLE_DOCKER_OPTS' >> /etc/default/docker"
-    docker_restart=true
-  else
-    __process_msg "Shippable docker options already present in /etc/default/docker"
-  fi
-
-  ## remove the docker option to listen on all ports
-  __process_msg "Disabling docker tcp listener"
-  sudo sh -c "sed -e s/\"-H tcp:\/\/0.0.0.0:4243\"//g -i /etc/default/docker"
-
-  ################## Restart Docker  #####################################
-  __process_msg "Checking if docker restart is necessary"
-  if [ $docker_restart == true ]; then
-    __process_msg "Restarting docker service on reset"
-    sudo service docker restart
-  else
-    __process_msg "docker_restart set to false, not restarting docker daemon"
-  fi
-
   ################## Install awscli  #####################################
   if type aws &> /dev/null && true; then
     __process_msg "'awscli' already installed"
