@@ -80,7 +80,11 @@ __check_dependencies() {
     sudo useradd -d /home/shippable -m -s /bin/bash -p shippablepwd shippable
   fi
 
-  sudo echo 'shippable ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
+  SHIPPABLE_SUDO_USER='shippable ALL=(ALL) NOPASSWD:ALL'
+  user_exist=$(sudo sh -c "grep '$SHIPPABLE_SUDO_USER' /etc/etc/sudoers || echo ''")
+  if [ -z "$user_exist" ]; then
+    sudo echo 'shippable ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
+  fi
   sudo chown -R $USER:$USER /home/shippable/
   sudo chown -R shippable:shippable /home/shippable/
 
@@ -89,11 +93,11 @@ __check_dependencies() {
     __process_msg "'docker' already installed, checking version"
     local docker_version=$(docker --version)
     if [[ "$docker_version" == *"$DOCKER_VERSION"* ]]; then
-      __process_msg "'docker' $DOCKER_VERSION installed"
+      __process_msg "'docker' $docker_version installed"
     else
       __process_error "Docker version $docker_version installed, required $DOCKER_VERSION"
-      __process_error "Install docker using script \"
-      https://raw.githubusercontent.com/Shippable/node/master/scripts/ubu_14.04_docker_1.13.sh"
+      __process_error "Install Docker Version $DOCKER_VERSION from \"
+      https://docs.docker.com/cs-engine/1.13/#install-on-ubuntu-1404-lts-or-1604-lts"
       exit 1
     fi
   else
