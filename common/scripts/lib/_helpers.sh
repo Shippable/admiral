@@ -182,7 +182,7 @@ __pull_images() {
 
   __process_msg "Registry: shipimg"
   
-  image="shipimg/genexec:$RELEASE"
+  image="drydock/genexec:$RELEASE"
   __process_msg "Pulling $image"
   sudo docker pull $image
 

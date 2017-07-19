@@ -177,7 +177,7 @@ function _generateImage(bag, next) {
 
   if (bag.component === 'genExec')
     bag.config.image = util.format('%s/genexec:%s',
-      'shipimg', bag.releaseVersion);
+      'drydock', bag.releaseVersion);
   else
     bag.config.image = util.format('%s/micro:%s',
       bag.registry, bag.releaseVersion);
