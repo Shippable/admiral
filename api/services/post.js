@@ -28,7 +28,8 @@ function post(req, res) {
     tmpScript: '/tmp/service.sh',
     accessKeyEnv: 'ACCESS_KEY',
     secretKeyEnv: 'SECRET_KEY',
-    registryEnv: 'PRIVATE_IMAGE_REGISTRY'
+    registryEnv: 'PRIVATE_IMAGE_REGISTRY',
+    publicRegistryEnv: 'PUBLIC_IMAGE_REGISTRY'
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -43,6 +44,7 @@ function post(req, res) {
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
       _getRegistry.bind(null, bag),
+      _getPublicRegistry.bind(null, bag),
       _generateServiceConfig.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
@@ -208,6 +210,26 @@ function _getRegistry(bag, next) {
   );
 }
 
+function _getPublicRegistry(bag, next) {
+  var who = bag.who + '|' + _getPublicRegistry.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.publicRegistryEnv,
+    function (err, pubRegistry) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.publicRegistryEnv)
+        );
+
+      bag.publicRegistry = pubRegistry;
+      logger.debug('Found public registry');
+
+      return next();
+    }
+  );
+}
+
 function _generateServiceConfig(bag, next) {
   var who = bag.who + '|' + _generateServiceConfig.name;
   logger.verbose(who, 'Inside');
@@ -230,7 +252,8 @@ function _generateServiceConfig(bag, next) {
     name: bag.name,
     registry: bag.registry,
     releaseVersion: bag.releaseVersion,
-    isSwarmClusterInitialized: bag.isSwarmClusterInitialized
+    isSwarmClusterInitialized: bag.isSwarmClusterInitialized,
+    publicRegistry: bag.publicRegistry
   };
 
   if (!configGenerator)

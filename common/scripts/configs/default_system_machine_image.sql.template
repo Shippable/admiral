@@ -5,7 +5,7 @@ do $$
        "isAvailable", "isDefault", "region", "keyName", "runShImage",  "securityGroup",
        "subnetId", "drydockTag", "drydockFamily", "createdBy", "updatedBy", "createdAt", "updatedAt")
      values ('572c81cb39a5440c0031b61c', 'ami-abcdefgh', 'AWS', 'Stable', 'Stable AMI',
-       true, true, 'us-east-1', 'shippable-beta', 'shipimg/genexec:<%= obj.releaseVersion %>', 'sg-123456',
+       true, true, 'us-east-1', 'shippable-beta', '<%= obj.publicRegistry %>/genexec:<%= obj.releaseVersion %>', 'sg-123456',
        '', 'prod', 'u14', '540e55445e5bad6f98764522', '540e55445e5bad6f98764522', '2016-02-29T00:00:00Z', '2016-02-29T00:00:00Z');
     end if;
   end
