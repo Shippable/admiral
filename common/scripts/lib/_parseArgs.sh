@@ -343,6 +343,14 @@ __print_help() {
   exit 0
 }
 
+__print_list() {
+  printf "\nAvailable Admiral versions are:\n"
+  git tag
+  printf "\nTo upgrade to a version use: $./admiral.sh upgrade <version>\n\n"
+  exit 0
+}
+
+
 __show_status() {
   __process_msg "All good !!!"
 }
@@ -435,6 +443,9 @@ __parse_args() {
       info)
         __bootstrap_admiral_env
         __print_info
+        ;;
+      list)
+        __print_list
         ;;
       help)
         __print_help
