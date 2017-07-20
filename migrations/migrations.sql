@@ -4156,5 +4156,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'systemNodes' and column_name = 'isSwapEnabled') then
       alter table "systemNodes" add column "isSwapEnabled" BOOLEAN NOT NULL DEFAULT false;
     end if;
+
+    -- Add customCloneUrl column to projects table
+    if not exists (select 1 from information_schema.columns where table_name = 'projects' and column_name = 'customCloneUrl') then
+      alter table "projects" add column "customCloneUrl" TEXT;
+    end if;
   end
 $$;
