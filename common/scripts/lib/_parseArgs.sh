@@ -339,6 +339,7 @@ __print_help() {
     help            Print this message
     clean           Remove shippable containers and configurations
     info            Print information about current installation
+    list            Print available admiral versions
   "
   exit 0
 }
@@ -346,7 +347,7 @@ __print_help() {
 __print_list() {
   printf "\nAvailable Admiral versions are:\n"
   git tag
-  printf "\nTo upgrade to a version use: $./admiral.sh upgrade <version>\n\n"
+  printf "\nTo upgrade use: $ sudo ./admiral.sh upgrade <version>\n\n"
   exit 0
 }
 
