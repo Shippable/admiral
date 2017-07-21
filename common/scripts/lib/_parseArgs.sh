@@ -346,7 +346,7 @@ __print_help() {
 
 __print_list() {
   printf "\nAvailable Admiral versions are:\n"
-  git tag
+  git fetch && git tag
   printf "\nTo upgrade use: $ sudo ./admiral.sh upgrade <version>\n\n"
   exit 0
 }
