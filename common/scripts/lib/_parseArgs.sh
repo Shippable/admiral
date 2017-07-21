@@ -340,6 +340,7 @@ __print_help() {
     clean           Remove shippable containers and configurations
     info            Print information about current installation
     list            Print available admiral versions
+    switch          Switch admiral to a given version
   "
   exit 0
 }
