@@ -418,6 +418,25 @@ __accept_shippable_license() {
   fi
 }
 
+__checkout_tag() {
+  if [ CHECKOUT_TAG ]; then
+    git fetch 2>&1 | tee $LOG_FILE
+    __process_msg "Checking out tag $CHECKOUT_TAG"
+    git checkout tags/$CHECKOUT_TAG 2>&1 | tee $LOG_FILE
+    if [ ${PIPESTATUS[0]} -ne 0 ]; then
+      __process_error "failed to checkout tag: $CHECKOUT_TAG"
+      exit 1
+    fi
+    __process_msg "Successfully checkout tag $CHECKOUT_TAG."
+    __process_msg "To upgrade run $ sudo ./admiral.sh upgrade"
+    exit 0
+  else
+    __process_error "switch requires a tag"
+    __process_error "Eg. $ sudo ./admiral.sh switch <tagname>"
+    exit 1
+  fi
+}
+
 __parse_args() {
   if [[ $# -gt 0 ]]; then
     key="$1"
@@ -429,6 +448,12 @@ __parse_args() {
         __parse_args_install "$@"
         __generate_ssh_keys
         __accept_shippable_license
+        ;;
+      switch)
+        if [ $# -gt 1 ]; then
+          export CHECKOUT_TAG=$2
+        fi
+        __checkout_tag
         ;;
       upgrade)
         __bootstrap_admiral_env
