@@ -81,7 +81,7 @@ __check_dependencies() {
   fi
 
   SHIPPABLE_SUDO_USER='shippable ALL=(ALL) NOPASSWD:ALL'
-  user_exist=$(sudo sh -c "grep '$SHIPPABLE_SUDO_USER' /etc/etc/sudoers || echo ''")
+  user_exist=$(sudo sh -c "grep '$SHIPPABLE_SUDO_USER' /etc/sudoers || echo ''")
   if [ -z "$user_exist" ]; then
     sudo echo 'shippable ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
   fi
