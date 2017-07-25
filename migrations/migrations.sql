@@ -803,6 +803,14 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'addOnMinionCountOverridden') then
       alter table "subscriptions" add column "addOnMinionCountOverridden" BOOLEAN NOT NULL DEFAULT false;
     end if;
+
+    -- Adds maxNodeIdleTimeInHrs and maxNodeIdleTimeOverridden columns to subscriptions
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'maxNodeIdleTimeInHrs') then
+      alter table "subscriptions" add column "maxNodeIdleTimeInHrs" INTEGER;
+    end if;
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'maxNodeIdleTimeOverridden') then
+      alter table "subscriptions" add column "maxNodeIdleTimeOverridden" BOOLEAN;
+    end if;
   end
 $$;
 
