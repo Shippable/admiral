@@ -811,6 +811,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'maxNodeIdleTimeOverridden') then
       alter table "subscriptions" add column "maxNodeIdleTimeOverridden" BOOLEAN;
     end if;
+    -- Adds maxNodeIdleTimeInHrs columns to clusterNodes
+    if not exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'maxNodeIdleTimeInHrs') then
+      alter table "clusterNodes" add column "maxNodeIdleTimeInHrs" INTEGER;
+    end if;
   end
 $$;
 
