@@ -8,6 +8,7 @@ function stateRoutes(app) {
   app.get('/api/redis/logs', validateAccount, require('./getLogs.js'));
   app.get('/api/redis/status', validateAccount, require('./getStatus.js'));
   app.post('/api/redis', validateAccount, require('./post.js'));
+  app.put('/api/redis', validateAccount, require('./put.js'));
   app.post('/api/redis/initialize', validateAccount,
     require('./initialize.js'));
 }
