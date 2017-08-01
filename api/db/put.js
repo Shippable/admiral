@@ -51,20 +51,20 @@ function _get(bag, next) {
   logger.verbose(who, 'Inside');
 
   configHandler.get(bag.component,
-    function (err, state) {
+    function (err, db) {
       if (err)
         return next(
           new ActErr(who, ActErr.DataNotFound,
             'Failed to get ' + bag.component, err)
         );
 
-      if (_.isEmpty(state))
+      if (_.isEmpty(db))
         return next(
           new ActErr(who, ActErr.DataNotFound,
             'No configuration in database for ' + bag.component)
         );
 
-      bag.config = state;
+      bag.config = db;
       return next();
     }
   );
