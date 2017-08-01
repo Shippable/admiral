@@ -8,6 +8,7 @@ function stateRoutes(app) {
   app.get('/api/state/logs', validateAccount, require('./getLogs.js'));
   app.get('/api/state/status', validateAccount, require('./getStatus.js'));
   app.post('/api/state', validateAccount, require('./post.js'));
+  app.put('/api/state', validateAccount, require('./put.js'));
   app.post('/api/state/initialize', validateAccount,
     require('./initialize.js'));
 }
