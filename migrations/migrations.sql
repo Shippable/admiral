@@ -734,6 +734,16 @@ do $$
       alter table "jobs" add column "genericIntegrations" TEXT;
     end if;
 
+    -- Add versionId column in jobs table
+    if not exists (select 1 from information_schema.columns where table_name = 'jobs' and column_name = 'versionId') then
+      alter table "jobs" add column "versionId" INTEGER;
+    end if;
+
+    -- add foreign key for job.versionId
+    if not exists (select 1 from pg_constraint where conname = 'jobs_versionId_fkey') then
+      alter table "jobs" add constraint "jobs_versionId_fkey" foreign key ("versionId") references "versions"(id) on update restrict on delete restrict;
+    end if;
+
     -- remove outdated routeRoles
     if exists (select 1 from information_schema.columns where table_name = 'routeRoles') then
       delete from "routeRoles" where "routePattern"='/accounts/:id' and "httpVerb"='GET';
