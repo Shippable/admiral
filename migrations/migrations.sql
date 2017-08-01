@@ -582,6 +582,10 @@ do $$
       alter table "jobs" add constraint "jobs_runId_fkey" foreign key ("runId") references "runs"(id) on update restrict on delete restrict;
     end if;
 
+    if not exists (select 1 from pg_constraint where conname = 'jobs_versionId_fkey') then
+      alter table "jobs" add constraint "jobs_versionId_fkey" foreign key ("versionId") references "versions"(id) on update restrict on delete restrict;
+    end if;
+
   -- Adds foreign key relationships for runs
     if not exists (select 1 from pg_constraint where conname = 'runs_statusCode_fkey') then
       alter table "runs" add constraint "runs_statusCode_fkey" foreign key ("statusCode") references "systemCodes"(code) on update restrict on delete restrict;
