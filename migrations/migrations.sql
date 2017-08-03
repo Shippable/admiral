@@ -266,6 +266,11 @@ do $$
       alter table "accountIntegrations" alter column "formJSONValues" drop not null;
     end if;
 
+    -- Drop not null constraint on subscriptionIntegrations.accountIntegrationId
+    if exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'accountIntegrationId' and is_nullable = 'NO') then
+      alter table "subscriptionIntegrations" alter column "accountIntegrationId" drop not null;
+    end if;
+
     -- Add braintreeSubscriptionId in subscriptions
      if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'braintreeSubscriptionId') then
        alter table "subscriptions" add column "braintreeSubscriptionId" character varying(255);
