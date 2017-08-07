@@ -394,6 +394,10 @@
           displayName: '',
           isEnabled: false
         },
+        keyValuePair: {
+          displayName: '',
+          isEnabled: false
+        },
         MAZ: {
           displayName: '',
           isEnabled: false
