@@ -4188,5 +4188,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'projects' and column_name = 'customCloneUrl') then
       alter table "projects" add column "customCloneUrl" TEXT;
     end if;
+
+    -- Add builderAccountLastValidatedAt column to projects table
+    if not exists (select 1 from information_schema.columns where table_name = 'projects' and column_name = 'builderAccountLastValidatedAt') then
+      alter table "projects" add column "builderAccountLastValidatedAt" timestamp with time zone;
+    end if;
   end
 $$;
