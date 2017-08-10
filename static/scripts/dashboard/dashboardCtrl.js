@@ -1123,6 +1123,7 @@
             'jobConsoleBatchSize',
             'jobConsoleBufferTimeIntervalMS',
             'apiRetryIntervalMS',
+            'accountSyncFrequencyHr',
             'rootS3Bucket',
             'nodeScriptsLocation',
             'enforcePrivateJobQuota',
