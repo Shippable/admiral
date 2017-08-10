@@ -5,6 +5,7 @@ do $$
       create table "systemSettings" (
         "id" INT PRIMARY KEY NOT NULL,
         "defaultMinionCount" INT DEFAULT 1 NOT NULL,
+        "accountSyncFrequencyHr" INT DEFAULT 4 NOT NULL,
         "autoSelectBuilderToken" BOOLEAN DEFAULT false NOT NULL,
         "buildTimeoutMS" INT DEFAULT 3600000 NOT NULL,
         "defaultPrivateJobQuota" INT DEFAULT 150 NOT NULL,
@@ -51,6 +52,10 @@ do $$
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'hubspotRSyncLastSyncTime') then
       alter table "systemSettings" add column "hubspotRSyncLastSyncTime" timestamp with time zone;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'accountSyncFrequencyHr') then
+      alter table "systemSettings" add column "accountSyncFrequencyHr" INTEGER  NOT NULL DEFAULT 4;
     end if;
 
   end
