@@ -811,6 +811,7 @@
                           </div>
                         </div>
                       </div>
+                      <!-- Internal API -->
                       <div class="col-md-offset-1 col-md-11">
                         <div>&nbsp;</div>
                         <div class="row">
@@ -827,6 +828,32 @@
                           <div class="col-md-8">
                             <input type="text" class="form-control input-sm" name="internalAPIUrl"
                               ng-model="vm.installForm.internalAPI.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                              <span>
+                                This URL will be used by the internal services. (Can be the same as API URL)
+                              </span>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Console API -->
+                      <div class="col-md-offset-1 col-md-11">
+                        <div>&nbsp;</div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <b>Console API</b>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-offset-2 col-md-10">
+                        <div class="row">
+                          <div class="col-md-4">
+                            URL
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" class="form-control input-sm" name="consoleAPIUrl"
+                              ng-model="vm.installForm.consoleAPI.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                              <span>
+                                This URL will be used for consoles. (Can be the same as API URL)
+                              </span>
                           </div>
                         </div>
                       </div>
