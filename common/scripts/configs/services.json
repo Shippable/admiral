@@ -259,140 +259,170 @@
       "name": "api",
       "repository": "api",
       "isGlobal": true,
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "api"
     },
     {
       "name": "braintree",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "certgen",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "charon",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "cron",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "deploy",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "ec2",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "email",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "hipchat",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "hubspotSync",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "irc",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "jobRequest",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "jobTrigger",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "jSync",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "logup",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "marshaller",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "manifest",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "mktg",
       "repository": "mktg",
       "isGlobal": true,
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "api"
     },
     {
       "name": "nexec",
       "repository": "nexec",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "nf",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "provision",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "release",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "rSync",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "segmentListener",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "slack",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "sync",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "timeTrigger",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "versionTrigger",
       "repository": "micro",
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "webhook",
-      "repository": "micro"
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "www",
       "repository": "www",
       "isGlobal": true,
-      "isCore": true
+      "isCore": true,
+      "apiUrlIntegration": "api"
     }
   ]
 }
