@@ -114,6 +114,15 @@
             }
           }
         },
+        consoleAPI: {
+          url: {
+            isEnabled: true,
+            masterName: 'url',
+            data: {
+              url: ''
+            }
+          }
+        },
         auth: {
           bitbucketKeys: {
             isEnabled: false,
@@ -705,6 +714,11 @@
             url: 'http://' + defaultWorkerAddress + ':50000'
           }
         },
+        consoleAPI: {
+          url: {
+            url: 'http://' + defaultWorkerAddress + ':50000'
+          }
+        },
         auth: {
           bitbucketKeys: {
             clientId: '',
@@ -898,6 +912,15 @@
           //over the values of the default api to it
           if (!internalAPIIntegration && apiIntegration)
             $scope.vm.installForm.internalAPI.url.data.url =
+              apiIntegration.data.url;
+
+          var consoleAPIIntegration =
+            _.findWhere(systemIntegrations, {name: 'consoleAPI'});
+
+          // If consoleAPIIntegration is not present copy
+          //over the values of the default api to it
+          if (!consoleAPIIntegration && apiIntegration)
+            $scope.vm.installForm.consoleAPI.url.data.url =
               apiIntegration.data.url;
 
           $scope.vm.systemIntegrations = systemIntegrations;
@@ -2091,6 +2114,7 @@
           updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
           updateInternalAPISystemIntegration,
+          updateConsoleAPISystemIntegration,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
           enableSCMMasterIntegrations,
@@ -2161,6 +2185,7 @@
           updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
           updateInternalAPISystemIntegration,
+          updateConsoleAPISystemIntegration,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
           enableSCMMasterIntegrations,
@@ -2330,7 +2355,22 @@
         name: 'internalAPI',
         masterName: $scope.vm.installForm.internalAPI.url.masterName,
         data: $scope.vm.installForm.internalAPI.url.data,
-        isEnabled: $scope.vm.installForm.api.url.isEnabled
+        isEnabled: $scope.vm.installForm.internalAPI.url.isEnabled
+      };
+
+      updateSystemIntegration(bag,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function updateConsoleAPISystemIntegration(next) {
+      var bag = {
+        name: 'consoleAPI',
+        masterName: $scope.vm.installForm.consoleAPI.url.masterName,
+        data: $scope.vm.installForm.consoleAPI.url.data,
+        isEnabled: $scope.vm.installForm.consoleAPI.url.isEnabled
       };
 
       updateSystemIntegration(bag,
