@@ -463,7 +463,11 @@ do $$
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 151) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (151, '57467326b3cbfc0c004f9111', 'secretKey', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (151, '57467326b3cbfc0c004f9111', 'secretKey', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if exists (select 1 from "masterIntegrationFields" where "id" = 151 and "isSecure" = false) then
+      update "masterIntegrationFields" set "isSecure" = true where "id" = 151;
     end if;
 
     -- masterIntegrationFields for gitlabCreds
