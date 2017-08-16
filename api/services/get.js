@@ -123,12 +123,12 @@ function _setDefault(bag, next) {
 
   _.each(bag.services.serviceConfigs,
     function (service) {
-
       bag.defaultService[service.name] = {
         serviceName: service.name,
         isCore: service.isCore,
         replicas: service.isGlobal ? 'global' : 1,
-        isEnabled: false
+        isEnabled: false,
+        apiUrlIntegration: service.apiUrlIntegration || 'api'
       };
     }
   );
