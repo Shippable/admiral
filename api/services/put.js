@@ -10,6 +10,8 @@ var spawn = require('child_process').spawn;
 var fs = require('fs');
 
 var configHandler = require('../../common/configHandler.js');
+var defaultServiceSettings =
+  require('../../common/scripts/configs/services.json');
 
 function put(req, res) {
   var bag = {
@@ -245,6 +247,16 @@ function _put(bag, next) {
   logger.verbose(who, 'Inside');
 
   bag.serviceConfig.replicas = bag.replicas;
+
+  var defaultApiUrlIntegration =
+    _.findWhere(defaultServiceSettings.serviceConfigs,
+        {name: bag.name}).apiUrlIntegration;
+
+  //bag.reqBody.apiUrlIntegration is added to add support for dynamically
+  //picking up apiUrlIntegration from the UI in the future
+  bag.serviceConfig.apiUrlIntegration = bag.reqBody.apiUrlIntegration ||
+    bag.serviceConfig.apiUrlIntegration || defaultApiUrlIntegration;
+
   bag.services[bag.name] = bag.serviceConfig;
 
   configHandler.put('services', bag.services,
