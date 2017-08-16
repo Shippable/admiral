@@ -10,6 +10,7 @@ do $$
         "typeCode" INT NOT NULL,
         "displayName" VARCHAR(255) NOT NULL,
         "isEnabled" BOOLEAN DEFAULT false NOT NULL,
+        "isDeprecated" BOOLEAN DEFAULT false NOT NULL,
         "level" VARCHAR(80) NOT NULL,
         "createdBy" VARCHAR(24) NOT NULL,
         "updatedBy" VARCHAR(24) NOT NULL,
@@ -18,8 +19,11 @@ do $$
       );
     end if;
 
-    -- Create indexes
+    if not exists (select 1 from information_schema.columns where table_name = 'masterIntegrations' and column_name = 'isDeprecated') then
+      alter table "masterIntegrations" add column "isDeprecated" BOOLEAN DEFAULT false NOT NULL;
+    end if;
 
+    -- Create indexes
     -- Add mIntmIntIdU index
     if not exists (select 1 from pg_indexes where tablename = 'masterIntegrations' and indexname = 'mIntmIntIdU') then
       create index "mIntmIntIdU" on "masterIntegrations" using btree("masterIntegrationId");
