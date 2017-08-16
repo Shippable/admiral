@@ -95,7 +95,7 @@ function _getAPISystemIntegration(bag, next) {
   var who = bag.who + '|' + _getAPISystemIntegration.name;
   logger.verbose(who, 'Inside');
 
-  var query = 'name=api&masterName=url';
+  var query = 'masterName=url';
   bag.apiAdapter.getSystemIntegrations(query,
     function (err, systemIntegrations) {
       if (err)
@@ -104,13 +104,18 @@ function _getAPISystemIntegration(bag, next) {
             'Failed to get system integrations: ' + util.inspect(err))
         );
 
-      if (!systemIntegrations.length)
+      if (_.isEmpty(systemIntegrations))
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'No api systemIntegration found.')
+            'No systemIntegration found for query: ' + query)
         );
 
-      bag.apiSystemIntegration = _.first(systemIntegrations);
+      var defaultAPIIntegration = _.findWhere(
+        systemIntegrations, {name: 'api'});
+      var serviceAPIIntegration = _.findWhere(
+        systemIntegrations, {name: bag.config.apiUrlIntegration});
+
+      bag.apiSystemIntegration = serviceAPIIntegration || defaultAPIIntegration;
 
       return next();
     }
