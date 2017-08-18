@@ -8,6 +8,8 @@ var path = require('path');
 var _ = require('underscore');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
+var defaultServiceSettings =
+  require('../../common/scripts/configs/services.json');
 
 var APIAdapter = require('../../common/APIAdapter.js');
 var envHandler = require('../../common/envHandler.js');
@@ -133,6 +135,16 @@ function _getServiceConfig(bag, next) {
 
       bag.services = config;
       bag.serviceConfig = config[bag.name];
+
+      var defaultApiUrlIntegration =
+        _.findWhere(defaultServiceSettings.serviceConfigs,
+          {name: bag.name}).apiUrlIntegration;
+
+      //bag.reqBody.apiUrlIntegration is added to add support for dynamically
+      //picking up apiUrlIntegration from the UI in the future
+      bag.serviceConfig.apiUrlIntegration = bag.reqBody.apiUrlIntegration ||
+        bag.serviceConfig.apiUrlIntegration || defaultApiUrlIntegration;
+
       return next();
     }
   );
