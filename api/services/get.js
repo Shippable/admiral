@@ -6,6 +6,7 @@ module.exports = self;
 var async = require('async');
 var _ = require('underscore');
 var configHandler = require('../../common/configHandler.js');
+var path = require('path');
 
 function get(req, res) {
   var bag = {
@@ -14,7 +15,8 @@ function get(req, res) {
     initializeDefault: false,
     component: 'services',
     defaultService: {},
-    services: require('../../common/scripts/configs/services.json')
+    services: require(path.join(global.config.scriptsDir,
+      '/configs/services.json'))
   };
 
   bag.who = util.format('services|%s', self.name);
