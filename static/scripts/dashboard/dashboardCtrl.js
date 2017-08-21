@@ -107,7 +107,7 @@
         },
         internalAPI: {
           url: {
-            isEnabled: true,
+            isEnabled: false,
             masterName: 'url',
             data: {
               url: ''
@@ -116,7 +116,7 @@
         },
         consoleAPI: {
           url: {
-            isEnabled: true,
+            isEnabled: false,
             masterName: 'url',
             data: {
               url: ''
