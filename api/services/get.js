@@ -5,9 +5,6 @@ module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
-var fs = require('fs');
-var path = require('path');
-
 var configHandler = require('../../common/configHandler.js');
 
 function get(req, res) {
@@ -16,7 +13,8 @@ function get(req, res) {
     resBody: [],
     initializeDefault: false,
     component: 'services',
-    defaultService: {}
+    defaultService: {},
+    services: require('../../common/scripts/configs/services.json')
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -25,7 +23,6 @@ function get(req, res) {
   async.series([
     _checkInputParams.bind(null, bag),
     _get.bind(null, bag),
-    _getServicesJson.bind(null, bag),
     _setDefault.bind(null, bag),
     _getDefaultServices.bind(null, bag)
   ],
@@ -63,7 +60,6 @@ function _get(bag, next) {
 
       if (_.isEmpty(services)) {
         logger.debug('No configuration in database for ' + bag.component);
-        bag.initializeDefault = true;
         return next();
       }
 
@@ -82,54 +78,25 @@ function _get(bag, next) {
   );
 }
 
-function _getServicesJson(bag, next) {
-  if (!bag.initializeDefault) return next();
-
-  var who = bag.who + '|' + _getServicesJson.name;
-  logger.verbose(who, 'Inside');
-
-  var servicesJsonPath =
-    path.join(global.config.scriptsDir, '/configs/services.json');
-
-  fs.readFile(servicesJsonPath,
-    function (err, data) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to get services.json: ' + util.inspect(err))
-        );
-
-      var error;
-
-      try {
-        bag.services = JSON.parse(data);
-      } catch (err) {
-        if (err)
-          error = new ActErr(who, ActErr.OperationFailed,
-            util.format('Failed to parse services.json: %s', err)
-          );
-      }
-
-      return next(error);
-    }
-  );
-}
-
 function _setDefault(bag, next) {
-  if (!bag.initializeDefault) return next();
+  if (bag.serviceQuery) return next();
 
   var who = bag.who + '|' + _setDefault.name;
   logger.verbose(who, 'Inside');
 
   _.each(bag.services.serviceConfigs,
     function (service) {
-      bag.defaultService[service.name] = {
-        serviceName: service.name,
-        isCore: service.isCore,
-        replicas: service.isGlobal ? 'global' : 1,
-        isEnabled: false,
-        apiUrlIntegration: service.apiUrlIntegration || 'api'
-      };
+      if (_.findWhere(bag.resBody, {serviceName: service.name}))
+        bag.defaultService[service.name] =
+          _.findWhere(bag.resBody, {serviceName: service.name});
+      else
+        bag.defaultService[service.name] = {
+          serviceName: service.name,
+          isCore: service.isCore,
+          replicas: service.isGlobal ? 'global' : 1,
+          isEnabled: false,
+          apiUrlIntegration: service.apiUrlIntegration || 'api'
+        };
     }
   );
 
@@ -147,7 +114,7 @@ function _setDefault(bag, next) {
 }
 
 function _getDefaultServices(bag, next) {
-  if (!bag.initializeDefault) return next();
+  if (bag.serviceQuery) return next();
 
   var who = bag.who + '|' + _getDefaultServices.name;
   logger.verbose(who, 'Inside');

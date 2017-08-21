@@ -263,6 +263,18 @@
       "apiUrlIntegration": "api"
     },
     {
+      "name": "internalAPI",
+      "repository": "api",
+      "isGlobal": true,
+      "apiUrlIntegration": "internalAPI"
+    },
+    {
+      "name": "consoleAPI",
+      "repository": "api",
+      "isGlobal": true,
+      "apiUrlIntegration": "consoleAPI"
+    },
+    {
       "name": "braintree",
       "repository": "micro",
       "apiUrlIntegration": "internalAPI"
