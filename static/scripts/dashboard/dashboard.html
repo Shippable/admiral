@@ -816,21 +816,21 @@
                         <div>&nbsp;</div>
                         <div class="row">
                           <div class="col-md-12">
-                            <b>Internal API</b>
+                            <div class="checkbox">
+                              <input type="checkbox" ng-model="vm.installForm.internalAPI.url.isEnabled" ng-disabled="vm.installing || vm.saving"/>
+                              <b> Dedicated Internal API (optional) </b>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-offset-2 col-md-10">
+                      <div class="col-md-offset-2 col-md-10" ng-if="vm.installForm.internalAPI.url.isEnabled">
                         <div class="row">
                           <div class="col-md-4">
-                            URL
+                            Internal API URL
                           </div>
                           <div class="col-md-8">
                             <input type="text" class="form-control input-sm" name="internalAPIUrl"
                               ng-model="vm.installForm.internalAPI.url.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <span>
-                                This URL will be used by the internal services. (Can be the same as API URL)
-                              </span>
                           </div>
                         </div>
                       </div>
