@@ -839,21 +839,21 @@
                         <div>&nbsp;</div>
                         <div class="row">
                           <div class="col-md-12">
-                            <b>Console API</b>
+                            <div class="checkbox">
+                              <input type="checkbox" ng-model="vm.installForm.consoleAPI.url.isEnabled" ng-disabled="vm.installing || vm.saving"/>
+                              <b> Dedicated Console API (optional) </b>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-offset-2 col-md-10">
+                      <div class="col-md-offset-2 col-md-10" ng-if="vm.installForm.consoleAPI.url.isEnabled">
                         <div class="row">
                           <div class="col-md-4">
-                            URL
+                            Console API URL
                           </div>
                           <div class="col-md-8">
                             <input type="text" class="form-control input-sm" name="consoleAPIUrl"
                               ng-model="vm.installForm.consoleAPI.url.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <span>
-                                This URL will be used for consoles. (Can be the same as API URL)
-                              </span>
                           </div>
                         </div>
                       </div>
