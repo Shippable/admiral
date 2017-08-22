@@ -1888,6 +1888,8 @@
           updateReleaseVersion.bind(null, bag),
           getEnabledServices.bind(null, bag),
           deleteAddonServices.bind(null, bag),
+          deleteInternalAPIService.bind(null, bag),
+          deleteConsoleAPIService.bind(null, bag),
           postDB.bind(null, bag),
           deleteCoreServices.bind(null, bag),
           startAPIService.bind(null, bag),
