@@ -257,6 +257,9 @@ function _put(bag, next) {
   bag.serviceConfig.apiUrlIntegration = bag.reqBody.apiUrlIntegration ||
     bag.serviceConfig.apiUrlIntegration || defaultApiUrlIntegration;
 
+  if (_.has(bag.reqBody, 'isEnabled'))
+    bag.serviceConfig.isEnabled = bag.reqBody.isEnabled;
+
   bag.services[bag.name] = bag.serviceConfig;
 
   configHandler.put('services', bag.services,
