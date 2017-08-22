@@ -30,7 +30,7 @@ function post(req, res) {
     secretKeyEnv: 'SECRET_KEY',
     registryEnv: 'PRIVATE_IMAGE_REGISTRY',
     publicRegistryEnv: 'PUBLIC_IMAGE_REGISTRY',
-    apiServices : ['api', 'internalAPI']
+    apiServices : ['api', 'internalAPI', 'consoleAPI']
   };
 
   bag.who = util.format('services|%s', self.name);

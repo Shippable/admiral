@@ -2024,6 +2024,19 @@
       );
     }
 
+    function deleteConsoleAPIService(bag, next) {
+      var body = {
+        isEnabled: $scope.vm.installForm.consoleAPI.url.isEnabled
+      };
+      admiralApiAdapter.deleteService('consoleAPI', body,
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
     function startAPIService(bag, next) {
       // Start API first because the other services need it
       var apiService = _.findWhere(bag.enabledCoreServices,
@@ -2147,6 +2160,7 @@
           updateSystemMachineImages,
           startAPI,
           startInternalAPI,
+          startConsoleAPI,
           startWWW,
           startSync,
           startMktg,
@@ -2218,7 +2232,8 @@
           updateProvisionSystemIntegration,
           updateSystemMachineImages,
           updateFilestoreSystemIntegration,
-          updateInternalAPIService
+          updateInternalAPIService,
+          updateConsoleAPIService
         ],
         function (err) {
           $scope.vm.saving = false;
@@ -2258,6 +2273,7 @@
           deleteAddonServices.bind(null, bag),
           deleteCoreServices.bind(null, bag),
           deleteInternalAPIService.bind(null, bag),
+          deleteConsoleAPIService.bind(null, bag),
           startAPIService.bind(null, bag),
           startCoreServices.bind(null, bag),
           startNexecService.bind(null, bag),
@@ -2330,6 +2346,27 @@
         $scope.vm.installForm.internalAPI.url.isEnabled;
 
       admiralApiAdapter.putService('internalAPI', internalAPIService,
+        function (err) {
+          if (err)
+            horn.error(err);
+          return next();
+        }
+      );
+    }
+
+    function updateConsoleAPIService(next) {
+      var consoleAPIService = {};
+      _.each($scope.vm.allServices,
+        function(service) {
+          if (service.serviceName === 'consoleAPI')
+            consoleAPIService = service;
+        }
+      );
+
+      consoleAPIService.isEnabled =
+        $scope.vm.installForm.consoleAPI.url.isEnabled;
+
+      admiralApiAdapter.putService('consoleAPI', consoleAPIService,
         function (err) {
           if (err)
             horn.error(err);
@@ -2955,6 +2992,18 @@
     function startInternalAPI(next) {
       if (!$scope.vm.installForm.internalAPI.url.isEnabled) return next();
       startService('internalAPI',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startConsoleAPI(next) {
+      if (!$scope.vm.installForm.consoleAPI.url.isEnabled) return next();
+      startService('consoleAPI',
         function (err) {
           if (err)
             return next(err);

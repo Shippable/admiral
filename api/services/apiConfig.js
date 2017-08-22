@@ -56,6 +56,8 @@ function _checkInputParams(bag, next) {
 
   if (bag.config.serviceName === 'internalAPI')
     bag.port = 50004;
+  else if (bag.config.serviceName === 'consoleAPI')
+    bag.port = 50005;
 
   return next();
 }
