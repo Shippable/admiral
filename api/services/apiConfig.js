@@ -161,9 +161,9 @@ function _generateRunCommandOnebox(bag, next) {
   var who = bag.who + '|' + _generateRunCommandOnebox.name;
   logger.verbose(who, 'Inside');
 
-  var opts = ' --publish=' + bag.port + ':' + bag.port + '/tcp ' +
+  var opts = util.format(' --publish=%s:%s/tcp ' +
     ' --network=host' +
-    ' --privileged=true';
+    ' --privileged=true', bag.port, bag.port);
 
   var runCommand = util.format('docker run -d ' +
     ' %s %s %s --name %s %s',
@@ -183,12 +183,12 @@ function _generateRunCommandCluster(bag, next) {
   var who = bag.who + '|' + _generateRunCommandCluster.name;
   logger.verbose(who, 'Inside');
 
-  var opts = ' --publish mode=host,target=' + bag.port + ',published=' +
-    bag.port + ',protocol=tcp' +
+  var opts = util.format(' --publish mode=host,target=%s,published=%s' +
+    ',protocol=tcp' +
     ' --network ingress' +
     ' --mode global' +
     ' --with-registry-auth' +
-    ' --endpoint-mode vip';
+    ' --endpoint-mode vip', bag.port, bag.port);
 
   var runCommand = util.format('docker service create ' +
     ' %s %s --name %s %s',
