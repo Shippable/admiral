@@ -21,7 +21,8 @@ function apiConfig(params, callback) {
     vaultUrlEnv: 'VAULT_URL',
     vaultUrl: '',
     vaultTokenEnv: 'VAULT_TOKEN',
-    vaultToken: ''
+    vaultToken: '',
+    port: 50000
   };
 
   bag.who = util.format('apiConfig|%s', self.name);
@@ -110,8 +111,8 @@ function _generateImage(bag, next) {
   var who = bag.who + '|' + _generateImage.name;
   logger.verbose(who, 'Inside');
 
-  bag.config.image = util.format('%s/%s:%s',
-    bag.registry, bag.config.serviceName, bag.releaseVersion);
+  bag.config.image = util.format('%s/api:%s',
+    bag.registry, bag.releaseVersion);
 
   return next();
 }
@@ -137,6 +138,10 @@ function _generateEnvs(bag, next) {
     envs, 'VAULT_URL', bag.vaultUrl);
   envs = util.format('%s -e %s=%s',
     envs, 'VAULT_TOKEN', bag.vaultToken);
+  envs = util.format('%s -e %s=%s',
+    envs, 'API_PORT', bag.port);
+  envs = util.format('%s -e %s=%s', envs,
+    'API_URL_INTEGRATION', bag.config.apiUrlIntegration);
 
   bag.envs = envs;
   return next();
@@ -156,9 +161,9 @@ function _generateRunCommandOnebox(bag, next) {
   var who = bag.who + '|' + _generateRunCommandOnebox.name;
   logger.verbose(who, 'Inside');
 
-  var opts = ' --publish=50000:50000/tcp ' +
+  var opts = util.format(' --publish=%s:%s/tcp ' +
     ' --network=host' +
-    ' --privileged=true';
+    ' --privileged=true', bag.port, bag.port);
 
   var runCommand = util.format('docker run -d ' +
     ' %s %s %s --name %s %s',
@@ -178,11 +183,12 @@ function _generateRunCommandCluster(bag, next) {
   var who = bag.who + '|' + _generateRunCommandCluster.name;
   logger.verbose(who, 'Inside');
 
-  var opts = ' --publish mode=host,target=50000,published=50000,protocol=tcp' +
+  var opts = util.format(' --publish mode=host,target=%s,published=%s' +
+    ',protocol=tcp' +
     ' --network ingress' +
     ' --mode global' +
     ' --with-registry-auth' +
-    ' --endpoint-mode vip';
+    ' --endpoint-mode vip', bag.port, bag.port);
 
   var runCommand = util.format('docker service create ' +
     ' %s %s --name %s %s',
