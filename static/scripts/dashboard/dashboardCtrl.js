@@ -2011,9 +2011,11 @@
       );
     }
 
-    function deleteInternalAPIService(bag,  next) {
-      admiralApiAdapter.deleteService('internalAPI',
-        {isEnabled: $scope.vm.installForm.internalAPI.url.isEnabled},
+    function deleteInternalAPIService(bag, next) {
+      var body = {
+        isEnabled: $scope.vm.installForm.internalAPI.url.isEnabled
+      };
+      admiralApiAdapter.deleteService('internalAPI', body,
         function (err) {
           if (err)
             return next(err);
