@@ -46,7 +46,9 @@
       globalServices: [
         'api',
         'mktg',
-        'www'
+        'www',
+        'internalAPI',
+        'consoleAPI'
       ],
       initializeForm: {
         secrets: {
@@ -2009,6 +2011,17 @@
       );
     }
 
+    function deleteInternalAPIService(bag,  next) {
+      admiralApiAdapter.deleteService('internalAPI',
+        {isEnabled: $scope.vm.installForm.internalAPI.url.isEnabled},
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
+        }
+      );
+    }
+
     function startAPIService(bag, next) {
       // Start API first because the other services need it
       var apiService = _.findWhere(bag.enabledCoreServices,
@@ -2131,6 +2144,7 @@
           updateProvisionSystemIntegration,
           updateSystemMachineImages,
           startAPI,
+          startInternalAPI,
           startWWW,
           startSync,
           startMktg,
@@ -2201,7 +2215,8 @@
           getMasterIntegrations.bind(null, {}),
           updateProvisionSystemIntegration,
           updateSystemMachineImages,
-          updateFilestoreSystemIntegration
+          updateFilestoreSystemIntegration,
+          updateInternalAPIService
         ],
         function (err) {
           $scope.vm.saving = false;
@@ -2240,6 +2255,7 @@
           getEnabledServices.bind(null, bag),
           deleteAddonServices.bind(null, bag),
           deleteCoreServices.bind(null, bag),
+          deleteInternalAPIService.bind(null, bag),
           startAPIService.bind(null, bag),
           startCoreServices.bind(null, bag),
           startNexecService.bind(null, bag),
@@ -2294,6 +2310,28 @@
       updateSystemIntegration(bag,
         function (err) {
           return next(err);
+        }
+      );
+    }
+
+
+    function updateInternalAPIService(next) {
+      var internalAPIService = {};
+      _.each($scope.vm.allServices,
+        function(service) {
+          if (service.serviceName === 'internalAPI')
+            internalAPIService = service;
+        }
+      );
+
+      internalAPIService.isEnabled =
+        $scope.vm.installForm.internalAPI.url.isEnabled;
+
+      admiralApiAdapter.putService('internalAPI', internalAPIService,
+        function (err) {
+          if (err)
+            horn.error(err);
+          return next();
         }
       );
     }
@@ -2903,6 +2941,18 @@
 
     function startAPI(next) {
       startService('api',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startInternalAPI(next) {
+      if (!$scope.vm.installForm.internalAPI.url.isEnabled) return next();
+      startService('internalAPI',
         function (err) {
           if (err)
             return next(err);
