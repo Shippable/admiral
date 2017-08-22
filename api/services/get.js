@@ -15,6 +15,7 @@ function get(req, res) {
     initializeDefault: false,
     component: 'services',
     defaultService: {},
+    dbServices: [],
     services: require(path.join(global.config.scriptsDir,
       '/configs/services.json'))
   };
@@ -68,7 +69,7 @@ function _get(bag, next) {
       if (!bag.serviceQuery) {
         _.each(services,
           function (service) {
-            bag.resBody.push(service);
+            bag.dbServices.push(service);
           }
         );
       } else if (_.has(services, bag.serviceQuery)) {
@@ -88,9 +89,9 @@ function _setDefault(bag, next) {
 
   _.each(bag.services.serviceConfigs,
     function (service) {
-      if (_.findWhere(bag.resBody, {serviceName: service.name}))
+      if (_.findWhere(bag.dbServices, {serviceName: service.name}))
         bag.defaultService[service.name] =
-          _.findWhere(bag.resBody, {serviceName: service.name});
+          _.findWhere(bag.dbServices, {serviceName: service.name});
       else
         bag.defaultService[service.name] = {
           serviceName: service.name,
