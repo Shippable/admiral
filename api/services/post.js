@@ -29,7 +29,8 @@ function post(req, res) {
     accessKeyEnv: 'ACCESS_KEY',
     secretKeyEnv: 'SECRET_KEY',
     registryEnv: 'PRIVATE_IMAGE_REGISTRY',
-    publicRegistryEnv: 'PUBLIC_IMAGE_REGISTRY'
+    publicRegistryEnv: 'PUBLIC_IMAGE_REGISTRY',
+    apiServices : ['api', 'internalAPI']
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -235,7 +236,7 @@ function _generateServiceConfig(bag, next) {
   logger.verbose(who, 'Inside');
 
   var configGenerator = null;
-  if (bag.name === 'api')
+  if (_.contains(bag.apiServices, bag.name))
     configGenerator = apiConfig;
   else if (bag.name === 'www')
     configGenerator = wwwConfig;
