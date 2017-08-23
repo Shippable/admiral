@@ -10,8 +10,6 @@ var spawn = require('child_process').spawn;
 var fs = require('fs');
 
 var configHandler = require('../../common/configHandler.js');
-var defaultServiceSettings =
-  require('../../common/scripts/configs/services.json');
 
 function put(req, res) {
   var bag = {
@@ -20,7 +18,9 @@ function put(req, res) {
     resBody: {},
     params: {},
     tmpScript: '/tmp/update_service.sh',
-    isSwarmClusterInitialized: false
+    isSwarmClusterInitialized: false,
+    defaultServiceSettings: require(path.join(global.config.scriptsDir,
+      '/configs/services.json'))
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -249,7 +249,7 @@ function _put(bag, next) {
   bag.serviceConfig.replicas = bag.replicas;
 
   var defaultApiUrlIntegration =
-    _.findWhere(defaultServiceSettings.serviceConfigs,
+    _.findWhere(bag.defaultServiceSettings.serviceConfigs,
         {name: bag.name}).apiUrlIntegration;
 
   //bag.reqBody.apiUrlIntegration is added to add support for dynamically
