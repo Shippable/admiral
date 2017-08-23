@@ -30,7 +30,9 @@ function post(req, res) {
     secretKeyEnv: 'SECRET_KEY',
     registryEnv: 'PRIVATE_IMAGE_REGISTRY',
     publicRegistryEnv: 'PUBLIC_IMAGE_REGISTRY',
-    apiServices : ['api', 'internalAPI', 'consoleAPI']
+    apiServices : ['api', 'internalAPI', 'consoleAPI'],
+    defaultServiceSettings: require(path.join(global.config.scriptsDir,
+      '/configs/services.json'))
   };
 
   bag.who = util.format('services|%s', self.name);
@@ -134,6 +136,16 @@ function _getServiceConfig(bag, next) {
 
       bag.services = config;
       bag.serviceConfig = config[bag.name];
+
+      var defaultApiUrlIntegration =
+        _.findWhere(bag.defaultServiceSettings.serviceConfigs,
+          {name: bag.name}).apiUrlIntegration;
+
+      //bag.reqBody.apiUrlIntegration is added to add support for dynamically
+      //picking up apiUrlIntegration from the UI in the future
+      bag.serviceConfig.apiUrlIntegration = bag.reqBody.apiUrlIntegration ||
+        bag.serviceConfig.apiUrlIntegration || defaultApiUrlIntegration;
+
       return next();
     }
   );
