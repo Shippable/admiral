@@ -55,10 +55,10 @@ function _checkInputParams(bag, next) {
   bag.config.replicas = bag.config.replicas;
   bag.config.serviceName = bag.name;
 
-  if (_.contains(['deploy', 'manifest', 'provision', 'release'],
+  if (_.contains(['deploy', 'provision', 'release'],
     bag.name))
     bag.component = 'stepExec';
-  else if (_.contains(['rSync'], bag.name))
+  else if (_.contains(['rSync', 'manifest'], bag.name))
     bag.component = 'genExec';
   else
     bag.component = bag.name;
