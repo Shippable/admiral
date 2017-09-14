@@ -4193,5 +4193,21 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'projects' and column_name = 'builderAccountLastValidatedAt') then
       alter table "projects" add column "builderAccountLastValidatedAt" timestamp with time zone;
     end if;
+
+    -- Add archTypeCode column to systemMachineImages table
+    if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'archTypeCode') then
+      alter table "systemMachineImages" add column "archTypeCode" INT NOT NULL DEFAULT 8000;
+    end if;
+
+    -- Add foreign key relationship to systemMachineImages table
+    if not exists (select 1 from pg_constraint where conname = 'systemMachineImages_archTypeCode_fkey') then
+      alter table "systemMachineImages" add constraint "systemMachineImages_archTypeCode_fkey" foreign key ("archTypeCode") references "systemCodes"(code) on update restrict on delete restrict;
+    end if;
+
+    -- Add unique index to systemMachineImages table on isDefault and archTypeCode
+    if not exists (select 1 from pg_indexes where tablename = 'systemMachineImages' and indexname = 'isDefaultArchTypeCodeU') then
+      create unique index "isDefaultArchTypeCodeU" on "systemMachineImages" using btree("isDefault", "archTypeCode") WHERE "isDefault" = true;
+    end if;
+
   end
 $$;
