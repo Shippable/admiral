@@ -588,6 +588,7 @@
           getSystemSettingsForInstallPanel.bind(null, bag),
           getServices.bind(null, bag),
           getSystemMachineImages,
+          getSystemCodes,
           getSystemSettingsForAddonsPanel.bind(null, bag),
           updateAddonsFormSystemIntegrations,
           getSuperUsers,
@@ -1139,6 +1140,23 @@
             }
           );
 
+          return next();
+        }
+      );
+    }
+
+    function getSystemCodes(next) {
+      admiralApiAdapter.getSystemCodes('',
+        function (err, systemCodes) {
+          if (err) {
+            horn.error(err);
+            return next();
+          }
+
+          if (_.isEmpty(systemCodes))
+            return next();
+
+          $scope.vm.archTypes = _.filter(systemCodes, {group: 'archType'});
           return next();
         }
       );
@@ -1799,6 +1817,7 @@
           getSystemSettingsForInstallPanel.bind(null, {}),
           getServices.bind(null, {}),
           getSystemMachineImages,
+          getSystemCodes,
           getMasterIntegrations.bind(null, {}),
           updateInitializeForm.bind(null, {}),
           updateAddonsFormSystemIntegrations

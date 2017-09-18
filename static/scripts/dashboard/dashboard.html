@@ -1592,6 +1592,18 @@
                             </div>
                             <div class="row">
                               <div class="col-md-offset-2 col-md-2">
+                                Architecture
+                              </div>
+                              <div class="col-md-8">
+                                <select
+                                  ng-model="machineImage.archTypeCode"
+                                  ng-init="machineImage.archTypeCode = machineImage.archTypeCode || vm.archTypes[0].code"
+                                  ng-options="arch.code as arch.name for arch in vm.archTypes">
+                                </select>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-offset-2 col-md-2">
                                 isAvailable
                                   <span>
                                     <a title="This is available for the user to select form the dropdown in the subscription settings.">
