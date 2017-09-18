@@ -60,6 +60,10 @@
         return API.delete('/api/superUsers/' +
           accountId, {}, callback);
       },
+      // SystemCodes Routes
+      getSystemCodes: function (query, callback) {
+        return API.get('/api/systemCodes?' + query, callback);
+      },
       // System Machine Image Routes
       getSystemMachineImages: function (query, callback) {
         return API.get('/api/systemMachineImages?' + query, callback);
