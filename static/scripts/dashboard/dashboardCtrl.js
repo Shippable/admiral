@@ -1146,6 +1146,8 @@
     }
 
     function getSystemCodes(next) {
+      if (!$scope.vm.initialized) return next();
+
       admiralApiAdapter.getSystemCodes('',
         function (err, systemCodes) {
           if (err) {
