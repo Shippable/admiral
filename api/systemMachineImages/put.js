@@ -89,6 +89,10 @@ function _put(bag, next) {
 
   var updates = ['"updatedAt"=CURRENT_TIMESTAMP'];
 
+  if (_.has(bag.reqBody, 'archTypeCode'))
+    updates.push(util.format('"archTypeCode"=\'%s\'',
+      bag.reqBody.archTypeCode));
+
   if (_.has(bag.reqBody, 'externalId'))
     updates.push(util.format('"externalId"=\'%s\'', bag.reqBody.externalId));
 

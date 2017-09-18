@@ -17,7 +17,8 @@ function post(req, res) {
   bag.who = util.format('systemMachineImages|%s', self.name);
   logger.info(bag.who, 'Starting');
 
-  async.series([
+  async.series(
+    [
       _checkInputParams.bind(null, bag),
       _post.bind(null, bag),
       _getSystemMachineImage.bind(null, bag)
@@ -60,6 +61,11 @@ function _checkInputParams(bag, next) {
   if (!bag.reqBody.description)
     return next(
       new ActErr(who, ActErr.DataNotFound, 'Missing body data :description')
+    );
+
+  if (!bag.reqBody.archTypeCode)
+    return next(
+      new ActErr(who, ActErr.DataNotFound, 'Missing body data :archTypeCode')
     );
 
   if (!_.isBoolean(bag.reqBody.isAvailable))
@@ -115,10 +121,10 @@ function _post(bag, next) {
   var insertStatement = util.format('INSERT INTO "systemMachineImages" ' +
     '("id", "name", "description", "externalId", "provider", "isAvailable", ' +
     '"isDefault", "region", "keyName", "runShImage", "securityGroup", ' +
-    '"subnetId", "drydockTag", "drydockFamily", ' +
+    '"subnetId", "drydockTag", "drydockFamily", "archTypeCode", ' +
     '"createdBy", "updatedBy", "createdAt", "updatedAt") ' +
     'values (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', %s,' +
-    '%s, \'%s\', \'%s\', \'%s\', \'%s\', %s, \'%s\', \'%s\', ' +
+    '%s, \'%s\', \'%s\', \'%s\', \'%s\', %s, \'%s\', \'%s\', %s, ' +
     ' \'54188262bc4d591ba438d62a\', \'54188262bc4d591ba438d62a\',' +
     ' CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
     bag.systemMachineImageId, bag.reqBody.name, bag.reqBody.description,
@@ -127,7 +133,8 @@ function _post(bag, next) {
     bag.reqBody.runShImage, bag.reqBody.securityGroup,
     (!_.has(bag.reqBody.subnetId) || bag.reqBody.subnetId === null) ?
       'NULL' : util.format('\'%s\'', bag.reqBody.subnetId),
-    bag.reqBody.drydockTag, bag.reqBody.drydockFamily);
+    bag.reqBody.drydockTag, bag.reqBody.drydockFamily,
+    bag.reqBody.archTypeCode);
 
   global.config.client.query(insertStatement,
     function (err) {
