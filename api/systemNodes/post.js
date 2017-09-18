@@ -21,8 +21,10 @@ function post(req, res) {
   bag.who = util.format('systemNodes|%s', self.name);
   logger.info(bag.who, 'Starting');
 
-  async.series([
+  async.series(
+    [
       _checkInputParams.bind(null, bag),
+      _getDefaultArchCode.bind(null, bag),
       _getDefaultSystemMachineImage.bind(null, bag),
       _post.bind(null, bag),
       _getSystemNode.bind(null, bag)
@@ -55,11 +57,37 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
+function _getDefaultArchCode(bag, next) {
+  var who = bag.who + '|' + _getDefaultArchCode.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemCodes(query,
+    function (err, systemCodes) {
+      if (err)
+        return next(who, ActErr.OperationFailed,
+          'Failed to get systemCodes for archTypes:' + util.inspect(err));
+
+      if (_.isEmpty(systemCodes))
+        return next(who, ActErr.DBEntityNotFound, 'No system codes found.');
+
+      var archCode = _.findWhere(systemCodes, {group: 'archType',
+        name: 'x86_64'});
+      if (_.isEmpty(archCode))
+        return next(who, ActErr.DBEntityNotFound, 'No arch code found for ' +
+        'group = archType and name = x86_64');
+
+      bag.x86ArchCode = archCode.code;
+      return next();
+    }
+  );
+}
+
 function _getDefaultSystemMachineImage(bag, next) {
   var who = bag.who + '|' + _getDefaultSystemMachineImage.name;
   logger.verbose(who, 'Inside');
 
-  var query = 'isDefault=true';
+  var query = util.format('isDefault=true&archTypeCodes=%s', bag.x86ArchCode);
   bag.apiAdapter.getSystemMachineImages(query,
     function (err, systemMachineImages) {
       if (err)
