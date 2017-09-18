@@ -17,7 +17,8 @@ function genexecConfig(params, callback) {
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
     serviceUserToken: '',
     isDockerLegacy: false,
-    dockerClientLatest: '/opt/docker/docker'
+    dockerClientLatest: '/opt/docker/docker',
+    defaultArch: 'x86_64'
   };
 
   bag.who = util.format('genexecConfig|%s', self.name);
@@ -146,6 +147,8 @@ function _generateEnvs(bag, next) {
     bag.isDockerLegacy);
   envs = util.format('%s -e %s=%s', envs, 'DOCKER_CLIENT_LATEST',
     bag.dockerClientLatest);
+  envs = util.format('%s -e %s=%s', envs, 'SHIPPABLE_NODE_ARCHITECTURE',
+    bag.defaultArch);
 
   bag.envs = envs;
   return next();
