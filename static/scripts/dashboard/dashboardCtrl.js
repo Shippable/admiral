@@ -2900,7 +2900,7 @@
         }
       );
 
-      updatedSystemMachineImages = _.sortBy(bag.updatedSystemMachineImages,
+      updatedSystemMachineImages = _.sortBy(updatedSystemMachineImages,
         function (smi) {
           return smi.isDefault;
         }
