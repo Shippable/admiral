@@ -2900,6 +2900,11 @@
         }
       );
 
+      updatedSystemMachineImages = _.sortBy(bag.updatedSystemMachineImages,
+        function (smi) {
+          return smi.isDefault;
+        }
+      );
       async.eachSeries(updatedSystemMachineImages,
         function (updatedImage, done) {
           var body = _.clone(updatedImage);
