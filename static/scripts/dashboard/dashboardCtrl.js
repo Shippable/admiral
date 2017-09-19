@@ -2977,6 +2977,8 @@
       if (!bag.secretKey || !bag.accessKey)
         return next();
 
+      if (bag.body.archTypeCode === $scope.vm.armArchCode) return next();
+
       var query = 'region=' + bag.region;
       admiralApiAdapter.getImageByAmiId(bag.amiId, query,
         function (err, imageId) {
