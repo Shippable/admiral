@@ -50,6 +50,8 @@
         'internalAPI',
         'consoleAPI'
       ],
+      x86ArchCode: null,
+      armArchCode: null,
       initializeForm: {
         secrets: {
           // install type can be admiral (same node as admiral), new, or existing
@@ -557,7 +559,8 @@
       showEULAModal: showEULAModal,
       refreshLogs: refreshLogs,
       isGlobalService: isGlobalService,
-      hasDefaultSystemMachineImage: hasDefaultSystemMachineImage,
+      hasDefaultx86SystemMachineImage: hasDefaultx86SystemMachineImage,
+      hasDefaultArmSystemMachineImage: hasDefaultArmSystemMachineImage,
       logOutOfAdmiral: logOutOfAdmiral,
       systemNodes: {
         addingSystemNode: false,
@@ -1159,6 +1162,10 @@
             return next();
 
           $scope.vm.archTypes = _.filter(systemCodes, {group: 'archType'});
+          $scope.vm.x86ArchCode = _.findWhere($scope.vm.archTypes,
+            {name: 'x86_64'}).code;
+          $scope.vm.armArchCode = _.findWhere($scope.vm.archTypes,
+            {name: 'aarch64'}).code;
           return next();
         }
       );
@@ -3699,13 +3706,25 @@
       return _.contains($scope.vm.globalServices, service);
     }
 
-    function hasDefaultSystemMachineImage() {
+    function hasDefaultx86SystemMachineImage() {
       if (!$scope.vm.installForm.systemMachineImages ||
         !$scope.vm.installForm.systemMachineImages.length)
         return false;
       return _.some($scope.vm.installForm.systemMachineImages,
         function (systemMachineImage) {
-          return systemMachineImage.isDefault;
+          return systemMachineImage.isDefault &&
+            systemMachineImage.archTypeCode === $scope.vm.x86ArchCode;
+        }
+      );
+    }
+    function hasDefaultArmSystemMachineImage() {
+      if (!$scope.vm.installForm.systemMachineImages ||
+        !$scope.vm.installForm.systemMachineImages.length)
+        return false;
+      return _.some($scope.vm.installForm.systemMachineImages,
+        function (systemMachineImage) {
+          return systemMachineImage.isDefault &&
+            systemMachineImage.archTypeCode === $scope.vm.armArchCode;
         }
       );
     }
