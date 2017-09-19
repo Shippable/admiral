@@ -1554,7 +1554,7 @@
                             Specify your machine image settings:
                           </div>
                         </div>
-                        <div class="row has-error" ng-if="!vm.hasDefaultSystemMachineImage() && vm.installForm.systemSettings.allowDynamicNodes">
+                        <div class="row has-error" ng-if="!vm.hasDefaultx86SystemMachineImage() && vm.installForm.systemSettings.allowDynamicNodes">
                           <div class="col-md-offset-1 col-md-11">
                             <span class="help-block">
                               One machine image must be default.
@@ -1627,7 +1627,9 @@
                               </div>
                               <div class="col-md-8">
                                 <input type="checkbox" name="machineImage{{$index}}IsDefault"
-                                  ng-model="machineImage.isDefault" ng-disabled="vm.installing || vm.saving || (!machineImage.isDefault && vm.hasDefaultSystemMachineImage())"/>
+                                  ng-model="machineImage.isDefault" ng-disabled= "vm.installing || vm.saving ||
+                                    (!machineImage.isDefault && machineImage.archTypeCode === vm.x86ArchCode && vm.hasDefaultx86SystemMachineImage()) ||
+                                    (!machineImage.isDefault && machineImage.archTypeCode === vm.armArchCode && vm.hasDefaultArmSystemMachineImage())"/>
                               </div>
                             </div>
                             <div class="row">
