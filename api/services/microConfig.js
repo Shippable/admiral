@@ -55,10 +55,8 @@ function _checkInputParams(bag, next) {
   bag.config.replicas = bag.config.replicas;
   bag.config.serviceName = bag.name;
 
-  if (_.contains(['deploy'],
+  if (_.contains(['rSync', 'manifest', 'release', 'provision', 'deploy'],
     bag.name))
-    bag.component = 'stepExec';
-  else if (_.contains(['rSync', 'manifest', 'release', 'provision'], bag.name))
     bag.component = 'genExec';
   else
     bag.component = bag.name;
@@ -232,10 +230,7 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'COMPONENT', bag.component);
 
-  if (bag.component === 'stepExec') {
-    envs = util.format('%s -e %s=%s',
-      envs, 'JOB_TYPE', bag.name);
-  } else if (bag.component === 'irc') {
+  if (bag.component === 'irc') {
     envs = util.format('%s -e %s=%s',
       envs, 'IRC_BOT_NICK', 'shippable');
   } else if (bag.component === 'genExec') {
