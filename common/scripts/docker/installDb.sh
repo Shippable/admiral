@@ -4,29 +4,8 @@ export DB_IMAGE="drydock/postgres:$RELEASE"
 export TIMEOUT=180
 
 __check_db() {
-  __process_msg "Checking database container status on: $DB_IP:$DB_PORT"
-  local interval=3
-  local counter=0
-  local db_booted=false
-
-
-  __process_msg "Waiting 10 seconds for db boot"
-  sleep 10
-
-  while [ $db_booted != true ] && [ $counter -lt $TIMEOUT ]; do
-    if nc -vz $DB_IP $DB_PORT &>/dev/null; then
-      __process_msg "Database found"
-      db_booted=true
-    else
-      __process_msg "Waiting for database to start"
-      let "counter = $counter + $interval"
-      sleep $interval
-    fi
-  done
-  if [ $db_booted = false ]; then
-    __process_msg "Failed to boot database container"
-    exit 1
-  fi
+  __process_msg "Checking $COMPONENT container status on: $DB_IP:$DB_PORT"
+  __check_service_up $DB_IP $DB_PORT $COMPONENT "180"
 }
 
 __run_db() {
