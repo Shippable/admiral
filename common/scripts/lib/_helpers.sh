@@ -6,6 +6,7 @@
 # TODO: break up this file into smaller, logically-grouped
 # files after we add release and re-install features
 
+source "$LIB_DIR/_logger.sh"
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
 declare -a PUBLIC_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
 
@@ -511,8 +512,8 @@ __copy_script_remote() {
 __check_service_connection() {
 
   if [ "$#" != "3" ] && [ "$#" != "4" ]; then
-    echo "invalid arguments to __check_service_connection()"
-    echo "Usage: __check_service_connection <host> <port> <serviceName> <timeout (optional)>"
+    __process_error "invalid arguments to __check_service_connection()"
+    __process_error "Usage: __check_service_connection <host> <port> <serviceName> <timeout (optional)>"
     exit 1
   fi
 
@@ -522,17 +523,17 @@ __check_service_connection() {
   fi
   local host=$1
   if [ -z "$host" ]; then
-    echo "got empty host in __check_service_connection(), exiting..."
+    __process_error "got empty host in __check_service_connection(), exiting..."
     exit 1
   fi
   local port=$2
   if [ -z "$port" ]; then
-    echo "got empty port in __check_service_connection(), exiting..."
+    __process_error "got empty port in __check_service_connection(), exiting..."
     exit 1
   fi
   local service=$3
   if [ -z "$service" ]; then
-    echo "got empty service name in __check_service_connection(), exiting..."
+    __process_error "got empty service name in __check_service_connection(), exiting..."
     exit 1
   fi
   local interval=3
@@ -541,17 +542,17 @@ __check_service_connection() {
 
   while [ $service_booted != true ] && [ $counter -lt $timeout ]; do
     if nc -vz $host $port &>/dev/null; then
-      echo "$service found"
+      __process_msg "$service found"
       sleep 5
       service_booted=true
     else
-      echo "Waiting for $service to start"
+      __process_msg "Waiting for $service to start"
       let "counter = $counter + $interval"
       sleep $interval
     fi
   done
   if [ $service_booted = false ]; then
-    echo "Could not detect $service container for host:$host, port:$port"
+    __process_error "Could not detect $service container for host:$host, port:$port"
     exit 1
   fi
 }
