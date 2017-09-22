@@ -6,7 +6,6 @@
 # TODO: break up this file into smaller, logically-grouped
 # files after we add release and re-install features
 
-source "$LIB_DIR/_logger.sh"
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
 declare -a PUBLIC_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
 
