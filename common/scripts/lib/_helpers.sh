@@ -506,6 +506,56 @@ __copy_script_remote() {
   copy_cmd_out=$(eval $copy_cmd)
 }
 
+# accepts arguments $host $port $serviceName $timeout
+# $timeout is optional and defaults to 60 seconds if not defined
+__check_service_connection() {
+
+  if [ "$#" != "3" ] && [ "$#" != "4" ]; then
+    __process_error "invalid arguments to __check_service_connection()"
+    __process_error "Usage: __check_service_connection <host> <port> <serviceName> <timeout (optional)>"
+    exit 1
+  fi
+
+  local timeout=$4
+  if [ -z "$timeout" ]; then
+    timeout=60
+  fi
+  local host=$1
+  if [ -z "$host" ]; then
+    __process_error "got empty host in __check_service_connection(), exiting..."
+    exit 1
+  fi
+  local port=$2
+  if [ -z "$port" ]; then
+    __process_error "got empty port in __check_service_connection(), exiting..."
+    exit 1
+  fi
+  local service=$3
+  if [ -z "$service" ]; then
+    __process_error "got empty service name in __check_service_connection(), exiting..."
+    exit 1
+  fi
+  local interval=3
+  local counter=0
+  local service_booted=false
+
+  while [ $service_booted != true ] && [ $counter -lt $timeout ]; do
+    if nc -vz $host $port &>/dev/null; then
+      __process_msg "$service found"
+      sleep 5
+      service_booted=true
+    else
+      __process_msg "Waiting for $service to start"
+      let "counter = $counter + $interval"
+      sleep $interval
+    fi
+  done
+  if [ $service_booted = false ]; then
+    __process_error "Could not detect $service container for host:$host, port:$port"
+    exit 1
+  fi
+}
+
 __copy_script_local() {
   local user="$SSH_USER"
   local key="$SSH_PRIVATE_KEY"
