@@ -5,7 +5,7 @@ export TIMEOUT=180
 
 __check_db() {
   __process_msg "Checking $COMPONENT container status on: $DB_IP:$DB_PORT"
-  __check_service_connection $DB_IP $DB_PORT $COMPONENT "180"
+  __check_service_connection "$DB_IP" "$DB_PORT" "$COMPONENT" "$TIMEOUT"
 }
 
 __run_db() {
