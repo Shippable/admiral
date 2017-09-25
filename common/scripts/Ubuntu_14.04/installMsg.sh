@@ -56,7 +56,8 @@ enable_management_plugin() {
 }
 
 check_rabbitmq_management_plugin() {
-  __check_service_connection "$MSG_HOST" "$AMQP_PORT" "MSG_ADMIN" "$TIMEOUT"
+  echo "Checking rabbitmq admin on $MSG_HOST:$ADMIN_PORT"
+  __check_service_connection "$MSG_HOST" "$ADMIN_PORT" "MSG_ADMIN" "$TIMEOUT"
 }
 
 main() {
