@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 export STATE_IMAGE="drydock/gitlab:$RELEASE"
-
 export TIMEOUT=180
 
 __cleanup() {
@@ -40,30 +39,9 @@ __run_state() {
 
 __check_state() {
   __process_msg "Checking gitlab container status on: $STATE_HOST:$STATE_PORT"
-  local interval=3
-  local counter=0
-  local is_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
-    if nc -vz $STATE_HOST $STATE_PORT &>/dev/null; then
-      __process_msg "Gitlab found"
-      sleep 5
-      is_booted=true
-    else
-      __process_msg "Waiting for gitlab to start"
-      let "counter = $counter + $interval"
-      sleep $interval
-    fi
-  done
-  if [ $is_booted = false ]; then
-    __process_error "Failed to boot gitlab container"
-    __process_error "Port $STATE_PORT not available for State."
-    exit 1
-  fi
-  if ! nc -vz $STATE_HOST $SSH_PORT &>/dev/null; then
-    __process_error "Port $SSH_PORT not available for State"
-    exit 1
-  fi
+  __check_service_connection "$STATE_HOST" "$STATE_PORT" "$COMPONENT" "$TIMEOUT"
+  __check_service_connection "$STATE_HOST" "$SSH_PORT" "ssh"
 }
 
 main() {
