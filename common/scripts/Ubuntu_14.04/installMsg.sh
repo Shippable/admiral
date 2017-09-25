@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-TIMEOUT=30
+TIMEOUT=60
 
 install_log_rotate() {
   apt-get -y -q install wget logrotate
@@ -18,28 +18,36 @@ start_rabbitmq() {
   service rabbitmq-server restart
 }
 
-check_rabbitmq() {
-  echo "Checking rabbitmq status on $MSG_HOST:$AMQP_PORT"
+# accepts arguments $host $port $serviceName $timeout
+__check_service_connection() {
+  local host=$1
+  local port=$2
+  local service=$3
+  local timeout=$4
   local interval=3
   local counter=0
-  local is_booted=false
+  local service_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
-    if nc -vz $MSG_HOST $AMQP_PORT &>/dev/null; then
-      echo "Rabbitmq found"
+  while [ $service_booted != true ] && [ $counter -lt $timeout ]; do
+    if nc -vz $host $port &>/dev/null; then
+      echo "$service found"
       sleep 5
-      is_booted=true
+      service_booted=true
     else
-      echo "Waiting for rabbitmq to start"
+      echo "Waiting for $service to start"
       let "counter = $counter + $interval"
       sleep $interval
     fi
   done
-  if [ $is_booted = false ]; then
-    echo "Failed to boot rabbitmq"
-    echo "Port $AMQP_PORT not available for msg"
+  if [ $service_booted = false ]; then
+    echo "Could not detect $service container for host:$host, port:$port"
     exit 1
   fi
+}
+
+check_rabbitmq() {
+  echo "Checking rabbitmq status on $MSG_HOST:$AMQP_PORT"
+  __check_service_connection "$MSG_HOST" "$AMQP_PORT" "rabbitmq" "$TIMEOUT"
 }
 
 enable_management_plugin() {
@@ -48,10 +56,7 @@ enable_management_plugin() {
 }
 
 check_rabbitmq_management_plugin() {
-  if ! nc -vz $MSG_HOST $ADMIN_PORT &>/dev/null; then
-    echo "Port $ADMIN_PORT not available for msg"
-    exit 1
-  fi
+  __check_service_connection "$MSG_HOST" "$AMQP_PORT" "MSG_ADMIN" "$TIMEOUT"
 }
 
 main() {
