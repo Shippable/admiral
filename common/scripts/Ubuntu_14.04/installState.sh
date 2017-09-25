@@ -1,6 +1,7 @@
 #!/bin/bash -e
 export GITLAB_VERSION=8.9.6-ce.0
-export TIMEOUT=60
+export TIMEOUT=180
+export SSH_TIMEOUT=60
 
 install_deps() {
   echo "installing dependencies"
@@ -18,32 +19,38 @@ configure_and_start() {
   gitlab-ctl reconfigure
 }
 
-check_state() {
-  echo "Checking gitlab status on: $STATE_HOST:$STATE_PORT"
+# accepts arguments $host $port $serviceName $timeout
+__check_service_connection() {
+  local host=$1
+  local port=$2
+  local service=$3
+  local timeout=$4
   local interval=3
   local counter=0
-  local is_booted=false
+  local service_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
-    if nc -vz $STATE_HOST $STATE_PORT &>/dev/null; then
-      echo "Gitlab found"
+  while [ $service_booted != true ] && [ $counter -lt $timeout ]; do
+    if nc -vz $host $port &>/dev/null; then
+      echo "$service found"
       sleep 5
-      is_booted=true
+      service_booted=true
     else
-      echo "Waiting for gitlab to start"
+      echo "Waiting for $service to start"
       let "counter = $counter + $interval"
       sleep $interval
     fi
   done
-  if [ $is_booted = false ]; then
-    echo "Failed to boot gitlab"
-    echo "Port $STATE_PORT not available for State."
+  if [ $service_booted = false ]; then
+    echo "Could not detect $service container for host:$host, port:$port"
     exit 1
   fi
-  if ! nc -vz $STATE_HOST $SSH_PORT &>/dev/null; then
-    echo "Port $SSH_PORT not available for State"
-    exit 1
-  fi
+}
+
+check_state() {
+  echo "Checking gitlab status on: $STATE_HOST:$STATE_PORT"
+  __check_service_connection "$STATE_HOST" "$STATE_PORT" "gitlab" "$TIMEOUT"
+  echo "Checking SSH status on: $STATE_HOST:$SSH_PORT"
+  __check_service_connection "$STATE_HOST" "$SSH_PORT" "ssh" "$SSH_TIMEOUT"
 }
 
 main() {
