@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 export MSG_IMAGE="drydock/rabbitmq:$RELEASE"
-export TIMEOUT=30
 
 __cleanup() {
   __process_msg "Removing stale containers"
@@ -32,30 +31,9 @@ __run_msg() {
 
 __check_msg() {
   __process_msg "Checking rabbitmq container status on: $MSG_HOST:$AMQP_PORT"
-  local interval=3
-  local counter=0
-  local is_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
-    if nc -vz $MSG_HOST $AMQP_PORT &>/dev/null; then
-      __process_msg "Rabbitmq found"
-      sleep 5
-      is_booted=true
-    else
-      __process_msg "Waiting for rabbitmq to start"
-      let "counter = $counter + $interval"
-      sleep $interval
-    fi
-  done
-  if [ $is_booted = false ]; then
-    __process_error "Failed to boot rabbitmq container"
-    __process_error "Port $AMQP_PORT not available for msg"
-    exit 1
-  fi
-  if ! nc -vz $MSG_HOST $ADMIN_PORT &>/dev/null; then
-    __process_error "Port $ADMIN_PORT not available for msg"
-    exit 1
-  fi
+  __check_service_connection "$MSG_HOST" "$AMQP_PORT" "$COMPONENT"
+  __check_service_connection "$MSG_HOST" "$ADMIN_PORT" "MSG_ADMIN"
 }
 
 
