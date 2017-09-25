@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 export REDIS_IMAGE="drydock/redis:$RELEASE"
-export TIMEOUT=30
 
 __cleanup() {
   __process_msg "Removing stale containers"
@@ -32,26 +31,7 @@ __run_redis() {
 
 __check_redis() {
   __process_msg "Checking redis container status on: $REDIS_HOST:$REDIS_PORT"
-  local interval=3
-  local counter=0
-  local is_booted=false
-
-  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
-    if nc -vz $REDIS_HOST $REDIS_PORT &>/dev/null; then
-      __process_msg "Redis found"
-      sleep 5
-      is_booted=true
-    else
-      __process_msg "Waiting for redis to start"
-      let "counter = $counter + $interval"
-      sleep $interval
-    fi
-  done
-  if [ $is_booted = false ]; then
-    __process_error "Failed to boot redis container"
-    __process_error "Port $REDIS_PORT not available for Redis"
-    exit 1
-  fi
+  __check_service_connection "$REDIS_HOST" "$REDIS_PORT" "$COMPONENT"
 }
 
 main() {
