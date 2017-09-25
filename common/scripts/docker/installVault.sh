@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 export VAULT_IMAGE="drydock/vault:$RELEASE"
-export TIMEOUT=30
 
 __cleanup() {
   __process_msg "Removing stale containers"
@@ -31,26 +30,7 @@ __run_vault() {
 
 __check_vault() {
   __process_msg "Checking vault container status on: $VAULT_HOST:$VAULT_PORT"
-  local interval=3
-  local counter=0
-  local is_booted=false
-
-  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
-    if nc -vz $VAULT_HOST $VAULT_PORT &>/dev/null; then
-      __process_msg "Vault found"
-      sleep 5
-      is_booted=true
-    else
-      __process_msg "Waiting for vault to start"
-      let "counter = $counter + $interval"
-      sleep $interval
-    fi
-  done
-  if [ $is_booted = false ]; then
-    __process_error "Failed to boot vault container"
-    __process_error "Port $VAULT_PORT not available for Secrets."
-    exit 1
-  fi
+  __check_service_connection "$VAULT_HOST" "$VAULT_PORT" "$COMPONENT"
 }
 
 main() {
