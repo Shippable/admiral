@@ -3,7 +3,7 @@
 VAULTVERSION=0.6.0
 VAULTDOWNLOAD=https://releases.hashicorp.com/vault/${VAULTVERSION}/vault_${VAULTVERSION}_linux_amd64.zip
 VAULTCONFIGDIR=/etc/vault.d
-TIMEOUT=30
+TIMEOUT=60
 
 download_vault() {
   apt-get install -y zip
@@ -28,28 +28,36 @@ start_vault() {
   service vault start
 }
 
-check_vault() {
-  echo "Checking vault status on $VAULT_HOST:$VAULT_PORT"
+# accepts arguments $host $port $serviceName $timeout
+__check_service_connection() {
+  local host=$1
+  local port=$2
+  local service=$3
+  local timeout=$4
   local interval=3
   local counter=0
-  local is_booted=false
+  local service_booted=false
 
-  while [ $is_booted != true ] && [ $counter -lt $TIMEOUT ]; do
-    if nc -vz $VAULT_HOST $VAULT_PORT &>/dev/null; then
-      echo "Vault found"
+  while [ $service_booted != true ] && [ $counter -lt $timeout ]; do
+    if nc -vz $host $port &>/dev/null; then
+      echo "$service found"
       sleep 5
-      is_booted=true
+      service_booted=true
     else
-      echo "Waiting for vault to start"
+      echo "Waiting for $service to start"
       let "counter = $counter + $interval"
       sleep $interval
     fi
   done
-  if [ $is_booted = false ]; then
-    echo "Failed to boot vault"
-    echo "Port $VAULT_PORT not available for Secrets."
+  if [ $service_booted = false ]; then
+    echo "Could not detect $service container for host:$host, port:$port"
     exit 1
   fi
+}
+
+check_vault() {
+  echo "Checking vault status on $VAULT_HOST:$VAULT_PORT"
+  __check_service_connection "$VAULT_HOST" "$VAULT_PORT" "vault" "$TIMEOUT"
 }
 
 main() {
