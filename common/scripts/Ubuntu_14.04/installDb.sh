@@ -17,6 +17,8 @@ readonly DB_ROLE=dbo
 readonly DB_TABLESPACE_PATH=/ship/db
 readonly DB_TABLESPACE_NAME=shipts
 
+export DB_TIMEOUT=180
+
 __validate_db_envs() {
   echo "Validating db ENV variables"
   if [ "$DB_IP" == "" ]; then
@@ -183,6 +185,38 @@ __start_instance() {
   service postgresql start
 }
 
+# accepts arguments $host $port $serviceName $timeout
+__check_service_connection() {
+  local host=$1
+  local port=$2
+  local service=$3
+  local timeout=$4
+  local interval=3
+  local counter=0
+  local service_booted=false
+
+  while [ $service_booted != true ] && [ $counter -lt $timeout ]; do
+    if nc -vz $host $port &>/dev/null; then
+      echo "$service found"
+      sleep 5
+      service_booted=true
+    else
+      echo "Waiting for $service to start"
+      let "counter = $counter + $interval"
+      sleep $interval
+    fi
+  done
+  if [ $service_booted = false ]; then
+    echo "Could not detect $service container for host:$host, port:$port"
+    exit 1
+  fi
+}
+
+__check_db() {
+  echo "Checking database status on: $DB_IP:$DB_PORT"
+  __check_service_connection "$DB_IP" "$DB_PORT" "database" "$DB_TIMEOUT"
+}
+
 __bootstrap_db() {
   sudo -u postgres psql -c "CREATE ROLE $DB_ROLE INHERIT";
   sudo -u postgres psql -c "CREATE USER $DB_USER IN ROLE $DB_ROLE PASSWORD '$DB_PASSWORD' LOGIN INHERIT";
@@ -217,7 +251,7 @@ main() {
   __initialize_custom_config
   __initialize_auth_config
   __start_instance
-  sleep 5
+  __check_db
   __bootstrap_db
   popd
 }
