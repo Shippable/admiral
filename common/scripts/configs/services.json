@@ -394,7 +394,7 @@
       "name": "rSync",
       "repository": "micro",
       "isCore": true,
-      "apiUrlIntegration": "consoleAPI"
+      "apiUrlIntegration": "api"
     },
     {
       "name": "segmentListener",
