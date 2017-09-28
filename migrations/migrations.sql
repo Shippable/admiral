@@ -3920,6 +3920,11 @@ do $$
       alter table "accounts" add column "defaultViewId" INTEGER;
     end if;
 
+    -- Add "isFlagged" to accounts
+    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'isFlagged') then
+      alter table "accounts" add column "isFlagged" boolean;
+    end if;
+
     -- Add subProviderIdLowercaseOrgNameI Index on projects
     if not exists (select 1 from pg_indexes where tablename = 'subscriptions' and indexname = 'subProviderIdLowercaseOrgNameI') then
       create index "subProviderIdLowercaseOrgNameI" on "subscriptions" using btree("providerId", lower("orgName"::text));
