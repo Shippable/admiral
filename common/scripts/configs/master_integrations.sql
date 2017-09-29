@@ -396,5 +396,14 @@ do $$
     -- update Git Store integration type
     update "masterIntegrations" set "level" = 'system' where "masterIntegrationId" = 1 and "name" = 'Git store' and type = 'scm';
 
+    --- Deprecate AWS deploy integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'AWS' and "typeCode" = 5002 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'AWS' and "typeCode" = 5002;
+    end if;
+
+    --- Deprecate Amazon ECR hub integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'ECR' and "typeCode" = 5001 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'ECR' and "typeCode" = 5001;
+    end if;
   end
 $$;
