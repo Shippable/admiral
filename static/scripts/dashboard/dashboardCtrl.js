@@ -328,6 +328,10 @@
           displayName: '',
           isEnabled: false
         },
+        amazonKeys: {
+          displayName: '',
+          isEnabled: false
+        },
         AWS_IAM: {
           displayName: '',
           isEnabled: false
@@ -1139,6 +1143,8 @@
                   masterInt.isEnabled;
                 $scope.vm.addonsForm[masterInt.name].displayName =
                   masterInt.displayName;
+                $scope.vm.addonsForm[masterInt.name].isDeprecated =
+                  masterInt.isDeprecated;
               }
             }
           );
@@ -2361,7 +2367,6 @@
         }
       );
     }
-
 
     function updateInternalAPIService(next) {
       var internalAPIService = {};
