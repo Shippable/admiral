@@ -3925,11 +3925,6 @@ do $$
       alter table "accounts" add column "isFlagged" boolean;
     end if;
 
-    -- Add "blockedEmails" to systemSettings
-    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'blockedEmails') then
-      alter table "systemSettings" add column "blockedEmails" TEXT;
-    end if;
-
     -- Add subProviderIdLowercaseOrgNameI Index on projects
     if not exists (select 1 from pg_indexes where tablename = 'subscriptions' and indexname = 'subProviderIdLowercaseOrgNameI') then
       create index "subProviderIdLowercaseOrgNameI" on "subscriptions" using btree("providerId", lower("orgName"::text));

@@ -38,6 +38,7 @@ do $$
         "redis" TEXT,
         "master" TEXT,
         "workers" TEXT,
+        "blockedEmails" TEXT,
         "mktgPageAggsLastDtTm" timestamp with time zone,
         "mktgCTAAggsLastDtTm" timestamp with time zone,
         "defaultMinionInstanceSize" VARCHAR(255),
@@ -56,6 +57,10 @@ do $$
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'accountSyncFrequencyHr') then
       alter table "systemSettings" add column "accountSyncFrequencyHr" INTEGER  NOT NULL DEFAULT 4;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'blockedEmails') then
+      alter table "systemSettings" add column "blockedEmails" TEXT;
     end if;
 
   end
