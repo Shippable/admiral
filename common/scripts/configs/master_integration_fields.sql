@@ -869,6 +869,32 @@ do $$
       values (233, '596d9b49fa1a3f979c10b5a7', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    -- Fields for quayLogin
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 234) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (234, '580ee981a337bd12008fc43f', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 235) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (235, '580ee981a337bd12008fc43f', 'username', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 236) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (236, '580ee981a337bd12008fc43f', 'password', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 237) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (237, '580ee981a337bd12008fc43f', 'email', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 238) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (238, '580ee981a337bd12008fc43f', 'accessToken', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
