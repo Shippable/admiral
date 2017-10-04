@@ -882,6 +882,12 @@ do $$
       delete from "masterIntegrationFields" where "masterIntegrationId"= '58c78481e34468d32114e125';
     end if;
 
+    -- Add masterIntegrationFields for pemKey
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 230) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (230, '59d3692f0c3f421becfae3f0', 'key', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
     -- Removing redundant master integrations
 
     -- AWS-ROOT
