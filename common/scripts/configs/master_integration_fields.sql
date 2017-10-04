@@ -892,7 +892,7 @@ do $$
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 238) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (238, '580ee981a337bd12008fc43f', 'accessToken', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+      values (238, '580ee981a337bd12008fc43f', 'accessToken', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
     end if;
 
     -- END adding master integration fields
