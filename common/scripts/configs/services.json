@@ -234,6 +234,11 @@
       "services": []
     },
     {
+      "name": "sshKey",
+      "type": "generic",
+      "services": []
+    },
+    {
       "name": "TRIPUB",
       "type": "deploy",
       "services": [

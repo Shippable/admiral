@@ -897,7 +897,7 @@ function _createSSHKeysSystemIntegration(bag, next) {
 
   var systemIntegration = {
     name: 'sshKeys',
-    masterName: 'ssh-key',
+    masterName: 'sshKey',
     data: {
       publicKey: bag.systemConfig.systemNodePublicKey ||
         bag.stateJson.systemSettings.systemNodePublicKey,

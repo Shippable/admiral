@@ -295,9 +295,9 @@
           }
         },
         sshKeys: {
-          'ssh-key': {
+          'sshKey': {
             isEnabled: true,
-            masterName: 'ssh-key',
+            masterName: 'sshKey',
             data: {
               publicKey: '',
               privateKey: ''
@@ -395,6 +395,10 @@
         'pem-key': {
           displayName: '',
           isEnabled: false
+        },
+        'ssh-key': {
+          displayName: '',
+          isEnabled: true
         },
         'Private Docker Registry': {
           displayName: '',
@@ -821,7 +825,7 @@
           }
         },
         sshKeys: {
-          'ssh-key': {
+          'sshKey': {
             publicKey: '',
             privateKey: ''
           }
@@ -2432,7 +2436,7 @@
 
       var bag = {
         name: 'sshKeys',
-        masterName: $scope.vm.installForm.sshKeys['ssh-key'].masterName,
+        masterName: $scope.vm.installForm.sshKeys['sshKey'].masterName,
         data: {
           publicKey: $scope.vm.machineKeys.publicKey,
           privateKey: $scope.vm.machineKeys.privateKey
