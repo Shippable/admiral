@@ -324,6 +324,10 @@
           displayName: '',
           isEnabled: false
         },
+        artifactoryKey: {
+          displayName: '',
+          isEnabled: false
+        },
         AWS: {
           displayName: '',
           isEnabled: false
