@@ -2426,6 +2426,12 @@
                             </div>
                             <div class="checkbox">
                               <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.artifactoryKey.isEnabled">
+                                {{vm.addonsForm.artifactory.displayName}} (Generic)
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
                                 <input type="checkbox" ng-model="vm.addonsForm['Private Docker Registry'].isEnabled">
                                 {{vm.addonsForm['Private Docker Registry'].displayName}}
                               </label>
@@ -2434,6 +2440,12 @@
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm['Quay.io'].isEnabled">
                                 {{vm.addonsForm['Quay.io'].displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.quayLogin.isEnabled">
+                                {{vm.addonsForm.quayLogin.displayName}} (Generic)
                               </label>
                             </div>
                           </div>
@@ -2460,6 +2472,12 @@
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm['pem-key'].isEnabled">
                                 {{vm.addonsForm['pem-key'].displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.pemKey.isEnabled">
+                                {{vm.addonsForm.pemKey.displayName}} (Generic)
                               </label>
                             </div>
                             <div class="checkbox">

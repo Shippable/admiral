@@ -324,6 +324,10 @@
           displayName: '',
           isEnabled: false
         },
+        artifactoryKey: {
+          displayName: '',
+          isEnabled: false
+        },
         AWS: {
           displayName: '',
           isEnabled: false
@@ -396,6 +400,10 @@
           displayName: '',
           isEnabled: false
         },
+        pemKey: {
+          displayName: '',
+          isEnabled: false
+        },
         'ssh-key': {
           displayName: '',
           isEnabled: true
@@ -405,6 +413,10 @@
           isEnabled: false
         },
         'Quay.io': {
+          displayName: '',
+          isEnabled: false
+        },
+        quayLogin: {
           displayName: '',
           isEnabled: false
         },
