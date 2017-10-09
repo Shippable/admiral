@@ -404,6 +404,10 @@
           displayName: '',
           isEnabled: false
         },
+        quayLogin: {
+          displayName: '',
+          isEnabled: false
+        },
         Slack: {
           displayName: '',
           isEnabled: false
