@@ -72,6 +72,7 @@ function migrate() {
       _updateMasterIntegrationFields.bind(null, bag),
       _createMsgSystemIntegration.bind(null, bag),
       _createRedisSystemIntegration.bind(null, bag),
+      _getSshKeysSystemIntegration.bind(null,bag),
       _createSSHKeysSystemIntegration.bind(null, bag),
       _createAPISystemIntegration.bind(null, bag),
       _createWWWSystemIntegration.bind(null, bag),
@@ -891,13 +892,37 @@ function _createRedisSystemIntegration(bag, next) {
   );
 }
 
+function _getSshKeysSystemIntegration(bag, next) {
+  var who = bag.who + '|' + _getSshKeysSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  var query = 'SELECT * FROM "systemIntegrations" WHERE name=\'sshKeys\' AND ' +
+    '"masterName"=\'ssh-key\';';
+
+  bag.postgresClient.query(query,
+    function (err, systemIntegrations) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DBOperationFailed,
+            'Failed to get sshKeys systemIntegration with error: ' +
+            util.inspect(err))
+        );
+
+      if (!_.isEmpty(systemIntegrations.rows))
+        bag.oldSshKeysSystemIntegration = systemIntegrations.rows[0];
+
+      return next();
+    }
+  );
+}
+
 function _createSSHKeysSystemIntegration(bag, next) {
   var who = bag.who + '|' + _createSSHKeysSystemIntegration.name;
   logger.verbose(who, 'Inside');
 
   var systemIntegration = {
     name: 'sshKeys',
-    masterName: 'sshKey',
+    masterName: 'ssh-key',
     data: {
       publicKey: bag.systemConfig.systemNodePublicKey ||
         bag.stateJson.systemSettings.systemNodePublicKey,
@@ -905,6 +930,10 @@ function _createSSHKeysSystemIntegration(bag, next) {
         bag.stateJson.systemSettings.systemNodePrivateKey
     }
   };
+  // if sshKeys system integration is already using ssh-key masterInt
+  // we dont create new system integration but we update it.
+  if (!bag.oldSshKeysSystemIntegration)
+    systemIntegration.masterName = 'sshKey';
 
   createOrUpdateSystemIntegration(bag.postgresClient, bag.vaultUrl,
     bag.vaultToken, systemIntegration,
