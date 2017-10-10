@@ -2443,13 +2443,14 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm['Quay.io'].isEnabled">
-                                {{vm.addonsForm['Quay.io'].displayName}}
+                                {{vm.addonsForm['Quay.io'].displayName}} <span ng-if="vm.addonsForm['Quay.io'].isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use non deprecated {{vm.addonsForm.quayLogin.displayName}} instead.">(Deprecated)
+                                  <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.quayLogin.isEnabled">
-                                {{vm.addonsForm.quayLogin.displayName}} (Generic)
+                                {{vm.addonsForm.quayLogin.displayName}}
                               </label>
                             </div>
                           </div>
