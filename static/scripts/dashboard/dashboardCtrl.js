@@ -33,6 +33,7 @@
       gitlabKeys: 'gitlab'
     };
 
+    var sshKeyMasterName = '';
     $scope.vm = {
       isLoaded: false,
       initializing: false,
@@ -294,16 +295,7 @@
             }
           }
         },
-        sshKeys: {
-          'ssh-key': {
-            isEnabled: true,
-            masterName: 'ssh-key',
-            data: {
-              publicKey: '',
-              privateKey: ''
-            }
-          }
-        },
+        sshKeys: {},
         www: {
           url: {
             isEnabled: true,
@@ -832,12 +824,7 @@
             url: ''
           }
         },
-        sshKeys: {
-          'ssh-key': {
-            publicKey: '',
-            privateKey: ''
-          }
-        },
+        sshKeys: {},
         state: {
           gitlabCreds: {
             password: '',
@@ -922,6 +909,27 @@
           if (err) {
             horn.error(err);
             return next();
+          }
+
+          var sshKeyIntegration =
+            _.findWhere(systemIntegrations, {name: 'sshKeys'});
+          if (sshKeyIntegration) {
+            sshKeyMasterName = sshKeyIntegration.masterName;
+            var sshKeysForm = {
+              isEnabled: true,
+              masterName: sshKeyMasterName,
+              data: {
+                publicKey: '',
+                privateKey: ''
+              }
+            };
+            var sshKeysDefault = {
+              publicKey: '',
+              privateKey: ''
+            };
+            //map the used masterName with sshKeys systemIntegration
+            $scope.vm.installForm.sshKeys[sshKeyMasterName] = sshKeysForm;
+            systemIntDataDefaults.sshKeys[sshKeyMasterName] = sshKeysDefault;
           }
 
           var apiIntegration =
@@ -2444,7 +2452,7 @@
 
       var bag = {
         name: 'sshKeys',
-        masterName: $scope.vm.installForm.sshKeys['ssh-key'].masterName,
+        masterName: $scope.vm.installForm.sshKeys[sshKeyMasterName].masterName,
         data: {
           publicKey: $scope.vm.machineKeys.publicKey,
           privateKey: $scope.vm.machineKeys.privateKey
