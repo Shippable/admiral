@@ -2480,6 +2480,12 @@
                                 {{vm.addonsForm.pemKey.displayName}} (Generic)
                               </label>
                             </div>
+                            <div class="checkbox" ng-if="vm.showNewSshKeyInt">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.sshKey.isEnabled">
+                                {{vm.addonsForm.sshKey.displayName}} (Generic)
+                              </label>
+                            </div>
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.DOC.isEnabled">

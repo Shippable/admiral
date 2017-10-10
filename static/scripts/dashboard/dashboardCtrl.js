@@ -43,6 +43,7 @@
       saving: false,
       restartingServices: false,
       requireRestart: false,
+      showNewSshKeyInt: false,
       globalServices: [
         'api',
         'mktg',
@@ -929,6 +930,13 @@
             //map the used masterName with sshKeys systemIntegration
             $scope.vm.installForm.sshKeys[sshKeyMasterName] = sshKeysForm;
             systemIntDataDefaults.sshKeys[sshKeyMasterName] = sshKeysDefault;
+            if (sshKeyMasterName === 'ssh-key'){
+              $scope.vm.addonsForm.sshKey = {
+                displayName: '',
+                isEnabled: false
+              };
+              $scope.vm.showNewSshKeyInt = true;
+            }
           }
 
           var apiIntegration =
