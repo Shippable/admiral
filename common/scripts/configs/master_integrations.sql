@@ -444,5 +444,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'Quay.io' and "typeCode" = 5001 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'Quay.io' and "typeCode" = 5001;
     end if;
+
+    --- Deprecate ssh-key integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'ssh-key' and "typeCode" = 5004 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'ssh-key' and "typeCode" = 5004;
+    end if;
   end
 $$;
