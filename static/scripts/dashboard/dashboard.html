@@ -2482,6 +2482,12 @@
                             </div>
                             <div class="checkbox">
                               <label>
+                                <input type="checkbox" ng-model="vm.addonsForm['ssh-key'].isEnabled">
+                                {{vm.addonsForm['ssh-key'].displayName}} (Key)
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.DOC.isEnabled">
                                 {{vm.addonsForm.DOC.displayName}}
                               </label>
