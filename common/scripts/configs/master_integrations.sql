@@ -434,5 +434,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'pem-key' and "typeCode" = 5004 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'pem-key' and "typeCode" = 5004;
     end if;
+
+    --- Deprecate artifactory integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'artifactory' and "typeCode" = 5001 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'artifactory' and "typeCode" = 5001;
+    end if;
   end
 $$;
