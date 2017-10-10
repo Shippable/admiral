@@ -33,6 +33,7 @@
       gitlabKeys: 'gitlab'
     };
 
+    var sshKeyMasterName = '';
     $scope.vm = {
       isLoaded: false,
       initializing: false,
@@ -294,16 +295,7 @@
             }
           }
         },
-        sshKeys: {
-          'sshKey': {
-            isEnabled: true,
-            masterName: 'sshKey',
-            data: {
-              publicKey: '',
-              privateKey: ''
-            }
-          }
-        },
+        sshKeys: {},
         www: {
           url: {
             isEnabled: true,
@@ -406,7 +398,7 @@
         },
         'ssh-key': {
           displayName: '',
-          isEnabled: true
+          isEnabled: false
         },
         'Private Docker Registry': {
           displayName: '',
@@ -836,12 +828,7 @@
             url: ''
           }
         },
-        sshKeys: {
-          'sshKey': {
-            publicKey: '',
-            privateKey: ''
-          }
-        },
+        sshKeys: {},
         state: {
           gitlabCreds: {
             password: '',
@@ -928,6 +915,25 @@
             return next();
           }
 
+          var sshKeyIntegration =
+            _.findWhere(systemIntegrations, {name: 'sshKeys'});
+          if (sshKeyIntegration) {
+            sshKeyMasterName = sshKeyIntegration.masterName;
+            var sshKeysForm = {
+              isEnabled: true,
+              masterName: sshKeyMasterName,
+              data: {
+                publicKey: '',
+                privateKey: ''
+              }
+            };
+            var sshKeysDefault = {
+              publicKey: '',
+              privateKey: ''
+            };
+            $scope.vm.installForm.sshKeys[sshKeyMasterName] = sshKeysForm;
+            systemIntDataDefaults.sshKeys[sshKeyMasterName] = sshKeysDefault;
+          }
           var apiIntegration =
             _.findWhere(systemIntegrations, {name: 'api'});
 
@@ -2448,7 +2454,7 @@
 
       var bag = {
         name: 'sshKeys',
-        masterName: $scope.vm.installForm.sshKeys['sshKey'].masterName,
+        masterName: $scope.vm.installForm.sshKeys[sshKeyMasterName].masterName,
         data: {
           publicKey: $scope.vm.machineKeys.publicKey,
           privateKey: $scope.vm.machineKeys.privateKey
