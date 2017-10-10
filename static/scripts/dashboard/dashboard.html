@@ -2270,7 +2270,8 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.AWS.isEnabled">
-                                {{vm.addonsForm.AWS.displayName}} <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonKeys.displayName}} instead.">(Deprecated) 🛈</i></span>
+                                {{vm.addonsForm.AWS.displayName}} <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonKeys.displayName}} instead.">(Deprecated)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
@@ -2391,13 +2392,15 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.ECR.isEnabled">
-                                {{vm.addonsForm.ECR.displayName}} <span ng-if="vm.addonsForm.ECR.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonKeys.displayName}} instead.">(Deprecated) 🛈</i></span>
+                                {{vm.addonsForm.ECR.displayName}} <span ng-if="vm.addonsForm.ECR.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonKeys.displayName}} instead.">(Deprecated)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.amazonKeys.isEnabled">
-                                {{vm.addonsForm.amazonKeys.displayName}} <span title="{{vm.addonsForm.amazonKeys.displayName}} is a unifying integration which can be used for ECR as well as other AWS services.">(ECR) 🛈</span>
+                                {{vm.addonsForm.amazonKeys.displayName}} <span title="{{vm.addonsForm.amazonKeys.displayName}} is a unifying integration which can be used for ECR as well as other AWS services.">(ECR)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
@@ -2471,13 +2474,14 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm['pem-key'].isEnabled">
-                                {{vm.addonsForm['pem-key'].displayName}}
+                                {{vm.addonsForm['pem-key'].displayName}} <span ng-if="vm.addonsForm['pem-key'].isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.pemKey.displayName}} instead.">(Deprecated)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.pemKey.isEnabled">
-                                {{vm.addonsForm.pemKey.displayName}} (Generic)
+                                {{vm.addonsForm.pemKey.displayName}}
                               </label>
                             </div>
                             <div class="checkbox">
