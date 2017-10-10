@@ -33,7 +33,6 @@
       gitlabKeys: 'gitlab'
     };
 
-    var sshKeyMasterName = '';
     $scope.vm = {
       isLoaded: false,
       initializing: false,
@@ -914,7 +913,7 @@
           var sshKeyIntegration =
             _.findWhere(systemIntegrations, {name: 'sshKeys'});
           if (sshKeyIntegration) {
-            sshKeyMasterName = sshKeyIntegration.masterName;
+            var sshKeyMasterName = sshKeyIntegration.masterName;
             var sshKeysForm = {
               isEnabled: true,
               masterName: sshKeyMasterName,
@@ -2450,6 +2449,12 @@
     function updateSSHKeysSystemIntegration(next) {
       if (!$scope.vm.machineKeys) return next();
 
+      var sshKeyIntegration =
+        _.findWhere($scope.vm.systemIntegrations, {name: 'sshKeys'});
+
+      var sshKeyMasterName = '';
+      if (sshKeyIntegration)
+        sshKeyMasterName = sshKeyIntegration.masterName;
       var bag = {
         name: 'sshKeys',
         masterName: $scope.vm.installForm.sshKeys[sshKeyMasterName].masterName,
