@@ -439,5 +439,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'artifactory' and "typeCode" = 5001 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'artifactory' and "typeCode" = 5001;
     end if;
+
+    --- Deprecate Quay.io integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'Quay.io' and "typeCode" = 5001 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Quay.io' and "typeCode" = 5001;
+    end if;
   end
 $$;
