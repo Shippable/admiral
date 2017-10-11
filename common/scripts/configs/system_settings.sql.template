@@ -39,6 +39,7 @@ do $$
         "master" TEXT,
         "workers" TEXT,
         "blockedEmails" TEXT,
+        "minimumSCMAccountAgeInDays" INT,
         "mktgPageAggsLastDtTm" timestamp with time zone,
         "mktgCTAAggsLastDtTm" timestamp with time zone,
         "defaultMinionInstanceSize" VARCHAR(255),
@@ -61,6 +62,10 @@ do $$
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'blockedEmails') then
       alter table "systemSettings" add column "blockedEmails" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'minimumSCMAccountAgeInDays') then
+      alter table "systemSettings" add column "minimumSCMAccountAgeInDays" INT;
     end if;
 
   end
