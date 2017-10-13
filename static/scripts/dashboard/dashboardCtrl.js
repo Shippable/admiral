@@ -364,6 +364,10 @@
           displayName: '',
           isEnabled: false
         },
+        gcloudKey: {
+          displayName: '',
+          isEnabled: false
+        },
         GKE: {
           displayName: '',
           isEnabled: false
