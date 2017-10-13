@@ -901,6 +901,12 @@ do $$
       values (239, '59df56e9b3a7f6d8361c226a', 'token', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-12', '2017-10-12');
     end if;
 
+    -- masterIntegrationFields for gcloudKey
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 240) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (240, '59df35075ece921592b443f6', 'JSON_key', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
     -- Fields for dockerRegistryLogin
     if not exists (select 1 from "masterIntegrationFields" where "id" = 241) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")

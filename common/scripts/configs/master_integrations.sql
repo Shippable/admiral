@@ -389,6 +389,12 @@ do $$
       values ('59df56e9b3a7f6d8361c226a', 75, 'hipchatKey', 'HipChat', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-12', '2017-10-12');
     end if;
 
+    -- adds gcloudKey integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'gcloudKey' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('59df35075ece921592b443f6', 76, 'gcloudKey', 'Google Cloud', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+    end if;
+
     -- adds dockerRegistryLogin integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'dockerRegistryLogin' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
