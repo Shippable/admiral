@@ -389,6 +389,12 @@ do $$
       values ('59df56e9b3a7f6d8361c226a', 75, 'hipchatKey', 'HipChat', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-12', '2017-10-12');
     end if;
 
+    -- adds dockerRegistryLogin integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'dockerRegistryLogin' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('59d5e0104bfbba06001df4d6', 77, 'dockerRegistryLogin', 'Docker Registry', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-13', '2017-10-13');
+    end if;
+
     -- END adding master integrations
 
     -- Remove masterIntegrations
