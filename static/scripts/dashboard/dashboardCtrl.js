@@ -416,6 +416,10 @@
           displayName: '',
           isEnabled: false
         },
+        dockerRegistryLogin: {
+          displayName: '',
+          isEnabled: false
+        },
         Slack: {
           displayName: '',
           isEnabled: false
