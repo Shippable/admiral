@@ -372,6 +372,10 @@
           displayName: '',
           isEnabled: false
         },
+        hipchatKey: {
+          displayName: '',
+          isEnabled: false
+        },
         hubspotToken: {
           displayName: '',
           isEnabled: false
