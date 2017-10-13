@@ -901,6 +901,27 @@ do $$
       values (239, '59df56e9b3a7f6d8361c226a', 'token', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-12', '2017-10-12');
     end if;
 
+    -- Fields for dockerRegistryLogin
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 241) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (241, '59d5e0104bfbba06001df4d6', 'url', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-13', '2017-10-13');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 242) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (242, '59d5e0104bfbba06001df4d6', 'username', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-13', '2017-10-13');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 243) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (243, '59d5e0104bfbba06001df4d6', 'password', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-14', '2017-10-14');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 244) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (244, '59d5e0104bfbba06001df4d6', 'email', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-15', '2017-10-15');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
