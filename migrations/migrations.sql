@@ -378,6 +378,16 @@ do $$
       alter table "projects" add column "isOrphaned" boolean;
     end if;
 
+    -- Add projects.archTypeCode
+    if not exists (select 1 from information_schema.columns where table_name = 'projects' and column_name = 'archTypeCode') then
+      alter table "projects" add column "archTypeCode" integer;
+    end if;
+
+    -- Add projects.operatingSystemCode
+    if not exists (select 1 from information_schema.columns where table_name = 'projects' and column_name = 'operatingSystemCode') then
+      alter table "projects" add column "operatingSystemCode" integer;
+    end if;
+
     -- Set builderAccountId for projects with only a ownerAccountId
     UPDATE projects SET "builderAccountId" = "ownerAccountId" WHERE "builderAccountId" IS NULL AND "ownerAccountId" IS NOT NULL;
 
