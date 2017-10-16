@@ -21,17 +21,17 @@ do $$
     end if;
 
     -- insert all operatingSystems
-    if not exists (select 1 from "operatingSystems" where code = 10) then
+    if not exists (select 1 from "operatingSystems" where "code" = 10 and "archTypeCode" = 8000) then
       insert into "operatingSystems" ("code", "name", "archTypeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (10, 'Ubuntu_14.04', 8000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    if not exists (select 1 from "operatingSystems" where code = 20) then
+    if not exists (select 1 from "operatingSystems" where "code" = 20 and "archTypeCode" = 8000) then
       insert into "operatingSystems" ("code", "name", "archTypeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (20, 'Ubuntu_16.04', 8000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    if not exists (select 1 from "operatingSystems" where code = 30) then
+    if not exists (select 1 from "operatingSystems" where "code" = 20 and "archTypeCode" = 8001) then
       insert into "operatingSystems" ("code", "name", "archTypeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (20, 'Ubuntu_16.04', 8001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
