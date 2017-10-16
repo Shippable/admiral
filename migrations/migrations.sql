@@ -3325,6 +3325,20 @@ do $$
       roleCode := 6040
     );
 
+    -- set workflowControllers routeRoles
+    perform set_route_role(
+      routePattern := '/workflowControllers',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
+    -- set operatingSystems routeRoles
+    perform set_route_role(
+      routePattern := '/operatingSystems',
+      httpVerb := 'GET',
+      roleCode := 6040
+    );
+
     -- set systemNodes routeRoles
     perform set_route_role(
       routePattern := '/systemNodes/:systemNodeId',
