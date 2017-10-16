@@ -33,7 +33,7 @@ do $$
 
     if not exists (select 1 from "operatingSystems" where code = 30) then
       insert into "operatingSystems" ("code", "name", "archTypeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (30, 'Ubuntu_16.04', 8001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (20, 'Ubuntu_16.04', 8001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
   end
