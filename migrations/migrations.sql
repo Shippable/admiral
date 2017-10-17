@@ -129,6 +129,16 @@ do $$
       alter table "resources" add column "projectId" varchar(24);
     end if;
 
+    -- Add resources.archTypeCode
+    if not exists (select 1 from information_schema.columns where table_name = 'resources' and column_name = 'archTypeCode') then
+      alter table "resources" add column "archTypeCode" integer;
+    end if;
+
+    -- Add resources.operatingSystemCode
+    if not exists (select 1 from information_schema.columns where table_name = 'resources' and column_name = 'operatingSystemCode') then
+      alter table "resources" add column "operatingSystemCode" integer;
+    end if;
+
     -- Add nextTriggerTime to resources
     if not exists (select 1 from information_schema.columns where table_name = 'resources' and column_name = 'nextTriggerTime') then
       alter table "resources" add column "nextTriggerTime" timestamp with time zone;
