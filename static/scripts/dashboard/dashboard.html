@@ -2060,6 +2060,28 @@
                         </div>
                       </div>
                     </div>
+                    <!-- IRC -->
+                    <div class="row">
+                      <div class="col-md-12">
+                        &nbsp;
+                        <h4 class="panel-title">
+                          IRC
+                        </h4>
+                      </div>
+                      <div class="col-md-offset-1 col-md-11">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.installForm.notification.irc.isEnabled"
+                                  ng-disabled="vm.installing || vm.saving || vm.addonsForm.irc.isEnabled">
+                                IRC
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <!-- System Settings -->
                     <div class="row">
                       <div class="col-md-12">
@@ -2372,7 +2394,9 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.irc.isEnabled">
-                                {{vm.addonsForm.irc.displayName}}
+                                {{vm.addonsForm.irc.displayName}} <span ng-if="vm.addonsForm.irc.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created. If enabled, existing integrations can continue to be used. Please enable IRC in the install panel instead.">(Deprecated)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
+                              </label>
                               </label>
                             </div>
                             <div class="checkbox">
