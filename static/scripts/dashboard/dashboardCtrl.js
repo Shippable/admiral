@@ -1974,6 +1974,7 @@
           updateReleaseVersion.bind(null, bag),
           getEnabledServices.bind(null, bag),
           deleteAddonServices.bind(null, bag),
+          deleteIrcService.bind(null, bag),
           deleteInternalAPIService.bind(null, bag),
           deleteConsoleAPIService.bind(null, bag),
           postDB.bind(null, bag),
@@ -2049,6 +2050,19 @@
         },
         function (err) {
           return next(err);
+        }
+      );
+    }
+
+    function deleteIrcService(bag, next) {
+      var body = {
+        isEnabled: $scope.vm.installForm.notification.irc.isEnabled
+      };
+      admiralApiAdapter.deleteService('irc', body,
+        function (err) {
+          if (err)
+            return next(err);
+          return next();
         }
       );
     }
@@ -2361,6 +2375,7 @@
       async.series([
           getEnabledServices.bind(null, bag),
           deleteAddonServices.bind(null, bag),
+          deleteIrcService.bind(null, bag),
           deleteCoreServices.bind(null, bag),
           deleteInternalAPIService.bind(null, bag),
           deleteConsoleAPIService.bind(null, bag),
