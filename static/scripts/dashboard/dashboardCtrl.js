@@ -20,7 +20,7 @@
 
   function dashboardCtrl($scope, $stateParams, $q, $state, $interval,
     admiralApiAdapter, horn) {
-    /* jshint maxstatements:150 */
+    /* jshint maxstatements:175 */
     var dashboardCtrlDefer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -263,6 +263,9 @@
               hostname: '',
               proxy: ''
             }
+          },
+          irc: {
+            isEnabled: false
           }
         },
         provision: {
@@ -909,6 +912,7 @@
           if (!_.contains(installFormNonSystemInts, systemIntName)) {
             _.each(systemInts,
               function (value, masterName) {
+                if (masterName === 'irc') return;
                 resetSystemIntegration(systemIntName, masterName);
               }
             );
@@ -1283,13 +1287,21 @@
 
           $scope.vm.allServices = services;
 
-          if (!$scope.vm.installing && !$scope.vm.saving)
+          if (!$scope.vm.installing && !$scope.vm.saving) {
             // Don't change this while installing
             $scope.vm.requireRestart = _.some($scope.vm.allServices,
               function (service) {
                 return service.isEnabled;
               }
             );
+
+            $scope.vm.installForm.notification.irc.isEnabled = _.some(
+              $scope.vm.allServices,
+              function (service) {
+                return service.serviceName === 'irc' && service.isEnabled;
+              }
+            );
+          }
 
           return next();
         }
@@ -2244,6 +2256,7 @@
           startJobTrigger,
           updateFilestoreSystemIntegration,
           startNf,
+          startOrStopIrc,
           startCharon,
           startDeploy,
           startManifest,
@@ -2309,7 +2322,8 @@
           updateSystemMachineImages,
           updateFilestoreSystemIntegration,
           updateInternalAPIService,
-          updateConsoleAPIService
+          updateConsoleAPIService,
+          updateIrcService
         ],
         function (err) {
           $scope.vm.saving = false;
@@ -2442,6 +2456,26 @@
         $scope.vm.installForm.consoleAPI.url.isEnabled;
 
       admiralApiAdapter.putService('consoleAPI', consoleAPIService,
+        function (err) {
+          if (err)
+            horn.error(err);
+          return next();
+        }
+      );
+    }
+
+    function updateIrcService(next) {
+      var ircService = {};
+      _.each($scope.vm.allServices,
+        function (service) {
+          if (service.serviceName === 'irc')
+            ircService = service;
+        }
+      );
+
+      ircService.isEnabled = $scope.vm.installForm.notification.irc.isEnabled;
+
+      admiralApiAdapter.putService('irc', ircService,
         function (err) {
           if (err)
             horn.error(err);
@@ -3167,6 +3201,28 @@
       );
     }
 
+    function startOrStopIrc(next) {
+      if ($scope.vm.installForm.notification.irc.isEnabled ||
+        $scope.vm.addonsForm.irc.isEnabled)
+        startService('irc',
+          function (err) {
+            if (err)
+              return next(err);
+
+            return next();
+          }
+        );
+      else
+        admiralApiAdapter.deleteService('irc', {},
+          function (err) {
+            if (err)
+              return next(err);
+
+            return next();
+          }
+        );
+    }
+
     function startCharon(next) {
       startService('charon',
         function (err) {
@@ -3458,6 +3514,10 @@
 
           if (!masterInt)
             return done('No master integration found for: ' + masterIntName);
+
+          if (masterIntName === 'irc' &&
+            masterInt.isEnabled === addonsMasterInt.isEnabled)
+            return done();
 
           var update = {
             isEnabled: addonsMasterInt.isEnabled
