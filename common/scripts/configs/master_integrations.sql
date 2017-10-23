@@ -477,5 +477,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'irc' and "typeCode" = 5003 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'irc' and "typeCode" = 5003;
     end if;
+
+    --- Deprecate hipchat integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'hipchat' and "typeCode" = 5003 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'hipchat' and "typeCode" = 5003;
+    end if;
   end
 $$;
