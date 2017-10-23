@@ -2383,6 +2383,10 @@
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.hipchat.isEnabled">
                                 {{vm.addonsForm.hipchat.displayName}}
+                                <span ng-if="vm.addonsForm.hipchat.isDeprecated"
+                                  title="This integration has been deprecated. Please use Generic {{vm.addonsForm.hipchatKey.displayName}} instead.">
+                                    (Deprecated) <span class="glyphicon glyphicon-info-sign"></span>
+                                </span>
                               </label>
                             </div>
                             <div class="checkbox">
