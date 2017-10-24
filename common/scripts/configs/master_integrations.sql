@@ -482,5 +482,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'hipchat' and "typeCode" = 5003 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'hipchat' and "typeCode" = 5003;
     end if;
+
+    --- Deprecate Private Docker Registry integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'Private Docker Registry' and "typeCode" = 5001 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Private Docker Registry' and "typeCode" = 5001;
+    end if;
   end
 $$;
