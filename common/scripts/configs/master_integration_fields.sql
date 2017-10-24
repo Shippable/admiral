@@ -928,6 +928,12 @@ do $$
       values (244, '59d5e0104bfbba06001df4d6', 'email', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-15', '2017-10-15');
     end if;
 
+    -- masterIntegrationFields for slackKey
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 245) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (245, '59eee00ef7bcf03ff7b62fc7', 'webhookUrl', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-24', '2017-10-24');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
