@@ -427,6 +427,10 @@
           displayName: '',
           isEnabled: false
         },
+        slackKey: {
+          displayName: '',
+          isEnabled: false
+        },
         TRIPUB: {
           displayName: '',
           isEnabled: false
