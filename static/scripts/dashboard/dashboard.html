@@ -2472,6 +2472,8 @@
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm['Private Docker Registry'].isEnabled">
                                 {{vm.addonsForm['Private Docker Registry'].displayName}}
+                                <span ng-if="vm.addonsForm['Private Docker Registry'].isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use non deprecated {{vm.addonsForm.dockerRegistryLogin.displayName}} instead.">(Deprecated)
+                                  <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
