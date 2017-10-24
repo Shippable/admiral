@@ -4248,5 +4248,9 @@ do $$
       create unique index "isDefaultArchTypeCodeU" on "systemMachineImages" using btree("isDefault", "archTypeCode") WHERE "isDefault" = true;
     end if;
 
+    -- Add reqProcImage column to systemMachineImages table
+    if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'reqProcImage') then
+      alter table "systemMachineImages" add column "reqProcImage" VARCHAR(80);
+    end if;
   end
 $$;
