@@ -401,6 +401,12 @@ do $$
       values ('59d5e0104bfbba06001df4d6', 77, 'dockerRegistryLogin', 'Docker Registry', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-13', '2017-10-13');
     end if;
 
+    -- adds slackkey integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'slackKey' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('59eee00ef7bcf03ff7b62fc7', 78, 'slackKey', 'Slack', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-24', '2017-10-24');
+    end if;
+
     -- END adding master integrations
 
     -- Remove masterIntegrations
