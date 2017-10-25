@@ -509,5 +509,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'Docker Trusted Registry' and "typeCode" = 5001 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'Docker Trusted Registry' and "typeCode" = 5001;
     end if;
+
+    --- Deprecate GCL integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'GCL' and "typeCode" = 5012 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCL' and "typeCode" = 5012;
+    end if;
   end
 $$;

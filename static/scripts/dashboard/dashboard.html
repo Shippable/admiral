@@ -2559,7 +2559,7 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.gcloudKey.isEnabled">
-                                {{vm.addonsForm.gcloudKey.displayName}} (Generic)
+                                {{vm.addonsForm.gcloudKey.displayName}}
                               </label>
                             </div>
                             <div class="checkbox">
@@ -2571,7 +2571,8 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.GCL.isEnabled">
-                                {{vm.addonsForm.GCL.displayName}}
+                                {{vm.addonsForm.GCL.displayName}} <span ng-if="vm.addonsForm.GCL.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.gcloudKey.displayName}} instead.">(Deprecated)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
