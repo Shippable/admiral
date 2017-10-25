@@ -937,17 +937,17 @@ do $$
     -- masterIntegrationFields for nodeCluster
     if not exists (select 1 from "masterIntegrationFields" where "id" = 246) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (246, '59eee00ef7bcf03ff7b62fc8', 'nodes', 'array', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (246, '59eee00ef7bcf03ff7b62fc8', 'nodes', 'array', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-25', '2017-10-25');
     end if;
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 247) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (247, '59eee00ef7bcf03ff7b62fc8', 'publicKey', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (247, '59eee00ef7bcf03ff7b62fc8', 'publicKey', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-25', '2017-10-25');
     end if;
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 248) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (248, '59eee00ef7bcf03ff7b62fc8', 'privateKey', 'string', false, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values (248, '59eee00ef7bcf03ff7b62fc8', 'privateKey', 'string', false, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-25', '2017-10-25');
     end if;
     -- END adding master integration fields
 
