@@ -343,6 +343,10 @@
           displayName: '',
           isEnabled: false
         },
+        nodeCluster: {
+          displayName: '',
+          isEnabled: false
+        },
         DCL: {
           displayName: '',
           isEnabled: false
