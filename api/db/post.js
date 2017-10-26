@@ -44,7 +44,7 @@ function post(req, res) {
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
       _upsertSystemCodes.bind(null, bag),
-      _upsertOperatingSystems.bind(null, bag),
+      _upsertNodePlatforms.bind(null, bag),
       _upsertMasterIntegrations.bind(null, bag),
       _upsertMasterIntegrationFields.bind(null, bag),
       _upsertSystemIntegrations.bind(null, bag),
@@ -294,16 +294,16 @@ function _upsertSystemCodes(bag, next) {
   );
 }
 
-function _upsertOperatingSystems(bag, next) {
-  var who = bag.who + '|' + _upsertOperatingSystems.name;
+function _upsertNodePlatforms(bag, next) {
+  var who = bag.who + '|' + _upsertNodePlatforms.name;
   logger.verbose(who, 'Inside');
 
   _copyAndRunScript({
       who: who,
       params: {},
       script: '',
-      scriptPath: 'create_operating_systems.sh',
-      tmpScriptFilename: '/tmp/operatingSystems.sh',
+      scriptPath: 'create_node_platforms.sh',
+      tmpScriptFilename: '/tmp/nodePlatforms.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,

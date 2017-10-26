@@ -505,6 +505,31 @@ do $$
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'Docker' and "typeCode" = 5001;
     end if;
 
+    --- Deprecate Trusted Docker Registry integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'Docker Trusted Registry' and "typeCode" = 5001 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Docker Trusted Registry' and "typeCode" = 5001;
+    end if;
+
+    --- Deprecate GCL integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'GCL' and "typeCode" = 5012 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCL' and "typeCode" = 5012;
+    end if;
+
+    --- Deprecate GCR integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'GCR' and "typeCode" = 5001 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCR' and "typeCode" = 5001;
+    end if;
+
+    --- Deprecate GKE integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'GKE' and "typeCode" = 5002 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'GKE' and "typeCode" = 5002;
+    end if;
+
+    --- Deprecate Slack integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'Slack' and "typeCode" = 5003 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Slack' and "typeCode" = 5003;
+    end if;
+
     --- Deprecate CLUSTER integration
     if exists (select 1 from "masterIntegrations" where "name" = 'CLUSTER' and "typeCode" = 5002 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'CLUSTER' and "typeCode" = 5002;
