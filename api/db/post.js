@@ -44,7 +44,6 @@ function post(req, res) {
       _generateServiceUserToken.bind(null, bag),
       _setServiceUserToken.bind(null, bag),
       _upsertSystemCodes.bind(null, bag),
-      _upsertOperatingSystems.bind(null, bag),
       _upsertMasterIntegrations.bind(null, bag),
       _upsertMasterIntegrationFields.bind(null, bag),
       _upsertSystemIntegrations.bind(null, bag),
@@ -277,33 +276,6 @@ function _upsertSystemCodes(bag, next) {
       script: '',
       scriptPath: 'create_system_codes.sh',
       tmpScriptFilename: '/tmp/systemCodes.sh',
-      scriptEnvs: {
-        'RUNTIME_DIR': global.config.runtimeDir,
-        'CONFIG_DIR': global.config.configDir,
-        'SCRIPTS_DIR': global.config.scriptsDir,
-        'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName,
-        'DBHOST': global.config.dbHost,
-        'DBPORT': global.config.dbPort,
-        'DBPASSWORD': global.config.dbPassword
-      }
-    },
-    function (err) {
-      return next(err);
-    }
-  );
-}
-
-function _upsertOperatingSystems(bag, next) {
-  var who = bag.who + '|' + _upsertOperatingSystems.name;
-  logger.verbose(who, 'Inside');
-
-  _copyAndRunScript({
-      who: who,
-      params: {},
-      script: '',
-      scriptPath: 'create_operating_systems.sh',
-      tmpScriptFilename: '/tmp/operatingSystems.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
