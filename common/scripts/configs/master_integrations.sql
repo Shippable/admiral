@@ -519,5 +519,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'GCR' and "typeCode" = 5001 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCR' and "typeCode" = 5001;
     end if;
+
+    --- Deprecate Slack integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'Slack' and "typeCode" = 5003 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Slack' and "typeCode" = 5003;
+    end if;
   end
 $$;
