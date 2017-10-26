@@ -520,6 +520,11 @@ do $$
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCR' and "typeCode" = 5001;
     end if;
 
+    --- Deprecate GKE integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'GKE' and "typeCode" = 5002 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'GKE' and "typeCode" = 5002;
+    end if;
+
     --- Deprecate Slack integration
     if exists (select 1 from "masterIntegrations" where "name" = 'Slack' and "typeCode" = 5003 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'Slack' and "typeCode" = 5003;
