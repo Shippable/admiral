@@ -3356,9 +3356,9 @@ do $$
       roleCode := 6060
     );
 
-    -- set operatingSystems routeRoles
+    -- set nodePlatforms routeRoles
     perform set_route_role(
-      routePattern := '/operatingSystems',
+      routePattern := '/nodePlatforms',
       httpVerb := 'GET',
       roleCode := 6040
     );
