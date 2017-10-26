@@ -31,19 +31,9 @@ do $$
     end if;
 
     -- insert all nodePlatforms
-    if not exists (select 1 from "nodePlatforms" where "archTypeCode" = 8000 and "operatingSystemCode" = 9000) then
-      insert into "nodePlatforms" ("archTypeCode", "operatingSystemCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (8000, 9000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "nodePlatforms" where "archTypeCode" = 8000 and "operatingSystemCode" = 9000) then
+    if not exists (select 1 from "nodePlatforms" where "archTypeCode" = 8000 and "operatingSystemCode" = 9001) then
       insert into "nodePlatforms" ("archTypeCode", "operatingSystemCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (8000, 9001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
-    if not exists (select 1 from "nodePlatforms" where "archTypeCode" = 8000 and "operatingSystemCode" = 9000) then
-      insert into "nodePlatforms" ("archTypeCode", "operatingSystemCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (8001, 9001, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
   end
 $$;
