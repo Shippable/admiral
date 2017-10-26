@@ -504,5 +504,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'Docker' and "typeCode" = 5001 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'Docker' and "typeCode" = 5001;
     end if;
+
+    --- Deprecate CLUSTER integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'CLUSTER' and "typeCode" = 5002 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'CLUSTER' and "typeCode" = 5002;
+    end if;
   end
 $$;
