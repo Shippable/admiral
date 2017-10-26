@@ -2413,6 +2413,9 @@
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.Slack.isEnabled">
                                 {{vm.addonsForm.Slack.displayName}}
+                                <span ng-if="vm.addonsForm.Slack.isDeprecated"
+                                title="This integration has been deprecated. Use Generic {{vm.addonsForm.slackKey.displayName}} instead.">
+                                  (Deprecated) <span class="glyphicon glyphicon-info-sign"></span>
                               </label>
                             </div>
                             <div class="checkbox">
