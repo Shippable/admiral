@@ -809,6 +809,7 @@ do $$
       delete from "routeRoles" where "routePattern"='/accounts/:accountId/sync' and "httpVerb"='GET';
       delete from "routeRoles" where "routePattern"='/projects/:projectId/sync' and "httpVerb"='GET';
       delete from "routeRoles" where "routePattern"='/masterIntegrationCodes' and "httpVerb"='GET';
+      delete from "routeRoles" where "routePattern"='/operatingSystems' and "httpVerb"='GET';
     end if;
 
     -- Add "isConsoleArchived" field to buildJobs table
@@ -3356,9 +3357,9 @@ do $$
       roleCode := 6060
     );
 
-    -- set operatingSystems routeRoles
+    -- set nodePlatforms routeRoles
     perform set_route_role(
-      routePattern := '/operatingSystems',
+      routePattern := '/nodePlatforms',
       httpVerb := 'GET',
       roleCode := 6040
     );
