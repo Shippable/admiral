@@ -2215,6 +2215,12 @@ do $$
       roleCode := 6060
     );
 
+    perform set_route_role(
+      routePattern := '/passthrough/nodes/platforms',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
     --set payments routeRoles
     perform set_route_role(
       routePattern := '/payments/clienttoken',
