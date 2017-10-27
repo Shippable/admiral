@@ -3362,13 +3362,6 @@ do $$
       roleCode := 6060
     );
 
-    -- set nodePlatforms routeRoles
-    perform set_route_role(
-      routePattern := '/nodePlatforms',
-      httpVerb := 'GET',
-      roleCode := 6040
-    );
-
     -- set systemNodes routeRoles
     perform set_route_role(
       routePattern := '/systemNodes/:systemNodeId',
