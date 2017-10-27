@@ -534,5 +534,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'CLUSTER' and "typeCode" = 5002 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'CLUSTER' and "typeCode" = 5002;
     end if;
+
+    --- Deprecate Azure Container Service (ACS) integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'ACS' and "typeCode" = 5002 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'ACS' and "typeCode" = 5002;
+    end if;
   end
 $$;
