@@ -339,6 +339,10 @@
           displayName: '',
           isEnabled: false
         },
+        azureDcosKey: {
+          displayName: '',
+          isEnabled: false
+        },
         CLUSTER: {
           displayName: '',
           isEnabled: false
