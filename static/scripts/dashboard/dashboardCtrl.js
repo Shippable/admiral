@@ -359,6 +359,10 @@
           displayName: '',
           isEnabled: false
         },
+        ddcKey: {
+          displayName: '',
+          isEnabled: false
+        },
         Docker: {
           displayName: '',
           isEnabled: false
