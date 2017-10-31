@@ -424,6 +424,12 @@ do $$
       values ('59eee00ef7bcf03ff7b62fc9', 80, 'azureDcosKey', 'Azure DC/OS', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
+    -- amazonIamRole master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'amazonIamRole' and "typeCode" = 5002) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('59eee00ef7bcf03ff7b62fd0', 9, 'amazonIamRole', 'Amazon Web Services (IAM)', 'deploy', false, 'account', 5002, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
     -- END adding master integrations
 
     -- Remove masterIntegrations

@@ -971,6 +971,22 @@ do $$
       values (252, '59eee00ef7bcf03ff7b62fc9', 'dcosPrivateKey', 'string', false, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
+    -- masterIntegrationFields for amazonIamRole
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 253) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (253, '59eee00ef7bcf03ff7b62fd0', 'assumeRoleARN', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 254) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (254, '59eee00ef7bcf03ff7b62fd0', 'output', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 255) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (255, '59eee00ef7bcf03ff7b62fd0', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
