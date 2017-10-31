@@ -413,6 +413,12 @@ do $$
       values ('59eee00ef7bcf03ff7b62fc8', 79, 'nodeCluster', 'Node Cluster', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-25', '2017-10-25');
     end if;
 
+    -- azureDcosKey master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'azureDcosKey' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('59eee00ef7bcf03ff7b62fc9', 80, 'azureDcosKey', 'Azure DC/OS', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
     -- END adding master integrations
 
     -- Remove masterIntegrations
