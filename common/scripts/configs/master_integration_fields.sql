@@ -987,6 +987,23 @@ do $$
       values (255, '59eee00ef7bcf03ff7b62fd0', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
+    -- masterIntegrationFields for ddcKey
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 253) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (253, '59e71aa80552d20500e76ba8', 'username', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 254) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (254, '59e71aa80552d20500e76ba8', 'password', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 255) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (255, '59e71aa80552d20500e76ba8', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
