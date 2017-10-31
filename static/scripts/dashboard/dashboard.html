@@ -2319,6 +2319,21 @@
                             </div>
                             <div class="checkbox">
                               <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.amazonIamRole.isEnabled">
+                                {{vm.addonsForm.amazonIamRole.displayName}} (Generic)
+                              </label>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.amazonIamRole.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                AWS Account ID:
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="awsAccountId"
+                                  ng-model="vm.addonsForm.systemSettings.awsAccountId" ng-disabled="vm.installingAddons"/>
+                              </div>
+                            </div>
+                            <div class="checkbox">
+                              <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.AZURE_DCOS.isEnabled">
                                 {{vm.addonsForm.AZURE_DCOS.displayName}}
                               </label>
