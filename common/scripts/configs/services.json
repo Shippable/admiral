@@ -153,13 +153,6 @@
       ]
     },
     {
-      "name": "Jenkins",
-      "type": "externalci",
-      "services": [
-        "jSync"
-      ]
-    },
-    {
       "name": "KUBERNETES",
       "type": "deploy",
       "services": [
@@ -337,11 +330,6 @@
       "name": "jobTrigger",
       "repository": "micro",
       "isCore": true,
-      "apiUrlIntegration": "internalAPI"
-    },
-    {
-      "name": "jSync",
-      "repository": "micro",
       "apiUrlIntegration": "internalAPI"
     },
     {
