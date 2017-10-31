@@ -2325,6 +2325,12 @@
                             </div>
                             <div class="checkbox">
                               <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.azureDcosKey.isEnabled">
+                                {{vm.addonsForm.azureDcosKey.displayName}} (Generic)
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.CLUSTER.isEnabled">
                                 {{vm.addonsForm.CLUSTER.displayName}}
                                 <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.CLUSTER.displayName}} instead.">(Deprecated)
