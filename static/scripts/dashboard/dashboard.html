@@ -2561,12 +2561,6 @@
                           <div class="col-md-12">
                             <div class="checkbox">
                               <label>
-                                <input type="checkbox" ng-model="vm.addonsForm.Jenkins.isEnabled">
-                                {{vm.addonsForm.Jenkins.displayName}}
-                              </label>
-                            </div>
-                            <div class="checkbox">
-                              <label>
                                 <input type="checkbox" ng-model="vm.addonsForm['pem-key'].isEnabled">
                                 {{vm.addonsForm['pem-key'].displayName}} <span ng-if="vm.addonsForm['pem-key'].isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.pemKey.displayName}} instead.">(Deprecated)
                                 <span class="glyphicon glyphicon-info-sign"></span></span>
