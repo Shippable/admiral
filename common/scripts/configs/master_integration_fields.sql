@@ -949,6 +949,28 @@ do $$
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (248, '59eee00ef7bcf03ff7b62fc8', 'privateKey', 'string', false, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-25', '2017-10-25');
     end if;
+
+    -- masterIntegrationFields for azureDcosKey
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 249) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (249, '59eee00ef7bcf03ff7b62fc9', 'username', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 250) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (250, '59eee00ef7bcf03ff7b62fc9', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 251) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (251, '59eee00ef7bcf03ff7b62fc9', 'dcosPublicKey', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 252) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (252, '59eee00ef7bcf03ff7b62fc9', 'dcosPrivateKey', 'string', false, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
