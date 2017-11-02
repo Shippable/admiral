@@ -2369,14 +2369,14 @@
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.DDC.isEnabled">
                                 {{vm.addonsForm.DDC.displayName}}
-                                <span ng-if="vm.addonsForm.DDC.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.ddcKey.displayName}} instead.">(Deprecated)
+                                <span ng-if="vm.addonsForm.DDC.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.ddcKey.displayName}}(Generic) instead.">(Deprecated)
                                 <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.ddcKey.isEnabled">
-                                {{vm.addonsForm.ddcKey.displayName}}
+                                {{vm.addonsForm.ddcKey.displayName}} (Generic)
                               </label>
                             </div>
                             <div class="checkbox">
