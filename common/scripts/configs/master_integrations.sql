@@ -562,5 +562,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'ACS' and "typeCode" = 5002 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'ACS' and "typeCode" = 5002;
     end if;
+
+    --- Deprecate Amazon Web Services(IAM) integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'AWS_IAM' and "typeCode" = 5002 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'AWS_IAM' and "typeCode" = 5002;
+    end if;
   end
 $$;
