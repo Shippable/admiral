@@ -567,5 +567,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'AWS_IAM' and "typeCode" = 5002 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'AWS_IAM' and "typeCode" = 5002;
     end if;
+
+    --- Deprecate DDC integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'DDC' and "typeCode" = 5002 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'DDC' and "typeCode" = 5002;
+    end if;
   end
 $$;
