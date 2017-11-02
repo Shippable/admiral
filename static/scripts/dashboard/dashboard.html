@@ -2305,7 +2305,8 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.AWS_IAM.isEnabled">
-                                {{vm.addonsForm.AWS_IAM.displayName}}
+                                {{vm.addonsForm.AWS_IAM.displayName}} <span ng-if="vm.addonsForm.AWS_IAM.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonIamRole.displayName}} instead.">(Deprecated)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="row" ng-if="vm.addonsForm.AWS_IAM.isEnabled">
@@ -2320,7 +2321,7 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.amazonIamRole.isEnabled">
-                                {{vm.addonsForm.amazonIamRole.displayName}} (Generic)
+                                {{vm.addonsForm.amazonIamRole.displayName}}
                               </label>
                             </div>
                             <div class="row" ng-if="vm.addonsForm.amazonIamRole.isEnabled">
