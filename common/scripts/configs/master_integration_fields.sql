@@ -1016,19 +1016,19 @@ do $$
     end if;
 
     -- masterIntegrationFields for dclKey
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 261) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (261, '59faf7b67fb80d78e55245bb', 'username', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
+
     if not exists (select 1 from "masterIntegrationFields" where "id" = 262) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (262, '59faf7b67fb80d78e55245bb', 'username', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+      values (262, '59faf7b67fb80d78e55245bb', 'token', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 263) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (263, '59faf7b67fb80d78e55245bb', 'token', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
-    end if;
-
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 264) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (264, '59faf7b67fb80d78e55245bb', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+      values (263, '59faf7b67fb80d78e55245bb', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
     -- END adding master integration fields
