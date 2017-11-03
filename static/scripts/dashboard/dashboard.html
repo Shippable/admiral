@@ -2422,6 +2422,12 @@
                             </div>
                             <div class="checkbox">
                               <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.webhookV2.isEnabled">
+                                {{vm.addonsForm.webhookV2.displayName}} (Generic)
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.hipchat.isEnabled">
                                 {{vm.addonsForm.hipchat.displayName}}
                                 <span ng-if="vm.addonsForm.hipchat.isDeprecated"

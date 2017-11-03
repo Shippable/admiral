@@ -451,6 +451,10 @@
           displayName: '',
           isEnabled: false
         },
+        webhookV2: {
+          displayName: '',
+          isEnabled: false
+        },
         DOC: {
           displayName: '',
           isEnabled: false
