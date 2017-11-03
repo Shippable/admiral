@@ -415,6 +415,10 @@
           displayName: '',
           isEnabled: false
         },
+        kubernetesConfig: {
+          displayName: '',
+          isEnabled: false
+        },
         'pem-key': {
           displayName: '',
           isEnabled: false

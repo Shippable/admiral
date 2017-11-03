@@ -2402,6 +2402,12 @@
                             </div>
                             <div class="checkbox">
                               <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.kubernetesConfig.isEnabled">
+                                {{vm.addonsForm.kubernetesConfig.displayName}} (Generic)
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.TRIPUB.isEnabled">
                                 {{vm.addonsForm.TRIPUB.displayName}}
                               </label>
