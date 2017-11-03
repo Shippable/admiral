@@ -439,7 +439,7 @@ do $$
     -- webhookV2
     if not exists (select 1 from "masterIntegrations" where "name" = 'webhookV2' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59e71aa80552d20500e76ba9', 83, 'webhookV2', 'Event Trigger', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
+      values ('59e71aa80552d20500e76ba9', 83, 'webhookV2', 'Webhook', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
     end if;
 
     -- END adding master integrations
