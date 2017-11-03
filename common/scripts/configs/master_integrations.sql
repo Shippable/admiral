@@ -446,11 +446,18 @@ do $$
     if not exists (select 1 from "masterIntegrations" where "name" = 'dclKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values ('59faf7b67fb80d78e55245bb', 84, 'dclKey', 'Docker Cloud', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+    end if;
 
     -- joyentTritonKey master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'joyentTritonKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values ('569cd11a1895ca4474700f95', 85, 'joyentTritonKey', 'Joyent Triton', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
+    end if;
+
+    -- adds kubernetesConfig master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'kubernetesConfig' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('59e71aa80552d20500e76bb0', 84, 'kubernetesConfig', 'Kubernetes', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
     end if;
 
     -- END adding master integrations
