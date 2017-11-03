@@ -245,6 +245,14 @@
         "nf",
         "webhook"
       ]
+    },
+    {
+      "name": "webhookV2",
+      "type": "generic",
+      "services": [
+        "nf",
+        "webhook"
+      ]
     }
   ],
   "serviceConfigs": [
