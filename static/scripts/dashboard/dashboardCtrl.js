@@ -451,6 +451,10 @@
           displayName: '',
           isEnabled: false
         },
+        joyentTritonKey: {
+          displayName: '',
+          isEnabled: false
+        },
         webhook: {
           displayName: '',
           isEnabled: false
