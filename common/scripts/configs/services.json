@@ -234,6 +234,13 @@
       ]
     },
     {
+      "name": "joyentTritonKey",
+      "type": "generic",
+      "services": [
+        "certgen"
+      ]
+    },
+    {
       "name": "VAULT",
       "type": "secretsBackend",
       "services": []
