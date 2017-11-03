@@ -359,6 +359,10 @@
           displayName: '',
           isEnabled: false
         },
+        dclKey: {
+          displayName: '',
+          isEnabled: false
+        },
         DDC: {
           displayName: '',
           isEnabled: false
