@@ -1003,6 +1003,17 @@ do $$
       values (258, '59e71aa80552d20500e76ba8', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
+    -- masterIntegrationFields for webhookV2
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 260) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (259, '59e71aa80552d20500e76ba9', 'webhookURL', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 261) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (260, '59e71aa80552d20500e76ba9', 'authorization', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
+    end if;
 
     -- END adding master integration fields
 
