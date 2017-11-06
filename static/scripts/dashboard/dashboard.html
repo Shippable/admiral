@@ -2436,6 +2436,10 @@
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.webhook.isEnabled">
                                 {{vm.addonsForm.webhook.displayName}}
+                                <span ng-if="vm.addonsForm.webhook.isDeprecated"
+                                  title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use Generic {{vm.addonsForm.webhookV2.displayName}} instead.">
+                                    (Deprecated) <span class="glyphicon glyphicon-info-sign"></span>
+                                </span>
                               </label>
                             </div>
                             <div class="checkbox">

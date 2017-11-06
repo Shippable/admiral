@@ -601,5 +601,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'AZURE_DCOS' and "typeCode" = 5002 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'AZURE_DCOS' and "typeCode" = 5002;
     end if;
+
+    --- Deprecate webhook integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'webhook' and "typeCode" = 5003 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'webhook' and "typeCode" = 5003;
+    end if;
   end
 $$;
