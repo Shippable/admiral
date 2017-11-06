@@ -2364,13 +2364,14 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.DCL.isEnabled">
-                                {{vm.addonsForm.DCL.displayName}}
+                                {{vm.addonsForm.DCL.displayName}} <span ng-if="vm.addonsForm.DCL.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.dclKey.displayName}} instead.">(Deprecated)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.dclKey.isEnabled">
-                                {{vm.addonsForm.dclKey.displayName}} (Generic)
+                                {{vm.addonsForm.dclKey.displayName}}
                               </label>
                             </div>
                             <div class="checkbox">
