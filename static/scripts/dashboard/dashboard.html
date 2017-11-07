@@ -2410,7 +2410,8 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.TRIPUB.isEnabled">
-                                {{vm.addonsForm.TRIPUB.displayName}}
+                                {{vm.addonsForm.TRIPUB.displayName}} <span ng-if="vm.addonsForm.TRIPUB.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.TRIPUB.displayName}} (Generic) instead.">(Deprecated)
+                                  <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
