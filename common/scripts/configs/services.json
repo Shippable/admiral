@@ -122,6 +122,13 @@
       ]
     },
     {
+      "name": "gcloudKey",
+      "type": "generic",
+      "services": [
+        "provision"
+      ]
+    },
+    {
       "name": "gmailCreds",
       "type": "generic",
       "services": [
