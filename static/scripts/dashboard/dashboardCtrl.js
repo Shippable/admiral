@@ -2287,7 +2287,6 @@
           updateGmailSystemIntegration,
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
-          enableEmailMasterIntegration,
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
           updateProvisionSystemIntegration,
@@ -2361,7 +2360,6 @@
           updateGmailSystemIntegration,
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
-          enableEmailMasterIntegration,
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
           updateProvisionSystemIntegration,
@@ -2770,31 +2768,6 @@
       updateSystemIntegration(bag,
         function (err) {
           return next(err);
-        }
-      );
-    }
-
-    function enableEmailMasterIntegration(next) {
-      var enable = $scope.vm.installForm.notification.smtpCreds.isEnabled ||
-        $scope.vm.installForm.notification.gmailCreds.isEnabled ||
-        $scope.vm.installForm.notification.smtpCreds.isEnabled;
-
-      var masterInt =
-        _.findWhere($scope.vm.masterIntegrations, {name: 'Email'});
-
-      if (!masterInt)
-        return next('No email masterIntegration found');
-
-      var update = {
-        isEnabled: enable
-      };
-
-      admiralApiAdapter.putMasterIntegration(masterInt.id, update,
-        function (err) {
-          if (err)
-            return next(err);
-
-          return next();
         }
       );
     }
@@ -3560,7 +3533,7 @@
           );
 
           if (!masterInt)
-            return done('No master integration found for: ' + masterIntName);
+            return done();
 
           if (masterIntName === 'irc' &&
             masterInt.isEnabled === addonsMasterInt.isEnabled)
