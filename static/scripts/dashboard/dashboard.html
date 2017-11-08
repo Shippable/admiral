@@ -2398,13 +2398,14 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.KUBERNETES.isEnabled">
-                                {{vm.addonsForm.KUBERNETES.displayName}}
+                                {{vm.addonsForm.KUBERNETES.displayName}} <span ng-if="vm.addonsForm.KUBERNETES.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.kubernetesConfig.displayName}} instead.">(Deprecated)
+                                  <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.kubernetesConfig.isEnabled">
-                                {{vm.addonsForm.kubernetesConfig.displayName}} (Generic)
+                                {{vm.addonsForm.kubernetesConfig.displayName}}
                               </label>
                             </div>
                             <div class="checkbox">
