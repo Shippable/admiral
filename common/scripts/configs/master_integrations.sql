@@ -616,5 +616,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'TRIPUB' and "typeCode" = 5002 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'TRIPUB' and "typeCode" = 5002;
     end if;
+
+    --- Deprecate KUBERNETES integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'KUBERNETES' and "typeCode" = 5002 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'KUBERNETES' and "typeCode" = 5002;
+    end if;
   end
 $$;
