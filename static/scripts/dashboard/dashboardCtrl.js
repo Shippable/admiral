@@ -3558,6 +3558,8 @@
     function updateAddonsPanelSystemSettings(next) {
       if (!$scope.vm.systemSettingsId) return next();
 
+      if (_.isEmpty($scope.vm.addonsForm.systemSettings)) return next();
+
       var update = $scope.vm.addonsForm.systemSettings;
 
       admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
