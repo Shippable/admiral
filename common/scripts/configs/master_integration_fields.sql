@@ -92,15 +92,15 @@ do $$
     end if;
 
     if exists (select 1 from "masterIntegrationFields" where "id" = 71 and "isRequired" = true) then		
--     update "masterIntegrationFields" set "isRequired" = false where "id" = 71;		
+      update "masterIntegrationFields" set "isRequired" = false where "id" = 71;
     end if;
 
     if exists (select 1 from "masterIntegrationFields" where "id" = 72 and "isRequired" = true) then		
-      update "masterIntegrationFields" set "isRequired" = false where "id" = 72;		
+      update "masterIntegrationFields" set "isRequired" = false where "id" = 72;
     end if;
 
     if exists (select 1 from "masterIntegrationFields" where "id" = 73 and "isRequired" = true) then		
-      update "masterIntegrationFields" set "isRequired" = false where "id" = 73;		
+      update "masterIntegrationFields" set "isRequired" = false where "id" = 73;
     end if;
 
     -- masterIntegrationFields for amazonKeys
