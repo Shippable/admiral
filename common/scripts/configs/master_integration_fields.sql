@@ -679,6 +679,22 @@ do $$
       values (270, '59e71aa80552d20500e76bb0', 'kubeConfigContent', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-06', '2017-11-06');
     end if;
 
+    -- masterIntegrationFields for azureKeys
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 271) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (271, '59e71aa80552d20500e76bb1', 'appId', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-15', '2017-11-15');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 272) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (272, '59e71aa80552d20500e76bb1', 'password', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-15', '2017-11-15');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 273) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (273, '59e71aa80552d20500e76bb1', 'tenant', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-15', '2017-11-15');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
