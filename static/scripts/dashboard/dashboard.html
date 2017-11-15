@@ -2347,6 +2347,12 @@
                                 {{vm.addonsForm.azureDcosKey.displayName}}
                               </label>
                             </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.azureKeys.isEnabled">
+                                {{vm.addonsForm.azureKeys.displayName}} (Generic)
+                              </label>
+                            </div>
                             <div ng-if="vm.addonsForm.CLUSTER.displayName" class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.CLUSTER.isEnabled">

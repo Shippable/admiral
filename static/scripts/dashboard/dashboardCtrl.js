@@ -347,6 +347,10 @@
           displayName: '',
           isEnabled: false
         },
+        azureKeys: {
+          displayName: '',
+          isEnabled: false
+        },
         CLUSTER: {
           displayName: '',
           isEnabled: false
