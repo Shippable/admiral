@@ -168,6 +168,13 @@
       ]
     },
     {
+      "name": "kubernetesConfig",
+      "type": "generic",
+      "services": [
+        "provision"
+      ]
+    },
+    {
       "name": "DOC",
       "type": "generic",
       "services": []

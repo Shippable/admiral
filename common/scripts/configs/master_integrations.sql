@@ -471,5 +471,10 @@ do $$
     if exists (select 1 from "masterIntegrations" where "name" = 'KUBERNETES' and "typeCode" = 5002 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'KUBERNETES' and "typeCode" = 5002;
     end if;
+
+    --- Deprecate Microsoft Azure integration
+    if exists (select 1 from "masterIntegrations" where "name" = 'MAZ' and "typeCode" = 5012 and "isDeprecated" = false) then
+      update "masterIntegrations" set "isDeprecated" = true where "name" = 'MAZ' and "typeCode" = 5012;
+    end if;
   end
 $$;
