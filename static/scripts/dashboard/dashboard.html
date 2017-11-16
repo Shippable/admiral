@@ -2350,7 +2350,7 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.azureKeys.isEnabled">
-                                {{vm.addonsForm.azureKeys.displayName}} (Generic)
+                                {{vm.addonsForm.azureKeys.displayName}}
                               </label>
                             </div>
                             <div ng-if="vm.addonsForm.CLUSTER.displayName" class="checkbox">
@@ -2642,6 +2642,8 @@
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.MAZ.isEnabled">
                                 {{vm.addonsForm.MAZ.displayName}}
+                                <span ng-if="vm.addonsForm.MAZ.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.azureKeys.displayName}} instead.">(Deprecated)
+                                <span class="glyphicon glyphicon-info-sign"></span></span>
                               </label>
                             </div>
                             <div ng-if="vm.addonsForm.GCL.displayName" class="checkbox">
