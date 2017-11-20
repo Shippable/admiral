@@ -4298,5 +4298,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'reqProcImage') then
       alter table "systemMachineImages" add column "reqProcImage" VARCHAR(80);
     end if;
+
+    -- Add isInternal column to accountIntegrations table
+    if not exists (select 1 from information_schema.columns where table_name = 'accountIntegrations' and column_name = 'isInternal') then
+      alter table "accountIntegrations" add column "isInternal" BOOLEAN;
+    end if;
   end
 $$;
