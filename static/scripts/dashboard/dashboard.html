@@ -2638,7 +2638,7 @@
                                 {{vm.addonsForm.gcloudKey.displayName}}
                               </label>
                             </div>
-                            <div class="checkbox">
+                            <div ng-if="vm.addonsForm['MAZ'].displayName" class="checkbox">
                               <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.MAZ.isEnabled">
                                 {{vm.addonsForm.MAZ.displayName}}

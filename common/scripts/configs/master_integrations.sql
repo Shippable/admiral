@@ -176,12 +176,6 @@ do $$
       values ('58a160e8c2845c9d5fb82042', 63, 'keyValuePair', 'Key-Value pair', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
     end if;
 
-    -- Microsoft Azure master integration
-    if not exists (select 1 from "masterIntegrations" where "name" = 'MAZ' and "typeCode" = 5012) then
-      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58ecb1a8f318373d7f5645f6', 66, 'MAZ', 'Microsoft Azure', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
-    end if;
-
     -- Digital Ocean master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'DOC' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
