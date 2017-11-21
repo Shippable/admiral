@@ -2859,46 +2859,46 @@ do $$
       roleCode := 6060
     );
 
-    -- set strictJobs routeRoles
+    -- set waitingJobs routeRoles
 
     perform set_route_role(
-      routePattern := '/strictJobs',
+      routePattern := '/waitingJobs',
       httpVerb := 'GET',
       roleCode := 6000
     );
 
     perform set_route_role(
-      routePattern := '/strictJobs',
+      routePattern := '/waitingJobs',
       httpVerb := 'GET',
       roleCode := 6010
     );
 
     perform set_route_role(
-      routePattern := '/strictJobs',
+      routePattern := '/waitingJobs',
       httpVerb := 'GET',
       roleCode := 6020
     );
 
     perform set_route_role(
-      routePattern := '/strictJobs',
+      routePattern := '/waitingJobs',
       httpVerb := 'GET',
       roleCode := 6060
     );
 
     perform set_route_role(
-      routePattern := '/strictJobs/:strictJobId',
+      routePattern := '/waitingJobs/:waitingJobId',
       httpVerb := 'DELETE',
       roleCode := 6010
     );
 
     perform set_route_role(
-      routePattern := '/strictJobs/:strictJobId',
+      routePattern := '/waitingJobs/:waitingJobId',
       httpVerb := 'DELETE',
       roleCode := 6020
     );
 
     perform set_route_role(
-      routePattern := '/strictJobs/:strictJobId',
+      routePattern := '/waitingJobs/:waitingJobId',
       httpVerb := 'DELETE',
       roleCode := 6060
     );
