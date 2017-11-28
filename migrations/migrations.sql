@@ -4303,5 +4303,18 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'accountIntegrations' and column_name = 'isInternal') then
       alter table "accountIntegrations" add column "isInternal" BOOLEAN;
     end if;
+
+    -- Add projectId column to jobTestReports table and populate projectId for existing jobTestReports
+    if not exists (select 1 from information_schema.columns where table_name = 'jobTestReports' and column_name = 'projectId') then
+      alter table "jobTestReports" add column "projectId" varchar(24);
+      update "jobTestReports" as t set "projectId" = (select "projectId" from jobs where id = t."jobId");
+      alter table "jobTestReports" alter column "projectId" set not null;
+      create index "jobTestRepProjIdI" on "jobTestReports" using btree("projectId");
+    end if;
+
+  -- Adds foreign key relationships for jobTestReports
+    if not exists (select 1 from pg_constraint where conname = 'jobTestReports_projectId_fkey') then
+      alter table "jobTestReports" add constraint "jobTestReports_projectId_fkey" foreign key ("projectId") references "projects"(id) on update restrict on delete restrict;
+    end if;
   end
 $$;
