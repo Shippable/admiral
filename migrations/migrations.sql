@@ -4307,7 +4307,7 @@ do $$
     -- Add projectId column to jobTestReports table and populate projectId for existing jobTestReports
     if not exists (select 1 from information_schema.columns where table_name = 'jobTestReports' and column_name = 'projectId') then
       alter table "jobTestReports" add column "projectId" varchar(24);
-      update "jobTestReports" as t set "projectId" = (select "projectId" from jobs where id = t."jobId");
+      update "jobTestReports" SET "projectId" = jobs."projectId" from jobs where "jobTestReports"."jobId" = "jobs".id;
       alter table "jobTestReports" alter column "projectId" set not null;
       create index "jobTestRepProjIdI" on "jobTestReports" using btree("projectId");
     end if;
