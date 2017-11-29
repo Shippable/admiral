@@ -4308,7 +4308,6 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'jobTestReports' and column_name = 'projectId') then
       alter table "jobTestReports" add column "projectId" varchar(24);
       update "jobTestReports" SET "projectId" = jobs."projectId" from jobs where "jobTestReports"."jobId" = "jobs".id;
-      alter table "jobTestReports" alter column "projectId" set not null;
       create index "jobTestRepProjIdI" on "jobTestReports" using btree("projectId");
     end if;
 
