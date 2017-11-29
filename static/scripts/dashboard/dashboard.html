@@ -2427,6 +2427,18 @@
                                 {{vm.addonsForm.joyentTritonKey.displayName}}
                               </label>
                             </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.DOC.isEnabled">
+                                {{vm.addonsForm.DOC.displayName}}
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.gcloudKey.isEnabled">
+                                {{vm.addonsForm.gcloudKey.displayName}}
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -2622,20 +2634,8 @@
                             </div>
                             <div class="checkbox">
                               <label>
-                                <input type="checkbox" ng-model="vm.addonsForm.DOC.isEnabled">
-                                {{vm.addonsForm.DOC.displayName}}
-                              </label>
-                            </div>
-                            <div class="checkbox">
-                              <label>
                                 <input type="checkbox" ng-model="vm.addonsForm.keyValuePair.isEnabled">
                                 {{vm.addonsForm.keyValuePair.displayName}}
-                              </label>
-                            </div>
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" ng-model="vm.addonsForm.gcloudKey.isEnabled">
-                                {{vm.addonsForm.gcloudKey.displayName}}
                               </label>
                             </div>
                             <div ng-if="vm.addonsForm['MAZ'].displayName" class="checkbox">
