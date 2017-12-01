@@ -4315,5 +4315,17 @@ do $$
     if not exists (select 1 from pg_constraint where conname = 'jobTestReports_projectId_fkey') then
       alter table "jobTestReports" add constraint "jobTestReports_projectId_fkey" foreign key ("projectId") references "projects"(id) on update restrict on delete restrict;
     end if;
+
+    -- Add projectId column to jobCoverageReports table and populate projectId for existing jobCoverageReports
+    if not exists (select 1 from information_schema.columns where table_name = 'jobCoverageReports' and column_name = 'projectId') then
+      alter table "jobCoverageReports" add column "projectId" varchar(24);
+      update "jobCoverageReports" SET "projectId" = jobs."projectId" from jobs where "jobCoverageReports"."jobId" = "jobs".id;
+      create index "jobCovRepProjIdI" on "jobCoverageReports" using btree("projectId");
+    end if;
+
+  -- Adds foreign key relationships for jobCoverageReports
+    if not exists (select 1 from pg_constraint where conname = 'jobCoverageReports_projectId_fkey') then
+      alter table "jobCoverageReports" add constraint "jobCoverageReports_projectId_fkey" foreign key ("projectId") references "projects"(id) on update restrict on delete restrict;
+    end if;
   end
 $$;
