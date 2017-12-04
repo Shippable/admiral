@@ -4327,10 +4327,5 @@ do $$
     if not exists (select 1 from pg_constraint where conname = 'jobCoverageReports_projectId_fkey') then
       alter table "jobCoverageReports" add constraint "jobCoverageReports_projectId_fkey" foreign key ("projectId") references "projects"(id) on update restrict on delete restrict;
     end if;
-
-    -- Add npsAnswers column to accounts
-    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'npsAnswers') then
-      alter table "accounts" add column "npsAnswers" varchar(1024);
-    end if;
   end
 $$;
