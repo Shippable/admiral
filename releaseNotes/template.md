@@ -4,20 +4,24 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple bold title**: brief description. [link to docs](#).
+  - **simple title**: brief description. [link to docs](#).
       - itemized
       - list
       - for details
       - if necessary
 
 ## Fixes
-  - **simple bold title**: brief description
-      - actions
-      - required
+  - **simple title**: brief description
+      - actions required
+      - or additional details
 
 ## Shippable Server
 
   - Features
-      - **simple bold title**: brief description
+      - **simple title**: brief description
   - Fixes
-      - **simple bold title**: brief description
+      - **simple title**: brief description
+
+## History
+
+To view Shippable's release history, check out our [releases page on github](https://github.com/Shippable/admiral/releases).
