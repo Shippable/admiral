@@ -445,6 +445,27 @@ do $$
       values (8001, 'aarch64', 'archType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    -- Add systemCodes for operatingSystem
+    if not exists (select 1 from "systemCodes" where code = 9000) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (9000, 'Ubuntu_14.04', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-06', '2017-12-06');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 9001) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (9001, 'Ubuntu_16.04', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-07-06', '2017-07-06');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 9002) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (9002, 'WindowsServer_2016', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-07-06', '2017-07-06');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 9003) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (9003, 'macOS_10.12', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-07-06', '2017-07-06');
+    end if;
+
     -- Add systemCodes for jobStatesMap
     if not exists (select 1 from "systemCodes" where code = 201) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
