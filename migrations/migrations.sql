@@ -1590,6 +1590,34 @@ do $$
       roleCode := 6060
     );
 
+    -- GET /clusterNodeTemplates for justUser
+    perform set_route_role(
+      routePattern := '/clusterNodeTemplates',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
+    -- GET /clusterNodeTemplates for member
+    perform set_route_role(
+      routePattern := '/clusterNodeTemplates',
+      httpVerb := 'GET',
+      roleCode := 6000
+    );
+
+    -- GET /clusterNodeTemplates for collaborator
+    perform set_route_role(
+      routePattern := '/clusterNodeTemplates',
+      httpVerb := 'GET',
+      roleCode := 6010
+    );
+
+    -- GET /clusterNodeTemplates for admin
+    perform set_route_role(
+      routePattern := '/clusterNodeTemplates',
+      httpVerb := 'GET',
+      roleCode := 6020
+    );
+
     -- set cluster node consoles route roles
     perform set_route_role(
       routePattern := '/clusterNodes/:clusterNodeId/clusterNodeConsoles',
