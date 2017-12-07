@@ -4403,28 +4403,5 @@ do $$
       alter table "accounts" add column "npsAnswer" varchar(1024);
     end if;
 
-    -- Add osTypeCode column to systemMachineImages table
-    if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'osTypeCode') then
-      alter table "systemMachineImages" add column "osTypeCode" INT NOT NULL DEFAULT 9000;
-    end if;
-
-    -- Add foreign key relationship to systemMachineImages table
-    if not exists (select 1 from pg_constraint where conname = 'systemMachineImages_osTypeCode_fkey') then
-      alter table "systemMachineImages" add constraint "systemMachineImages_osTypeCode_fkey" foreign key ("osTypeCode") references "systemCodes"(code) on update restrict on delete restrict;
-    end if;
-
-    -- Reindex isDefaultArchTypeCodeU to sysMachImgIsDefaultArchTypeCodeOsTypeCodeU in system machine images table
-    if exists (select 1 from pg_indexes where tablename = 'systemMachineImages' and indexname = 'sysMachImgIsDefaultArchTypeCodeU') then
-      drop index "sysMachImgIsDefaultArchTypeCodeU";
-    end if;
-
-    if exists (select 1 from pg_indexes where tablename = 'systemMachineImages' and indexname = 'isDefaultArchTypeCodeU') then
-      drop index "isDefaultArchTypeCodeU";
-    end if;
-
-    if not exists (select 1 from pg_indexes where tablename = 'systemMachineImages' and indexname = 'sysMachImgIsDefaultArchTypeCodeOsTypeCodeU') then
-      create unique index "sysMachImgIsDefaultArchTypeCodeOsTypeCodeU" on "systemMachineImages" using btree("isDefault", "archTypeCode", "osTypeCode") WHERE "isDefault" = true;
-    end if;
-
   end
 $$;
