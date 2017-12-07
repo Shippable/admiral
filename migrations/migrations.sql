@@ -88,6 +88,11 @@ do $$
       values ('sysIntegrationName', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a',  '2016-06-01', '2016-06-01');
     end if;
 
+    if not exists (select 1 from "systemProperties" where "fieldName" = 'sysVersionFormat') then
+      insert into "systemProperties" ("fieldName", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('sysVersionFormat', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a',  '2016-06-01', '2016-06-01');
+    end if;
+
     -- Drop masterIntegration dependency from providers
     if exists (select 1 from pg_constraint where conname = 'providers_masterIntegrationId_fkey') then
       alter table "providers" drop constraint "providers_masterIntegrationId_fkey";
