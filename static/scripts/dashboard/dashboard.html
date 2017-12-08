@@ -2723,6 +2723,22 @@
                                   ng-model="vm.addonsForm.systemIntegrations.clearbit.data.envs.clearbitApiKey" ng-disabled="vm.installingAddons"/>
                               </div>
                             </div>
+                            <!-- intercom -->
+                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.intercom.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                              <label>
+                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.intercom.isEnabled">
+                                Intercom
+                              </label>
+                            </div>
+                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.intercom.isEnabled">
+                              <div class="col-md-offset-1 col-md-3">
+                                Access Token
+                              </div>
+                              <div class="col-md-8">
+                                <input type="text" class="form-control input-sm" name="intercomAccessToken"
+                                  ng-model="vm.addonsForm.systemIntegrations.intercom.data.envs.intercomAccessToken" ng-disabled="vm.installingAddons"/>
+                              </div>
+                            </div>
                             <!-- deploy -->
                             <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.deploy.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
                               <label>

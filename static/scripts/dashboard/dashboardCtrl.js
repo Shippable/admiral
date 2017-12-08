@@ -503,6 +503,16 @@
               }
             }
           },
+          intercom: {
+            isEnabled: false,
+            name: 'intercom',
+            masterName: 'keyValuePair',
+            data: {
+              envs: {
+                intercomAccessToken: ''
+              }
+            }
+          },
           deploy: {
             isEnabled: false,
             name: 'deploy',
@@ -893,6 +903,13 @@
           keyValuePair: {
             envs: {
               clearbitApiKey: ''
+            }
+          }
+        },
+        intercom: {
+          keyValuePair: {
+            envs: {
+              intercomAccessToken: ''
             }
           }
         },
