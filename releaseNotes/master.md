@@ -19,7 +19,8 @@ ${RES_VER_DATE}
 ## Shippable Server
 
   - Features
-      - **simple title**: brief description
+      - **Configuring SMTP with no authentication**: You can now use email integration with an SMTP relay that does not require username and password.
+
   - Fixes
       - **simple title**: brief description
 
