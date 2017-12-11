@@ -3529,7 +3529,8 @@
           updateMasterIntegrations,
           updateAddonsPanelSystemSettings,
           updateAddonsPanelSystemIntegrations,
-          getServices.bind(null, {})
+          startOrStopIntercomProc,
+          getServices.bind(null, {}),
         ],
         function (err) {
           $scope.vm.installingAddons = false;
@@ -3615,6 +3616,35 @@
           return next();
         }
       );
+    }
+
+    function startOrStopIntercomProc(next) {
+      var intercomProcService = _.findWhere($scope.vm.allServices,
+        {serviceName: 'intercomProc'});
+      if ($scope.vm.addonsForm.systemIntegrations.intercom.isEnabled &&
+        !intercomProcService.isEnabled) {
+        startService('intercomProc',
+          function (err) {
+            if (err)
+              return next(err);
+
+            return next();
+          }
+        );
+      }
+      else if (!$scope.vm.addonsForm.systemIntegrations.intercom.isEnabled &&
+        intercomProcService.isEnabled) {
+        admiralApiAdapter.deleteService('intercomProc', {},
+          function (err) {
+            if (err)
+              return next(err);
+
+            return next();
+          }
+        );
+      }
+      else
+        return next();
     }
 
     $scope.$watch('vm.installForm.www.url.data.url',
