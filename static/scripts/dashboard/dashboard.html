@@ -2202,7 +2202,7 @@
                         <thead>
                         </thead>
                         <tbody>
-                          <tr ng-repeat="service in vm.allServices" ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">
+                          <tr ng-repeat="service in vm.allServices | orderBy: 'serviceName'" ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">
                             <td>
                               <b>{{service.serviceName}}</b>
                             </td>
