@@ -4338,5 +4338,14 @@ do $$
       alter table "accounts" add column "npsAnswer" varchar(1024);
     end if;
 
+    -- Add intercomId column to accounts
+    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'intercomId') then
+      alter table "accounts" add column "intercomId" varchar(30);
+    end if;
+
+    -- Add lastIntercomSyncAt column to accounts table
+    if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'lastIntercomSyncAt') then
+      alter table "accounts" add column "lastIntercomSyncAt" TIMESTAMP WITH TIME ZONE;
+    end if;
   end
 $$;
