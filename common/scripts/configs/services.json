@@ -345,6 +345,11 @@
       "apiUrlIntegration": "internalAPI"
     },
     {
+      "name": "intercomProc",
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
+    },
+    {
       "name": "irc",
       "repository": "micro",
       "apiUrlIntegration": "internalAPI"

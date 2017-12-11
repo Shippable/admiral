@@ -210,7 +210,7 @@ function _generateSystemIntegrationData(bag) {
       'core.hubspotSync|core.marshaller|marshaller.ec2|core.sync|' +
       'job.request|job.trigger|cluster.init|steps.deploy|steps.manifest|' +
       'steps.provision|steps.rSync|steps.release|core.logup|www.signals|' +
-      'core.segment'
+      'core.segment|core.intercom'
   };
 
   return data;
