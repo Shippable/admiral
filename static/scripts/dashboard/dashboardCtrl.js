@@ -3631,8 +3631,7 @@
             return next();
           }
         );
-      }
-      else if (!$scope.vm.addonsForm.systemIntegrations.intercom.isEnabled &&
+      } else if (!$scope.vm.addonsForm.systemIntegrations.intercom.isEnabled &&
         intercomProcService.isEnabled) {
         admiralApiAdapter.deleteService('intercomProc', {},
           function (err) {
@@ -3642,9 +3641,9 @@
             return next();
           }
         );
-      }
-      else
+      } else {
         return next();
+      }
     }
 
     $scope.$watch('vm.installForm.www.url.data.url',
