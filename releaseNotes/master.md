@@ -4,10 +4,11 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **Azure Container Service (AKS) deployments**: AKS is now supported in deploy jobs.
+  - **Azure Container Service (AKS)**: Shippable now has native support for [AKS](https://azure.microsoft.com/en-us/services/container-service/) in both managed deploy jobs and cliConfig resources.
       - An Azure Keys integration can be used in a cluster resource to deploy to a cluster in AKS.  See the [cluster documentation](http://docs.shippable.com/platform/workflow/resource/cluster/) for more information.
       - LoadBalancer resources with an Azure Keys integration used as inputs to a provision job will be provisioned in AKS.  See the [loadBalancer documentation](http://docs.shippable.com/platform/workflow/resource/loadbalancer/) for more information.
       - The Azure CLI has been updated to version 2.0.21 in runSh jobs.
+      - The [cliConfig resource](http://docs.shippable.com/platform/workflow/resource/cliConfig/) has been updated to support an `aks` scope when an Azure Keys integration is used.  This will automatically authenticate with your cluster, allowing you to use kubectl to issue commands directly to your cluster.
 
   - **Custom dashboards have an option to trigger debug builds**: Rebuilding with SSH is now supported in custom dashboard.
       - This will allow you to debug problems that arise due to differences in your local and Shippable environment.
