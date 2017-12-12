@@ -466,6 +466,52 @@ do $$
       values (9003, 'macOS_10.12', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-07-06', '2017-07-06');
     end if;
 
+    -- Add systemCodes for clusterTypes
+    if not exists (select 1 from "systemCodes" where code = 10000) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10000, 'dynamic__x86_64__Ubuntu_14.04__c4.large', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10001) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10001, 'dynamic__x86_64__Ubuntu__14.04__c4.xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10002) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10002, 'dynamic__x86_64__Ubuntu_14.04__c4.2xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10003) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10003, 'custom__x86_64__Ubuntu_14.04', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10004) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10004, 'custom__x86_64__Ubuntu_16.04', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10005) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10005, 'custom__aarch64__Ubuntu_16.04', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10006) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10006, 'custom__x86_64__macOS_10.12', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10007) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10007, 'custom__x86_64__WindowsServer_2016', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10008) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10008, 'custom__x86_64__CentOS_7', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
     -- Add systemCodes for jobStatesMap
     if not exists (select 1 from "systemCodes" where code = 201) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
