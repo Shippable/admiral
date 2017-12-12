@@ -1,4 +1,4 @@
-FROM drydock/microbase:{{%TAG%}}
+FROM drydock/microbase:master
 
 ADD . /home/shippable/admiral
 
