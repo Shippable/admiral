@@ -14,6 +14,8 @@ ${RES_VER_DATE}
       - This will allow you to debug problems that arise due to differences in your local and Shippable environment.
       - Refer [SSH Access to Build Machine](http://docs.shippable.com/ci/ssh-access/#which-subscriptions-can-debug?) for more information.
 
+  - **SPOG persists the zoom and position context within a browser session**: Zoom and position context for SPOG will persist across page switches within a browser session making SPOG more user-friendly for large pipelines.
+
 ## Fixes
   - **Fixes Permissions Checks while creating or deleting a job's coverage and test reports**: We have fixed the bug where users with incorrect permissions were able to create and delete coverage and test reports for a job. After this fix, only users with collaborator and owner access to a project can create and delete coverage and test reports.
 
