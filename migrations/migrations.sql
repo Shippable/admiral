@@ -4347,5 +4347,25 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'lastIntercomSyncAt') then
       alter table "accounts" add column "lastIntercomSyncAt" TIMESTAMP WITH TIME ZONE;
     end if;
+
+    -- Remove dailyAggs.activeSubscriptions30Days
+    if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'activeSubscriptions30Days') then
+      alter table "dailyAggs" drop column "activeSubscriptions30Days";
+    end if;
+
+    -- Remove dailyAggs.activeProjects30Days
+    if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'activeProjects30Days') then
+      alter table "dailyAggs" drop column "activeProjects30Days";
+    end if;
+
+    -- Remove dailyAggs.buildersToday
+    if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildersToday') then
+      alter table "dailyAggs" drop column "buildersToday";
+    end if;
+
+    -- Remove dailyAggs.builders30Days 
+    if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'builders30Days') then
+      alter table "dailyAggs" drop column "builders30Days";
+    end if;
   end
 $$;
