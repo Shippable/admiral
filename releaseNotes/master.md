@@ -16,12 +16,18 @@ ${RES_VER_DATE}
 
   - **SPOG persists the zoom and position context within a browser session**: Zoom and position context for SPOG will persist across page switches within a browser session making SPOG more user-friendly for large pipelines.
 
+  - **New shipctl function available**: A new function has been added to shipctl. `shipctl get_resource_env <resource> <env>`.  This should ease the pain of figuring out the sanitized variable name when trying to access resource-specific environment variables.
+      - available in runSh jobs only at this time.
+      - see [shipctl docs](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/) for more information.
+
 ## Fixes
   - **Fixes Permissions Checks while creating or deleting a job's coverage and test reports**: We have fixed the bug where users with incorrect permissions were able to create and delete coverage and test reports for a job. After this fix, only users with collaborator and owner access to a project can create and delete coverage and test reports.
 
   - **Fixes bug of deploy keys not being deleted while hard deleting a git resource**: We have fixed the bug of deploy keys not being deleted on hard deleting the git resource. After this fix, hard deleting a git resource will delete the deploy keys of the git resource along with its webhooks.
 
   - **Bitbucket build statuses are created for latest run of a commit**: We have fixed the bug where bitbucket build statuses are created for each run within a commit. After this fix, we only show the latest run status in Bitbucket.
+
+  - **shipctl copy_file_from_resource_state**: This function used to only work on `state` type resources.  Now it will also work on any IN job.  Use this function to copy files from your incoming job's state folder to any destination.
 
 ## Shippable Server
 
