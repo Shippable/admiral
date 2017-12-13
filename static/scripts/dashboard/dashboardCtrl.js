@@ -1265,6 +1265,7 @@
             return next();
 
           $scope.vm.archTypes = _.filter(systemCodes, {group: 'archType'});
+          $scope.vm.clusterTypes = _.filter(systemCodes, {group:'clusterType'});
           $scope.vm.x86ArchCode = _.findWhere($scope.vm.archTypes,
             {name: 'x86_64'}).code;
           $scope.vm.armArchCode = _.findWhere($scope.vm.archTypes,
@@ -1311,7 +1312,8 @@
             'technicalSupportAvailable',
             'customNodesAdminOnly',
             'allowedSystemImageFamily',
-            'defaultMinionInstanceSize'
+            'defaultMinionInstanceSize',
+            'defaultClusterType'
           ];
 
           _.each(installPanelSystemSettings,
