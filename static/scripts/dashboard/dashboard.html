@@ -1769,6 +1769,18 @@
                         &nbsp;
                         <div class="row">
                           <div class="col-md-4">
+                            Default cluster type created for a subscription
+                          </div>
+                          <div class="col-md-8">
+                            <select
+                              ng-model="vm.installForm.systemSettings.defaultClusterType"
+                              ng-options="clusterType.name as clusterType.name for clusterType in vm.clusterTypes">
+                            </select>
+                          </div>
+                        </div>
+                        &nbsp;
+                        <div class="row">
+                          <div class="col-md-4">
                             Location of node provisioning scripts
                           </div>
                           <div class="col-md-8">

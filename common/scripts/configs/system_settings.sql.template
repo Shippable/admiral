@@ -43,9 +43,14 @@ do $$
         "mktgPageAggsLastDtTm" timestamp with time zone,
         "mktgCTAAggsLastDtTm" timestamp with time zone,
         "defaultMinionInstanceSize" VARCHAR(255),
+        "defaultClusterType" VARCHAR(255) NOT NULL DEFAULT 'dynamic__x86_64__Ubuntu_14.04__c4.large',
         "createdAt" timestamp with time zone NOT NULL,
         "updatedAt" timestamp with time zone NOT NULL
       );
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'defaultClusterType') then
+      alter table "systemSettings" add column "defaultClusterType" VARCHAR(255) NOT NULL DEFAULT 'dynamic__x86_64__Ubuntu_14.04__c4.large';
     end if;
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'hubspotProjectsLastSyncTime') then
