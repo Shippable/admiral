@@ -19,6 +19,8 @@ ${RES_VER_DATE}
 ## Fixes
   - **Fixes Permissions Checks while creating or deleting a job's coverage and test reports**: We have fixed the bug where users with incorrect permissions were able to create and delete coverage and test reports for a job. After this fix, only users with collaborator and owner access to a project can create and delete coverage and test reports.
 
+  - **Fixes bug of deploy keys not being deleted while hard deleting a git resource**: We have fixed the bug of deploy keys not being deleted on hard deleting the git resource. After this fix, hard deleting a git resource will delete the deploy keys of the git resource along with its webhooks.
+
 ## Shippable Server
 
   - Features
