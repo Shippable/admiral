@@ -21,6 +21,8 @@ ${RES_VER_DATE}
 
   - **Fixes bug of deploy keys not being deleted while hard deleting a git resource**: We have fixed the bug of deploy keys not being deleted on hard deleting the git resource. After this fix, hard deleting a git resource will delete the deploy keys of the git resource along with its webhooks.
 
+  - **Bitbucket build statuses are created for latest run of a commit**: We have fixed the bug where bitbucket build statuses are created for each run within a commit. After this fix, we only show the latest run status in Bitbucket.
+
 ## Shippable Server
 
   - Features
