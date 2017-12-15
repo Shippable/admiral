@@ -4363,9 +4363,14 @@ do $$
       alter table "dailyAggs" drop column "buildersToday";
     end if;
 
-    -- Remove dailyAggs.builders30Days 
+    -- Remove dailyAggs.builders30Days
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'builders30Days') then
       alter table "dailyAggs" drop column "builders30Days";
+    end if;
+
+    -- Add subscriptions.clusterLicenses
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'clusterLicenses') then
+      alter table "subscriptions" add column "clusterLicenses" TEXT;
     end if;
   end
 $$;
