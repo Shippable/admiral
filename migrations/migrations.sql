@@ -4447,5 +4447,10 @@ do $$
     if not exists (select 1 from pg_constraint where conname = 'clusterNodes_clusterId_fkey') then
       alter table "clusterNodes" add constraint "clusterNodes_clusterId_fkey" foreign key ("clusterId") references "clusters"(id) on update restrict on delete restrict;
     end if;
+
+    -- Add activeFreePrivateProjectsToday column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'activeFreePrivateProjectsToday') then
+      alter table "dailyAggs" add column "activeFreePrivateProjectsToday" INTEGER;
+    end if;
   end
 $$;
