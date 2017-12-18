@@ -4417,5 +4417,35 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'activePaidSubscriptionsToday') then
       alter table "dailyAggs" add column "activePaidSubscriptionsToday" INTEGER;
     end if;
+
+    -- Add subscriptions.defaultClusterId
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'defaultClusterId') then
+      alter table "subscriptions" add column "defaultClusterId" INTEGER;
+    end if;
+
+    -- Add subscriptions.defaultClusterId foreign key
+    if not exists (select 1 from pg_constraint where conname = 'subscriptions_defaultClusterId_fkey') then
+      alter table "subscriptions" add constraint "subscriptions_defaultClusterId_fkey" foreign key ("defaultClusterId") references "clusters"(id) on update restrict on delete restrict;
+    end if;
+
+    -- Add systemMachineImages.runtimeTemplateId
+    if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'runtimeTemplateId') then
+      alter table "systemMachineImages" add column "runtimeTemplateId" INTEGER;
+    end if;
+
+    -- Add systemMachineImages.runtimeTemplateId foreign key
+    if not exists (select 1 from pg_constraint where conname = 'systemMachineImages_runtimeTemplateId_fkey') then
+      alter table "systemMachineImages" add constraint "systemMachineImages_runtimeTemplateId_fkey" foreign key ("runtimeTemplateId") references "runtimeTemplates"(id) on update restrict on delete restrict;
+    end if;
+
+    -- Add clusterNodes.clusterId
+    if not exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'clusterId') then
+      alter table "clusterNodes" add column "clusterId" INTEGER;
+    end if;
+
+    -- Add clusterNodes.clusterId foreign key
+    if not exists (select 1 from pg_constraint where conname = 'clusterNodes_clusterId_fkey') then
+      alter table "clusterNodes" add constraint "clusterNodes_clusterId_fkey" foreign key ("clusterId") references "clusters"(id) on update restrict on delete restrict;
+    end if;
   end
 $$;
