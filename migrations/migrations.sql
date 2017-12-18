@@ -4412,5 +4412,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsCancelled') then
       alter table "dailyAggs" add column "buildJobsCancelled" INTEGER;
     end if;
+
+    -- Add lastIntercomProjectsScanAt column to systemSettings table
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'lastIntercomProjectsScanAt') then
+      alter table "systemSettings" add column "lastIntercomProjectsScanAt" TIMESTAMP WITH TIME ZONE;
+    end if;
   end
 $$;
