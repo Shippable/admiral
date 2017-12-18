@@ -11,9 +11,7 @@ ${RES_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **SPOG shows incorrect color for inconsistent orphaned resources**: SPOG will now show the correct colour for inconsistent orphaned resources.
 
 ## Shippable Server
 
