@@ -4372,5 +4372,45 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'clusterLicenses') then
       alter table "subscriptions" add column "clusterLicenses" TEXT;
     end if;
+
+    -- Add buildJobCount column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobCount') then
+      alter table "dailyAggs" add column "buildJobCount" INTEGER;
+    end if;
+
+    -- Add buildJobLengthInMS column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobLengthInMS') then
+      alter table "dailyAggs" add column "buildJobLengthInMS" BIGINT;
+    end if;
+
+    -- Add buildJobsFailed column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsFailed') then
+      alter table "dailyAggs" add column "buildJobsFailed" INTEGER;
+    end if;
+
+    -- Add buildJobsSuccessful column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsSuccessful') then
+      alter table "dailyAggs" add column "buildJobsSuccessful" INTEGER;
+    end if;
+
+    -- Add buildJobsUnstable column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsUnstable') then
+      alter table "dailyAggs" add column "buildJobsUnstable" INTEGER;
+    end if;
+
+    -- Add buildJobsTimedOut column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsTimedOut') then
+      alter table "dailyAggs" add column "buildJobsTimedOut" INTEGER;
+    end if;
+
+    -- Add buildJobsSkipped column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsSkipped') then
+      alter table "dailyAggs" add column "buildJobsSkipped" INTEGER;
+    end if;
+
+    -- Add buildJobsCancelled column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsCancelled') then
+      alter table "dailyAggs" add column "buildJobsCancelled" INTEGER;
+    end if;
   end
 $$;
