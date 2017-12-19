@@ -41,6 +41,7 @@ do $$
         "blockedEmails" TEXT,
         "minimumSCMAccountAgeInDays" INT,
         "lastIntercomProjectsScanAt" timestamp with time zone,
+        "lastIntercomRSyncScanAt" timestamp with time zone,
         "mktgPageAggsLastDtTm" timestamp with time zone,
         "mktgCTAAggsLastDtTm" timestamp with time zone,
         "defaultMinionInstanceSize" VARCHAR(255),
@@ -76,6 +77,10 @@ do $$
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'lastIntercomProjectsScanAt') then
       alter table "systemSettings" add column "lastIntercomProjectsScanAt" TIMESTAMP WITH TIME ZONE;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'lastIntercomRSyncScanAt') then
+      alter table "systemSettings" add column "lastIntercomRSyncScanAt" TIMESTAMP WITH TIME ZONE;
     end if;
 
   end
