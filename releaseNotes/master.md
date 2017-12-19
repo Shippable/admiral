@@ -4,11 +4,7 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Show loading/in-progress animations**: Shows progressive loading bar for all page transitions.
 
 ## Fixes
   - **SPOG shows incorrect color for inconsistent orphaned resources**: SPOG will now show the correct colour for inconsistent orphaned resources.
