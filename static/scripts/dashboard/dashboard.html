@@ -2862,29 +2862,6 @@
                                   ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreeEnvironment" ng-disabled="vm.installingAddons"/>
                               </div>
                             </div>
-                            <!-- segment -->
-                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.segment.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
-                              <label>
-                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.segment.isEnabled">
-                                Segment
-                              </label>
-                            </div>
-                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.segment.isEnabled">
-                              <div class="col-md-offset-1 col-md-3">
-                                API Key
-                              </div>
-                              <div class="col-md-8">
-                                <input type="text" class="form-control input-sm" name="segmentApiKey"
-                                  ng-model="vm.addonsForm.systemIntegrations.segment.data.envs.segmentApiKey" ng-disabled="vm.installingAddons"/>
-                              </div>
-                              <div class="col-md-offset-1 col-md-3">
-                                Mktg Key
-                              </div>
-                              <div class="col-md-8">
-                                <input type="text" class="form-control input-sm" name="segmentMktgKey"
-                                  ng-model="vm.addonsForm.systemIntegrations.segment.data.envs.segmentMktgKey" ng-disabled="vm.installingAddons"/>
-                              </div>
-                           </div>
                          </div>
                        </div>
                       </div>

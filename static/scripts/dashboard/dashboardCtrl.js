@@ -556,17 +556,6 @@
               braintreeEnvironment: '',
               braintreePublicKey: ''
             }
-          },
-          segment: {
-            isEnabled: false,
-            name: 'segment',
-            masterName: 'keyValuePair',
-            data: {
-              envs: {
-                segmentApiKey: '',
-                segmentMktgKey: ''
-              }
-            }
           }
         }
       },
@@ -937,14 +926,6 @@
             braintreePrivateKey: '',
             braintreeEnvironment: '',
             braintreePublicKey: ''
-          }
-        },
-        segment: {
-          keyValuePair: {
-            envs: {
-              segmentApiKey: '',
-              segmentMktgKey: ''
-            }
           }
         }
       };
