@@ -213,13 +213,6 @@
       "services": []
     },
     {
-      "name": "segmentKeys",
-      "type": "generic",
-      "services" : [
-        "segmentListener"
-      ]
-    },
-    {
       "name": "Slack",
       "type": "notification",
       "services": [
@@ -417,11 +410,6 @@
       "repository": "micro",
       "isCore": true,
       "apiUrlIntegration": "api"
-    },
-    {
-      "name": "segmentListener",
-      "repository": "micro",
-      "apiUrlIntegration": "internalAPI"
     },
     {
       "name": "slack",
