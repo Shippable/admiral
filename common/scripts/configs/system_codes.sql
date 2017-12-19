@@ -466,6 +466,11 @@ do $$
       values (9003, 'macOS_10.12', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-07-06', '2017-07-06');
     end if;
 
+    if not exists (select 1 from "systemCodes" where code = 9004) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (9004, 'CentOS_7', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-07-06', '2017-07-06');
+    end if;
+
     -- Add systemCodes for clusterTypes
     if not exists (select 1 from "systemCodes" where code = 10000) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
