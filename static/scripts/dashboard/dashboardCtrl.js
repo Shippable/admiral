@@ -407,10 +407,6 @@
           displayName: '',
           isEnabled: false
         },
-        hubspotToken: {
-          displayName: '',
-          isEnabled: false
-        },
         irc: {
           displayName: '',
           isEnabled: false
@@ -520,15 +516,6 @@
             data: {
               accessKey: '',
               secretKey: ''
-            }
-          },
-          mktg: {
-            isEnabled: false,
-            name: 'mktg',
-            masterName: 'hubspotToken',
-            data: {
-              hubspotApiEndPoint: '',
-              hubspotApiToken: ''
             }
           },
           mktgDB: {
@@ -824,10 +811,6 @@
         mktg: {
           url: {
             url: 'http://' + defaultWorkerAddress + ':50002'
-          },
-          hubspotToken: {
-            hubspotApiEndPoint: '',
-            hubspotApiToken: ''
           }
         },
         msg: {

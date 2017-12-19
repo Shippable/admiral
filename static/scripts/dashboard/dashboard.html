@@ -2671,54 +2671,6 @@
                                 {{vm.addonsForm.gitCredential.displayName}}
                               </label>
                             </div>
-                            <!-- hubspot -->
-                            <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
-                              <label>
-                                <input type="checkbox" ng-model="vm.addonsForm.systemIntegrations.mktg.isEnabled">
-                                Hubspot
-                              </label>
-                            </div>
-                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled">
-                              <div class="col-md-offset-1 col-md-3">
-                                hubspotListId
-                              </div>
-                              <div class="col-md-8">
-                                <input type="number" class="form-control input-sm" name="hubspotListId"
-                                  ng-model="vm.addonsForm.systemSettings.hubspotListId" ng-disabled="vm.installingAddons"/>
-                              </div>
-                            </div>
-                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled">
-                              <div class="col-md-offset-1 col-md-11">
-                                <div class="checkbox">
-                                  <label>
-                                    <input type="checkbox" ng-model="vm.addonsForm.systemSettings.hubspotShouldSimulate">
-                                    hubspotShouldSimulate
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled">
-                              <div class="col-md-12" ng-if="vm.addonsForm.systemIntegrations.mktg.isEnabled">
-                                <div class="row">
-                                  <div class="col-md-offset-1 col-md-3">
-                                    Hubspot API Endpoint
-                                  </div>
-                                  <div class="col-md-8">
-                                    <input type="text" class="form-control input-sm" name="hubspotApiEndPoint"
-                                      ng-model="vm.addonsForm.systemIntegrations.mktg.data.hubspotApiEndPoint" ng-disabled="vm.installingAddons"/>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-md-offset-1 col-md-3">
-                                    Hubspot API Token
-                                  </div>
-                                  <div class="col-md-8">
-                                    <input type="text" class="form-control input-sm" name="hubspotApiToken"
-                                      ng-model="vm.addonsForm.systemIntegrations.mktg.data.hubspotApiToken" ng-disabled="vm.installingAddons"/>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
                             <!-- clearbit -->
                             <div class="checkbox" ng-if="vm.addonsForm.systemIntegrations.clearbit.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
                               <label>
