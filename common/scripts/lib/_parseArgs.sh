@@ -374,6 +374,7 @@ __wipe_clean() {
   __process_msg "WARNING: including all containers and the database."
   __process_msg "Do you wish to continue? (Y to confirm)"
   read confirmation
+  confirmation=$(echo $confirmation | awk '{print toupper($0)}')
 
   if [[ "$confirmation" =~ "Y" ]]; then
 
@@ -410,6 +411,8 @@ __accept_shippable_license() {
   else
     __process_success "Do you wish to continue? (Y to confirm)"
     read confirmation
+    confirmation==$(echo $confirmation | awk '{print toupper($0)}')
+
     if [[ "$confirmation" =~ "Y" ]]; then
       __process_msg "Thank you for accepting the Shippable Server Software License Agreement. Continuing with installation."
     else
