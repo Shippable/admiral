@@ -4602,5 +4602,10 @@ do $$
       insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
       values (8000, 9004, 'v5.10.4', 'drydock', 'u16', 'v5.10.4', 'microbase', 'reqproc', true, '2017-12-19', '2017-12-19');
     end if;
+
+    -- Add addedJobResourceCount column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'addedJobResourceCount') then
+      alter table "dailyAggs" add column "addedJobResourceCount" INTEGER;
+    end if;
   end
 $$;
