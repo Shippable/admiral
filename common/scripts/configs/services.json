@@ -145,13 +145,6 @@
       ]
     },
     {
-      "name": "hubspotToken",
-      "type": "generic",
-      "services": [
-        "hubspotSync"
-      ]
-    },
-    {
       "name": "irc",
       "type": "notification",
       "services": [
@@ -329,11 +322,6 @@
     },
     {
       "name": "hipchat",
-      "repository": "micro",
-      "apiUrlIntegration": "internalAPI"
-    },
-    {
-      "name": "hubspotSync",
       "repository": "micro",
       "apiUrlIntegration": "internalAPI"
     },
