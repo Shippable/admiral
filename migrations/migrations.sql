@@ -4403,5 +4403,10 @@ do $$
       alter table "accounts" add column "npsAnswer" varchar(1024);
     end if;
 
+  -- Add timeoutMs column to builds
+    if not exists (select 1 from information_schema.columns where table_name = 'builds' and column_name = 'timeoutMS') then
+      alter table "builds" add column "timeoutMS" integer;
+    end if;
+
   end
 $$;
