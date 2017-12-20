@@ -312,7 +312,7 @@ __set_admiral_ip() {
   __process_success "Please enter your current IP address. This will be the address at which you access the installer webpage. Type D to set default (127.0.0.1) value."
   read response
 
-  if [ "$response" != "D" ]; then
+  if [ "$response" != "D" ] && ["$response" != "d"]; then
     export ADMIRAL_IP=$response
   else
     export ADMIRAL_IP=$admiral_ip
@@ -325,7 +325,7 @@ __set_db_ip() {
   __process_success "Please enter the IP address of the database or D to set the default ($db_ip)."
   read response
 
-  if [ "$response" != "D" ]; then
+  if [ "$response" != "D" ] && ["$response" != "d"]; then
     export DB_IP=$response
   else
     export DB_IP=$db_ip
@@ -337,6 +337,7 @@ __set_db_installed() {
     __process_success "Enter I to install a new database or E to use an existing one."
     __process_msg "Existing databases must be Postgres 9.5 and have a user named apiuser with full permissions on a database named shipdb."
     read response
+    response==$(echo $response | awk '{print toupper($0)}')
 
     if [ "$response" == "I" ]; then
       __process_msg "A new database will be installed"
@@ -360,6 +361,8 @@ __add_ssh_key_to_db() {
 
     __process_success "Enter Y to confirm that you have run this command"
     read confirmation
+    confirmation=$(echo $confirmation | awk '{print toupper($0)}')
+
     if [[ "$confirmation" =~ "Y" ]]; then
       __process_msg "Confirmation received"
     else
@@ -378,6 +381,7 @@ __set_db_port() {
   else
     __process_success "Please enter the database port or D to set the default ($db_port)."
     read response
+    response=$(echo $response | awk '{print toupper($0)}')
 
     if [ "$response" != "D" ]; then
       export DB_PORT=$response
@@ -411,6 +415,8 @@ __set_public_image_registry() {
 
 __require_confirmation() {
   read confirmation
+  confirmation=$(echo $confirmation | awk '{print toupper($0)}')
+
   if [[ "$confirmation" =~ "Y" ]]; then
     __process_msg "Confirmation received"
     export INSTALL_INPUTS_CONFIRMED=true
