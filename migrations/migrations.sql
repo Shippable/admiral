@@ -4612,5 +4612,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'builds' and column_name = 'timeoutMS') then
       alter table "builds" add column "timeoutMS" integer;
     end if;
+
+    -- Add avgQueueLength column to dailyAggs
+    if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'avgQueueLength') then
+      alter table "dailyAggs" add column "avgQueueLength" INTEGER;
+    end if;
   end
 $$;
