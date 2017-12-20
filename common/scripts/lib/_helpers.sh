@@ -312,7 +312,7 @@ __set_admiral_ip() {
   __process_success "Please enter your current IP address. This will be the address at which you access the installer webpage. Type D to set default (127.0.0.1) value."
   read response
 
-  if [ "$response" != "D" ] && ["$response" != "d"]; then
+  if [ "$response" != "D" ] && [ "$response" != "d" ]; then
     export ADMIRAL_IP=$response
   else
     export ADMIRAL_IP=$admiral_ip
@@ -325,7 +325,7 @@ __set_db_ip() {
   __process_success "Please enter the IP address of the database or D to set the default ($db_ip)."
   read response
 
-  if [ "$response" != "D" ] && ["$response" != "d"]; then
+  if [ "$response" != "D" ] && [ "$response" != "d" ]; then
     export DB_IP=$response
   else
     export DB_IP=$db_ip
