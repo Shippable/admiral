@@ -682,8 +682,22 @@
     function getSystemSettings(bag, next) {
       admiralApiAdapter.getSystemSettings(
         function (err, systemSettings) {
-          if (err)
-            return next(err);
+          if (err) {
+            if (err.id === 2000) {
+              admiralApiAdapter.postLogout({},
+                function (logoutErr) {
+                  if (logoutErr)
+                    return next(logoutErr);
+
+                  $state.go('login', $state.params);
+                  return next();
+                }
+              );
+            } else {
+              return next(err);
+            }
+          }
+
           if (_.isEmpty(systemSettings)) {
             // if empty, we can't do anything yet
             return next();
