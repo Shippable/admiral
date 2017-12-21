@@ -690,7 +690,7 @@
                     return next(logoutErr);
 
                   $state.go('login', $state.params);
-                  return next();
+                  return next(err);
                 }
               );
             } else {
