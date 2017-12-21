@@ -157,8 +157,7 @@ function _generateRunCommandOnebox(bag, next) {
   var who = bag.who + '|' + _generateRunCommandOnebox.name;
   logger.verbose(who, 'Inside');
 
-  var opts = ' --publish=50002:50002/tcp ' +
-    ' --network=host' +
+  var opts = ' --publish=50002:50002/tcp --restart=always --network=host' +
     ' --privileged=true';
 
   var runCommand = util.format('docker run -d ' +
