@@ -645,10 +645,22 @@
         function (err) {
           $scope.vm.isLoaded = true;
           if (err) {
-            dashboardCtrlDefer.reject(err);
-            return horn.error(err);
+            if ($scope.vm.shouldRedirect) {
+              admiralApiAdapter.postLogout({},
+                function (logoutErr) {
+                  if (logoutErr)
+                    return horn.error(logoutErr);
+
+                  $state.go('login', $state.params);
+                }
+              );
+            } else {
+              dashboardCtrlDefer.reject(err);
+              return horn.error(err);
+            }
+          } else {
+            dashboardCtrlDefer.resolve();
           }
-          dashboardCtrlDefer.resolve();
         }
       );
     }
@@ -669,6 +681,10 @@
       admiralApiAdapter.getAdmiralEnv(
         function (err, admiralEnv) {
           if (err) {
+            if (err.id === 2000) {
+              $scope.vm.shouldRedirect = true;
+              return next(err);
+            }
             horn.error(err);
             return next();
           }
@@ -684,6 +700,7 @@
         function (err, systemSettings) {
           if (err)
             return next(err);
+
           if (_.isEmpty(systemSettings)) {
             // if empty, we can't do anything yet
             return next();
