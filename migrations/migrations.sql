@@ -4615,7 +4615,7 @@ do $$
 
     -- Add avgQueueLength column to dailyAggs
     if not exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'avgQueueLength') then
-      alter table "dailyAggs" add column "avgQueueLength" INTEGER;
+      alter table "dailyAggs" add column "avgQueueLength" FLOAT;
     end if;
   end
 $$;
