@@ -14,7 +14,7 @@ ${RES_VER_DATE}
   - Features
       - **simple title**: brief description
   - Fixes
-      - **simple title**: brief description
+    - **On enabling slack and hipchat integrations, slack and hipchat services were not coming up on fresh admiral installs**: Now enabling slack and hipchat integrations from admiral UI will automatically bring up slack and hipchat services.
 
 ## History
 
