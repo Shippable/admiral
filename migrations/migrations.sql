@@ -4621,61 +4621,73 @@ do $$
     -- Set default value 0 for dailyAggs.avgQueueLength
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'avgQueueLength' and column_default IS NULL) then
       alter table "dailyAggs" alter column "avgQueueLength" SET DEFAULT 0;
+      update "dailyAggs" set "avgQueueLength"=0 WHERE "avgQueueLength" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.addedJobResourceCount
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'addedJobResourceCount' and column_default IS NULL) then
       alter table "dailyAggs" alter column "addedJobResourceCount" SET DEFAULT 0;
+      update "dailyAggs" set "addedJobResourceCount"=0 WHERE "addedJobResourceCount" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.activeFreePrivateProjectsToday
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'activeFreePrivateProjectsToday' and column_default IS NULL) then
       alter table "dailyAggs" alter column "activeFreePrivateProjectsToday" SET DEFAULT 0;
+      update "dailyAggs" set "activeFreePrivateProjectsToday"=0 WHERE "activeFreePrivateProjectsToday" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.activePaidSubscriptionsToday
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'activePaidSubscriptionsToday' and column_default IS NULL) then
       alter table "dailyAggs" alter column "activePaidSubscriptionsToday" SET DEFAULT 0;
+      update "dailyAggs" set "activePaidSubscriptionsToday"=0 WHERE "activePaidSubscriptionsToday" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.buildJobsCancelled
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsCancelled' and column_default IS NULL) then
       alter table "dailyAggs" alter column "buildJobsCancelled" SET DEFAULT 0;
+      update "dailyAggs" set "buildJobsCancelled"=0 WHERE "buildJobsCancelled" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.buildJobsSkipped
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsSkipped' and column_default IS NULL) then
       alter table "dailyAggs" alter column "buildJobsSkipped" SET DEFAULT 0;
+      update "dailyAggs" set "buildJobsSkipped"=0 WHERE "buildJobsSkipped" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.buildJobsTimedOut
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsTimedOut' and column_default IS NULL) then
       alter table "dailyAggs" alter column "buildJobsTimedOut" SET DEFAULT 0;
+      update "dailyAggs" set "buildJobsTimedOut"=0 WHERE "buildJobsTimedOut" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.buildJobsUnstable
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsUnstable' and column_default IS NULL) then
       alter table "dailyAggs" alter column "buildJobsUnstable" SET DEFAULT 0;
+      update "dailyAggs" set "buildJobsUnstable"=0 WHERE "buildJobsUnstable" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.buildJobsSuccessful
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsSuccessful' and column_default IS NULL) then
       alter table "dailyAggs" alter column "buildJobsSuccessful" SET DEFAULT 0;
+      update "dailyAggs" set "buildJobsSuccessful"=0 WHERE "buildJobsSuccessful" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.buildJobsFailed
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobsFailed' and column_default IS NULL) then
       alter table "dailyAggs" alter column "buildJobsFailed" SET DEFAULT 0;
+      update "dailyAggs" set "buildJobsFailed"=0 WHERE "buildJobsFailed" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.buildJobLengthInMS
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobLengthInMS' and column_default IS NULL) then
       alter table "dailyAggs" alter column "buildJobLengthInMS" SET DEFAULT 0;
+      update "dailyAggs" set "buildJobLengthInMS"=0 WHERE "buildJobLengthInMS" IS NULL;
     end if;
 
     -- Set default value 0 for dailyAggs.buildJobCount
     if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'buildJobCount' and column_default IS NULL) then
       alter table "dailyAggs" alter column "buildJobCount" SET DEFAULT 0;
+      update "dailyAggs" set "buildJobCount"=0 WHERE "buildJobCount" IS NULL;
     end if;
   end
 $$;
