@@ -15,6 +15,11 @@ ${RES_VER_DATE}
       - actions required
       - or additional details
 
+## Custom Nodes
+  - **simple title**: brief description
+      - additional details or
+      - actions required
+
 ## Shippable Server
 
   - Features
