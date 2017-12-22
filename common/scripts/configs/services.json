@@ -145,6 +145,14 @@
       ]
     },
     {
+      "name": "hipchatKey",
+      "type": "generic",
+      "services": [
+        "nf",
+        "hipchat"
+      ]
+    },
+    {
       "name": "irc",
       "type": "notification",
       "services": [
@@ -208,6 +216,14 @@
     {
       "name": "Slack",
       "type": "notification",
+      "services": [
+        "nf",
+        "slack"
+      ]
+    },
+    {
+      "name": "slackKey",
+      "type": "generic",
       "services": [
         "nf",
         "slack"
