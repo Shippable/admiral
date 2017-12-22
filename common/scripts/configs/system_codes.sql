@@ -477,9 +477,10 @@ do $$
       values (10000, 'dynamic__x86_64__Ubuntu_14.04__c4.large', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
     end if;
 
+    delete from "systemCodes" where code = 10001 and name = 'dynamic__x86_64__Ubuntu__14.04__c4.xlarge';
     if not exists (select 1 from "systemCodes" where code = 10001) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (10001, 'dynamic__x86_64__Ubuntu__14.04__c4.xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+      values (10001, 'dynamic__x86_64__Ubuntu_14.04__c4.xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
     end if;
 
     if not exists (select 1 from "systemCodes" where code = 10002) then
