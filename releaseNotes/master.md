@@ -11,6 +11,7 @@ Friday, Jan 05 2018
 
 ## Fixes
   - **SPOG shows incorrect color for inconsistent orphaned resources**: SPOG will now show the correct colour for inconsistent orphaned resources.
+  - **Cluster node is hidden if I don't complete manual initialization**: Save button restores if there is an error while adding custom node.
 
 ## Custom nodes
   - **Resource templating**: re-initialization is required to support resource templating.
