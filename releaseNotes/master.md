@@ -1,7 +1,7 @@
 # v6.1.1 Release Notes
 
 ## Release Date
-January, 05, 2018
+Friday, Jan 05 2018
 
 ## Features
   - **Show loading/in-progress animations**: Shows progressive loading bar for all page transitions.
