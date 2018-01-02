@@ -342,14 +342,14 @@ do $$
     update "masterIntegrations" set "level" = 'system' where "masterIntegrationId" = 1 and "name" = 'Git store' and type = 'scm';
 
     --- Deprecate AWS deploy integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'AWS' and "typeCode" = 5002 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'AWS' and "typeCode" = 5002;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'AWS' and "typeCode" = 5002 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'AWS' and "typeCode" = 5002;
+    -- end if;
 
     --- Deprecate Amazon ECR hub integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'ECR' and "typeCode" = 5001 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'ECR' and "typeCode" = 5001;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'ECR' and "typeCode" = 5001 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'ECR' and "typeCode" = 5001;
+    -- end if;
 
     --- Deprecate pem-key integration
     if exists (select 1 from "masterIntegrations" where "name" = 'pem-key' and "typeCode" = 5004 and "isDeprecated" = false) then
@@ -357,14 +357,14 @@ do $$
     end if;
 
     --- Deprecate artifactory integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'artifactory' and "typeCode" = 5001 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'artifactory' and "typeCode" = 5001;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'artifactory' and "typeCode" = 5001 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'artifactory' and "typeCode" = 5001;
+    -- end if;
 
     --- Deprecate Quay.io integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'Quay.io' and "typeCode" = 5001 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Quay.io' and "typeCode" = 5001;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'Quay.io' and "typeCode" = 5001 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'Quay.io' and "typeCode" = 5001;
+    -- end if;
 
     --- Deprecate ssh-key integration
     if exists (select 1 from "masterIntegrations" where "name" = 'ssh-key' and "typeCode" = 5004 and "isDeprecated" = false) then
@@ -387,34 +387,34 @@ do $$
     end if;
 
     --- Deprecate Private Docker Registry integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'Private Docker Registry' and "typeCode" = 5001 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Private Docker Registry' and "typeCode" = 5001;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'Private Docker Registry' and "typeCode" = 5001 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'Private Docker Registry' and "typeCode" = 5001;
+    -- end if;
 
     --- Deprecate docker integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'Docker' and "typeCode" = 5001 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Docker' and "typeCode" = 5001;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'Docker' and "typeCode" = 5001 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'Docker' and "typeCode" = 5001;
+    -- end if;
 
     --- Deprecate Trusted Docker Registry integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'Docker Trusted Registry' and "typeCode" = 5001 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'Docker Trusted Registry' and "typeCode" = 5001;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'Docker Trusted Registry' and "typeCode" = 5001 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'Docker Trusted Registry' and "typeCode" = 5001;
+    -- end if;
 
     --- Deprecate GCL integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'GCL' and "typeCode" = 5012 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCL' and "typeCode" = 5012;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'GCL' and "typeCode" = 5012 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCL' and "typeCode" = 5012;
+    -- end if;
 
     --- Deprecate GCR integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'GCR' and "typeCode" = 5001 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCR' and "typeCode" = 5001;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'GCR' and "typeCode" = 5001 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'GCR' and "typeCode" = 5001;
+    -- end if;
 
     --- Deprecate GKE integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'GKE' and "typeCode" = 5002 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'GKE' and "typeCode" = 5002;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'GKE' and "typeCode" = 5002 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'GKE' and "typeCode" = 5002;
+    -- end if;
 
     --- Deprecate Slack integration
     if exists (select 1 from "masterIntegrations" where "name" = 'Slack' and "typeCode" = 5003 and "isDeprecated" = false) then
@@ -462,13 +462,13 @@ do $$
     end if;
 
     --- Deprecate KUBERNETES integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'KUBERNETES' and "typeCode" = 5002 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'KUBERNETES' and "typeCode" = 5002;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'KUBERNETES' and "typeCode" = 5002 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'KUBERNETES' and "typeCode" = 5002;
+    -- end if;
 
     --- Deprecate Microsoft Azure integration
-    if exists (select 1 from "masterIntegrations" where "name" = 'MAZ' and "typeCode" = 5012 and "isDeprecated" = false) then
-      update "masterIntegrations" set "isDeprecated" = true where "name" = 'MAZ' and "typeCode" = 5012;
-    end if;
+    -- if exists (select 1 from "masterIntegrations" where "name" = 'MAZ' and "typeCode" = 5012 and "isDeprecated" = false) then
+    --   update "masterIntegrations" set "isDeprecated" = true where "name" = 'MAZ' and "typeCode" = 5012;
+    -- end if;
   end
 $$;
