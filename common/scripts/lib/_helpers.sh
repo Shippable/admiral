@@ -305,6 +305,12 @@ __set_secret_key() {
   export SECRET_KEY="$response"
 }
 
+_validate_ip() {
+  local ip=$1
+  local rx='([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
+  [[ $ip =~ ^$rx\.$rx\.$rx\.$rx$ ]];
+}
+
 __set_admiral_ip() {
   __process_msg "Setting value of admiral IP address"
   local admiral_ip='127.0.0.1'
@@ -313,7 +319,12 @@ __set_admiral_ip() {
   read response
 
   if [ "$response" != "D" ] && [ "$response" != "d" ]; then
-    export ADMIRAL_IP=$response
+    if _validate_ip $response ; then
+      export ADMIRAL_IP=$response
+    else
+      __process_error "Invalid response, please enter valid IP address"
+      __set_admiral_ip
+    fi
   else
     export ADMIRAL_IP=$admiral_ip
   fi
@@ -326,7 +337,12 @@ __set_db_ip() {
   read response
 
   if [ "$response" != "D" ] && [ "$response" != "d" ]; then
-    export DB_IP=$response
+    if _validate_ip $response ; then
+      export DB_IP=$response
+    else
+      __process_error "Invalid response, please enter valid IP address"
+      __set_db_ip
+    fi
   else
     export DB_IP=$db_ip
   fi
