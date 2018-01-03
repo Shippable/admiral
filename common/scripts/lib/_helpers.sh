@@ -305,6 +305,12 @@ __set_secret_key() {
   export SECRET_KEY="$response"
 }
 
+_validate_ip() {
+  local ip=$1
+  local rx='([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
+  [[ $ip =~ ^$rx\.$rx\.$rx\.$rx$ ]];
+}
+
 __set_admiral_ip() {
   __process_msg "Setting value of admiral IP address"
   local admiral_ip='127.0.0.1'
@@ -312,10 +318,8 @@ __set_admiral_ip() {
   __process_success "Please enter your current IP address. This will be the address at which you access the installer webpage. Type D to set default (127.0.0.1) value."
   read response
 
-  local rx='([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
-
   if [ "$response" != "D" ] && [ "$response" != "d" ]; then
-    if [[ $response =~ ^$rx\.$rx\.$rx\.$rx$ ]]; then
+    if _validate_ip $response ; then
       export ADMIRAL_IP=$response
     else
       __process_error "Invalid response, please enter valid IP address"
@@ -332,10 +336,8 @@ __set_db_ip() {
   __process_success "Please enter the IP address of the database or D to set the default ($db_ip)."
   read response
 
-  local rx='([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
-
   if [ "$response" != "D" ] && [ "$response" != "d" ]; then
-    if [[ $response =~ ^$rx\.$rx\.$rx\.$rx$ ]]; then
+    if _validate_ip $response ; then
       export DB_IP=$response
     else
       __process_error "Invalid response, please enter valid IP address"
