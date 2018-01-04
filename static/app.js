@@ -22,6 +22,18 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
       }
     );
 
+    $stateProvider.state('index2', {
+      url: '/index2',
+      templateUrl: SRC_PATH + 'dashboard/dashboard2.html',
+      controller: 'dashboard2Ctrl'
+    });
+
+    $stateProvider.state('index', {
+      url: '/',
+      templateUrl: SRC_PATH + 'dashboard/dashboard.html',
+      controller: 'dashboardCtrl'
+    });
+
     $urlRouterProvider.otherwise('/');
 
     $urlMatcherFactoryProvider.strictMode(false);
