@@ -20,7 +20,8 @@ Friday, Jan 05 2018
 ## Shippable Server
 
   - Features
-      - TBD
+    - **Enhanced metrics on Admin dashboard**: The Admin dashboard now has more relevant build and system level metrics like like number of active proejects, subscriptions, average queue time for jobs, average duration of jobs etc.
+      
       
   - Fixes
     - **On enabling slack and hipchat integrations, slack and hipchat services were not coming up on fresh admiral installs**: Now enabling slack and hipchat integrations from Admiral UI will automatically bring up slack and hipchat services.
