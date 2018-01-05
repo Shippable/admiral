@@ -303,6 +303,12 @@ __set_secret_key() {
   __process_success "Please enter the provided installer secret key."
   read response
   export SECRET_KEY="$response"
+
+  local get_ips=$(ip -f inet -4 addr | grep inet | grep -v 127.0.0.1 | awk '{print $2}' | awk -F "/" '{print $1}');
+
+  if [[ "$get_ips" ]]; then
+    export MACHINE_IPS=$get_ips
+  fi
 }
 
 _validate_ip() {
@@ -313,20 +319,36 @@ _validate_ip() {
 
 __set_admiral_ip() {
   __process_msg "Setting value of admiral IP address"
-  local admiral_ip='127.0.0.1'
 
-  __process_success "Please enter your current IP address. This will be the address at which you access the installer webpage. Type D to set default (127.0.0.1) value."
+  __process_msg "List of your machine IP addresses:"
+
+  local machine_ips=('127.0.0.1')
+
+  if [[ "$MACHINE_IPS" ]]; then
+    machine_ips+=( $MACHINE_IPS )
+  fi
+
+  for (( i = 1 ; i < ${#machine_ips[@]} + 1 ; i++ )) do
+    __process_msg "$i - (${machine_ips[$i-1]})"
+  done
+
+  __process_success "Please pick one of the IP addresses from the above list by selecting the index (1, 2, etc) or enter a custom IP"
   read response
 
-  if [ "$response" != "D" ] && [ "$response" != "d" ]; then
+  if [[ $response =~ ^[0-9]+$ ]]; then
+    if [ ${machine_ips[$response-1]} ]; then
+      export ADMIRAL_IP=${machine_ips[$response-1]}
+    else
+      __process_error "Invalid response, please enter valid index or enter a custom IP"
+      __set_admiral_ip
+    fi
+  else
     if _validate_ip $response ; then
       export ADMIRAL_IP=$response
     else
       __process_error "Invalid response, please enter valid IP address"
       __set_admiral_ip
     fi
-  else
-    export ADMIRAL_IP=$admiral_ip
   fi
 }
 
