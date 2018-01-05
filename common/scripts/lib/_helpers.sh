@@ -307,7 +307,11 @@ __set_secret_key() {
   local get_ips=$(ip -f inet -4 addr | grep inet | grep -v 127.0.0.1 | awk '{print $2}' | awk -F "/" '{print $1}');
 
   if [[ "$get_ips" ]]; then
+    number_of_ips=($get_ips)
+    __process_msg "${#number_of_ips[@]} IP addresses available for the host"
     export MACHINE_IPS=$get_ips
+  else
+    __process_msg "No IP addresses avaiable"
   fi
 }
 
@@ -320,7 +324,7 @@ _validate_ip() {
 __set_admiral_ip() {
   __process_msg "Setting value of admiral IP address"
 
-  __process_msg "List of your machine IP addresses:"
+  __process_msg "List of your machine IP addresses including default:"
 
   local machine_ips=('127.0.0.1')
 
@@ -337,6 +341,7 @@ __set_admiral_ip() {
 
   if [[ $response =~ ^[0-9]+$ ]]; then
     if [ ${machine_ips[$response-1]} ]; then
+      __process_msg "${machine_ips[$response-1]} was selected as admiral IP"
       export ADMIRAL_IP=${machine_ips[$response-1]}
     else
       __process_error "Invalid response, please enter valid index or enter a custom IP"
@@ -350,6 +355,7 @@ __set_admiral_ip() {
       __set_admiral_ip
     fi
   fi
+  __process_msg "Admiral IP is set to $ADMIRAL_IP"
 }
 
 __set_db_ip() {
