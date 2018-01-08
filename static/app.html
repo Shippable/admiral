@@ -22,12 +22,15 @@
   <!-- Meta description -->
   <meta name="description" content="Continuous Integration and Deployment platform for Docker">
   <meta name="author" content="Shippable, Inc.">
+
   <!-- CSS -->
   <link rel="stylesheet" href="app.cat.css" />
-  <link rel='stylesheet prefetch' href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css' />
 </head>
 
 <body>
+<div ng-if="admiralPathName === 'index' || !admiralPathName">
+  <link rel='stylesheet prefetch' href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css' />
+
     <!-- Navbar -->
     <nav class="navbar navbar-inverse">
       <div class="container-fluid container">
@@ -45,7 +48,7 @@
        <a href="" class="pull-right" ng-click="removeHornMessage(horn)">x</a>
        <div ng-bind-html="horn.message"></div>
      </div>
-   </div>
+    </div>
     <!-- Loading app -->
     <div class="ship-center-loading ss-text-center" ng-if="!_r.appLoaded && _r.loadingMessage" style="z-index:1000;">
       <i class="fa fa-life-ring fa-spin sf-200"></i>
@@ -56,12 +59,278 @@
     <!-- View Body -->
     <div ng-cloak ui-view ng-if="_r.appLoaded">
     </div>
+</div>
 
   <!-- load script library -->
   <script src="lib.min.js"></script>
   <!-- ngApp Start -->
   <script src="app.cat.js"></script>
   <!---->
+
+<div ng-if="admiralPathName === 'index2'">
+  <!-- CSS -->
+  <link href="/app/plugins/switchery/switchery.min.css" rel="stylesheet" />
+  <link href="/app/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="/app/assets/css/core.css" rel="stylesheet" type="text/css">
+  <link href="/app/assets/css/icons.css" rel="stylesheet" type="text/css">
+  <link href="/app/assets/css/components.css" rel="stylesheet" type="text/css">
+  <link href="/app/assets/css/menu.css" rel="stylesheet" type="text/css">
+  <link href="/app/assets/css/responsive.css" rel="stylesheet" type="text/css">
+  <link href="/app/assets/css/shippable.css" rel="stylesheet" type="text/css">
+
+  <script src="/app/assets/js/modernizr.min.js"></script>
+
+  <!-- Begin page -->
+  <div id="wrapper">
+
+      <!-- Top Bar Start -->
+      <div class="topbar">
+
+          <!-- LOGO -->
+          <div class="topbar-left">
+            <div class="text-center">
+              <a href="/" target="_self" class="logo"><img src="/app/assets/images/shippable-logo.png">
+                <span><img src="/app/assets/images/shippable-text-white.png"></span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Navbar -->
+          <div class="navbar navbar-default" role="navigation">
+              <div class="container">
+                  <div class="">
+                      <div class="pull-left">
+                          <button
+                            class="button-menu-mobile open-left waves-effect waves-light">
+                            <i class="md md-chevron-left"></i>
+                          </button>
+                          <span class="clearfix"></span>
+                      </div>
+
+                      <ul class="nav navbar-nav navbar-right pull-right">
+
+                          <li class="hidden-xs">
+                              <a href="#" class="right-bar-toggle waves-effect waves-light"><i
+                                      class="md md-settings"></i></a>
+                          </li>
+
+                      </ul>
+                  </div>
+                  <!--/.nav-collapse -->
+              </div>
+          </div>
+
+      </div>
+      <!-- Top Bar End -->
+
+
+      <!-- ========== Left Sidebar Start ========== -->
+      <div class="left side-menu">
+          <div class="sidebar-inner slimscrollleft">
+
+              <div id="sidebar-menu">
+                  <ul>
+
+                    <li>
+                      <a href="#" class="waves-effect waves-primary">
+                        <i class="md md-dashboard"></i><span> Infrastructure </span>
+                      </a>
+                    </li>
+                    <li class="has_sub">
+                      <a href="#" class="waves-effect waves-primary">
+                        <i class="md md-palette"></i> <span> Config & Install </span>
+                      </a>
+                    </li>
+                    <li class="has_sub">
+                      <a href="#" class="waves-effect waves-primary">
+                        <i class="md md-invert-colors-on"></i><span> Add-ons </span>
+                      </a>
+                    </li>
+                    <li class="has_sub">
+                      <a href="#" class="waves-effect waves-primary">
+                        <i class="md md-redeem"></i><span> System Settings </span>
+                      </a>
+                    </li>
+
+                  </ul>
+                  <div class="clearfix"></div>
+              </div>
+
+              <div class="clearfix"></div>
+          </div>
+      </div>
+      <!-- Left Sidebar End -->
+
+
+      <!-- ============================================================== -->
+      <!-- Start right Content here -->
+      <!-- ============================================================== -->
+      <div class="content-page">
+          <!-- Start content -->
+          <div class="content">
+              <div class="container">
+
+                NEW ADMIRAL
+
+              </div>
+              <!-- end container -->
+
+          </div>
+          <!-- end content -->
+
+
+          <!-- FOOTER -->
+          <footer class="footer text-right">
+              2017 © Shippable.
+          </footer>
+          <!-- End FOOTER -->
+
+      </div>
+      <!-- ============================================================== -->
+      <!-- End Right content here -->
+      <!-- ============================================================== -->
+
+      <!-- Right Sidebar -->
+      <div class="side-bar right-bar">
+          <div class="nicescroll">
+              <ul class="nav nav-tabs tabs">
+                  <li class="active tab">
+                      <a href="#profile-2" data-toggle="tab" aria-expanded="false">
+                          <span class="visible-xs"><i class="fa fa-user"></i></span>
+                          <span class="hidden-xs">Chat</span>
+                      </a>
+                  </li>
+                  <li class="tab">
+                      <a href="#messages-2" data-toggle="tab" aria-expanded="true">
+                          <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
+                          <span class="hidden-xs">Settings</span>
+                      </a>
+                  </li>
+              </ul>
+              <div class="tab-content">
+
+                  <div class="tab-pane fade in active" id="profile-2">
+                      <div class="contact-list nicescroll">
+                          <ul class="list-group contacts-list">
+                              <li class="list-group-item">
+                                  <a href="#">
+                                      <div class="avatar">
+                                          <img src="assets/images/users/avatar-1.jpg" alt="">
+                                      </div>
+                                      <span class="name">Chadengle</span>
+                                      <i class="fa fa-circle online"></i>
+                                  </a>
+                                  <span class="clearfix"></span>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="messages-2">
+
+                      <div class="row m-t-20">
+                          <div class="col-xs-8">
+                              <h5 class="m-0">Notifications</h5>
+                              <p class="text-muted m-b-0"><small>Do you need them?</small></p>
+                          </div>
+                          <div class="col-xs-4 text-right">
+                              <input type="checkbox" checked data-plugin="switchery" data-color="#3bafda" data-size="small"/>
+                          </div>
+                      </div>
+
+                      <div class="row m-t-20">
+                          <div class="col-xs-8">
+                              <h5 class="m-0">API Access</h5>
+                              <p class="m-b-0 text-muted"><small>Enable/Disable access</small></p>
+                          </div>
+                          <div class="col-xs-4 text-right">
+                              <input type="checkbox" checked data-plugin="switchery" data-color="#3bafda" data-size="small"/>
+                          </div>
+                      </div>
+
+                      <div class="row m-t-20">
+                          <div class="col-xs-8">
+                              <h5 class="m-0">Auto Updates</h5>
+                              <p class="m-b-0 text-muted"><small>Keep up to date</small></p>
+                          </div>
+                          <div class="col-xs-4 text-right">
+                              <input type="checkbox" checked data-plugin="switchery" data-color="#3bafda" data-size="small"/>
+                          </div>
+                      </div>
+
+                      <div class="row m-t-20">
+                          <div class="col-xs-8">
+                              <h5 class="m-0">Online Status</h5>
+                              <p class="m-b-0 text-muted"><small>Show your status to all</small></p>
+                          </div>
+                          <div class="col-xs-4 text-right">
+                              <input type="checkbox" checked data-plugin="switchery" data-color="#3bafda" data-size="small"/>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- /Right-bar -->
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <script>
+        var resizefunc = [];
+    </script>
+
+    <!-- jQuery  -->
+    <script src="/app/assets/js/jquery.min.js"></script>
+    <script src="/app/assets/js/bootstrap.min.js"></script>
+    <script src="/app/assets/js/detect.js"></script>
+    <script src="/app/assets/js/fastclick.js"></script>
+    <script src="/app/assets/js/jquery.slimscroll.js"></script>
+    <script src="/app/assets/js/jquery.blockUI.js"></script>
+    <script src="/app/assets/js/waves.js"></script>
+    <script src="/app/assets/js/wow.min.js"></script>
+    <script src="/app/assets/js/jquery.nicescroll.js"></script>
+    <script src="/app/assets/js/jquery.scrollTo.min.js"></script>
+    <script src="/app/plugins/switchery/switchery.min.js"></script>
+
+    <!-- Modal-Effect -->
+    <script src="/app/plugins/custombox/dist/custombox.min.js"></script>
+    <script src="/app/plugins/custombox/dist/legacy.min.js"></script>
+
+    <script src="/app/assets/js/jquery.core.js"></script>
+    <script src="/app/assets/js/jquery.app.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('input:radio[name=install_location_rabbit]').change(function() {
+          if (this.value == 'newNode') {
+              $('#newNode').show();
+              $('#existingNode').hide();
+          }
+          else if (this.value == 'existingNode') {
+            $('#newNode').hide();
+            $('#existingNode').show();
+          }
+      });
+    });
+
+    /*
+    $(document).ready(function(){
+      $('#install_location_rabbit').change(function() {
+        console.log('IN', this.value);
+        var hiddenDiv2 = document.getElementById('newNode');
+        hiddenDiv2.style.display = (this.value == 'newNode') ? 'block' : 'none';
+        var hiddenDiv3 = document.getElementById('existingNode');
+        hiddenDiv3.style.display = (this.value == 'existingNode') ? 'block' : 'none';
+      });
+    });
+    */
+    </script>
+
+</div>
+
 </body>
 
 </html>
