@@ -4695,5 +4695,10 @@ do $$
       alter table "dailyAggs" alter column "buildJobCount" SET DEFAULT 0;
       update "dailyAggs" set "buildJobCount"=0 WHERE "buildJobCount" IS NULL;
     end if;
+
+    -- Remove not null constraint on clusters.queueName
+    if exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'queueName') then
+      alter table "clusters" alter "queueName" drop not null;
+    end if;
   end
 $$;
