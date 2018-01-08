@@ -4452,6 +4452,11 @@ do $$
       if not exists (select 1 from pg_constraint where conname = 'clusterNodes_clusterId_fkey') then
         alter table "clusterNodes" add constraint "clusterNodes_clusterId_fkey" foreign key ("clusterId") references "clusters"(id) on update restrict on delete restrict;
       end if;
+
+      -- Remove not null constraint on queueName
+      if exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'queueName') then
+        alter table "clusters" alter "queueName" drop not null;
+      end if;
     end if;
 
     -- Add systemMachineImages.runtimeTemplateId
