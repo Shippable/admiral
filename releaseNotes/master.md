@@ -4,11 +4,7 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Shows account integration owner name in dropdown when editing a subscription integration**: Display account integration owner name along with integration name which helps in choosing subscription integration when there are multiple account integrations with the same name
 
 ## Fixes
   - **simple title**: brief description
