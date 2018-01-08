@@ -263,13 +263,6 @@ function _getValuesForSystemSettings(bag, next) {
     apiRetryIntervalMS:
       __getValueForSystemSettings(bag, 'apiRetryInterval', 3),
     truck: __getValueForSystemSettings(bag, 'truck', false),
-    hubspotListId: __getValueForSystemSettings(bag, 'hubspotListId', null),
-    hubspotShouldSimulate:
-      __getValueForSystemSettings(bag, 'hubspotShouldSimulate', null),
-    hubspotProjectsLastSyncTime:
-      __getValueForSystemSettings(bag, 'hubspotProjectsLastSyncTime', null),
-    hubspotRSyncLastSyncTime:
-      __getValueForSystemSettings(bag, 'hubspotRSyncLastSyncTime', null),
     rootS3Bucket:
       __getValueForSystemSettings(bag, 'rootS3Bucket', ''),
     nodeScriptsLocation:
