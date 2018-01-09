@@ -435,15 +435,30 @@ __set_db_port() {
   fi
 }
 
+__validate_db_password() {
+  local pwd=$1
+  if [[ "$pwd" =~ [^-_+=a-zA-Z0-9] ]]; then
+    return 1
+  fi
+  return 0
+}
+
 __set_db_password() {
   __process_msg "Setting database password"
 
   __process_success "Please enter the password for your database."
   read response
 
-  if [ "$response" != "" ]; then
+  if [ "$response" == "" ]; then
+    __process_error "Database password cannot be empty. Re-enter password"
+    __set_db_password
+  elif __validate_db_password $response ; then
     export DB_PASSWORD=$response
+  else
+    __process_error "Invalid characters in the database password field, valid characters are: -_=+a-zA-Z0-9"
+    __set_db_password
   fi
+
 }
 
 __set_public_image_registry() {
