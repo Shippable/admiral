@@ -7,9 +7,9 @@ ${RES_VER_DATE}
   - **Shows account integration owner name in dropdown when editing a subscription integration**: Display account integration owner name along with integration name which helps in choosing subscription integration when there are multiple account integrations with the same name
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Restrict database password with special characters**: During installation, adding database passsword with unsupported charaacters will thow an error
+      - if database password is empty or invalid, user will be prompted to re-enter the password.
+      - valid characters for database password are: -_=+a-zA-Z0-9
 
 ## Custom Nodes
   - **simple title**: brief description
