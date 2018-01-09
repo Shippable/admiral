@@ -23,6 +23,9 @@ ${RES_VER_DATE}
   - Fixes
       - **simple title**: brief description
 
+## Deprecation Notice
+  - **lastHubspotSyncAt field removed from accounts GET API response**: Accounts GET API will no longer return `lastHubspotSyncAt` field in the response body.
+
 ## History
 
 To view Shippable's release history, check out our [releases page on github](https://github.com/Shippable/admiral/releases).
