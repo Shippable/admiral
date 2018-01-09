@@ -381,7 +381,7 @@ __set_db_installed() {
     __process_success "Enter I to install a new database or E to use an existing one."
     __process_msg "Existing databases must be Postgres 9.5 and have a user named apiuser with full permissions on a database named shipdb."
     read response
-    response==$(echo $response | awk '{print toupper($0)}')
+    response=$(echo $response | awk '{print toupper($0)}')
 
     if [ "$response" == "I" ]; then
       __process_msg "A new database will be installed"
