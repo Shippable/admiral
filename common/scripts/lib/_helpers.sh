@@ -455,7 +455,7 @@ __set_db_password() {
   elif __validate_db_password $response ; then
     export DB_PASSWORD=$response
   else
-    __process_error "Invalid characters in database password. Valid characters include -_=+a-zA-Z0-9"
+    __process_error "Invalid characters in the database password field, valid characters are: -_=+a-zA-Z0-9"
     __set_db_password
   fi
 
