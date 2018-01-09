@@ -23,8 +23,8 @@ ${RES_VER_DATE}
   - Fixes
       - **simple title**: brief description
 
-## Depreciation Notice
-  - **lastHubspotSyncAt field removed from accounts GET API response**: Accounts GET API will no longer return `lastHubspotSyncAt` field in the response body. So we suggest removing this field if you are using it anywhere in your application built using Shippable API.
+## Deprecation Notice
+  - **lastHubspotSyncAt field removed from accounts GET API response**: Accounts GET API will no longer return `lastHubspotSyncAt` field in the response body.
 
 ## History
 
