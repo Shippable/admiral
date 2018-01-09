@@ -695,3 +695,6 @@ a:active {
   color: #000;
   margin-bottom: 0px;
 }
+.alignTextRight {
+  text-align: right;
+}

@@ -123,69 +123,20 @@
       </div>
       <!-- Top Bar End -->
 
-
-      <!-- ========== Left Sidebar Start ========== -->
-      <div class="left side-menu">
-          <div class="sidebar-inner slimscrollleft">
-
-              <div id="sidebar-menu">
-                  <ul>
-
-                    <li>
-                      <a href="#" class="waves-effect waves-primary">
-                        <i class="md md-dashboard"></i><span> Infrastructure </span>
-                      </a>
-                    </li>
-                    <li class="has_sub">
-                      <a href="#" class="waves-effect waves-primary">
-                        <i class="md md-palette"></i> <span> Config & Install </span>
-                      </a>
-                    </li>
-                    <li class="has_sub">
-                      <a href="#" class="waves-effect waves-primary">
-                        <i class="md md-invert-colors-on"></i><span> Add-ons </span>
-                      </a>
-                    </li>
-                    <li class="has_sub">
-                      <a href="#" class="waves-effect waves-primary">
-                        <i class="md md-redeem"></i><span> System Settings </span>
-                      </a>
-                    </li>
-
-                  </ul>
-                  <div class="clearfix"></div>
-              </div>
-
-              <div class="clearfix"></div>
-          </div>
-      </div>
-      <!-- Left Sidebar End -->
+                <!-- START NEW ADMIRAL -->
+                <!-- Loading app -->
+                <div class="ship-center-loading ss-text-center" ng-if="!_r.appLoaded && _r.loadingMessage" style="z-index:1000;">
+                  <i class="fa fa-life-ring fa-spin sf-200"></i>
+                  <div class="seperator"></div>
+                  <i class="sf-16" ng-if="!_r.loadingMessage">Loading...</i>
+                  <i class="sf-16" ng-cloak>{{_r.loadingMessage}}</i>
+                </div>
+                <!-- View Body -->
+                <div ng-cloak ui-view ng-if="_r.appLoaded">
+                </div>
+                <!-- END NEW ADMIRAL -->
 
 
-      <!-- ============================================================== -->
-      <!-- Start right Content here -->
-      <!-- ============================================================== -->
-      <div class="content-page">
-          <!-- Start content -->
-          <div class="content">
-              <div class="container">
-
-                NEW ADMIRAL
-
-              </div>
-              <!-- end container -->
-
-          </div>
-          <!-- end content -->
-
-
-          <!-- FOOTER -->
-          <footer class="footer text-right">
-              2017 © Shippable.
-          </footer>
-          <!-- End FOOTER -->
-
-      </div>
       <!-- ============================================================== -->
       <!-- End Right content here -->
       <!-- ============================================================== -->
@@ -301,34 +252,6 @@
 
     <script src="/app/assets/js/jquery.core.js"></script>
     <script src="/app/assets/js/jquery.app.js"></script>
-
-    <script type="text/javascript">
-    $(document).ready(function() {
-      $('input:radio[name=install_location_rabbit]').change(function() {
-          if (this.value == 'newNode') {
-              $('#newNode').show();
-              $('#existingNode').hide();
-          }
-          else if (this.value == 'existingNode') {
-            $('#newNode').hide();
-            $('#existingNode').show();
-          }
-      });
-    });
-
-    /*
-    $(document).ready(function(){
-      $('#install_location_rabbit').change(function() {
-        console.log('IN', this.value);
-        var hiddenDiv2 = document.getElementById('newNode');
-        hiddenDiv2.style.display = (this.value == 'newNode') ? 'block' : 'none';
-        var hiddenDiv3 = document.getElementById('existingNode');
-        hiddenDiv3.style.display = (this.value == 'existingNode') ? 'block' : 'none';
-      });
-    });
-    */
-    </script>
-
 </div>
 
 </body>
