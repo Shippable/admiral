@@ -71,7 +71,8 @@ function _get(bag, next) {
     function (envLine) {
       if (!_.isEmpty(envLine) && envLine.indexOf('=') >= 0) {
         var name = envLine.split('=')[0];
-        var value = envLine.split('=')[1];
+        // split the string only on first = for postgres password
+        var value = envLine.split(/=(.+)/)[1];
         bag.resBody[name] = JSON.parse(value);
       }
     }
