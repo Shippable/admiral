@@ -1,5 +1,455 @@
-<div>
-  <div class="text-center">
-    <h2>Admiral - Shippable Admin Panel (NEW ADMIRAL)</h2>
+
+      <!-- ========== Left Sidebar Start ========== -->
+      <div class="left side-menu">
+          <div class="sidebar-inner slimscrollleft">
+
+              <div id="sidebar-menu">
+                  <ul>
+
+                    <li>
+                      <a href="#" class="waves-effect waves-primary subdrop">
+                        <i class="md md-dashboard"></i><span> Infrastructure </span>
+                      </a>
+                    </li>
+                    <li class="has_sub">
+                      <a href="#" class="waves-effect waves-primary">
+                        <i class="md md-palette"></i> <span> Config & Install </span>
+                      </a>
+                    </li>
+                    <li class="has_sub">
+                      <a href="#" class="waves-effect waves-primary">
+                        <i class="md md-invert-colors-on"></i><span> Add-ons </span>
+                      </a>
+                    </li>
+                    <li class="has_sub">
+                      <a href="#" class="waves-effect waves-primary">
+                        <i class="md md-redeem"></i><span> System Settings </span>
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+              </div>
+
+              <div class="clearfix"></div>
+          </div>
+
+          <div class="user-detail" style="position: absolute; bottom: 0;">
+              <div class="dropup">
+                  <span class="user-info-span">
+                    <button class="btn btn-md" type="submit" ng-click="vm.logOutOfAdmiral($event)">
+                      <i class="md md-settings-power"></i>Logout
+                    </button>
+                  </span>
+              </div>
+          </div>
+
+      </div>
+      <!-- Left Sidebar End -->
+
+
+      <!-- ============================================================== -->
+      <!-- Start right Content here -->
+      <!-- ============================================================== -->
+      <div class="content-page">
+          <!-- Start content -->
+          <div class="content">
+              <div class="container">
+
+
+<!-- Page-Title -->
+<div class="row">
+    <div class="col-md-12">
+      <div class="page-title-box">
+          <h4 class="page-title">Infrastructure</h4>
+      </div>
+    </div>
+</div>
+<!-- end row -->
+
+<div class="row">
+    <div class="col-md-12">
+      <div class="card-box">
+        <h4 class="header-title m-t-0"><b>SUMMARY</b></h4>
+        <p class="text-muted m-b-20 font-13">
+            A rendered modal with header, body, and set of actions in the footer.
+        </p>
+        <p>
+          <label class="control-label">All Nodes</label>
+          <p class="font-13">
+            <b>Node 1:</b> <code>123.123.123.123</code> (Admiral runs on it)
+          </p>
+          <p class="font-13">
+            <b>Node 2:</b> <code>111.222.333.111</code> (Database runs on it)
+          </p>
+        </p>
+      </div>
+    </div>
+</div>
+<!-- END ROW -->
+
+<!-- START RabbitMQ -->
+<div class="row">
+    <div class="col-md-12">
+      <div class="portlet">
+
+        <div class="portlet-heading" style="background-color: #e1dbf5 !important;">
+          <h3 class="portlet-title text-dark">
+              MESSAGING (RabbitMQ)
+          </h3>
+          <div class="portlet-widgets">
+              <span class="divider"></span>
+              <span class="text-dark" ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
+              <span class="text-dark" ng-if="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed">
+                {{vm.systemSettings.msg.isInitialized ? 'initialized' : 'not initialized'}}
+              </span>
+              <span class="text-dark" ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
+              <span class="divider"></span>
+              <a data-toggle="collapse" href="#bg-rabbitmq"><i class="ion-minus-round"></i></a>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
+        <div id="bg-rabbitmq" class="panel-collapse collapse in">
+          <div class="portlet-body">
+
+              <div class="row">
+                <div class="col-md-9">
+                  <p class="text-muted m-b-20 font-13">
+                      A rendered modal with header, body, and set of actions in the footer.
+                  </p>
+                </div>
+                <div class="col-md-3 alignTextRight">
+                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
+                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')" ng-disabled="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed && !vm.systemSettings.msg.isInitialized">Logs</button>
+                </div>
+              </div><!-- END row -->
+
+              <div class="row">
+                <div class="col-md-4">
+                  <form class="form-horizontal">
+                    <h5>Install RabbitMQ on:</h5>
+                    <input type="text" class="form-control input-sm"
+                      name="install_location_rabbit" placeholder="8 or more characters"
+                      ng-model="vm.initializeForm.msg.initType" disabled>
+                    <!-- Example
+                    <select class="form-control" id="install_location_1"
+                      ng-model="vm.initializeForm.msg.initType"
+                      ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                      ng-options="displayEach.displayName for displayEach in vm.systemSettings.displayNodes track by displayEach.initType">
+                    </select>
+                    -->
+                  </form>
+                </div>
+                <div class="col-md-4">
+                  <form class="form-horizontal">
+                    <h5 ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</h5>
+                    <h5 ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</h5>
+                    <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)" class="m-b-10">
+                      <input type="text" class="form-control input-sm" name="msgPassword"
+                      ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-md-3">
+                  <!-- Button trigger modal -->
+                  <button class="btn btn-default waves-effect waves-light m-t-30" data-toggle="modal" data-target="#rabbit-location-modal">Add a new Node details instead</button>
+                </div>
+
+                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrl">
+                  <form class="form-horizontal">
+                    <h4 class="m-t-30">Service Addresses</h4>
+                    <h5>amqp URL</h5>
+                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrl}}</p>
+                  </form>
+                </div>
+
+                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot">
+                  <form class="form-horizontal">
+                    <h5>amqp Root Url:</h5>
+                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot}}</p>
+                  </form>
+                </div>
+
+                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin">
+                  <form class="form-horizontal">
+                    <h5>amqp Admin URL</h5>
+                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin}}</p>
+                  </form>
+                </div>
+
+                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange">
+                  <form class="form-horizontal">
+                    <h5>amqp Default Exchange</h5>
+                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange}}</p>
+                  </form>
+                </div>
+
+                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.rootQueueList">
+                  <form class="form-horizontal">
+                    <h5>Root Queue List</h5>
+                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.rootQueueList}}</p>
+                  </form>
+                </div>
+
+              </div><!--row ends-->
+
+            </div><!-- END portlet-body -->
+          </div><!-- END bg-default12 -->
+
+
+      </div><!-- END portlet -->
+    </div><!-- END col-md-12 -->
+
+    <div class="col-md-offset-10 col-md-2">
+      <!-- Button trigger modal -->
+      <button ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" class="btn btn-primary waves-effect waves-light m-t-10" data-toggle="modal" data-target="#con-close-modal">
+        Initialise
+      </button>
+    </div>
+
+</div>
+<!-- END ROW -->
+<!-- END RabbitMQ -->
+
+
+
+
+    </div>
+    <!-- end container -->
+
+  </div>
+  <!-- end content -->
+
+  <!-- FOOTER -->
+  <footer class="footer text-right">
+  2018 © Shippable.
+  </footer>
+  <!-- End FOOTER -->
+
+</div>
+
+<!-- START Configs Modal -->
+<div class="modal fade" id="configsModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+          aria-label="Close">
+        <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{vm.selectedService.displayName}} Configs</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-condensed table-striped">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="config in vm.selectedService.configs">
+              <td>
+                <b>{{config.key}}:</b>
+              </td>
+              <td style="word-wrap: break-word; word-break: break-all;">
+                {{config.value}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
   </div>
 </div>
+<!-- END Configs Modal -->
+
+<!-- START Logs Modal -->
+<div class="modal fade" id="logsModal"
+  tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">
+          {{vm.selectedService.displayName}} Logs
+          <button class="btn btn-sm btn-default" ng-click="vm.refreshLogs()">
+            Refresh
+          </button>
+        </h4>
+      </div>
+      <div class="modal-body ship-console">
+        <div class="ship-console-command-line" ng-repeat="log in vm.selectedService.logs track by $index">
+          {{log}}
+        </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END Logs Modal -->
+
+<!-- START Install Location Node Modal -->
+<div id="rabbit-location-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #f7f7f7">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Add Node details for RabbitMQ</h4>
+            </div>
+            <div class="modal-body">
+              <div class="card-box">
+                <div class="row">
+                    <div class="col-md-12">
+                      <div class="radio radio-primary m-t-0 m-b-20">
+                          <input type="radio" value="new" name="install_location_rabbit" checked
+                             ng-model="vm.initializeForm.msg.initType">
+                          <label for="install_location_rabbit" class="control-label">New Node</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" id="new" style="display: block;">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark" ng-if="vm.initializeForm.msg.initType !== 'new'">Choose a password for RabbitMQ:</span>
+                            <span ng-if="vm.initializeForm.msg.initType === 'new'">RabbitMQ Password:</span>
+                            <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)">
+                              <input type="text" class="form-control input-sm" name="msgPassword"
+                              ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">IP address to install RabbitMQ:</span>
+                            <div ng-class="vm.validateIP(vm.initializeForm.msg.address)">
+                              <input type="text" class="form-control input-sm" name="msgAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                              ng-model="vm.initializeForm.msg.address"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
+                            <div class="ss-action"></div>
+                            <div class="ship-console" style="word-break: break-all;">
+                              {{vm.initializeForm.sshCommand}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="checkbox checkbox-success m-t-0"
+                        ng-class="vm.initializeForm.msg.confirmCommand ? '' : 'has-error'">
+                        <div class="checkbox">
+                          <input id="checkbox_confirmCommand" type="checkbox" ng-model="vm.initializeForm.msg.confirmCommand"/>
+                          <label for="checkbox_confirmCommand">Click here once you have run the above command on your node</label>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+              </div>
+              <div class="card-box">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="radio radio-primary m-t-0 m-b-20">
+                        <input type="radio" value="existing" name="install_location_rabbit"
+                          ng-model="vm.initializeForm.msg.initType">
+                        <label for="install_location_rabbit" class="control-label">Existing Node</label>
+                    </div>
+                  </div>
+
+                  <div class="row" id="existing" style="display: block;">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <span class="text-dark">RabbitMQ Username:</span>
+                            <div ng-class="vm.initializeForm.msg.username.length ? '' : 'has-error'">
+                              <input type="text" class="form-control input-sm" name="msgUsername"
+                                ng-model="vm.initializeForm.msg.username" placeholder="username"
+                                ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <span class="text-dark" ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</span>
+                            <span ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</span>
+                            <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)">
+                              <input type="text" class="form-control input-sm" name="msgPassword"
+                              ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-11">
+                        <div class="form-group">
+                            <span class="text-dark">IP address to install:</span>
+                            <div ng-class="vm.validateIP(vm.initializeForm.msg.address)">
+                              <input type="text" class="form-control input-sm" name="msgAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                              ng-model="vm.initializeForm.msg.address"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="field-2">Protocol used to connect to your RabbitMQ installation:</label>
+                            <div>
+                              <span>
+                                <input type="radio" ng-model="vm.initializeForm.msg.isSecure" ng-value=false ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing">
+                                amqp
+                              </span>
+                              <span>
+                                <input type="radio" ng-model="vm.initializeForm.msg.isSecure" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" ng-value=true>
+                                amqps
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" name="msg_save_location">
+                  Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
+<!-- END Install Location Node Modal -->
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  var $radios = $('input:radio[name=install_location_rabbit]');
+  if($radios.is(':checked') === false) {
+      $radios.filter('[value=new]').prop('checked', true);
+      $('#new').show();
+      $('#existing').hide();
+  }
+  $radios.change(function() {
+      if (this.value == 'new' || this.value == 'admiral') {
+          $('#new').show();
+          $('#existing').hide();
+      }
+      else if (this.value == 'existing') {
+        $('#new').hide();
+        $('#existing').show();
+      }
+  });
+
+  $('button[name=msg_save_location]').click(function() {
+    console.log('clicked Save Changes Rabbit');
+    $('input:text[name=install_location_rabbit]').val($radios.value);
+    $('#rabbit-location-modal').modal('hide');
+  });
+});
+</script>

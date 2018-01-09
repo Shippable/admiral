@@ -372,7 +372,7 @@ body.fixed-left .side-menu.left {
 }
 .subdrop i,
 .subdrop span {
-  color: rgba(255, 255, 255, 0.85) !important;
+  /*color: rgba(255, 255, 255, 0.85) !important;*/
 }
 .user-detail {
   position: absolute;
