@@ -232,6 +232,7 @@
   </div><!-- END ROW -->
 <!-- END Secrets -->
 
+
 <!-- START RabbitMQ -->
 <div class="row">
     <div class="col-md-12">
@@ -269,42 +270,46 @@
                 </div>
               </div><!-- END row -->
 
-              <span>DATA: {{vm.initializeForm.msg}}</span>
-
               <div class="row">
-                <div class="col-md-4">
-                  <form class="form-horizontal">
+                <div class="col-md-2">
                     <h5>Install RabbitMQ on:</h5>
-                    <input type="text" class="form-control input-sm"
-                      placeholder="8 or more characters"
-                      ng-model="vm.initializeForm.msg.initType" disabled />
-                  </form>
+                    <div class="radio radio-primary m-t-0 m-b-20">
+                        <input type="radio" value="admiral" name="install_location_rabbit"
+                           ng-model="vm.initializeForm.msg.initType">
+                        <label for="install_location_rabbit" class="control-label">This Node</label>
+                    </div>
                 </div>
                 <div class="col-md-4" ng-if="vm.initializeForm.msg.initType === 'admiral'">
-                  <form class="form-horizontal">
                     <h5 ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</h5>
                     <h5 ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</h5>
                     <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)" class="m-b-10">
                       <input type="text" class="form-control input-sm" name="msgPassword"
                       ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
                     </div>
-                  </form>
                 </div>
+              </div>
 
-                <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-3">
                   <!-- Button trigger modal -->
-                  <button class="btn btn-default waves-effect waves-light m-t-30"
+                  <button class="btn btn-default waves-effect waves-light m-t-20"
                     ng-click="vm.showInstallLocationModal('msg')">
                     Add a new Node details instead
                   </button>
                 </div>
+                <div class="col-md-4 m-t-20" ng-if="vm.initializeForm.msg.initType === 'new'">
+                  <h5><code>New node details are updated.</code></h5>
+                </div>
+                <div class="col-md-4 m-t-20" ng-if="vm.initializeForm.msg.initType === 'existing'">
+                  <h5><code>Existing node details are updated.</code></h5>
+                </div>
+              </div>
 
+              <div class="row">
                 <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrl">
-                  <form class="form-horizontal">
-                    <h4 class="m-t-30">Service Addresses</h4>
-                    <h5>amqp URL</h5>
-                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrl}}</p>
-                  </form>
+                  <h4 class="m-t-30">Service Addresses</h4>
+                  <h5>amqp URL</h5>
+                  <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrl}}</p>
                 </div>
 
                 <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot">
