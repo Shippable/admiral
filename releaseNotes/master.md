@@ -10,6 +10,9 @@ ${RES_VER_DATE}
   - **simple title**: brief description
       - actions required
       - or additional details
+  - **Bitbucket permissions on renamed repositories**: An error updating the deploy key on Bitbucket when a repository is renamed has been fixed.
+      - The error resulted in missing permissions for accounts on the repository after it was renamed.
+      - Synchronizing any affected accounts will fix missing permissions.
 
 ## Custom Nodes
   - **simple title**: brief description
