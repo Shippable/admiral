@@ -318,7 +318,7 @@ __set_secret_key() {
 _validate_ip() {
   local ip=$1
   local rx='([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
-  [[ $ip =~ ^$rx\.$rx\.$rx\.$rx$ ]];
+  [[ $ip =~ (http(s)?://)?([a-zA-Z]+(\.[a-zA-Z0-9]+)+.*)$ ||  $ip =~ ^$rx\.$rx\.$rx\.$rx$ ]];
 }
 
 __set_admiral_ip() {
@@ -343,19 +343,25 @@ __set_admiral_ip() {
     if [ ${machine_ips[$response-1]} ]; then
       __process_msg "${machine_ips[$response-1]} was selected as admiral IP"
       export ADMIRAL_IP=${machine_ips[$response-1]}
+      __process_msg "Admiral IP is set to $ADMIRAL_IP"
     else
       __process_error "Invalid response, please enter valid index or enter a custom IP"
       __set_admiral_ip
     fi
   else
-    if _validate_ip $response ; then
-      export ADMIRAL_IP=$response
+    if [ "$response" != 'localhost' ]; then
+      if _validate_ip $response ; then
+        export ADMIRAL_IP=$response
+        __process_msg "Admiral IP is set to $ADMIRAL_IP"
+      else
+        __process_error "Invalid response, please enter valid IP address"
+        __set_admiral_ip
+      fi
     else
-      __process_error "Invalid response, please enter valid IP address"
-      __set_admiral_ip
+      export ADMIRAL_IP=$response
+      __process_msg "Admiral IP is set to $ADMIRAL_IP"
     fi
   fi
-  __process_msg "Admiral IP is set to $ADMIRAL_IP"
 }
 
 __set_db_ip() {
