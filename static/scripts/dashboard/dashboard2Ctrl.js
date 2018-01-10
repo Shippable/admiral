@@ -578,6 +578,8 @@
       systemSettingsId: null,
       selectedService: {},
       initialize: initialize,
+      resetInstallLocationModal: resetInstallLocationModal,
+      showInstallLocationModal: showInstallLocationModal,
       validatePassword: validatePassword,
       validateIP: validateIP,
       validateWorkerAddress: validateWorkerAddress,
@@ -1134,6 +1136,29 @@
       );
 
       return next();
+    }
+
+    function resetInstallLocationModal (fromCopy) {
+      var old =  fromCopy + '_old';
+      //console.log('Modal closed reset values to ' , $scope.vm.initializeForm[old] );
+      $scope.vm.initializeForm[fromCopy] =  angular.copy($scope.vm.initializeForm[old]);
+      //console.log('Modal Back to old values ' , $scope.vm.initializeForm[fromCopy]);
+    }
+
+    function showInstallLocationModal(sectionName) {
+      var old = sectionName + '_old';
+
+      if (sectionName === 'secrets') {
+        console.log('OLD ', old, $scope.vm.initializeForm.msg);
+        $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.secrets);
+        $('#secrets-location-modal').modal('show');
+      }
+
+      if (sectionName === 'msg') {
+        console.log('OLD ', old, $scope.vm.initializeForm.msg);
+        $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.msg);
+        $('#msg-location-modal').modal('show');
+      }
     }
 
     function updateInstallForm(workers, next) {

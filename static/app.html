@@ -123,18 +123,18 @@
       </div>
       <!-- Top Bar End -->
 
-                <!-- START NEW ADMIRAL -->
-                <!-- Loading app -->
-                <div class="ship-center-loading ss-text-center" ng-if="!_r.appLoaded && _r.loadingMessage" style="z-index:1000;">
-                  <i class="fa fa-life-ring fa-spin sf-200"></i>
-                  <div class="seperator"></div>
-                  <i class="sf-16" ng-if="!_r.loadingMessage">Loading...</i>
-                  <i class="sf-16" ng-cloak>{{_r.loadingMessage}}</i>
-                </div>
-                <!-- View Body -->
-                <div ng-cloak ui-view ng-if="_r.appLoaded">
-                </div>
-                <!-- END NEW ADMIRAL -->
+        <!-- START NEW ADMIRAL -->
+        <!-- Loading app -->
+        <div class="ship-center-loading ss-text-center" ng-if="!_r.appLoaded && _r.loadingMessage" style="z-index:1000;">
+          <i class="fa fa-life-ring fa-spin sf-200"></i>
+          <div class="seperator"></div>
+          <i class="sf-16" ng-if="!_r.loadingMessage">Loading...</i>
+          <i class="sf-16" ng-cloak>{{_r.loadingMessage}}</i>
+        </div>
+        <!-- View Body -->
+        <div ng-cloak ui-view ng-if="_r.appLoaded">
+        </div>
+        <!-- END NEW ADMIRAL -->
 
 
       <!-- ============================================================== -->
