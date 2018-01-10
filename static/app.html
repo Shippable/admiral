@@ -123,18 +123,27 @@
       </div>
       <!-- Top Bar End -->
 
-                <!-- START NEW ADMIRAL -->
-                <!-- Loading app -->
-                <div class="ship-center-loading ss-text-center" ng-if="!_r.appLoaded && _r.loadingMessage" style="z-index:1000;">
-                  <i class="fa fa-life-ring fa-spin sf-200"></i>
-                  <div class="seperator"></div>
-                  <i class="sf-16" ng-if="!_r.loadingMessage">Loading...</i>
-                  <i class="sf-16" ng-cloak>{{_r.loadingMessage}}</i>
-                </div>
-                <!-- View Body -->
-                <div ng-cloak ui-view ng-if="_r.appLoaded">
-                </div>
-                <!-- END NEW ADMIRAL -->
+        <!-- START NEW ADMIRAL -->
+        <!-- Horn -->
+        <div id="horn" class="ss-horn-bar">
+         <div ng-cloak class="alert {{hornMessageStyle(horn)}} ss-natural-word-break ss-page-container"
+           ng-repeat="horn in horns">
+           <a href="" class="pull-right" ng-click="removeHornMessage(horn)">x</a>
+           <div ng-bind-html="horn.message"></div>
+         </div>
+        </div>
+
+        <!-- Loading app -->
+        <div class="ship-center-loading ss-text-center" ng-if="!_r.appLoaded && _r.loadingMessage" style="z-index:1000;">
+          <i class="fa fa-life-ring fa-spin sf-200"></i>
+          <div class="seperator"></div>
+          <i class="sf-16" ng-if="!_r.loadingMessage">Loading...</i>
+          <i class="sf-16" ng-cloak>{{_r.loadingMessage}}</i>
+        </div>
+        <!-- View Body -->
+        <div ng-cloak ui-view ng-if="_r.appLoaded">
+        </div>
+        <!-- END NEW ADMIRAL -->
 
 
       <!-- ============================================================== -->
