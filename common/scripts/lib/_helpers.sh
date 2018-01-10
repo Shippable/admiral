@@ -370,15 +370,19 @@ __set_db_ip() {
   __process_success "Please enter the IP address of the database or D to set the default ($db_ip)."
   read response
 
-  if [ "$response" != "D" ] && [ "$response" != "d" ]; then
-    if _validate_ip $response ; then
-      export DB_IP=$response
+  if [ "$response" != 'localhost' ]; then
+    if [ "$response" != "D" ] && [ "$response" != "d" ]; then
+      if _validate_ip $response ; then
+        export DB_IP=$response
+      else
+        __process_error "Invalid response, please enter valid IP address"
+        __set_db_ip
+      fi
     else
-      __process_error "Invalid response, please enter valid IP address"
-      __set_db_ip
+      export DB_IP=$db_ip
     fi
   else
-    export DB_IP=$db_ip
+    export DB_IP=$response
   fi
 }
 
