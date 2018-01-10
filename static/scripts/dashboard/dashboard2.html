@@ -11,6 +11,7 @@
                         <i class="md md-dashboard"></i><span> Infrastructure </span>
                       </a>
                     </li>
+                    <!--
                     <li class="has_sub">
                       <a href="#" class="waves-effect waves-primary">
                         <i class="md md-palette"></i> <span> Config & Install </span>
@@ -26,6 +27,7 @@
                         <i class="md md-redeem"></i><span> System Settings </span>
                       </a>
                     </li>
+                    -->
                   </ul>
                   <div class="clearfix"></div>
               </div>
@@ -211,17 +213,34 @@
                   <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
                   <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized">logs</button>
                 </div>
-                <div class="col-md-4 form-horizontal">
+              </div>
+
+              <div class="row">
+                <div class="col-md-2">
                     <h5>Install Secrets on:</h5>
-                    <input type="text" class="form-control input-sm"
-                      name="install_location_secrets" placeholder="8 or more characters"
-                      ng-model="vm.initializeForm.secrets.initType" disabled />
+                    <div class="radio radio-primary m-t-0 m-b-20">
+                        <input type="radio" value="admiral"
+                           ng-model="vm.initializeForm.secrets.initType">
+                        <label class="control-label">This Node</label>
+                    </div>
                 </div>
-                <div class="col-md-4">
+              </div>
+
+              <div class="row">
+                <div class="col-md-3">
                   <!-- Button trigger modal -->
-                  <button class="btn btn-default waves-effect waves-light m-t-30" data-toggle="modal" data-target="#secrets-location-modal">Add a new Node details instead</button>
+                  <button class="btn btn-default waves-effect waves-light m-t-10"
+                    ng-click="vm.showInstallLocationModal('secrets')">
+                    Add a new Node details instead
+                  </button>
                 </div>
-              </div><!-- END row -->
+                <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                  <h5><code>New node details are updated.</code></h5>
+                </div>
+                <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'existing'">
+                  <h5><code>Existing node details are updated.</code></h5>
+                </div>
+              </div>
 
           </div><!-- END portlet-body -->
         </div><!-- END bg-secrets -->
@@ -292,15 +311,15 @@
               <div class="row">
                 <div class="col-md-3">
                   <!-- Button trigger modal -->
-                  <button class="btn btn-default waves-effect waves-light m-t-20"
+                  <button class="btn btn-default waves-effect waves-light m-t-10"
                     ng-click="vm.showInstallLocationModal('msg')">
                     Add a new Node details instead
                   </button>
                 </div>
-                <div class="col-md-4 m-t-20" ng-if="vm.initializeForm.msg.initType === 'new'">
+                <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.msg.initType === 'new'">
                   <h5><code>New node details are updated.</code></h5>
                 </div>
-                <div class="col-md-4 m-t-20" ng-if="vm.initializeForm.msg.initType === 'existing'">
+                <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.msg.initType === 'existing'">
                   <h5><code>Existing node details are updated.</code></h5>
                 </div>
               </div>
@@ -441,8 +460,8 @@
 </div>
 <!-- END Logs Modal -->
 
-<!-- START Install Location Node Modal -->
-<div id="rabbit-location-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+<!-- START Install Location Node Modal for MSG -->
+<div id="msg-location-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content" style="background-color: #f7f7f7">
             <div class="modal-header">
@@ -531,16 +550,18 @@
                             <span ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</span>
                             <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)">
                               <input type="text" class="form-control input-sm" name="msgPassword"
-                              ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                                ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters"
+                                ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-11">
                         <div class="form-group">
-                            <span class="text-dark">IP address to install:</span>
+                            <span class="text-dark">IP address of your existing RabbitMQ installation:</span>
                             <div ng-class="vm.validateIP(vm.initializeForm.msg.address)">
-                              <input type="text" class="form-control input-sm" name="msgAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
-                              ng-model="vm.initializeForm.msg.address"/>
+                              <input type="text" class="form-control input-sm" name="msgAddress" placeholder="0.0.0.0"
+                                ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                                ng-model="vm.initializeForm.msg.address"/>
                             </div>
                         </div>
                     </div>
@@ -549,11 +570,13 @@
                             <label for="field-2">Protocol used to connect to your RabbitMQ installation:</label>
                             <div>
                               <span>
-                                <input type="radio" ng-model="vm.initializeForm.msg.isSecure" ng-value=false ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing">
+                                <input type="radio" ng-model="vm.initializeForm.msg.isSecure" ng-value=false
+                                ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing">
                                 amqp
                               </span>
                               <span>
-                                <input type="radio" ng-model="vm.initializeForm.msg.isSecure" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" ng-value=true>
+                                <input type="radio" ng-model="vm.initializeForm.msg.isSecure"
+                                ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" ng-value=true>
                                 amqps
                               </span>
                             </div>
@@ -574,3 +597,105 @@
     </div>
 </div><!-- /.modal -->
 <!-- END Install Location Node Modal -->
+
+
+<!-- START Install Location Node Modal for SECRETS -->
+<div id="secrets-location-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabelSecrets" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #f7f7f7">
+            <div class="modal-header">
+                <button ng-click="vm.resetInstallLocationModal('secrets')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Add Node details for Secrets</h4>
+            </div>
+            <div class="modal-body">
+              <div class="card-box">
+                <div class="row">
+                    <div class="col-md-12">
+                      <div class="radio radio-primary m-t-0 m-b-20">
+                          <input type="radio" value="new"
+                             ng-model="vm.initializeForm.secrets.initType">
+                          <label class="control-label">New Node</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" id="new" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">IP address to install Secrets:</span>
+                            <div ng-class="vm.validateIP(vm.initializeForm.secrets.address)">
+                              <input type="text" class="form-control input-sm" name="secretsAddress" placeholder="0.0.0.0"
+                                ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                                ng-model="vm.initializeForm.secrets.address"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
+                            <div class="ss-action"></div>
+                            <div class="ship-console" style="word-break: break-all;">
+                              {{vm.initializeForm.sshCommand}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="checkbox checkbox-success m-t-0" ng-class="vm.initializeForm.secrets.confirmCommand ? '' : 'has-error'">
+                        <div class="checkbox">
+                          <input id="checkbox_confirmCommand" type="checkbox" ng-model="vm.initializeForm.secrets.confirmCommand"/>
+                          <label for="checkbox_confirmCommand">Click here once you have run the above command on your node</label>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+              </div>
+              <div class="card-box">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="radio radio-primary m-t-0 m-b-20">
+                        <input type="radio"
+                          value="existing" ng-model="vm.initializeForm.secrets.initType">
+                        <label class="control-label">
+                          Existing Node
+                        </label>
+                    </div>
+                  </div>
+
+                  <div class="row" id="existing" ng-if="vm.initializeForm.secrets.initType === 'existing'">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">IP address of your existing Secrets installation:</span>
+                            <div ng-class="vm.validateIP(vm.initializeForm.secrets.address)">
+                              <input type="text" class="form-control input-sm" name="secretsAddress" placeholder="0.0.0.0"
+                                ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                                ng-model="vm.initializeForm.secrets.address"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">Root token for your Secrets installation:</span>
+                            <div ng-class="vm.initializeForm.secrets.rootToken.length ? '' : 'has-error'">
+                              <input type="text" class="form-control input-sm" name="secretsRootToken" placeholder="root token"
+                                ng-disabled="vm.initializing"
+                                ng-model="vm.initializeForm.secrets.rootToken"/>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="vm.resetInstallLocationModal('secrets')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light"  data-dismiss="modal" name="secrets_save_location">
+                  Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
+<!-- END Install Location Node Modal for SECRETS-->
