@@ -82,17 +82,130 @@
             <b>Node 2:</b> <code>111.222.333.111</code> (Database runs on it)
           </p>
         </p>
-      </div>
+        <div class="row">
+          <div class="col-md-2">
+            <h5 class="m-t-20"><b>Admiral Environment:</b></h5>
+          </div>
+          <div class="col-md-10 m-t-15">
+            <button class="btn btn-sm btn-primary" ng-click="vm.showAdmiralEnvModal()">Config</button>
+          </div>
+        </div>
     </div>
+  </div>
 </div>
 <!-- END ROW -->
+
+<!-- START Database -->
+<div class="row">
+    <div class="col-md-12">
+      <div class="portlet">
+
+        <div class="portlet-heading" style="background-color: #e0dee0 !important;">
+          <h3 class="portlet-title text-dark">
+              Database
+          </h3>
+          <div class="portlet-widgets">
+              <span class="divider"></span>
+              <span class="text-dark" ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
+              <span class="text-dark" ng-if="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed">
+                {{vm.systemSettings.db.isInitialized ? 'initialized' : 'not initialized'}}
+              </span>
+              <span class="text-dark" ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
+              <span class="divider"></span>
+              <a data-toggle="collapse" href="#bg-database"><i class="ion-minus-round"></i></a>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
+        <div id="bg-database" class="panel-collapse collapse in">
+          <div class="portlet-body">
+
+              <div class="row">
+                <div class="col-md-9">
+                  <p class="text-muted m-b-20 font-13">
+                      A rendered modal with header, body, and set of actions in the footer.
+                  </p>
+                </div>
+                <div class="col-md-3 alignTextRight">
+                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
+                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('db')" ng-disabled="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed && !vm.systemSettings.db.isInitialized">Logs</button>
+                </div>
+              </div><!-- END row -->
+
+            </div><!-- END portlet-body -->
+          </div><!-- END bg-default12 -->
+
+
+      </div><!-- END portlet -->
+    </div><!-- END col-md-12 -->
+<!-- END Database -->
+
+
+<!-- START Secrets -->
+<div class="row">
+    <div class="col-md-12">
+      <div class="portlet">
+
+        <div class="portlet-heading" style="background-color: #e1dbf5 !important;">
+          <h3 class="portlet-title text-dark">
+              SECRETS
+          </h3>
+          <div class="portlet-widgets">
+              <span class="divider"></span>
+              <span class="text-dark" ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
+              <span class="text-dark" ng-if="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed">
+                {{vm.systemSettings.secrets.isInitialized ? 'initialized' : 'not initialized'}}
+              </span>
+              <span class="text-dark" ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
+              <span class="divider"></span>
+              <a data-toggle="collapse" href="#bg-secrets"><i class="ion-minus-round"></i></a>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
+        <div id="bg-secrets" class="panel-collapse collapse in">
+          <div class="portlet-body">
+
+              <div class="row">
+                <div class="col-md-9">
+                  <p class="text-muted m-b-20 font-13">
+                      A rendered modal with header, body, and set of actions in the footer.
+                  </p>
+                </div>
+                <div class="col-md-3 alignTextRight">
+                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized">logs</button>
+                </div>
+                <div class="col-md-4">
+                  <form class="form-horizontal">
+                    <h5>Install Secrets on:</h5>
+                    <input type="text" class="form-control input-sm"
+                      name="install_location_secrets" placeholder="8 or more characters"
+                      ng-model="vm.initializeForm.secrets.initType" disabled />
+                  </form>
+                </div>
+                <div class="col-md-4">
+                  <!-- Button trigger modal -->
+                  <button class="btn btn-default waves-effect waves-light m-t-30" data-toggle="modal" data-target="#secrets-location-modal">Add a new Node details instead</button>
+                </div>
+              </div><!-- END row -->
+
+            </div><!-- END portlet-body -->
+          </div><!-- END bg-secrets -->
+
+
+      </div><!-- END portlet -->
+    </div><!-- END col-md-12 -->
+  </div><!-- END ROW -->
+<!-- END Secrets -->
+
 
 <!-- START RabbitMQ -->
 <div class="row">
     <div class="col-md-12">
       <div class="portlet">
 
-        <div class="portlet-heading" style="background-color: #e1dbf5 !important;">
+        <div class="portlet-heading" style="background-color: #dae5e4 !important;">
           <h3 class="portlet-title text-dark">
               MESSAGING (RabbitMQ)
           </h3>
@@ -109,7 +222,7 @@
           <div class="clearfix"></div>
         </div>
 
-        <div id="bg-rabbitmq" class="panel-collapse collapse in">
+        <div id="bg-rabbitmq" class="panel-collapse">
           <div class="portlet-body">
 
               <div class="row">
@@ -130,7 +243,7 @@
                     <h5>Install RabbitMQ on:</h5>
                     <input type="text" class="form-control input-sm"
                       name="install_location_rabbit" placeholder="8 or more characters"
-                      ng-model="vm.initializeForm.msg.initType" disabled>
+                      ng-model="vm.initializeForm.msg.initType" disabled />
                     <!-- Example
                     <select class="form-control" id="install_location_1"
                       ng-model="vm.initializeForm.msg.initType"
@@ -140,6 +253,7 @@
                     -->
                   </form>
                 </div>
+
                 <div class="col-md-4">
                   <form class="form-horizontal">
                     <h5 ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</h5>
@@ -150,7 +264,8 @@
                     </div>
                   </form>
                 </div>
-                <div class="col-md-3">
+
+                <div class="col-md-4">
                   <!-- Button trigger modal -->
                   <button class="btn btn-default waves-effect waves-light m-t-30" data-toggle="modal" data-target="#rabbit-location-modal">Add a new Node details instead</button>
                 </div>
@@ -200,18 +315,212 @@
       </div><!-- END portlet -->
     </div><!-- END col-md-12 -->
 
-    <div class="col-md-offset-10 col-md-2">
-      <!-- Button trigger modal -->
-      <button ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" class="btn btn-primary waves-effect waves-light m-t-10" data-toggle="modal" data-target="#con-close-modal">
-        Initialise
-      </button>
-    </div>
-
-</div>
-<!-- END ROW -->
-<!-- END RabbitMQ -->
+  </div><!-- END ROW -->
+  <!-- END RabbitMQ -->
 
 
+  <!-- START State -->
+  <div class="row">
+      <div class="col-md-12">
+        <div class="portlet">
+
+          <div class="portlet-heading" style="background-color: #eadee9 !important;">
+            <h3 class="portlet-title text-dark">
+                STATE
+            </h3>
+            <div class="portlet-widgets">
+                <span class="divider"></span>
+                <span class="text-dark" ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
+                <span class="text-dark" ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
+                  {{vm.systemSettings.state.isInitialized ? 'initialized' : 'not initialized'}}
+                </span>
+                <span class="text-dark" ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
+                <span class="divider"></span>
+                <a data-toggle="collapse" href="#bg-state"><i class="ion-minus-round"></i></a>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+
+          <div id="bg-state" class="panel-collapse">
+            <div class="portlet-body">
+
+                <div class="row">
+                  <div class="col-md-9">
+                    <p class="text-muted m-b-20 font-13">
+                        A rendered modal with header, body, and set of actions in the footer.
+                    </p>
+                  </div>
+                  <div class="col-md-3 alignTextRight">
+                    <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
+                    <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')" ng-disabled="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed && !vm.systemSettings.state.isInitialized">Logs</button>
+                  </div>
+                </div><!-- END row -->
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <form class="form-horizontal">
+                      <h5>Install State on:</h5>
+                      <input type="text" class="form-control input-sm"
+                        name="install_location_rabbit" placeholder="8 or more characters"
+                        ng-model="vm.initializeForm.state.initType" disabled />
+                    </form>
+                  </div>
+
+                  <div class="col-md-4">
+                    <form class="form-horizontal">
+                      <h5 ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for RabbitMQ:</h5>
+                      <h5 ng-if="vm.initializeForm.state.initType === 'existing'">RabbitMQ Password:</h5>
+
+                      <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)" class="m-b-10">
+                        <input type="text" class="form-control input-sm" name="statePassword"
+                        ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="col-md-4">
+                    <!-- Button trigger modal -->
+                    <button class="btn btn-default waves-effect waves-light m-t-30" data-toggle="modal" data-target="#state-location-modal">Add a new Node details instead</button>
+                  </div>
+
+                </div><!--row ends-->
+
+              </div><!-- END portlet-body -->
+            </div><!-- END bg-default12 -->
+
+
+        </div><!-- END portlet -->
+      </div><!-- END col-md-12 -->
+
+    </div><!-- END ROW -->
+    <!-- END State -->
+
+
+
+    <!-- START Redis -->
+    <div class="row">
+        <div class="col-md-12">
+          <div class="portlet">
+
+            <div class="portlet-heading" style="background-color: #d2eff7 !important;">
+              <h3 class="portlet-title text-dark">
+                  REDIS
+              </h3>
+              <div class="portlet-widgets">
+                  <span class="divider"></span>
+                  <span class="text-dark" ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
+                  <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
+                    {{vm.systemSettings.redis.isInitialized ? 'initialized' : 'not initialized'}}
+                  </span>
+                  <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
+                  <span class="divider"></span>
+                  <a data-toggle="collapse" href="#bg_redis"><i class="ion-minus-round"></i></a>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div id="bg_redis" class="panel-collapse collapse in">
+              <div class="portlet-body">
+
+                  <div class="row">
+                    <div class="col-md-9">
+                      <p class="text-muted m-b-20 font-13">
+                          A rendered modal with header, body, and set of actions in the footer.
+                      </p>
+                    </div>
+                    <div class="col-md-3 alignTextRight">
+                      <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
+                      <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')" ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">Logs</button>
+                    </div>
+                    <div class="col-md-4">
+                      <form class="form-horizontal">
+                        <h5>Install Redis on:</h5>
+                        <input type="text" class="form-control input-sm"
+                          name="install_location_redis" placeholder="8 or more characters"
+                          ng-model="vm.initializeForm.redis.initType" disabled />
+                      </form>
+                    </div>
+                    <div class="col-md-4">
+                      <!-- Button trigger modal -->
+                      <button class="btn btn-default waves-effect waves-light m-t-30" data-toggle="modal" data-target="#redis-location-modal">Add a new Node details instead</button>
+                    </div>
+                  </div><!-- END row -->
+
+                </div><!-- END portlet-body -->
+              </div><!-- END bg-redis -->
+
+            </div><!-- END portlet -->
+          </div><!-- END col-md-12 -->
+
+        </div><!-- END ROW -->
+        <!-- END Redis -->
+
+
+        <!-- START Swarm -->
+        <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+
+                <div class="portlet-heading" style="background-color: #c0d6d4 !important;">
+                  <h3 class="portlet-title text-dark">
+                      SWARM
+                  </h3>
+                  <div class="portlet-widgets">
+                      <span class="divider"></span>
+                      <span class="text-dark" ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
+                      <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed">
+                        {{vm.systemSettings.master.isInitialized ? 'initialized' : 'not initialized'}}
+                      </span>
+                      <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
+                      <span class="divider"></span>
+                      <a data-toggle="collapse" href="#bg_swarm"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div id="bg_swarm" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+
+                      <div class="row">
+                        <div class="col-md-9">
+                          <p class="text-muted m-b-20 font-13">
+                              A rendered modal with header, body, and set of actions in the footer.
+                          </p>
+                        </div>
+                        <div class="col-md-3 alignTextRight">
+                          <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
+                          <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')" ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">Logs</button>
+                        </div>
+                        <div class="col-md-4">
+                          <form class="form-horizontal">
+                            <h5>Worker Install Location:</h5>
+                            <input type="text" class="form-control input-sm"
+                              name="install_location_swarm" placeholder="8 or more characters"
+                              ng-model="vm.initializeForm.master.initType" disabled />
+                          </form>
+                        </div>
+                        <div class="col-md-4">
+                          <!-- Button trigger modal -->
+                          <button class="btn btn-default waves-effect waves-light m-t-30" data-toggle="modal" data-target="#swarm-location-modal">Add a new Node details instead</button>
+                        </div>
+                      </div><!-- END row -->
+
+                    </div><!-- END portlet-body -->
+                  </div><!-- END bg-swarm -->
+
+          </div><!-- END portlet -->
+        </div><!-- END col-md-12 -->
+      </div><!-- END ROW -->
+    <!-- END Swarm -->
+
+
+
+  <div class="col-md-offset-10 col-md-2">
+    <!-- Button trigger modal -->
+    <button ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing" class="btn btn-primary waves-effect waves-light m-t-10" data-toggle="modal" data-target="#con-close-modal">
+      Initialise
+    </button>
+  </div>
 
 
     </div>
