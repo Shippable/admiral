@@ -3,6 +3,7 @@
 var self = post;
 module.exports = self;
 
+var _ = require('underscore');
 var async = require('async');
 var fs = require('fs');
 
@@ -35,6 +36,12 @@ function post(req, res) {
 function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
   logger.verbose(who, 'Inside');
+
+  if (_.isEmpty(bag.reqBody))
+    return next(
+      new ActErr(who, ActErr.InvalidParam,
+        'request body cannot be empty')
+    );
 
   return next();
 }
