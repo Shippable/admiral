@@ -106,6 +106,7 @@
       },
       // map by systemInt name, then masterName
       installForm: {
+        ignoreTLSErrors: false,
         api: {
           url: {
             isEnabled: true,
@@ -695,6 +696,9 @@
           }
 
           $scope.vm.admiralEnv = admiralEnv;
+          if (admiralEnv && admiralEnv.IGNORE_TLS_ERRORS &&
+            admiralEnv.IGNORE_TLS_ERRORS === 'true')
+            $scope.vm.installForm.ignoreTLSErrors = true;
           return next();
         }
       );
@@ -2321,6 +2325,7 @@
           updateAPISystemIntegration,
           updateInternalAPISystemIntegration,
           updateConsoleAPISystemIntegration,
+          updateIgnoreTLSEnv,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
           enableSCMMasterIntegrations,
@@ -2394,6 +2399,7 @@
           updateAPISystemIntegration,
           updateInternalAPISystemIntegration,
           updateConsoleAPISystemIntegration,
+          updateIgnoreTLSEnv,
           updateWWWSystemIntegration,
           updateAuthSystemIntegrations,
           enableSCMMasterIntegrations,
@@ -2659,6 +2665,67 @@
           return next(err);
         }
       );
+    }
+
+    function updateIgnoreTLSEnv(next) {
+      var ignoreTLSErrors = 'false';
+      if ($scope.vm.installForm.ignoreTLSErrors)
+        ignoreTLSErrors = 'true';
+
+      var innerBag = {
+        envVars: null,
+        ignoreTLSErrors: ignoreTLSErrors
+      };
+
+      async.series(
+        [
+          _getAdmiralEnv.bind(null, innerBag),
+          _setIgnoreTlsEnv.bind(null, innerBag)
+        ],
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function _getAdmiralEnv(innerBag, nextStep) {
+      admiralApiAdapter.getAdmiralEnv(
+        function (err, admiralEnv) {
+          if (err)
+            return nextStep(err);
+          innerBag.envVars = admiralEnv;
+          return nextStep();
+        }
+      );
+    }
+
+    function _setIgnoreTlsEnv(innerBag, nextStep) {
+      if (!innerBag.envVars)
+        return nextStep(1);
+
+      if (innerBag.envVars.IGNORE_TLS_ERRORS) {
+        admiralApiAdapter.putAdmiralEnv(
+          {
+            IGNORE_TLS_ERRORS: innerBag.ignoreTLSErrors
+          },
+          function (err) {
+            if (err)
+              return nextStep(err);
+            return nextStep();
+          }
+        );
+      } else {
+        admiralApiAdapter.postAdmiralEnv(
+          {
+            IGNORE_TLS_ERRORS: innerBag.ignoreTLSErrors
+          },
+          function (err) {
+            if (err)
+              return nextStep(err);
+            return nextStep();
+          }
+        );
+      }
     }
 
     function updateWWWSystemIntegration(next) {
