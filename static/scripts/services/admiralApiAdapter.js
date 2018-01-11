@@ -16,6 +16,9 @@
       getAdmiralEnv: function (callback) {
         return API.get('/api/admiral', callback);
       },
+      postAdmiralEnv: function (body, callback) {
+        return API.post('/api/admiral', body, callback);
+      },
       putAdmiralEnv: function (body, callback) {
         return API.put('/api/admiral', body, callback);
       },

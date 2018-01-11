@@ -33,6 +33,40 @@ envHandler.get = function (envName, cb) {
   );
 };
 
+envHandler.post = function (envName, envValue, cb) {
+  if (_.isUndefined(envName) || _.isNull(envName) ||
+    _.isUndefined(envValue) || _.isNull(envValue))
+    return cb('envName or envValue cannot be null');
+
+  var createCmd = util.format('sudo echo \'%s="%s"\' >> %s',
+    envName, envValue, global.config.admiralEnv);
+
+  var exec = spawn('/bin/bash',
+    ['-c', createCmd]
+  );
+
+  exec.stdout.on('data',
+    function (data)  {
+      logger.debug(self.name, data.toString());
+    }
+  );
+
+  exec.stderr.on('data',
+    function (data)  {
+      logger.error(self.name, data.toString());
+    }
+  );
+
+  exec.on('close',
+    function (exitCode)  {
+      if (exitCode)
+        return cb(exitCode, null);
+
+      return cb(null);
+    }
+  );
+};
+
 envHandler.put = function (envName, envValue, cb) {
   var updateCmd = util.format('sudo sed -i \'s#.*%s=.*#%s="%s"#g\' %s',
     envName, envName, envValue, global.config.admiralEnv);
