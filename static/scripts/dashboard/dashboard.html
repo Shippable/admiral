@@ -943,7 +943,7 @@
                               amqp URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="msgAmqpUrl" ng-pattern="vm.urlRegex"
+                              <input type="text" class="form-control input-sm" name="msgAmqpUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrl" ng-disabled="vm.installing || vm.saving"/>
                               <dd class="text-danger" ng-show="vm.admiralInstallForm.msgAmqpUrl.$error.pattern">
                                 <span>URL is invalid.</span>
@@ -953,7 +953,7 @@
                               amqp Root Url
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="msgAmqpUrlRoot" ng-pattern="vm.urlRegex"
+                              <input type="text" class="form-control input-sm" name="msgAmqpUrlRoot" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot" ng-disabled="vm.installing || vm.saving"/>
                               <dd class="text-danger" ng-show="vm.admiralInstallForm.msgAmqpUrlRoot.$error.pattern">
                                 <span>URL is invalid.</span>
@@ -963,7 +963,7 @@
                               amqp Admin URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="msgAmqpUrlAdmin" ng-pattern="vm.urlRegex"
+                              <input type="text" class="form-control input-sm" name="msgAmqpUrlAdmin" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin" ng-disabled="vm.installing || vm.saving"/>
                               <dd class="text-danger" ng-show="vm.admiralInstallForm.msgAmqpUrlAdmin.$error.pattern">
                                 <span>URL is invalid.</span>
@@ -1000,7 +1000,7 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="redisUrl" ng-pattern="vm.urlRegex"
+                              <input type="text" class="form-control input-sm" name="redisUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.redis.url.data.url" ng-disabled="vm.installing || vm.saving"/>
                               <dd class="text-danger" ng-show="vm.admiralInstallForm.redisUrl.$error.pattern">
                                 <span>URL is invalid.</span>
