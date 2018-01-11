@@ -1149,15 +1149,18 @@
       var old = sectionName + '_old';
 
       if (sectionName === 'secrets') {
-        console.log('OLD ', old, $scope.vm.initializeForm.msg);
         $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.secrets);
         $('#secrets-location-modal').modal('show');
       }
 
       if (sectionName === 'msg') {
-        console.log('OLD ', old, $scope.vm.initializeForm.msg);
         $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.msg);
         $('#msg-location-modal').modal('show');
+      }
+
+      if (sectionName === 'state') {
+        $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.state);
+        $('#state-location-modal').modal('show');
       }
     }
 
