@@ -24,6 +24,7 @@ __boot_admiral() {
     -e ADMIRAL_IP=$ADMIRAL_IP \
     -e PRIVATE_IMAGE_REGISTRY=$PRIVATE_IMAGE_REGISTRY \
     -e CONFIG_DIR=$CONFIG_DIR \
+    -e IGNORE_TLS_ERRORS=$IGNORE_TLS_ERRORS \
     -e RUNTIME_DIR=$RUNTIME_DIR"
 
   __process_msg "Generating admiral mounts"
