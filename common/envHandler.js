@@ -34,7 +34,8 @@ envHandler.get = function (envName, cb) {
 };
 
 envHandler.post = function (envName, envValue, cb) {
-  if (envName === null || envValue === null)
+  if (_.isUndefined(envName) || _.isNull(envName) ||
+    _.isUndefined(envValue) || _.isNull(envValue))
     return cb('envName or envValue cannot be null');
 
   var createCmd = util.format('sudo echo \'%s="%s"\' >> %s',
