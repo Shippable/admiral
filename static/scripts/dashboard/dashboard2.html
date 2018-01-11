@@ -466,6 +466,254 @@
     <!-- END State -->
 
 
+    <!-- START Redis -->
+    <div class="row">
+        <div class="col-md-12">
+          <div class="portlet">
+
+            <div class="portlet-heading" style="background-color: #e1dbf5 !important;">
+              <h3 class="portlet-title text-dark">
+                  REDIS
+              </h3>
+              <div class="portlet-widgets">
+                  <span class="divider"></span>
+                  <span class="text-dark" ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
+                  <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
+                    {{vm.systemSettings.redis.isInitialized ? 'initialized' : 'not initialized'}}
+                  </span>
+                  <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
+                  <span class="divider"></span>
+                  <a data-toggle="collapse" href="#bg-redis"><i class="ion-minus-round"></i></a>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div id="bg-redis" class="panel-collapse">
+              <div class="portlet-body">
+
+                  <div class="row">
+                    <div class="col-md-9">
+                      <p class="text-muted m-b-20 font-13">
+                          A short one liner on what this section is ...
+                      </p>
+                    </div>
+                    <div class="col-md-3 alignTextRight">
+                      <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')"
+                        ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                      <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')"
+                        ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">logs</button>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-2">
+                        <h5>Install Redis on:</h5>
+                        <div class="radio radio-primary m-t-0 m-b-20">
+                            <input type="radio" value="admiral"
+                               ng-model="vm.initializeForm.redis.initType">
+                            <label class="control-label">This Node</label>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <!-- Button trigger modal -->
+                      <button class="btn btn-default waves-effect waves-light m-t-10"
+                        ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                        ng-click="vm.showInstallLocationModal('redis')">
+                        Add a new Node details instead
+                      </button>
+                    </div>
+                    <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.redis.initType === 'new'">
+                      <h5><code>New node details are updated.</code></h5>
+                    </div>
+                    <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.redis.initType === 'existing'">
+                      <h5><code>Existing node details are updated.</code></h5>
+                    </div>
+                  </div>
+
+              </div><!-- END portlet-body -->
+            </div><!-- END bg-redis -->
+
+          </div><!-- END portlet -->
+        </div><!-- END col-md-12 -->
+      </div><!-- END ROW -->
+    <!-- END Redis -->
+
+
+
+    <!-- START Swarm -->
+    <div class="row">
+        <div class="col-md-12">
+          <div class="portlet">
+
+            <div class="portlet-heading" style="background-color: #eaefce !important;">
+              <h3 class="portlet-title text-dark">
+                  SWARM
+              </h3>
+              <div class="portlet-widgets">
+                  <span class="divider"></span>
+                  <span class="text-dark" ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
+                  <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed">
+                    {{vm.systemSettings.master.isInitialized ? 'initialized' : 'not initialized'}}
+                  </span>
+                  <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
+                  <span class="divider"></span>
+                  <a data-toggle="collapse" href="#bg-master"><i class="ion-minus-round"></i></a>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div id="bg-master" class="panel-collapse">
+              <div class="portlet-body">
+
+                  <div class="row">
+                    <div class="col-md-9">
+                      <p class="text-muted m-b-20 font-13">
+                          A short one liner on what this section is ...
+                      </p>
+                    </div>
+                    <div class="col-md-3 alignTextRight">
+                      <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')"
+                        ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                      <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')"
+                        ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">logs</button>
+                    </div>
+                  </div>
+
+                  <div class="row m-b-20">
+                    <div class="col-md-12">
+                        <h5>Worker Install Location:</h5>
+                        <div class="radio radio-primary m-t-0 m-b-20" style="display: inline;">
+                            <input type="radio" value="admiral"
+                              ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing"
+                              ng-model="vm.initializeForm.workers.initType">
+                            <label class="control-label" style="margin-right: 40px">This Node</label>
+                            <input type="radio" value="new"
+                              ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing"
+                              ng-model="vm.initializeForm.workers.initType">
+                            <label class="control-label">New Node(s)</label>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="card-box" ng-if="vm.initializeForm.workers.initType === 'new'">
+                    <div class="row">
+                      <div class="col-md-12">
+                          <h5>Swarm master</h5>
+                          <div class="col-md-2">
+                            <label class="control-label">IP:</label> {{vm.initializeForm.master.address || vm.admiralEnv.ADMIRAL_IP}}
+                          </div>
+                          <div class="col-md-3">
+                            <label class="control-label">Port:</label> {{vm.initializeForm.master.port || 2377}}
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row" >
+                      <div class="col-md-12">
+                          <h5>Swarm workers</h5>
+                          <div class="col-md-4">
+                            <span>Worker names must be unique</span>
+                          </div>
+                          <div class="col-md-4">
+                            <button class="btn btn-sm btn-default"
+                              ng-click="vm.showWorkersLogModal('workers')"
+                              ng-disabled="!vm.initializeForm.workers.enableLogsButton">Worker init logs</button>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="row" >
+                      <div class="col-md-12">
+                          <h5>Add Worker:</h5>
+                          <div class="col-md-4">
+                            <span class="text-dark">Name:</span>
+                            <div ng-class="!vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.newWorker.name.length ? 'has-error' : ''">
+                              <input type="text" class="form-control input-sm" name="workerName" placeholder="worker name" ng-disabled="vm.initializing"
+                              ng-model="vm.initializeForm.workers.newWorker.name"/>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <span class="text-dark">IP:</span>
+                            <div ng-class="vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)">
+                              <input type="text" class="form-control input-sm" name="workerAddress" placeholder="0.0.0.0" ng-disabled="vm.initializing"
+                              ng-model="vm.initializeForm.workers.newWorker.address"/>
+                            </div>
+                          </div>
+                          <div class="col-md-4 m-t-20">
+                            <button class="btn btn-sm btn-default" ng-click="vm.addWorker(vm.initializeForm.workers.newWorker)">Add</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" ng-repeat="worker in vm.initializeForm.workers.workers">
+                        <div class="col-md-2">
+                          <span ng-if="$first">
+                            Workers:
+                          </span>
+                        </div>
+                        <div class="col-md-1 text-right">
+                          Name:
+                        </div>
+                        <div class="col-md-3">
+                          {{worker.name}}
+                        </div>
+                        <div class="col-md-1 text-right">
+                          IP:
+                        </div>
+                        <div class="col-md-2">
+                          {{worker.address}}
+                        </div>
+                        <div class="col-md-1">
+                          <button class="btn btn-sm btn-default" ng-click="vm.removeWorker(worker)">
+                            Remove
+                          </button>
+                        </div>
+                        <div class="col-md-2 text-center">
+                          <span ng-if="worker.isProcessing">initializing...</span>
+                          <span ng-if="!worker.isProcessing && !worker.isFailed">
+                            {{worker.isInitialized ? 'initialized' : 'not initialized'}}
+                          </span>
+                          <span ng-if="!worker.isProcessing && worker.isFailed">failed &#x26a0;</span>
+                        </div>
+                      </div>
+
+                      <div class='row'>
+                          <div class="col-md-12 m-t-10">
+                              <div class="form-group">
+                                  <span class="text-dark m-b-10">
+                                    Please run this command on {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} node to authorize SSH access:
+                                  </span>
+                                  <div class="ss-action"></div>
+                                  <div class="ship-console" style="word-break: break-all;">
+                                    {{vm.initializeForm.sshCommand}}
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="checkbox checkbox-success m-t-0" ng-class="vm.initializeForm.workers.confirmCommand ? '' : 'has-error'">
+                              <div class="checkbox">
+                                <input id="checkbox_confirmCommand" type="checkbox" ng-model="vm.initializeForm.workers.confirmCommand"/>
+                                <label for="checkbox_confirmCommand">
+                                  Click here once you have run the above command on
+                                  {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} worker node
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+
+                  </div><!-- END card-box -->
+              </div><!-- END portlet-body -->
+            </div><!-- END bg-swarm -->
+
+          </div><!-- END portlet -->
+        </div><!-- END col-md-12 -->
+      </div><!-- END ROW -->
+    <!-- END Swarm -->
+
+
 <!-- Initialize button -->
   <div class="col-md-offset-10 col-md-2">
     <button class="btn btn-md btn-primary waves-effect waves-light m-t-10" type="submit" ng-click="vm.initialize()"
@@ -914,3 +1162,94 @@
     </div>
 </div><!-- /.modal -->
 <!-- END STATE Install Location Node Modal -->
+
+
+<!-- START Install Location Node Modal for REDIS -->
+<div id="redis-location-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabelRedis" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #f7f7f7">
+            <div class="modal-header">
+                <button ng-click="vm.resetInstallLocationModal('redis')" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Add Node details for Redis</h4>
+            </div>
+            <div class="modal-body">
+              <div class="card-box">
+                <div class="row">
+                    <div class="col-md-12">
+                      <div class="radio radio-primary m-t-0 m-b-20">
+                          <input type="radio" value="new"
+                             ng-model="vm.initializeForm.redis.initType">
+                          <label class="control-label">New Node</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" id="new" ng-if="vm.initializeForm.redis.initType === 'new'">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">IP address to install Redis:</span>
+                            <div ng-class="vm.validateIP(vm.initializeForm.redis.address)">
+                              <input type="text" class="form-control input-sm" name="redisAddress" placeholder="0.0.0.0"
+                                ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                                ng-model="vm.initializeForm.redis.address"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
+                            <div class="ss-action"></div>
+                            <div class="ship-console" style="word-break: break-all;">
+                              {{vm.initializeForm.sshCommand}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="checkbox checkbox-success m-t-0" ng-class="vm.initializeForm.redis.confirmCommand ? '' : 'has-error'">
+                        <div class="checkbox">
+                          <input id="checkbox_confirmCommand" type="checkbox" ng-model="vm.initializeForm.redis.confirmCommand"/>
+                          <label for="checkbox_confirmCommand">Click here once you have run the above command on your node</label>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+              </div>
+              <div class="card-box">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="radio radio-primary m-t-0 m-b-20">
+                        <input type="radio"
+                          value="existing" ng-model="vm.initializeForm.redis.initType">
+                        <label class="control-label">
+                          Existing Node
+                        </label>
+                    </div>
+                  </div>
+
+                  <div class="row" id="existing" ng-if="vm.initializeForm.redis.initType === 'existing'">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="text-dark">IP address of your existing Redis installation:</span>
+                            <div ng-class="vm.validateIP(vm.initializeForm.redis.address)">
+                              <input type="text" class="form-control input-sm" name="redisAddress" placeholder="0.0.0.0"
+                                ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                                ng-model="vm.initializeForm.redis.address"/>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="vm.resetInstallLocationModal('redis')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light"  data-dismiss="modal" name="redis_save_location">
+                  Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
+<!-- END Install Location Node Modal for REDIS -->
