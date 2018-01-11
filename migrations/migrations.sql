@@ -246,6 +246,11 @@ do $$
       alter table "projects" alter column "sourceDefaultBranch" type varchar(255);
     end if;
 
+    -- change type of "name" to varchar(255) in clusters table
+    if exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'name') then
+      alter table "clusters" alter column "name" type varchar(255);
+    end if;
+
     -- Add "isInternal" to accountTokens table
     if not exists (select 1 from information_schema.columns where table_name = 'accountTokens' and column_name = 'isInternal') then
       alter table "accountTokens" add column "isInternal" BOOLEAN DEFAULT false;
