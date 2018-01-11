@@ -24,6 +24,11 @@
     white-space: nowrap;
 }
 
+.table > tbody > tr > td.wrap-text {
+  padding: 8px 8px;
+  white-space: normal;
+}
+
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(even) > th {
   background-color: #FFFFFF;
