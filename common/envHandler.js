@@ -34,6 +34,9 @@ envHandler.get = function (envName, cb) {
 };
 
 envHandler.post = function (envName, envValue, cb) {
+  if (envName === null || envValue === null)
+    return cb('envName or envValue cannot be null');
+
   var createCmd = util.format('sudo echo \'%s="%s"\' >> %s',
     envName, envValue, global.config.admiralEnv);
 
