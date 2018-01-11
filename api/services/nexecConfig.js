@@ -189,6 +189,9 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_AMQP_DEFAULT_EXCHANGE', amqpDefaultExchange);
 
+  if (global.config.ignoreTlsErrors)
+    envs = util.format('%s -e %s=%s', envs, 'NODE_TLS_REJECT_UNAUTHORIZED', 0);
+
   bag.envs = envs;
   return next();
 }
