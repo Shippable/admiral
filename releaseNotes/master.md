@@ -13,18 +13,11 @@ ${RES_VER_DATE}
   - **gitRepo initial version**: adding a gitRepo for the first time will have additional conditions under which an initial version will be created when no branch is specified.  This should reduce confusion around errors when using a gitRepo as an `IN` for the first time before any webhooks are received. Logic is as follows:
       - use specified branch, if provided
       - use default branch if it exists or "master" if there is no default, but only if the resulting branch fits into the specified `except` and `only` rules.
+  - **Resources names beginning with a number**: Fixed a bug that caused jobs to fail when one of the IN resources started with a number.
 
 ## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
-
-## Shippable Server
-
-  - Features
-      - **simple title**: brief description
-  - Fixes
-      - **simple title**: brief description
+  - **Resources names beginning with a number**: Fixed a bug that caused jobs to fail when one of the IN resources started with a number.
+      - Reinitialization is required to apply this fix.
 
 ## Deprecation Notice
   - **lastHubspotSyncAt field removed from accounts GET API response**: Accounts GET API will no longer return `lastHubspotSyncAt` field in the response body.
