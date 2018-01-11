@@ -130,6 +130,11 @@ function _initializeConfig(bag, next) {
   else
     bag.config.runMode = 'production';
 
+  if (bag.env.IGNORE_TLS_ERRORS && bag.env.IGNORE_TLS_ERRORS === 'true')
+    bag.config.ignoreTlsErrors = true;
+  else
+    bag.config.ignoreTlsErrors = false;
+
   if (bag.env.LOGIN_TOKEN)
     bag.config.loginToken = bag.env.LOGIN_TOKEN;
   else
