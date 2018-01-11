@@ -804,13 +804,12 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="apiUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.api.url.data.url, 'apiUrl')"
+                              <input type="url" class="form-control input-sm" name="apiUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.api.url.data.url" ng-disabled="vm.installing || vm.saving"/>
                                 <span ng-if="vm.systemSettings.workers.length > 1">
                                   This field requires a LoadBalanced IP/DNS
                                 </span>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['apiUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.apiUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -834,10 +833,9 @@
                               Internal API URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="internalAPIUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.internalAPI.url.data.url, 'internalAPIUrl')"
+                              <input type="url" class="form-control input-sm" name="internalAPIUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.internalAPI.url.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['internalAPIUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.internalAPIUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -861,10 +859,9 @@
                               Console API URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="consoleAPIUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.consoleAPI.url.data.url, 'consoleAPIUrl')"
+                              <input type="url" class="form-control input-sm" name="consoleAPIUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.consoleAPI.url.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['consoleAPIUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.consoleAPIUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -892,17 +889,16 @@
                               Username
                             </div>
                             <div class="col-md-8">
-                              <input type="text" class="form-control input-sm" name="stateUserName"
+                              <input type="text" class="form-control input-sm" name="stateURL"
                                 ng-model="vm.installForm.state.gitlabCreds.data.username" ng-disabled="true"/>
                             </div>
                             <div class="col-md-4">
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="stateURL"
-                                ng-change="vm.formValuesChanged(vm.installForm.state.gitlabCreds.data.url, 'stateURL')"
+                              <input type="url" class="form-control input-sm" name="stateURL" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.state.gitlabCreds.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['stateURL']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.stateURL.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -923,10 +919,9 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="mktgUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.mktg.url.data.url, 'mktgUrl')"
+                              <input type="url" class="form-control input-sm" name="mktgUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.mktg.url.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['mktgUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.mktgUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -947,10 +942,9 @@
                               amqp URL
                             </div>
                             <div class="col-md-8">
-                              <input class="form-control input-sm" name="msgAmqpUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.msg.rabbitmqCreds.data.amqpUrl, 'msgAmqpUrl')"
+                              <input type="url" class="form-control input-sm" name="msgAmqpUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrl" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['msgAmqpUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.msgAmqpUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -958,10 +952,9 @@
                               amqp Root Url
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="msgAmqpUrlRoot"
-                                ng-change="vm.formValuesChanged(vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot, 'msgAmqpUrlRoot')"
+                              <input type="url" class="form-control input-sm" name="msgAmqpUrlRoot" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['msgAmqpUrlRoot']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.msgAmqpUrlRoot.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -969,10 +962,9 @@
                               amqp Admin URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="msgAmqpUrlAdmin"
-                                ng-change="vm.formValuesChanged(vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin, 'msgAmqpUrlAdmin')"
+                              <input type="url" class="form-control input-sm" name="msgAmqpUrlAdmin" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['msgAmqpUrlAdmin']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.msgAmqpUrlAdmin.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -1007,10 +999,9 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="redisUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.redis.url.data.url, 'redisUrl')"
+                              <input type="url" class="form-control input-sm" name="redisUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.redis.url.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['redisUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.redisUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -1033,8 +1024,7 @@
                             <div class="col-md-8">
                               <input type="url" name="wwwUrl"
                                 class="col-md-12 form-control input-sm"
-                                ng-change="vm.formValuesChanged(vm.installForm.www.url.data.url, 'wwwUrl')"
-                                ng-model="vm.installForm.www.url.data.url"
+                                ng-model="vm.installForm.www.url.data.url" ng-pattern="vm.urlRegex"
                                 ng-disabled="vm.installing || vm.saving"/>
                                 <span ng-if="vm.systemSettings.workers.length > 1">
                                   This field requires a LoadBalanced IP/DNS
@@ -1045,7 +1035,7 @@
                                   target="_blank">here</a>
                                 to login
                               </div>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['wwwUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.wwwUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -1135,10 +1125,9 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="bitbucketUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.auth.bitbucketKeys.data.url, 'bitbucketUrl')"
+                              <input type="url" class="form-control input-sm" name="bitbucketUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.auth.bitbucketKeys.data.url" ng-disabled="true"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['bitbucketUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.bitbucketUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -1214,10 +1203,9 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="bitbucketServerUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.auth.bitbucketServerKeys.data.url, 'bitbucketServerUrl')"
+                              <input type="url" class="form-control input-sm" name="bitbucketServerUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['bitbucketServerUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.bitbucketServerUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -1293,10 +1281,9 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="githubUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.auth.githubKeys.data.url, 'githubUrl')"
+                              <input type="url" class="form-control input-sm" name="githubUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.auth.githubKeys.data.url" ng-disabled="true"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['githubUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.githubUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -1372,10 +1359,9 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="githubEnterpriseUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.auth.githubEnterpriseKeys.data.url, 'githubEnterpriseUrl')"
+                              <input type="url" class="form-control input-sm" name="githubEnterpriseUrl" ng-pattern="vm.urlRegex"
                                 ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['githubEnterpriseUrl']">
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.githubEnterpriseUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>
@@ -1451,14 +1437,9 @@
                               URL
                             </div>
                             <div class="col-md-8">
-                              <input type="url" class="form-control input-sm" name="gitlabUrl"
-                                ng-change="vm.formValuesChanged(vm.installForm.auth.gitlabKeys.data.url, 'gitlabUrl')"
-                                ng-model="vm.installForm.auth.gitlabKeys.data.url"
-                                ng-disabled="false"/>
-                              <dd class="text-danger" ng-if="vm.isError">
-                                <span>Please provide a valid gitlab endpoint url</span>
-                              </dd>
-                              <dd class="text-danger" ng-if="vm.isUrlNotValid['gitlabUrl']">
+                              <input type="url" class="form-control input-sm" name="gitlabUrl" ng-pattern="vm.urlRegex"
+                                ng-model="vm.installForm.auth.gitlabKeys.data.url" ng-disabled="false"/>
+                              <dd class="text-danger" ng-show="vm.admiralInstallForm.gitlabUrl.$error.pattern">
                                 <span>URL is invalid.</span>
                               </dd>
                             </div>

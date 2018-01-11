@@ -51,7 +51,7 @@
         'internalAPI',
         'consoleAPI'
       ],
-      isUrlNotValid: [],
+      urlRegex: /(http(s)?:\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/,
       x86ArchCode: null,
       armArchCode: null,
       initializeForm: {
@@ -99,15 +99,6 @@
         sshCommand: '',
         installerAccessKey: '',
         installerSecretKey: ''
-      },
-      formValuesChanged: function (url, name) {
-        var urlRegex = /(http(s)?:\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/;
-        
-        if(urlRegex.test(url)) {
-          $scope.vm.isUrlNotValid[name] = false;
-        }
-        else
-          $scope.vm.isUrlNotValid[name] = true;
       },
       // map by systemInt name, then masterName
       installForm: {
