@@ -1064,6 +1064,7 @@
          function () { 
           $scope.vm.isNotValidurl[bag.masterName] =
             bag.isNotValidurl[bag.masterName];
+          $scope.vm.disableSave = bag.isNotValidurl[bag.masterName];
          }
        );
      }

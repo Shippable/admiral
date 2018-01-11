@@ -2218,7 +2218,7 @@
                               Install
                             </div>
                           </button>
-                          <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showSaveModal()">
+                          <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave" ng-click="vm.showSaveModal()">
                             <div ng-if="vm.saving">
                               Saving...
                             </div>

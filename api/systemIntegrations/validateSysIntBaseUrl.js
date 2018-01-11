@@ -25,7 +25,7 @@ function validateSysIntBaseUrl(req, res) {
 
   bag.who = util.format('systemIntegrations|%s',
     self.name);
-  logger.error(bag.who, 'Starting');
+  logger.info(bag.who, 'Starting');
 
   async.series([
       _checkInputParams.bind(null, bag),
