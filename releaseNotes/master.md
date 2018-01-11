@@ -4,23 +4,28 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **Shows account integration owner name in dropdown when editing a subscription integration**: Display account integration owner name along with integration name which helps in choosing subscription integration when there are multiple account integrations with the same name
+  - **simple title**: brief description. [link to docs](#).
+      - itemized
+      - list
+      - for details
+      - if necessary
 
 ## Fixes
-  - **Bitbucket permissions on renamed repositories**: An error updating the deploy key on Bitbucket when a repository is renamed has been fixed.
-      - The error resulted in missing permissions for accounts on the repository after it was renamed.
-      - Synchronizing any affected accounts will fix missing permissions.
-  - **gitRepo initial version**: adding a gitRepo for the first time will have additional conditions under which an initial version will be created when no branch is specified.  This should reduce confusion around errors when using a gitRepo as an `IN` for the first time before any webhooks are received. Logic is as follows:
-      - use specified branch, if provided
-      - use default branch if it exists or "master" if there is no default, but only if the resulting branch fits into the specified `except` and `only` rules.
-  - **Resources names beginning with a number**: Fixed a bug that caused jobs to fail when one of the IN resources started with a number.
+  - **simple title**: brief description
+      - actions required
+      - or additional details
 
 ## Custom Nodes
-  - **Resources names beginning with a number**: Fixed a bug that caused jobs to fail when one of the IN resources started with a number.
-      - Reinitialization is required to apply this fix.
+  - **simple title**: brief description
+      - additional details or
+      - actions required
 
-## Deprecation Notice
-  - **lastHubspotSyncAt field removed from accounts GET API response**: Accounts GET API will no longer return `lastHubspotSyncAt` field in the response body.
+## Shippable Server
+
+  - Features
+      - **simple title**: brief description
+  - Fixes
+      - **simple title**: brief description
 
 ## History
 
