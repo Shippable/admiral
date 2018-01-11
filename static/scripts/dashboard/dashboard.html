@@ -1207,7 +1207,7 @@
                               <dd class="text-danger" ng-if="vm.isNotValidurl['bitbucketServerKeys']">
                                 <span>Please give a valid bitbucketServer endpoint url</span>
                               </dd>
-                              <dd class="text-danger" ng-show="vm.admiralInstallForm.bitbucketServerUrl.$dirty">
+                              <dd class="text-danger" ng-if="!vm.isNotValidurl['bitbucketServerKeys']">
                                 <span ng-show="vm.admiralInstallForm.bitbucketServerUrl.$error.url">URL is invalid.</span>
                               </dd>
                             </div>
@@ -1364,7 +1364,7 @@
                               <dd class="text-danger" ng-if="vm.isNotValidurl['githubEnterpriseKeys']">
                                 <span>Please give a valid githubEnterprise endpoint url</span>
                               </dd>
-                              <dd class="text-danger" ng-show="vm.admiralInstallForm.githubEnterpriseUrl.$dirty">
+                              <dd class="text-danger" ng-if="!vm.isNotValidurl['githubEnterpriseKeys']">
                                 <span ng-show="vm.admiralInstallForm.githubEnterpriseUrl.$error.url">URL is invalid.</span>
                               </dd>
                             </div>
