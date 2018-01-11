@@ -158,9 +158,23 @@
 
               <div class="row">
                 <div class="col-md-9">
-                  <p class="text-muted m-b-20 font-13">
-                      A short one liner on what this section is ...
-                  </p>
+                  <div class="col-md-12">
+                    <form class="form-horizontal">
+                      <h5>Database Address</h5>
+                      <p style="word-wrap: break-word;" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.address">
+                        {{vm.systemSettings.db.address}}
+                      </p>
+                      <p style="word-wrap: break-word;" ng-if="!vm.systemSettings.db.isInitialized">-</p>
+                    </form>
+                  </div>
+                  <div class="col-md-12">
+                    <form class="form-horizontal">
+                      <h5>Database Port</h5>
+                      <p style="word-wrap: break-word;" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.port">
+                      {{vm.systemSettings.db.port}}</p>
+                      <p style="word-wrap: break-word;" ng-if="!vm.systemSettings.db.isInitialized">-</p>
+                    </form>
+                  </div>
                 </div>
                 <div class="col-md-3 alignTextRight">
                   <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
@@ -506,7 +520,7 @@
         <h4 class="modal-title">{{vm.selectedService.displayName}} Configs</h4>
       </div>
       <div class="modal-body">
-        <table class="table table-condensed table-striped">
+        <table class="table table-condensed table-striped" style="width: 100%">
           <thead>
             <tr>
               <th></th>
@@ -518,7 +532,7 @@
               <td>
                 <b>{{config.key}}:</b>
               </td>
-              <td style="word-wrap: break-word; word-break: break-all;">
+              <td class="wrap-text" style="word-wrap: break-word; word-break: break-all;">
                 {{config.value}}
               </td>
             </tr>
