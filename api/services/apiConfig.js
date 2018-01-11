@@ -20,6 +20,7 @@ function apiConfig(params, callback) {
     runCommand: '',
     vaultUrlEnv: 'VAULT_URL',
     vaultUrl: '',
+    ignoreTLSEnv: 'IGNORE_TLS_ERRORS',
     vaultTokenEnv: 'VAULT_TOKEN',
     vaultToken: '',
     port: 50000
@@ -28,8 +29,10 @@ function apiConfig(params, callback) {
   bag.who = util.format('apiConfig|%s', self.name);
   logger.info(bag.who, 'Starting');
 
-  async.series([
+  async.series(
+    [
       _checkInputParams.bind(null, bag),
+      _getIgnoreTLSEnv.bind(null, bag),
       _getVaultURL.bind(null, bag),
       _getVaultToken.bind(null, bag),
       _generateImage.bind(null, bag),
@@ -60,6 +63,26 @@ function _checkInputParams(bag, next) {
     bag.port = 50005;
 
   return next();
+}
+
+function _getIgnoreTLSEnv(bag, next) {
+  var who = bag.who + '|' + _getIgnoreTLSEnv.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.ignoreTLSEnv,
+    function (err, shouldIgnoreTls) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.ignoreTLSEnv)
+        );
+
+      bag.shouldIgnoreTls = shouldIgnoreTls;
+      logger.debug('Found ignoreTLS env: ', shouldIgnoreTls);
+
+      return next();
+    }
+  );
 }
 
 function _getVaultURL(bag, next) {
@@ -148,7 +171,7 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s', envs,
     'API_URL_INTEGRATION', bag.config.apiUrlIntegration);
 
-  if (global.config.ignoreTlsErrors)
+  if (bag.shouldIgnoreTls && bag.shouldIgnoreTls === 'true')
     envs = util.format('%s -e %s=%s', envs, 'NODE_TLS_REJECT_UNAUTHORIZED', 0);
 
   bag.envs = envs;
