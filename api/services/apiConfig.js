@@ -148,6 +148,9 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s', envs,
     'API_URL_INTEGRATION', bag.config.apiUrlIntegration);
 
+  if (global.config.ignoreTlsErrors)
+    envs = util.format('%s -e %s=%s', envs, 'NODE_TLS_REJECT_UNAUTHORIZED', 0);
+
   bag.envs = envs;
   return next();
 }

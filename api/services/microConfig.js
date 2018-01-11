@@ -230,6 +230,9 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'COMPONENT', bag.component);
 
+  if (global.config.ignoreTlsErrors)
+    envs = util.format('%s -e %s=%s', envs, 'NODE_TLS_REJECT_UNAUTHORIZED', 0);
+
   if (bag.component === 'irc') {
     envs = util.format('%s -e %s=%s',
       envs, 'IRC_BOT_NICK', 'shippable');
