@@ -219,9 +219,9 @@
                 <div class="col-md-2">
                     <h5>Install Secrets on:</h5>
                     <div class="radio radio-primary m-t-0 m-b-20">
-                        <input type="radio" value="admiral"
+                        <input id="secrets_install_on_this_node" type="radio" value="admiral"
                            ng-model="vm.initializeForm.secrets.initType">
-                        <label class="control-label">This Node</label>
+                        <label for="secrets_install_on_this_node" class="control-label">This Node</label>
                     </div>
                 </div>
               </div>
@@ -293,7 +293,7 @@
                 <div class="col-md-2">
                     <h5>Install RabbitMQ on:</h5>
                     <div class="radio radio-primary m-t-0 m-b-20">
-                        <input type="radio" value="admiral" name="install_location_rabbit"
+                        <input type="radio" value="admiral" name="install_location_rabbit" id="install_location_rabbit"
                            ng-model="vm.initializeForm.msg.initType">
                         <label for="install_location_rabbit" class="control-label">This Node</label>
                     </div>
@@ -484,9 +484,9 @@
                 <div class="row">
                     <div class="col-md-12">
                       <div class="radio radio-primary m-t-0 m-b-20">
-                          <input type="radio" value="new" name="install_location_rabbit"
+                          <input type="radio" value="new" name="install_location_rabbit_new_node" id="install_location_rabbit_new_node"
                              ng-model="vm.initializeForm.msg.initType">
-                          <label for="install_location_rabbit" class="control-label">New Node</label>
+                          <label for="install_location_rabbit_new_node" class="control-label">New Node</label>
                       </div>
                     </div>
                   </div>
@@ -535,7 +535,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
-                        <input type="radio" name="existing_msg"
+                        <input type="radio" name="existing_msg" id="existing_msg"
                           value="existing" ng-model="vm.initializeForm.msg.initType">
                         <label class="control-label" for="existing_msg"
                           value="existing" ng-model="vm.initializeForm.msg.initType">
@@ -623,9 +623,9 @@
                 <div class="row">
                     <div class="col-md-12">
                       <div class="radio radio-primary m-t-0 m-b-20">
-                          <input type="radio" value="new"
+                          <input id="secrets_install_on_new_node" type="radio" value="new"
                              ng-model="vm.initializeForm.secrets.initType">
-                          <label class="control-label">New Node</label>
+                          <label for="secrets_install_on_new_node" class="control-label">New Node</label>
                       </div>
                     </div>
                   </div>
@@ -665,9 +665,9 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
-                        <input type="radio"
+                        <input type="radio" id="secrets_install_on_existing_node"
                           value="existing" ng-model="vm.initializeForm.secrets.initType">
-                        <label class="control-label">
+                        <label for="secrets_install_on_existing_node" class="control-label">
                           Existing Node
                         </label>
                     </div>
