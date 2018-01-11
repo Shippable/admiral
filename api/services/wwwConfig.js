@@ -19,6 +19,7 @@ function wwwConfig(params, callback) {
     envs: '',
     mounts: '',
     runCommand: '',
+    ignoreTLSEnv: 'IGNORE_TLS_ERRORS',
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
     serviceUserToken: ''
   };
@@ -26,8 +27,10 @@ function wwwConfig(params, callback) {
   bag.who = util.format('wwwConfig|%s', self.name);
   logger.info(bag.who, 'Starting');
 
-  async.series([
+  async.series(
+    [
       _checkInputParams.bind(null, bag),
+      _getIgnoreTLSEnv.bind(null, bag),
       _getServiceUserToken.bind(null, bag),
       _getAPISystemIntegration.bind(null, bag),
       _generateImage.bind(null, bag),
@@ -53,6 +56,26 @@ function _checkInputParams(bag, next) {
   bag.config.serviceName = bag.name;
 
   return next();
+}
+
+function _getIgnoreTLSEnv(bag, next) {
+  var who = bag.who + '|' + _getIgnoreTLSEnv.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.ignoreTLSEnv,
+    function (err, shouldIgnoreTls) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.ignoreTLSEnv)
+        );
+
+      bag.shouldIgnoreTls = shouldIgnoreTls;
+      logger.debug('Found ignoreTLS env: ', shouldIgnoreTls);
+
+      return next();
+    }
+  );
 }
 
 function _getServiceUserToken(bag, next) {
@@ -140,7 +163,7 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_API_URL', apiUrl);
 
-  if (global.config.ignoreTlsErrors)
+  if (bag.shouldIgnoreTls && bag.shouldIgnoreTls === 'true')
     envs = util.format('%s -e %s=%s', envs, 'NODE_TLS_REJECT_UNAUTHORIZED', 0);
 
   bag.envs = envs;

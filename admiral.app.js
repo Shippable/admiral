@@ -130,10 +130,13 @@ function _initializeConfig(bag, next) {
   else
     bag.config.runMode = 'production';
 
-  if (bag.env.IGNORE_TLS_ERRORS && bag.env.IGNORE_TLS_ERRORS === 'true')
+  if (bag.env.IGNORE_TLS_ERRORS && bag.env.IGNORE_TLS_ERRORS === 'true') {
+    // disable TLS check for admiral itself
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     bag.config.ignoreTlsErrors = true;
-  else
+  } else {
     bag.config.ignoreTlsErrors = false;
+  }
 
   if (bag.env.LOGIN_TOKEN)
     bag.config.loginToken = bag.env.LOGIN_TOKEN;
