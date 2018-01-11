@@ -51,6 +51,7 @@
         'internalAPI',
         'consoleAPI'
       ],
+      isNotValidurl: [],
       urlRegex: /(http(s)?:\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/,
       x86ArchCode: null,
       armArchCode: null,
@@ -99,6 +100,9 @@
         sshCommand: '',
         installerAccessKey: '',
         installerSecretKey: ''
+      },
+      formValuesChanged: function (url, masterName) {
+        validateSCMUrlWorkflow(url, masterName);
       },
       // map by systemInt name, then masterName
       installForm: {
@@ -1045,6 +1049,41 @@
         }
       );
     }
+
+    function validateSCMUrlWorkflow(url, masterName) {
+       var bag = {
+         url: url,
+         name: 'auth',
+         masterName: masterName,
+         isNotValidurl: []
+       };
+       async.series([
+         getSystemIntegration.bind(null, bag),
+         validateSCMUrl.bind(null, bag)
+       ],
+         function () { 
+          $scope.vm.isNotValidurl[bag.masterName] =
+            bag.isNotValidurl[bag.masterName];
+          $scope.vm.disableSave = bag.isNotValidurl[bag.masterName];
+         }
+       );
+     }
+
+     function validateSCMUrl(bag, next) {
+       var validateBody = {
+         url: bag.url
+       };
+       admiralApiAdapter.validateUrl(bag.systemIntegration.id, validateBody,
+         function (err, res) {
+           if (err) {
+             bag.isNotValidurl[bag.masterName] = true;
+             return next();
+           }
+           bag.isNotValidurl[bag.masterName] = false;
+           return next();
+         }
+       );
+     }
 
     function updateInitializeForm(bag, next) {
       if ($scope.vm.admiralEnv) {

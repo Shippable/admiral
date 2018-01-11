@@ -182,6 +182,12 @@ APIAdapter.prototype.postSystemIntegration =
     this.post(url, body, callback);
   };
 
+APIAdapter.prototype.validateUrl =
+  function (systemIntegrationId, body, callback) {
+    var url = '/api/systemIntegrations' + systemIntegrationId + '/validate';
+    this.post(url, body, callback);
+  };
+
 // systemMachineImages
 APIAdapter.prototype.getSystemMachineImages =
   function (query, callback) {

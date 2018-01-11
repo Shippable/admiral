@@ -110,6 +110,9 @@
       postSystemIntegration: function (body, callback) {
         return API.post('/api/systemIntegrations', body, callback);
       },
+      validateUrl: function (systemIntegrationId, body, callback) {
+        return API.post('/api/systemIntegrations/' + systemIntegrationId + '/validate', body, callback);
+      },
       putSystemIntegration: function (systemIntegrationId, body, callback) {
         return API.put('/api/systemIntegrations/' +
           systemIntegrationId, body, callback);

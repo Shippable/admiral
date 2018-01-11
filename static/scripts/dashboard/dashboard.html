@@ -778,7 +778,7 @@
                 Please initialize first.
               </div>
               <div ng-if="vm.isLoaded && vm.initialized">
-                <form class="form-group" name="vm.admiralInstallForm">
+                <form class="form-group" name="vm.admiralInstallForm" novalidate>
                   <div class="row">
                     <div class="col-md-offset-1 col-md-10">
                     <!-- Service Addresses -->
@@ -1202,7 +1202,11 @@
                             </div>
                             <div class="col-md-8">
                               <input type="url" class="form-control input-sm" name="bitbucketServerUrl"
+                                ng-blur="vm.formValuesChanged(vm.installForm.auth.bitbucketServerKeys.data.url, 'bitbucketServerKeys')"
                                 ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
+                              <dd class="text-danger" ng-if="vm.isNotValidurl['bitbucketServerKeys']">
+                                <span>Please give a valid bitbucketServer endpoint url</span>
+                              </dd>
                               <dd class="text-danger" ng-show="vm.admiralInstallForm.bitbucketServerUrl.$dirty">
                                 <span ng-show="vm.admiralInstallForm.bitbucketServerUrl.$error.url">URL is invalid.</span>
                               </dd>
@@ -1355,7 +1359,11 @@
                             </div>
                             <div class="col-md-8">
                               <input type="url" class="form-control input-sm" name="githubEnterpriseUrl"
+                                ng-blur="vm.formValuesChanged(vm.installForm.auth.githubEnterpriseKeys.data.url, 'githubEnterpriseKeys')"
                                 ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
+                              <dd class="text-danger" ng-if="vm.isNotValidurl['githubEnterpriseKeys']">
+                                <span>Please give a valid githubEnterprise endpoint url</span>
+                              </dd>
                               <dd class="text-danger" ng-show="vm.admiralInstallForm.githubEnterpriseUrl.$dirty">
                                 <span ng-show="vm.admiralInstallForm.githubEnterpriseUrl.$error.url">URL is invalid.</span>
                               </dd>
@@ -1433,8 +1441,12 @@
                             </div>
                             <div class="col-md-8">
                               <input type="url" class="form-control input-sm" name="gitlabUrl"
+                                ng-blur="vm.formValuesChanged(vm.installForm.auth.gitlabKeys.data.url, 'gitlabKeys')"
                                 ng-model="vm.installForm.auth.gitlabKeys.data.url" ng-disabled="false"/>
-                              <dd class="text-danger" ng-show="vm.admiralInstallForm.gitlabUrl.$dirty">
+                              <dd class="text-danger" ng-if="vm.isNotValidurl['gitlabKeys']">
+                                <span>Please give a valid gitlab endpoint url</span>
+                              </dd>
+                              <dd class="text-danger" ng-if="!vm.isNotValidurl['gitlabKeys']">
                                 <span ng-show="vm.admiralInstallForm.gitlabUrl.$error.url">URL is invalid.</span>
                               </dd>
                             </div>
@@ -2206,7 +2218,7 @@
                               Install
                             </div>
                           </button>
-                          <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-click="vm.showSaveModal()">
+                          <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit" ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave" ng-click="vm.showSaveModal()">
                             <div ng-if="vm.saving">
                               Saving...
                             </div>
