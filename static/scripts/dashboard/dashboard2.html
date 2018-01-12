@@ -323,7 +323,7 @@
                 </div>
               </div><!--row ends-->
 
-              <div class="row">
+              <div class="row" ng-if="vm.initializeForm.msg.initType !== 'admiral'">
                 <div class="col-md-3">
                   <button class="btn btn-default waves-effect waves-light m-t-10"
                     ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
