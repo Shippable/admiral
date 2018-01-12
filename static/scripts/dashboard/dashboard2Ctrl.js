@@ -580,6 +580,8 @@
       initialize: initialize,
       resetInstallLocationModal: resetInstallLocationModal,
       showInstallLocationModal: showInstallLocationModal,
+      saveInstallLocationModal: saveInstallLocationModal,
+      secretsModalErrorMsg: null,
       validatePassword: validatePassword,
       validateIP: validateIP,
       validateWorkerAddress: validateWorkerAddress,
@@ -1143,10 +1145,38 @@
       $scope.vm.initializeForm[fromCopy] =  angular.copy($scope.vm.initializeForm[old]);
     }
 
+    function saveInstallLocationModal (secName) {
+      console.log ('secNAme ' , secName );
+      if (secName === 'secrets') {
+        var hasErr = '';
+
+        if ($scope.vm.initializeForm.secrets.initType === 'new') {
+          hasErr = validateIP ($scope.vm.initializeForm.secrets.address);
+          if (!$scope.vm.initializeForm.secrets.confirmCommand) {
+            hasErr = 'has-error';
+          }
+        }
+        if ($scope.vm.initializeForm.secrets.initType === 'existing') {
+          hasErr = validateIP ($scope.vm.initializeForm.secrets.address);
+          if (!$scope.vm.initializeForm.secrets.rootToken.length) {
+            hasErr = 'has-error';
+          }
+        }
+
+        if (hasErr) {
+          $scope.vm.secretsModalErrorMsg = hasErr;
+        } else {
+          $scope.vm.secretsModalErrorMsg = '';
+          $('#secrets-location-modal').modal('hide');
+        }
+      }
+    }
+
     function showInstallLocationModal(sectionName, clickType) {
       var old = sectionName + '_old';
 
       if (sectionName === 'secrets') {
+        $scope.vm.secretsModalErrorMsg = '';
         $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.secrets);
         if (clickType === 'dropdown' && $scope.vm.initializeForm.secrets.initType === 'admiral') {
           //do nothing
