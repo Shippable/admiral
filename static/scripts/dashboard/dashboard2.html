@@ -216,45 +216,47 @@
         <div id="bg-secrets" class="panel-collapse collapse in">
           <div class="portlet-body">
 
-              <div class="row">
-                <div class="col-md-9">
-                  <p class="text-muted m-b-20 font-13">
-                      A short one liner on what this section is ...
-                  </p>
-                </div>
-                <div class="col-md-3 alignTextRight">
-                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
-                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized">logs</button>
+            <div class="row">
+              <div class="col-md-4">
+                <h5>Install Secrets on:</h5>
+                <select class="form-control"
+                  ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                  ng-change="vm.showInstallLocationModal('secrets', 'dropdown')"
+                  ng-model="vm.initializeForm.secrets.initType">
+                  <option value="admiral">This node</option>
+                  <option value="new">New node</option>
+                  <option value="existing">Existing node</option>
+                </select>
+              </div>
+              <div class="col-md-4 m-t-5">
+                <div ng-if="vm.initializeForm.secrets.address">
+                  <h5>IP address where Secret is installed:</h5>
+                  <span>{{vm.initializeForm.secrets.address}}</span>
                 </div>
               </div>
+              <div class="col-md-4 alignTextRight">
+                <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized">logs</button>
+              </div>
+            </div><!--row ends-->
 
-              <div class="row">
-                <div class="col-md-2">
-                    <h5>Install Secrets on:</h5>
-                    <div class="radio radio-primary m-t-0 m-b-20">
-                        <input id="secrets_install_on_this_node" type="radio" value="admiral"
-                           ng-model="vm.initializeForm.secrets.initType">
-                        <label for="secrets_install_on_this_node" class="control-label">This Node</label>
-                    </div>
-                </div>
+            <div class="row">
+              <div class="col-md-3">
+                <button class="btn btn-default waves-effect waves-light m-t-10"
+                  ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                  ng-click="vm.showInstallLocationModal('secrets', 'button')">
+                  Add new/existing node details
+                </button>
               </div>
-
-              <div class="row">
-                <div class="col-md-3">
-                  <!-- Button trigger modal -->
-                  <button class="btn btn-default waves-effect waves-light m-t-10"
-                    ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
-                    ng-click="vm.showInstallLocationModal('secrets')">
-                    Add a new Node details instead
-                  </button>
-                </div>
-                <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'new'">
-                  <h5><code>New node details are updated.</code></h5>
-                </div>
-                <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'existing'">
-                  <h5><code>Existing node details are updated.</code></h5>
-                </div>
+              <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                <h5 ng-if="vm.initializeForm.secrets.address"><code>New node details are added.</code></h5>
+                <h5 ng-if="!vm.initializeForm.secrets.address"><code>Kindly complete the details for adding a new node.</code></h5>
               </div>
+              <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'existing'">
+                <h5 ng-if="vm.initializeForm.secrets.address"><code>Existing node details are added.</code></h5>
+                <h5 ng-if="!vm.initializeForm.secrets.address"><code>Kindly complete the details for adding an existing node.</code></h5>
+              </div>
+            </div>
 
           </div><!-- END portlet-body -->
         </div><!-- END bg-secrets -->
