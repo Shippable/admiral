@@ -1180,7 +1180,7 @@
           }
         }
         if ($scope.vm.initializeForm.msg.initType === 'new') {
-          hasErr = validateIP ($scope.vm.initializeForm.msg.password);
+          hasErr = validatePassword ($scope.vm.initializeForm.msg.password);
           if (!$scope.vm.initializeForm.msg.confirmCommand) {
             hasErr = 'has-error';
           }
