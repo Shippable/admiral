@@ -303,7 +303,15 @@
                     <option value="existing">Existing node</option>
                   </select>
                 </div>
-                <div class="col-md-4 m-t-5">
+                <div class="col-md-4" ng-if="vm.initializeForm.msg.initType === 'admiral'">
+                  <h5 ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</h5>
+                  <h5 ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</h5>
+                  <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)" class="m-b-10">
+                    <input type="text" class="form-control input-sm" name="msgPassword"
+                    ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                  </div>
+                </div>
+                <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.msg.initType === 'new' || vm.initializeForm.msg.initType === 'existing'">
                   <div ng-if="vm.initializeForm.msg.address">
                     <h5>IP address where RabbitMQ is installed:</h5>
                     <span>{{vm.initializeForm.msg.address}}</span>
