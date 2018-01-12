@@ -1157,7 +1157,11 @@
 
       if (sectionName === 'msg') {
         $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.msg);
-        $('#msg-location-modal').modal('show');
+        if (clickType === 'dropdown' && $scope.vm.initializeForm.msg.initType === 'admiral') {
+          //do nothing
+        } else {
+          $('#msg-location-modal').modal('show');
+        }
       }
 
       if (sectionName === 'state') {
