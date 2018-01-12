@@ -19,10 +19,6 @@ do $$
         "jobConsoleBufferTimeIntervalMS" INTEGER DEFAULT 3000 NOT NULL,
         "apiRetryIntervalMS" INTEGER DEFAULT 3000 NOT NULL,
         "truck" BOOLEAN DEFAULT false NOT NULL,
-        "hubspotListId" INTEGER,
-        "hubspotShouldSimulate" BOOLEAN,
-        "hubspotProjectsLastSyncTime" timestamp with time zone,
-        "hubspotRSyncLastSyncTime" timestamp with time zone,
         "rootS3Bucket" VARCHAR(64) NOT NULL,
         "nodeScriptsLocation" VARCHAR(255) NOT NULL,
         "enforcePrivateJobQuota" BOOLEAN DEFAULT false NOT NULL,
@@ -55,12 +51,20 @@ do $$
       alter table "systemSettings" add column "defaultClusterType" VARCHAR(255) NOT NULL DEFAULT 'dynamic__x86_64__Ubuntu_14.04__c4.large';
     end if;
 
-    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'hubspotProjectsLastSyncTime') then
-      alter table "systemSettings" add column "hubspotProjectsLastSyncTime" timestamp with time zone;
+    if exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'hubspotProjectsLastSyncTime') then
+      alter table "systemSettings" drop column "hubspotProjectsLastSyncTime";
     end if;
 
-    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'hubspotRSyncLastSyncTime') then
-      alter table "systemSettings" add column "hubspotRSyncLastSyncTime" timestamp with time zone;
+    if exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'hubspotRSyncLastSyncTime') then
+      alter table "systemSettings" drop column "hubspotRSyncLastSyncTime";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'hubspotListId') then
+      alter table "systemSettings" drop column "hubspotListId";
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'hubspotShouldSimulate') then
+      alter table "systemSettings" drop column "hubspotShouldSimulate";
     end if;
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'accountSyncFrequencyHr') then
