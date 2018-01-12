@@ -1225,8 +1225,14 @@
       }
 
       if (sectionName === 'state') {
-        $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.state);
-        $('#state-location-modal').modal('show');
+        $scope.vm.initializeForm[old] = angular.copy(
+          $scope.vm.initializeForm.state);
+        if (clickType === 'dropdown' &&
+          $scope.vm.initializeForm.state.initType === 'admiral') {
+          //do nothing
+        } else {
+          $('#state-location-modal').modal('show');
+        }
       }
 
       if (sectionName === 'redis') {
@@ -1509,6 +1515,8 @@
     }
 
     function validatePassword(password) {
+      if (!password)
+        return;
       if (password.length < 8)
         return 'has-error';
     }
