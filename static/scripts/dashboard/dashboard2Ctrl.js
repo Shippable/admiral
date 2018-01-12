@@ -1145,12 +1145,17 @@
       //console.log('Modal Back to old values ' , $scope.vm.initializeForm[fromCopy]);
     }
 
-    function showInstallLocationModal(sectionName) {
+    function showInstallLocationModal(sectionName, clickType) {
       var old = sectionName + '_old';
+      //console.log('get values', $scope.vm.initializeForm[sectionName]);
 
       if (sectionName === 'secrets') {
         $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.secrets);
-        $('#secrets-location-modal').modal('show');
+        if (clickType === 'dropdown' && $scope.vm.initializeForm.secrets.initType === 'admiral') {
+          //do nothing
+        } else {
+          $('#secrets-location-modal').modal('show');
+        }
       }
 
       if (sectionName === 'msg') {
