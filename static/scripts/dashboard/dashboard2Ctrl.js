@@ -1140,14 +1140,11 @@
 
     function resetInstallLocationModal (fromCopy) {
       var old =  fromCopy + '_old';
-      //console.log('Modal closed reset values to ' , $scope.vm.initializeForm[old] );
       $scope.vm.initializeForm[fromCopy] =  angular.copy($scope.vm.initializeForm[old]);
-      //console.log('Modal Back to old values ' , $scope.vm.initializeForm[fromCopy]);
     }
 
     function showInstallLocationModal(sectionName, clickType) {
       var old = sectionName + '_old';
-      //console.log('get values', $scope.vm.initializeForm[sectionName]);
 
       if (sectionName === 'secrets') {
         $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.secrets);
