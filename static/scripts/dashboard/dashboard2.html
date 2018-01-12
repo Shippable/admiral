@@ -292,50 +292,42 @@
           <div class="portlet-body">
 
               <div class="row">
-                <div class="col-md-9">
-                  <p class="text-muted m-b-20 font-13">
-                      A short one liner on what this section is ...
-                  </p>
+                <div class="col-md-4">
+                  <h5>Install RabbitMQ on:</h5>
+                  <select class="form-control"
+                    ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                    ng-change="vm.showInstallLocationModal('msg', 'dropdown')"
+                    ng-model="vm.initializeForm.msg.initType">
+                    <option value="admiral">This node</option>
+                    <option value="new">New node</option>
+                    <option value="existing">Existing node</option>
+                  </select>
                 </div>
-                <div class="col-md-3 alignTextRight">
-                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
-                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')" ng-disabled="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed && !vm.systemSettings.msg.isInitialized">Logs</button>
+                <div class="col-md-4 m-t-5">
+                  <div ng-if="vm.initializeForm.msg.address">
+                    <h5>IP address where RabbitMQ is installed:</h5>
+                    <span>{{vm.initializeForm.msg.address}}</span>
+                  </div>
                 </div>
-              </div><!-- END row -->
-
-              <div class="row">
-                <div class="col-md-2">
-                    <h5>Install RabbitMQ on:</h5>
-                    <div class="radio radio-primary m-t-0 m-b-20">
-                        <input type="radio" value="admiral" name="install_location_rabbit" id="install_location_rabbit"
-                           ng-model="vm.initializeForm.msg.initType">
-                        <label for="install_location_rabbit" class="control-label">This Node</label>
-                    </div>
+                <div class="col-md-4 alignTextRight">
+                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')" ng-disabled="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed && !vm.systemSettings.msg.isInitialized">logs</button>
                 </div>
-                <div class="col-md-4" ng-if="vm.initializeForm.msg.initType === 'admiral'">
-                    <h5 ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</h5>
-                    <h5 ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</h5>
-                    <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)" class="m-b-10">
-                      <input type="text" class="form-control input-sm" name="msgPassword"
-                      ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
-                    </div>
-                </div>
-              </div>
+              </div><!--row ends-->
 
               <div class="row">
                 <div class="col-md-3">
-                  <!-- Button trigger modal -->
                   <button class="btn btn-default waves-effect waves-light m-t-10"
                     ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
-                    ng-click="vm.showInstallLocationModal('msg')">
-                    Add a new Node details instead
+                    ng-click="vm.showInstallLocationModal('msg', 'button')">
+                    Add new/existing node details
                   </button>
                 </div>
-                <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.msg.initType === 'new'">
-                  <h5><code>New node details are updated.</code></h5>
+                <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.msg.initType === 'new'">
+                  <h5 ng-if="!vm.initializeForm.msg.address"><code>Kindly complete the details for adding a new node.</code></h5>
                 </div>
-                <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.msg.initType === 'existing'">
-                  <h5><code>Existing node details are updated.</code></h5>
+                <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.msg.initType === 'existing'">
+                  <h5 ng-if="!vm.initializeForm.msg.address"><code>Kindly complete the details for adding an existing node.</code></h5>
                 </div>
               </div>
 
