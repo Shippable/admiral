@@ -425,7 +425,7 @@
                     <option value="existing">Existing node</option>
                   </select>
                 </div>
-                <div class="col-md-4" ng-if="vm.initializeForm.state.initType === 'admiral'">
+                <div class="col-md-4">
                   <h5 ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</h5>
                   <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)" class="m-b-10">
                     <input type="text" class="form-control input-sm" name="statePassword"
