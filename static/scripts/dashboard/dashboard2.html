@@ -843,24 +843,26 @@
                   </div>
 
                   <div class="row" id="new" ng-if="vm.initializeForm.msg.initType === 'new'">
-                    <div class="col-md-12">
+                    <div>
+                      <div class="col-md-6">
                         <div class="form-group">
-                            <span class="text-dark" ng-if="vm.initializeForm.msg.initType !== 'new'">Choose a password for RabbitMQ:</span>
-                            <span ng-if="vm.initializeForm.msg.initType === 'new'">RabbitMQ Password:</span>
-                            <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)">
-                              <input type="text" class="form-control input-sm" name="msgPassword"
-                              ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
-                            </div>
+                          <span class="text-dark" ng-if="vm.initializeForm.msg.initType !== 'new'">Choose a password for RabbitMQ:</span>
+                          <span ng-if="vm.initializeForm.msg.initType === 'new'">RabbitMQ Password:</span>
+                          <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)">
+                            <input type="text" class="form-control input-sm" name="msgPassword"
+                            ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                          </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
+                      </div>
+                      <div class="col-md-6">
                         <div class="form-group">
-                            <span class="text-dark">IP address to install RabbitMQ:</span>
-                            <div ng-class="vm.validateIP(vm.initializeForm.msg.address)">
-                              <input type="text" class="form-control input-sm" name="msgAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
-                              ng-model="vm.initializeForm.msg.address"/>
-                            </div>
+                          <span class="text-dark">IP address to install RabbitMQ:</span>
+                          <div ng-class="vm.validateIP(vm.initializeForm.msg.address)">
+                            <input type="text" class="form-control input-sm" name="msgAddress" placeholder="0.0.0.0" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.msg.address"/>
+                          </div>
                         </div>
+                      </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
@@ -949,9 +951,12 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-12">
+              <span ng-if="vm.msgModalErrorMsg" ng-model="vm.msgModalErrorMsg"><code>Kindly fill in all the details.</code></span>
+            </div>
             <div class="modal-footer">
                 <button type="button" ng-click="vm.resetInstallLocationModal('msg')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light"  data-dismiss="modal" name="msg_save_location">
+                <button type="button" class="btn btn-primary waves-effect waves-light" name="msg_save_location" ng-click="vm.saveInstallLocationModal('msg')">
                   Save changes
                 </button>
             </div>
