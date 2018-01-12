@@ -170,12 +170,12 @@ do $$
     end if;
 
     -- Change jobLengthInMS of dailyAggs from int to big int
-    if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'jobLengthInMS' and data_type = 'int') then
+    if exists (select 1 from information_schema.columns where table_name = 'dailyAggs' and column_name = 'jobLengthInMS' and data_type = 'integer') then
       alter table "dailyAggs" ALTER COLUMN "jobLengthInMS" type bigint;
     end if;
 
     -- Change jobLengthInMS of projectDailyAggs from int to big int
-    if exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'jobLengthInMS' and data_type = 'int') then
+    if exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'jobLengthInMS' and data_type = 'integer') then
       alter table "projectDailyAggs" ALTER COLUMN "jobLengthInMS" type bigint;
     end if;
 
