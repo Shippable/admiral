@@ -1162,6 +1162,11 @@
         $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.state);
         $('#state-location-modal').modal('show');
       }
+
+      if (sectionName === 'redis') {
+        $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.redis);
+        $('#redis-location-modal').modal('show');
+      }
     }
 
     function updateInstallForm(workers, next) {
