@@ -951,9 +951,12 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-12">
+              <span ng-if="vm.msgModalErrorMsg" ng-model="vm.msgModalErrorMsg"><code>Kindly fill in all the details.</code></span>
+            </div>
             <div class="modal-footer">
                 <button type="button" ng-click="vm.resetInstallLocationModal('msg')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light"  data-dismiss="modal" name="msg_save_location">
+                <button type="button" class="btn btn-primary waves-effect waves-light" name="msg_save_location" ng-click="vm.saveInstallLocationModal('msg')">
                   Save changes
                 </button>
             </div>

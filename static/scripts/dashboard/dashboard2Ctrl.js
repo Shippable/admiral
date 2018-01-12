@@ -582,6 +582,7 @@
       showInstallLocationModal: showInstallLocationModal,
       saveInstallLocationModal: saveInstallLocationModal,
       secretsModalErrorMsg: null,
+      msgModalErrorMsg: null,
       validatePassword: validatePassword,
       validateIP: validateIP,
       validateWorkerAddress: validateWorkerAddress,
@@ -1146,7 +1147,6 @@
     }
 
     function saveInstallLocationModal (secName) {
-      console.log ('secNAme ' , secName );
       if (secName === 'secrets') {
         var hasErr = '';
 
@@ -1170,6 +1170,35 @@
           $('#secrets-location-modal').modal('hide');
         }
       }
+      if (secName === 'msg') {
+        var hasErr = '';
+
+        if ($scope.vm.initializeForm.msg.initType === 'new') {
+          hasErr = validateIP ($scope.vm.initializeForm.msg.address);
+          if (!$scope.vm.initializeForm.msg.confirmCommand) {
+            hasErr = 'has-error';
+          }
+        }
+        if ($scope.vm.initializeForm.msg.initType === 'new') {
+          hasErr = validateIP ($scope.vm.initializeForm.msg.password);
+          if (!$scope.vm.initializeForm.msg.confirmCommand) {
+            hasErr = 'has-error';
+          }
+        }
+        if ($scope.vm.initializeForm.msg.initType === 'existing') {
+          hasErr = validateIP ($scope.vm.initializeForm.msg.address);
+          if (!$scope.vm.initializeForm.msg.username.length) {
+            hasErr = 'has-error';
+          }
+        }
+
+        if (hasErr) {
+          $scope.vm.msgModalErrorMsg = hasErr;
+        } else {
+          $scope.vm.msgModalErrorMsg = '';
+          $('#msg-location-modal').modal('hide');
+        }
+      }
     }
 
     function showInstallLocationModal(sectionName, clickType) {
@@ -1186,6 +1215,7 @@
       }
 
       if (sectionName === 'msg') {
+        $scope.vm.msgModalErrorMsg = '';
         $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.msg);
         if (clickType === 'dropdown' && $scope.vm.initializeForm.msg.initType === 'admiral') {
           //do nothing
