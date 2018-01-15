@@ -240,7 +240,7 @@
               </div>
             </div><!--row ends-->
 
-            <div class="row">
+            <div class="row" ng-if="vm.initializeForm.secrets.initType !== 'admiral'">
               <div class="col-md-3">
                 <button class="btn btn-default waves-effect waves-light m-t-10"
                   ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
@@ -471,6 +471,7 @@
     <!-- END State -->
 
 
+
     <!-- START Redis -->
     <div class="row">
         <div class="col-md-12">
@@ -496,56 +497,63 @@
             <div id="bg-redis" class="panel-collapse collapse in">
               <div class="portlet-body">
 
-                  <div class="row">
-                    <div class="col-md-9">
-                      <p class="text-muted m-b-20 font-13">
-                          A short one liner on what this section is ...
-                      </p>
-                    </div>
-                    <div class="col-md-3 alignTextRight">
-                      <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')"
-                        ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
-                      <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')"
-                        ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">logs</button>
+                <div class="row">
+                  <div class="col-md-4">
+                    <h5>Install Redis on:</h5>
+                    <select class="form-control"
+                      ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                      ng-change="vm.showInstallLocationModal('redis', 'dropdown')"
+                      ng-model="vm.initializeForm.redis.initType">
+                      <option value="admiral">This node</option>
+                      <option value="new">New node</option>
+                      <option value="existing">Existing node</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 m-t-5">
+                    <div ng-if="vm.initializeForm.redis.address">
+                      <h5>IP address where Redis is installed:</h5>
+                      <span>{{vm.initializeForm.redis.address}}</span>
                     </div>
                   </div>
+                  <div class="col-md-4 alignTextRight">
+                    <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')"
+                      ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                    <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')"
+                      ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">logs</button>
+                  </div>
+                </div><!--row ends-->
 
-                  <div class="row">
-                    <div class="col-md-2">
-                        <h5>Install Redis on:</h5>
-                        <div class="radio radio-primary m-t-0 m-b-20">
-                            <input type="radio" value="admiral"
-                               ng-model="vm.initializeForm.redis.initType">
-                            <label class="control-label">This Node</label>
-                        </div>
-                    </div>
+                <div class="row" ng-if="vm.initializeForm.redis.initType !== 'admiral'">
+                  <div class="col-md-3">
+                    <button class="btn btn-default waves-effect waves-light m-t-10"
+                      ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                      ng-click="vm.showInstallLocationModal('redis', 'button')">
+                      Add new/existing node details
+                    </button>
                   </div>
+                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.redis.initType === 'new'">
+                    <h5 ng-if="!vm.initializeForm.redis.address"><code>Kindly complete the details for adding a new node.</code></h5>
+                  </div>
+                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.redis.initType === 'existing'">
+                    <h5 ng-if="!vm.initializeForm.redis.address"><code>Kindly complete the details for adding an existing node.</code></h5>
+                  </div>
+                </div>
 
-                  <div class="row">
-                    <div class="col-md-3">
-                      <!-- Button trigger modal -->
-                      <button class="btn btn-default waves-effect waves-light m-t-10"
-                        ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
-                        ng-click="vm.showInstallLocationModal('redis')">
-                        Add a new Node details instead
-                      </button>
-                    </div>
-                    <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.redis.initType === 'new'">
-                      <h5><code>New node details are updated.</code></h5>
-                    </div>
-                    <div class="col-md-4 m-t-10" ng-if="vm.initializeForm.redis.initType === 'existing'">
-                      <h5><code>Existing node details are updated.</code></h5>
-                    </div>
+                <div class="row">
+                  <div class="col-md-12" ng-if="vm.installForm.redis.url.data.url">
+                    <h5>URL</h5>
+                    <p style="word-wrap: break-word;">{{vm.installForm.redis.url.data.url}}</p>
                   </div>
+                </div>
 
               </div><!-- END portlet-body -->
             </div><!-- END bg-redis -->
+
 
           </div><!-- END portlet -->
         </div><!-- END col-md-12 -->
       </div><!-- END ROW -->
     <!-- END Redis -->
-
 
 
     <!-- START Swarm -->
@@ -1191,9 +1199,9 @@
                 <div class="row">
                     <div class="col-md-12">
                       <div class="radio radio-primary m-t-0 m-b-20">
-                          <input type="radio" value="new"
+                          <input id="redis_install_on_new_node" type="radio" value="new"
                              ng-model="vm.initializeForm.redis.initType">
-                          <label class="control-label">New Node</label>
+                          <label for="redis_install_on_new_node" class="control-label">New Node</label>
                       </div>
                     </div>
                   </div>
@@ -1233,9 +1241,9 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
-                        <input type="radio"
+                        <input type="radio" id="redis_install_on_existing_node"
                           value="existing" ng-model="vm.initializeForm.redis.initType">
-                        <label class="control-label">
+                        <label for="redis_install_on_existing_node" class="control-label">
                           Existing Node
                         </label>
                     </div>
@@ -1253,13 +1261,17 @@
                         </div>
                     </div>
                   </div>
-
                 </div>
               </div>
+              <div class="col-md-12">
+                <span ng-if="vm.redisModalErrorMsg" ng-model="vm.redisModalErrorMsg"><code>Kindly fill in all the details.</code></span>
+              </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" ng-click="vm.resetInstallLocationModal('redis')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light"  data-dismiss="modal" name="redis_save_location">
+                <button type="button" class="btn btn-primary waves-effect waves-light" name="redis_save_location"
+                  ng-click="vm.saveInstallLocationModal('redis')">
                   Save changes
                 </button>
             </div>

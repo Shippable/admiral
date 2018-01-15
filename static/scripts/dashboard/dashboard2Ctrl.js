@@ -583,6 +583,7 @@
       saveInstallLocationModal: saveInstallLocationModal,
       secretsModalErrorMsg: null,
       msgModalErrorMsg: null,
+      redisModalErrorMsg: null,
       validatePassword: validatePassword,
       validateIP: validateIP,
       validateWorkerAddress: validateWorkerAddress,
@@ -1199,6 +1200,26 @@
           $('#msg-location-modal').modal('hide');
         }
       }
+      if (secName === 'redis') {
+        var hasErr = '';
+
+        if ($scope.vm.initializeForm.redis.initType === 'new') {
+          hasErr = validateIP ($scope.vm.initializeForm.redis.address);
+          if (!$scope.vm.initializeForm.redis.confirmCommand) {
+            hasErr = 'has-error';
+          }
+        }
+        if ($scope.vm.initializeForm.redis.initType === 'existing') {
+          hasErr = validateIP ($scope.vm.initializeForm.redis.address);
+        }
+
+        if (hasErr) {
+          $scope.vm.redisModalErrorMsg = hasErr;
+        } else {
+          $scope.vm.redisModalErrorMsg = '';
+          $('#redis-location-modal').modal('hide');
+        }
+      }
     }
 
     function showInstallLocationModal(sectionName, clickType) {
@@ -1236,8 +1257,14 @@
       }
 
       if (sectionName === 'redis') {
-        $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.redis);
-        $('#redis-location-modal').modal('show');
+        $scope.vm.initializeForm[old] = angular.copy(
+          $scope.vm.initializeForm.redis);
+        if (clickType === 'dropdown' &&
+          $scope.vm.initializeForm.redis.initType === 'admiral') {
+          //do nothing
+        } else {
+          $('#redis-location-modal').modal('show');
+        }
       }
     }
 
