@@ -1241,6 +1241,17 @@
           }
         }
 
+        if ($scope.vm.initializeForm.state.initType === 'existing') {
+          // if both the address and the rootPassword are empty then error
+          if (!$scope.vm.initializeForm.state.address ||
+            !$scope.vm.initializeForm.state.rootPassword)
+            hasErr = 'has-error';
+          // else validate both the address and rootPassword
+          hasErr = hasErr ||
+            (validateIP($scope.vm.initializeForm.state.address) ||
+            validatePassword($scope.vm.initializeForm.state.rootPassword));
+        }
+
         if (hasErr) {
           $scope.vm.stateModalErrorMsg = hasErr;
         } else {
