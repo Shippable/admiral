@@ -425,11 +425,17 @@
                     <option value="existing">Existing node</option>
                   </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" ng-if="vm.initializeForm.state.initType === 'admiral'">
                   <h5 ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</h5>
                   <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)" class="m-b-10">
                     <input type="text" class="form-control input-sm" name="statePassword"
                     ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
+                  </div>
+                </div>
+                <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.state.initType !== 'admiral'">
+                  <div ng-if="vm.initializeForm.state.address">
+                    <h5>IP address where State is installed:</h5>
+                    <span>{{vm.initializeForm.state.address}}</span>
                   </div>
                 </div>
                 <div class="col-md-4 alignTextRight">
@@ -437,19 +443,6 @@
                   <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')" ng-disabled="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed && !vm.systemSettings.state.isInitialized">logs</button>
                 </div>
               </div><!-- END row -->
-
-              <div class="row">
-                <div class="col-md-4 m-t-5" ng-if="vm.systemSettings.state.isInitialized && vm.initializeForm.state.address">
-                  <h5 class="m-t-30">Address where State is installed</h5>
-                  <p style="word-wrap: break-word;">{{vm.initializeForm.state.address}}</p>
-                </div>
-
-                <div class="col-md-4 m-t-5" ng-if="vm.systemSettings.state.isInitialized && vm.initializeForm.state.sshPort">
-                  <h5 class="m-t-30">SSH Port where State is installed</h5>
-                  <p style="word-wrap: break-word;">{{vm.initializeForm.state.sshPort}}</p>
-                </div>
-
-              </div><!--row ends-->
 
               <div class="row" ng-if="vm.initializeForm.state.initType !== 'admiral'">
                 <div class="col-md-3">
