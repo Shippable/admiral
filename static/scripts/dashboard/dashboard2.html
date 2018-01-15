@@ -434,7 +434,8 @@
                 </div>
                 <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.state.initType !== 'admiral'">
                   <div ng-if="vm.initializeForm.state.address">
-                    <h5>IP address where State is installed:</h5>
+                    <h5 ng-if="!vm.systemSettings.state.isInitialized">IP address where State is to be installed:</h5>
+                    <h5 ng-if="vm.systemSettings.state.isInitialized">IP address where State is installed:</h5>
                     <span>{{vm.initializeForm.state.address}}</span>
                   </div>
                 </div>
@@ -1083,36 +1084,35 @@
             <div class="modal-body">
               <div class="card-box">
                 <div class="row">
-                    <div class="col-md-12">
-                      <div class="radio radio-primary m-t-0 m-b-20">
-                          <input type="radio" value="new"
-                             ng-model="vm.initializeForm.state.initType">
-                          <label class="control-label">New Node</label>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="radio radio-primary m-t-0 m-b-20">
+                      <input type="radio" value="new" id="state_install_on_new_node"
+                         ng-model="vm.initializeForm.state.initType">
+                      <label for="state_install_on_new_node" class="control-label">New Node</label>
                     </div>
                   </div>
+                </div>
 
                   <div class="row" id="new" ng-if="vm.initializeForm.state.initType === 'new'">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <span class="text-dark" ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</span>
-                            <span ng-if="vm.initializeForm.state.initType === 'existing'">Password for State root user:</span>
-                            <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)">
-                              <input type="text" class="form-control input-sm" name="statePassword"
-                                ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters"
-                                ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
-                            </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <span class="text-dark" ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</span>
+                        <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)">
+                          <input type="text" class="form-control input-sm" name="statePassword"
+                            ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters"
+                            ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
                         </div>
+                      </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <span class="text-dark">IP address to install State:</span>
-                            <div ng-class="vm.validateIP(vm.initializeForm.state.address)">
-                              <input type="text" class="form-control input-sm" name="stateAddress" placeholder="0.0.0.0"
-                                ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
-                                ng-model="vm.initializeForm.state.address"/>
-                            </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <span class="text-dark">IP address to install State:</span>
+                        <div ng-class="vm.validateIP(vm.initializeForm.state.address)">
+                          <input type="text" class="form-control input-sm" name="stateAddress" placeholder="0.0.0.0"
+                            ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.state.address"/>
                         </div>
+                      </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
@@ -1131,16 +1131,16 @@
                         </div>
                       </div>
                     </div>
-                </div>
+                  </div>
 
-              </div>
+                </div>
               <div class="card-box">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
-                        <input type="radio"
+                        <input type="radio" id="state_install_on_existing_node"
                           value="existing" ng-model="vm.initializeForm.state.initType">
-                        <label class="control-label"
+                        <label class="control-label" for="state_install_on_existing_node"
                           value="existing" ng-model="vm.initializeForm.state.initType">
                           Existing Node
                         </label>
@@ -1174,11 +1174,15 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-12">
+              <span ng-if="vm.stateModalErrorMsg" ng-model="vm.stateModalErrorMsg"><code>Kindly fill in all the details correctly.</code></span>
+            </div>
             <div class="modal-footer">
-                <button type="button" ng-click="vm.resetInstallLocationModal('state')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light"  data-dismiss="modal" name="state_save_location">
-                  Save changes
-                </button>
+              <button type="button" ng-click="vm.resetInstallLocationModal('state')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
+              <button type="button" class="btn btn-primary waves-effect waves-light" name="state_save_location"
+                ng-click="vm.saveInstallLocationModal('state')">
+                Save changes
+              </button>
             </div>
         </div>
     </div>
