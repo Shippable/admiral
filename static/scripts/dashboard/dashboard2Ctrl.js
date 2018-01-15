@@ -1582,15 +1582,11 @@
     }
 
     function validatePassword(password) {
-      if (!password)
-        return;
       if (password.length < 8)
         return 'has-error';
     }
 
     function validateIP(ip) {
-      if (!ip)
-        return;
       var nums = ip.split('.');
       var numsValues = _.every(nums,
         function (num) {

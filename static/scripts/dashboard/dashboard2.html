@@ -1201,34 +1201,34 @@
             <div class="modal-body">
               <div class="card-box">
                 <div class="row">
-                    <div class="col-md-12">
-                      <div class="radio radio-primary m-t-0 m-b-20">
-                          <input id="redis_install_on_new_node" type="radio" value="new"
-                             ng-model="vm.initializeForm.redis.initType">
-                          <label for="redis_install_on_new_node" class="control-label">New Node</label>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="radio radio-primary m-t-0 m-b-20">
+                      <input id="redis_install_on_new_node" type="radio" value="new"
+                         ng-model="vm.initializeForm.redis.initType">
+                      <label for="redis_install_on_new_node" class="control-label">New Node</label>
                     </div>
                   </div>
+                </div>
 
                   <div class="row" id="new" ng-if="vm.initializeForm.redis.initType === 'new'">
                     <div class="col-md-12">
-                        <div class="form-group">
-                            <span class="text-dark">IP address to install Redis:</span>
-                            <div ng-class="vm.validateIP(vm.initializeForm.redis.address)">
-                              <input type="text" class="form-control input-sm" name="redisAddress" placeholder="0.0.0.0"
-                                ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
-                                ng-model="vm.initializeForm.redis.address"/>
-                            </div>
+                      <div class="form-group">
+                        <span class="text-dark">IP address to install Redis:</span>
+                        <div ng-class="vm.validateIP(vm.initializeForm.redis.address)">
+                          <input type="text" class="form-control input-sm" name="redisAddress" placeholder="0.0.0.0"
+                            ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.redis.address"/>
                         </div>
+                      </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="form-group">
-                            <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
-                            <div class="ss-action"></div>
-                            <div class="ship-console" style="word-break: break-all;">
-                              {{vm.initializeForm.sshCommand}}
-                            </div>
+                      <div class="form-group">
+                        <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
+                        <div class="ss-action"></div>
+                        <div class="ship-console" style="word-break: break-all;">
+                          {{vm.initializeForm.sshCommand}}
                         </div>
+                      </div>
                     </div>
                     <div class="col-md-12">
                       <div class="checkbox checkbox-success m-t-0" ng-class="vm.initializeForm.redis.confirmCommand ? '' : 'has-error'">
@@ -1245,24 +1245,24 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
-                        <input type="radio" id="redis_install_on_existing_node"
-                          value="existing" ng-model="vm.initializeForm.redis.initType">
-                        <label for="redis_install_on_existing_node" class="control-label">
-                          Existing Node
-                        </label>
+                      <input type="radio" id="redis_install_on_existing_node"
+                        value="existing" ng-model="vm.initializeForm.redis.initType">
+                      <label for="redis_install_on_existing_node" class="control-label">
+                        Existing Node
+                      </label>
                     </div>
                   </div>
 
                   <div class="row" id="existing" ng-if="vm.initializeForm.redis.initType === 'existing'">
                     <div class="col-md-12">
-                        <div class="form-group">
-                            <span class="text-dark">IP address of your existing Redis installation:</span>
-                            <div ng-class="vm.validateIP(vm.initializeForm.redis.address)">
-                              <input type="text" class="form-control input-sm" name="redisAddress" placeholder="0.0.0.0"
-                                ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
-                                ng-model="vm.initializeForm.redis.address"/>
-                            </div>
+                      <div class="form-group">
+                        <span class="text-dark">IP address of your existing Redis installation:</span>
+                        <div ng-class="vm.validateIP(vm.initializeForm.redis.address)">
+                          <input type="text" class="form-control input-sm" name="redisAddress" placeholder="0.0.0.0"
+                            ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                            ng-model="vm.initializeForm.redis.address"/>
                         </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1273,11 +1273,11 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" ng-click="vm.resetInstallLocationModal('redis')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light" name="redis_save_location"
-                  ng-click="vm.saveInstallLocationModal('redis')">
-                  Save changes
-                </button>
+              <button type="button" ng-click="vm.resetInstallLocationModal('redis')" class="btn btn-default waves-effect" data-dismiss="modal" aria-hidden="true">Close</button>
+              <button type="button" class="btn btn-primary waves-effect waves-light" name="redis_save_location"
+                ng-click="vm.saveInstallLocationModal('redis')">
+                Save changes
+              </button>
             </div>
         </div>
     </div>
