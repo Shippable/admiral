@@ -92,7 +92,7 @@ __check_api() {
     if [ "$running_api_container" != "" ]; then
       __process_msg "Waiting fifteen seconds before stopping API container"
       is_booted=true
-      sleep 15
+      sleep 30
 
       # Check if it's still running
       local api_container=$(sudo docker ps | grep fakeapi | awk '{print $1}')
