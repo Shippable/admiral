@@ -581,37 +581,24 @@
 
             <div id="bg-master" class="panel-collapse collapse in">
               <div class="portlet-body">
-
-                  <div class="row">
-                    <div class="col-md-9">
-                      <p class="text-muted m-b-20 font-13">
-                          A short one liner on what this section is ...
-                      </p>
+                  <div class="row m-b-20">
+                    <div class="col-md-4">
+                        <h5>Worker Install Location:</h5>
+                        <select class="form-control"
+                          ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing"
+                          ng-model="vm.initializeForm.workers.initType">
+                          <option value="admiral">This node</option>
+                          <option value="new">New node(s)</option>
+                        </select>
                     </div>
-                    <div class="col-md-3 alignTextRight">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 alignTextRight">
                       <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')"
                         ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
                       <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')"
                         ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">logs</button>
                     </div>
                   </div>
-
-                  <div class="row m-b-20">
-                    <div class="col-md-12">
-                        <h5>Worker Install Location:</h5>
-                        <div class="radio radio-primary m-t-0 m-b-20" style="display: inline;">
-                            <input type="radio" value="admiral"
-                              ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing"
-                              ng-model="vm.initializeForm.workers.initType">
-                            <label class="control-label" style="margin-right: 40px">This Node</label>
-                            <input type="radio" value="new"
-                              ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing"
-                              ng-model="vm.initializeForm.workers.initType">
-                            <label class="control-label">New Node(s)</label>
-                        </div>
-                    </div>
-                  </div>
-
                   <div class="card-box" ng-if="vm.initializeForm.workers.initType === 'new'">
                     <div class="row">
                       <div class="col-md-12">
@@ -660,20 +647,18 @@
                           </div>
                         </div>
                       </div>
-                      <div class="row" ng-repeat="worker in vm.initializeForm.workers.workers">
-                        <div class="col-md-2">
-                          <span ng-if="$first">
-                            Workers:
-                          </span>
+                      <div class="row m-t-20" ng-repeat="worker in vm.initializeForm.workers.workers">
+                        <div class="col-md-12" ng-if="$first">
+                          <h5>Workers:</h5>
                         </div>
                         <div class="col-md-1 text-right">
-                          Name:
+                          <b>Name:</b>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                           {{worker.name}}
                         </div>
                         <div class="col-md-1 text-right">
-                          IP:
+                          <b>IP:</b>
                         </div>
                         <div class="col-md-2">
                           {{worker.address}}
@@ -683,7 +668,7 @@
                             Remove
                           </button>
                         </div>
-                        <div class="col-md-2 text-center">
+                        <div class="col-md-5">
                           <span ng-if="worker.isProcessing">initializing...</span>
                           <span ng-if="!worker.isProcessing && !worker.isFailed">
                             {{worker.isInitialized ? 'initialized' : 'not initialized'}}
