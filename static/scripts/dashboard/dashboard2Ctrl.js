@@ -584,6 +584,7 @@
       secretsModalErrorMsg: null,
       msgModalErrorMsg: null,
       redisModalErrorMsg: null,
+      stateModalErrorMsg: null,
       validatePassword: validatePassword,
       validateIP: validateIP,
       validateWorkerAddress: validateWorkerAddress,
@@ -1200,6 +1201,7 @@
           $('#msg-location-modal').modal('hide');
         }
       }
+
       if (secName === 'redis') {
         var hasErr = '';
 
@@ -1218,6 +1220,32 @@
         } else {
           $scope.vm.redisModalErrorMsg = '';
           $('#redis-location-modal').modal('hide');
+        }
+      }
+
+      if (secName === 'state') {
+        var hasErr = '';
+
+        if ($scope.vm.initializeForm.state.initType === 'new') {
+          // if both the address and the rootPassword are empty then error
+          if (!$scope.vm.initializeForm.state.address ||
+            !$scope.vm.initializeForm.state.rootPassword)
+            hasErr = 'has-error';
+          // else validate both the address and rootPassword
+          hasErr = hasErr ||
+            (validateIP($scope.vm.initializeForm.state.address) ||
+            validatePassword($scope.vm.initializeForm.state.rootPassword));
+          // if ssh command not run on the node
+          if (!$scope.vm.initializeForm.state.confirmCommand) {
+            hasErr = 'has-error';
+          }
+        }
+
+        if (hasErr) {
+          $scope.vm.stateModalErrorMsg = hasErr;
+        } else {
+          $scope.vm.stateModalErrorMsg = '';
+          $('#state-location-modal').modal('hide');
         }
       }
     }
@@ -1246,6 +1274,7 @@
       }
 
       if (sectionName === 'state') {
+        $scope.vm.stateModalErrorMsg = '';
         $scope.vm.initializeForm[old] = angular.copy(
           $scope.vm.initializeForm.state);
         if (clickType === 'dropdown' &&
@@ -1549,6 +1578,8 @@
     }
 
     function validateIP(ip) {
+      if (!ip)
+        return;
       var nums = ip.split('.');
       var numsValues = _.every(nums,
         function (num) {
