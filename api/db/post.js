@@ -38,7 +38,7 @@ function post(req, res) {
       _getReleaseVersionFromAdmiralEnv.bind(null, bag),
       _templateSystemSettingsFile.bind(null, bag),
       _upsertSystemSettings.bind(null, bag),
-      _getReleaseVersionFromSystemSettings.bind(null, bag),
+      _getSystemSettings.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _sendResponse.bind(null, bag),
       _generateServiceUserToken.bind(null, bag),
@@ -58,6 +58,7 @@ function post(req, res) {
       _getPublicRegistry.bind(null, bag),
       _templateDefaultSystemMachineImageFile.bind(null, bag),
       _upsertDefaultSystemMachineImage.bind(null, bag),
+      _insertMasterRuntimeTemplates.bind(null, bag),
       _getRootBucket.bind(null, bag),
       _setRootBucket.bind(null, bag),
       _setDbFlags.bind(null, bag)
@@ -164,8 +165,8 @@ function _upsertSystemSettings(bag, next) {
   );
 }
 
-function _getReleaseVersionFromSystemSettings(bag, next) {
-  var who = bag.who + '|' + _getReleaseVersionFromSystemSettings.name;
+function _getSystemSettings(bag, next) {
+  var who = bag.who + '|' + _getSystemSettings.name;
   logger.verbose(who, 'Inside');
 
   var query = '';
@@ -177,6 +178,7 @@ function _getReleaseVersionFromSystemSettings(bag, next) {
             'Failed to get system settings : ' + util.inspect(err))
         );
 
+      bag.systemSettings = systemSettings;
       bag.releaseVersion = systemSettings.releaseVersion;
 
       return next();
@@ -645,6 +647,37 @@ function _upsertDefaultSystemMachineImage(bag, next) {
       script: '',
       scriptPath: 'create_default_system_machine_image.sh',
       tmpScriptFilename: '/tmp/defaultSystemMachineImage.sh',
+      scriptEnvs: {
+        'RUNTIME_DIR': global.config.runtimeDir,
+        'CONFIG_DIR': global.config.configDir,
+        'SCRIPTS_DIR': global.config.scriptsDir,
+        'DBUSERNAME': global.config.dbUsername,
+        'DBNAME': global.config.dbName,
+        'DBHOST': global.config.dbHost,
+        'DBPORT': global.config.dbPort,
+        'DBPASSWORD': global.config.dbPassword
+      }
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+function _insertMasterRuntimeTemplates(bag, next) {
+  if (bag.systemSettings.runMode !== 'dev' &&
+    bag.systemSettings.runMode !== 'beta')
+    return next();
+
+  var who = bag.who + '|' + _insertMasterRuntimeTemplates.name;
+  logger.verbose(who, 'Inside');
+
+  _copyAndRunScript({
+      who: who,
+      params: {},
+      script: '',
+      scriptPath: 'create_master_runtime_templates.sh',
+      tmpScriptFilename: '/tmp/masterRuntimeTemplates.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
         'CONFIG_DIR': global.config.configDir,
