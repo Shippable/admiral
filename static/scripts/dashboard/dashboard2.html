@@ -817,7 +817,7 @@
                 <h4 class="modal-title">Add Node details for RabbitMQ</h4>
             </div>
             <div class="modal-body">
-              <div class="card-box">
+              <div class="card-box" ng-if="vm.initializeForm.msg.initType === 'new'">
                 <div class="row">
                     <div class="col-md-12">
                       <div class="radio radio-primary m-t-0 m-b-20">
@@ -828,7 +828,7 @@
                     </div>
                   </div>
 
-                  <div class="row" id="new" ng-if="vm.initializeForm.msg.initType === 'new'">
+                  <div class="row" id="new">
                     <div>
                       <div class="col-md-6">
                         <div class="form-group">
@@ -870,7 +870,7 @@
                 </div>
 
               </div>
-              <div class="card-box">
+              <div class="card-box" ng-if="vm.initializeForm.msg.initType === 'existing'">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
@@ -883,7 +883,7 @@
                     </div>
                   </div>
 
-                  <div class="row" id="existing" ng-if="vm.initializeForm.msg.initType === 'existing'">
+                  <div class="row" id="existing">
                     <div class="col-md-6">
                         <div class="form-group">
                             <span class="text-dark">RabbitMQ Username:</span>
@@ -961,7 +961,7 @@
                 <h4 class="modal-title">Add Node details for Secrets</h4>
             </div>
             <div class="modal-body">
-              <div class="card-box">
+              <div class="card-box" ng-if="vm.initializeForm.secrets.initType === 'new'">
                 <div class="row">
                     <div class="col-md-12">
                       <div class="radio radio-primary m-t-0 m-b-20">
@@ -972,7 +972,7 @@
                     </div>
                   </div>
 
-                  <div class="row" id="new" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                  <div class="row" id="new">
                     <div class="col-md-12">
                         <div class="form-group">
                             <span class="text-dark">IP address to install Secrets:</span>
@@ -1003,7 +1003,7 @@
                 </div>
 
               </div>
-              <div class="card-box">
+              <div class="card-box" ng-if="vm.initializeForm.secrets.initType === 'existing'">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
@@ -1015,7 +1015,7 @@
                     </div>
                   </div>
 
-                  <div class="row" id="existing" ng-if="vm.initializeForm.secrets.initType === 'existing'">
+                  <div class="row" id="existing">
                     <div class="col-md-12">
                         <div class="form-group">
                             <span class="text-dark">IP address of your existing Secrets installation:</span>
@@ -1067,7 +1067,7 @@
                 <h4 class="modal-title">Add Node details for State</h4>
             </div>
             <div class="modal-body">
-              <div class="card-box">
+              <div class="card-box" ng-if="vm.initializeForm.state.initType === 'new'">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
@@ -1078,7 +1078,7 @@
                   </div>
                 </div>
 
-                  <div class="row" id="new" ng-if="vm.initializeForm.state.initType === 'new'">
+                  <div class="row" id="new">
                     <div class="col-md-6">
                       <div class="form-group">
                         <span class="text-dark" ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</span>
@@ -1119,7 +1119,7 @@
                   </div>
 
                 </div>
-              <div class="card-box">
+              <div class="card-box" ng-if="vm.initializeForm.state.initType === 'existing'">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
@@ -1132,7 +1132,7 @@
                     </div>
                   </div>
 
-                  <div class="row" id="existing" ng-if="vm.initializeForm.state.initType === 'existing'">
+                  <div class="row" id="existing">
                     <div class="col-md-11">
                         <div class="form-group">
                             <span class="text-dark" ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</span>
@@ -1184,7 +1184,7 @@
                 <h4 class="modal-title">Add Node details for Redis</h4>
             </div>
             <div class="modal-body">
-              <div class="card-box">
+              <div class="card-box" ng-if="vm.initializeForm.redis.initType === 'new'">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
@@ -1195,7 +1195,7 @@
                   </div>
                 </div>
 
-                  <div class="row" id="new" ng-if="vm.initializeForm.redis.initType === 'new'">
+                  <div class="row" id="new">
                     <div class="col-md-12">
                       <div class="form-group">
                         <span class="text-dark">IP address to install Redis:</span>
@@ -1226,7 +1226,7 @@
                 </div>
 
               </div>
-              <div class="card-box">
+              <div class="card-box" ng-if="vm.initializeForm.redis.initType === 'existing'">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="radio radio-primary m-t-0 m-b-20">
@@ -1238,7 +1238,7 @@
                     </div>
                   </div>
 
-                  <div class="row" id="existing" ng-if="vm.initializeForm.redis.initType === 'existing'">
+                  <div class="row" id="existing">
                     <div class="col-md-12">
                       <div class="form-group">
                         <span class="text-dark">IP address of your existing Redis installation:</span>
