@@ -36,6 +36,7 @@
 
 .portlet .portlet-heading {
     padding: 8px 20px;
+    background-color: #dae5e4 !important;
 }
 
 .portlet .portlet-body {
