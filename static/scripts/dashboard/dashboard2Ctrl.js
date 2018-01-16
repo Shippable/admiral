@@ -44,6 +44,7 @@
       restartingServices: false,
       requireRestart: false,
       showNewSshKeyInt: false,
+      sectionSelected: 'infrastructure',
       globalServices: [
         'api',
         'mktg',
@@ -577,6 +578,7 @@
       },
       systemSettingsId: null,
       selectedService: {},
+      changeSection: changeSection,
       initialize: initialize,
       resetInstallLocationModal: resetInstallLocationModal,
       showInstallLocationModal: showInstallLocationModal,
@@ -1579,6 +1581,10 @@
           return next();
         }
       );
+    }
+
+    function changeSection(section) {
+      $scope.vm.sectionSelected = section;
     }
 
     function validatePassword(password) {
