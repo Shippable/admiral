@@ -1,715 +1,712 @@
-      <!-- ========== Left Sidebar Start ========== -->
-      <div class="left side-menu">
-          <div class="sidebar-inner slimscrollleft">
+<!-- ========== Left Sidebar Start ========== -->
+<div class="left side-menu">
+  <div class="sidebar-inner slimscrollleft">
 
-              <div id="sidebar-menu">
-                  <ul>
+    <div id="sidebar-menu">
+      <ul>
 
-                    <li>
-                      <a href="#" class="waves-effect waves-primary subdrop">
-                        <i class="md md-dashboard"></i><span> Infrastructure </span>
-                      </a>
-                    </li>
-                    <!--
-                    <li class="has_sub">
-                      <a href="#" class="waves-effect waves-primary">
-                        <i class="md md-palette"></i> <span> Config & Install </span>
-                      </a>
-                    </li>
-                    <li class="has_sub">
-                      <a href="#" class="waves-effect waves-primary">
-                        <i class="md md-invert-colors-on"></i><span> Add-ons </span>
-                      </a>
-                    </li>
-                    <li class="has_sub">
-                      <a href="#" class="waves-effect waves-primary">
-                        <i class="md md-redeem"></i><span> System Settings </span>
-                      </a>
-                    </li>
-                    -->
-                  </ul>
-                  <div class="clearfix"></div>
-              </div>
-
-              <div class="clearfix"></div>
-          </div>
-
-          <div class="user-detail" style="position: absolute; bottom: 0;">
-              <div class="dropup">
-                  <span class="user-info-span">
-                    <button class="btn btn-md" type="submit" ng-click="vm.logOutOfAdmiral($event)">
-                      <i class="md md-settings-power"></i>Logout
-                    </button>
-                  </span>
-              </div>
-          </div>
-
-      </div>
-      <!-- Left Sidebar End -->
-
-
-      <!-- ============================================================== -->
-      <!-- Start right Content here -->
-      <!-- ============================================================== -->
-      <div class="content-page">
-          <!-- Start content -->
-          <div class="content">
-              <div class="container">
-
-
-<!-- Page-Title -->
-<div class="row">
-    <div class="col-md-12">
-      <div class="page-title-box">
-          <h4 class="page-title">Infrastructure</h4>
-      </div>
+        <li>
+          <a href="#" class="waves-effect waves-primary subdrop">
+            <i class="md md-dashboard"></i><span> Infrastructure </span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="waves-effect waves-primary">
+            <i class="md md-palette"></i> <span> Config & Install </span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="waves-effect waves-primary">
+            <i class="md md-invert-colors-on"></i><span> Add-ons </span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="waves-effect waves-primary">
+            <i class="md md-redeem"></i><span> System Settings </span>
+          </a>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
     </div>
-</div>
-<!-- end row -->
-
-<!-- Horn -->
-<div class="row">
-  <div id="horn" class="ss-horn-bar">
-   <div ng-cloak class="alert {{hornMessageStyle(horn)}} ss-natural-word-break ss-page-container"
-     ng-repeat="horn in horns">
-     <a href="" class="pull-right" ng-click="removeHornMessage(horn)">x</a>
-     <div ng-bind-html="horn.message"></div>
-   </div>
+    <div class="clearfix"></div>
   </div>
-</div>
 
-<div class="row">
-    <div class="col-md-12">
-      <div class="card-box">
-        <h4 class="header-title m-t-0"><b>SUMMARY</b></h4>
-        <p class="text-muted m-b-20 font-13">
-            A detailed summary of this full section. ...
-        </p>
-        <p>
-          <label class="control-label">All Nodes</label>
-          <p class="font-13">
-            <b>Node 1:</b> <code>123.123.123.123</code> (Admiral runs on it)
-          </p>
-          <p class="font-13">
-            <b>Node 2:</b> <code>111.222.333.111</code> (Database runs on it)
-          </p>
-        </p>
-      </div>
-      <div class="card-box">
-        <div class="row">
-          <div class="col-md-2">
-            <h5 class="m-t-20"><b>Installer Access Key:</b></h5>
-          </div>
-          <div class="col-md-5 m-t-15">
-            <input type="text" class="form-control input-sm" name="installerAccessKey" placeholder="Access Key (Optional)" ng-disabled="vm.initializing"
-            ng-model="vm.initializeForm.installerAccessKey"/>
-          </div>
-          <div class="col-md-4 m-t-20">
-            <a href="http://www.shippable.com/contact.html">Contact us to obtain your keys</a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-2">
-            <h5 class="m-t-20"><b>Installer Secret Key:</b></h5>
-          </div>
-          <div class="col-md-5 m-t-15">
-            <input type="text" class="form-control input-sm" name="installerSecretKey" placeholder="Secret Key (Optional)" ng-disabled="vm.initializing"
-            ng-model="vm.initializeForm.installerSecretKey"/>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-2">
-            <h5 class="m-t-20"><b>Admiral Environment:</b></h5>
-          </div>
-          <div class="col-md-10 m-t-15">
-            <button class="btn btn-sm btn-primary" ng-click="vm.showAdmiralEnvModal()">Config</button>
-          </div>
-        </div>
+  <div class="user-detail" style="position: absolute; bottom: 0;">
+    <div class="dropup">
+      <span class="user-info-span">
+        <button class="btn btn-md" type="submit" ng-click="vm.logOutOfAdmiral($event)">
+          <i class="md md-settings-power"></i>Logout
+        </button>
+      </span>
     </div>
   </div>
+
 </div>
-<!-- END ROW -->
+<!-- Left Sidebar End -->
 
-<!-- START Database -->
-<div class="row">
-    <div class="col-md-12">
-      <div class="portlet">
 
-        <div data-toggle="collapse" data-target="#database" class="portlet-heading">
-          <h3 class="portlet-title text-dark">
-              Database
-          </h3>
-          <div class="portlet-widgets">
-              <span class="divider"></span>
-              <span class="text-dark" ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
-              <span class="text-dark" ng-if="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed">
-                {{vm.systemSettings.db.isInitialized ? 'initialized' : 'not initialized'}}
-              </span>
-              <span class="text-dark" ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
-              <span class="divider"></span>
-              <a data-toggle="collapse" data-target="#database"><i class="ion-minus-round"></i></a>
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="content-page">
+  <!-- Start content -->
+  <div class="content">
+    <div class="container">
+
+
+      <!-- Page-Title -->
+      <div class="row">
+          <div class="col-md-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Infrastructure</h4>
+            </div>
           </div>
-          <div class="clearfix"></div>
+      </div>
+      <!-- end row -->
+
+      <!-- Horn -->
+      <div class="row">
+        <div id="horn" class="ss-horn-bar">
+         <div ng-cloak class="alert {{hornMessageStyle(horn)}} ss-natural-word-break ss-page-container"
+           ng-repeat="horn in horns">
+           <a href="" class="pull-right" ng-click="removeHornMessage(horn)">x</a>
+           <div ng-bind-html="horn.message"></div>
+         </div>
         </div>
+      </div>
 
-        <div id="database" class="panel-collapse collapse in">
-          <div class="portlet-body">
-
-              <div class="row">
-                <div class="col-md-9">
-                  <div class="col-md-12">
-                    <form class="form-horizontal">
-                      <h5>Database Address</h5>
-                      <p style="word-wrap: break-word;" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.address">
-                        {{vm.systemSettings.db.address}}
-                      </p>
-                      <p style="word-wrap: break-word;" ng-if="!vm.systemSettings.db.isInitialized">-</p>
-                    </form>
-                  </div>
-                  <div class="col-md-12">
-                    <form class="form-horizontal">
-                      <h5>Database Port</h5>
-                      <p style="word-wrap: break-word;" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.port">
-                      {{vm.systemSettings.db.port}}</p>
-                      <p style="word-wrap: break-word;" ng-if="!vm.systemSettings.db.isInitialized">-</p>
-                    </form>
-                  </div>
-                </div>
-                <div class="col-md-3 alignTextRight">
-                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
-                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('db')" ng-disabled="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed && !vm.systemSettings.db.isInitialized">Logs</button>
-                </div>
-              </div><!-- END row -->
-
-            </div><!-- END portlet-body -->
-          </div><!-- END bg-default12 -->
-
-
-      </div><!-- END portlet -->
-    </div><!-- END col-md-12 -->
-</div><!-- END row -->
-<!-- END Database -->
-
-
-<!-- START Secrets -->
-<div class="row">
-    <div class="col-md-12">
-      <div class="portlet">
-
-        <div data-toggle="collapse" data-target="#bg-secrets" class="portlet-heading">
-          <h3 class="portlet-title text-dark">
-              SECRETS
-          </h3>
-          <div class="portlet-widgets">
-              <span class="divider"></span>
-              <span class="text-dark" ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
-              <span class="text-dark" ng-if="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed">
-                {{vm.systemSettings.secrets.isInitialized ? 'initialized' : 'not initialized'}}
-              </span>
-              <span class="text-dark" ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
-              <span class="divider"></span>
-              <a data-toggle="collapse" data-target="#bg-secrets"><i class="ion-minus-round"></i></a>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card-box">
+            <h4 class="header-title m-t-0"><b>SUMMARY</b></h4>
+            <p class="text-muted m-b-20 font-13">
+                A detailed summary of this full section. ...
+            </p>
+            <p>
+              <label class="control-label">All Nodes</label>
+              <p class="font-13">
+                <b>Node 1:</b> <code>123.123.123.123</code> (Admiral runs on it)
+              </p>
+              <p class="font-13">
+                <b>Node 2:</b> <code>111.222.333.111</code> (Database runs on it)
+              </p>
+            </p>
           </div>
-          <div class="clearfix"></div>
-        </div>
-
-        <div id="bg-secrets" class="panel-collapse collapse in">
-          <div class="portlet-body">
-
+          <div class="card-box">
             <div class="row">
-              <div class="col-md-4">
-                <h5>Install Secrets on:</h5>
-                <select class="form-control"
-                  ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
-                  ng-change="vm.showInstallLocationModal('secrets', 'dropdown')"
-                  ng-model="vm.initializeForm.secrets.initType">
-                  <option value="admiral">This node</option>
-                  <option value="new">New node</option>
-                  <option value="existing">Existing node</option>
-                </select>
+              <div class="col-md-2">
+                <h5 class="m-t-20"><b>Installer Access Key:</b></h5>
               </div>
-              <div class="col-md-4 m-t-5">
-                <div ng-if="vm.initializeForm.secrets.address">
-                  <h5>IP address where Secret is installed:</h5>
-                  <span>{{vm.initializeForm.secrets.address}}</span>
-                </div>
+              <div class="col-md-5 m-t-15">
+                <input type="text" class="form-control input-sm" name="installerAccessKey" placeholder="Access Key (Optional)" ng-disabled="vm.initializing"
+                ng-model="vm.initializeForm.installerAccessKey"/>
               </div>
-              <div class="col-md-4 alignTextRight">
-                <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
-                <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized">logs</button>
-              </div>
-            </div><!--row ends-->
-            <div class="row" ng-if="vm.initializeForm.secrets.initType !== 'admiral'">
-              <div class="col-md-3" ng-if="!vm.systemSettings.secrets.isInitialized && !vm.initializing">
-                <button class="btn btn-default waves-effect waves-light m-t-10"
-                  ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
-                  ng-click="vm.showInstallLocationModal('secrets', 'button')">
-                  Add new/existing node details
-                </button>
-              </div>
-              <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'new'">
-                <h5 ng-if="!vm.initializeForm.secrets.address"><code>Kindly complete the details for adding a new node.</code></h5>
-              </div>
-              <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'existing'">
-                <h5 ng-if="!vm.initializeForm.secrets.address"><code>Kindly complete the details for adding an existing node.</code></h5>
+              <div class="col-md-4 m-t-20">
+                <a href="http://www.shippable.com/contact.html">Contact us to obtain your keys</a>
               </div>
             </div>
-
-          </div><!-- END portlet-body -->
-        </div><!-- END bg-secrets -->
-
-
-      </div><!-- END portlet -->
-    </div><!-- END col-md-12 -->
-  </div><!-- END ROW -->
-<!-- END Secrets -->
-
-
-<!-- START RabbitMQ -->
-<div class="row">
-    <div class="col-md-12">
-      <div class="portlet">
-
-        <div data-toggle="collapse" data-target="#bg-rabbitmq" class="portlet-heading">
-          <h3 class="portlet-title text-dark">
-              MESSAGING
-          </h3>
-          <div class="portlet-widgets">
-              <span class="divider"></span>
-              <span class="text-dark" ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
-              <span class="text-dark" ng-if="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed">
-                {{vm.systemSettings.msg.isInitialized ? 'initialized' : 'not initialized'}}
-              </span>
-              <span class="text-dark" ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
-              <span class="divider"></span>
-              <a data-toggle="collapse" data-target="#bg-rabbitmq"><i class="ion-minus-round"></i></a>
+            <div class="row">
+              <div class="col-md-2">
+                <h5 class="m-t-20"><b>Installer Secret Key:</b></h5>
+              </div>
+              <div class="col-md-5 m-t-15">
+                <input type="text" class="form-control input-sm" name="installerSecretKey" placeholder="Secret Key (Optional)" ng-disabled="vm.initializing"
+                ng-model="vm.initializeForm.installerSecretKey"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <h5 class="m-t-20"><b>Admiral Environment:</b></h5>
+              </div>
+              <div class="col-md-10 m-t-15">
+                <button class="btn btn-sm btn-primary" ng-click="vm.showAdmiralEnvModal()">Config</button>
+              </div>
+            </div>
           </div>
-          <div class="clearfix"></div>
         </div>
+      </div>
+      <!-- END ROW -->
 
-        <div id="bg-rabbitmq" class="panel-collapse collapse in">
-          <div class="portlet-body">
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h5>Install RabbitMQ on:</h5>
-                  <select class="form-control"
-                    ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
-                    ng-change="vm.showInstallLocationModal('msg', 'dropdown')"
-                    ng-model="vm.initializeForm.msg.initType">
-                    <option value="admiral">This node</option>
-                    <option value="new">New node</option>
-                    <option value="existing">Existing node</option>
-                  </select>
-                </div>
-                <div class="col-md-4" ng-if="vm.initializeForm.msg.initType === 'admiral'">
-                  <h5 ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</h5>
-                  <h5 ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</h5>
-                  <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)" class="m-b-10">
-                    <input type="text" class="form-control input-sm" name="msgPassword"
-                    ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
-                  </div>
-                </div>
-                <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.msg.initType === 'new' || vm.initializeForm.msg.initType === 'existing'">
-                  <div ng-if="vm.initializeForm.msg.address">
-                    <h5>IP address where RabbitMQ is installed:</h5>
-                    <span>{{vm.initializeForm.msg.address}}</span>
-                  </div>
-                </div>
-                <div class="col-md-4 alignTextRight">
-                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
-                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')" ng-disabled="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed && !vm.systemSettings.msg.isInitialized">logs</button>
-                </div>
-              </div><!--row ends-->
-
-              <div class="row" ng-if="vm.initializeForm.msg.initType !== 'admiral'">
-                <div class="col-md-3" ng-if="!vm.systemSettings.msg.isInitialized && !vm.initializing">
-                  <button class="btn btn-default waves-effect waves-light m-t-10"
-                    ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
-                    ng-click="vm.showInstallLocationModal('msg', 'button')">
-                    Add new/existing node details
-                  </button>
-                </div>
-                <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.msg.initType === 'new'">
-                  <h5 ng-if="!vm.initializeForm.msg.address"><code>Kindly complete the details for adding a new node.</code></h5>
-                </div>
-                <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.msg.initType === 'existing'">
-                  <h5 ng-if="!vm.initializeForm.msg.address"><code>Kindly complete the details for adding an existing node.</code></h5>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrl">
-                  <h4 class="m-t-30">Service Addresses</h4>
-                  <h5>amqp URL</h5>
-                  <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrl}}</p>
-                </div>
-
-                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot">
-                  <form class="form-horizontal">
-                    <h5>amqp Root Url:</h5>
-                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot}}</p>
-                  </form>
-                </div>
-
-                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin">
-                  <form class="form-horizontal">
-                    <h5>amqp Admin URL</h5>
-                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin}}</p>
-                  </form>
-                </div>
-
-                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange">
-                  <form class="form-horizontal">
-                    <h5>amqp Default Exchange</h5>
-                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange}}</p>
-                  </form>
-                </div>
-
-                <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.rootQueueList">
-                  <form class="form-horizontal">
-                    <h5>Root Queue List</h5>
-                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.rootQueueList}}</p>
-                  </form>
-                </div>
-
-              </div><!--row ends-->
-
-            </div><!-- END portlet-body -->
-          </div><!-- END bg-default12 -->
-
-
-      </div><!-- END portlet -->
-    </div><!-- END col-md-12 -->
-
-  </div><!-- END ROW -->
-  <!-- END RabbitMQ -->
-
-
-
-    <!-- START State -->
-    <div class="row">
-      <div class="col-md-12">
-        <div class="portlet">
-
-          <div data-toggle="collapse" data-target="#state" class="portlet-heading">
-            <h3 class="portlet-title text-dark">
-              STATE
-            </h3>
-            <div class="portlet-widgets">
-                <span class="divider"></span>
-                <span class="text-dark" ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
-                <span class="text-dark" ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
-                  {{vm.systemSettings.state.isInitialized ? 'initialized' : 'not initialized'}}
-                </span>
-                <span class="text-dark" ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
-                <span class="divider"></span>
-                <a data-toggle="collapse" data-target="#state"><i class="ion-minus-round"></i></a>
-            </div>
-            <div class="clearfix"></div>
-          </div>
-
-          <div id="state" class="panel-collapse collapse in">
-            <div class="portlet-body">
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h5>Install State on:</h5>
-                  <select class="form-control"
-                    ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
-                    ng-change="vm.showInstallLocationModal('state', 'dropdown')"
-                    ng-model="vm.initializeForm.state.initType">
-                    <option value="admiral">This node</option>
-                    <option value="new">New node</option>
-                    <option value="existing">Existing node</option>
-                  </select>
-                </div>
-                <div class="col-md-4" ng-if="vm.initializeForm.state.initType === 'admiral'">
-                  <h5 ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</h5>
-                  <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)" class="m-b-10">
-                    <input type="text" class="form-control input-sm" name="statePassword"
-                    ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
-                  </div>
-                </div>
-                <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.state.initType !== 'admiral'">
-                  <div ng-if="vm.initializeForm.state.address">
-                    <h5 ng-if="!vm.systemSettings.state.isInitialized">IP address where State is to be installed:</h5>
-                    <h5 ng-if="vm.systemSettings.state.isInitialized">IP address where State is installed:</h5>
-                    <span>{{vm.initializeForm.state.address}}</span>
-                  </div>
-                </div>
-                <div class="col-md-4 alignTextRight">
-                  <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')" ng-disabled="!vm.systemSettings.state.isInitialized">config</button>
-                  <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')" ng-disabled="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed && !vm.systemSettings.state.isInitialized">logs</button>
-                </div>
-              </div><!-- END row -->
-
-              <div class="row" ng-if="vm.initializeForm.state.initType !== 'admiral'">
-                <div class="col-md-3" ng-if="!vm.systemSettings.state.isInitialized && !vm.initializing">
-                  <button class="btn btn-default waves-effect waves-light m-t-10"
-                    ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
-                    ng-click="vm.showInstallLocationModal('state', 'button')">
-                    Add new/existing node details
-                  </button>
-                </div>
-                <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.state.initType === 'new'">
-                  <h5 ng-if="!vm.initializeForm.state.address"><code>Kindly complete the details for adding a new node.</code></h5>
-                </div>
-                <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.state.initType === 'existing'">
-                  <h5 ng-if="!vm.initializeForm.state.address"><code>Kindly complete the details for adding an existing node.</code></h5>
-                </div>
-              </div>
-
-            </div><!-- END portlet-body -->
-          </div><!-- END state -->
-
-
-        </div><!-- END portlet -->
-      </div><!-- END col-md-12 -->
-
-    </div><!-- END ROW -->
-    <!-- END State -->
-
-
-
-    <!-- START Redis -->
-    <div class="row">
+      <!-- START Database -->
+      <div class="row">
         <div class="col-md-12">
           <div class="portlet">
 
-            <div data-toggle="collapse" data-target="#bg-redis" class="portlet-heading">
+            <div data-toggle="collapse" data-target="#database" class="portlet-heading">
               <h3 class="portlet-title text-dark">
-                  REDIS
+                Database
               </h3>
               <div class="portlet-widgets">
-                  <span class="divider"></span>
-                  <span class="text-dark" ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
-                    {{vm.systemSettings.redis.isInitialized ? 'initialized' : 'not initialized'}}
-                  </span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
-                  <span class="divider"></span>
-                  <a data-toggle="collapse" data-target="#bg-redis"><i class="ion-minus-round"></i></a>
+                <span class="divider"></span>
+                <span class="text-dark" ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
+                <span class="text-dark" ng-if="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed">
+                  {{vm.systemSettings.db.isInitialized ? 'initialized' : 'not initialized'}}
+                </span>
+                <span class="text-dark" ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
+                <span class="divider"></span>
+                <a data-toggle="collapse" data-target="#database"><i class="ion-minus-round"></i></a>
               </div>
               <div class="clearfix"></div>
             </div>
 
-            <div id="bg-redis" class="panel-collapse collapse in">
+            <div id="database" class="panel-collapse collapse in">
+              <div class="portlet-body">
+
+                <div class="row">
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <form class="form-horizontal">
+                        <h5>Database Address</h5>
+                        <p style="word-wrap: break-word;" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.address">
+                          {{vm.systemSettings.db.address}}
+                        </p>
+                        <p style="word-wrap: break-word;" ng-if="!vm.systemSettings.db.isInitialized">-</p>
+                      </form>
+                    </div>
+                    <div class="col-md-12">
+                      <form class="form-horizontal">
+                        <h5>Database Port</h5>
+                        <p style="word-wrap: break-word;" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.port">
+                        {{vm.systemSettings.db.port}}</p>
+                        <p style="word-wrap: break-word;" ng-if="!vm.systemSettings.db.isInitialized">-</p>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="col-md-3 alignTextRight">
+                    <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('db')" ng-disabled="!vm.systemSettings.db.isInitialized">Config</button>
+                    <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('db')" ng-disabled="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed && !vm.systemSettings.db.isInitialized">Logs</button>
+                  </div>
+                </div><!-- END row -->
+
+              </div><!-- END portlet-body -->
+            </div><!-- END database -->
+
+
+          </div><!-- END portlet -->
+        </div><!-- END col-md-12 -->
+      </div><!-- END row -->
+      <!-- END Database -->
+
+
+      <!-- START Secrets -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="portlet">
+
+            <div data-toggle="collapse" data-target="#bg-secrets" class="portlet-heading">
+              <h3 class="portlet-title text-dark">
+                  SECRETS
+              </h3>
+              <div class="portlet-widgets">
+                <span class="divider"></span>
+                <span class="text-dark" ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
+                <span class="text-dark" ng-if="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed">
+                  {{vm.systemSettings.secrets.isInitialized ? 'initialized' : 'not initialized'}}
+                </span>
+                <span class="text-dark" ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
+                <span class="divider"></span>
+                <a data-toggle="collapse" data-target="#bg-secrets"><i class="ion-minus-round"></i></a>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div id="bg-secrets" class="panel-collapse collapse in">
               <div class="portlet-body">
 
                 <div class="row">
                   <div class="col-md-4">
-                    <h5>Install Redis on:</h5>
+                    <h5>Install Secrets on:</h5>
                     <select class="form-control"
-                      ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
-                      ng-change="vm.showInstallLocationModal('redis', 'dropdown')"
-                      ng-model="vm.initializeForm.redis.initType">
+                      ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                      ng-change="vm.showInstallLocationModal('secrets', 'dropdown')"
+                      ng-model="vm.initializeForm.secrets.initType">
                       <option value="admiral">This node</option>
                       <option value="new">New node</option>
                       <option value="existing">Existing node</option>
                     </select>
                   </div>
                   <div class="col-md-4 m-t-5">
-                    <div ng-if="vm.initializeForm.redis.address">
-                      <h5>IP address where Redis is installed:</h5>
-                      <span>{{vm.initializeForm.redis.address}}</span>
+                    <div ng-if="vm.initializeForm.secrets.address">
+                      <h5>IP address where Secret is installed:</h5>
+                      <span>{{vm.initializeForm.secrets.address}}</span>
                     </div>
                   </div>
                   <div class="col-md-4 alignTextRight">
-                    <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')"
-                      ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
-                    <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')"
-                      ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">logs</button>
+                    <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('secrets')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                    <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('secrets')" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized">logs</button>
                   </div>
                 </div><!--row ends-->
-
-                <div class="row" ng-if="vm.initializeForm.redis.initType !== 'admiral'">
-                  <div class="col-md-3" ng-if="!vm.systemSettings.redis.isInitialized && !vm.initializing">
+                <div class="row" ng-if="vm.initializeForm.secrets.initType !== 'admiral'">
+                  <div class="col-md-3" ng-if="!vm.systemSettings.secrets.isInitialized && !vm.initializing">
                     <button class="btn btn-default waves-effect waves-light m-t-10"
-                      ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
-                      ng-click="vm.showInstallLocationModal('redis', 'button')">
+                      ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                      ng-click="vm.showInstallLocationModal('secrets', 'button')">
                       Add new/existing node details
                     </button>
                   </div>
-                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.redis.initType === 'new'">
-                    <h5 ng-if="!vm.initializeForm.redis.address"><code>Kindly complete the details for adding a new node.</code></h5>
+                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'new'">
+                    <h5 ng-if="!vm.initializeForm.secrets.address"><code>Kindly complete the details for adding a new node.</code></h5>
                   </div>
-                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.redis.initType === 'existing'">
-                    <h5 ng-if="!vm.initializeForm.redis.address"><code>Kindly complete the details for adding an existing node.</code></h5>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12" ng-if="vm.installForm.redis.url.data.url">
-                    <h5>URL</h5>
-                    <p style="word-wrap: break-word;">{{vm.installForm.redis.url.data.url}}</p>
+                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.secrets.initType === 'existing'">
+                    <h5 ng-if="!vm.initializeForm.secrets.address"><code>Kindly complete the details for adding an existing node.</code></h5>
                   </div>
                 </div>
 
               </div><!-- END portlet-body -->
-            </div><!-- END bg-redis -->
+            </div><!-- END bg-secrets -->
 
 
           </div><!-- END portlet -->
         </div><!-- END col-md-12 -->
       </div><!-- END ROW -->
-    <!-- END Redis -->
+      <!-- END Secrets -->
 
 
-    <!-- START Swarm -->
-    <div class="row">
+      <!-- START RabbitMQ -->
+      <div class="row">
         <div class="col-md-12">
           <div class="portlet">
 
-            <div data-toggle="collapse" data-target="#bg-master" class="portlet-heading">
+            <div data-toggle="collapse" data-target="#bg-rabbitmq" class="portlet-heading">
               <h3 class="portlet-title text-dark">
-                  SWARM
+                  MESSAGING
               </h3>
               <div class="portlet-widgets">
-                  <span class="divider"></span>
-                  <span class="text-dark" ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed">
-                    {{vm.systemSettings.master.isInitialized ? 'initialized' : 'not initialized'}}
-                  </span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
-                  <span class="divider"></span>
-                  <a data-toggle="collapse" data-target="#bg-master"><i class="ion-minus-round"></i></a>
+                <span class="divider"></span>
+                <span class="text-dark" ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
+                <span class="text-dark" ng-if="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed">
+                  {{vm.systemSettings.msg.isInitialized ? 'initialized' : 'not initialized'}}
+                </span>
+                <span class="text-dark" ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
+                <span class="divider"></span>
+                <a data-toggle="collapse" data-target="#bg-rabbitmq"><i class="ion-minus-round"></i></a>
               </div>
               <div class="clearfix"></div>
             </div>
 
-            <div id="bg-master" class="panel-collapse collapse in">
+            <div id="bg-rabbitmq" class="panel-collapse collapse in">
               <div class="portlet-body">
-                  <div class="row m-b-20">
-                    <div class="col-md-4">
-                        <h5>Worker Install Location:</h5>
-                        <select class="form-control"
-                          ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing"
-                          ng-model="vm.initializeForm.workers.initType">
-                          <option value="admiral">This node</option>
-                          <option value="new">New node(s)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4 alignTextRight">
-                      <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')"
-                        ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
-                      <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')"
-                        ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">logs</button>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <h5>Install RabbitMQ on:</h5>
+                    <select class="form-control"
+                      ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                      ng-change="vm.showInstallLocationModal('msg', 'dropdown')"
+                      ng-model="vm.initializeForm.msg.initType">
+                      <option value="admiral">This node</option>
+                      <option value="new">New node</option>
+                      <option value="existing">Existing node</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4" ng-if="vm.initializeForm.msg.initType === 'admiral'">
+                    <h5 ng-if="vm.initializeForm.msg.initType !== 'existing'">Choose a password for RabbitMQ:</h5>
+                    <h5 ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</h5>
+                    <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)" class="m-b-10">
+                      <input type="text" class="form-control input-sm" name="msgPassword"
+                      ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
                     </div>
                   </div>
-                  <div class="card-box" ng-if="vm.initializeForm.workers.initType === 'new'">
-                    <div class="row">
-                      <div class="col-md-12">
-                          <h5>Swarm master</h5>
-                          <div class="col-md-2">
-                            <label class="control-label">IP:</label> {{vm.initializeForm.master.address || vm.admiralEnv.ADMIRAL_IP}}
-                          </div>
-                          <div class="col-md-3">
-                            <label class="control-label">Port:</label> {{vm.initializeForm.master.port || 2377}}
-                          </div>
-                      </div>
+                  <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.msg.initType === 'new' || vm.initializeForm.msg.initType === 'existing'">
+                    <div ng-if="vm.initializeForm.msg.address">
+                      <h5>IP address where RabbitMQ is installed:</h5>
+                      <span>{{vm.initializeForm.msg.address}}</span>
                     </div>
-                    <div class="row" >
-                      <div class="col-md-12">
-                          <h5>Swarm workers</h5>
-                          <div class="col-md-4">
-                            <span>Worker names must be unique</span>
-                          </div>
-                          <div class="col-md-4">
-                            <button class="btn btn-sm btn-default"
-                              ng-click="vm.showWorkersLogModal('workers')"
-                              ng-disabled="!vm.initializeForm.workers.enableLogsButton">Worker init logs</button>
-                          </div>
-                      </div>
-                    </div>
+                  </div>
+                  <div class="col-md-4 alignTextRight">
+                    <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('msg')" ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                    <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('msg')" ng-disabled="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed && !vm.systemSettings.msg.isInitialized">logs</button>
+                  </div>
+                </div><!--row ends-->
 
-                    <div class="row" >
-                      <div class="col-md-12">
-                          <h5>Add Worker:</h5>
-                          <div class="col-md-4">
-                            <span class="text-dark">Name:</span>
-                            <div ng-class="!vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.newWorker.name.length ? 'has-error' : ''">
-                              <input type="text" class="form-control input-sm" name="workerName" placeholder="worker name" ng-disabled="vm.initializing"
-                              ng-model="vm.initializeForm.workers.newWorker.name"/>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <span class="text-dark">IP:</span>
-                            <div ng-class="vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)">
-                              <input type="text" class="form-control input-sm" name="workerAddress" placeholder="0.0.0.0" ng-disabled="vm.initializing"
-                              ng-model="vm.initializeForm.workers.newWorker.address"/>
-                            </div>
-                          </div>
-                          <div class="col-md-4 m-t-20">
-                            <button class="btn btn-sm btn-default" ng-click="vm.addWorker(vm.initializeForm.workers.newWorker)">Add</button>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row m-t-20" ng-repeat="worker in vm.initializeForm.workers.workers">
-                        <div class="col-md-12" ng-if="$first">
-                          <h5>Workers:</h5>
-                        </div>
-                        <div class="col-md-1 text-right">
-                          <b>Name:</b>
-                        </div>
-                        <div class="col-md-2">
-                          {{worker.name}}
-                        </div>
-                        <div class="col-md-1 text-right">
-                          <b>IP:</b>
-                        </div>
-                        <div class="col-md-2">
-                          {{worker.address}}
-                        </div>
-                        <div class="col-md-1">
-                          <button class="btn btn-sm btn-default" ng-click="vm.removeWorker(worker)">
-                            Remove
-                          </button>
-                        </div>
-                        <div class="col-md-5">
-                          <span ng-if="worker.isProcessing">initializing...</span>
-                          <span ng-if="!worker.isProcessing && !worker.isFailed">
-                            {{worker.isInitialized ? 'initialized' : 'not initialized'}}
-                          </span>
-                          <span ng-if="!worker.isProcessing && worker.isFailed">failed &#x26a0;</span>
-                        </div>
-                      </div>
+                <div class="row" ng-if="vm.initializeForm.msg.initType !== 'admiral'">
+                  <div class="col-md-3" ng-if="!vm.systemSettings.msg.isInitialized && !vm.initializing">
+                    <button class="btn btn-default waves-effect waves-light m-t-10"
+                      ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                      ng-click="vm.showInstallLocationModal('msg', 'button')">
+                      Add new/existing node details
+                    </button>
+                  </div>
+                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.msg.initType === 'new'">
+                    <h5 ng-if="!vm.initializeForm.msg.address"><code>Kindly complete the details for adding a new node.</code></h5>
+                  </div>
+                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.msg.initType === 'existing'">
+                    <h5 ng-if="!vm.initializeForm.msg.address"><code>Kindly complete the details for adding an existing node.</code></h5>
+                  </div>
+                </div>
 
-                      <div class='row'>
-                          <div class="col-md-12 m-t-10">
-                              <div class="form-group">
-                                  <span class="text-dark m-b-10">
-                                    Please run this command on {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} node to authorize SSH access:
-                                  </span>
-                                  <div class="ss-action"></div>
-                                  <div class="ship-console" style="word-break: break-all;">
-                                    {{vm.initializeForm.sshCommand}}
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="checkbox checkbox-success m-t-0" ng-class="vm.initializeForm.workers.confirmCommand ? '' : 'has-error'">
-                              <div class="checkbox">
-                                <input id="checkbox_confirmCommand" type="checkbox" ng-model="vm.initializeForm.workers.confirmCommand"/>
-                                <label for="checkbox_confirmCommand">
-                                  Click here once you have run the above command on
-                                  {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} worker node
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-                    </div>
+                <div class="row">
+                  <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrl">
+                    <h4 class="m-t-30">Service Addresses</h4>
+                    <h5>amqp URL</h5>
+                    <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrl}}</p>
+                  </div>
 
-                  </div><!-- END card-box -->
+                  <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot">
+                    <form class="form-horizontal">
+                      <h5>amqp Root Url:</h5>
+                      <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot}}</p>
+                    </form>
+                  </div>
+
+                  <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin">
+                    <form class="form-horizontal">
+                      <h5>amqp Admin URL</h5>
+                      <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin}}</p>
+                    </form>
+                  </div>
+
+                  <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange">
+                    <form class="form-horizontal">
+                      <h5>amqp Default Exchange</h5>
+                      <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange}}</p>
+                    </form>
+                  </div>
+
+                  <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.rootQueueList">
+                    <form class="form-horizontal">
+                      <h5>Root Queue List</h5>
+                      <p style="word-wrap: break-word;">{{vm.installForm.msg.rabbitmqCreds.data.rootQueueList}}</p>
+                    </form>
+                  </div>
+
+                </div><!--row ends-->
+
               </div><!-- END portlet-body -->
-            </div><!-- END bg-swarm -->
+            </div><!-- END bg-default12 -->
+
 
           </div><!-- END portlet -->
         </div><!-- END col-md-12 -->
+
       </div><!-- END ROW -->
-    <!-- END Swarm -->
+      <!-- END RabbitMQ -->
+
+
+
+      <!-- START State -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="portlet">
+
+            <div data-toggle="collapse" data-target="#state" class="portlet-heading">
+              <h3 class="portlet-title text-dark">
+                STATE
+              </h3>
+              <div class="portlet-widgets">
+                  <span class="divider"></span>
+                  <span class="text-dark" ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
+                  <span class="text-dark" ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
+                    {{vm.systemSettings.state.isInitialized ? 'initialized' : 'not initialized'}}
+                  </span>
+                  <span class="text-dark" ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
+                  <span class="divider"></span>
+                  <a data-toggle="collapse" data-target="#state"><i class="ion-minus-round"></i></a>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div id="state" class="panel-collapse collapse in">
+              <div class="portlet-body">
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <h5>Install State on:</h5>
+                    <select class="form-control"
+                      ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                      ng-change="vm.showInstallLocationModal('state', 'dropdown')"
+                      ng-model="vm.initializeForm.state.initType">
+                      <option value="admiral">This node</option>
+                      <option value="new">New node</option>
+                      <option value="existing">Existing node</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4" ng-if="vm.initializeForm.state.initType === 'admiral'">
+                    <h5 ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</h5>
+                    <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)" class="m-b-10">
+                      <input type="text" class="form-control input-sm" name="statePassword"
+                      ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
+                    </div>
+                  </div>
+                  <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.state.initType !== 'admiral'">
+                    <div ng-if="vm.initializeForm.state.address">
+                      <h5 ng-if="!vm.systemSettings.state.isInitialized">IP address where State is to be installed:</h5>
+                      <h5 ng-if="vm.systemSettings.state.isInitialized">IP address where State is installed:</h5>
+                      <span>{{vm.initializeForm.state.address}}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4 alignTextRight">
+                    <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('state')" ng-disabled="!vm.systemSettings.state.isInitialized">config</button>
+                    <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('state')" ng-disabled="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed && !vm.systemSettings.state.isInitialized">logs</button>
+                  </div>
+                </div><!-- END row -->
+
+                <div class="row" ng-if="vm.initializeForm.state.initType !== 'admiral'">
+                  <div class="col-md-3" ng-if="!vm.systemSettings.state.isInitialized && !vm.initializing">
+                    <button class="btn btn-default waves-effect waves-light m-t-10"
+                      ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                      ng-click="vm.showInstallLocationModal('state', 'button')">
+                      Add new/existing node details
+                    </button>
+                  </div>
+                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.state.initType === 'new'">
+                    <h5 ng-if="!vm.initializeForm.state.address"><code>Kindly complete the details for adding a new node.</code></h5>
+                  </div>
+                  <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.state.initType === 'existing'">
+                    <h5 ng-if="!vm.initializeForm.state.address"><code>Kindly complete the details for adding an existing node.</code></h5>
+                  </div>
+                </div>
+
+              </div><!-- END portlet-body -->
+            </div><!-- END state -->
+
+
+          </div><!-- END portlet -->
+        </div><!-- END col-md-12 -->
+
+      </div><!-- END ROW -->
+      <!-- END State -->
+
+
+
+      <!-- START Redis -->
+      <div class="row">
+          <div class="col-md-12">
+            <div class="portlet">
+
+              <div data-toggle="collapse" data-target="#bg-redis" class="portlet-heading">
+                <h3 class="portlet-title text-dark">
+                    REDIS
+                </h3>
+                <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <span class="text-dark" ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
+                    <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
+                      {{vm.systemSettings.redis.isInitialized ? 'initialized' : 'not initialized'}}
+                    </span>
+                    <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-target="#bg-redis"><i class="ion-minus-round"></i></a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div id="bg-redis" class="panel-collapse collapse in">
+                <div class="portlet-body">
+
+                  <div class="row">
+                    <div class="col-md-4">
+                      <h5>Install Redis on:</h5>
+                      <select class="form-control"
+                        ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                        ng-change="vm.showInstallLocationModal('redis', 'dropdown')"
+                        ng-model="vm.initializeForm.redis.initType">
+                        <option value="admiral">This node</option>
+                        <option value="new">New node</option>
+                        <option value="existing">Existing node</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4 m-t-5">
+                      <div ng-if="vm.initializeForm.redis.address">
+                        <h5>IP address where Redis is installed:</h5>
+                        <span>{{vm.initializeForm.redis.address}}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4 alignTextRight">
+                      <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('redis')"
+                        ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                      <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('redis')"
+                        ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">logs</button>
+                    </div>
+                  </div><!--row ends-->
+
+                  <div class="row" ng-if="vm.initializeForm.redis.initType !== 'admiral'">
+                    <div class="col-md-3" ng-if="!vm.systemSettings.redis.isInitialized && !vm.initializing">
+                      <button class="btn btn-default waves-effect waves-light m-t-10"
+                        ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                        ng-click="vm.showInstallLocationModal('redis', 'button')">
+                        Add new/existing node details
+                      </button>
+                    </div>
+                    <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.redis.initType === 'new'">
+                      <h5 ng-if="!vm.initializeForm.redis.address"><code>Kindly complete the details for adding a new node.</code></h5>
+                    </div>
+                    <div class="col-md-9 m-t-10" ng-if="vm.initializeForm.redis.initType === 'existing'">
+                      <h5 ng-if="!vm.initializeForm.redis.address"><code>Kindly complete the details for adding an existing node.</code></h5>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12" ng-if="vm.installForm.redis.url.data.url">
+                      <h5>URL</h5>
+                      <p style="word-wrap: break-word;">{{vm.installForm.redis.url.data.url}}</p>
+                    </div>
+                  </div>
+
+                </div><!-- END portlet-body -->
+              </div><!-- END bg-redis -->
+
+
+            </div><!-- END portlet -->
+          </div><!-- END col-md-12 -->
+      </div><!-- END ROW -->
+      <!-- END Redis -->
+
+
+      <!-- START Swarm -->
+      <div class="row">
+          <div class="col-md-12">
+            <div class="portlet">
+
+              <div data-toggle="collapse" data-target="#bg-master" class="portlet-heading">
+                <h3 class="portlet-title text-dark">
+                    SWARM
+                </h3>
+                <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <span class="text-dark" ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
+                    <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed">
+                      {{vm.systemSettings.master.isInitialized ? 'initialized' : 'not initialized'}}
+                    </span>
+                    <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-target="#bg-master"><i class="ion-minus-round"></i></a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div id="bg-master" class="panel-collapse collapse in">
+                <div class="portlet-body">
+                    <div class="row m-b-20">
+                      <div class="col-md-4">
+                          <h5>Worker Install Location:</h5>
+                          <select class="form-control"
+                            ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing"
+                            ng-model="vm.initializeForm.workers.initType">
+                            <option value="admiral">This node</option>
+                            <option value="new">New node(s)</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4"></div>
+                      <div class="col-md-4 alignTextRight">
+                        <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')"
+                          ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                        <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')"
+                          ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">logs</button>
+                      </div>
+                    </div>
+                    <div class="card-box" ng-if="vm.initializeForm.workers.initType === 'new'">
+                      <div class="row">
+                        <div class="col-md-12">
+                            <h5>Swarm master</h5>
+                            <div class="col-md-2">
+                              <label class="control-label">IP:</label> {{vm.initializeForm.master.address || vm.admiralEnv.ADMIRAL_IP}}
+                            </div>
+                            <div class="col-md-3">
+                              <label class="control-label">Port:</label> {{vm.initializeForm.master.port || 2377}}
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row" >
+                        <div class="col-md-12">
+                            <h5>Swarm workers</h5>
+                            <div class="col-md-4">
+                              <span>Worker names must be unique</span>
+                            </div>
+                            <div class="col-md-4">
+                              <button class="btn btn-sm btn-default"
+                                ng-click="vm.showWorkersLogModal('workers')"
+                                ng-disabled="!vm.initializeForm.workers.enableLogsButton">Worker init logs</button>
+                            </div>
+                        </div>
+                      </div>
+
+                      <div class="row" >
+                        <div class="col-md-12">
+                            <h5>Add Worker:</h5>
+                            <div class="col-md-4">
+                              <span class="text-dark">Name:</span>
+                              <div ng-class="!vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.newWorker.name.length ? 'has-error' : ''">
+                                <input type="text" class="form-control input-sm" name="workerName" placeholder="worker name" ng-disabled="vm.initializing"
+                                ng-model="vm.initializeForm.workers.newWorker.name"/>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <span class="text-dark">IP:</span>
+                              <div ng-class="vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)">
+                                <input type="text" class="form-control input-sm" name="workerAddress" placeholder="0.0.0.0" ng-disabled="vm.initializing"
+                                ng-model="vm.initializeForm.workers.newWorker.address"/>
+                              </div>
+                            </div>
+                            <div class="col-md-4 m-t-20">
+                              <button class="btn btn-sm btn-default" ng-click="vm.addWorker(vm.initializeForm.workers.newWorker)">Add</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-t-20" ng-repeat="worker in vm.initializeForm.workers.workers">
+                          <div class="col-md-12" ng-if="$first">
+                            <h5>Workers:</h5>
+                          </div>
+                          <div class="col-md-1 text-right">
+                            <b>Name:</b>
+                          </div>
+                          <div class="col-md-2">
+                            {{worker.name}}
+                          </div>
+                          <div class="col-md-1 text-right">
+                            <b>IP:</b>
+                          </div>
+                          <div class="col-md-2">
+                            {{worker.address}}
+                          </div>
+                          <div class="col-md-1">
+                            <button class="btn btn-sm btn-default" ng-click="vm.removeWorker(worker)">
+                              Remove
+                            </button>
+                          </div>
+                          <div class="col-md-5">
+                            <span ng-if="worker.isProcessing">initializing...</span>
+                            <span ng-if="!worker.isProcessing && !worker.isFailed">
+                              {{worker.isInitialized ? 'initialized' : 'not initialized'}}
+                            </span>
+                            <span ng-if="!worker.isProcessing && worker.isFailed">failed &#x26a0;</span>
+                          </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class="col-md-12 m-t-10">
+                                <div class="form-group">
+                                    <span class="text-dark m-b-10">
+                                      Please run this command on {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} node to authorize SSH access:
+                                    </span>
+                                    <div class="ss-action"></div>
+                                    <div class="ship-console" style="word-break: break-all;">
+                                      {{vm.initializeForm.sshCommand}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="checkbox checkbox-success m-t-0" ng-class="vm.initializeForm.workers.confirmCommand ? '' : 'has-error'">
+                                <div class="checkbox">
+                                  <input id="checkbox_confirmCommand" type="checkbox" ng-model="vm.initializeForm.workers.confirmCommand"/>
+                                  <label for="checkbox_confirmCommand">
+                                    Click here once you have run the above command on
+                                    {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} worker node
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+
+                    </div><!-- END card-box -->
+                </div><!-- END portlet-body -->
+              </div><!-- END bg-swarm -->
+
+            </div><!-- END portlet -->
+          </div><!-- END col-md-12 -->
+      </div><!-- END ROW -->
+      <!-- END Swarm -->
 
 
       <!-- Initialize button -->
