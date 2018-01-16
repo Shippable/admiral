@@ -240,7 +240,7 @@
               </div>
             </div><!--row ends-->
             <div class="row" ng-if="vm.initializeForm.secrets.initType !== 'admiral'">
-              <div class="col-md-3" ng-if="!vm.systemSettings.secrets.isInitialized || !vm.initializing">
+              <div class="col-md-3" ng-if="!vm.systemSettings.secrets.isInitialized && !vm.initializing">
                 <button class="btn btn-default waves-effect waves-light m-t-10"
                   ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
                   ng-click="vm.showInstallLocationModal('secrets', 'button')">
@@ -323,7 +323,7 @@
               </div><!--row ends-->
 
               <div class="row" ng-if="vm.initializeForm.msg.initType !== 'admiral'">
-                <div class="col-md-3" ng-if="!vm.systemSettings.msg.isInitialized || !vm.initializing">
+                <div class="col-md-3" ng-if="!vm.systemSettings.msg.isInitialized && !vm.initializing">
                   <button class="btn btn-default waves-effect waves-light m-t-10"
                     ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
                     ng-click="vm.showInstallLocationModal('msg', 'button')">
@@ -445,7 +445,7 @@
               </div><!-- END row -->
 
               <div class="row" ng-if="vm.initializeForm.state.initType !== 'admiral'">
-                <div class="col-md-3" ng-if="!vm.systemSettings.state.isInitialized || !vm.initializing">
+                <div class="col-md-3" ng-if="!vm.systemSettings.state.isInitialized && !vm.initializing">
                   <button class="btn btn-default waves-effect waves-light m-t-10"
                     ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
                     ng-click="vm.showInstallLocationModal('state', 'button')">
@@ -524,7 +524,7 @@
                 </div><!--row ends-->
 
                 <div class="row" ng-if="vm.initializeForm.redis.initType !== 'admiral'">
-                  <div class="col-md-3" ng-if="!vm.systemSettings.redis.isInitialized || !vm.initializing">
+                  <div class="col-md-3" ng-if="!vm.systemSettings.redis.isInitialized && !vm.initializing">
                     <button class="btn btn-default waves-effect waves-light m-t-10"
                       ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
                       ng-click="vm.showInstallLocationModal('redis', 'button')">
