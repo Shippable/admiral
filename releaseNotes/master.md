@@ -11,9 +11,7 @@ ${RES_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Left navbar missing subscription heading**: Display the subscription heading on the navigation menu to make the UI consistent.
 
 ## Custom Nodes
   - **simple title**: brief description
