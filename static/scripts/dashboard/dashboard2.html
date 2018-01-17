@@ -1187,7 +1187,7 @@
                       <div class="col-md-6 col-sm-12">
                           <div class="card-box">
                             <h4 class="m-t-0"><b>Notifications</b></h4>
-                            
+
                           </div>
                       </div>
                     </div>
@@ -1196,13 +1196,13 @@
                       <div class="col-md-6 col-sm-12">
                         <div class="card-box">
                           <h4 class="m-t-0"><b>Registries</b></h4>
-                          
+
                         </div>
                       </div>
                       <div class="col-md-6 col-sm-12">
                         <div class="card-box">
                           <h4 class="m-t-0"><b>Others</b></h4>
-                          
+
                         </div>
                       </div>
                     </div>
@@ -1219,7 +1219,7 @@
                     </button>
                     <div class="clearfix"></div>
                   </div> <!-- end portlet -->
- 
+
                 </div><!-- END portlet-body -->
               </div><!-- END addons -->
             </div><!-- END portlet -->
@@ -1238,12 +1238,19 @@
           </div>
         </div>
 
-        <div class="row m-l-20" ng-if="!vm.initialized">
-          <h3> Please initialize first.</h3>
-        </div>
+        <section ng-if="!vm.initialized">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <h5 class="text-custom m-t-20 m-b-5">
+                  Please initialize first from the Infrastructure Panel.
+                </h5>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <div ng-if="vm.isLoaded && vm.initialized">
-
+        <section ng-if="vm.isLoaded && vm.initialized">
           <!-- START Settings -->
           <div class="row">
             <div class="col-md-12">
@@ -1314,7 +1321,6 @@
                     ng-disabled="vm.installing || vm.saving">
                   <label for="checkbox_tls"><b>Ignore TLS Errors (optional)</b></label>
                 </div>
-
                 <div class="row">
                   <div class="col-md-6" ng-if="vm.installForm.ignoreTLSErrors">
                     <dd class="text-danger">
@@ -1334,7 +1340,6 @@
           <div class="row">
             <div class="col-md-12">
               <div class="portlet">
-
                 <div data-toggle="collapse" data-target="#emailProvider" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
                     Email Provider
@@ -1344,10 +1349,8 @@
                   </div>
                   <div class="clearfix"></div>
                 </div>
-
                 <div id="emailProvider" class="panel-collapse collapse in">
                   <div class="portlet-body">
-
                     <div class="row">
                       <div class="col-md-12">
                         <div class="checkbox">
@@ -1396,7 +1399,6 @@
                         </div>
                       </div><!-- END row -->
                     </div> <!-- if -->
-
                     <!-- Mailgun -->
                     <div class="row">
                       <div class="col-md-12">
@@ -1446,7 +1448,6 @@
                         </div>
                       </div><!-- END row -->
                     </div><!-- if -->
-
                     <!-- SMTP -->
                     <div class="row">
                       <div class="col-md-12">
@@ -1532,10 +1533,8 @@
                         </div>
                       </div><!-- END row -->
                     </div><!-- if -->
-
                   </div><!-- END portlet-body -->
                 </div><!-- END systemSuperusers -->
-
               </div><!-- END portlet -->
             </div><!-- END col-md-12 -->
           </div><!-- END ROW -->
@@ -1545,7 +1544,6 @@
           <div class="row">
             <div class="col-md-12">
               <div class="portlet">
-
                 <div data-toggle="collapse" data-target="#systemSuperusers" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
                     Manage System Superusers
@@ -1555,10 +1553,8 @@
                   </div>
                   <div class="clearfix"></div>
                 </div>
-
                 <div id="systemSuperusers" class="panel-collapse collapse in">
                   <div class="portlet-body">
-
                     <div class="row">
                       <div class="col-md-12">
                         <h5 class="m-t-20"><b>Add superUser:</b></h5>
@@ -1576,7 +1572,6 @@
                         </button>
                       </div>
                     </div><!-- END row -->
-
                     <div class="row">
                       <div class="col-md-2">
                         <h5 class="m-t-20"><b>Current SuperUsers:</b></h5>
@@ -1597,11 +1592,9 @@
                         </div>
                       </div><!-- END row -->
                     </div><!-- END row -->
-
                   </div><!-- END portlet-body -->
                 </div><!-- END systemSuperusers -->
                 <!-- END ROW -->
-
               </div><!-- END portlet -->
             </div><!-- END col-md-12 -->
           </div><!-- END ROW -->
@@ -1611,7 +1604,6 @@
           <div class="row" ng-if="vm.runMode === 'dev'">
             <div class="col-md-12">
               <div class="portlet">
-
                 <div data-toggle="collapse" data-target="#systemNodes" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
                     Manage System Nodes
@@ -1621,10 +1613,8 @@
                   </div>
                   <div class="clearfix"></div>
                 </div>
-
                 <div id="systemNodes" class="panel-collapse collapse in">
                   <div class="portlet-body">
-
                     <div class="row">
                       <div class="col-md-2">
                         <h5 class="m-t-20"><b>Add system node:</b></h5>
@@ -1656,17 +1646,54 @@
                         </div>
                       </div><!-- END row -->
                     </div><!-- END row -->
-
                   </div><!-- END portlet-body -->
                 </div><!-- END systemNodes -->
                 <!-- END ROW -->
-
               </div><!-- END portlet -->
             </div><!-- END col-md-12 -->
           </div><!-- END ROW -->
           <!-- END Manage System Nodes -->
 
-        </div><!-- if loaded -->
+          <!-- Install and Save Buttons -->
+          <div class="row">
+            <div class="col-md-12 text-right">
+              <p>
+                &nbsp;
+              </p>
+              <button ng-if="!vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices">
+                <!-- ng-click="vm.install()"> -->
+                <div ng-if="vm.installing">
+                  Installing...
+                </div>
+                <div ng-if="!vm.installing">
+                  Install
+                </div>
+              </button>
+              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave">
+                <!-- ng-click="vm.showSaveModal()"> -->
+                <div ng-if="vm.saving">
+                  Saving...
+                </div>
+                <div ng-if="!vm.saving">
+                  Save
+                </div>
+              </button>
+              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices">
+                <!-- ng-click="vm.showRestartServicesModal()"> -->
+                <div ng-if="vm.restartingServices">
+                  Restarting...
+                </div>
+                <div ng-if="!vm.restartingServices">
+                  Restart Services
+                </div>
+              </button>
+            </div>
+          </div>
+
+        </section><!-- if loaded -->
       </section>
       <!-- END System Settings -->
 
