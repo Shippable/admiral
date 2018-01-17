@@ -1056,6 +1056,58 @@
               </div>
             </div>
           </div>
+          <!-- WWW Config Section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+                <div data-toggle="collapse" data-target="#www" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Shippable UI
+                  </h3>
+                  <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-target="#www"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div id="www" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Shippable UI</b></h4>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <form class="form-horizontal" role="form" name="vm.wwwInstallForm" novalidate>
+                                <div class="form-group">
+                                  <label class="col-md-2 control-label">URL</label>
+                                  <div class="col-md-6">
+                                    <input type="url" class="form-control" name="wwwUrl"
+                                      ng-model="vm.installForm.www.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                    <dd class="text-danger" ng-show="vm.wwwInstallForm.wwwUrl.$dirty">
+                                      <span ng-show="vm.wwwInstallForm.wwwUrl.$error.url">URL is invalid.</span>
+                                    </dd>
+                                    <span class="text-muted m-b-20 font-13" ng-if="vm.systemSettings.workers.length > 1">
+                                      This field requires a Load Balanced IP/DNS.
+                                    </span>
+                                    <div ng-if="vm.requireRestart">
+                                      Click
+                                      <a href="{{vm.installForm.www.url.data.url}}"
+                                        target="_blank">here</a>
+                                      to login
+                                    </div>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </section>
       <section id="addons" ng-if="vm.sectionSelected === 'addons'">
