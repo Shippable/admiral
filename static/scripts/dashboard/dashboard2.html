@@ -749,18 +749,21 @@
                         <h4 class="m-t-0 header-title"><b>API</b></h4>
                         <div class="row">
                           <div class="col-md-12">
-                            <div class="form-horizontal">
+                            <form class="form-horizontal" role="form" name="vm.apiInstallForm" novalidate>
                               <div class="form-group">
                                 <label class="col-md-2 control-label">URL</label>
                                 <div class="col-md-6">
                                   <input type="url" class="form-control" name="apiUrl"
                                     ng-model="vm.installForm.api.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                  <dd class="text-danger" ng-show="vm.apiInstallForm.apiUrl.$dirty">
+                                    <span ng-show="vm.apiInstallForm.apiUrl.$error.url">URL is invalid.</span>
+                                  </dd>
                                     <span class="text-muted m-b-20 font-13" ng-if="vm.systemSettings.workers.length > 1">
                                       This field requires a Load Balanced IP/DNS.
                                     </span>
                                 </div>
                               </div>
-                            </div>
+                            </form>
                           </div>
                         </div>
                       </div>
@@ -778,15 +781,18 @@
                         </div>
                         <div class="row" ng-if="vm.installForm.internalAPI.url.isEnabled">
                           <div class="col-md-12">
-                            <div class="form-horizontal">
+                            <form class="form-horizontal" role="form" name="vm.internalAPIInstallForm" novalidate>
                               <div class="form-group">
                                 <label class="col-md-2 control-label">Internal API URL</label>
                                 <div class="col-md-6">
                                   <input type="url" class="form-control" name="internalAPIUrl"
                                   ng-model="vm.installForm.internalAPI.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                  <dd class="text-danger" ng-show="vm.internalAPIInstallForm.internalAPIUrl.$dirty">
+                                    <span ng-show="vm.internalAPIInstallForm.internalAPIUrl.$error.url">URL is invalid.</span>
+                                  </dd>
                                 </div>
                               </div>
-                            </div>
+                            </form>
                           </div>
                         </div>
                       </div>
@@ -804,15 +810,18 @@
                         </div>
                         <div class="row" ng-if="vm.installForm.consoleAPI.url.isEnabled">
                           <div class="col-md-12">
-                            <div class="form-horizontal">
+                            <form class="form-horizontal" role="form" name="vm.consoleAPIInstallForm" novalidate>
                               <div class="form-group">
                                 <label class="col-md-2 control-label">Console API URL</label>
                                 <div class="col-md-6">
                                   <input type="url" class="form-control" name="consoleAPIUrl"
                                   ng-model="vm.installForm.consoleAPI.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                  <dd class="text-danger" ng-show="vm.consoleAPIInstallForm.consoleAPIUrl.$dirty">
+                                    <span ng-show="vm.consoleAPIInstallForm.consoleAPIUrl.$error.url">URL is invalid.</span>
+                                  </dd>
                                 </div>
                               </div>
-                            </div>
+                            </form>
                           </div>
                         </div>
                       </div>
@@ -839,7 +848,7 @@
                         <h4 class="m-t-0 header-title"><b>State</b></h4>
                         <div class="row">
                           <div class="col-md-12">
-                            <div class="form-horizontal">
+                            <form class="form-horizontal" role="form" name="vm.stateInstallForm" novalidate>
                               <div class="form-group">
                                 <label class="col-md-2 control-label">Password</label>
                                 <div class="col-md-6">
@@ -859,9 +868,12 @@
                                 <div class="col-md-6">
                                   <input type="url" class="form-control" name="stateURL"
                                     ng-model="vm.installForm.state.gitlabCreds.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                  <dd class="text-danger" ng-show="vm.stateInstallForm.stateURL.$dirty">
+                                    <span ng-show="vm.stateInstallForm.stateURL.$error.url">URL is invalid.</span>
+                                  </dd>
                                 </div>
                               </div>
-                            </div>
+                            </form>
                           </div>
                         </div>
                       </div>
