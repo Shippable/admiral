@@ -750,6 +750,8 @@
           </div>
         </div>
       </section>
+
+      <!-- START System Settings -->
       <section id="system" ng-if="vm.sectionSelected === 'system'">
         <div class="row">
           <div class="col-md-12">
@@ -758,18 +760,439 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card-box">
-              <h4 class="header-title m-t-0"><b>SUMMARY</b></h4>
-              <p class="text-muted m-b-20 font-13">
-                A detailed summary of this full section.... this is the system settings section
-              </p>
+
+        <div class="row m-l-20" ng-if="!vm.initialized">
+          <h3> Please initialize first.</h3>
+        </div>
+
+        <div ng-if="vm.isLoaded && vm.initialized">
+
+          <!-- START Settings -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <div class="row">
+                  <div class="col-md-3">
+                    <h5 class="m-t-20"><b>Run Mode:</b></h5>
+                  </div>
+                  <div class="col-md-5 m-t-15">
+                    <input type="text" class="form-control input-sm" name="runMode"
+                      ng-model="vm.installForm.systemSettings.runMode" ng-disabled="vm.installing || vm.saving"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <h5 class="m-t-20"><b>Service User Token:</b></h5>
+                  </div>
+                  <div class="col-md-5 m-t-15">
+                    <input type="text" class="form-control input-sm" name="serviceUserToken"
+                      ng-model="vm.installForm.systemSettings.serviceUserToken" ng-disabled="true"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <h5 class="m-t-20"><b>API Retry Interval:</b></h5>
+                  </div>
+                  <div class="col-md-5 m-t-15">
+                    <input type="text" class="form-control input-sm" name="apiRetryIntervalMS"
+                      ng-model="vm.installForm.systemSettings.apiRetryIntervalMS" ng-disabled="vm.installing || vm.saving"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <h5 class="m-t-20"><b>Account Sync Frequency (in Hours):</b></h5>
+                  </div>
+                  <div class="col-md-5 m-t-15">
+                    <input type="text" class="form-control input-sm" name="accountSyncFrequencyHr"
+                      ng-model="vm.installForm.systemSettings.accountSyncFrequencyHr" ng-disabled="vm.installing || vm.saving"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- END ROW -->
+          <!-- END Settings -->
+
+          <!-- START IRC -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <div class="checkbox">
+                  <input type="checkbox" id="checkbox_irc"
+                    ng-model="vm.installForm.notification.irc.isEnabled"
+                    ng-disabled="vm.installing || vm.saving || vm.addonsForm.irc.isEnabled">
+                  <label for="checkbox_irc"><b>IRC</b></label>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- END ROW -->
+          <!-- END IRC -->
+
+          <!-- START TLS -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <div class="checkbox">
+                  <input type="checkbox" id="checkbox_tls"
+                    ng-model="vm.installForm.ignoreTLSErrors"
+                    ng-disabled="vm.installing || vm.saving">
+                  <label for="checkbox_tls"><b>Ignore TLS Errors (optional)</b></label>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6" ng-if="vm.installForm.ignoreTLSErrors">
+                    <dd class="text-danger">
+                      <span>WARNING: Enabling this flag will skip TLS certificate checks for all Shippable services.
+                          This is an insecure configuration and should only be used in trusted networks.
+                          Scenarios for using this setting include enterprise SCM installation in a private network with custom SSL certificate.
+                      </span>
+                    </dd>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END TLS -->
+
+          <!-- START Email Provider -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+
+                <div data-toggle="collapse" data-target="#emailProvider" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Email Provider
+                  </h3>
+                  <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-target="#emailProvider"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div id="emailProvider" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="checkbox">
+                          <input type="checkbox" id="checkbox_gmail"
+                            ng-model="vm.installForm.notification.gmailCreds.isEnabled"
+                            ng-disabled="vm.installing || vm.saving || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.smtpCreds.isEnabled">
+                          <label for="checkbox_gmail"><b>Gmail</b></label>
+                        </div>
+                      </div>
+                    </div><!-- END row -->
+                    <div ng-if="vm.installForm.notification.gmailCreds.isEnabled">
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Username:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="gmailUsername"
+                            ng-model="vm.installForm.notification.gmailCreds.data.username" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Password:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="gmailPassword"
+                            ng-model="vm.installForm.notification.gmailCreds.data.password" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Proxy:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="gmailProxy"
+                            ng-model="vm.installForm.notification.gmailCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Email Sender:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="gmailEmailSender"
+                            ng-model="vm.installForm.notification.gmailCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                    </div> <!-- if -->
+
+                    <!-- Mailgun -->
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="checkbox">
+                          <input type="checkbox" id="checkbox_mailgun"
+                            ng-model="vm.installForm.notification.mailgunCreds.isEnabled"
+                            ng-disabled="vm.installing || vm.saving || vm.installForm.notification.smtpCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
+                          <label for="checkbox_mailgun"><b>Mailgun</b></label>
+                        </div>
+                      </div>
+                    </div><!-- END row -->
+                    <div ng-if="vm.installForm.notification.mailgunCreds.isEnabled">
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>API Key:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="mailgunApiKey"
+                            ng-model="vm.installForm.notification.mailgunCreds.data.apiKey" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Domain:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="mailgunDomain"
+                            ng-model="vm.installForm.notification.mailgunCreds.data.domain" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Proxy:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="mailgunProxy"
+                            ng-model="vm.installForm.notification.mailgunCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Email Sender:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="mailgunEmailSender"
+                            ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                    </div><!-- if -->
+
+                    <!-- SMTP -->
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="checkbox">
+                          <input type="checkbox" id="checkbox_smtp"
+                            ng-model="vm.installForm.notification.smtpCreds.isEnabled"
+                            ng-disabled="vm.installing || vm.saving || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
+                          <label for="checkbox_smtp"><b>SMTP</b></label>
+                        </div>
+                      </div>
+                    </div><!-- END row -->
+                    <div ng-if="vm.installForm.notification.smtpCreds.isEnabled">
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Email Auth User:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="smtpEmailAuthUser"
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthUser" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Email Auth Password:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="smtpEmailAuthPassword"
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailAuthPassword" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Email Sender:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="smtpEmailSender"
+                            ng-model="vm.installForm.notification.smtpCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Host:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="smtpHost"
+                            ng-model="vm.installForm.notification.smtpCreds.data.host" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Port:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="smtpPort"
+                            ng-model="vm.installForm.notification.smtpCreds.data.port" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Secure:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="smtpSecure"
+                            ng-model="vm.installForm.notification.smtpCreds.data.secure" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Hostname:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="smtpHostname"
+                            ng-model="vm.installForm.notification.smtpCreds.data.hostname" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                      <div class="row">
+                        <div class="col-md-offset-1 col-md-2">
+                          <h5 class="m-t-20"><b>Proxy:</b></h5>
+                        </div>
+                        <div class="col-md-5 m-t-15">
+                          <input type="text" class="form-control input-sm" name="smtpProxy"
+                            ng-model="vm.installForm.notification.smtpCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
+                        </div>
+                      </div><!-- END row -->
+                    </div><!-- if -->
+
+                  </div><!-- END portlet-body -->
+                </div><!-- END systemSuperusers -->
+
+              </div><!-- END portlet -->
+            </div><!-- END col-md-12 -->
+          </div><!-- END ROW -->
+          <!-- END Email Provider -->
+
+          <!-- START Manage System Superusers -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+
+                <div data-toggle="collapse" data-target="#systemSuperusers" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Manage System Superusers
+                  </h3>
+                  <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-target="#systemSuperusers"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div id="systemSuperusers" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h5 class="m-t-20"><b>Add superUser:</b></h5>
+                      </div>
+                      <div class="col-md-2">
+                        <h5 class="m-t-20"><b>Account ID:</b></h5>
+                      </div>
+                      <div class="col-md-4 m-t-15">
+                        <input type="text" class="form-control input-sm" name="superUserAccountID" placeholder="abcdef0123456789abcdef01"
+                        ng-model="vm.superUsers.newSuperUser" ng-disabled="vm.superUsers.addingSuperUser"/>
+                      </div>
+                      <div class="col-md-4 m-t-15">
+                        <button ng-click="vm.addSuperUser()" ng-disabled="vm.superUsers.addingSuperUser">
+                          Add
+                        </button>
+                      </div>
+                    </div><!-- END row -->
+
+                    <div class="row">
+                      <div class="col-md-2">
+                        <h5 class="m-t-20"><b>Current SuperUsers:</b></h5>
+                      </div>
+                      <div class="col-md-10 m-t-15">
+                        <div ng-if="!vm.superUsers.superUsers.length">
+                          <i>No current SuperUsers</i>
+                        </div>
+                        <div class="row m-t-10" ng-repeat="superUser in vm.superUsers.superUsers" ng-if="vm.superUsers.superUsers.length">
+                          <div class="col-md-3">
+                            {{superUser}}
+                          </div>
+                          <div class="col-md-9">
+                            <button ng-click="vm.removeSuperUser(superUser)" ng-disabled="vm.superUsers.deletingSuperUser">
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div><!-- END row -->
+                    </div><!-- END row -->
+
+                  </div><!-- END portlet-body -->
+                </div><!-- END systemSuperusers -->
+                <!-- END ROW -->
+
+              </div><!-- END portlet -->
+            </div><!-- END col-md-12 -->
+          </div><!-- END ROW -->
+          <!-- END Manage System Superusers -->
+
+          <!-- START Manage System Nodes -->
+          <div class="row" ng-if="vm.runMode === 'dev'">
+            <div class="col-md-12">
+              <div class="portlet">
+
+                <div data-toggle="collapse" data-target="#systemNodes" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Manage System Nodes
+                  </h3>
+                  <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-target="#systemNodes"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div id="systemNodes" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+
+                    <div class="row">
+                      <div class="col-md-2">
+                        <h5 class="m-t-20"><b>Add system node:</b></h5>
+                      </div>
+                      <div class="col-md-4 m-t-15">
+                        <button ng-click="vm.addSystemNode()" ng-disabled="vm.systemNodes.addingSystemNode">
+                          Initialize system node
+                        </button>
+                      </div>
+                    </div><!-- END row -->
+                    <div class="row">
+                      <div class="col-md-2">
+                        <h5 class="m-t-20"><b>Current system nodes:</b></h5>
+                      </div>
+                      <div class="col-md-10 m-t-15">
+                        <div ng-if="!vm.systemNodes.systemNodes.length">
+                          <i>No current SystemNodes</i>
+                        </div>
+                        <div class="row m-t-10" ng-repeat="systemNode in vm.systemNodes.systemNodes" ng-if="vm.systemNodes.systemNodes.length">
+                          <div class="col-md-3">
+                            {{systemNode.friendlyName}}
+                          </div>
+                          <div class="col-md-9">
+                            <button ng-click="vm.removeSystemNode(systemNode)"
+                              ng-disabled="vm.systemNodes.deletingSystemNode">
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div><!-- END row -->
+                    </div><!-- END row -->
+
+                  </div><!-- END portlet-body -->
+                </div><!-- END systemNodes -->
+                <!-- END ROW -->
+
+              </div><!-- END portlet -->
+            </div><!-- END col-md-12 -->
+          </div><!-- END ROW -->
+          <!-- END Manage System Nodes -->
+
+        </div><!-- if loaded -->
       </section>
+      <!-- END System Settings -->
+
     </div>
     <!-- end container -->
 
