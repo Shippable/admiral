@@ -1,7 +1,7 @@
 'use strict';
 
 var admiral = angular.module('admiral', ['ui.bootstrap',
-  'angularMoment', 'ngSanitize', 'ngCookies', 'ui.router'
+  'angularMoment', 'ngSanitize', 'ngCookies', 'ui.router', 'NgSwitchery'
 ]);
 
 admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
