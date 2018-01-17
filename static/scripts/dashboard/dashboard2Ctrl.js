@@ -52,6 +52,7 @@
         'internalAPI',
         'consoleAPI'
       ],
+      urlRegex: /(http(s)?:\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/,
       x86ArchCode: null,
       armArchCode: null,
       initializeForm: {
