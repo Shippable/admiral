@@ -1533,13 +1533,13 @@
                         <div class="col-md-6 col-sm-12">
                           <div class="card-box">
                             <h4 class="m-t-0"><b>Registries</b></h4>
-                            
+
                           </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
                           <div class="card-box">
                             <h4 class="m-t-0"><b>Others</b></h4>
-                            
+
                           </div>
                         </div>
                       </div>
@@ -1556,7 +1556,7 @@
                       </button>
                       <div class="clearfix"></div>
                     </div> <!-- end portlet -->
-  
+
                   </div><!-- END portlet-body -->
                 </div><!-- END addons -->
               </div><!-- END portlet -->
@@ -1998,19 +1998,9 @@
               <p>
                 &nbsp;
               </p>
-              <button ng-if="!vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices">
-                <!-- ng-click="vm.install()"> -->
-                <div ng-if="vm.installing">
-                  Installing...
-                </div>
-                <div ng-if="!vm.installing">
-                  Install
-                </div>
-              </button>
               <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave">
-                <!-- ng-click="vm.showSaveModal()"> -->
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave"
+                ng-click="vm.showSaveModal()">
                 <div ng-if="vm.saving">
                   Saving...
                 </div>
@@ -2019,8 +2009,8 @@
                 </div>
               </button>
               <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices">
-                <!-- ng-click="vm.showRestartServicesModal()"> -->
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices"
+                ng-click="vm.showRestartServicesModal()">
                 <div ng-if="vm.restartingServices">
                   Restarting...
                 </div>
@@ -2047,6 +2037,68 @@
   </footer>
   <!-- End FOOTER -->
 
+</div>
+
+<!-- Save Modal -->
+<div class="modal fade" id="saveModal"
+  tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">
+          Restart Required
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div>
+          A restart is required for your changes to take effect.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-md btn-primary" type="submit" ng-click="vm.save()">
+          Save
+        </button>
+        <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Restart Services Modal -->
+<div class="modal fade" id="restartServicesModal"
+  tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">
+          Restart Services
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div>
+          This will restart all your services. Are you sure?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-md btn-primary" type="submit" ng-click="vm.restartServices()">
+          Yes
+        </button>
+        <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- START Configs Modal -->
@@ -2258,7 +2310,6 @@
 </div><!-- /.modal -->
 <!-- END Install Location Node Modal -->
 
-
 <!-- START Install Location Node Modal for SECRETS -->
 <div id="secrets-location-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabelSecrets" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
@@ -2363,7 +2414,6 @@
     </div>
 </div><!-- /.modal -->
 <!-- END Install Location Node Modal for SECRETS-->
-
 
 <!-- START Install Location Node Modal for STATE -->
 <div id="state-location-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -2480,7 +2530,6 @@
     </div>
 </div><!-- /.modal -->
 <!-- END STATE Install Location Node Modal -->
-
 
 <!-- START Install Location Node Modal for REDIS -->
 <div id="redis-location-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabelRedis" aria-hidden="true" style="display: none;">
