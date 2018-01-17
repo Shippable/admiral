@@ -1178,285 +1178,391 @@
             </div>
           </div>
         </div>
-        <!-- start enable addons section -->
-        <div class="row">
-          <div class="col-md-12">
-            <div class="portlet">
-
-              <div data-toggle="collapse" data-target="#enable-addons" class="portlet-heading">
-                <h3 class="portlet-title text-dark">
-                  Enable account integrations for your users
-                </h3>
-                <div class="portlet-widgets">
-                  <span class="divider"></span>
-                  <a data-toggle="collapse" data-target="#enable-addons"><i class="ion-minus-round"></i></a>
-                </div>
-                <div class="clearfix"></div>
+        <section ng-if="!vm.initialized">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <h5 class="text-custom m-t-20 m-b-5">
+                  Please initialize first from the Infrastructure Panel.
+                </h5>
               </div>
+            </div>
+          </div>
+        </section>
+        <section ng-if="vm.isLoaded && vm.initialized">
+          <!-- start enable addons section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
 
-              <div id="enable-addons" class="panel-collapse collapse in">
-                <div class="portlet-body">
+                <div data-toggle="collapse" data-target="#enable-addons" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Enable account integrations for your users
+                  </h3>
+                  <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-target="#enable-addons"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
 
-                  <div class="portlet m-t-30">
-                    <div class="row">
-                      <div class="col-md-6 col-sm-12">
-                        <div class="card-box">
-                          <h4 class="m-t-0"><b>Cloud Providers</b></h4>
-                          <table class="table table-striped m-0">
-                            <tbody>
-                              <tr ng-if="vm.addonsForm.AWS.displayName">
-                                <td>{{vm.addonsForm.AWS.displayName}}
-                                  <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonKeys.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.AWS.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.amazonKeys.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.amazonKeys.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.AWS_IAM.displayName">
-                                <td>{{vm.addonsForm.AWS_IAM.displayName}}
-                                  <span ng-if="vm.addonsForm.AWS_IAM.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonIamRole.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.AWS_IAM.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                  <input ng-if="vm.addonsForm.AWS_IAM.isEnabled" type="text" name="awsAccountId"
-                                    class="form-control input-sm m-t-20" placeholder="Your aws account ID"
-                                    ng-model="vm.addonsForm.systemSettings.awsAccountId"
-                                    ng-disabled="vm.installingAddons"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.amazonIamRole.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.amazonIamRole.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                  <input ng-if="vm.addonsForm.amazonIamRole.isEnabled" type="text" name="awsAccountId"
-                                    class="form-control input-sm m-t-20" placeholder="Your aws account ID"
-                                    ng-model="vm.addonsForm.systemSettings.awsAccountId"
-                                    ng-disabled="vm.installingAddons"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.AZURE_DCOS.displayName">
-                                <td>{{vm.addonsForm.AZURE_DCOS.displayName}}
-                                  <span ng-if="vm.addonsForm.AZURE_DCOS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.azureDcosKey.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.AZURE_DCOS.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.azureDcosKey.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.azureDcosKey.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.azureKeys.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.azureKeys.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.CLUSTER.displayName">
-                                <td>{{vm.addonsForm.CLUSTER.displayName}}
-                                  <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.nodeCluster.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.CLUSTER.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.nodeCluster.displayName">
-                                <td>{{vm.addonsForm.nodeCluster.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.nodeCluster.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.DCL.displayName">
-                                <td>{{vm.addonsForm.DCL.displayName}}
-                                  <span ng-if="vm.addonsForm.DCL.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.dclKey.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.DCL.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <t>
-                                <td>{{vm.addonsForm.dclKey.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.dclKey.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.DDC.displayName">
-                                <td>{{vm.addonsForm.DDC.displayName}}
-                                  <span ng-if="vm.addonsForm.DDC.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.ddcKey.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.DDC.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.ddcKey.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.ddcKey.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.GKE.displayName">
-                                <td>{{vm.addonsForm.GKE.displayName}}
-                                  <span ng-if="vm.addonsForm.GKE.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.gcloudKey.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.GKE.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.KUBERNETES.displayName">
-                                <td>{{vm.addonsForm.KUBERNETES.displayName}}
-                                  <span ng-if="vm.addonsForm.KUBERNETES.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.kubernetesConfig.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.KUBERNETES.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.kubernetesConfig.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.kubernetesConfig.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr ng-if="vm.addonsForm.TRIPUB.displayName">
-                                <td>{{vm.addonsForm.TRIPUB.displayName}}
-                                  <span ng-if="vm.addonsForm.TRIPUB.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.joyentTritonKey.displayName}} instead.">(Deprecated)
-                                </td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.TRIPUB.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.joyentTritonKey.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.joyentTritonKey.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.DOC.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.DOC.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{vm.addonsForm.gcloudKey.displayName}}</td>
-                                <td class="text-right">
-                                  <input type="checkbox" class="js-switch"
-                                    ng-model="vm.addonsForm.gcloudKey.isEnabled"
-                                    ui-switch="{color: '#00b19d'}"
-                                  />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="col-md-6 col-sm-12">
+                <div id="enable-addons" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+
+                    <div class="portlet m-t-30">
+                      <div class="row">
+                        <div class="col-md-6 col-sm-12">
                           <div class="card-box">
-                            <h4 class="m-t-0"><b>Notifications</b></h4>
-
+                            <h4 class="m-t-0"><b>Cloud Providers</b></h4>
+                            <table class="table table-striped m-0">
+                              <tbody>
+                                <tr ng-if="vm.addonsForm.AWS.displayName">
+                                  <td>{{vm.addonsForm.AWS.displayName}}
+                                    <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonKeys.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.AWS.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.amazonKeys.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.amazonKeys.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.AWS_IAM.displayName">
+                                  <td>{{vm.addonsForm.AWS_IAM.displayName}}
+                                    <span ng-if="vm.addonsForm.AWS_IAM.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonIamRole.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                    <input ng-if="vm.addonsForm.AWS_IAM.isEnabled" type="text" name="awsAccountId"
+                                      class="form-control input-sm m-t-20" placeholder="Your aws account ID"
+                                      ng-model="vm.addonsForm.systemSettings.awsAccountId"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.AWS_IAM.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.amazonIamRole.displayName}}
+                                    <input ng-if="vm.addonsForm.amazonIamRole.isEnabled" type="text" name="awsAccountId"
+                                      class="form-control input-sm m-t-20" placeholder="Your aws account ID"
+                                      ng-model="vm.addonsForm.systemSettings.awsAccountId"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.amazonIamRole.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.AZURE_DCOS.displayName">
+                                  <td>{{vm.addonsForm.AZURE_DCOS.displayName}}
+                                    <span ng-if="vm.addonsForm.AZURE_DCOS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.azureDcosKey.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.AZURE_DCOS.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.azureDcosKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.azureDcosKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.azureKeys.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.azureKeys.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.CLUSTER.displayName">
+                                  <td>{{vm.addonsForm.CLUSTER.displayName}}
+                                    <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.nodeCluster.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.CLUSTER.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.nodeCluster.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.nodeCluster.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.DCL.displayName">
+                                  <td>{{vm.addonsForm.DCL.displayName}}
+                                    <span ng-if="vm.addonsForm.DCL.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.dclKey.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.DCL.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <t>
+                                  <td>{{vm.addonsForm.dclKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.dclKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.DDC.displayName">
+                                  <td>{{vm.addonsForm.DDC.displayName}}
+                                    <span ng-if="vm.addonsForm.DDC.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.ddcKey.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.DDC.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.ddcKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.ddcKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.GKE.displayName">
+                                  <td>{{vm.addonsForm.GKE.displayName}}
+                                    <span ng-if="vm.addonsForm.GKE.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.gcloudKey.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.GKE.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.KUBERNETES.displayName">
+                                  <td>{{vm.addonsForm.KUBERNETES.displayName}}
+                                    <span ng-if="vm.addonsForm.KUBERNETES.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.kubernetesConfig.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.KUBERNETES.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.kubernetesConfig.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.kubernetesConfig.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.TRIPUB.displayName">
+                                  <td>{{vm.addonsForm.TRIPUB.displayName}}
+                                    <span ng-if="vm.addonsForm.TRIPUB.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.joyentTritonKey.displayName}} instead.">(Deprecated)
+                                    <span class="md md-info"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.TRIPUB.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.joyentTritonKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.joyentTritonKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.DOC.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.DOC.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.gcloudKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.gcloudKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-md-6 col-sm-12">
-                        <div class="card-box">
-                          <h4 class="m-t-0"><b>Registries</b></h4>
-
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="card-box">
+                              <h4 class="m-t-0"><b>Notifications</b></h4>
+                              <table class="table table-striped m-0">
+                                <tbody>
+                                  <tr ng-if="vm.addonsForm.webhook.displayName">
+                                    <td>{{vm.addonsForm.webhook.displayName}}
+                                      <span ng-if="vm.addonsForm.webhook.isDeprecated"
+                                        title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use Generic {{vm.addonsForm.webhookV2.displayName}} instead.">
+                                          (Deprecated) <span class="md md-info"></span>
+                                      </span>
+                                    </td>
+                                    <td class="text-right">
+                                      <input type="checkbox" class="js-switch"
+                                        ng-model="vm.addonsForm.webhook.isEnabled"
+                                        ui-switch="{color: '#00b19d'}"
+                                      />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>{{vm.addonsForm.webhookV2.displayName}}</td>
+                                    <td class="text-right">
+                                      <input type="checkbox" class="js-switch"
+                                        ng-model="vm.addonsForm.webhookV2.isEnabled"
+                                        ui-switch="{color: '#00b19d'}"
+                                      />
+                                    </td>
+                                  </tr>
+                                  <tr ng-if="vm.addonsForm.hipchat.displayName">
+                                    <td>{{vm.addonsForm.hipchat.displayName}}
+                                      <span ng-if="vm.addonsForm.hipchat.isDeprecated"
+                                        title="This integration has been deprecated. Please use Generic {{vm.addonsForm.hipchatKey.displayName}} instead.">
+                                          (Deprecated) <span class="md md-info"></span>
+                                      </span>
+                                    </td>
+                                    <td class="text-right">
+                                      <input type="checkbox" class="js-switch"
+                                        ng-model="vm.addonsForm.hipchat.isEnabled"
+                                        ui-switch="{color: '#00b19d'}"
+                                      />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>{{vm.addonsForm.hipchatKey.displayName}}</td>
+                                    <td class="text-right">
+                                      <input type="checkbox" class="js-switch"
+                                        ng-model="vm.addonsForm.hipchatKey.isEnabled"
+                                        ui-switch="{color: '#00b19d'}"
+                                      />
+                                    </td>
+                                  </tr>
+                                  <tr ng-if="vm.addonsForm.irc.displayName">
+                                    <td>{{vm.addonsForm.irc.displayName}}
+                                      <span ng-if="vm.addonsForm.irc.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created. If enabled, existing integrations can continue to be used. Please enable IRC in the install panel instead.">(Deprecated)
+                                      <span class="md md-info"></span></span>
+                                    </td>
+                                    <td class="text-right">
+                                      <input type="checkbox" class="js-switch"
+                                        ng-model="vm.addonsForm.irc.isEnabled"
+                                        ui-switch="{color: '#00b19d'}"
+                                      />
+                                    </td>
+                                  </tr>
+                                  <tr ng-if="vm.addonsForm.Slack.displayName">
+                                    <td>{{vm.addonsForm.Slack.displayName}}
+                                      <span ng-if="vm.addonsForm.Slack.isDeprecated"
+                                      title="This integration has been deprecated. Use Generic {{vm.addonsForm.slackKey.displayName}} instead.">
+                                        (Deprecated) <span class="md md-info"></span></span>
+                                    </td>
+                                    <td class="text-right">
+                                      <input type="checkbox" class="js-switch"
+                                        ng-model="vm.addonsForm.Slack.isEnabled"
+                                        ui-switch="{color: '#00b19d'}"
+                                      />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>{{vm.addonsForm.slackKey.displayName}}</td>
+                                    <td class="text-right">
+                                      <input type="checkbox" class="js-switch"
+                                        ng-model="vm.addonsForm.slackKey.isEnabled"
+                                        ui-switch="{color: '#00b19d'}"
+                                      />
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
                         </div>
                       </div>
-                      <div class="col-md-6 col-sm-12">
-                        <div class="card-box">
-                          <h4 class="m-t-0"><b>Others</b></h4>
 
+                      <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                          <div class="card-box">
+                            <h4 class="m-t-0"><b>Registries</b></h4>
+                            
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="card-box">
+                            <h4 class="m-t-0"><b>Others</b></h4>
+                            
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <button class="btn btn-md btn-primary waves-effect waves-light m-t-10 pull-right"
-                      type="button" ng-click="vm.installAddons()"
-                      ng-disabled="vm.installingAddons">
-                      <div ng-if="vm.installingAddons">
-                        Installing...
-                      </div>
-                      <div ng-if="!vm.installingAddons">
-                        Install Add-ons
-                      </div>
-                    </button>
-                    <div class="clearfix"></div>
-                  </div> <!-- end portlet -->
-
-                </div><!-- END portlet-body -->
-              </div><!-- END addons -->
-            </div><!-- END portlet -->
-          </div><!-- END col-md-12 -->
-        </div>
+                      <button class="btn btn-md btn-primary waves-effect waves-light m-t-10 pull-right"
+                        type="button" ng-click="vm.installAddons()"
+                        ng-disabled="vm.installingAddons">
+                        <div ng-if="vm.installingAddons">
+                          Installing...
+                        </div>
+                        <div ng-if="!vm.installingAddons">
+                          Install Add-ons
+                        </div>
+                      </button>
+                      <div class="clearfix"></div>
+                    </div> <!-- end portlet -->
+  
+                  </div><!-- END portlet-body -->
+                </div><!-- END addons -->
+              </div><!-- END portlet -->
+            </div><!-- END col-md-12 -->
+          </div>
+        </section>
         <!-- end enable addons section -->
       </section>
 
