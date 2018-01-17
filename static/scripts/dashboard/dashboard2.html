@@ -1892,19 +1892,9 @@
               <p>
                 &nbsp;
               </p>
-              <button ng-if="!vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices">
-                <!-- ng-click="vm.install()"> -->
-                <div ng-if="vm.installing">
-                  Installing...
-                </div>
-                <div ng-if="!vm.installing">
-                  Install
-                </div>
-              </button>
               <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave">
-                <!-- ng-click="vm.showSaveModal()"> -->
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave"
+                ng-click="vm.showSaveModal()">
                 <div ng-if="vm.saving">
                   Saving...
                 </div>
@@ -1913,8 +1903,8 @@
                 </div>
               </button>
               <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices">
-                <!-- ng-click="vm.showRestartServicesModal()"> -->
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices"
+                ng-click="vm.showRestartServicesModal()">
                 <div ng-if="vm.restartingServices">
                   Restarting...
                 </div>
