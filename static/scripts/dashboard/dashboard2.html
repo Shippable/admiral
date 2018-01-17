@@ -883,6 +883,44 @@
               </div>
             </div>
           </div>
+          <!-- mktg Config Section -->
+          <div class="row" ng-if="!vm.admiralEnv.IS_SERVER">
+            <div class="col-md-12">
+              <div class="portlet">
+                <div class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    mktg
+                  </h3>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="portlet-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="card-box">
+                        <h4 class="m-t-0 header-title"><b>mktg</b></h4>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <form class="form-horizontal" role="form" name="vm.mktgInstallForm" novalidate>
+                              <div class="form-group">
+                                <label class="col-md-2 control-label">URL</label>
+                                <div class="col-md-6">
+                                  <input type="url" class="form-control" name="mktgUrl"
+                                    ng-model="vm.installForm.mktg.url.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                  <dd class="text-danger" ng-show="vm.mktgInstallForm.mktgUrl.$dirty">
+                                    <span ng-show="vm.mktgInstallForm.mktgUrl.$error.url">URL is invalid.</span>
+                                  </dd>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </section>
       <section id="addons" ng-if="vm.sectionSelected === 'addons'">
