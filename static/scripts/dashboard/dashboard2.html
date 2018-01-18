@@ -1608,6 +1608,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.AWS.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1617,6 +1618,7 @@
                                   <td>{{vm.addonsForm.amazonKeys.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.amazonKeys.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1634,6 +1636,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.AWS_IAM.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1649,6 +1652,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.amazonIamRole.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1661,6 +1665,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.AZURE_DCOS.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1670,6 +1675,7 @@
                                   <td>{{vm.addonsForm.azureDcosKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.azureDcosKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1679,6 +1685,7 @@
                                   <td>{{vm.addonsForm.azureKeys.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.azureKeys.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1691,6 +1698,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.CLUSTER.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1700,6 +1708,7 @@
                                   <td>{{vm.addonsForm.nodeCluster.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.nodeCluster.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1712,6 +1721,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.DCL.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1721,6 +1731,7 @@
                                   <td>{{vm.addonsForm.dclKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.dclKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1733,6 +1744,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.DDC.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1742,6 +1754,7 @@
                                   <td>{{vm.addonsForm.ddcKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.ddcKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1754,6 +1767,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.GKE.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1766,6 +1780,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.KUBERNETES.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1775,6 +1790,7 @@
                                   <td>{{vm.addonsForm.kubernetesConfig.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.kubernetesConfig.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1787,6 +1803,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.TRIPUB.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1796,6 +1813,7 @@
                                   <td>{{vm.addonsForm.joyentTritonKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.joyentTritonKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1805,6 +1823,7 @@
                                   <td>{{vm.addonsForm.DOC.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.DOC.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1814,6 +1833,7 @@
                                   <td>{{vm.addonsForm.gcloudKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.gcloudKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1838,6 +1858,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.webhook.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1847,6 +1868,7 @@
                                   <td>{{vm.addonsForm.webhookV2.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.webhookV2.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1861,6 +1883,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.hipchat.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1870,6 +1893,7 @@
                                   <td>{{vm.addonsForm.hipchatKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.hipchatKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1882,6 +1906,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.irc.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1895,6 +1920,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.Slack.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1904,6 +1930,7 @@
                                   <td>{{vm.addonsForm.slackKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.slackKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1924,6 +1951,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.ECR.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1936,6 +1964,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.amazonKeys.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1948,6 +1977,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.Docker.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1960,6 +1990,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm['Docker Trusted Registry'].isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1972,6 +2003,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.GCR.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1984,6 +2016,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.artifactory.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1993,6 +2026,7 @@
                                   <td>{{vm.addonsForm.artifactoryKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.artifactoryKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2005,6 +2039,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm['Private Docker Registry'].isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2017,6 +2052,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm['Quay.io'].isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2026,6 +2062,7 @@
                                   <td>{{vm.addonsForm.quayLogin.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.quayLogin.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2035,6 +2072,7 @@
                                   <td>{{vm.addonsForm.dockerRegistryLogin.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.dockerRegistryLogin.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2060,6 +2098,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm['pem-key'].isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2069,6 +2108,7 @@
                                   <td>{{vm.addonsForm.pemKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.pemKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2078,6 +2118,7 @@
                                   <td>{{vm.addonsForm.sshKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.sshKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2087,6 +2128,7 @@
                                   <td>{{vm.addonsForm.keyValuePair.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.keyValuePair.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2099,6 +2141,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.MAZ.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2111,6 +2154,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.GCL.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2120,6 +2164,7 @@
                                   <td>{{vm.addonsForm.gitCredential.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.gitCredential.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2137,6 +2182,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.clearbit.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2154,6 +2200,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.intercom.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2177,6 +2224,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.deploy.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2224,6 +2272,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2259,6 +2308,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.payment.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
