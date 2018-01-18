@@ -1056,6 +1056,94 @@
               </div>
             </div>
           </div>
+          <!-- Auth Config Section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+                <div data-toggle="collapse" data-target="#auth" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Authorization and Source Control Management (SCM) Providers
+                  </h3>
+                  <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-target="#auth"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div id="auth" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Bitbucket</b></h4>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card-box">
+                                <div class="checkbox checkbox-primary checkbox-inline">
+                                  <input id="checkbox_for_bb_auth" type="checkbox"
+                                    ng-model="vm.installForm.auth.bitbucketKeys.isEnabled"  ng-change="vm.toggleAuthProvider('bitbucket')"/>
+                                  <label for="checkbox_for_bb_auth">
+                                    <b> Auth </b>
+                                  </label>
+                                </div>
+                                <div class="checkbox checkbox-primary checkbox-inline">
+                                  <input id="checkbox_for_bb_scm" type="checkbox"
+                                    ng-model="vm.installForm.scm.bitbucket.isEnabled" ng-disabled="vm.installForm.auth.bitbucketKeys.isEnabled"/>
+                                  <label for="checkbox_for_bb_scm">
+                                    <b> SCM </b>
+                                  </label>
+                                </div>
+                                <div class="row" ng-if="vm.installForm.auth.bitbucketKeys.isEnabled">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Client ID</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="bitbucketClientId"
+                                          ng-model="vm.installForm.auth.bitbucketKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Client Secret</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="bitbucketClientSecret"
+                                          ng-model="vm.installForm.auth.bitbucketKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="bitbucketUrl"
+                                          ng-model="vm.installForm.auth.bitbucketKeys.data.url" ng-disabled="true"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">WWW URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="bitbucketWWWUrl"
+                                          ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group" ng-if="vm.installForm.auth.bitbucketKeys.callbackUrl">
+                                        <label class="col-md-2 control-label">Callback URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="bitbucketCallbackUrl"
+                                          ng-model="vm.installForm.auth.bitbucketKeys.callbackUrl" readonly />
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- WWW Config Section -->
           <div class="row">
             <div class="col-md-12">
@@ -1666,7 +1754,82 @@
                         <div class="col-md-6 col-sm-12">
                           <div class="card-box">
                             <h4 class="m-t-0"><b>Others</b></h4>
-
+                            <table class="table table-striped m-0">
+                              <tbody>
+                                <tr ng-if="vm.addonsForm['pem-key'].displayName">
+                                  <td>{{vm.addonsForm['pem-key'].displayName}}
+                                    <span ng-if="vm.addonsForm['pem-key'].isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.pemKey.displayName}} instead.">(Deprecated)
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm['pem-key'].isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.pemKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.pemKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.showNewSshKeyInt">
+                                  <td>{{vm.addonsForm.sshKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.sshKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.keyValuePair.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.keyValuePair.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm['MAZ'].displayName">
+                                  <td>{{vm.addonsForm['MAZ'].displayName}}
+                                    <span ng-if="vm.addonsForm.MAZ.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.azureKeys.displayName}} instead.">(Deprecated)
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.MAZ.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.GCL.displayName">
+                                  <td>{{vm.addonsForm.GCL.displayName}}
+                                    <span ng-if="vm.addonsForm.GCL.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.gcloudKey.displayName}} instead.">(Deprecated)
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.GCL.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.gitCredential.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.gitCredential.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       </div>
