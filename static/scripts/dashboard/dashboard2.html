@@ -1828,6 +1828,63 @@
                                     />
                                   </td>
                                 </tr>
+                                <!-- clearbit -->
+                                <tr ng-if="vm.addonsForm.systemIntegrations.clearbit.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                                  <td>Clearbit
+                                    <input type="text" name="clearbitApiKey"
+                                      ng-if="vm.addonsForm.systemIntegrations.clearbit.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="Your clearbit API key"
+                                      ng-model="vm.addonsForm.systemIntegrations.clearbit.data.envs.clearbitApiKey"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.systemIntegrations.clearbit.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <!-- intercom -->
+                                <tr ng-if="vm.addonsForm.systemIntegrations.intercom.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                                  <td>Intercom
+                                    <input type="text" name="intercomAccessToken"
+                                      ng-if="vm.addonsForm.systemIntegrations.intercom.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="Your intercom access token"
+                                      ng-model="vm.addonsForm.systemIntegrations.intercom.data.envs.intercomAccessToken"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.systemIntegrations.intercom.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <!-- deploy -->
+                                <tr ng-if="vm.addonsForm.systemIntegrations.deploy.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                                  <td>AWS Deploy Integration
+                                    <input type="text" name="deployAccessKey"
+                                      ng-if="vm.addonsForm.systemIntegrations.deploy.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="Your Access Key"
+                                      ng-model="vm.addonsForm.systemIntegrations.deploy.data.accessKey"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="deploySecretKey"
+                                      ng-if="vm.addonsForm.systemIntegrations.deploy.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="Your Secret Key"
+                                      ng-model="vm.addonsForm.systemIntegrations.deploy.data.secretKey"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.systemIntegrations.deploy.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
                               </tbody>
                             </table>
                           </div>
