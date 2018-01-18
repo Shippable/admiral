@@ -1666,7 +1666,82 @@
                         <div class="col-md-6 col-sm-12">
                           <div class="card-box">
                             <h4 class="m-t-0"><b>Others</b></h4>
-
+                            <table class="table table-striped m-0">
+                              <tbody>
+                                <tr ng-if="vm.addonsForm['pem-key'].displayName">
+                                  <td>{{vm.addonsForm['pem-key'].displayName}}
+                                    <span ng-if="vm.addonsForm['pem-key'].isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.pemKey.displayName}} instead.">(Deprecated)
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm['pem-key'].isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.pemKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.pemKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.showNewSshKeyInt">
+                                  <td>{{vm.addonsForm.sshKey.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.sshKey.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.keyValuePair.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.keyValuePair.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm['MAZ'].displayName">
+                                  <td>{{vm.addonsForm['MAZ'].displayName}}
+                                    <span ng-if="vm.addonsForm.MAZ.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.azureKeys.displayName}} instead.">(Deprecated)
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.MAZ.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr ng-if="vm.addonsForm.GCL.displayName">
+                                  <td>{{vm.addonsForm.GCL.displayName}}
+                                    <span ng-if="vm.addonsForm.GCL.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.gcloudKey.displayName}} instead.">(Deprecated)
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.GCL.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.gitCredential.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.gitCredential.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       </div>
