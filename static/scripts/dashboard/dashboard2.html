@@ -1641,13 +1641,6 @@
                                         <div class="m-b-20 font-14 col-md-offset-1 col-md-4">
                                           Specify your machine image settings:
                                         </div>
-                                        <div class=" m-b-20 font-14 col-md-offset-2 col-md-4">
-                                          <button class="btn btn-danger btn-sm"
-                                            ng-disabled="vm.installForm.systemMachineImages.length === 1"
-                                            ng-click="vm.removeSystemMachineImage(machineImage)">
-                                            Remove
-                                          </button>
-                                        </div>
                                       </div>
                                       <div class="form-group">
                                         <label class="col-md-2 control-label">Name</label>
@@ -1675,10 +1668,9 @@
                                       </div>
                                       <div class="form-group">
                                         <label class="col-md-2 control-label">
-                                          isAvailable <span>
-                                            <a title="This is available for the user to select form the dropdown in the subscription settings.">
-                                            <img src="images/question_mark.png" height="16px" style="vertical-align: text-top !important"/>
-                                            </a>
+                                          isAvailable
+                                          <span title="This is available for the user to select form the dropdown in the subscription settings.">
+                                            <span class="glyphicon glyphicon-info-sign"></span>
                                           </span>
                                         </label>
                                         <div class="col-md-6" ng-class="machineImage.isAvailable ? '' : 'has-error'">
@@ -1688,25 +1680,23 @@
                                       </div>
                                       <div class="form-group">
                                         <label class="col-md-2 control-label">
-                                          isDefault <span>
-                                            <a title="This is the default machine image.">
-                                            <img src="images/question_mark.png" height="16px" style="vertical-align: text-top !important"/>
-                                            </a>
+                                          isDefault
+                                          <span title="This is the default machine image.">
+                                            <span class="glyphicon glyphicon-info-sign"></span>
                                           </span>
                                         </label>
                                         <div class="col-md-6">
                                           <input type="text" class="form-control" name="machineImage{{$index}}IsDefault"
                                           ng-model="machineImage.isDefault" ng-disabled="vm.installing || vm.saving ||
-                                      (!machineImage.isDefault && machineImage.archTypeCode === vm.x86ArchCode && vm.hasDefaultx86SystemMachineImage()) ||
-                                      (!machineImage.isDefault && machineImage.archTypeCode === vm.armArchCode && vm.hasDefaultArmSystemMachineImage())"/>
+                                          (!machineImage.isDefault && machineImage.archTypeCode === vm.x86ArchCode && vm.hasDefaultx86SystemMachineImage()) ||
+                                          (!machineImage.isDefault && machineImage.archTypeCode === vm.armArchCode && vm.hasDefaultArmSystemMachineImage())"/>
                                         </div>
                                       </div>
                                       <div class="form-group">
                                         <label class="col-md-2 control-label">
-                                          Shippable AMI Id <span>
-                                            <a target="_blank" href="http://docs.shippable.com/reference/machine-images-overview/" title="Please click here to see the list of all the ami with their versions">
-                                              <img src="images/question_mark.png" height="16px" style="vertical-align: text-top !important"/>
-                                            </a>
+                                          Shippable AMI Id
+                                            <span target="_blank" href="http://docs.shippable.com/reference/machine-images-overview/" title="Please click here to see the list of all the ami with their versions">
+                                              <span class="glyphicon glyphicon-info-sign"></span>
                                           </span>
                                         </label>
                                         <div class="col-md-6" ng-class="machineImage.externalId ? '' : 'has-error'">
@@ -1782,6 +1772,15 @@
                                         <div class="col-md-6" ng-class="machineImage.sshPort ? '' : 'has-error'">
                                           <input type="text" class="form-control" name="machineImage{{$index}}SSHPort"
                                           ng-model="machineImage.sshPort" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class=" m-b-20 font-14 col-md-offset-2 col-md-4">
+                                          <button class="btn btn-danger btn-sm"
+                                            ng-disabled="vm.installForm.systemMachineImages.length === 1"
+                                            ng-click="vm.removeSystemMachineImage(machineImage)">
+                                            Remove
+                                          </button>
                                         </div>
                                       </div>
                                       <hr/>
