@@ -1399,6 +1399,31 @@ do $$
       roleCode := 6060
     );
 
+    -- set clusters routeRoles
+    perform set_route_role(
+      routePattern := '/clusters',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/clusters',
+      httpVerb := 'GET',
+      roleCode := 6000
+    );
+
+    perform set_route_role(
+      routePattern := '/clusters',
+      httpVerb := 'GET',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/clusters',
+      httpVerb := 'GET',
+      roleCode := 6020
+    );
+
     -- set clusterNodes routeRoles
 
     perform set_route_role(
