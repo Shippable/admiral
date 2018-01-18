@@ -1850,6 +1850,52 @@
               </div>
             </div>
           </div>
+          <!-- Services Section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+                <div data-toggle="collapse" data-target="#servicesConfig" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Services
+                  </h3>
+                  <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-target="#servicesConfig"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div id="servicesConfig" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+                    <p ng-if="!vm.requireRestart">
+                      Please click <i>Install</i> button below first to view services.
+                    </p>
+                    <!-- Core Services -->
+                    <table class="table table-striped m-0" ng-if="vm.requireRestart">
+                      <tbody>
+                        <tr ng-repeat="service in vm.allServices | orderBy: 'serviceName'"
+                          ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">
+                          <td colspan="4">
+                            <b>{{service.serviceName}}</b>
+                          </td>
+                          <td class="text-right">
+                            Replicas:
+                          </td>
+                          <td>
+                            <span ng-if="vm.isGlobalService(service.serviceName)">
+                              {{service.replicas}}
+                            </span>
+                            <input ng-if="!vm.isGlobalService(service.serviceName)"
+                              class="form-control input-sm"
+                              type=number ng-model="service.replicas" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Install and Save buttons -->
           <div class="row">
             <div class="col-md-12 text-right">
@@ -2741,20 +2787,19 @@
               </div><!-- END portlet -->
             </div><!-- END col-md-12 -->
           </div>
+          <button class="btn btn-md btn-primary waves-effect waves-light m-t-10 pull-right"
+            type="button" ng-click="vm.installAddons()"
+            ng-disabled="vm.installingAddons">
+            <div ng-if="vm.installingAddons">
+              Installing...
+            </div>
+            <div ng-if="!vm.installingAddons">
+              Install Add-ons
+            </div>
+          </button>
+          <div class="clearfix"></div>
         </section>
 
-
-        <button class="btn btn-md btn-primary waves-effect waves-light m-t-10 pull-right"
-          type="button" ng-click="vm.installAddons()"
-          ng-disabled="vm.installingAddons">
-          <div ng-if="vm.installingAddons">
-            Installing...
-          </div>
-          <div ng-if="!vm.installingAddons">
-            Install Add-ons
-          </div>
-        </button>
-        <div class="clearfix"></div>
         <!-- end enable addons section -->
       </section>
 
