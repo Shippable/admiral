@@ -1548,6 +1548,290 @@
                         </div>
                       </div>
                     </div>
+                    <!-- Gitlab -->
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Nodes</b></h4>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card-box">
+                                <div class="checkbox checkbox-primary">
+                                  <input id="checkbox_for_system_nodes" type="checkbox"
+                                    ng-model="vm.installForm.systemSettings.allowSystemNodes" ng-disabled="vm.installing || vm.saving"/>
+                                  <label for="checkbox_for_system_nodes">
+                                    <b> Enable system nodes (always-running nodes, available to any user) </b>
+                                  </label>
+                                </div>
+                                <div>&nbsp</div>
+                                <div class="checkbox checkbox-primary">
+                                  <input id="checkbox_for_custom_nodes" type="checkbox"
+                                    ng-model="vm.installForm.systemSettings.allowCustomNodes" ng-disabled="vm.installing || vm.saving"/>
+                                  <label for="checkbox_for_custom_nodes">
+                                    <b> Enable custom nodes (users can attach always-running nodes to their subscription) </b>
+                                  </label>
+                                </div>
+                                <div class="checkbox checkbox-primary col-md-offset-1" ng-if="vm.installForm.systemSettings.allowCustomNodes">
+                                  <input id="checkbox_for_custom_nodes_admin" type="checkbox"
+                                    ng-model="vm.installForm.systemSettings.customNodesAdminOnly" ng-disabled="vm.installing || vm.saving"/>
+                                  <label for="checkbox_for_custom_nodes_admin">
+                                    <b> Restrict custom node creation to superUsers only </b>
+                                  </label>
+                                </div>
+                                <div>&nbsp</div>
+                                <div class="checkbox checkbox-primary">
+                                  <input id="checkbox_for_dynamic_nodes" type="checkbox"
+                                    ng-model="vm.installForm.systemSettings.allowDynamicNodes" ng-change="vm.installForm.provision.amazonKeys.isEnabled = vm.installForm.systemSettings.allowDynamicNodes" ng-disabled="vm.installing || vm.saving"/>
+                                  <label for="checkbox_for_dynamic_nodes">
+                                    <b> Enable dynamic nodes (nodes are created and deleted as needed) </b>
+                                  </label>
+                                </div>
+                                <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="m-b-20 font-14 col-md-offset-1">
+                                        Enter AWS access key and secret for node provisioning:
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Access Key</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="provisionAccessKey"
+                                          ng-model="vm.installForm.provision.amazonKeys.data.accessKey" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Secret Key</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="provisionSecretKey"
+                                          ng-model="vm.installForm.provision.amazonKeys.data.secretKey" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div>&nbsp</div>
+                                <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="m-b-20 font-14 col-md-offset-1">
+                                        Select the default size of provisioned nodes:
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Instance size</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="defaultMinionInstanceSize"
+                                          ng-model="vm.installForm.systemSettings.defaultMinionInstanceSize" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div>&nbsp</div>
+                                <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                                  <div class="col-md-12">
+                                    <div class="row has-error" ng-if="!vm.hasDefaultx86SystemMachineImage() && vm.installForm.systemSettings.allowDynamicNodes">
+                                      <div class="help-block m-b-20 font-14 col-md-offset-1 col-md-4">
+                                        One machine image must be default.
+                                      </div>
+                                    </div>
+                                    <form class="form-horizontal" role="form"  ng-repeat="machineImage in vm.installForm.systemMachineImages">
+                                      <div class="row">
+                                        <div class="m-b-20 font-14 col-md-offset-1 col-md-4">
+                                          Specify your machine image settings:
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Name</label>
+                                        <div class="col-md-6" ng-class="machineImage.name ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}Name"
+                                          ng-model="machineImage.name" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Description</label>
+                                        <div class="col-md-6" ng-class="machineImage.description ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}Description"
+                                          ng-model="machineImage.description" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Architecture</label>
+                                        <div class="col-md-6">
+                                          <select class="form-control"
+                                            ng-model="machineImage.archTypeCode"
+                                            ng-init="machineImage.archTypeCode = machineImage.archTypeCode || vm.archTypes[0].code"
+                                            ng-options="arch.code as arch.name for arch in vm.archTypes">
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                          isAvailable
+                                          <span title="This is available for the user to select form the dropdown in the subscription settings.">
+                                            <span class="glyphicon glyphicon-info-sign"></span>
+                                          </span>
+                                        </label>
+                                        <div class="col-md-6" ng-class="machineImage.isAvailable ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}IsAvailable"
+                                          ng-model="machineImage.isAvailable" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                          isDefault
+                                          <span title="This is the default machine image.">
+                                            <span class="glyphicon glyphicon-info-sign"></span>
+                                          </span>
+                                        </label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}IsDefault"
+                                          ng-model="machineImage.isDefault" ng-disabled="vm.installing || vm.saving ||
+                                          (!machineImage.isDefault && machineImage.archTypeCode === vm.x86ArchCode && vm.hasDefaultx86SystemMachineImage()) ||
+                                          (!machineImage.isDefault && machineImage.archTypeCode === vm.armArchCode && vm.hasDefaultArmSystemMachineImage())"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                          Shippable AMI Id
+                                            <span target="_blank" href="http://docs.shippable.com/reference/machine-images-overview/" title="Please click here to see the list of all the ami with their versions">
+                                              <span class="glyphicon glyphicon-info-sign"></span>
+                                          </span>
+                                        </label>
+                                        <div class="col-md-6" ng-class="machineImage.externalId ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}ExternalId"
+                                          ng-model="machineImage.externalId" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Provider</label>
+                                        <div class="col-md-6" ng-class="machineImage.provider ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}Provider"
+                                          ng-model="machineImage.provider" ng-disabled="true"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Region</label>
+                                        <div class="col-md-6" ng-class="machineImage.region ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}Region"
+                                          ng-model="machineImage.region" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Key pair name</label>
+                                        <div class="col-md-6" ng-class="machineImage.keyName ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}KeyName"
+                                          ng-model="machineImage.keyName" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">runSh Image</label>
+                                        <div class="col-md-6" ng-class="machineImage.runShImage ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}RunShImage"
+                                          ng-model="machineImage.runShImage" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Security group id</label>
+                                        <div class="col-md-6" ng-class="machineImage.securityGroup ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}SecurityGroup"
+                                          ng-model="machineImage.securityGroup" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Subnet ID</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}SubnetId"
+                                          ng-model="machineImage.subnetId" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Drydock Tag</label>
+                                        <div class="col-md-6" ng-class="machineImage.drydockTag ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}DrydockTag"
+                                          ng-model="machineImage.drydockTag" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Drydock Family</label>
+                                        <div class="col-md-6" ng-class="machineImage.drydockFamily ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}DrydockFamily"
+                                          ng-model="machineImage.drydockFamily" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">SSH User</label>
+                                        <div class="col-md-6" ng-class="machineImage.sshUser ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}SSHUser"
+                                          ng-model="machineImage.sshUser" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">SSH Port</label>
+                                        <div class="col-md-6" ng-class="machineImage.sshPort ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}SSHPort"
+                                          ng-model="machineImage.sshPort" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class=" m-b-20 font-14 col-md-offset-2 col-md-4">
+                                          <button class="btn btn-danger btn-sm"
+                                            ng-disabled="vm.installForm.systemMachineImages.length === 1"
+                                            ng-click="vm.removeSystemMachineImage(machineImage)">
+                                            Remove
+                                          </button>
+                                        </div>
+                                      </div>
+                                      <hr/>
+                                    </form>
+                                  </div>
+                                </div>
+                                <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                                  <div class="col-md-offset-2 col-md-6 text-center">
+                                    <button class="btn btn-sm btn-default" ng-click="vm.addSystemMachineImage()">
+                                      Add another machine image
+                                    </button>
+                                  </div>
+                                </div>
+                                <hr/>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Default cluster type created for a subscription</label>
+                                        <div class="col-md-6">
+                                          <select class="form-control"
+                                            ng-model="vm.installForm.systemSettings.defaultClusterType"
+                                            ng-options="clusterType.name as clusterType.name for clusterType in vm.clusterTypes">
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                                <hr/>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Location of node provisioning scripts</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="nodeScriptsLocation"
+                                            ng-model="vm.installForm.systemSettings.nodeScriptsLocation" ng-disabled="vm.installing || vm.saving"/>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1575,14 +1859,14 @@
           </div>
         </section>
         <section ng-if="vm.isLoaded && vm.initialized">
-          <!-- start enable addons section -->
+          <!-- start enable cloudproviders section -->
           <div class="row">
             <div class="col-md-12">
               <div class="portlet">
 
                 <div data-toggle="collapse" data-target="#enable-addons" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
-                    Enable account integrations for your users
+                    Cloud Providers
                   </h3>
                   <div class="portlet-widgets">
                     <span class="divider"></span>
@@ -1598,7 +1882,6 @@
                       <div class="row">
                         <div class="col-md-6 col-sm-12">
                           <div class="card-box">
-                            <h4 class="m-t-0"><b>Cloud Providers</b></h4>
                             <table class="table table-striped m-0">
                               <tbody>
                                 <tr ng-if="vm.addonsForm.AWS.displayName">
@@ -1608,6 +1891,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.AWS.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1617,6 +1901,7 @@
                                   <td>{{vm.addonsForm.amazonKeys.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.amazonKeys.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1634,6 +1919,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.AWS_IAM.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1649,6 +1935,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.amazonIamRole.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1661,6 +1948,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.AZURE_DCOS.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1670,6 +1958,7 @@
                                   <td>{{vm.addonsForm.azureDcosKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.azureDcosKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1679,6 +1968,7 @@
                                   <td>{{vm.addonsForm.azureKeys.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.azureKeys.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1691,6 +1981,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.CLUSTER.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1700,6 +1991,7 @@
                                   <td>{{vm.addonsForm.nodeCluster.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.nodeCluster.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1712,6 +2004,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.DCL.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1721,6 +2014,7 @@
                                   <td>{{vm.addonsForm.dclKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.dclKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1733,6 +2027,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.DDC.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1742,6 +2037,7 @@
                                   <td>{{vm.addonsForm.ddcKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.ddcKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1754,6 +2050,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.GKE.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1766,6 +2063,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.KUBERNETES.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1775,6 +2073,7 @@
                                   <td>{{vm.addonsForm.kubernetesConfig.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.kubernetesConfig.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1787,6 +2086,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.TRIPUB.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1796,6 +2096,7 @@
                                   <td>{{vm.addonsForm.joyentTritonKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.joyentTritonKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1805,6 +2106,7 @@
                                   <td>{{vm.addonsForm.DOC.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.DOC.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1814,6 +2116,7 @@
                                   <td>{{vm.addonsForm.gcloudKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.gcloudKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1823,10 +2126,40 @@
                             </table>
                           </div>
                         </div>
+                      </div>
+
+                    </div> <!-- end portlet -->
+
+                  </div><!-- END portlet-body -->
+                </div><!-- END addons -->
+              </div><!-- END portlet -->
+            </div><!-- END col-md-12 -->
+          </div>
+
+          <!-- start enable notifications section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+
+                <div data-toggle="collapse" data-target="#enable-addons-notifications" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Notifications
+                  </h3>
+                  <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-target="#enable-addons-notifications"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div id="enable-addons-notifications" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+
+                    <div class="portlet m-t-30">
+                      <div class="row">
                         <div class="col-md-6 col-sm-12">
                           <!-- start Notifications -->
                           <div class="card-box">
-                            <h4 class="m-t-0"><b>Notifications</b></h4>
                             <table class="table table-striped m-0">
                               <tbody>
                                 <tr ng-if="vm.addonsForm.webhook.displayName">
@@ -1838,6 +2171,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.webhook.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1847,6 +2181,7 @@
                                   <td>{{vm.addonsForm.webhookV2.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.webhookV2.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1861,6 +2196,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.hipchat.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1870,6 +2206,7 @@
                                   <td>{{vm.addonsForm.hipchatKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.hipchatKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1882,6 +2219,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.irc.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1895,6 +2233,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.Slack.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1904,6 +2243,7 @@
                                   <td>{{vm.addonsForm.slackKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.slackKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1912,9 +2252,39 @@
                               </tbody>
                             </table>
                           </div>
-                          <!-- start Registries -->
+                        </div>
+                      </div>
+                    </div> <!-- end portlet -->
+
+                  </div><!-- END portlet-body -->
+                </div><!-- END addons -->
+              </div><!-- END portlet -->
+            </div><!-- END col-md-12 -->
+          </div>
+
+          <!-- start enable Registries section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+
+                <div data-toggle="collapse" data-target="#enable-addons-registries" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Registries
+                  </h3>
+                  <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-target="#enable-addons-registries"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div id="enable-addons-registries" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+
+                    <div class="portlet m-t-30">
+                      <div class="row">
+                        <div class="col-md-6 col-sm-12">
                           <div class="card-box">
-                            <h4 class="m-t-0"><b>Registries</b></h4>
                             <table class="table table-striped m-0">
                               <tbody>
                                 <tr ng-if="vm.addonsForm.ECR.displayName">
@@ -1924,6 +2294,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.ECR.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1936,6 +2307,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.amazonKeys.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1948,6 +2320,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.Docker.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1960,6 +2333,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm['Docker Trusted Registry'].isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1972,6 +2346,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.GCR.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1984,6 +2359,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.artifactory.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -1993,6 +2369,7 @@
                                   <td>{{vm.addonsForm.artifactoryKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.artifactoryKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2005,6 +2382,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm['Private Docker Registry'].isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2017,6 +2395,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm['Quay.io'].isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2026,6 +2405,7 @@
                                   <td>{{vm.addonsForm.quayLogin.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.quayLogin.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2035,6 +2415,7 @@
                                   <td>{{vm.addonsForm.dockerRegistryLogin.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.dockerRegistryLogin.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2046,11 +2427,36 @@
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- END col-md-12 -->
 
+          <!-- start enable Others section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+
+                <div data-toggle="collapse" data-target="#enable-addons-others" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Others
+                  </h3>
+                  <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-target="#enable-addons-others"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div id="enable-addons-others" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+
+                    <div class="portlet m-t-30">
                       <div class="row">
                         <div class="col-md-6 col-sm-12">
                           <div class="card-box">
-                            <h4 class="m-t-0"><b>Others</b></h4>
                             <table class="table table-striped m-0">
                               <tbody>
                                 <tr ng-if="vm.addonsForm['pem-key'].displayName">
@@ -2060,6 +2466,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm['pem-key'].isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2069,6 +2476,7 @@
                                   <td>{{vm.addonsForm.pemKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.pemKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2078,6 +2486,7 @@
                                   <td>{{vm.addonsForm.sshKey.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.sshKey.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2087,6 +2496,7 @@
                                   <td>{{vm.addonsForm.keyValuePair.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.keyValuePair.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2099,6 +2509,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.MAZ.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2111,6 +2522,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.GCL.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2120,6 +2532,7 @@
                                   <td>{{vm.addonsForm.gitCredential.displayName}}</td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.gitCredential.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2137,6 +2550,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.clearbit.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2154,6 +2568,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.intercom.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2177,6 +2592,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.deploy.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2224,6 +2640,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2259,6 +2676,7 @@
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.systemIntegrations.payment.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2269,18 +2687,6 @@
                           </div>
                         </div>
                       </div>
-
-                      <button class="btn btn-md btn-primary waves-effect waves-light m-t-10 pull-right"
-                        type="button" ng-click="vm.installAddons()"
-                        ng-disabled="vm.installingAddons">
-                        <div ng-if="vm.installingAddons">
-                          Installing...
-                        </div>
-                        <div ng-if="!vm.installingAddons">
-                          Install Add-ons
-                        </div>
-                      </button>
-                      <div class="clearfix"></div>
                     </div> <!-- end portlet -->
 
                   </div><!-- END portlet-body -->
@@ -2289,6 +2695,19 @@
             </div><!-- END col-md-12 -->
           </div>
         </section>
+
+
+        <button class="btn btn-md btn-primary waves-effect waves-light m-t-10 pull-right"
+          type="button" ng-click="vm.installAddons()"
+          ng-disabled="vm.installingAddons">
+          <div ng-if="vm.installingAddons">
+            Installing...
+          </div>
+          <div ng-if="!vm.installingAddons">
+            Install Add-ons
+          </div>
+        </button>
+        <div class="clearfix"></div>
         <!-- end enable addons section -->
       </section>
 
