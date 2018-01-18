@@ -1285,6 +1285,157 @@
                         </div>
                       </div>
                     </div>
+                    <!-- GHE -->
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Github Enterprise</b></h4>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card-box">
+                                <div class="checkbox checkbox-primary checkbox-inline">
+                                  <input id="checkbox_for_ghe_auth" type="checkbox"
+                                    ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled"  ng-change="vm.toggleAuthProvider('githubEnterprise')"/>
+                                  <label for="checkbox_for_ghe_auth">
+                                    <b> Auth </b>
+                                  </label>
+                                </div>
+                                <div class="checkbox checkbox-primary checkbox-inline">
+                                  <input id="checkbox_for_ghe_scm" type="checkbox"
+                                    ng-model="vm.installForm.scm.githubEnterprise.isEnabled" ng-disabled="vm.installForm.auth.githubEnterpriseKeys.isEnabled"/>
+                                  <label for="checkbox_for_ghe_scm">
+                                    <b> SCM </b>
+                                  </label>
+                                </div>
+                                <div class="row" ng-if="vm.installForm.auth.githubEnterpriseKeys.isEnabled">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form" name="vm.gheInstallForm" novalidate>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Client ID</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="githubEnterpriseClientId"
+                                          ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Client Secret</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="githubEnterpriseClientSecret"
+                                          ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving" />
+                                          </textarea>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">URL</label>
+                                        <div class="col-md-6">
+                                          <input type="url" class="form-control" name="githubEnterpriseUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.githubEnterpriseKeys.data.url, 'githubEnterpriseKeys')"
+                                          ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                          <dd class="text-danger" ng-if="vm.isNotValidurl['githubEnterpriseKeys']">
+                                            <span>Please give a valid githubEnterprise endpoint url</span>
+                                          </dd>
+                                          <dd class="text-danger" ng-if="!vm.isNotValidurl['githubEnterpriseKeys']">
+                                            <span ng-show="vm.gheInstallForm.githubEnterpriseUrl.$error.url">URL is invalid.</span>
+                                          </dd>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">WWW URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="githubEnterpriseWWWUrl"
+                                          ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group" ng-if="vm.installForm.auth.githubEnterpriseKeys.callbackUrl">
+                                        <label class="col-md-2 control-label">Callback URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="githubEnterpriseCallbackUrl"
+                                          ng-model="vm.installForm.auth.githubEnterpriseKeys.callbackUrl" readonly />
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Gitlab -->
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Gitlab</b></h4>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card-box">
+                                <div class="checkbox checkbox-primary checkbox-inline">
+                                  <input id="checkbox_for_gitlab_auth" type="checkbox"
+                                    ng-model="vm.installForm.auth.gitlabKeys.isEnabled"  ng-change="vm.toggleAuthProvider('gitlab')"/>
+                                  <label for="checkbox_for_gitlab_auth">
+                                    <b> Auth </b>
+                                  </label>
+                                </div>
+                                <div class="checkbox checkbox-primary checkbox-inline">
+                                  <input id="checkbox_for_gitlab_scm" type="checkbox"
+                                    ng-model="vm.installForm.scm.gitlab.isEnabled" ng-disabled="vm.installForm.auth.gitlabKeys.isEnabled"/>
+                                  <label for="checkbox_for_gitlab_scm">
+                                    <b> SCM </b>
+                                  </label>
+                                </div>
+                                <div class="row" ng-if="vm.installForm.auth.gitlabKeys.isEnabled">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form" name="vm.gitlabInstallForm" novalidate>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Application ID</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="gitlabClientId"
+                                          ng-model="vm.installForm.auth.gitlabKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Secret</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="gitlabClientSecret"
+                                          ng-model="vm.installForm.auth.gitlabKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">URL</label>
+                                        <div class="col-md-6">
+                                          <input type="url" class="form-control" name="gitlabUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.gitlabKeys.data.url, 'gitlabKeys')"
+                                          ng-model="vm.installForm.auth.gitlabKeys.data.url" ng-disabled="false"/>
+                                          <dd class="text-danger" ng-if="vm.isNotValidurl['gitlabKeys']">
+                                            <span>Please give a valid gitlab endpoint url</span>
+                                          </dd>
+                                          <dd class="text-danger" ng-if="!vm.isNotValidurl['gitlabKeys']">
+                                            <span ng-show="vm.gitlabInstallForm.gitlabUrl.$error.url">URL is invalid.</span>
+                                          </dd>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">WWW URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="gitlabWWWUrl"
+                                          ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group" ng-if="vm.installForm.auth.gitlabKeys.callbackUrl">
+                                        <label class="col-md-2 control-label">Callback URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="gitlabCallbackUrl"
+                                          ng-model="vm.installForm.auth.gitlabKeys.callbackUrl" readonly />
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
