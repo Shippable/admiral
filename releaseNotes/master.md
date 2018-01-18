@@ -9,11 +9,16 @@ ${RES_VER_DATE}
 
 ## Fixes
   - **Left navbar missing subscription heading**: Display the subscription heading on the navigation menu to make the UI consistent.
+  - **Environment variables for resources starting with numbers**: Exporting environment variables for Assembly Line resources with names that start with a number will no longer fail.
+      - The leading numbers will be removed to create a valid environment variable key.  The environment variables may now be used in templated resources or in an unmanaged job.
 
 ## Custom Nodes
   - **simple title**: brief description
       - additional details or
       - actions required
+  - **Environment variables for resources starting with numbers**: Environment variables for jobs and resources with names that start with a number in runSh and runCI will no longer fail.
+      - The leading numbers will be removed to create a valid environment variable key.
+      - Custom nodes must be reinitialized to use the environment variables for resources with names that start with a number.
 
 ## Shippable Server
 
