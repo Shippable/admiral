@@ -1756,7 +1756,7 @@
                       ng-model="vm.installForm.systemSettings.accountSyncFrequencyHr" ng-disabled="vm.installing || vm.saving"/>
                   </div>
                 </div>
-                <div class="row m-t-15"><!--  ng-if="vm.admiralEnv.IS_SERVER === false" -->
+                <div class="row m-t-15" ng-if="vm.admiralEnv.IS_SERVER === false">
                   <div class="col-md-12">
                     <div class="checkbox checkbox-primary">
                       <input type="checkbox" id="checkbox_link_status"
