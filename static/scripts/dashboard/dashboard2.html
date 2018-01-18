@@ -1071,6 +1071,7 @@
                 </div>
                 <div id="auth" class="panel-collapse collapse in">
                   <div class="portlet-body">
+                    <!-- Bitbucket -->
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="card-box">
@@ -1112,7 +1113,7 @@
                                       <div class="form-group">
                                         <label class="col-md-2 control-label">URL</label>
                                         <div class="col-md-6">
-                                          <input type="text" class="form-control" name="bitbucketUrl"
+                                          <input type="url" class="form-control" name="bitbucketUrl"
                                           ng-model="vm.installForm.auth.bitbucketKeys.data.url" ng-disabled="true"/>
                                         </div>
                                       </div>
@@ -1128,6 +1129,82 @@
                                         <div class="col-md-6">
                                           <input type="text" class="form-control" name="bitbucketCallbackUrl"
                                           ng-model="vm.installForm.auth.bitbucketKeys.callbackUrl" readonly />
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Bitbucket Server -->
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Bitbucket Server</b></h4>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card-box">
+                                <div class="checkbox checkbox-primary checkbox-inline">
+                                  <input id="checkbox_for_bbs_auth" type="checkbox"
+                                    ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled"  ng-change="vm.toggleAuthProvider('bitbucketServer')"/>
+                                  <label for="checkbox_for_bbs_auth">
+                                    <b> Auth </b>
+                                  </label>
+                                </div>
+                                <div class="checkbox checkbox-primary checkbox-inline">
+                                  <input id="checkbox_for_bbs_scm" type="checkbox"
+                                    ng-model="vm.installForm.scm.bitbucketServer.isEnabled" ng-disabled="vm.installForm.auth.bitbucketServer.isEnabled"/>
+                                  <label for="checkbox_for_bbs_scm">
+                                    <b> SCM </b>
+                                  </label>
+                                </div>
+                                <div class="row" ng-if="vm.installForm.auth.bitbucketServerKeys.isEnabled">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form" name="vm.bbsInstallForm" novalidate>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Client ID</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="bitbucketServerClientId"
+                                          ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Client Secret</label>
+                                        <div class="col-md-6">
+                                          <textarea rows="3" class="form-control" name="bitbucketServerClientSecret"
+                                          ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving" placeholder="-----BEGIN ENCRYPTED PRIVATE KEY----- MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIS2qgprFqPxECAggA MBQGCCqGSIb3DQMHBAgD1kGN4ZslJgSCBMi1xk9jhlPxP3FyaMIUq8QmckXCs3Sa 9g73NQbtqZwI+9X5OhpSg/2ALxlCCjbqvzgSu8gfFZ4yo+Xd8VucZDmDSpzZGDod A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  X0R+meOaudPTBxoSgCCM51poFgaqt4l6VlTN4FRpj+c/WZeoMM/BVXO+nayuIMyH blK948UAda/bWVmZjXfY4Tztah0CuqlAldOQBzu8TwE7WDwo5S7lo5u0EXEoqCCq H0ga/iLNvWYexG7FHLRiq5hTj0g9mUPEbeTXuPtOkTEb/0ckVE2iZH9l7g5edmUZ GEs= -----END ENCRYPTED PRIVATE KEY----- -----BEGIN CERTIFICATE----- MIIDXTCCAkWgAwIBAgIJAJC1HiIAZAiIMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTExMjMxMDg1OTQ0WhcNMTIxMjMwMDg1OTQ0WjBF A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  JjyzfN746vaInA1KxYEeI1Rx5KXY8zIdj6a7hhphpj2E04LDdw7r495dv3UgEgpR C3Fayua4DRHyZOLmlvQ6tIChY0ClXXuefbmVSDeUHwc8YufRAERp2GfQnL2JlPUL B7xxt8BVc69rLeHV15A0qyx77CLSj3tCx2IUXVqRs5mlSbq094NBxsauYcm0A6Jq vA== -----END CERTIFICATE-----">
+                                          </textarea>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">URL</label>
+                                        <div class="col-md-6">
+                                          <input type="url" class="form-control" name="bitbucketServerUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.bitbucketServerKeys.data.url, 'bitbucketServerKeys')"
+                                          ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                          <dd class="text-danger" ng-if="vm.isNotValidurl['bitbucketServerKeys']">
+                                            <span>Please give a valid bitbucketServer endpoint url</span>
+                                          </dd>
+                                          <dd class="text-danger" ng-if="!vm.isNotValidurl['bitbucketServerKeys']">
+                                            <span ng-show="vm.bbsInstallForm.bitbucketServerUrl.$error.url">URL is invalid.</span>
+                                          </dd>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">WWW URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="bitbucketServerWWWUrl"
+                                          ng-model="vm.installForm.www.url.data.url" ng-disabled="true"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group" ng-if="vm.installForm.auth.bitbucketServerKeys.callbackUrl">
+                                        <label class="col-md-2 control-label">Callback URL</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="bitbucketCallbackUrl"
+                                          ng-model="vm.installForm.auth.bitbucketServerKeys.callbackUrl" readonly />
                                         </div>
                                       </div>
                                     </form>
