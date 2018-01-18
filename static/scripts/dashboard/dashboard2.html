@@ -1548,6 +1548,290 @@
                         </div>
                       </div>
                     </div>
+                    <!-- Gitlab -->
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Nodes</b></h4>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card-box">
+                                <div class="checkbox checkbox-primary">
+                                  <input id="checkbox_for_system_nodes" type="checkbox"
+                                    ng-model="vm.installForm.systemSettings.allowSystemNodes" ng-disabled="vm.installing || vm.saving"/>
+                                  <label for="checkbox_for_system_nodes">
+                                    <b> Enable system nodes (always-running nodes, available to any user) </b>
+                                  </label>
+                                </div>
+                                <div>&nbsp</div>
+                                <div class="checkbox checkbox-primary">
+                                  <input id="checkbox_for_custom_nodes" type="checkbox"
+                                    ng-model="vm.installForm.systemSettings.allowCustomNodes" ng-disabled="vm.installing || vm.saving"/>
+                                  <label for="checkbox_for_custom_nodes">
+                                    <b> Enable custom nodes (users can attach always-running nodes to their subscription) </b>
+                                  </label>
+                                </div>
+                                <div class="checkbox checkbox-primary col-md-offset-1" ng-if="vm.installForm.systemSettings.allowCustomNodes">
+                                  <input id="checkbox_for_custom_nodes_admin" type="checkbox"
+                                    ng-model="vm.installForm.systemSettings.customNodesAdminOnly" ng-disabled="vm.installing || vm.saving"/>
+                                  <label for="checkbox_for_custom_nodes_admin">
+                                    <b> Restrict custom node creation to superUsers only </b>
+                                  </label>
+                                </div>
+                                <div>&nbsp</div>
+                                <div class="checkbox checkbox-primary">
+                                  <input id="checkbox_for_dynamic_nodes" type="checkbox"
+                                    ng-model="vm.installForm.systemSettings.allowDynamicNodes" ng-change="vm.installForm.provision.amazonKeys.isEnabled = vm.installForm.systemSettings.allowDynamicNodes" ng-disabled="vm.installing || vm.saving"/>
+                                  <label for="checkbox_for_dynamic_nodes">
+                                    <b> Enable dynamic nodes (nodes are created and deleted as needed) </b>
+                                  </label>
+                                </div>
+                                <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="m-b-20 font-14 col-md-offset-1">
+                                        Enter AWS access key and secret for node provisioning:
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Access Key</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="provisionAccessKey"
+                                          ng-model="vm.installForm.provision.amazonKeys.data.accessKey" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Secret Key</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="provisionSecretKey"
+                                          ng-model="vm.installForm.provision.amazonKeys.data.secretKey" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div>&nbsp</div>
+                                <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="m-b-20 font-14 col-md-offset-1">
+                                        Select the default size of provisioned nodes:
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Instance size</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="defaultMinionInstanceSize"
+                                          ng-model="vm.installForm.systemSettings.defaultMinionInstanceSize" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div>&nbsp</div>
+                                <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                                  <div class="col-md-12">
+                                    <div class="row has-error" ng-if="!vm.hasDefaultx86SystemMachineImage() && vm.installForm.systemSettings.allowDynamicNodes">
+                                      <div class="help-block m-b-20 font-14 col-md-offset-1 col-md-4">
+                                        One machine image must be default.
+                                      </div>
+                                    </div>
+                                    <form class="form-horizontal" role="form"  ng-repeat="machineImage in vm.installForm.systemMachineImages">
+                                      <div class="row">
+                                        <div class="m-b-20 font-14 col-md-offset-1 col-md-4">
+                                          Specify your machine image settings:
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Name</label>
+                                        <div class="col-md-6" ng-class="machineImage.name ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}Name"
+                                          ng-model="machineImage.name" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Description</label>
+                                        <div class="col-md-6" ng-class="machineImage.description ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}Description"
+                                          ng-model="machineImage.description" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Architecture</label>
+                                        <div class="col-md-6">
+                                          <select class="form-control"
+                                            ng-model="machineImage.archTypeCode"
+                                            ng-init="machineImage.archTypeCode = machineImage.archTypeCode || vm.archTypes[0].code"
+                                            ng-options="arch.code as arch.name for arch in vm.archTypes">
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                          isAvailable
+                                          <span title="This is available for the user to select form the dropdown in the subscription settings.">
+                                            <span class="glyphicon glyphicon-info-sign"></span>
+                                          </span>
+                                        </label>
+                                        <div class="col-md-6" ng-class="machineImage.isAvailable ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}IsAvailable"
+                                          ng-model="machineImage.isAvailable" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                          isDefault
+                                          <span title="This is the default machine image.">
+                                            <span class="glyphicon glyphicon-info-sign"></span>
+                                          </span>
+                                        </label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}IsDefault"
+                                          ng-model="machineImage.isDefault" ng-disabled="vm.installing || vm.saving ||
+                                          (!machineImage.isDefault && machineImage.archTypeCode === vm.x86ArchCode && vm.hasDefaultx86SystemMachineImage()) ||
+                                          (!machineImage.isDefault && machineImage.archTypeCode === vm.armArchCode && vm.hasDefaultArmSystemMachineImage())"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                          Shippable AMI Id
+                                            <span target="_blank" href="http://docs.shippable.com/reference/machine-images-overview/" title="Please click here to see the list of all the ami with their versions">
+                                              <span class="glyphicon glyphicon-info-sign"></span>
+                                          </span>
+                                        </label>
+                                        <div class="col-md-6" ng-class="machineImage.externalId ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}ExternalId"
+                                          ng-model="machineImage.externalId" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Provider</label>
+                                        <div class="col-md-6" ng-class="machineImage.provider ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}Provider"
+                                          ng-model="machineImage.provider" ng-disabled="true"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Region</label>
+                                        <div class="col-md-6" ng-class="machineImage.region ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}Region"
+                                          ng-model="machineImage.region" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Key pair name</label>
+                                        <div class="col-md-6" ng-class="machineImage.keyName ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}KeyName"
+                                          ng-model="machineImage.keyName" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">runSh Image</label>
+                                        <div class="col-md-6" ng-class="machineImage.runShImage ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}RunShImage"
+                                          ng-model="machineImage.runShImage" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Security group id</label>
+                                        <div class="col-md-6" ng-class="machineImage.securityGroup ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}SecurityGroup"
+                                          ng-model="machineImage.securityGroup" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Subnet ID</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}SubnetId"
+                                          ng-model="machineImage.subnetId" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Drydock Tag</label>
+                                        <div class="col-md-6" ng-class="machineImage.drydockTag ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}DrydockTag"
+                                          ng-model="machineImage.drydockTag" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Drydock Family</label>
+                                        <div class="col-md-6" ng-class="machineImage.drydockFamily ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}DrydockFamily"
+                                          ng-model="machineImage.drydockFamily" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">SSH User</label>
+                                        <div class="col-md-6" ng-class="machineImage.sshUser ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}SSHUser"
+                                          ng-model="machineImage.sshUser" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">SSH Port</label>
+                                        <div class="col-md-6" ng-class="machineImage.sshPort ? '' : 'has-error'">
+                                          <input type="text" class="form-control" name="machineImage{{$index}}SSHPort"
+                                          ng-model="machineImage.sshPort" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class=" m-b-20 font-14 col-md-offset-2 col-md-4">
+                                          <button class="btn btn-danger btn-sm"
+                                            ng-disabled="vm.installForm.systemMachineImages.length === 1"
+                                            ng-click="vm.removeSystemMachineImage(machineImage)">
+                                            Remove
+                                          </button>
+                                        </div>
+                                      </div>
+                                      <hr/>
+                                    </form>
+                                  </div>
+                                </div>
+                                <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                                  <div class="col-md-offset-2 col-md-6 text-center">
+                                    <button class="btn btn-sm btn-default" ng-click="vm.addSystemMachineImage()">
+                                      Add another machine image
+                                    </button>
+                                  </div>
+                                </div>
+                                <hr/>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Default cluster type created for a subscription</label>
+                                        <div class="col-md-6">
+                                          <select class="form-control"
+                                            ng-model="vm.installForm.systemSettings.defaultClusterType"
+                                            ng-options="clusterType.name as clusterType.name for clusterType in vm.clusterTypes">
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                                <hr/>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Location of node provisioning scripts</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="nodeScriptsLocation"
+                                            ng-model="vm.installForm.systemSettings.nodeScriptsLocation" ng-disabled="vm.installing || vm.saving"/>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
