@@ -1424,6 +1424,24 @@ do $$
       roleCode := 6020
     );
 
+    perform set_route_role(
+      routePattern := '/clusters',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/clusters',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/clusters',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
     -- set clusterNodes routeRoles
 
     perform set_route_role(
