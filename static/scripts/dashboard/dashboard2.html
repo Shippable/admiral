@@ -1756,6 +1756,16 @@
                       ng-model="vm.installForm.systemSettings.accountSyncFrequencyHr" ng-disabled="vm.installing || vm.saving"/>
                   </div>
                 </div>
+                <div class="row m-t-15"><!--  ng-if="vm.admiralEnv.IS_SERVER === false" -->
+                  <div class="col-md-12">
+                    <div class="checkbox checkbox-primary">
+                      <input type="checkbox" id="checkbox_link_status"
+                      ng-model="vm.installForm.systemSettings.technicalSupportAvailable"
+                      ng-disabled="vm.installing || vm.saving"/>
+                      <label for="checkbox_link_status"><b>Show Link to Shippable Status</b></label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div><!-- END ROW -->
@@ -1765,7 +1775,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card-box">
-                <div class="checkbox">
+                <div class="checkbox checkbox-primary">
                   <input type="checkbox" id="checkbox_irc"
                     ng-model="vm.installForm.notification.irc.isEnabled"
                     ng-disabled="vm.installing || vm.saving || vm.addonsForm.irc.isEnabled">
@@ -1780,7 +1790,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card-box">
-                <div class="checkbox">
+                <div class="checkbox checkbox-primary">
                   <input type="checkbox" id="checkbox_tls"
                     ng-model="vm.installForm.ignoreTLSErrors"
                     ng-disabled="vm.installing || vm.saving">
@@ -1818,7 +1828,7 @@
                   <div class="portlet-body">
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="checkbox">
+                        <div class="checkbox checkbox-primary">
                           <input type="checkbox" id="checkbox_gmail"
                             ng-model="vm.installForm.notification.gmailCreds.isEnabled"
                             ng-disabled="vm.installing || vm.saving || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.smtpCreds.isEnabled">
@@ -1867,7 +1877,7 @@
                     <!-- Mailgun -->
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="checkbox">
+                        <div class="checkbox checkbox-primary">
                           <input type="checkbox" id="checkbox_mailgun"
                             ng-model="vm.installForm.notification.mailgunCreds.isEnabled"
                             ng-disabled="vm.installing || vm.saving || vm.installForm.notification.smtpCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
@@ -1916,7 +1926,7 @@
                     <!-- SMTP -->
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="checkbox">
+                        <div class="checkbox checkbox-primary">
                           <input type="checkbox" id="checkbox_smtp"
                             ng-model="vm.installForm.notification.smtpCreds.isEnabled"
                             ng-disabled="vm.installing || vm.saving || vm.installForm.notification.mailgunCreds.isEnabled || vm.installForm.notification.gmailCreds.isEnabled">
