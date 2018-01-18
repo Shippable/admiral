@@ -2182,6 +2182,88 @@
                                     />
                                   </td>
                                 </tr>
+                                <!-- mktgDB -->
+                                <tr ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                                  <td>Mktg DB
+                                    <input type="text" name="mktgDBName"
+                                      ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="DB Name"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbName"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="mktgDBUsername"
+                                      ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="DB Username"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbUsername"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="mktgDBPassword"
+                                      ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="DB Password"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbPassword"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="mktgDBHost"
+                                      ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="DB Host"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbHost"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="mktgDBPort"
+                                      ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="DB Port"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbPort"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="mktgDBDialect"
+                                      ng-if="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="DB Dialect"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktgDB.data.envs.dbDialect"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.systemIntegrations.mktgDB.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <!-- payment -->
+                                <tr ng-if="vm.addonsForm.systemIntegrations.payment.isEnabled || (vm.admiralEnv.IS_SERVER === false)">
+                                  <td>Braintree
+                                    <input type="text" name="braintreeMerchantId"
+                                      ng-if="vm.addonsForm.systemIntegrations.payment.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="Merchant ID"
+                                      ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreeMerchantId"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="braintreePublicKey"
+                                      ng-if="vm.addonsForm.systemIntegrations.payment.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="Public Key"
+                                      ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreePublicKey"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="braintreePrivateKey"
+                                      ng-if="vm.addonsForm.systemIntegrations.payment.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="Private Key"
+                                      ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreePrivateKey"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                    <input type="text" name="braintreeEnvironment"
+                                      ng-if="vm.addonsForm.systemIntegrations.payment.isEnabled"
+                                      class="form-control input-sm m-t-20" placeholder="Environment"
+                                      ng-model="vm.addonsForm.systemIntegrations.payment.data.braintreeEnvironment"
+                                      ng-disabled="vm.installingAddons"
+                                    />
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.addonsForm.systemIntegrations.payment.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
                               </tbody>
                             </table>
                           </div>
