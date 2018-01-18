@@ -1307,7 +1307,7 @@
                                 <tr ng-if="vm.addonsForm.AWS.displayName">
                                   <td>{{vm.addonsForm.AWS.displayName}}
                                     <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonKeys.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1328,7 +1328,7 @@
                                 <tr ng-if="vm.addonsForm.AWS_IAM.displayName">
                                   <td>{{vm.addonsForm.AWS_IAM.displayName}}
                                     <span ng-if="vm.addonsForm.AWS_IAM.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonIamRole.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                     <input ng-if="vm.addonsForm.AWS_IAM.isEnabled" type="text" name="awsAccountId"
                                       class="form-control input-sm m-t-20" placeholder="Your aws account ID"
                                       ng-model="vm.addonsForm.systemSettings.awsAccountId"
@@ -1360,7 +1360,7 @@
                                 <tr ng-if="vm.addonsForm.AZURE_DCOS.displayName">
                                   <td>{{vm.addonsForm.AZURE_DCOS.displayName}}
                                     <span ng-if="vm.addonsForm.AZURE_DCOS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.azureDcosKey.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1390,7 +1390,7 @@
                                 <tr ng-if="vm.addonsForm.CLUSTER.displayName">
                                   <td>{{vm.addonsForm.CLUSTER.displayName}}
                                     <span ng-if="vm.addonsForm.AWS.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.nodeCluster.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1411,7 +1411,7 @@
                                 <tr ng-if="vm.addonsForm.DCL.displayName">
                                   <td>{{vm.addonsForm.DCL.displayName}}
                                     <span ng-if="vm.addonsForm.DCL.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.dclKey.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1432,7 +1432,7 @@
                                 <tr ng-if="vm.addonsForm.DDC.displayName">
                                   <td>{{vm.addonsForm.DDC.displayName}}
                                     <span ng-if="vm.addonsForm.DDC.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.ddcKey.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1453,7 +1453,7 @@
                                 <tr ng-if="vm.addonsForm.GKE.displayName">
                                   <td>{{vm.addonsForm.GKE.displayName}}
                                     <span ng-if="vm.addonsForm.GKE.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.gcloudKey.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1465,7 +1465,7 @@
                                 <tr ng-if="vm.addonsForm.KUBERNETES.displayName">
                                   <td>{{vm.addonsForm.KUBERNETES.displayName}}
                                     <span ng-if="vm.addonsForm.KUBERNETES.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.kubernetesConfig.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1486,7 +1486,7 @@
                                 <tr ng-if="vm.addonsForm.TRIPUB.displayName">
                                   <td>{{vm.addonsForm.TRIPUB.displayName}}
                                     <span ng-if="vm.addonsForm.TRIPUB.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.joyentTritonKey.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1536,7 +1536,7 @@
                                   <td>{{vm.addonsForm.webhook.displayName}}
                                     <span ng-if="vm.addonsForm.webhook.isDeprecated"
                                       title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use Generic {{vm.addonsForm.webhookV2.displayName}} instead.">
-                                        (Deprecated) <span class="md md-info"></span>
+                                        (Deprecated) <span class="glyphicon glyphicon-info-sign"></span>
                                     </span>
                                   </td>
                                   <td class="text-right">
@@ -1559,7 +1559,7 @@
                                   <td>{{vm.addonsForm.hipchat.displayName}}
                                     <span ng-if="vm.addonsForm.hipchat.isDeprecated"
                                       title="This integration has been deprecated. Please use Generic {{vm.addonsForm.hipchatKey.displayName}} instead.">
-                                        (Deprecated) <span class="md md-info"></span>
+                                        (Deprecated) <span class="glyphicon glyphicon-info-sign"></span>
                                     </span>
                                   </td>
                                   <td class="text-right">
@@ -1581,7 +1581,7 @@
                                 <tr ng-if="vm.addonsForm.irc.displayName">
                                   <td>{{vm.addonsForm.irc.displayName}}
                                     <span ng-if="vm.addonsForm.irc.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created. If enabled, existing integrations can continue to be used. Please enable IRC in the install panel instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1594,7 +1594,7 @@
                                   <td>{{vm.addonsForm.Slack.displayName}}
                                     <span ng-if="vm.addonsForm.Slack.isDeprecated"
                                     title="This integration has been deprecated. Use Generic {{vm.addonsForm.slackKey.displayName}} instead.">
-                                      (Deprecated) <span class="md md-info"></span></span>
+                                      (Deprecated) <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1623,7 +1623,7 @@
                                 <tr ng-if="vm.addonsForm.ECR.displayName">
                                   <td>{{vm.addonsForm.ECR.displayName}}
                                     <span ng-if="vm.addonsForm.ECR.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use {{vm.addonsForm.amazonKeys.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1647,7 +1647,7 @@
                                 <tr ng-if="vm.addonsForm.Docker.displayName">
                                   <td>{{vm.addonsForm.Docker.displayName}}
                                     <span ng-if="vm.addonsForm.Docker.isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use non deprecated {{vm.addonsForm.dockerRegistryLogin.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
@@ -1659,7 +1659,7 @@
                                 <tr ng-if="vm.addonsForm['Docker Trusted Registry'].displayName">
                                   <td>{{vm.addonsForm['Docker Trusted Registry'].displayName}}
                                     <span ng-if="vm.addonsForm['Docker Trusted Registry'].isDeprecated" title="This integration has been deprecated. New integrations of this type cannot be created anymore. If enabled, existing integrations can continue to be used. Please use non deprecated {{vm.addonsForm.dockerRegistryLogin.displayName}} instead.">(Deprecated)
-                                    <span class="md md-info"></span></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
