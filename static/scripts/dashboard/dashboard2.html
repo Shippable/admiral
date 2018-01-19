@@ -1548,7 +1548,7 @@
                         </div>
                       </div>
                     </div>
-                    <!-- Gitlab -->
+                    <!-- Nodes -->
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="card-box">
@@ -1835,6 +1835,40 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <!-- Install and Save buttons -->
+          <div class="row">
+            <div class="col-md-12 text-right">
+              <button class="btn btn-md btn-primary waves-effect waves-light m-t-10" type="submit" ng-click="vm.install()"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-if="!vm.requireRestart">
+                <div ng-if="vm.installing">
+                  Installing...
+                </div>
+                <div ng-if="!vm.installing">
+                  Install
+                </div>
+              </button>
+              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave"
+                ng-click="vm.showSaveModal()">
+                <div ng-if="vm.saving">
+                  Saving...
+                </div>
+                <div ng-if="!vm.saving">
+                  Save
+                </div>
+              </button>
+              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices"
+                ng-click="vm.showRestartServicesModal()">
+                <div ng-if="vm.restartingServices">
+                  Restarting...
+                </div>
+                <div ng-if="!vm.restartingServices">
+                  Restart Services
+                </div>
+              </button>
             </div>
           </div>
         </section>
