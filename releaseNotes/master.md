@@ -7,8 +7,8 @@ ${RES_VER_DATE}
   - **gitRepo deployments to node clusters**: gitRepo resources may be used as inputs in deploy jobs to deploy those repositories to node clusters. An example deploying a gitRepo to a node cluster after CI is documented [here](docs.shippable.com/deploy/vm-gitRepo/).
       - The gitRepo inputs will only be deployed to node clusters; other cluster types are not supported.
 
-  - **deployments to node cluster using bastion host**: deployments to node cluster can be done using bastion host.
-  All the nodes should be ssh accessible from bastion host using a hostname and these hostnames should be added as nodes in node-cluster accountIntegration. checkout the YML definition for cluster [here](docs.shippable.com/platform/workflow/resource/cluster/).
+  - **Deployments to node cluster using bastion host**: Deployments to node cluster can be done using bastion host.
+  All the nodes should be accessible over ssh from bastion host using a hostname and these hostnames should be added as nodes in [nodeCluster account integration](docs.shippable.com/platform/integration/nodeCluster/). Check out the YML definition for cluster [here](docs.shippable.com/platform/workflow/resource/cluster/).
 
 ## Fixes
   - **Left navbar missing subscription heading**: Display the subscription heading on the navigation menu to make the UI consistent.
