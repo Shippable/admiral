@@ -4,23 +4,21 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **gitRepo deployments to node clusters**: gitRepo resources may be used as inputs in deploy jobs to deploy those repositories to node clusters. An example deploying a gitRepo to a node cluster after CI is documented [here](docs.shippable.com/deploy/vm-gitRepo/).
-      - The gitRepo inputs will only be deployed to node clusters; other cluster types are not supported.
-
-  - **Deployments to node cluster using bastion host**: Deployments to node cluster can be done using bastion host.
-  All the nodes should be accessible over ssh from bastion host using a hostname and these hostnames should be added as nodes in [nodeCluster account integration](docs.shippable.com/platform/integration/nodeCluster/). Check out the YML definition for cluster [here](docs.shippable.com/platform/workflow/resource/cluster/).
+  - **simple title**: brief description. [link to docs](#).
+      - itemized
+      - list
+      - for details
+      - if necessary
 
 ## Fixes
-  - **Left navbar missing subscription heading**: Display the subscription heading on the navigation menu to make the UI consistent.
-  - **Environment variables for resources starting with numbers**: Exporting environment variables for Assembly Line resources with names that start with a number will no longer fail.
-      - The leading numbers will be removed to create a valid environment variable key.  The environment variables may now be used in templated resources or in an unmanaged job.
-  - **Coverage results for a run included jobs with no coverage**: Jobs with no coverage results will not be included when calculating the coverage results for the run.
-      - The overall coverage results for the run will be the average of the jobs in the matrix that have coverage results.
+  - **simple title**: brief description
+      - actions required
+      - or additional details
 
 ## Custom Nodes
-  - **Environment variables for resources starting with numbers**: Environment variables for jobs and resources with names that start with a number in runSh and runCI will no longer fail.
-      - The leading numbers will be removed to create a valid environment variable key.
-      - Custom nodes must be reinitialized to use the environment variables for resources with names that start with a number.
+  - **simple title**: brief description
+      - additional details or
+      - actions required
 
 ## Shippable Server
 
