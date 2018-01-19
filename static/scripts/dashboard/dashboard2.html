@@ -699,8 +699,8 @@
 
         <!-- Initialize button -->
         <div class="row">
-          <div class="col-md-offset-11 col-md-2">
-            <button class="btn btn-md btn-primary waves-effect waves-light m-t-10" type="submit" ng-click="vm.initialize()"
+          <div class="col-md-12 text-right">
+            <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.initialize()"
               ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.initType === 'new' && !vm.initializeForm.workers.confirmCommand)">
               <div ng-if="vm.initializing">
                 Initializing...
@@ -1706,8 +1706,10 @@
                                       <div class="form-group">
                                         <label class="col-md-2 control-label">
                                           Shippable AMI Id
-                                            <span target="_blank" href="http://docs.shippable.com/reference/machine-images-overview/" title="Please click here to see the list of all the ami with their versions">
-                                              <span class="glyphicon glyphicon-info-sign"></span>
+                                            <span title="Please click here to see the list of all the ami with their versions">
+                                              <a target="_blank" href="http://docs.shippable.com/reference/machine-images-overview" style="color: #606060;"/">
+                                                <span class="glyphicon glyphicon-info-sign"></span>
+                                              </a>
                                           </span>
                                         </label>
                                         <div class="col-md-6" ng-class="machineImage.externalId ? '' : 'has-error'">
@@ -1851,7 +1853,7 @@
           <!-- Install and Save buttons -->
           <div class="row">
             <div class="col-md-12 text-right">
-              <button class="btn btn-md btn-primary waves-effect waves-light m-t-10" type="submit" ng-click="vm.install()"
+              <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.install()"
                 ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-if="!vm.requireRestart">
                 <div ng-if="vm.installing">
                   Installing...
