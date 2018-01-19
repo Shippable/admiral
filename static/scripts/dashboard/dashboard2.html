@@ -706,8 +706,8 @@
 
         <!-- Initialize button -->
         <div class="row">
-          <div class="col-md-offset-11 col-md-2">
-            <button class="btn btn-md btn-primary waves-effect waves-light m-t-10" type="submit" ng-click="vm.initialize()"
+          <div class="col-md-12 text-right">
+            <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.initialize()"
               ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.initType === 'new' && !vm.initializeForm.workers.confirmCommand)">
               <div ng-if="vm.initializing">
                 Initializing...
@@ -733,6 +733,17 @@
               <div class="card-box">
                 <h5 class="text-custom m-t-20 m-b-5">
                   Please initialize first from the Infrastructure Panel.
+                </h5>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section ng-if="!vm.isLoaded">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <h5 class="text-custom m-t-20 m-b-5">
+                  Loading...
                 </h5>
               </div>
             </div>
@@ -1555,7 +1566,7 @@
                         </div>
                       </div>
                     </div>
-                    <!-- Gitlab -->
+                    <!-- Nodes -->
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="card-box">
@@ -1702,8 +1713,10 @@
                                       <div class="form-group">
                                         <label class="col-md-2 control-label">
                                           Shippable AMI Id
-                                            <span target="_blank" href="http://docs.shippable.com/reference/machine-images-overview/" title="Please click here to see the list of all the ami with their versions">
-                                              <span class="glyphicon glyphicon-info-sign"></span>
+                                            <span title="Please click here to see the list of all the ami with their versions">
+                                              <a target="_blank" href="http://docs.shippable.com/platform/runtime/machine-image/ami-overview/" style="color: #606060;"/">
+                                                <span class="glyphicon glyphicon-info-sign"></span>
+                                              </a>
                                           </span>
                                         </label>
                                         <div class="col-md-6" ng-class="machineImage.externalId ? '' : 'has-error'">
@@ -1844,6 +1857,86 @@
               </div>
             </div>
           </div>
+          <!-- Services Section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+                <div data-toggle="collapse" data-target="#servicesConfig" class="portlet-heading">
+                  <h3 class="portlet-title text-dark">
+                    Services
+                  </h3>
+                  <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-target="#servicesConfig"><i class="ion-minus-round"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div id="servicesConfig" class="panel-collapse collapse in">
+                  <div class="portlet-body">
+                    <p ng-if="!vm.requireRestart">
+                      Please click <i>Install</i> button below first to view services.
+                    </p>
+                    <!-- Core Services -->
+                    <table class="table table-striped m-0" ng-if="vm.requireRestart">
+                      <tbody>
+                        <tr ng-repeat="service in vm.allServices | orderBy: 'serviceName'"
+                          ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">
+                          <td colspan="4">
+                            <b>{{service.serviceName}}</b>
+                          </td>
+                          <td class="text-right">
+                            Replicas:
+                          </td>
+                          <td>
+                            <span ng-if="vm.isGlobalService(service.serviceName)">
+                              {{service.replicas}}
+                            </span>
+                            <input ng-if="!vm.isGlobalService(service.serviceName)"
+                              class="form-control input-sm"
+                              type=number ng-model="service.replicas" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Install and Save buttons -->
+          <div class="row">
+            <div class="col-md-12 text-right">
+              <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.install()"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-if="!vm.requireRestart">
+                <div ng-if="vm.installing">
+                  Installing...
+                </div>
+                <div ng-if="!vm.installing">
+                  Install
+                </div>
+              </button>
+              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave"
+                ng-click="vm.showSaveModal()">
+                <div ng-if="vm.saving">
+                  Saving...
+                </div>
+                <div ng-if="!vm.saving">
+                  Save
+                </div>
+              </button>
+              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices"
+                ng-click="vm.showRestartServicesModal()">
+                <div ng-if="vm.restartingServices">
+                  Restarting...
+                </div>
+                <div ng-if="!vm.restartingServices">
+                  Restart Services
+                </div>
+              </button>
+            </div>
+          </div>
         </section>
       </section>
       <section id="addons" ng-if="vm.sectionSelected === 'addons'">
@@ -1865,7 +1958,18 @@
             </div>
           </div>
         </section>
-        <section ng-if="vm.isLoaded && vm.initialized">
+        <section ng-if="!vm.requireRestart">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <h5 class="text-custom m-t-20 m-b-5">
+                  Please install first at the Configure & Install Panel.
+                </h5>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section ng-if="vm.isLoaded && vm.initialized && vm.requireRestart">
           <!-- start enable cloudproviders section -->
           <div class="row">
             <div class="col-md-12">
@@ -2701,20 +2805,19 @@
               </div><!-- END portlet -->
             </div><!-- END col-md-12 -->
           </div>
+          <button class="btn btn-md btn-primary waves-effect waves-light m-t-10 pull-right"
+            type="button" ng-click="vm.installAddons()"
+            ng-disabled="vm.installingAddons">
+            <div ng-if="vm.installingAddons">
+              Installing...
+            </div>
+            <div ng-if="!vm.installingAddons">
+              Install Add-ons
+            </div>
+          </button>
+          <div class="clearfix"></div>
         </section>
 
-
-        <button class="btn btn-md btn-primary waves-effect waves-light m-t-10 pull-right"
-          type="button" ng-click="vm.installAddons()"
-          ng-disabled="vm.installingAddons">
-          <div ng-if="vm.installingAddons">
-            Installing...
-          </div>
-          <div ng-if="!vm.installingAddons">
-            Install Add-ons
-          </div>
-        </button>
-        <div class="clearfix"></div>
         <!-- end enable addons section -->
       </section>
 

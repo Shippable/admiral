@@ -2605,7 +2605,8 @@
           updateFilestoreSystemIntegration,
           updateInternalAPIService,
           updateConsoleAPIService,
-          updateIrcService
+          updateIrcService,
+          saveServices
         ],
         function (err) {
           $scope.vm.saving = false;
@@ -2668,7 +2669,7 @@
       );
     }
 
-    function saveServices() {
+    function saveServices(next) {
       $scope.vm.saving = true;
       hideSaveServicesModal();
 
@@ -2685,7 +2686,8 @@
         function (err) {
           $scope.vm.saving = false;
           if (err)
-            return horn.error(err);
+            horn.error(err);
+          return next();
         }
       );
     }
