@@ -108,11 +108,12 @@ __check_dependencies() {
     echo 'readonly MESSAGE_STORE_LOCATION="/tmp/cexec"' >> installDockerScript.sh
     echo 'readonly KEY_STORE_LOCATION="/tmp/ssh"' >> installDockerScript.sh
     echo 'readonly BUILD_LOCATION="/build"' >> installDockerScript.sh
+    echo 'install_docker_only="true"' >> installDockerScript.sh
 
     # Fetch the installation script and headers
     curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/lib/logger.sh >> installDockerScript.sh
     curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/lib/headers.sh >> installDockerScript.sh
-    curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/scripts/Ubuntu_14.04_Docker_1.13.sh >> installDockerScript.sh
+    curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/initScripts/x86_64/Ubuntu_14.04/Docker_1.13.sh >> installDockerScript.sh
     # Install Docker
     chmod +x installDockerScript.sh
     ./installDockerScript.sh
@@ -181,7 +182,7 @@ __pull_images() {
   done
 
   __process_msg "Registry: shipimg"
-  
+
   image="$PUBLIC_IMAGE_REGISTRY/genexec:$RELEASE"
   __process_msg "Pulling $image"
   sudo docker pull $image
