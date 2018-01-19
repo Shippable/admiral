@@ -57,7 +57,9 @@ module.exports = function (grunt) {
           'static/bower_components/angular-ui-router/release/angular-ui-router.min.js',
           // switchery
           'static/bower_components/switchery/dist/switchery.min.js',
-          'static/bower_components/ng-switchery/src/ng-switchery.js'
+          'static/bower_components/ng-switchery/src/ng-switchery.js',
+          // Clipboard
+          'static/bower_components/clipboard/dist/clipboard.min.js',
         ],
         dest: 'static/lib.cat.js'
       }

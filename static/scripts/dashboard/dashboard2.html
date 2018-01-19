@@ -670,8 +670,15 @@
                               Please run this command on {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} node to authorize SSH access:
                             </span>
                             <div class="ss-action"></div>
-                            <div class="ship-console" style="word-break: break-all;">
+                            <div class="ship-console" style="word-break: break-all;"
+                              id="copy-input-workers">
                               {{vm.initializeForm.sshCommand}}
+                            </div>
+                            <div class="text-right m-t-5 m-r-5">
+                              <a href="" id="copy" data-clipboard-target="#copy-input-workers"
+                                ng-click="vm.copyToClipboard()">
+                                <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                              </a>
                             </div>
                           </div>
                         </div>
@@ -3483,8 +3490,15 @@
                         <div class="form-group">
                             <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
                             <div class="ss-action"></div>
-                            <div class="ship-console" style="word-break: break-all;">
+                            <div class="ship-console" style="word-break: break-all;"
+                              id="copy-input-msg">
                               {{vm.initializeForm.sshCommand}}
+                            </div>
+                            <div class="text-right m-t-5 m-r-5">
+                              <a href="" id="copy" data-clipboard-target="#copy-input-msg"
+                                ng-click="vm.copyToClipboard()">
+                                <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                              </a>
                             </div>
                         </div>
                     </div>
@@ -3615,8 +3629,15 @@
                         <div class="form-group">
                             <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
                             <div class="ss-action"></div>
-                            <div class="ship-console" style="word-break: break-all;">
+                            <div class="ship-console" style="word-break: break-all;"
+                              id="copy-input-secrets">
                               {{vm.initializeForm.sshCommand}}
+                            </div>
+                            <div class="text-right m-t-5 m-r-5">
+                              <a href="" id="copy" data-clipboard-target="#copy-input-secrets"
+                                ng-click="vm.copyToClipboard()">
+                                <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                              </a>
                             </div>
                         </div>
                     </div>
@@ -3730,8 +3751,15 @@
                         <div class="form-group">
                             <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
                             <div class="ss-action"></div>
-                            <div class="ship-console" style="word-break: break-all;">
+                            <div class="ship-console" style="word-break: break-all;"
+                              id="copy-input-state">
                               {{vm.initializeForm.sshCommand}}
+                            </div>
+                            <div class="text-right m-t-5 m-r-5">
+                              <a href="" id="copy" data-clipboard-target="#copy-input-state"
+                                ng-click="vm.copyToClipboard()">
+                                <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                              </a>
                             </div>
                         </div>
                     </div>
@@ -3836,8 +3864,15 @@
                       <div class="form-group">
                         <span class="text-dark">Please run this command on your node to authorize SSH access:</span>
                         <div class="ss-action"></div>
-                        <div class="ship-console" style="word-break: break-all;">
+                        <div class="ship-console" style="word-break: break-all;"
+                          id="copy-input-redis">
                           {{vm.initializeForm.sshCommand}}
+                        </div>
+                        <div class="text-right m-t-5 m-r-5">
+                          <a href="" id="copy" data-clipboard-target="#copy-input-redis"
+                            ng-click="vm.copyToClipboard()">
+                            <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                          </a>
                         </div>
                       </div>
                     </div>
