@@ -1951,7 +1951,18 @@
             </div>
           </div>
         </section>
-        <section ng-if="vm.isLoaded && vm.initialized">
+        <section ng-if="!vm.requireRestart">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <h5 class="text-custom m-t-20 m-b-5">
+                  Please install first at the Configure & Install Panel.
+                </h5>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section ng-if="vm.isLoaded && vm.initialized && vm.requireRestart">
           <!-- start enable cloudproviders section -->
           <div class="row">
             <div class="col-md-12">
