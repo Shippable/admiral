@@ -586,6 +586,8 @@
       selectedService: {},
       changeSection: changeSection,
       initialize: initialize,
+      copyText: 'Copy',
+      copyToClipboard: copyToClipboard,
       resetInstallLocationModal: resetInstallLocationModal,
       showInstallLocationModal: showInstallLocationModal,
       saveInstallLocationModal: saveInstallLocationModal,
@@ -1189,9 +1191,16 @@
       return next();
     }
 
+    //ngclipboard has issues working with the modal. So using Clipboard instead.
+    function copyToClipboard() {
+      var clipboard = new Clipboard('#copy');
+      $scope.vm.copyText = 'Copied';
+    }
+
     function resetInstallLocationModal (fromCopy) {
       var old =  fromCopy + '_old';
       $scope.vm.initializeForm[fromCopy] =  angular.copy($scope.vm.initializeForm[old]);
+      $scope.vm.copyText = 'Copy';
     }
 
     function saveInstallLocationModal (secName) {
@@ -1309,6 +1318,7 @@
 
     function showInstallLocationModal(sectionName, clickType) {
       var old = sectionName + '_old';
+      $scope.vm.copyText = 'Copy';
 
       if (sectionName === 'secrets') {
         $scope.vm.secretsModalErrorMsg = '';

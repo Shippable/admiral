@@ -60,7 +60,6 @@ module.exports = function (grunt) {
           'static/bower_components/ng-switchery/src/ng-switchery.js',
           // Clipboard
           'static/bower_components/clipboard/dist/clipboard.min.js',
-          'static/bower_components/ngclipboard/dist/ngclipboard.min.js'
         ],
         dest: 'static/lib.cat.js'
       }
