@@ -731,6 +731,17 @@
             </div>
           </div>
         </section>
+        <section ng-if="!vm.isLoaded">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <h5 class="text-custom m-t-20 m-b-5">
+                  Loading...
+                </h5>
+              </div>
+            </div>
+          </div>
+        </section>
         <section ng-if="vm.isLoaded && vm.initialized">
           <!-- API Config section -->
           <div class="row">
