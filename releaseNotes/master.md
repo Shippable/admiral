@@ -8,7 +8,7 @@ ${RES_VER_DATE}
       - The gitRepo inputs will only be deployed to node clusters; other cluster types are not supported.
 
   - **deployments to node cluster using bastion host**: deployments to node cluster can be done using bastion host.
-  All the nodes should be ssh accessible from bastion host using a hostname and these hostnames should be added as nodes in node-cluster accountIntegration. checkout the YML definition for cluster [here.](docs.shippable.com/platform/workflow/resource/cluster/).    
+  All the nodes should be ssh accessible from bastion host using a hostname and these hostnames should be added as nodes in node-cluster accountIntegration. checkout the YML definition for cluster [here](docs.shippable.com/platform/workflow/resource/cluster/).
 
 ## Fixes
   - **Left navbar missing subscription heading**: Display the subscription heading on the navigation menu to make the UI consistent.
