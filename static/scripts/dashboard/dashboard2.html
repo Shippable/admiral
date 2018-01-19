@@ -1714,7 +1714,7 @@
                                         <label class="col-md-2 control-label">
                                           Shippable AMI Id
                                             <span title="Please click here to see the list of all the ami with their versions">
-                                              <a target="_blank" href="http://docs.shippable.com/platform/runtime/machine-image/ami-overview/" style="color: #606060;"/">
+                                              <a target="_blank" href="http://docs.shippable.com/platform/runtime/machine-image/ami-overview/" style="color: #606060;">
                                                 <span class="glyphicon glyphicon-info-sign"></span>
                                               </a>
                                           </span>
@@ -3929,3 +3929,28 @@
     </div>
 </div><!-- /.modal -->
 <!-- END Install Location Node Modal for REDIS -->
+
+<!-- EULA Modal -->
+<div class="modal fade" id="eulaModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-wide" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">
+          Shippable Server License Agreement
+        </h4>
+      </div>
+      <div class="modal-body ship-eula-text">
+        </pre>{{vm.eulaText}}</pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-md btn-default" type="button" data-dismiss="modal">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

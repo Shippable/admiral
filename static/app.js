@@ -56,6 +56,9 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
     $('#overlay').fadeOut(800);
     // All root variables to be stored in _r
     $rootScope._r = {};
+    $rootScope._r.openEULA = function() {
+      $rootScope.$broadcast('showEULAModal');
+    };
 
     async.series([
         reset

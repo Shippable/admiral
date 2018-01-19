@@ -3777,6 +3777,8 @@
       $('#restartServicesModal').modal('hide');
     }
 
+    $scope.$on('showEULAModal', showEULAModal);
+
     function showEULAModal() {
       $scope.vm.eulaText = [];
       admiralApiAdapter.getEULAText(
