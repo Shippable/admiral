@@ -4789,5 +4789,23 @@ do $$
     if exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'lastHubspotSyncAt') then
       alter table "accounts" drop column "lastHubspotSyncAt";
     end if;
+
+    -- Add isOnSystemCluster flag to subscriptions
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptions' and column_name = 'isOnSystemCluster') then
+      alter table "subscriptions" add column "isOnSystemCluster" BOOLEAN;
+    end if;
+
+    -- Add systemClusterId to systemNodes
+    if not exists (select 1 from information_schema.columns where table_name = 'systemNodes' and column_name = 'systemClusterId') then
+      alter table "systemNodes" add column "systemClusterId" INTEGER;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemClusters') then
+      -- Add systemNodes.systemClusterId foreign key
+      if not exists (select 1 from pg_constraint where conname = 'sytemNodes_systemClusterId_fkey') then
+        alter table "systemNodes" add constraint "sytemNodes_systemClusterId_fkey" foreign key ("systemClusterId") references "systemClusters"(id) on update restrict on delete restrict;
+      end if;
+    end if;
+
   end
 $$;
