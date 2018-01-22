@@ -645,10 +645,10 @@ a:active {
 
 <!-- ADMIRAL -->
 .topbar .topbar-left {
-  background: #388583 !important;
+  background: #008583 !important;
 }
 .navbar-default {
-  background-color: #388583 !important;
+  background-color: #008583 !important;
 }
 .side-menu.left {
   background: #ffffff;
@@ -662,7 +662,7 @@ a:active {
   background-color: #eeeeee;
 }
 #sidebar-menu > ul > li > a:hover {
-  color: #388583;
+  color: #008583;
 }
 .user-detail {
   border-top: 1px solid #f9f9f9;
