@@ -4,11 +4,9 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Querying runs by commitSha**: Runs can now be queried by the commitSha.
+      - The [API route](http://docs.shippable.com/platform/api/api-overview/#!/Runs/get_runs) for runs will accept a `commitShas` parameter.
+      - Querying by SHA must use the full 40 character SHAs.
 
 ## Fixes
   - **simple title**: brief description
