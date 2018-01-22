@@ -4184,6 +4184,11 @@ do $$
       create index "resourceTypeCodeI" on "resources" using btree("typeCode");
     end if;
 
+    -- Add runsCommitShaI Index on versions
+    if not exists (select 1 from pg_indexes where tablename = 'runs' and indexname = 'runsCommitShaI') then
+      create index "runsCommitShaI" on "runs" using btree("commitSha");
+    end if;
+
     -- Add versionsSubscriptionIdI Index on versions
     if not exists (select 1 from pg_indexes where tablename = 'versions' and indexname = 'versionsSubscriptionIdI') then
       create index "versionsSubscriptionIdI" on "versions" using btree("subscriptionId");
