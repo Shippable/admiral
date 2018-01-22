@@ -137,11 +137,11 @@
                 </h3>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <span class="text-dark" ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed">
+                  <span class="label label-processing" ng-if="vm.systemSettings.db.isProcessing">initializing...</span>
+                  <span class="label label-{{vm.systemSettings.db.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed">
                     {{vm.systemSettings.db.isInitialized ? 'initialized' : 'not initialized'}}
                   </span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
+                  <span class="label label-failed" ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
                   <span class="divider"></span>
                   <a data-toggle="collapse" data-target="#database"><i class="ion-minus-round"></i></a>
                 </div>
@@ -198,11 +198,11 @@
                 </h3>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <span class="text-dark" ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed">
+                  <span class="label label-processing" ng-if="vm.systemSettings.secrets.isProcessing">initializing...</span>
+                  <span class="label label-{{vm.systemSettings.secrets.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed">
                     {{vm.systemSettings.secrets.isInitialized ? 'initialized' : 'not initialized'}}
                   </span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
+                  <span class="label label-failed" ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
                   <span class="divider"></span>
                   <a data-toggle="collapse" data-target="#bg-secrets"><i class="ion-minus-round"></i></a>
                 </div>
@@ -272,11 +272,11 @@
                 </h3>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <span class="text-dark" ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed">
+                  <span class="label label-processing" ng-if="vm.systemSettings.msg.isProcessing">initializing...</span>
+                  <span class="label label-{{vm.systemSettings.msg.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed">
                     {{vm.systemSettings.msg.isInitialized ? 'initialized' : 'not initialized'}}
                   </span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
+                  <span class="label label-failed" ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
                   <span class="divider"></span>
                   <a data-toggle="collapse" data-target="#bg-rabbitmq"><i class="ion-minus-round"></i></a>
                 </div>
@@ -392,11 +392,11 @@
                 </h3>
                 <div class="portlet-widgets">
                     <span class="divider"></span>
-                    <span class="text-dark" ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
-                    <span class="text-dark" ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
+                    <span class="label label-processing" ng-if="vm.systemSettings.state.isProcessing">initializing...</span>
+                    <span class="label label-{{vm.systemSettings.state.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
                       {{vm.systemSettings.state.isInitialized ? 'initialized' : 'not initialized'}}
                     </span>
-                    <span class="text-dark" ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
+                    <span class="label label-failed" ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
                     <span class="divider"></span>
                     <a data-toggle="collapse" data-target="#state"><i class="ion-minus-round"></i></a>
                 </div>
@@ -473,11 +473,11 @@
                 </h3>
                 <div class="portlet-widgets">
                     <span class="divider"></span>
-                    <span class="text-dark" ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
-                    <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
+                    <span class="label label-processing" ng-if="vm.systemSettings.redis.isProcessing">initializing...</span>
+                    <span class="label label-{{vm.systemSettings.redis.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
                       {{vm.systemSettings.redis.isInitialized ? 'initialized' : 'not initialized'}}
                     </span>
-                    <span class="text-dark" ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
+                    <span class="label label-failed" ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
                     <span class="divider"></span>
                     <a data-toggle="collapse" data-target="#bg-redis"><i class="ion-minus-round"></i></a>
                 </div>
@@ -554,11 +554,11 @@
                 </h3>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <span class="text-dark" ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed">
+                  <span class="label label-processing" ng-if="vm.systemSettings.master.isProcessing">initializing...</span>
+                  <span class="label label-{{vm.systemSettings.master.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed">
                     {{vm.systemSettings.master.isInitialized ? 'initialized' : 'not initialized'}}
                   </span>
-                  <span class="text-dark" ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
+                  <span class="label label-failed" ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
                   <span class="divider"></span>
                   <a data-toggle="collapse" data-target="#bg-master"><i class="ion-minus-round"></i></a>
                 </div>
