@@ -403,6 +403,12 @@ body.fixed-left .side-menu.left {
 #wrapper.enlarged .menu-arrow {
   display: none !important;
 }
+#wrapper.enlarged .button-menu-mobile {
+  -ms-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
 #wrapper.enlarged #sidebar-menu ul ul {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
@@ -532,6 +538,9 @@ body.fixed-left .side-menu.left {
   top: 22px;
 }
 #wrapper.enlarged .user-detail p span {
+  display: none;
+}
+#wrapper.enlarged .user-detail .btn {
   display: none;
 }
 #wrapper.enlarged #sidebar-menu ul ul li.active a {
