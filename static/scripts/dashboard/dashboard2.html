@@ -83,12 +83,50 @@
               </p>
               <p>
                 <label class="control-label">All Nodes</label>
-                <p class="font-13">
-                  <b>Node 1:</b> <code>123.123.123.123</code> (Admiral runs on it)
-                </p>
-                <p class="font-13">
-                  <b>Node 2:</b> <code>111.222.333.111</code> (Database runs on it)
-                </p>
+                <table class="table table-bordered m-0">
+                  <thead>
+                    <tr>
+                      <th>Nodes</th>
+                      <th>Admiral</th>
+                      <th>Database</th>
+                      <th>Secrets</th>
+                      <th>Messaging</th>
+                      <th>State</th>
+                      <th>Redis</th>
+                      <th>Swarm Master</th>
+                      <th>Swarm Workers</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="(addr, node) in vm.allNodes">
+                      <td>{{addr}}</td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="node|contains:'admiral'"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'db') && vm.systemSettings.db.isInstalled && vm.systemSettings.db.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'secrets') && vm.systemSettings.secrets.isInstalled && vm.systemSettings.secrets.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'msg') && vm.systemSettings.msg.isInstalled && vm.systemSettings.msg.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'state') && vm.systemSettings.state.isInstalled && vm.systemSettings.state.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'redis') && vm.systemSettings.redis.isInstalled && vm.systemSettings.redis.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'master') && vm.systemSettings.master.isInstalled && vm.systemSettings.master.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'worker') && vm.systemSettings.workers[0].isInstalled && vm.systemSettings.workers[0].isInitialized"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </p>
             </div>
             <div class="card-box">

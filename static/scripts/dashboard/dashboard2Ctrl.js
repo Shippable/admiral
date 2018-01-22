@@ -631,7 +631,8 @@
       addSystemNode: addSystemNode,
       removeSystemNode: removeSystemNode,
       eulaText: '',
-      runMode: 'production'
+      runMode: 'production',
+      allNodes: {}
     };
 
     var systemIntDataDefaults = {};
@@ -676,6 +677,10 @@
               return horn.error(err);
             }
           } else {
+            if ($scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP])
+              $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP].push('admiral');
+            else
+              $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP] = ['admiral'];
             dashboardCtrlDefer.resolve();
           }
         }
@@ -779,6 +784,52 @@
               }
             );
 
+          if ($scope.vm.systemSettings.db && $scope.vm.systemSettings.db.address) {
+            if ($scope.vm.allNodes[$scope.vm.systemSettings.db.address])
+              $scope.vm.allNodes[$scope.vm.systemSettings.db.address].push('db');
+            else
+              $scope.vm.allNodes[$scope.vm.systemSettings.db.address] = ['db'];
+          }
+          if ($scope.vm.systemSettings.msg && $scope.vm.systemSettings.msg.address) {
+            if ($scope.vm.allNodes[$scope.vm.systemSettings.msg.address])
+              $scope.vm.allNodes[$scope.vm.systemSettings.msg.address].push('msg');
+            else
+              $scope.vm.allNodes[$scope.vm.systemSettings.msg.address] = ['msg'];
+          }
+          if ($scope.vm.systemSettings.state && $scope.vm.systemSettings.state.address) {
+            if ($scope.vm.allNodes[$scope.vm.systemSettings.state.address])
+              $scope.vm.allNodes[$scope.vm.systemSettings.state.address].push('state');
+            else
+              $scope.vm.allNodes[$scope.vm.systemSettings.state.address] = ['state'];
+          }
+          if ($scope.vm.systemSettings.secrets && $scope.vm.systemSettings.secrets.address) {
+            if ($scope.vm.allNodes[$scope.vm.systemSettings.secrets.address])
+              $scope.vm.allNodes[$scope.vm.systemSettings.secrets.address].push('secrets');
+            else
+              $scope.vm.allNodes[$scope.vm.systemSettings.secrets.address] = ['secrets'];
+          }
+          if ($scope.vm.systemSettings.redis && $scope.vm.systemSettings.redis.address) {
+            if ($scope.vm.allNodes[$scope.vm.systemSettings.redis.address])
+              $scope.vm.allNodes[$scope.vm.systemSettings.redis.address].push('redis');
+            else
+              $scope.vm.allNodes[$scope.vm.systemSettings.redis.address] = ['redis'];
+          }
+          if ($scope.vm.systemSettings.master && $scope.vm.systemSettings.master.address) {
+            if ($scope.vm.allNodes[$scope.vm.systemSettings.master.address])
+              $scope.vm.allNodes[$scope.vm.systemSettings.master.address].push('master');
+            else
+              $scope.vm.allNodes[$scope.vm.systemSettings.master.address] = ['master'];
+          }
+          _.each($scope.vm.systemSettings.workers,
+            function(worker) {
+              if (worker.address) {
+                if ($scope.vm.allNodes[worker.address])
+                  $scope.vm.allNodes[worker.address].push('worker');
+                else
+                  $scope.vm.allNodes[worker.address] = ['worker'];
+              }
+            }
+          );
           return next();
         }
       );

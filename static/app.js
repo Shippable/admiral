@@ -47,6 +47,12 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
   }
 ]);
 
+admiral.filter('contains', function() {
+  return function (array, needle) {
+    return array.indexOf(needle) >= 0;
+  };
+});
+
 (function () {
   admiral.run(['$rootScope', '$timeout', '$q', '$cookies',
     startApp
