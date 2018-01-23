@@ -1170,7 +1170,8 @@
           else
             _.each(obj,
               function (value, key) {
-                if ($scope.vm.systemSettings[service][key])
+                if ($scope.vm.systemSettings[service] &&
+                  $scope.vm.systemSettings[service][key])
                   $scope.vm.initializeForm[service][key] =
                     $scope.vm.systemSettings[service][key];
               }
@@ -1234,7 +1235,8 @@
           } else {
             $scope.vm.initializeForm[service].initType = 'existing';
           }
-          if ($scope.vm.systemSettings[service].isInitialized)
+          if ($scope.vm.systemSettings[service] &&
+            $scope.vm.systemSettings[service].isInitialized)
             $scope.vm.initializeForm[service].confirmCommand = true;
         }
       );
