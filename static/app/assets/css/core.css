@@ -796,6 +796,10 @@ pre {
   border-color: #ef5350;
   box-shadow: none !important;
 }
+.has-error input:focus.form-control {
+  border-color: #ef5350;
+  box-shadow: none !important;
+}
 .input-group-addon {
   border-radius: 2px;
   border: 1px solid #eeeeee;
