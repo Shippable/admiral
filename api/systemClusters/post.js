@@ -94,12 +94,6 @@ function _getDefaultSystemCluster(bag, next) {
             'Failed to get systemCluster with error: ' + util.inspect(err))
         );
 
-      if (_.isEmpty(systemCluster.rows))
-        return next(
-          new ActErr(who, ActErr.DBEntityNotFound,
-            'No default system cluster found')
-        );
-
       bag.defaultSystemCluster = systemCluster.rows[0];
       return next();
     }

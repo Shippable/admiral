@@ -4,6 +4,6 @@ var validateAccount = require('../../common/auth/validateAccount.js');
 module.exports = workflowControllerRoutes;
 
 function workflowControllerRoutes(app) {
-  app.get('/workflowControllers', validateAccount, require('./get.js'));
-  app.post('/workflowControllers', validateAccount, require('./post.js'));
+  app.get('/api/workflowControllers', validateAccount, require('./get.js'));
+  app.post('/api/workflowControllers', validateAccount, require('./post.js'));
 }
