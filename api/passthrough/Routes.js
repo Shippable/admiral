@@ -5,4 +5,6 @@ var validateAccount = require('../../common/auth/validateAccount.js');
 
 function passthroughRoutes(app) {
   app.get('/api/passthrough/ami/:id', validateAccount, require('./getImageByAmiId.js'));
+  app.post('/api/passthrough/systemClusters/default', validateAccount,
+    require('./postDefaultSystemCluster.js'))
 }
