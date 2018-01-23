@@ -9,9 +9,7 @@ ${RES_VER_DATE}
       - Querying by SHA must use the full 40 character SHAs.
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Add Content-Type header in requests to slack**: Requests to slack API specify `Content-Type: application/json` header.
 
 ## Custom Nodes
   - **simple title**: brief description
