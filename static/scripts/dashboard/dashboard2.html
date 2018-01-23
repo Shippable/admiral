@@ -78,17 +78,52 @@
           <div class="col-md-12">
             <div class="card-box">
               <h4 class="header-title m-t-0"><b>SUMMARY</b></h4>
-              <p class="text-muted m-b-20 font-13">
-                A detailed summary of this full section. ...
-              </p>
               <p>
                 <label class="control-label">All Nodes</label>
-                <p class="font-13">
-                  <b>Node 1:</b> <code>123.123.123.123</code> (Admiral runs on it)
-                </p>
-                <p class="font-13">
-                  <b>Node 2:</b> <code>111.222.333.111</code> (Database runs on it)
-                </p>
+                <table class="table table-bordered m-0">
+                  <thead>
+                    <tr>
+                      <th>Nodes</th>
+                      <th>Admiral</th>
+                      <th>Database</th>
+                      <th>Secrets</th>
+                      <th>Messaging</th>
+                      <th>State</th>
+                      <th>Redis</th>
+                      <th>Swarm Master</th>
+                      <th>Swarm Workers</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="(addr, node) in vm.allNodes">
+                      <td>{{addr}}</td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="node|contains:'admiral'"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'db') && vm.systemSettings.db.isInstalled && vm.systemSettings.db.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'secrets') && vm.systemSettings.secrets.isInstalled && vm.systemSettings.secrets.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'msg') && vm.systemSettings.msg.isInstalled && vm.systemSettings.msg.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'state') && vm.systemSettings.state.isInstalled && vm.systemSettings.state.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'redis') && vm.systemSettings.redis.isInstalled && vm.systemSettings.redis.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'master') && vm.systemSettings.master.isInstalled && vm.systemSettings.master.isInitialized"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fa fa-times" ng-if="(node|contains:'worker') && vm.systemSettings.workers[0].isInstalled && vm.systemSettings.workers[0].isInitialized"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </p>
             </div>
             <div class="card-box">
@@ -141,7 +176,7 @@
                   <span class="label label-{{vm.systemSettings.db.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed">
                     {{vm.systemSettings.db.isInitialized ? 'initialized' : 'not initialized'}}
                   </span>
-                  <span class="label label-failed" ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
+                  <span class="label label-failure" ng-if="!vm.systemSettings.db.isProcessing && vm.systemSettings.db.isFailed">failed &#x26a0;</span>
                   <span class="divider"></span>
                   <a data-toggle="collapse" data-target="#database"><i class="ion-minus-round"></i></a>
                 </div>
@@ -202,7 +237,7 @@
                   <span class="label label-{{vm.systemSettings.secrets.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed">
                     {{vm.systemSettings.secrets.isInitialized ? 'initialized' : 'not initialized'}}
                   </span>
-                  <span class="label label-failed" ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
+                  <span class="label label-failure" ng-if="!vm.systemSettings.secrets.isProcessing && vm.systemSettings.secrets.isFailed">failed &#x26a0;</span>
                   <span class="divider"></span>
                   <a data-toggle="collapse" data-target="#bg-secrets"><i class="ion-minus-round"></i></a>
                 </div>
@@ -276,7 +311,7 @@
                   <span class="label label-{{vm.systemSettings.msg.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed">
                     {{vm.systemSettings.msg.isInitialized ? 'initialized' : 'not initialized'}}
                   </span>
-                  <span class="label label-failed" ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
+                  <span class="label label-failure" ng-if="!vm.systemSettings.msg.isProcessing && vm.systemSettings.msg.isFailed">failed &#x26a0;</span>
                   <span class="divider"></span>
                   <a data-toggle="collapse" data-target="#bg-rabbitmq"><i class="ion-minus-round"></i></a>
                 </div>
@@ -396,7 +431,7 @@
                     <span class="label label-{{vm.systemSettings.state.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed">
                       {{vm.systemSettings.state.isInitialized ? 'initialized' : 'not initialized'}}
                     </span>
-                    <span class="label label-failed" ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
+                    <span class="label label-failure" ng-if="!vm.systemSettings.state.isProcessing && vm.systemSettings.state.isFailed">failed &#x26a0;</span>
                     <span class="divider"></span>
                     <a data-toggle="collapse" data-target="#state"><i class="ion-minus-round"></i></a>
                 </div>
@@ -477,7 +512,7 @@
                     <span class="label label-{{vm.systemSettings.redis.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed">
                       {{vm.systemSettings.redis.isInitialized ? 'initialized' : 'not initialized'}}
                     </span>
-                    <span class="label label-failed" ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
+                    <span class="label label-failure" ng-if="!vm.systemSettings.redis.isProcessing && vm.systemSettings.redis.isFailed">failed &#x26a0;</span>
                     <span class="divider"></span>
                     <a data-toggle="collapse" data-target="#bg-redis"><i class="ion-minus-round"></i></a>
                 </div>
@@ -558,7 +593,7 @@
                   <span class="label label-{{vm.systemSettings.master.isInitialized ? 'green' : 'waiting'}}" ng-if="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed">
                     {{vm.systemSettings.master.isInitialized ? 'initialized' : 'not initialized'}}
                   </span>
-                  <span class="label label-failed" ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
+                  <span class="label label-failure" ng-if="!vm.systemSettings.master.isProcessing && vm.systemSettings.master.isFailed">failed &#x26a0;</span>
                   <span class="divider"></span>
                   <a data-toggle="collapse" data-target="#bg-master"><i class="ion-minus-round"></i></a>
                 </div>
