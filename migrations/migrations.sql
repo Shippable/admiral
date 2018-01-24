@@ -4641,7 +4641,7 @@ do $$
       -- x86_64 Ubuntu_14.04 v6.1.4
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.1.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9000, 'v6.1.4', 'drydock', 'u16', 'v6.1.4', 'microbase', 'reqproc', true, '2018-01-24', '2017-12-19');
+        values (8000, 9000, 'v6.1.4', 'drydock', 'u16', 'v6.1.4', 'microbase', 'reqproc', true, '2018-01-24', '2018-01-24');
       end if;
 
       -- x86_64 Ubuntu_16.04 Stable
@@ -4706,7 +4706,7 @@ do $$
       -- x86_64 Ubuntu_16.04 v6.1.4
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.1.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9001, 'v6.1.4', 'drydock', 'u16', 'v6.1.4', 'microbase', 'reqproc', true, '2018-01-24', '2017-12-19');
+        values (8000, 9001, 'v6.1.4', 'drydock', 'u16', 'v6.1.4', 'microbase', 'reqproc', true, '2018-01-24', '2018-01-24');
       end if;
 
       -- aarch64 Ubuntu_16.04 v5.9.4
