@@ -2310,6 +2310,20 @@ do $$
       roleCode := 6060
     );
 
+    -- Allow justUser to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/subscriptions/:subscriptionId/grisham',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
+    -- Allow admins of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/subscriptions/:subscriptionId/grisham',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
     --set payments routeRoles
     perform set_route_role(
       routePattern := '/payments/clienttoken',
