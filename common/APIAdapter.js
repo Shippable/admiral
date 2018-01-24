@@ -119,6 +119,13 @@ APIAdapter.prototype.initializeRedis =
     this.post(url, body, callback);
   };
 
+// runtimeTemplates
+APIAdapter.prototype.getRuntimeTemplates =
+  function (callback) {
+    var url = '/api/runtimeTemplates';
+    this.get(url, callback);
+  };
+
 // secrets
 APIAdapter.prototype.getSecrets =
   function (callback) {
@@ -226,6 +233,19 @@ APIAdapter.prototype.getSystemCodes =
   function (query, callback) {
     var url = '/api/systemCodes?' + query;
     this.get(url, callback);
+  };
+
+// systemClusters
+APIAdapter.prototype.getSystemClusters =
+  function (query, callback) {
+    var url = '/api/systemClusters?' + query;
+    this.get(url, callback);
+  };
+
+APIAdapter.prototype.postSystemCluster =
+  function (body, callback) {
+    var url = '/api/systemClusters';
+    this.post(url, body, callback);
   };
 
 /*****************************************/
