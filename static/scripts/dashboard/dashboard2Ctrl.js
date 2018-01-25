@@ -1097,7 +1097,6 @@
                   systemIntegration.data
                 );
                 $scope.vm.installForm[sysIntName][masterName].isEnabled = true;
-
                 if (sysIntName === 'auth') {
                   var providerAuthName = providerAuthNames[masterName];
                   if (!_.isEmpty(providerAuthName)) {
@@ -1177,25 +1176,31 @@
               }
             );
 
-          if (service === 'secrets') {
-            $scope.vm.initializeForm[service].rootToken =
-              $scope.vm.admiralEnv.VAULT_TOKEN || '';
-          } else if (service === 'msg') {
-            var msgSystemIntegration = _.findWhere($scope.vm.systemIntegrations,
-              {name: 'msg', masterName: 'rabbitmqCreds'});
-            if (msgSystemIntegration) {
-              var auth = msgSystemIntegration.data.amqpUrlRoot.
-                split('@')[0].split('//')[1];
-              $scope.vm.initializeForm[service].username = auth.split(':')[0];
-              $scope.vm.initializeForm[service].password = auth.split(':')[1];
+          // don't update these input field's models if in postServices flow as these models
+          // can have new values modified by user which will be refreshed from systemIntegrations
+          // only in postInitFlow that happens after initialize is completed.
+          // so don't try to overwrite user modified values until initFlow is completed
+          if (!bag.inPostServices) {
+            if (service === 'secrets') {
+              $scope.vm.initializeForm[service].rootToken =
+                $scope.vm.admiralEnv.VAULT_TOKEN || '';
+            } else if (service === 'msg') {
+              var msgSystemIntegration = _.findWhere($scope.vm.systemIntegrations,
+                {name: 'msg', masterName: 'rabbitmqCreds'});
+              if (msgSystemIntegration) {
+                var auth = msgSystemIntegration.data.amqpUrlRoot.
+                  split('@')[0].split('//')[1];
+                $scope.vm.initializeForm[service].username = auth.split(':')[0];
+                $scope.vm.initializeForm[service].password = auth.split(':')[1];
+              }
+            } else if (service === 'state') {
+              var stateSystemIntegration =
+                _.findWhere($scope.vm.systemIntegrations,
+                  {name: 'state', masterName: 'gitlabCreds'});
+              if (stateSystemIntegration)
+                $scope.vm.initializeForm[service].rootPassword =
+                  stateSystemIntegration.data.password;
             }
-          } else if (service === 'state') {
-            var stateSystemIntegration =
-              _.findWhere($scope.vm.systemIntegrations,
-                {name: 'state', masterName: 'gitlabCreds'});
-            if (stateSystemIntegration)
-              $scope.vm.initializeForm[service].rootPassword =
-                stateSystemIntegration.data.password;
           }
 
           if (!_.has($scope.vm.systemSettings[service], 'isShippableManaged') ||
@@ -1975,6 +1980,9 @@
         stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
           ($scope.vm.initializeForm.state.initType === 'admiral' ? 2222 : 22);
 
+      var updateInitializeFormBag = {
+        inPostServices: true
+      };
       async.series([
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
@@ -1983,7 +1991,7 @@
           postWorkers.bind(null, workersList),
           deleteWorkers.bind(null, deletedWorkers),
           getSystemSettings.bind(null, {}),
-          updateInitializeForm.bind(null, {}),
+          updateInitializeForm.bind(null, updateInitializeFormBag),
           updateInstallForm.bind(null, workersList)
         ],
         function (err) {
@@ -2206,13 +2214,16 @@
           getServices.bind(null, {}),
           getSystemMachineImages,
           getSystemCodes,
-          getMasterIntegrations.bind(null, {}),
-          updateInitializeForm.bind(null, {}),
-          updateAddonsFormSystemIntegrations
+          getMasterIntegrations.bind(null, {})
         ],
         function (err) {
           if (err)
             horn.error(err);
+
+          // these functions update vm with data fetched by above async.parallel
+          // functions so it needs to wait till all call are complete
+          updateInitializeForm({}, function(){});
+          updateAddonsFormSystemIntegrations(function(){});
           $scope.vm.initializing = false;
         }
       );
