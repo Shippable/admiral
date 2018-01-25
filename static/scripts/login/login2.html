@@ -1,4 +1,12 @@
 <div class="wrapper">
+  <!-- Horn -->
+  <div id="horn" class="ss-horn-bar">
+   <div ng-cloak class="alert {{hornMessageStyle(horn)}} ss-natural-word-break ss-page-container"
+     ng-repeat="horn in horns">
+     <a href="" class="pull-right" ng-click="removeHornMessage(horn)">x</a>
+     <div ng-bind-html="horn.message"></div>
+   </div>
+  </div>
   <form>
     <div class="form-signin">
       <h2 class="form-signin-heading">Please log in</h2>
