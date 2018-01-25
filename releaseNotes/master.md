@@ -11,17 +11,8 @@ ${RES_VER_DATE}
 ## Fixes
   - **Add Content-Type header in requests to slack**: Requests to slack API specify `Content-Type: application/json` header.
 
-## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
+  - **Fix triggering of `strict mode` jobs**: strict mode jobs now gets triggered when a job, whose OUT resource is used as IN to this strict job, completes
 
-## Shippable Server
-
-  - Features
-      - **simple title**: brief description
-  - Fixes
-      - **simple title**: brief description
 
 ## History
 
