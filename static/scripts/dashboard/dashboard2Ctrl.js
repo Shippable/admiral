@@ -6,15 +6,6 @@
   admiral.controller('dashboard2Ctrl', ['$scope', '$stateParams', '$q', '$state',
     '$interval', 'admiralApiAdapter', 'horn',
     dashboard2Ctrl
-  ])
-  .config(['$stateProvider', 'SRC_PATH',
-    function ($stateProvider, SRC_PATH) {
-      $stateProvider.state('dashboard2', {
-        url: '/',
-        templateUrl: SRC_PATH + 'dashboard/dashboard2.html',
-        controller: 'dashboard2Ctrl'
-      });
-    }
   ]);
 
 
@@ -669,7 +660,7 @@
                   if (logoutErr)
                     return horn.error(logoutErr);
 
-                  $state.go('login', $state.params);
+                  $state.go('login2', $state.params);
                 }
               );
             } else {
@@ -4221,7 +4212,7 @@
             return horn.error(err);
 
           e.preventDefault();
-          $state.go('login', $state.params);
+          $state.go('login2', $state.params);
           window.scrollTo(0, 0);
         }
       );

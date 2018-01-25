@@ -22,7 +22,7 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
       }
     );
 
-    $stateProvider.state('index2', {
+    $stateProvider.state('dashboard2', {
       url: '/index2',
       templateUrl: SRC_PATH + 'dashboard/dashboard2.html',
       onEnter: function ($rootScope) {

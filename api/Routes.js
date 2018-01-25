@@ -48,6 +48,23 @@ function initHelperRoutes(bag, next) {
     }
   );
 
+  bag.app.get('/login2',
+    function (req, res) {
+      res.cookie('admiralUrl', req.protocol + '://' + req.get('host'));
+
+      var opts = {};
+      res.render(path.resolve('static/app.html'), opts,
+        function (err, html) {
+          if (err) {
+            shipError(err.stack);
+            res.status(500).send('Internal Error. See logs');
+          }
+          res.send(html);
+        }
+      );
+    }
+  );
+
   bag.app.get('*',
     function (req, res) {
       if (!req.cookies.loginToken)
