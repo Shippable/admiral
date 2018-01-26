@@ -4,11 +4,8 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Ignore provider deployments when removing syncRepo**: When deleting a syncRepo, you can now tell Shippable to avoid removing deployments from the provider.  This allows you to remove your syncRepo and all of its children without disrupting any running container service deployments you might have. See [syncRepo docs](http://docs.shippable.com/platform/tutorial/workflow/crud-syncrepo/#deleting-a-syncrepo) for more info.
+
 
 ## Fixes
   - **simple title**: brief description
