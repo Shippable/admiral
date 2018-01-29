@@ -40,6 +40,12 @@ function _checkInputParams(bag, next) {
       new ActErr(who, ActErr.DataNotFound, 'Route parameter not found :url')
     );
 
+  if (!bag.url.endsWith('api/v3') && !bag.url.endsWith('api/v3/'))
+    return next(
+      new ActErr(who, ActErr.InvalidParam, 'Invalid parameter :url')
+    );
+
+  bag.url = bag.url.split('/api/v3')[0];
   return next();
 }
 
