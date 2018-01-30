@@ -11,6 +11,8 @@ ${RES_VER_DATE}
 ## Fixes
   - **Improve error logging of gitRepo in rSync**: Improved error logging for gitRepo resources by adding the resource name and reason why the resource is marked inconsistent during rSync processing.
 
+  - **Changing type of a subscriptionIntegration**: Allow editing of account integration type , this helps in changing the deprecated account integration type.
+
 ## Custom Nodes
   - **simple title**: brief description
       - additional details or
