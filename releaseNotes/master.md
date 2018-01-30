@@ -9,9 +9,7 @@ ${RES_VER_DATE}
 
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Improve error logging of gitRepo in rSync**: Improved error logging for gitRepo resources by adding the resource name and reason why the resource is marked inconsistent during rSync processing.
 
 ## Custom Nodes
   - **simple title**: brief description
