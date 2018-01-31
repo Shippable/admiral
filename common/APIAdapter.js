@@ -248,6 +248,19 @@ APIAdapter.prototype.postSystemCluster =
     this.post(url, body, callback);
   };
 
+// systemNodes
+APIAdapter.prototype.getSystemNodes =
+  function (query, callback) {
+    var url = '/api/systemNodes?' + query;
+    this.get(url, callback);
+  };
+
+APIAdapter.prototype.putSystemNodeById =
+  function (systemNodeId, body, callback) {
+    var url = '/api/systemNodes/' + systemNodeId;
+    this.put(url, body, callback);
+  };
+
 /*****************************************/
 /*              HTTP METHODS             */
 /*****************************************/
