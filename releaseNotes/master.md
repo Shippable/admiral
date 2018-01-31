@@ -29,9 +29,12 @@ ${RES_VER_DATE}
       - actions required
 
 ## Shippable Server
-
   - Features
-      - **simple title**: brief description
+      - **Node pools**: With the Node Pools release, a whole bunch of features were added like [Multi platform support](http://docs.shippable.com/platform/runtime/nodes/#byon-nodes), [Host execution](http://docs.shippable.com/platform/workflow/job/runsh/), [Custom images in runSh](http://docs.shippable.com/platform/workflow/job/runsh/) and [Node pool management](http://docs.shippable.com/platform/management/subscription/node-pools/).
+        - These features will be available by default for any new releases using v6.2.1 release.
+        - Any older release which is upgraded to v6.2.1 will automatically see the new features too.
+        - No user action is required for any migrations, they're handled
+          transparently as part of upgrade process.
   - Fixes
       - **simple title**: brief description
 
