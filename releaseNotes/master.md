@@ -4,10 +4,19 @@
 ${RES_VER_DATE}
 
 ## Features
+  - **Node pools**: With the Node Pools release, a whole bunch of features were added like [Multi platform support](http://docs.shippable.com/platform/runtime/nodes/#byon-nodes), [Host execution](http://docs.shippable.com/platform/workflow/job/runsh/), [Custom images in runSh](http://docs.shippable.com/platform/workflow/job/runsh/) and [Node pool management](http://docs.shippable.com/platform/management/subscription/node-pools/)
+    - Subscriptions using [On-demand nodes](http://docs.shippable.com/platform/runtime/nodes/#on-demand-nodes) will be migrated automatically to use Node Pools over the period of next few weeks.
+    - Subscriptions using [BYON nodes](http://docs.shippable.com/platform/runtime/nodes/#byon-nodes) will have an option to opt-in to use this functionality. Users can navigate to the Nodes page for their subscriptions, and see a button to switch to use new features.
+    - Before opting in, there are a few things of note:
+        1. Once you've opted in, the existing nodes will continue to process builds as is, but none of the new features will be available to it.
+        1. All the nodes **must** be reinitialized to access all the new features.
+        1. A default node pool will automatically be setup with all your existing nodes added it. By default we create Ubuntu 14.04 node pool. If you have any Ubuntu 16.04 nodes, a 16.04 node pool will be created instead.
+        1. After opting-in, there are a couple of [API changes](http://docs.shippable.com/platform/api/api-overview/) that you need to be aware of if you use the `POST /clusterNodes` route:
+            - `clusterId` will be a required field. This refers to the node pool ID to which you want to add the node. You can obtain this by accessing the `GET /clusters` route.
+            - `initScript` will no longer support the old script names. The new script names can be [found here](https://github.com/Shippable/node/tree/master/initScripts). For example, to init a x86_64, Ubuntu 16.04 node and install Docker 17.06, you will use: `x86_64/Ubuntu_16.04/Docker_17.06.sh`
   - **Ignore provider deployments when removing syncRepo**: When deleting a syncRepo, you can now tell Shippable to avoid removing deployments from the provider.  This allows you to remove your syncRepo and all of its children without disrupting any running container service deployments you might have. See [syncRepo docs](http://docs.shippable.com/platform/tutorial/workflow/crud-syncrepo/#deleting-a-syncrepo) for more info.
   - **Show the number of remaining builds for free accounts**: Displays remaining builds for the current month. This is displayed for free users using private repository who have a limit of 150 builds per month.
   - **Configurable timeout in deploy jobs**: The duration to wait for a deployment to become stable can be configured with `maxWaitTime`. See the [deploy job documentation](http://docs.shippable.com/platform/workflow/job/deploy/) for more information.
-
 
 ## Fixes
   - **Improve error logging of gitRepo in rSync**: Improved error logging for gitRepo resources by adding the resource name and reason why the resource is marked inconsistent during rSync processing.
@@ -20,9 +29,12 @@ ${RES_VER_DATE}
       - actions required
 
 ## Shippable Server
-
   - Features
-      - **simple title**: brief description
+      - **Node pools**: With the Node Pools release, a whole bunch of features were added like [Multi platform support](http://docs.shippable.com/platform/runtime/nodes/#byon-nodes), [Host execution](http://docs.shippable.com/platform/workflow/job/runsh/), [Custom images in runSh](http://docs.shippable.com/platform/workflow/job/runsh/) and [Node pool management](http://docs.shippable.com/platform/management/subscription/node-pools/).
+        - These features will be available by default for any new releases using v6.2.1 release.
+        - Any older release which is upgraded to v6.2.1 will automatically see the new features too.
+        - No user action is required for any migrations, they're handled
+          transparently as part of upgrade process.
   - Fixes
       - **simple title**: brief description
 
