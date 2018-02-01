@@ -17,6 +17,7 @@ ${RES_VER_DATE}
   - **Ignore provider deployments when removing syncRepo**: When deleting a syncRepo, you can now tell Shippable to avoid removing deployments from the provider.  This allows you to remove your syncRepo and all of its children without disrupting any running container service deployments you might have. See [syncRepo docs](http://docs.shippable.com/platform/tutorial/workflow/crud-syncrepo/#deleting-a-syncrepo) for more info.
   - **Show the number of remaining builds for free accounts**: Displays remaining builds for the current month. This is displayed for free users using private repository who have a limit of 150 builds per month.
   - **Configurable timeout in deploy jobs**: The duration to wait for a deployment to become stable can be configured with `maxWaitTime`. See the [deploy job documentation](http://docs.shippable.com/platform/workflow/job/deploy/) for more information.
+  - **Multiple billing contacts**: Multiple billing contacts can now be added on the subscription billing page. They should be semicolon separated. Each email in the list will receive billing related emails and receipts.
 
 ## Fixes
   - **Improve error logging of gitRepo in rSync**: Improved error logging for gitRepo resources by adding the resource name and reason why the resource is marked inconsistent during rSync processing.
@@ -24,9 +25,7 @@ ${RES_VER_DATE}
   - **Changing type of a subscriptionIntegration**: Allow a different integration type to be selected; this helps when replacing deprecated account integration types.
 
 ## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
+  - **Node Pools**: If you decide to opt-in to the node pool features (described in the features section), we highly recommend resetting your existing nodes in order to utilize new features.
 
 ## Shippable Server
   - Features
@@ -35,8 +34,6 @@ ${RES_VER_DATE}
         - Any older release which is upgraded to v6.2.1 will automatically see the new features too.
         - No user action is required for any migrations, they're handled
           transparently as part of upgrade process.
-  - Fixes
-      - **simple title**: brief description
 
 ## History
 
