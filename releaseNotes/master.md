@@ -25,6 +25,8 @@ ${RES_VER_DATE}
 
   - **Changing type of a subscriptionIntegration**: Allow a different integration type to be selected; this helps when replacing deprecated account integration types.
 
+  - **Using the same webhook integration multiple times in a CI project**: When the same integration is added to the `notifications` section of a `shippable.yml` multiple times, each payload triggered will be sent.
+
 ## Custom Nodes
   - **Node Pools**: If you decide to opt-in to the node pool features (described in the features section), we highly recommend resetting your existing nodes in order to utilize new features.
 
