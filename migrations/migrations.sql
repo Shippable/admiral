@@ -2656,6 +2656,11 @@ do $$
       roleCode := 6020
     );
 
+    perform set_route_role(
+      routePattern := '/projectDailyAggs',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
     -- set resources routeRoles
     perform set_route_role(
       routePattern := '/resources',
