@@ -24,6 +24,13 @@ __install_docker() {
   rm installDockerScript.sh
 }
 
+__install_ntp() {
+  # Install ntp
+  echo "Installing NTP"
+  sudo apt-get install -y ntp
+  sudo service ntp restart
+}
+
 __install_ecr() {
   sudo apt-get -y install python-pip
   sudo pip install awscli==1.10.63
@@ -49,6 +56,7 @@ main() {
   echo "Installing docker on worker node: $WORKER_HOST"
   __create_exec_file
   __install_docker
+  __install_ntp
   __install_ecr
   __initialize_worker
   __registry_login
