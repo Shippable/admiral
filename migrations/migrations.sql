@@ -2661,6 +2661,26 @@ do $$
       httpVerb := 'GET',
       roleCode := 6060
     );
+
+    -- set jobsDailyAggs routeRoles
+    perform set_route_role(
+      routePattern := '/jobsDailyAggs',
+      httpVerb := 'GET',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/jobsDailyAggs',
+      httpVerb := 'GET',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/jobsDailyAggs',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
     -- set resources routeRoles
     perform set_route_role(
       routePattern := '/resources',
