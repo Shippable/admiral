@@ -6,7 +6,7 @@
 # TODO: break up this file into smaller, logically-grouped
 # files after we add release and re-install features
 
-declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
+declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec" "genexec")
 declare -a PRIVATE_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
 
 __cleanup() {
@@ -173,14 +173,6 @@ __registry_login() {
 
 __pull_images() {
   __process_marker "Pulling latest service images"
-  __process_msg "Registry: $PUBLIC_IMAGE_REGISTRY"
-
-  __process_msg "Registry: shipimg"
-
-  image="$PUBLIC_IMAGE_REGISTRY/genexec:$RELEASE"
-  __process_msg "Pulling $image"
-  sudo docker pull $image
-
   __process_msg "Registry: $PRIVATE_IMAGE_REGISTRY"
   __registry_login
 
