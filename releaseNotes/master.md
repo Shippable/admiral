@@ -29,6 +29,8 @@ ${RES_VER_DATE}
 
   - **Improved triggering for strict mode**: Occasionally, strict mode jobs would remain in waiting status when the previous job started in a failed state, even if it later succeeds.  Now the strict mode jobs logic has been further serialized to prevent this occurrence.
 
+  - **Updated receipts**: Line break handling has been updated to make multiple billing email addresses or long addresses easier to read.
+
 ## Custom Nodes
   - **Node Pools**: If you decide to opt-in to the node pool features (described in the features section), we highly recommend resetting your existing nodes in order to utilize new features.
 
