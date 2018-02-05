@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export REDIS_IMAGE="drydock/redis:$RELEASE"
+export REDIS_IMAGE="374168611083.dkr.ecr.us-east-1.amazonaws.com/redis:$RELEASE"
 
 __cleanup() {
   __process_msg "Removing stale containers"

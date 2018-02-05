@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export MSG_IMAGE="drydock/rabbitmq:$RELEASE"
+export MSG_IMAGE="374168611083.dkr.ecr.us-east-1.amazonaws.com/rabbitmq:$RELEASE"
 
 __cleanup() {
   __process_msg "Removing stale containers"

@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export DB_IMAGE="$PRIVATE_IMAGE_REGISTRY/postgres:$RELEASE"
+export DB_IMAGE="374168611083.dkr.ecr.us-east-1.amazonaws.com/postgres:$RELEASE"
 export TIMEOUT=180
 
 __check_db() {

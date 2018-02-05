@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export STATE_IMAGE="drydock/gitlab:$RELEASE"
+export STATE_IMAGE="374168611083.dkr.ecr.us-east-1.amazonaws.com/gitlab:$RELEASE"
 export TIMEOUT=180
 
 __cleanup() {

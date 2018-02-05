@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export VAULT_IMAGE="drydock/vault:$RELEASE"
+export VAULT_IMAGE="374168611083.dkr.ecr.us-east-1.amazonaws.com/vault:$RELEASE"
 
 __cleanup() {
   __process_msg "Removing stale containers"
