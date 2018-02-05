@@ -7,8 +7,8 @@
 # files after we add release and re-install features
 
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
-declare -a PRIVATE_REGISTRY_IMAGES=("admiral")
-declare -a PUBLIC_REGISTRY_IMAGES=("postgres" "vault" "rabbitmq" "gitlab" "redis")
+declare -a PRIVATE_REGISTRY_IMAGES=("admiral" "postgres")
+declare -a PUBLIC_REGISTRY_IMAGES=("vault" "rabbitmq" "gitlab" "redis")
 
 __cleanup() {
   if [ -d $CONFIG_DIR ]; then

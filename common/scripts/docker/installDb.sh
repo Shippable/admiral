@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export DB_IMAGE="drydock/postgres:$RELEASE"
+export DB_IMAGE="$PRIVATE_IMAGE_REGISTRY/postgres:$RELEASE"
 export TIMEOUT=180
 
 __check_db() {
