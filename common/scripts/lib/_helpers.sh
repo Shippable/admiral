@@ -7,8 +7,7 @@
 # files after we add release and re-install features
 
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec")
-declare -a PRIVATE_REGISTRY_IMAGES=("admiral" "postgres")
-declare -a PUBLIC_REGISTRY_IMAGES=("vault" "rabbitmq" "gitlab" "redis")
+declare -a PRIVATE_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
 
 __cleanup() {
   if [ -d $CONFIG_DIR ]; then
@@ -175,12 +174,6 @@ __registry_login() {
 __pull_images() {
   __process_marker "Pulling latest service images"
   __process_msg "Registry: $PUBLIC_IMAGE_REGISTRY"
-
-  for image in "${PUBLIC_REGISTRY_IMAGES[@]}"; do
-    image="$PUBLIC_IMAGE_REGISTRY/$image:$RELEASE"
-    __process_msg "Pulling $image"
-    sudo docker pull $image
-  done
 
   __process_msg "Registry: shipimg"
 
