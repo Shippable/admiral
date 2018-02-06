@@ -174,6 +174,17 @@ function _generateEnvs(bag, next) {
   if (bag.shouldIgnoreTls && bag.shouldIgnoreTls === 'true')
     envs = util.format('%s -e %s=%s', envs, 'NODE_TLS_REJECT_UNAUTHORIZED', 0);
 
+  /* jshint camelcase:false */
+  if (process.env.http_proxy)
+    envs = util.format('%s -e http_proxy=%s', envs, process.env.http_proxy);
+
+  if (process.env.https_proxy)
+    envs = util.format('%s -e https_proxy=%s', envs, process.env.https_proxy);
+
+  if (process.env.no_proxy)
+    envs = util.format('%s -e no_proxy=%s', envs, process.env.no_proxy);
+  /* jshint camelcase:true */
+
   bag.envs = envs;
   return next();
 }

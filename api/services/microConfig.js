@@ -269,6 +269,17 @@ function _generateEnvs(bag, next) {
       envs, 'LISTEN_QUEUE', 'steps.', bag.name);
   }
 
+  /* jshint camelcase:false */
+  if (process.env.http_proxy)
+    envs = util.format('%s -e http_proxy=%s', envs, process.env.http_proxy);
+
+  if (process.env.https_proxy)
+    envs = util.format('%s -e https_proxy=%s', envs, process.env.https_proxy);
+
+  if (process.env.no_proxy)
+    envs = util.format('%s -e no_proxy=%s', envs, process.env.no_proxy);
+  /* jshint camelcase:true */
+
   bag.envs = envs;
   return next();
 }
