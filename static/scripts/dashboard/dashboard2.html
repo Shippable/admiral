@@ -1872,12 +1872,127 @@
                                         <label class="col-md-2 control-label">Location of node provisioning scripts</label>
                                         <div class="col-md-6">
                                           <input type="text" class="form-control" name="nodeScriptsLocation"
-                                            ng-model="vm.installForm.systemSettings.nodeScriptsLocation" ng-disabled="vm.installing || vm.saving"/>
-                                          </select>
+                                          ng-model="vm.installForm.systemSettings.nodeScriptsLocation" ng-disabled="vm.installing || vm.saving"/>
                                         </div>
                                       </div>
                                     </form>
                                     <hr/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Settings -->
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Settings</b></h4>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card-box">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Default build timeout (in milliseconds)</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="buildTimeoutMS"
+                                            ng-model="vm.installForm.systemSettings.buildTimeoutMS" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Default number of minions per subscription</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="defaultMinionCount"
+                                            ng-model="vm.installForm.systemSettings.defaultMinionCount" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Allowed system image family</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="allowedSystemImageFamily"
+                                            ng-model="vm.installForm.systemSettings.allowedSystemImageFamily" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Job console batch size</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="jobConsoleBatchSize"
+                                            ng-model="vm.installForm.systemSettings.jobConsoleBatchSize" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Job console buffer time interval</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="jobConsoleBufferTimeIntervalMS"
+                                            ng-model="vm.installForm.systemSettings.jobConsoleBufferTimeIntervalMS" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="checkbox checkbox-primary">
+                                      <input id="checkbox_for_auto_select" type="checkbox"
+                                      ng-model="vm.installForm.systemSettings.autoSelectBuilderToken" ng-disabled="vm.installing || vm.saving"/>
+                                      <label for="checkbox_for_auto_select">
+                                        <b> Auto-select the token used to run webhook builds </b>
+                                      </label>
+                                    </div>
+                                    <hr/>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="checkbox checkbox-primary">
+                                      <input id="checkbox_for_pvt_job_quota" type="checkbox"
+                                      ng-model="vm.installForm.systemSettings.enforcePrivateJobQuota" ng-disabled="vm.installing || vm.saving"/>
+                                      <label for="checkbox_for_pvt_job_quota">
+                                        <b> Limit number of builds allowed for private repos </b>
+                                      </label>
+                                    </div>
+                                    <form class="form-horizontal" role="form" ng-if="vm.installForm.systemSettings.enforcePrivateJobQuota">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Default private build limit:</label>
+                                        <div class="col-md-6">
+                                          <input type="text" class="form-control" name="defaultPrivateJobQuota"
+                                          ng-model="vm.installForm.systemSettings.defaultPrivateJobQuota" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form>
                                   </div>
                                 </div>
                               </div>
