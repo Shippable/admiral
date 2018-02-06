@@ -33,6 +33,7 @@ ${RES_VER_DATE}
 
 ## Custom Nodes
   - **Node Pools**: If you decide to opt-in to the node pool features (described in the features section), we highly recommend resetting your existing nodes in order to utilize new features.
+  - **Allow re-init of manually initialized BYON nodes in waiting state**: Previously users could not download re-initialization script for manually initialized BYON node if the node was in waiting state. This is now supported.
 
 ## Shippable Server
   - Features
