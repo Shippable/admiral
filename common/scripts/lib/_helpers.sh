@@ -120,6 +120,71 @@ __check_dependencies() {
     rm installDockerScript.sh
   fi
 
+  # Configure proxy for docker
+  docker_restart=false
+
+  if [ ! -z "$http_proxy" ]; then
+    http_proxy_env="export http_proxy=\"$http_proxy\""
+    http_proxy_exists=$(grep "^$http_proxy_env$" /etc/default/docker || echo "")
+    if [ -z $http_proxy_exists ]; then
+      __process_msg "Configuring docker http_proxy"
+      sed -i '/^export http_proxy/d' /etc/default/docker
+      echo "$http_proxy_env" >> /etc/default/docker
+      docker_restart=true
+    fi
+  else
+    # Clean up any env set already if we do not find one in the our environment
+    http_proxy_exists=$(grep "^export http_proxy=" /etc/default/docker || echo "")
+    if [ ! -z "$http_proxy_exists" ]; then
+      __process_msg "Removing docker http_proxy"
+      sed -i '/^export http_proxy/d' /etc/default/docker
+      docker_restart=true
+    fi
+  fi
+
+  if [ ! -z "$https_proxy" ]; then
+    https_proxy_env="export https_proxy=\"$https_proxy\""
+    https_proxy_exists=$(grep "^$https_proxy_env$" /etc/default/docker || echo "")
+    if [ -z $https_proxy_exists ]; then
+      __process_msg "Configuring docker https_proxy"
+      sed -i '/^export https_proxy/d' /etc/default/docker
+      echo "$https_proxy_env" >> /etc/default/docker
+      docker_restart=true
+    fi
+  else
+    # Clean up any env set already if we do not find one in the our environment
+    https_proxy_exists=$(grep "^export https_proxy=" /etc/default/docker || echo "")
+    if [ ! -z "$https_proxy_exists" ]; then
+      __process_msg "Removing docker https_proxy"
+      sed -i '/^export https_proxy/d' /etc/default/docker
+      docker_restart=true
+    fi
+  fi
+
+  if [ ! -z "$no_proxy" ]; then
+    no_proxy_env="export no_proxy=\"$no_proxy\""
+    no_proxy_exists=$(grep "^$no_proxy_env$" /etc/default/docker || echo "")
+    if [ -z $no_proxy_exists ]; then
+      __process_msg "Configuring docker no_proxy"
+      sed -i '/^export no_proxy/d' /etc/default/docker
+      echo "$no_proxy_env" >> /etc/default/docker
+      docker_restart=true
+    fi
+  else
+    # Clean up any env set already if we do not find one in the our environment
+    no_proxy_exists=$(grep "^export no_proxy=" /etc/default/docker || echo "")
+    if [ ! -z "$no_proxy_exists" ]; then
+      __process_msg "Removing docker no_proxy"
+      sed -i '/^export no_proxy/d' /etc/default/docker
+      docker_restart=true
+    fi
+  fi
+
+  if [ $docker_restart == true ]; then
+    __process_msg "Restarting docker"
+    service docker restart
+  fi
+
   ################## Install awscli  #####################################
   if type aws &> /dev/null && true; then
     __process_msg "'awscli' already installed"
