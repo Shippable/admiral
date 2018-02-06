@@ -120,9 +120,10 @@ __check_dependencies() {
     rm installDockerScript.sh
   fi
 
+  #
   # Configure proxy for docker
+  #
   docker_restart=false
-
   if [ ! -z "$http_proxy" ]; then
     http_proxy_env="export http_proxy=\"$http_proxy\""
     http_proxy_exists=$(grep "^$http_proxy_env$" /etc/default/docker || echo "")
@@ -133,7 +134,8 @@ __check_dependencies() {
       docker_restart=true
     fi
   else
-    # Clean up any env set already if we do not find one in the our environment
+    # Clean up any env configured already if we do not find it in our
+    # environment
     http_proxy_exists=$(grep "^export http_proxy=" /etc/default/docker || echo "")
     if [ ! -z "$http_proxy_exists" ]; then
       __process_msg "Removing docker http_proxy"
@@ -152,7 +154,8 @@ __check_dependencies() {
       docker_restart=true
     fi
   else
-    # Clean up any env set already if we do not find one in the our environment
+    # Clean up any env configured already if we do not find it in our
+    # environment
     https_proxy_exists=$(grep "^export https_proxy=" /etc/default/docker || echo "")
     if [ ! -z "$https_proxy_exists" ]; then
       __process_msg "Removing docker https_proxy"
@@ -171,7 +174,8 @@ __check_dependencies() {
       docker_restart=true
     fi
   else
-    # Clean up any env set already if we do not find one in the our environment
+    # Clean up any env configured already if we do not find it in our
+    # environment
     no_proxy_exists=$(grep "^export no_proxy=" /etc/default/docker || echo "")
     if [ ! -z "$no_proxy_exists" ]; then
       __process_msg "Removing docker no_proxy"

@@ -27,6 +27,21 @@ __boot_admiral() {
     -e IGNORE_TLS_ERRORS=$IGNORE_TLS_ERRORS \
     -e RUNTIME_DIR=$RUNTIME_DIR"
 
+  if [ ! -z "$http_proxy" ]; then
+    envs="$envs \
+      -e http_proxy=$http_proxy"
+  fi
+
+  if [ ! -z "$https_proxy" ]; then
+    envs="$envs \
+      -e https_proxy=$https_proxy"
+  fi
+
+  if [ ! -z "$no_proxy" ]; then
+    envs="$envs \
+      -e no_proxy=$no_proxy"
+  fi
+
   __process_msg "Generating admiral mounts"
   local docker_location=$(which docker)
   local mounts=" -v $CONFIG_DIR:$CONFIG_DIR \
