@@ -704,3 +704,9 @@ a:active {
 .alignTextRight {
   text-align: right;
 }
+
+.alert-danger-popup {
+  background-color: #f2dede;
+  border-color: rgba(239, 83, 80, 0.5) !important;
+  color: #ef5350;
+}
