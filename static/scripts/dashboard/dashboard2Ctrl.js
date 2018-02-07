@@ -4,13 +4,13 @@
   /* global _, async */
 
   admiral.controller('dashboard2Ctrl', ['$scope', '$stateParams', '$q', '$state',
-    '$interval', '$timeout', 'admiralApiAdapter', 'horn',
+    '$interval', '$timeout', 'admiralApiAdapter', 'popup_horn',
     dashboard2Ctrl
   ]);
 
 
   function dashboard2Ctrl($scope, $stateParams, $q, $state, $interval, $timeout,
-    admiralApiAdapter, horn) {
+    admiralApiAdapter, popup_horn) {
     /* jshint maxstatements:175 */
     var dashboardCtrlDefer = $q.defer();
 
@@ -23,7 +23,6 @@
       githubEnterpriseKeys: 'ghe',
       gitlabKeys: 'gitlab'
     };
-
     $scope.vm = {
       isLoaded: false,
       resetSwitchForAmazonKeys: false,
@@ -660,14 +659,14 @@
               admiralApiAdapter.postLogout({},
                 function (logoutErr) {
                   if (logoutErr)
-                    return horn.error(logoutErr);
+                    return popup_horn.error(logoutErr);
 
                   $state.go('login2', $state.params);
                 }
               );
             } else {
               dashboardCtrlDefer.reject(err);
-              return horn.error(err);
+              return popup_horn.error(err);
             }
           } else {
             if ($scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP])
@@ -700,7 +699,7 @@
               $scope.vm.shouldRedirect = true;
               return next(err);
             }
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
@@ -1021,7 +1020,7 @@
       admiralApiAdapter.getSystemIntegrations('',
         function (err, systemIntegrations) {
           if (err) {
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
@@ -1464,7 +1463,7 @@
       admiralApiAdapter.getMachineKeys(
         function (err, machineKeys) {
           if (err) {
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
@@ -1483,7 +1482,7 @@
       admiralApiAdapter.getMasterIntegrations(
         function (err, masterIntegrations) {
           if (err) {
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
@@ -1517,7 +1516,7 @@
       admiralApiAdapter.getSystemCodes('',
         function (err, systemCodes) {
           if (err) {
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
@@ -1541,7 +1540,7 @@
       admiralApiAdapter.getSystemSettings(
         function (err, systemSettings) {
           if (err) {
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
@@ -1596,7 +1595,7 @@
       admiralApiAdapter.getServices('',
         function (err, services) {
           if (err) {
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
@@ -1629,12 +1628,12 @@
       admiralApiAdapter.getSystemMachineImages('',
         function (err, systemMachineImages) {
           if (err) {
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
           if (_.isEmpty(systemMachineImages)) {
-            horn.error('No default system machine image found. ' +
+            popup_horn.error('No default system machine image found. ' +
               'Please reinitialize.');
             return next();
           }
@@ -1659,7 +1658,7 @@
       admiralApiAdapter.getSystemSettings(
         function (err, systemSettings) {
           if (err) {
-            horn.error(err);
+            popup_horn.error(err);
             return next();
           }
 
@@ -1733,7 +1732,7 @@
         function (err) {
           if (err) {
             $scope.vm.initializing = false;
-            return horn.error(err);
+            return popup_horn.error(err);
           }
 
           pollService('db', postAndInitSecrets);
@@ -1788,7 +1787,7 @@
             if (err) {
               $interval.cancel(promise);
               $scope.vm.initializing = false;
-              return horn.error(err);
+              return popup_horn.error(err);
             }
 
             var service = $scope.vm.systemSettings[serviceName];
@@ -1833,7 +1832,7 @@
         function (err) {
           if (err) {
             $scope.vm.initializing = false;
-            return horn.error(err);
+            return popup_horn.error(err);
           }
 
           pollService('secrets', postServices);
@@ -1990,7 +1989,7 @@
         function (err) {
           if (err) {
             $scope.vm.initializing = false;
-            return horn.error(err);
+            return popup_horn.error(err);
           }
 
           initMsg();
@@ -2086,7 +2085,7 @@
           if (err) {
             $scope.vm.systemSettings.msg.isProcessing = false;
             $scope.vm.initializing = false;
-            return horn.error(err);
+            return popup_horn.error(err);
           }
 
           pollService('msg', initState);
@@ -2102,7 +2101,7 @@
           if (err) {
             $scope.vm.systemSettings.state.isProcessing = false;
             $scope.vm.initializing = false;
-            return horn.error(err);
+            return popup_horn.error(err);
           }
 
           pollService('state', initRedis);
@@ -2117,7 +2116,7 @@
           if (err) {
             $scope.vm.systemSettings.redis.isProcessing = false;
             $scope.vm.initializing = false;
-            return horn.error(err);
+            return popup_horn.error(err);
           }
 
           pollService('redis', initMaster);
@@ -2132,7 +2131,7 @@
           if (err) {
             $scope.vm.systemSettings.master.isProcessing = false;
             $scope.vm.initializing = false;
-            return horn.error(err);
+            return popup_horn.error(err);
           }
 
           pollService('master', initWorkers);
@@ -2159,7 +2158,7 @@
         function (err) {
           if (err) {
             $scope.vm.initializing = false;
-            return horn.error(err);
+            return popup_horn.error(err);
           }
           postInitFlow();
         }
@@ -2211,7 +2210,7 @@
         ],
         function (err) {
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
 
           // these functions update vm with data fetched by above async.parallel
           // functions so it needs to wait till all call are complete
@@ -2230,7 +2229,7 @@
       );
 
       if (nameInUse) {
-        horn.error('A swarm worker already exists with that name. ' +
+        popup_horn.error('A swarm worker already exists with that name. ' +
           'Worker names must be unique.'
         );
         return;
@@ -2243,7 +2242,7 @@
       );
 
       if (addressInUse) {
-        horn.error('A swarm worker already exists with that address. ' +
+        popup_horn.error('A swarm worker already exists with that address. ' +
           'Worker addresses must be unique.'
         );
         return;
@@ -2315,7 +2314,7 @@
         function (err) {
           $scope.vm.upgrading = false;
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
         }
       );
     }
@@ -2609,25 +2608,25 @@
         function (err) {
           $scope.vm.installing = false;
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
 
           // Check if we should show "Install" or "Save" and "Restart Services"
           getServices({},
             function (err) {
               if (err)
-                return horn.error(err);
+                return popup_horn.error(err);
             }
           );
           getSuperUsers(
             function (err) {
               if (err)
-                return horn.error(err);
+                return popup_horn.error(err);
             }
           );
           getSystemNodes(
             function (err) {
               if (err)
-                return horn.error(err);
+                return popup_horn.error(err);
             }
           );
         }
@@ -2668,25 +2667,25 @@
         function (err) {
           $scope.vm.saving = false;
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
 
           // Check if we should show "Install" or "Save" and "Restart Services"
           getServices({},
             function (err) {
               if (err)
-                return horn.error(err);
+                return popup_horn.error(err);
             }
           );
           getSuperUsers(
             function (err) {
               if (err)
-                return horn.error(err);
+                return popup_horn.error(err);
             }
           );
           getSystemNodes(
             function (err) {
               if (err)
-                return horn.error(err);
+                return popup_horn.error(err);
             }
           );
         }
@@ -2713,13 +2712,13 @@
         function (err) {
           $scope.vm.restartingServices = false;
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
 
           // Check if we should show "Install" or "Save" and "Restart Services"
           getServices({},
             function (err) {
               if (err)
-                return horn.error(err);
+                return popup_horn.error(err);
             }
           );
         }
@@ -2735,7 +2734,7 @@
           admiralApiAdapter.putService(service.serviceName, service,
             function (err) {
               if (err)
-                horn.error(err);
+                popup_horn.error(err);
               return done();
             }
           );
@@ -2743,7 +2742,7 @@
         function (err) {
           $scope.vm.saving = false;
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
           return next();
         }
       );
@@ -2779,7 +2778,7 @@
       admiralApiAdapter.putService('internalAPI', internalAPIService,
         function (err) {
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
           return next();
         }
       );
@@ -2800,7 +2799,7 @@
       admiralApiAdapter.putService('consoleAPI', consoleAPIService,
         function (err) {
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
           return next();
         }
       );
@@ -2820,7 +2819,7 @@
       admiralApiAdapter.putService('irc', ircService,
         function (err) {
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
           return next();
         }
       );
@@ -3733,7 +3732,7 @@
       admiralApiAdapter.getAdmiralEnv(
         function (err, admiralEnv) {
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
 
           $scope.vm.selectedService.configs = [];
 
@@ -3757,7 +3756,7 @@
       admiralApiAdapter.getCoreService(service,
         function (err, configs) {
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
 
           $scope.vm.selectedService.configs = [];
 
@@ -3783,7 +3782,7 @@
       admiralApiAdapter.getServiceLogs(service,
         function (err, logs) {
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
 
           $scope.vm.selectedService.logs = logs;
 
@@ -3801,7 +3800,7 @@
       admiralApiAdapter.getServiceLogs(service,
         function (err, logs) {
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
 
           $scope.vm.selectedService.logs = logs;
 
@@ -3841,7 +3840,7 @@
       admiralApiAdapter.getEULAText(
         function (err, eula) {
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
           $scope.vm.eulaText = eula.join('\n');
 
           $('#eulaModal').modal('show');
@@ -3854,7 +3853,7 @@
       admiralApiAdapter.getServiceLogs($scope.vm.selectedService.serviceName,
         function (err, logs) {
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
 
           $scope.vm.selectedService.logs = logs;
         }
@@ -3874,7 +3873,7 @@
         function (err) {
           $scope.vm.installingAddons = false;
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
           getMasterIntegrations({}, function () {});
         }
       );
@@ -3951,7 +3950,7 @@
         },
         function (err) {
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
           return next();
         }
       );
@@ -4020,7 +4019,7 @@
           ],
           function (err) {
             if (err)
-              return horn.error(err);
+              return popup_horn.error(err);
             if (bag.systemIntegrationId) {
               var providerAuthName = providerAuthNames[bag.masterName];
               if (!_.isEmpty(providerAuthName))
@@ -4041,7 +4040,7 @@
           ],
           function (err) {
             if (err)
-              return horn.error(err);
+              return popup_horn.error(err);
           }
         );
       }
@@ -4058,7 +4057,7 @@
           $scope.vm.superUsers.addingSuperUser = false;
           $scope.vm.superUsers.newSuperUser = '';
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
         }
       );
     }
@@ -4077,7 +4076,7 @@
         function (err) {
           $scope.vm.superUsers.deletingSuperUser = false;
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
         }
       );
     }
@@ -4101,7 +4100,7 @@
       admiralApiAdapter.getSuperUsers(
         function (err, superUsers) {
           if (err)
-            horn.error(err);
+            popup_horn.error(err);
           $scope.vm.superUsers.superUsers = superUsers;
           return next();
         }
@@ -4115,7 +4114,7 @@
 
       admiralApiAdapter.getSystemNodes('',
         function (err, systemNodes) {
-          if (err) return horn.error(err);
+          if (err) return popup_horn.error(err);
 
           $scope.vm.systemNodes.systemNodes = systemNodes;
           return next();
@@ -4146,7 +4145,7 @@
         ],
         function (err) {
           $scope.vm.systemNodes.addingSystemNode = false;
-          if (err) return horn.error(err);
+          if (err) return popup_horn.error(err);
 
           $scope.vm.systemNodes.systemNodes.push(bag.systemNode);
         }
@@ -4195,7 +4194,7 @@
         ],
         function (err) {
           $scope.vm.systemNodes.deletingSystemNode = false;
-          if (err) return horn.error(err);
+          if (err) return popup_horn.error(err);
 
           $scope.vm.systemNodes.systemNodes = _.reject(
             $scope.vm.systemNodes.systemNodes,
@@ -4222,7 +4221,7 @@
       admiralApiAdapter.postLogout({},
         function (err) {
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
 
           e.preventDefault();
           $state.go('login2', $state.params);

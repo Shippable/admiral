@@ -51,16 +51,6 @@
   <!-- Start content -->
   <div class="content">
     <div class="container">
-      <!-- Horn -->
-      <div class="row">
-        <div id="horn" class="ss-horn-bar">
-         <div ng-cloak class="alert {{hornMessageStyle(horn)}} ss-natural-word-break ss-page-container"
-           ng-repeat="horn in horns">
-           <a href="" class="pull-right" ng-click="removeHornMessage(horn)">x</a>
-           <div ng-bind-html="horn.message"></div>
-         </div>
-        </div>
-      </div>
 
       <section id="infrastructure" ng-if="vm.sectionSelected === 'infrastructure'">
         <!-- Page-Title -->
