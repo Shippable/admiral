@@ -50,6 +50,10 @@ __validate_runtime() {
     __process_msg "LOGIN_TOKEN already generated, skipping"
   fi
 
+  if [ -z "$NO_VERIFY_SSL" ]; then
+    echo "NO_VERIFY_SSL=false" >> $ADMIRAL_ENV
+  fi
+
   ################## check for services ##########################
   local services_path=$SCRIPTS_DIR/configs/services.json
   if [ ! -f "$services_path" ]; then
