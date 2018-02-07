@@ -9,11 +9,21 @@ __create_exec_file() {
   echo 'readonly KEY_STORE_LOCATION="/tmp/ssh"' >> installDockerScript.sh
   echo 'readonly BUILD_LOCATION="/build"' >> installDockerScript.sh
   echo 'install_docker_only="true"' >> installDockerScript.sh
-  # Fetch the installation script and headers
-  echo "Downloading installation scripts from 'node' repo"
-  curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/lib/logger.sh >> installDockerScript.sh
-  curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/lib/headers.sh >> installDockerScript.sh
-  curl https://raw.githubusercontent.com/Shippable/node/$RELEASE/initScripts/x86_64/Ubuntu_14.04/Docker_1.13.sh >> installDockerScript.sh
+  local node_scripts_location=/tmp/node
+  local node_s3_location="https://s3.amazonaws.com/shippable-artifacts/node/$RELEASE/node-$RELEASE.tar.gz"
+
+  pushd /tmp
+  mkdir -p $node_scripts_location
+  wget $node_s3_location
+  tar -xzf node-$RELEASE.tar.gz -C $node_scripts_location --strip-components=1
+  rm -rf node-$RELEASE.tar.gz
+  popd
+
+  cat $node_scripts_location/lib/logger.sh >> installDockerScript.sh
+  cat $node_scripts_location/lib/headers.sh >> installDockerScript.sh
+  cat $node_scripts_location/initScripts/x86_64/Ubuntu_14.04/Docker_1.13.sh >> installDockerScript.sh
+
+  rm -rf $node_scripts_location
 }
 
 __install_docker() {
