@@ -27,7 +27,8 @@ function post(req, res) {
     setServiceUserToken: false,
     accessKeyEnv: 'ACCESS_KEY',
     secretKeyEnv: 'SECRET_KEY',
-    publicRegistryEnv: 'PUBLIC_IMAGE_REGISTRY'
+    publicRegistryEnv: 'PUBLIC_IMAGE_REGISTRY',
+    noVerifySSLEnv: 'NO_VERIFY_SSL'
   };
 
   bag.who = util.format('db|%s', self.name);
@@ -49,6 +50,7 @@ function post(req, res) {
       _upsertSystemIntegrations.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
+      _getNoVerifySSL.bind(null, bag),
       _checkIsInitialized.bind(null, bag),
       _runMigrationsBeforeAPIStart.bind(null, bag),
       _startFakeAPI.bind(null, bag),
@@ -416,6 +418,25 @@ function _getSecretKey(bag, next) {
   );
 }
 
+function _getNoVerifySSL(bag, next) {
+  var who = bag.who + '|' + _getNoVerifySSL.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.noVerifySSLEnv,
+    function (err, noVerifySSL) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.noVerifySSLEnv)
+        );
+
+      bag.noVerifySSL = noVerifySSL;
+
+      return next();
+    }
+  );
+}
+
 function _checkIsInitialized(bag, next) {
   var who = bag.who + '|' + _checkIsInitialized.name;
   logger.verbose(who, 'Inside');
@@ -492,7 +513,8 @@ function _startFakeAPI(bag, next) {
         'DBDIALECT': global.config.dbDialect,
         'ACCESS_KEY': bag.accessKey,
         'SECRET_KEY': bag.secretKey,
-        'PRIVATE_IMAGE_REGISTRY': global.config.privateImageRegistry
+        'PRIVATE_IMAGE_REGISTRY': global.config.privateImageRegistry,
+        'NO_VERIFY_SSL': bag.noVerifySSL
       }
     },
     function (err) {
@@ -824,6 +846,18 @@ function _writeScriptToFile(seriesBag, next) {
 function _runScript(seriesBag, next) {
   var who = seriesBag.who + '|' + _runScript.name;
   logger.verbose(who, 'Inside');
+
+  /* jshint camelcase:false */
+  seriesBag.scriptEnvs = seriesBag.scriptEnvs || {};
+  if (process.env.http_proxy)
+    seriesBag.scriptEnvs.http_proxy = process.env.http_proxy;
+
+  if (process.env.https_proxy)
+    seriesBag.scriptEnvs.https_proxy = process.env.https_proxy;
+
+  if (process.env.no_proxy)
+    seriesBag.scriptEnvs.no_proxy = process.env.no_proxy;
+  /* jshint camelcase:true */
 
   var exec = spawn('/bin/bash',
     ['-c', seriesBag.tmpScriptFilename],
