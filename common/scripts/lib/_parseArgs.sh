@@ -275,10 +275,10 @@ __prompt_for_inputs() {
         __process_msg "Saved public image registry"
       fi
       if $setProxy ; then
-        sed -i 's/^HTTP_PROXY=.*/HTTP_PROXY="'$HTTP_PROXY'"/g' $ADMIRAL_ENV
-        sed -i 's/^HTTPS_PROXY=.*/HTTPS_PROXY="'$HTTPS_PROXY'"/g' $ADMIRAL_ENV
-        sed -i 's/^NO_PROXY=.*/NO_PROXY="'$NO_PROXY'"/g' $ADMIRAL_ENV
-        __process_msg "Save proxy configuration"
+        sed -i 's#^HTTP_PROXY=.*#HTTP_PROXY="'$HTTP_PROXY'"#g' $ADMIRAL_ENV
+        sed -i 's#^HTTPS_PROXY=.*#HTTPS_PROXY="'$HTTPS_PROXY'"#g' $ADMIRAL_ENV
+        sed -i 's#^NO_PROXY=.*#NO_PROXY="'$NO_PROXY'"#g' $ADMIRAL_ENV
+        __process_msg "Saved proxy configuration"
       fi
 
       if $setDBIP && [ "$DB_IP" != "$ADMIRAL_IP" ] && [ "$DB_INSTALLED" == "false" ]; then
