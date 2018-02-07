@@ -4,12 +4,12 @@
   /* global _, async */
 
   admiral.controller('dashboard2Ctrl', ['$scope', '$stateParams', '$q', '$state',
-    '$interval', 'admiralApiAdapter', 'horn',
+    '$interval', '$timeout', 'admiralApiAdapter', 'horn',
     dashboard2Ctrl
   ]);
 
 
-  function dashboard2Ctrl($scope, $stateParams, $q, $state, $interval,
+  function dashboard2Ctrl($scope, $stateParams, $q, $state, $interval, $timeout,
     admiralApiAdapter, horn) {
     /* jshint maxstatements:175 */
     var dashboardCtrlDefer = $q.defer();
@@ -26,6 +26,7 @@
 
     $scope.vm = {
       isLoaded: false,
+      resetSwitchForAmazonKeys: false,
       initializing: false,
       initialized: false,
       dbInitialized: false,
@@ -615,6 +616,7 @@
       hasDefaultx86SystemMachineImage: hasDefaultx86SystemMachineImage,
       hasDefaultArmSystemMachineImage: hasDefaultArmSystemMachineImage,
       logOutOfAdmiral: logOutOfAdmiral,
+      switchToggle: switchToggle,
       systemNodes: {
         addingSystemNode: false,
         systemNodes: []
@@ -4227,6 +4229,15 @@
           window.scrollTo(0, 0);
         }
       );
+    }
+
+    function switchToggle() {
+      $scope.vm.resetSwitchForAmazonKeys = true;
+      $timeout(toggleAmazonKeysSwitch, 200);
+    }
+
+    function toggleAmazonKeysSwitch () {
+      $scope.vm.resetSwitchForAmazonKeys = false;
     }
 
     function isGlobalService(service) {
