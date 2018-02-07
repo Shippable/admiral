@@ -1183,6 +1183,13 @@
                                           ng-model="vm.installForm.auth.bitbucketKeys.callbackUrl" readonly />
                                         </div>
                                       </div>
+                                      <div class="form-group" ng-if="!vm.installForm.auth.bitbucketKeys.data.clientId || !vm.installForm.auth.bitbucketKeys.data.clientSecret">
+                                        <div class="col-md-offset-2 col-md-6">
+                                          <dd class="text-danger">
+                                            <span>All these are required fields. Please fill them all before continuing further.</span>
+                                          </dd>
+                                        </div>
+                                      </div>
                                     </form>
                                   </div>
                                 </div>
@@ -1259,6 +1266,13 @@
                                           ng-model="vm.installForm.auth.bitbucketServerKeys.callbackUrl" readonly />
                                         </div>
                                       </div>
+                                      <div class="form-group" ng-if="!vm.installForm.auth.bitbucketServerKeys.data.clientId || !vm.installForm.auth.bitbucketServerKeys.data.clientSecret || !vm.installForm.auth.bitbucketServerKeys.data.url">
+                                        <div class="col-md-offset-2 col-md-6">
+                                          <dd class="text-danger">
+                                            <span>All these are required fields. Please fill them all before continuing further.</span>
+                                          </dd>
+                                        </div>
+                                      </div>
                                     </form>
                                   </div>
                                 </div>
@@ -1326,6 +1340,13 @@
                                         <div class="col-md-6">
                                           <input type="text" class="form-control" name="githubCallbackUrl"
                                           ng-model="vm.installForm.auth.githubKeys.callbackUrl" readonly />
+                                        </div>
+                                      </div>
+                                      <div class="form-group" ng-if="!vm.installForm.auth.githubKeys.data.clientId || !vm.installForm.auth.githubKeys.data.clientSecret">
+                                        <div class="col-md-offset-2 col-md-6">
+                                          <dd class="text-danger">
+                                            <span>All these are required fields. Please fill them all before continuing further.</span>
+                                          </dd>
                                         </div>
                                       </div>
                                     </form>
@@ -1404,6 +1425,13 @@
                                           ng-model="vm.installForm.auth.githubEnterpriseKeys.callbackUrl" readonly />
                                         </div>
                                       </div>
+                                      <div class="form-group" ng-if="!vm.installForm.auth.githubEnterpriseKeys.data.clientId || !vm.installForm.auth.githubEnterpriseKeys.data.clientSecret || !vm.installForm.auth.githubEnterpriseKeys.data.url">
+                                        <div class="col-md-offset-2 col-md-6">
+                                          <dd class="text-danger">
+                                            <span>All these are required fields. Please fill them all before continuing further.</span>
+                                          </dd>
+                                        </div>
+                                      </div>
                                     </form>
                                   </div>
                                 </div>
@@ -1477,6 +1505,13 @@
                                         <div class="col-md-6">
                                           <input type="text" class="form-control" name="gitlabCallbackUrl"
                                           ng-model="vm.installForm.auth.gitlabKeys.callbackUrl" readonly />
+                                        </div>
+                                      </div>
+                                      <div class="form-group" ng-if="!vm.installForm.auth.gitlabKeys.data.clientId || !vm.installForm.auth.gitlabKeys.data.clientSecret || !vm.installForm.auth.gitlabKeys.data.url">
+                                        <div class="col-md-offset-2 col-md-6">
+                                          <dd class="text-danger">
+                                            <span>All these are required fields. Please fill them all before continuing further.</span>
+                                          </dd>
                                         </div>
                                       </div>
                                     </form>
