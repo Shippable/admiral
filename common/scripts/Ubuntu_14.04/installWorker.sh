@@ -57,7 +57,11 @@ __initialize_worker() {
 __registry_login() {
   echo "Logging into registry"
   mkdir -p ~/.aws
-  local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
+  if [ "$NO_VERIFY_SSL" == true ]; then
+    local docker_login_cmd=$(aws ecr --no-verify-ssl --region us-east-1 get-login)
+  else
+    local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
+  fi
   echo "Docker login generated, logging into ecr"
   eval "$docker_login_cmd"
 }
