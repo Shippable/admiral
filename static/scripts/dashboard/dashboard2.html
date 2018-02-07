@@ -2195,8 +2195,8 @@
                                 <tr>
                                   <td>{{vm.addonsForm.amazonKeys.displayName}}</td>
                                   <td class="text-right">
-                                    <input type="checkbox" class="js-switch"
-                                      ng-disabled="vm.installingAddons"
+                                    <input type="checkbox" class="js-switch" ng-change="vm.switchToggle()"
+                                      ng-disabled="vm.installingAddons || vm.resetSwitchForAmazonKeys"
                                       ng-model="vm.addonsForm.amazonKeys.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -2601,8 +2601,8 @@
                                     <span class="glyphicon glyphicon-info-sign"></span></span>
                                   </td>
                                   <td class="text-right">
-                                    <input type="checkbox" class="js-switch"
-                                      ng-disabled="vm.installingAddons"
+                                    <input type="checkbox" class="js-switch" ng-change="vm.switchToggle()"
+                                      ng-disabled="vm.installingAddons || vm.resetSwitchForAmazonKeys"
                                       ng-model="vm.addonsForm.amazonKeys.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
