@@ -268,6 +268,18 @@ function _installVault(bag, next) {
   var who = bag.who + '|' + _installVault.name;
   logger.verbose(who, 'Inside');
 
+  /* jshint camelcase:false */
+  bag.scriptEnvs = bag.scriptEnvs || {};
+  if (process.env.http_proxy)
+    bag.scriptEnvs.http_proxy = process.env.http_proxy;
+
+  if (process.env.https_proxy)
+    bag.scriptEnvs.https_proxy = process.env.https_proxy;
+
+  if (process.env.no_proxy)
+    bag.scriptEnvs.no_proxy = process.env.no_proxy;
+  /* jshint camelcase:true */
+
   var exec = spawn('/bin/bash',
     ['-c', bag.tmpScript],
     {
