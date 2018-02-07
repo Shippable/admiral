@@ -2,7 +2,7 @@
   'use strict';
 
   admiral.controller('loginCtrl2', ['$scope', '$stateParams', '$q', '$state',
-    'admiralApiAdapter', 'horn',
+    'admiralApiAdapter', 'popup_horn',
     loginCtrl2
   ])
   .config(['$stateProvider', 'SRC_PATH',
@@ -20,7 +20,7 @@
 
 
   function loginCtrl2($scope, $stateParams, $q, $state,
-    admiralApiAdapter, horn) {
+    admiralApiAdapter, popup_horn) {
     var loginCtrl2Defer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -44,7 +44,7 @@
           $scope.vm.isLoaded = true;
           if (err) {
             loginCtrl2Defer.reject(err);
-            return horn.error(err);
+            return popup_horn.error(err);
           }
 
           loginCtrl2Defer.resolve();
@@ -72,7 +72,7 @@
         },
         function (err) {
           if (err)
-            return horn.error(err);
+            return popup_horn.error(err);
 
           e.preventDefault();
           $scope._r.loginToken = loginToken;

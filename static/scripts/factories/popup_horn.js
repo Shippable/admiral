@@ -15,7 +15,7 @@
           message: message,
           duration: -1,
           position: getPosition(),
-          classes: ['alert-danger']
+          classes: ['alert-danger-popup']
         });
       },
 
