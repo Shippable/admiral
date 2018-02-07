@@ -135,8 +135,8 @@ __check_dependencies() {
   # Configure proxy for docker
   #
   docker_restart=false
-  if [ ! -z "$http_proxy" ]; then
-    http_proxy_env="export http_proxy=\"$http_proxy\""
+  if [ ! -z "$HTTP_PROXY" ]; then
+    http_proxy_env="export http_proxy=\"$HTTP_PROXY\""
     http_proxy_exists=$(grep "^$http_proxy_env$" /etc/default/docker || echo "")
     if [ -z $http_proxy_exists ]; then
       __process_msg "Configuring docker http_proxy"
@@ -155,8 +155,8 @@ __check_dependencies() {
     fi
   fi
 
-  if [ ! -z "$https_proxy" ]; then
-    https_proxy_env="export https_proxy=\"$https_proxy\""
+  if [ ! -z "$HTTPS_PROXY" ]; then
+    https_proxy_env="export https_proxy=\"$HTTPS_PROXY\""
     https_proxy_exists=$(grep "^$https_proxy_env$" /etc/default/docker || echo "")
     if [ -z $https_proxy_exists ]; then
       __process_msg "Configuring docker https_proxy"
@@ -175,8 +175,8 @@ __check_dependencies() {
     fi
   fi
 
-  if [ ! -z "$no_proxy" ]; then
-    no_proxy_env="export no_proxy=\"$no_proxy\""
+  if [ ! -z "$NO_PROXY" ]; then
+    no_proxy_env="export no_proxy=\"$NO_PROXY\""
     no_proxy_exists=$(grep "^$no_proxy_env$" /etc/default/docker || echo "")
     if [ -z $no_proxy_exists ]; then
       __process_msg "Configuring docker no_proxy"
@@ -809,4 +809,8 @@ __exec_cmd_remote_proxyless() {
     __process_msg "ERROR: Command failed on host: $host ==> '$cmd'"
     exit 1
   }
+}
+
+__configure_proxy() {
+  source "$SCRIPTS_DIR/configureProxy.sh"
 }

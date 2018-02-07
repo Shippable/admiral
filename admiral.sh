@@ -51,6 +51,7 @@ main() {
   __check_logsdir
   __parse_args "$@"
   __validate_runtime
+  __configure_proxy
   __check_dependencies
   __pull_images
   __pull_images_workers
@@ -63,7 +64,7 @@ main() {
     source "$SCRIPTS_DIR/restart.sh"
   } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )
 
-  __process_msg "Command successfully completed !!!"
+  __process_msg "Command successfully completed!"
 }
 
 main "$@"
