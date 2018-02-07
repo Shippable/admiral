@@ -21,6 +21,7 @@ __validate_worker_envs() {
   __process_msg "WORKER_JOIN_TOKEN: $WORKER_JOIN_TOKEN"
   __process_msg "ACCESS_KEY: ${#ACCESS_KEY}"
   __process_msg "SECRET_KEY: ${#SECRET_KEY}"
+  __process_msg "NO_VERIFY_SSL: $NO_VERIFY_SSL"
 }
 
 __validate_worker_mounts() {
@@ -89,10 +90,15 @@ main() {
         WORKER_PORT=$WORKER_PORT \
         MASTER_HOST=$MASTER_HOST \
         RELEASE=$RELEASE \
+        NO_VERIFY_SSL=$NO_VERIFY_SSL \
         $SCRIPTS_DIR_REMOTE/$script_name"
       __exec_cmd_remote "$WORKER_HOST" "$worker_install_cmd"
 
-      local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+      if [ "$NO_VERIFY_SSL" == true ]; then
+        local docker_login_cmd="aws ecr --no-verify-ssl --region us-east-1 get-login | bash"
+      else
+        local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+      fi
       __exec_cmd_remote "$WORKER_HOST" "$docker_login_cmd"
 
       for image in "${SERVICE_IMAGES[@]}"; do

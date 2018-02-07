@@ -26,7 +26,8 @@ function initialize(req, res) {
     tmpScript: '/tmp/workers.sh',
     accessKeyEnv: 'ACCESS_KEY',
     secretKeyEnv: 'SECRET_KEY',
-    swarmWorkerTokenEnv: 'SWARM_WORKER_JOIN_TOKEN'
+    swarmWorkerTokenEnv: 'SWARM_WORKER_JOIN_TOKEN',
+    noVerifySSLEnv: 'NO_VERIFY_SSL'
   };
 
   bag.who = util.format('workers|%s', self.name);
@@ -41,6 +42,7 @@ function initialize(req, res) {
       _sendResponse.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
+      _getNoVerifySSL.bind(null, bag),
       _getSwarmWorkerJoinToken.bind(null, bag),
       _getReleaseVersion.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
@@ -240,6 +242,25 @@ function _getSecretKey(bag, next) {
   );
 }
 
+function _getNoVerifySSL(bag, next) {
+  var who = bag.who + '|' + _getNoVerifySSL.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get(bag.noVerifySSLEnv,
+    function (err, noVerifySSL) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.noVerifySSLEnv)
+        );
+
+      bag.noVerifySSL = noVerifySSL;
+
+      return next();
+    }
+  );
+}
+
 function _getSwarmWorkerJoinToken(bag, next) {
   var who = bag.who + '|' + _getSwarmWorkerJoinToken.name;
   logger.verbose(who, 'Inside');
@@ -306,7 +327,8 @@ function _generateInitializeEnvs(bag, next) {
     'WORKER_JOIN_TOKEN': bag.swarmWorkerJoinToken,
     'PRIVATE_IMAGE_REGISTRY': global.config.privateImageRegistry,
     'ACCESS_KEY': bag.accessKey,
-    'SECRET_KEY': bag.secretKey
+    'SECRET_KEY': bag.secretKey,
+    'NO_VERIFY_SSL': bag.noVerifySSL
   };
 
   return next();
@@ -358,6 +380,18 @@ function _writeScriptToFile(bag, next) {
 function _initializeWorker(bag, next) {
   var who = bag.who + '|' + _initializeWorker.name;
   logger.verbose(who, 'Inside');
+
+  /* jshint camelcase:false */
+  bag.scriptEnvs = bag.scriptEnvs || {};
+  if (process.env.http_proxy)
+    bag.scriptEnvs.http_proxy = process.env.http_proxy;
+
+  if (process.env.https_proxy)
+    bag.scriptEnvs.https_proxy = process.env.https_proxy;
+
+  if (process.env.no_proxy)
+    bag.scriptEnvs.no_proxy = process.env.no_proxy;
+  /* jshint camelcase:true */
 
   var exec = spawn('/bin/bash',
     ['-c', bag.tmpScript],
