@@ -63,6 +63,21 @@ __validate_runtime() {
     fi
   fi
 
+  http_proxy_exists=$(grep "^HTTP_PROXY=" $ADMIRAL_ENV || echo "")
+  if [ -z "$http_proxy_exists" ]; then
+    echo "HTTP_PROXY=\"\"" >> $ADMIRAL_ENV
+  fi
+
+  https_proxy_exists=$(grep "^HTTPS_PROXY=" $ADMIRAL_ENV || echo "")
+  if [ -z "$https_proxy_exists" ]; then
+    echo "HTTPS_PROXY=\"\"" >> $ADMIRAL_ENV
+  fi
+
+  no_proxy_exists=$(grep "^NO_PROXY=" $ADMIRAL_ENV || echo "")
+  if [ -z "$no_proxy_exists" ]; then
+    echo "NO_PROXY=\"\"" >> $ADMIRAL_ENV
+  fi
+
   ################## check for services ##########################
   local services_path=$SCRIPTS_DIR/configs/services.json
   if [ ! -f "$services_path" ]; then
@@ -93,7 +108,7 @@ __prompt_for_inputs() {
   local setDBPort=false
   local setDBPassword=false
   local setPublicImageRegistry=false
-
+  local setProxy=false
 
   ################## check access key ###############################
   if [ "$ACCESS_KEY" == "" ]; then
@@ -167,8 +182,13 @@ __prompt_for_inputs() {
     __process_msg "PUBLIC_IMAGE_REGISTRY already set, skipping"
   fi
 
+  if [ "$WITH_PROXY_CONFIG" == true ]; then
+    __set_proxy_envs
+    setProxy=true
+  fi
+
   ################## confirm values #######################################
-  if $setAccessKey || $setSecretKey || $setAdmiralIP || $setDBIP || $setDBPort || $setDBPassword || $setPublicImageRegistry ; then
+  if $setAccessKey || $setSecretKey || $setAdmiralIP || $setDBIP || $setDBPort || $setDBPassword || $setPublicImageRegistry || $setProxy ; then
     __process_success "These values are easy to set now, but hard to change later! Please confirm that they are correct:"
     if $setAccessKey ; then
       local escaped_access_key=$(echo $ACCESS_KEY | sed -e 's/[\/&]/\\&/g')
@@ -203,6 +223,12 @@ __prompt_for_inputs() {
     fi
     if $setPublicImageRegistry ; then
       echo "Public Image Registry:    $PUBLIC_IMAGE_REGISTRY"
+    fi
+
+    if $setProxy ; then
+      echo "http_proxy:               $HTTP_PROXY"
+      echo "https_proxy:              $HTTPS_PROXY"
+      echo "no_proxy:                 $NO_PROXY"
     fi
 
     __process_success "Enter Y to confirm or N to re-enter these values."
@@ -247,7 +273,12 @@ __prompt_for_inputs() {
       if $setPublicImageRegistry ; then
         sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$PUBLIC_IMAGE_REGISTRY'"#g' $ADMIRAL_ENV
         __process_msg "Saved public image registry"
-
+      fi
+      if $setProxy ; then
+        sed -i 's/^HTTP_PROXY=.*/HTTP_PROXY="'$HTTP_PROXY'"/g' $ADMIRAL_ENV
+        sed -i 's/^HTTPS_PROXY=.*/HTTPS_PROXY="'$HTTPS_PROXY'"/g' $ADMIRAL_ENV
+        sed -i 's/^NO_PROXY=.*/NO_PROXY="'$NO_PROXY'"/g' $ADMIRAL_ENV
+        __process_msg "Save proxy configuration"
       fi
 
       if $setDBIP && [ "$DB_IP" != "$ADMIRAL_IP" ] && [ "$DB_INSTALLED" == "false" ]; then
@@ -299,6 +330,9 @@ __parse_args_install() {
         --no-verify-ssl)
           export NO_VERIFY_SSL=true
           ;;
+        --with-proxy-config)
+          export WITH_PROXY_CONFIG=true
+          ;;
         -h|help|--help)
           __print_help_install
           ;;
@@ -322,6 +356,9 @@ __parse_args_upgrade() {
       case $key in
         --no-verify-ssl)
           export NO_VERIFY_SSL=true
+          ;;
+        --with-proxy-config)
+          export WITH_PROXY_CONFIG=true
           ;;
         *)
           echo "Invalid option: $key"

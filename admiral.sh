@@ -38,6 +38,7 @@ export LC_ALL=C
 export IS_UPGRADE=false
 export IS_RESTART=false
 export NO_PROMPT=false
+export WITH_PROXY_CONFIG=false
 export KEYS_GENERATED=false
 ###########################################################
 
