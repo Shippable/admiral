@@ -398,6 +398,20 @@ _validate_ip() {
   [[ $ip =~ ^(http(s)?://)?([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+[a-zA-Z0-9/?]*)$ ||  $ip =~ ^$rx\.$rx\.$rx\.$rx$ ]];
 }
 
+__set_proxy_envs() {
+  __process_msg "Set value for http_proxy, press enter to leave this empty."
+  read response
+  export HTTP_PROXY="$response"
+
+  __process_msg "Set value for https_proxy, press enter to leave this empty."
+  read response
+  export HTTPS_PROXY="$response"
+
+  __process_msg "Set value for no_proxy, press enter to leave this empty."
+  read response
+  export NO_PROXY="$response"
+}
+
 __set_admiral_ip() {
   __process_msg "Setting value of admiral IP address"
 
