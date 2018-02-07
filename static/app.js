@@ -1,6 +1,6 @@
 'use strict';
 
-var admiral = angular.module('admiral', ['ui.bootstrap',
+var admiral = angular.module('admiral', ['ui.bootstrap', 'cgNotify',
   'angularMoment', 'ngSanitize', 'ngCookies', 'ui.router', 'NgSwitchery'
 ]);
 

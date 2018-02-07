@@ -28,6 +28,8 @@ module.exports = function (grunt) {
         src: [
           // switchery
           'static/bower_components/switchery/dist/switchery.min.css',
+          // notify
+          'node_modules/@cgross/angular-notify/dist/angular-notify.min.css',
           'static/app.css'
         ],
         dest: 'static/app.cat.css'
@@ -60,6 +62,8 @@ module.exports = function (grunt) {
           'static/bower_components/ng-switchery/src/ng-switchery.js',
           // Clipboard
           'static/bower_components/clipboard/dist/clipboard.min.js',
+          // notify
+          'node_modules/@cgross/angular-notify/dist/angular-notify.min.js',
         ],
         dest: 'static/lib.cat.js'
       }
