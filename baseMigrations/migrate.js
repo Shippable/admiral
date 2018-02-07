@@ -1150,8 +1150,19 @@ function _runScript(params, next) {
   var who = params.who + '|' + _runScript.name;
   logger.verbose(who, 'Inside');
 
-
   fs.chmodSync(params.scriptPath, '755');
+
+  /* jshint camelcase:false */
+  params.scriptEnvs = params.scriptEnvs || {};
+  if (process.env.http_proxy)
+    params.scriptEnvs.http_proxy = process.env.http_proxy;
+
+  if (process.env.https_proxy)
+    params.scriptEnvs.https_proxy = process.env.https_proxy;
+
+  if (process.env.no_proxy)
+    params.scriptEnvs.no_proxy = process.env.no_proxy;
+  /* jshint camelcase:true */
 
   var exec = spawn('/bin/bash',
     ['-c', params.scriptPath],

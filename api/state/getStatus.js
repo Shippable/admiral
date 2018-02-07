@@ -184,14 +184,26 @@ function _checkSSHPort(bag, next) {
   logger.verbose(who, 'Inside');
 
   var address = url.parse(bag.gitlabUrl).hostname;
+  var env = {
+    'IP': address,
+    'PORT': bag.gitlabSSHPort,
+  };
+
+  /* jshint camelcase:false */
+  if (process.env.http_proxy)
+    env.http_proxy = process.env.http_proxy;
+
+  if (process.env.https_proxy)
+    env.https_proxy = process.env.https_proxy;
+
+  if (process.env.no_proxy)
+    env.no_proxy = process.env.no_proxy;
+  /* jshint camelcase:true */
 
   var exec = spawn('/bin/bash',
     ['-c', bag.tmpScriptFilename],
     {
-      env: {
-        'IP': address,
-        'PORT': bag.gitlabSSHPort,
-      }
+      env: env
     }
   );
 
