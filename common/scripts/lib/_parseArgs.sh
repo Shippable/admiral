@@ -51,7 +51,16 @@ __validate_runtime() {
   fi
 
   if [ -z "$NO_VERIFY_SSL" ]; then
+    __process_msg "NO_VERIFY_SSL not set, setting to false"
     echo "NO_VERIFY_SSL=false" >> $ADMIRAL_ENV
+  elif [ "$NO_VERIFY_SSL" == true ]; then
+    # If this is set to true, verify that the env file also has this set to true.
+    no_verify_ssl_true_exists=$(grep "^NO_VERIFY_SSL=true$" $ADMIRAL_ENV || echo "")
+    if [ -z $no_verify_ssl_true_exists ]; then
+      __process_msg "NO_VERIFY_SSL set to true, updating"
+      sed -i '/^NO_VERIFY_SSL=/d' $ADMIRAL_ENV
+      echo "NO_VERIFY_SSL=true" >> $ADMIRAL_ENV
+    fi
   fi
 
   ################## check for services ##########################
@@ -287,12 +296,36 @@ __parse_args_install() {
         -s|--silent)
          export NO_PROMPT=true
          ;;
+        --no-verify-ssl)
+          export NO_VERIFY_SSL=true
+          ;;
         -h|help|--help)
           __print_help_install
           ;;
         *)
           echo "Invalid option: $key"
           __print_help_install
+          ;;
+      esac
+      shift
+    done
+  fi
+}
+
+__parse_args_upgrade() {
+  export IS_UPGRADE=true
+
+  if [[ $# -gt 0 ]]; then
+    while [[ $# -gt 0 ]]; do
+      key="$1"
+
+      case $key in
+        --no-verify-ssl)
+          export NO_VERIFY_SSL=true
+          ;;
+        *)
+          echo "Invalid option: $key"
+          __print_help_upgrade
           ;;
       esac
       shift
@@ -324,6 +357,16 @@ __print_help_install() {
   This script installs Shippable enterprise
   examples:
     $0 install
+  "
+  exit 0
+}
+
+__print_help_upgrade() {
+  echo "
+  usage: $0 upgrade [flags]
+  This script upgrades a Shippable Enterprise installation
+  examples:
+    $0 upgrade
   "
   exit 0
 }
@@ -464,8 +507,9 @@ __parse_args() {
         __checkout_tag
         ;;
       upgrade)
+        shift
         __bootstrap_admiral_env
-        export IS_UPGRADE=true
+        __parse_args_upgrade "$@"
         ;;
       restart)
         __bootstrap_admiral_env
