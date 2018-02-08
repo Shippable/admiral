@@ -20,6 +20,12 @@ ${RES_VER_DATE}
   - **Multiple billing contacts**: Multiple billing contacts can now be added on the subscription billing page. They should be semicolon separated. Each email in the list will receive billing related emails and receipts.
   - **rSync jobs with parentResourceId**: rSync jobs will now have the syncRepo's ID in the "parentResourceId" field where it used to be null. This should simplify the process of finding the syncRepo for an rSync job, or finding an rSync job for a syncRepo.
   - **show upgrade to node pools button for paid customers using dynamic nodes**: Admins for paid subscriptions using dynamic nodes should see a button to upgrade to [node pools](http://docs.shippable.com/platform/management/subscription/node-pools/). On upgrade, they should see an option in the subscription settings dropdown to navigate to the node pools page.
+ - **SPOG beta**: The new SPOG will be an optional feature which will have the following improvements:
+   1. Less wasted space
+   2. Reduced number of unnecessarily disjoint sections
+   3. Grouping of input resources to reduce links
+
+    you can enable the new SPOG by clicking on "Try the new SPOG(beta)" option in the views dropdown when in SPOG view for custom dashboards and subscription dashboards.
 
 ## Fixes
   - **Improve error logging of gitRepo in rSync**: Improved error logging for gitRepo resources by adding the resource name and reason why the resource is marked inconsistent during rSync processing.
