@@ -25,19 +25,7 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
     $stateProvider.state('dashboard2', {
       url: '/index2',
       templateUrl: SRC_PATH + 'dashboard/dashboard2.html',
-      onEnter: function ($rootScope) {
-        $rootScope.admiralPathName = "index2";
-      },
       controller: 'dashboard2Ctrl'
-    });
-
-    $stateProvider.state('index', {
-      url: '/',
-      templateUrl: SRC_PATH + 'dashboard/dashboard.html',
-      onEnter: function ($rootScope) {
-        $rootScope.admiralPathName = "index";
-      },
-      controller: 'dashboardCtrl'
     });
 
     $urlRouterProvider.otherwise('/');
