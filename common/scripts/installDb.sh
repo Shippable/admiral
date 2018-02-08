@@ -85,6 +85,15 @@ __install_db() {
   else
     __check_connection "$DB_IP"
 
+    local proxy_script_name="configureProxy.sh"
+    local proxy_config_script="$SCRIPTS_DIR/$proxy_script_name"
+    __copy_script_remote "$DB_IP" "$proxy_config_script" "$SCRIPTS_DIR_REMOTE"
+    local proxy_config_install_cmd="HTTP_PROXY=$HTTP_PROXY \
+      HTTPS_PROXY=$HTTPS_PROXY \
+      NO_PROXY=$NO_PROXY \
+      $SCRIPTS_DIR_REMOTE/$proxy_script_name"
+    __exec_cmd_remote "$DB_IP" "$proxy_config_install_cmd"
+
     local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
     __copy_script_remote "$DB_IP" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
     __exec_cmd_remote "$DB_IP" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
@@ -101,7 +110,6 @@ __install_db() {
       $SCRIPTS_DIR_REMOTE/$script_name"
     __exec_cmd_remote "$DB_IP" "$db_install_cmd"
   fi
-
 }
 
 main() {
