@@ -328,7 +328,10 @@ function _generateInitializeEnvs(bag, next) {
     'PRIVATE_IMAGE_REGISTRY': global.config.privateImageRegistry,
     'ACCESS_KEY': bag.accessKey,
     'SECRET_KEY': bag.secretKey,
-    'NO_VERIFY_SSL': bag.noVerifySSL
+    'NO_VERIFY_SSL': bag.noVerifySSL,
+    'SHIPPABLE_HTTP_PROXY': process.env.http_proxy || '',
+    'SHIPPABLE_HTTPS_PROXY': process.env.https_proxy || '',
+    'SHIPPABLE_NO_PROXY': process.env.no_proxy || ''
   };
 
   return next();

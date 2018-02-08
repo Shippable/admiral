@@ -189,7 +189,10 @@ function _generateInitializeEnvs(bag, next) {
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
     'REDIS_HOST': bag.config.address,
-    'REDIS_PORT': bag.config.port
+    'REDIS_PORT': bag.config.port,
+    'SHIPPABLE_HTTP_PROXY': process.env.http_proxy || '',
+    'SHIPPABLE_HTTPS_PROXY': process.env.https_proxy || '',
+    'SHIPPABLE_NO_PROXY': process.env.no_proxy || ''
   };
 
   return next();
