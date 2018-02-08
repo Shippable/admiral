@@ -21,7 +21,7 @@
         </li>
         <li>
           <a href="#" class="waves-effect waves-primary"  ng-class="{active: vm.sectionSelected === 'system'}" ng-click="vm.changeSection('system')">
-            <i class="md md-redeem"></i><span> System Settings </span>
+            <i class="md md-settings"></i><span> System Settings </span>
           </a>
         </li>
       </ul>
@@ -87,28 +87,28 @@
                     <tr ng-repeat="(addr, node) in vm.allNodes">
                       <td>{{addr}}</td>
                       <td class="text-center">
-                        <i class="fa fa-times" ng-if="node|contains:'admiral'"></i>
+                        <i class="fa fa-check" ng-if="node|contains:'admiral'"></i>
                       </td>
                       <td class="text-center">
-                        <i class="fa fa-times" ng-if="(node|contains:'db') && vm.systemSettings.db.isInstalled && vm.systemSettings.db.isInitialized"></i>
+                        <i class="fa fa-check" ng-if="(node|contains:'db') && vm.systemSettings.db.isInstalled && vm.systemSettings.db.isInitialized"></i>
                       </td>
                       <td class="text-center">
-                        <i class="fa fa-times" ng-if="(node|contains:'secrets') && vm.systemSettings.secrets.isInstalled && vm.systemSettings.secrets.isInitialized"></i>
+                        <i class="fa fa-check" ng-if="(node|contains:'secrets') && vm.systemSettings.secrets.isInstalled && vm.systemSettings.secrets.isInitialized"></i>
                       </td>
                       <td class="text-center">
-                        <i class="fa fa-times" ng-if="(node|contains:'msg') && vm.systemSettings.msg.isInstalled && vm.systemSettings.msg.isInitialized"></i>
+                        <i class="fa fa-check" ng-if="(node|contains:'msg') && vm.systemSettings.msg.isInstalled && vm.systemSettings.msg.isInitialized"></i>
                       </td>
                       <td class="text-center">
-                        <i class="fa fa-times" ng-if="(node|contains:'state') && vm.systemSettings.state.isInstalled && vm.systemSettings.state.isInitialized"></i>
+                        <i class="fa fa-check" ng-if="(node|contains:'state') && vm.systemSettings.state.isInstalled && vm.systemSettings.state.isInitialized"></i>
                       </td>
                       <td class="text-center">
-                        <i class="fa fa-times" ng-if="(node|contains:'redis') && vm.systemSettings.redis.isInstalled && vm.systemSettings.redis.isInitialized"></i>
+                        <i class="fa fa-check" ng-if="(node|contains:'redis') && vm.systemSettings.redis.isInstalled && vm.systemSettings.redis.isInitialized"></i>
                       </td>
                       <td class="text-center">
-                        <i class="fa fa-times" ng-if="(node|contains:'master') && vm.systemSettings.master.isInstalled && vm.systemSettings.master.isInitialized"></i>
+                        <i class="fa fa-check" ng-if="(node|contains:'master') && vm.systemSettings.master.isInstalled && vm.systemSettings.master.isInitialized"></i>
                       </td>
                       <td class="text-center">
-                        <i class="fa fa-times" ng-if="(node|contains:'worker') && vm.systemSettings.workers[0].isInstalled && vm.systemSettings.workers[0].isInitialized"></i>
+                        <i class="fa fa-check" ng-if="(node|contains:'worker') && vm.systemSettings.workers[0].isInstalled && vm.systemSettings.workers[0].isInitialized"></i>
                       </td>
                     </tr>
                   </tbody>
