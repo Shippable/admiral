@@ -135,8 +135,8 @@ __check_dependencies() {
   # Configure proxy for docker
   #
   docker_restart=false
-  if [ ! -z "$HTTP_PROXY" ]; then
-    http_proxy_env="export http_proxy=\"$HTTP_PROXY\""
+  if [ ! -z "$SHIPPABLE_HTTP_PROXY" ]; then
+    http_proxy_env="export http_proxy=\"$SHIPPABLE_HTTP_PROXY\""
     http_proxy_exists=$(grep "^$http_proxy_env$" /etc/default/docker || echo "")
     if [ -z $http_proxy_exists ]; then
       __process_msg "Configuring docker http_proxy"
@@ -155,8 +155,8 @@ __check_dependencies() {
     fi
   fi
 
-  if [ ! -z "$HTTPS_PROXY" ]; then
-    https_proxy_env="export https_proxy=\"$HTTPS_PROXY\""
+  if [ ! -z "$SHIPPABLE_HTTPS_PROXY" ]; then
+    https_proxy_env="export https_proxy=\"$SHIPPABLE_HTTPS_PROXY\""
     https_proxy_exists=$(grep "^$https_proxy_env$" /etc/default/docker || echo "")
     if [ -z $https_proxy_exists ]; then
       __process_msg "Configuring docker https_proxy"
@@ -175,8 +175,8 @@ __check_dependencies() {
     fi
   fi
 
-  if [ ! -z "$NO_PROXY" ]; then
-    no_proxy_env="export no_proxy=\"$NO_PROXY\""
+  if [ ! -z "$SHIPPABLE_NO_PROXY" ]; then
+    no_proxy_env="export no_proxy=\"$SHIPPABLE_NO_PROXY\""
     no_proxy_exists=$(grep "^$no_proxy_env$" /etc/default/docker || echo "")
     if [ -z $no_proxy_exists ]; then
       __process_msg "Configuring docker no_proxy"
@@ -401,15 +401,15 @@ _validate_ip() {
 __set_proxy_envs() {
   __process_msg "Set value for http_proxy, press enter to leave this empty."
   read response
-  export HTTP_PROXY="$response"
+  export SHIPPABLE_HTTP_PROXY="$response"
 
   __process_msg "Set value for https_proxy, press enter to leave this empty."
   read response
-  export HTTPS_PROXY="$response"
+  export SHIPPABLE_HTTPS_PROXY="$response"
 
   __process_msg "Set value for no_proxy, press enter to leave this empty."
   read response
-  export NO_PROXY="$response"
+  export SHIPPABLE_NO_PROXY="$response"
 }
 
 __set_admiral_ip() {

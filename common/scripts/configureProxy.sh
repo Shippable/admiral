@@ -4,8 +4,8 @@ configure_proxy() {
   echo "Defaults        env_keep += \"http_proxy https_proxy no_proxy\"" > /etc/sudoers.d/shippable-proxy-whitelist
 
   local env_location="/etc/environment"
-  if [ ! -z "$HTTP_PROXY" ]; then
-    http_proxy_env="export http_proxy=\"$HTTP_PROXY\""
+  if [ ! -z "$SHIPPABLE_HTTP_PROXY" ]; then
+    http_proxy_env="export http_proxy=\"$SHIPPABLE_HTTP_PROXY\""
     http_proxy_exists=$(grep "^$http_proxy_env$" $env_location || echo "")
     if [ -z "$http_proxy_exists" ]; then
       echo "Adding http_proxy to /etc/environment"
@@ -21,8 +21,8 @@ configure_proxy() {
     fi
   fi
 
-  if [ ! -z "$HTTPS_PROXY" ]; then
-    https_env="export https_proxy=\"$HTTPS_PROXY\""
+  if [ ! -z "$SHIPPABLE_HTTPS_PROXY" ]; then
+    https_env="export https_proxy=\"$SHIPPABLE_HTTPS_PROXY\""
     https_exists=$(grep "^$https_env$" $env_location || echo "")
     if [ -z "$https_exists" ]; then
       echo "Adding https_proxy to /etc/environment"
@@ -38,8 +38,8 @@ configure_proxy() {
     fi
   fi
 
-  if [ ! -z "$NO_PROXY" ]; then
-    no_proxy_env="export no_proxy=\"$NO_PROXY\""
+  if [ ! -z "$SHIPPABLE_NO_PROXY" ]; then
+    no_proxy_env="export no_proxy=\"$SHIPPABLE_NO_PROXY\""
     no_proxy_exists=$(grep "^$no_proxy_env$" $env_location || echo "")
     if [ -z "$no_proxy_exists" ]; then
       echo "Adding no_proxy to /etc/environment"
