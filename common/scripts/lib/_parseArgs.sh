@@ -63,19 +63,19 @@ __validate_runtime() {
     fi
   fi
 
-  http_proxy_exists=$(grep "^HTTP_PROXY=" $ADMIRAL_ENV || echo "")
+  http_proxy_exists=$(grep "^SHIPPABLE_HTTP_PROXY=" $ADMIRAL_ENV || echo "")
   if [ -z "$http_proxy_exists" ]; then
-    echo "HTTP_PROXY=\"\"" >> $ADMIRAL_ENV
+    echo "SHIPPABLE_HTTP_PROXY=\"\"" >> $ADMIRAL_ENV
   fi
 
-  https_proxy_exists=$(grep "^HTTPS_PROXY=" $ADMIRAL_ENV || echo "")
+  https_proxy_exists=$(grep "^SHIPPABLE_HTTPS_PROXY=" $ADMIRAL_ENV || echo "")
   if [ -z "$https_proxy_exists" ]; then
-    echo "HTTPS_PROXY=\"\"" >> $ADMIRAL_ENV
+    echo "SHIPPABLE_HTTPS_PROXY=\"\"" >> $ADMIRAL_ENV
   fi
 
-  no_proxy_exists=$(grep "^NO_PROXY=" $ADMIRAL_ENV || echo "")
+  no_proxy_exists=$(grep "^SHIPPABLE_NO_PROXY=" $ADMIRAL_ENV || echo "")
   if [ -z "$no_proxy_exists" ]; then
-    echo "NO_PROXY=\"\"" >> $ADMIRAL_ENV
+    echo "SHIPPABLE_NO_PROXY=\"\"" >> $ADMIRAL_ENV
   fi
 
   ################## check for services ##########################
@@ -226,9 +226,9 @@ __prompt_for_inputs() {
     fi
 
     if $setProxy ; then
-      echo "http_proxy:               $HTTP_PROXY"
-      echo "https_proxy:              $HTTPS_PROXY"
-      echo "no_proxy:                 $NO_PROXY"
+      echo "http_proxy:               $SHIPPABLE_HTTP_PROXY"
+      echo "https_proxy:              $SHIPPABLE_HTTPS_PROXY"
+      echo "no_proxy:                 $SHIPPABLE_NO_PROXY"
     fi
 
     __process_success "Enter Y to confirm or N to re-enter these values."
@@ -275,9 +275,9 @@ __prompt_for_inputs() {
         __process_msg "Saved public image registry"
       fi
       if $setProxy ; then
-        sed -i 's#^HTTP_PROXY=.*#HTTP_PROXY="'$HTTP_PROXY'"#g' $ADMIRAL_ENV
-        sed -i 's#^HTTPS_PROXY=.*#HTTPS_PROXY="'$HTTPS_PROXY'"#g' $ADMIRAL_ENV
-        sed -i 's#^NO_PROXY=.*#NO_PROXY="'$NO_PROXY'"#g' $ADMIRAL_ENV
+        sed -i 's#^SHIPPABLE_HTTP_PROXY=.*#SHIPPABLE_HTTP_PROXY="'$SHIPPABLE_HTTP_PROXY'"#g' $ADMIRAL_ENV
+        sed -i 's#^SHIPPABLE_HTTPS_PROXY=.*#SHIPPABLE_HTTPS_PROXY="'$SHIPPABLE_HTTPS_PROXY'"#g' $ADMIRAL_ENV
+        sed -i 's#^SHIPPABLE_NO_PROXY=.*#SHIPPABLE_NO_PROXY="'$SHIPPABLE_NO_PROXY'"#g' $ADMIRAL_ENV
         __process_msg "Saved proxy configuration"
       fi
 

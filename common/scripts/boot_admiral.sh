@@ -27,19 +27,19 @@ __boot_admiral() {
     -e IGNORE_TLS_ERRORS=$IGNORE_TLS_ERRORS \
     -e RUNTIME_DIR=$RUNTIME_DIR"
 
-  if [ ! -z "$http_proxy" ]; then
+  if [ ! -z "$SHIPPABLE_HTTP_PROXY" ]; then
     envs="$envs \
-      -e http_proxy=$http_proxy"
+      -e http_proxy=$SHIPPABLE_HTTP_PROXY"
   fi
 
-  if [ ! -z "$https_proxy" ]; then
+  if [ ! -z "$SHIPPABLE_HTTPS_PROXY" ]; then
     envs="$envs \
-      -e https_proxy=$https_proxy"
+      -e https_proxy=$SHIPPABLE_HTTPS_PROXY"
   fi
 
-  if [ ! -z "$no_proxy" ]; then
+  if [ ! -z "$SHIPPABLE_NO_PROXY" ]; then
     envs="$envs \
-      -e no_proxy=$no_proxy"
+      -e no_proxy=$SHIPPABLE_NO_PROXY"
   fi
 
   __process_msg "Generating admiral mounts"

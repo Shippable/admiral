@@ -88,9 +88,9 @@ __install_db() {
     local proxy_script_name="configureProxy.sh"
     local proxy_config_script="$SCRIPTS_DIR/$proxy_script_name"
     __copy_script_remote "$DB_IP" "$proxy_config_script" "$SCRIPTS_DIR_REMOTE"
-    local proxy_config_install_cmd="HTTP_PROXY=$HTTP_PROXY \
-      HTTPS_PROXY=$HTTPS_PROXY \
-      NO_PROXY=$NO_PROXY \
+    local proxy_config_install_cmd="SHIPPABLE_HTTP_PROXY=$SHIPPABLE_HTTP_PROXY \
+      SHIPPABLE_HTTPS_PROXY=$SHIPPABLE_HTTPS_PROXY \
+      SHIPPABLE_NO_PROXY=$SHIPPABLE_NO_PROXY \
       $SCRIPTS_DIR_REMOTE/$proxy_script_name"
     __exec_cmd_remote "$DB_IP" "$proxy_config_install_cmd"
 
