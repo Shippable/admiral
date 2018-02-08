@@ -53,7 +53,24 @@ function initHelperRoutes(bag, next) {
       res.cookie('admiralUrl', req.protocol + '://' + req.get('host'));
 
       var opts = {};
-      res.render(path.resolve('static/app.html'), opts,
+      res.render(path.resolve('static/app2.html'), opts,
+        function (err, html) {
+          if (err) {
+            shipError(err.stack);
+            res.status(500).send('Internal Error. See logs');
+          }
+          res.send(html);
+        }
+      );
+    }
+  );
+
+  bag.app.get('/index2',
+    function (req, res) {
+      res.cookie('admiralUrl', req.protocol + '://' + req.get('host'));
+
+      var opts = {};
+      res.render(path.resolve('static/app2.html'), opts,
         function (err, html) {
           if (err) {
             shipError(err.stack);
