@@ -3361,7 +3361,7 @@
                         ng-model="vm.superUsers.newSuperUser" ng-disabled="vm.superUsers.addingSuperUser"/>
                       </div>
                       <div class="col-md-4 m-t-15">
-                        <button ng-click="vm.addSuperUser()" ng-disabled="vm.superUsers.addingSuperUser">
+                        <button class="btn btn-primary" ng-click="vm.addSuperUser()" ng-disabled="vm.superUsers.addingSuperUser">
                           Add
                         </button>
                       </div>
@@ -3376,10 +3376,10 @@
                         </div>
                         <div class="row m-t-10" ng-repeat="superUser in vm.superUsers.superUsers" ng-if="vm.superUsers.superUsers.length">
                           <div class="col-md-3">
-                            {{superUser}}
+                            <p class="m-t-5">{{superUser}}</p>
                           </div>
                           <div class="col-md-9">
-                            <button ng-click="vm.removeSuperUser(superUser)" ng-disabled="vm.superUsers.deletingSuperUser">
+                            <button class="btn btn-danger btn-sm" ng-click="vm.removeSuperUser(superUser)" ng-disabled="vm.superUsers.deletingSuperUser">
                               Remove
                             </button>
                           </div>
@@ -3414,7 +3414,7 @@
                         <h5 class="m-t-20"><b>Add system node:</b></h5>
                       </div>
                       <div class="col-md-4 m-t-15">
-                        <button ng-click="vm.addSystemNode()" ng-disabled="vm.systemNodes.addingSystemNode">
+                        <button class="btn btn-primary" ng-click="vm.addSystemNode()" ng-disabled="vm.systemNodes.addingSystemNode">
                           Initialize system node
                         </button>
                       </div>
@@ -3429,10 +3429,10 @@
                         </div>
                         <div class="row m-t-10" ng-repeat="systemNode in vm.systemNodes.systemNodes" ng-if="vm.systemNodes.systemNodes.length">
                           <div class="col-md-3">
-                            {{systemNode.friendlyName}}
+                            <p class="m-t-5">{{systemNode.friendlyName}}</p>
                           </div>
                           <div class="col-md-9">
-                            <button ng-click="vm.removeSystemNode(systemNode)"
+                            <button class="btn btn-danger btn-sm" ng-click="vm.removeSystemNode(systemNode)"
                               ng-disabled="vm.systemNodes.deletingSystemNode">
                               Remove
                             </button>
