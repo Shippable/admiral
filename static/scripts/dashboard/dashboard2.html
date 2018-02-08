@@ -1684,7 +1684,6 @@
                                         </div>
                                       </div>
                                     </form>
-                                    <hr/>
                                   </div>
                                 </div>
                                 <div>&nbsp</div>
@@ -1750,9 +1749,12 @@
                                             <span class="glyphicon glyphicon-info-sign"></span>
                                           </span>
                                         </label>
-                                        <div class="col-md-6" ng-class="machineImage.isAvailable ? '' : 'has-error'">
-                                          <input type="text" class="form-control" name="machineImage{{$index}}IsAvailable"
-                                          ng-model="machineImage.isAvailable" ng-disabled="vm.installing || vm.saving"/>
+                                        <div class="col-md-6">
+                                          <div class="checkbox checkbox-primary">
+                                            <input type="checkbox" name="machineImage{{$index}}IsAvailable"
+                                            ng-model="machineImage.isAvailable" ng-disabled="vm.installing || vm.saving || vm.isDefault"/>
+                                            <label></label>
+                                          </div>
                                         </div>
                                       </div>
                                       <div class="form-group">
@@ -1763,10 +1765,13 @@
                                           </span>
                                         </label>
                                         <div class="col-md-6">
-                                          <input type="text" class="form-control" name="machineImage{{$index}}IsDefault"
-                                          ng-model="machineImage.isDefault" ng-disabled="vm.installing || vm.saving ||
-                                          (!machineImage.isDefault && machineImage.archTypeCode === vm.x86ArchCode && vm.hasDefaultx86SystemMachineImage()) ||
-                                          (!machineImage.isDefault && machineImage.archTypeCode === vm.armArchCode && vm.hasDefaultArmSystemMachineImage())"/>
+                                          <div class="checkbox checkbox-primary">
+                                            <input type="checkbox" name="machineImage{{$index}}IsDefault"
+                                            ng-model="machineImage.isDefault" ng-disabled="vm.installing || vm.saving ||
+                                            (!machineImage.isDefault && machineImage.archTypeCode === vm.x86ArchCode && vm.hasDefaultx86SystemMachineImage()) ||
+                                            (!machineImage.isDefault && machineImage.archTypeCode === vm.armArchCode && vm.hasDefaultArmSystemMachineImage())"/>
+                                            <label></label>
+                                          </div>
                                         </div>
                                       </div>
                                       <div class="form-group">
