@@ -24,6 +24,9 @@ __validate_vault_envs() {
   __process_msg "DBUSERNAME: $DBUSERNAME"
   __process_msg "DBPASSWORD: ${#DBPASSWORD}"
   __process_msg "LOGS_FILE: $LOGS_FILE"
+  __process_msg "SHIPPABLE_HTTP_PROXY: $SHIPPABLE_HTTP_PROXY"
+  __process_msg "SHIPPABLE_HTTPS_PROXY: $SHIPPABLE_HTTPS_PROXY"
+  __process_msg "SHIPPABLE_NO_PROXY: $SHIPPABLE_NO_PROXY"
 }
 
 __validate_vault_mounts() {
@@ -99,6 +102,16 @@ main() {
     else
       local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
       __check_connection "$VAULT_HOST"
+
+      local proxy_script_name="configureProxy.sh"
+      local proxy_config_script="$SCRIPTS_DIR/$proxy_script_name"
+      __copy_script_remote "$VAULT_HOST" "$proxy_config_script" "$SCRIPTS_DIR_REMOTE"
+      local proxy_config_install_cmd="SHIPPABLE_HTTP_PROXY=$SHIPPABLE_HTTP_PROXY \
+        SHIPPABLE_HTTPS_PROXY=$SHIPPABLE_HTTPS_PROXY \
+        SHIPPABLE_NO_PROXY=$SHIPPABLE_NO_PROXY \
+        $SCRIPTS_DIR_REMOTE/$proxy_script_name"
+      __exec_cmd_remote "$VAULT_HOST" "$proxy_config_install_cmd"
+
       __copy_configs
 
       local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"

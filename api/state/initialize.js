@@ -219,7 +219,10 @@ function _generateInitializeEnvs(bag, next) {
     'STATE_PASS': bag.systemIntegration.data.password,
     'STATE_PORT': bag.config.port,
     'SSH_PORT': bag.config.sshPort,
-    'SECURE_PORT': bag.config.securePort
+    'SECURE_PORT': bag.config.securePort,
+    'SHIPPABLE_HTTP_PROXY': process.env.http_proxy || '',
+    'SHIPPABLE_HTTPS_PROXY': process.env.https_proxy || '',
+    'SHIPPABLE_NO_PROXY': process.env.no_proxy || ''
   };
 
   return next();

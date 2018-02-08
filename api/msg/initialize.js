@@ -229,7 +229,10 @@ function _generateInitializeEnvs(bag, next) {
     'AMQP_PORT': bag.config.amqpPort,
     'ADMIN_PORT': bag.config.adminPort,
     'RABBITMQ_ADMIN':
-      path.join(global.config.scriptsDir, '/rabbitmqadmin')
+      path.join(global.config.scriptsDir, '/rabbitmqadmin'),
+    'SHIPPABLE_HTTP_PROXY': process.env.http_proxy || '',
+    'SHIPPABLE_HTTPS_PROXY': process.env.https_proxy || '',
+    'SHIPPABLE_NO_PROXY': process.env.no_proxy || ''
   };
 
   return next();

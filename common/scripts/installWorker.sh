@@ -22,6 +22,9 @@ __validate_worker_envs() {
   __process_msg "ACCESS_KEY: ${#ACCESS_KEY}"
   __process_msg "SECRET_KEY: ${#SECRET_KEY}"
   __process_msg "NO_VERIFY_SSL: $NO_VERIFY_SSL"
+  __process_msg "SHIPPABLE_HTTP_PROXY: $SHIPPABLE_HTTP_PROXY"
+  __process_msg "SHIPPABLE_HTTPS_PROXY: $SHIPPABLE_HTTPS_PROXY"
+  __process_msg "SHIPPABLE_NO_PROXY: $SHIPPABLE_NO_PROXY"
 }
 
 __validate_worker_mounts() {
@@ -70,6 +73,16 @@ main() {
     else
       local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
       __check_connection "$WORKER_HOST"
+
+      local proxy_script_name="configureProxy.sh"
+      local proxy_config_script="$SCRIPTS_DIR/$proxy_script_name"
+      __copy_script_remote "$WORKER_HOST" "$proxy_config_script" "$SCRIPTS_DIR_REMOTE"
+      local proxy_config_install_cmd="SHIPPABLE_HTTP_PROXY=$SHIPPABLE_HTTP_PROXY \
+        SHIPPABLE_HTTPS_PROXY=$SHIPPABLE_HTTPS_PROXY \
+        SHIPPABLE_NO_PROXY=$SHIPPABLE_NO_PROXY \
+        $SCRIPTS_DIR_REMOTE/$proxy_script_name"
+      __exec_cmd_remote "$WORKER_HOST" "$proxy_config_install_cmd"
+
       __copy_configs
 
       local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
