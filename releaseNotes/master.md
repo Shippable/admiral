@@ -4,11 +4,7 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Extra billing information**: Subscription billing page now has an option to enter custom billing information. You can use this to specify tax information and billing addresses, for example, to be included on your payment receipts. See the [Subscription Billing](http://docs.shippable.com/platform/management/subscription/billing/) for more details.
 
 ## Fixes
   - **simple title**: brief description
