@@ -5,6 +5,7 @@ ${RES_VER_DATE}
 
 ## Features
   - **Extra billing information**: Subscription billing page now has an option to enter custom billing information. You can use this to specify tax information and billing addresses, for example, to be included on your payment receipts. See the [Subscription Billing](http://docs.shippable.com/platform/management/subscription/billing/) for more details.
+  - **Improved account sync indicator**: A spinning refresh icon will appear in the sidebar next to the subscriptions header when an account is being synchronized.  And accounts will be automatically synchronized when adding new SCM integrations.
 
 ## Fixes
   - **simple title**: brief description
