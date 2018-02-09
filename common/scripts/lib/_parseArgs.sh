@@ -20,13 +20,17 @@ __validate_runtime() {
 
   ################## set release   ###############################
   cd $ROOT_DIR
-  local head_sha=$(git symbolic-ref HEAD --short -q)
-  if [ "$head_sha" == "" ]; then
-    ## user has checked out a tag, find latest tag
-    export RELEASE=$(git describe --tags)
+  if [ -d ".git" ]; then
+    local head_sha=$(git symbolic-ref HEAD --short -q)
+    if [ "$head_sha" == "" ]; then
+      ## user has checked out a tag, find latest tag
+      export RELEASE=$(git describe --tags)
+    else
+      ## no tag has been checked out, use master
+      export RELEASE=master
+    fi
   else
-    ## no tag has been checked out, use master
-    export RELEASE=master
+    export RELEASE=$(cat version.txt)
   fi
 
   __process_msg "Using release: $RELEASE"
