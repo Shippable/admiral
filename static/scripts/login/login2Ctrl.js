@@ -8,7 +8,7 @@
   .config(['$stateProvider', 'SRC_PATH',
     function ($stateProvider, SRC_PATH) {
       $stateProvider.state('login2', {
-        url: '/login2',
+        url: '/login',
         templateUrl: SRC_PATH + 'login/login2.html',
         controller: 'loginCtrl2',
         onEnter: function ($rootScope) {
