@@ -260,14 +260,20 @@ function _put(bag, next) {
 
   bag.serviceConfig.replicas = bag.replicas;
 
-  var defaultApiUrlIntegration =
-    _.findWhere(bag.defaultServiceSettings.serviceConfigs,
-        {name: bag.name}).apiUrlIntegration;
+  var serviceConf = _.findWhere(bag.defaultServiceSettings.serviceConfigs,
+    {name: bag.name});
+
+  if (_.isEmpty(serviceConf))
+    return next(
+      new ActErr(who, ActErr.OperationFailed,
+        util.format('unable to fetch service configuration from services.json' +
+          ' for service name: %s', bag.name))
+    );
 
   //bag.reqBody.apiUrlIntegration is added to add support for dynamically
   //picking up apiUrlIntegration from the UI in the future
   bag.serviceConfig.apiUrlIntegration = bag.reqBody.apiUrlIntegration ||
-    bag.serviceConfig.apiUrlIntegration || defaultApiUrlIntegration;
+    bag.serviceConfig.apiUrlIntegration || serviceConf.apiUrlIntegration;
 
   if (_.has(bag.reqBody, 'isEnabled'))
     bag.serviceConfig.isEnabled = bag.reqBody.isEnabled;
