@@ -13,6 +13,8 @@ ${RES_VER_DATE}
   - **Support single quotes in runSh jobs that run on Windows**: Single quotes can be added to the script, on_failure, always and other sections in runSh jobs. 
   
   - **Custom information as part of the invoice**: You can now add custom information as part of your invoice such as a purchase order number, or official company name.
+  
+  - **rSync job shows failures for a runSh job with no TASK section**: We have enhanced rSync so that it shows failures for runSh jobs defined without a TASK section.
 
 ## Custom Nodes
   - **simple title**: brief description
