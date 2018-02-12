@@ -9,6 +9,8 @@ ${RES_VER_DATE}
 
 ## Fixes
   - **Subscriptions not shown when sidebar is collapsed**: When the sidebar is a collapsed state and you hover over the SCM icon, you can view all your subscriptions. This allows you to navigate to all the subscriptions in your SCM with the sidebar collapsed, improving the usability of the collapsed sidebar.
+  
+  - **Support single quotes in runSh jobs that run on Windows**: Single quotes can be added to the script, on_failure, always and other sections in runSh jobs. 
 
 ## Custom Nodes
   - **simple title**: brief description
