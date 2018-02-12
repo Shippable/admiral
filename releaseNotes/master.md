@@ -8,9 +8,7 @@ ${RES_VER_DATE}
   - **Improved account sync indicator**: A spinning refresh icon will appear in the sidebar next to the subscriptions header when an account is being synchronized. Accounts will be automatically synchronized after new SCM integrations are created.
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Subscriptions not shown when sidebar is collapsed**: When the sidebar is a collapsed state and you hover over the SCM icon, you can view all your subscriptions. This allows you to navigate to all the subscriptions in your SCM with the sidebar collapsed, improving the usability of the collapsed sidebar.
 
 ## Custom Nodes
   - **simple title**: brief description
