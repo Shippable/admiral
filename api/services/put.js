@@ -270,12 +270,10 @@ function _put(bag, next) {
           ' for service name: %s', bag.name))
     );
 
-  var defaultApiUrlIntegration = serviceConf.apiUrlIntegration;
-
   //bag.reqBody.apiUrlIntegration is added to add support for dynamically
   //picking up apiUrlIntegration from the UI in the future
   bag.serviceConfig.apiUrlIntegration = bag.reqBody.apiUrlIntegration ||
-    bag.serviceConfig.apiUrlIntegration || defaultApiUrlIntegration;
+    bag.serviceConfig.apiUrlIntegration || serviceConf.apiUrlIntegration;
 
   if (_.has(bag.reqBody, 'isEnabled'))
     bag.serviceConfig.isEnabled = bag.reqBody.isEnabled;
