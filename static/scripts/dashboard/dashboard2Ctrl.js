@@ -2729,7 +2729,13 @@
       $scope.vm.saving = true;
       hideSaveServicesModal();
 
-      async.eachSeries($scope.vm.allServices,
+      var enabledServices = _.filter($scope.vm.allServices,
+        function(svc){
+          return svc.isEnabled === true;
+        }
+      );
+
+      async.eachSeries(enabledServices,
         function (service, done) {
           admiralApiAdapter.putService(service.serviceName, service,
             function (err) {
