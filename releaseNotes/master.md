@@ -15,6 +15,8 @@ ${RES_VER_DATE}
   - **Custom information as part of the invoice**: You can now add custom information as part of your invoice such as a purchase order number, or official company name.
   
   - **rSync job shows failures for a runSh job with no TASK section**: We have enhanced rSync so that it shows failures for runSh jobs defined without a TASK section.
+  
+  - **Occurence of an `=` character in an integration value causes runCI jobs to fail**: This bug has been fixed for runCI jobs. 
 
 ## Custom Nodes
   - **simple title**: brief description
