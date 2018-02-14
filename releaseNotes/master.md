@@ -19,10 +19,11 @@ ${RES_VER_DATE}
   
   - **Occurence of an `=` character in an integration value causes runCI jobs to fail**: This bug has been fixed for runCI jobs. 
 
-  - **can save system machine images without crashing Admiral**: Can save System Machine Images (SMIs) in `Configure and Install` page without crashing Admiral.
-      - Admiral only saves enabled services and will throw an error if updating a service fails while saving SMIs.
+  - **System machine images can be saved in Admiral**: Users can now save System Machine Images (SMIs) in `Configure and Install` page. Admiral would earlier crash during this operation. Admiral only saves enabled services and will throw an error if updating a service fails while saving SMIs.
 
-  - **shippable service start error causes builds to fail if start command fails** - fixes shippable service start script to fail builds if service fails to boot. Changes will go in with next drydock release.
+  - **Shippable service start error causes builds to fail if start command fails** - Builds will now fail fast if any startup services do not start successfully. Changes will go in with next drydock release.
+  
+  - **Early adopters can see free and paid minions in Billing page** - Free minions were not being rendered in the `Admin Add-on` section and this issue has been fixed.
 
 ## Custom Nodes
   - **simple title**: brief description
