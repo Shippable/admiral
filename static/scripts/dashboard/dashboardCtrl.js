@@ -10,7 +10,7 @@
   .config(['$stateProvider', 'SRC_PATH',
     function ($stateProvider, SRC_PATH) {
       $stateProvider.state('dashboard', {
-        url: '/',
+        url: '/index2',
         templateUrl: SRC_PATH + 'dashboard/dashboard.html',
         controller: 'dashboardCtrl'
       });

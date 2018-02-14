@@ -36,7 +36,7 @@ function initHelperRoutes(bag, next) {
       res.cookie('admiralUrl', req.protocol + '://' + req.get('host'));
 
       var opts = {};
-      res.render(path.resolve('static/app.html'), opts,
+      res.render(path.resolve('static/app2.html'), opts,
         function (err, html) {
           if (err) {
             shipError(err.stack);
@@ -53,7 +53,7 @@ function initHelperRoutes(bag, next) {
       res.cookie('admiralUrl', req.protocol + '://' + req.get('host'));
 
       var opts = {};
-      res.render(path.resolve('static/app2.html'), opts,
+      res.render(path.resolve('static/app.html'), opts,
         function (err, html) {
           if (err) {
             shipError(err.stack);
@@ -70,7 +70,7 @@ function initHelperRoutes(bag, next) {
       res.cookie('admiralUrl', req.protocol + '://' + req.get('host'));
 
       var opts = {};
-      res.render(path.resolve('static/app2.html'), opts,
+      res.render(path.resolve('static/app.html'), opts,
         function (err, html) {
           if (err) {
             shipError(err.stack);
@@ -88,7 +88,7 @@ function initHelperRoutes(bag, next) {
         return res.redirect('/login');
 
       var opts = {};
-      res.render(path.resolve('static/app.html'), opts,
+      res.render(path.resolve('static/app2.html'), opts,
         function (err, html) {
           if (err) {
             shipError(err.stack);
