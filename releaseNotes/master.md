@@ -22,6 +22,8 @@ ${RES_VER_DATE}
   - **can save system machine images without crashing Admiral**: Can save System Machine Images (SMIs) in `Configure and Install` page without crashing Admiral.
       - Admiral only saves enabled services and will throw an error if updating a service fails while saving SMIs.
 
+  - **shippable service start error causes builds to fail if start command fails** - fixes shippable service start script to fail builds if service fails to boot. Changes will go in with next drydock release.
+
 ## Custom Nodes
   - **simple title**: brief description
       - additional details or
