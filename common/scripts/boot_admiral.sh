@@ -42,6 +42,11 @@ __boot_admiral() {
       -e no_proxy=$SHIPPABLE_NO_PROXY"
   fi
 
+  if [ "$NO_VERIFY_SSL" == true ]; then
+    envs="$envs \
+      -e NODE_TLS_REJECT_UNAUTHORIZED=0"
+  fi
+
   __process_msg "Generating admiral mounts"
   local docker_location=$(which docker)
   local mounts=" -v $CONFIG_DIR:$CONFIG_DIR \
