@@ -19,6 +19,9 @@ ${RES_VER_DATE}
   
   - **Occurence of an `=` character in an integration value causes runCI jobs to fail**: This bug has been fixed for runCI jobs. 
 
+  - **can save system machine images without crashing Admiral**: Can save System Machine Images (SMIs) in `Configure and Install` page without crashing Admiral.
+      - Admiral only saves enabled services and will throw an error if updating a service fails while saving SMIs.
+
 ## Custom Nodes
   - **simple title**: brief description
       - additional details or
