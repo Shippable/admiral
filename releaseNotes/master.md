@@ -24,6 +24,8 @@ ${RES_VER_DATE}
   - **Shippable service start error causes builds to fail if start command fails** - Builds will now fail fast if any startup services do not start successfully. Changes will go in with next drydock release.
   
   - **Early adopters can see free and paid minions in Billing page** - Free minions were not being rendered in the `Admin Add-on` section and this issue has been fixed.
+  
+  - **Improved error message when an incorrect ARN type is specified for an ECS loadBalancer** - The deploy job shows a descriptive error if the sourceName does not meet a certain ALB ARN pattern.
 
 ## Custom Nodes
   - **simple title**: brief description
