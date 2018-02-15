@@ -25,7 +25,7 @@ ${RES_VER_DATE}
   
   - **Early adopters can see free and paid minions in Billing page** - Free minions were not being rendered in the `Admin Add-on` section and this issue has been fixed.
   
-  - **Improved error message when an incorrect ARN type is specified for an ECS loadBalancer** - The deploy job shows a descriptive error if the sourceName does not meet a certain ALB ARN pattern.
+  - **Improved error message when an incorrect ARN type is specified for an ECS loadBalancer** - The deploy job shows a descriptive error if the `sourceName` of the load balancer resource does not meet a certain ALB ARN pattern.
 
 ## Custom Nodes
   - **simple title**: brief description
