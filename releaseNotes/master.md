@@ -27,6 +27,9 @@ ${RES_VER_DATE}
   - **Improved error message when an incorrect ARN type is specified for an ECS loadBalancer** - The deploy job shows a descriptive error if the `sourceName` of the load balancer resource does not meet a certain ALB ARN pattern.
   
   - **Manually triggered builds for paid accounts default to building without SSH** - Debugging a build is not the most common choice when triggering a manual build from the UI. The default button in the dialog that is shown when a manual build is triggered has been switched to building without SSH access.
+  
+  - **Accessing PEM keys for a gitRepo resource that is used as an IN dependency in a job using an environment variable was failing**: gitRepo resources can be accessed using both the <RESOURCENAME>_KEYPATH env variable and /tmp/<resource name>_key path.
+
 
 ## Custom Nodes
   - **simple title**: brief description
