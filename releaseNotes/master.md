@@ -21,7 +21,7 @@ ${RES_VER_DATE}
 
   - **System machine images can be saved in Admiral**: Users can now save System Machine Images (SMIs) in `Configure and Install` page. Admiral would earlier crash during this operation. Admiral only saves enabled services and will throw an error if updating a service fails while saving SMIs.
 
-  - **Shippable service start error causes builds to fail if start command fails** - Builds will now fail fast if any startup services do not start successfully. Changes will go in with next drydock release.
+  - **Shippable service start error causes builds to fail if start command fails** - Builds will now fail fast if any startup services do not start successfully. 
   
   - **Early adopters can see free and paid minions in Billing page** - Free minions were not being rendered in the `Admin Add-on` section and this issue has been fixed.
   
