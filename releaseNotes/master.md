@@ -24,6 +24,8 @@ ${RES_VER_DATE}
   - **Early adopters can see free and paid minions in Billing page** - Free minions were not being rendered in the `Admin Add-on` section and this issue has been fixed.
   
   - **Improved error message when an incorrect ARN type is specified for an ECS loadBalancer** - The deploy job shows a descriptive error if the `sourceName` of the load balancer resource does not meet a certain ALB ARN pattern.
+  
+  - **Manually triggered builds for paid accounts default to building without SSH** - Debugging a build is not the most common choice when triggering a manual build from the UI. The default button in the dialog that is shown when a manual build is triggered has been switched to building without SSH access.
 
 ## Custom Nodes
   - **simple title**: brief description
