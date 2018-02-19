@@ -1,18 +1,5 @@
 #!/bin/bash -e
 
-__bootstrap_admiral_env() {
-  ################## load env file  ###########################
-  if [ ! -f "$ADMIRAL_ENV" ]; then
-    __process_msg "ADMIRAL_ENV does not exist, creating"
-    mkdir -p $CONFIG_DIR
-    cp -vr $SCRIPTS_DIR/configs/admiral.env.template $ADMIRAL_ENV
-    __process_msg "Successfully created admiral env "
-  else
-    __process_msg "Loading ADMIRAL_ENV from $ADMIRAL_ENV"
-  fi
-  source "$ADMIRAL_ENV"
-}
-
 __validate_runtime() {
   __process_marker "Validating runtime"
 
@@ -536,7 +523,6 @@ __parse_args() {
     case $key in
       install)
         shift
-        __bootstrap_admiral_env
         __parse_args_install "$@"
         __generate_ssh_keys
         __accept_shippable_license
@@ -549,18 +535,15 @@ __parse_args() {
         ;;
       upgrade)
         shift
-        __bootstrap_admiral_env
         __parse_args_upgrade "$@"
         ;;
       restart)
-        __bootstrap_admiral_env
         __parse_args_restart
         ;;
       status)
         __show_status
         ;;
       info)
-        __bootstrap_admiral_env
         __print_info
         ;;
       list)
