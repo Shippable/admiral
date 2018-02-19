@@ -44,6 +44,9 @@ export KEYS_GENERATED=false
 
 source "$LIB_DIR/_logger.sh"
 source "$LIB_DIR/_helpers.sh"
+
+__bootstrap_admiral_env
+
 source "$LIB_DIR/_parseArgs.sh"
 source "$LIB_DIR/_admiralAdapter.sh"
 

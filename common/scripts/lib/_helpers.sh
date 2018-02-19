@@ -9,6 +9,19 @@
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec" "genexec")
 declare -a PRIVATE_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
 
+__bootstrap_admiral_env() {
+  ################## load env file  ###########################
+  if [ ! -f "$ADMIRAL_ENV" ]; then
+    __process_msg "ADMIRAL_ENV does not exist, creating"
+    mkdir -p $CONFIG_DIR
+    cp -vr $SCRIPTS_DIR/configs/admiral.env.template $ADMIRAL_ENV
+    __process_msg "Successfully created admiral env "
+  else
+    __process_msg "Loading ADMIRAL_ENV from $ADMIRAL_ENV"
+  fi
+  source "$ADMIRAL_ENV"
+}
+
 __cleanup() {
   if [ -d $CONFIG_DIR ]; then
     __process_msg "Removing previously created $CONFIG_DIR"
