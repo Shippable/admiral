@@ -409,16 +409,6 @@ __set_secret_key() {
   __process_success "Please enter the provided installer secret key."
   read response
   export SECRET_KEY="$response"
-
-  local get_ips=$(ip -f inet -4 addr | grep inet | grep -v 127.0.0.1 | awk '{print $2}' | awk -F "/" '{print $1}');
-
-  if [[ "$get_ips" ]]; then
-    number_of_ips=($get_ips)
-    __process_msg "${#number_of_ips[@]} IP addresses available for the host"
-    export MACHINE_IPS=$get_ips
-  else
-    __process_msg "No IP addresses avaiable"
-  fi
 }
 
 _validate_ip() {
@@ -446,10 +436,19 @@ __set_admiral_ip() {
 
   __process_msg "List of your machine IP addresses including default:"
 
+  local get_ips=$(ip -f inet -4 addr | grep inet | grep -v 127.0.0.1 | awk '{print $2}' | awk -F "/" '{print $1}');
+
+  if [[ "$get_ips" ]]; then
+    number_of_ips=($get_ips)
+    __process_msg "${#number_of_ips[@]} IP addresses available for the host"
+  else
+    __process_msg "No IP addresses avaiable"
+  fi
+
   local machine_ips=('127.0.0.1')
 
-  if [[ "$MACHINE_IPS" ]]; then
-    machine_ips+=( $MACHINE_IPS )
+  if [[ "$get_ips" ]]; then
+    machine_ips+=( $get_ips )
   fi
 
   for (( i = 1 ; i < ${#machine_ips[@]} + 1 ; i++ )) do
