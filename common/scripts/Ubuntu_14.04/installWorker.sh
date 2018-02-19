@@ -43,7 +43,7 @@ __install_ntp() {
 
 __install_ecr() {
   sudo apt-get -y install python-pip
-  sudo pip install awscli==1.10.63
+  sudo pip install awscli==1.11.91
 }
 
 __initialize_worker() {
@@ -58,9 +58,9 @@ __registry_login() {
   echo "Logging into registry"
   mkdir -p ~/.aws
   if [ "$NO_VERIFY_SSL" == true ]; then
-    local docker_login_cmd=$(aws ecr --no-verify-ssl --region us-east-1 get-login)
+    local docker_login_cmd=$(aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login)
   else
-    local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
+    local docker_login_cmd=$(aws ecr --no-include-email --region us-east-1 get-login)
   fi
   echo "Docker login generated, logging into ecr"
   eval "$docker_login_cmd"

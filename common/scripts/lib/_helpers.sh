@@ -201,9 +201,16 @@ __check_dependencies() {
   fi
 
   ################## Install awscli  #####################################
+  local install_awscli="true"
+
   if type aws &> /dev/null && true; then
-    __process_msg "'awscli' already installed"
-  else
+    local current_aws_cli_version=$(pip show awscli | awk '/^Version: / { print $2 }')
+    if __version_gte $AWSCLI_VERSION $current_aws_cli_version; then
+      install_awscli="false"
+      __process_msg "'awscli' already installed"
+    fi
+  fi
+  if [ "$install_awscli" == "true" ]; then
     __process_msg "Installing 'awscli'"
     apt-get -y install python-pip
     pip install awscli==$AWSCLI_VERSION
@@ -244,9 +251,9 @@ __registry_login() {
     mkdir -p ~/.aws
     mv -v $credentials_file ~/.aws
     if [ "$NO_VERIFY_SSL" == true ]; then
-      local docker_login_cmd=$(aws ecr --no-verify-ssl --region us-east-1 get-login)
+      local docker_login_cmd=$(aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login)
     else
-      local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
+      local docker_login_cmd=$(aws ecr --no-include-email --region us-east-1 get-login)
     fi
     __process_msg "Docker login generated, logging into ecr"
     eval "$docker_login_cmd"
@@ -318,7 +325,7 @@ __pull_images_workers() {
       continue
     fi
 
-    local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+    local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
     __exec_cmd_remote "$host" "$docker_login_cmd"
 
     for image in "${SERVICE_IMAGES[@]}"; do
@@ -813,4 +820,16 @@ __exec_cmd_remote_proxyless() {
 
 __configure_proxy() {
   source "$SCRIPTS_DIR/configureProxy.sh"
+}
+
+__version_gte() {
+  local arg1="$1"
+  local arg2="$2"
+
+  local args="$arg1\n$arg2"
+  local lower_value=$(printf $args | sort -V | head -n 1)
+  if [ "$lower_value" == "$arg1" ]; then
+    return 0
+  fi
+  return 1
 }

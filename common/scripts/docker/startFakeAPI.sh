@@ -50,9 +50,9 @@ __docker_login() {
     mkdir -p ~/.aws
     mv -v $credentials_file ~/.aws
     if [ "$NO_VERIFY_SSL" == true ]; then
-      local docker_login_cmd=$(aws ecr --no-verify-ssl --region us-east-1 get-login)
+      local docker_login_cmd=$(aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login)
     else
-      local docker_login_cmd=$(aws ecr --region us-east-1 get-login)
+      local docker_login_cmd=$(aws ecr --no-include-email --region us-east-1 get-login)
     fi
     __process_msg "Docker login generated, logging into ecr"
     eval "$docker_login_cmd"
