@@ -22,6 +22,22 @@ __bootstrap_admiral_env() {
   source "$ADMIRAL_ENV"
 }
 
+__check_os_and_architecture() {
+  if [ -z "$OPERATING_SYSTEM" ] || [ -z "$ARCHITECTURE" ]; then
+    source /etc/os-release
+    sed -i '/^OPERATING_SYSTEM/d' "$ADMIRAL_ENV"
+    sed -i '/^ARCHITECTURE/d' "$ADMIRAL_ENV"
+
+    local architecture=$(uname -m)
+    local os=$(set -- "$NAME" && echo "$1")
+    local os_version="$VERSION_ID"
+    local operating_system=$os"_"$os_version
+
+    echo "ARCHITECTURE=$architecture" >> "$ADMIRAL_ENV"
+    echo "OPERATING_SYSTEM=$operating_system" >> "$ADMIRAL_ENV"
+  fi
+}
+
 __cleanup() {
   if [ -d $CONFIG_DIR ]; then
     __process_msg "Removing previously created $CONFIG_DIR"
