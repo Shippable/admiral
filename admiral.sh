@@ -48,6 +48,8 @@ source "$LIB_DIR/_helpers.sh"
 __bootstrap_admiral_env
 __check_os_and_architecture
 
+source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/_helpers.sh"
+
 source "$LIB_DIR/_parseArgs.sh"
 source "$LIB_DIR/_admiralAdapter.sh"
 
