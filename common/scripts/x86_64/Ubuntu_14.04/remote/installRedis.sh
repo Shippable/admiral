@@ -2,11 +2,6 @@
 
 TIMEOUT=60
 
-install_redis() {
-  echo "installing redis"
-  apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y redis-server
-}
-
 set_defaults() {
   if [ -z "$REDIS_HOST" ]; then
     REDIS_HOST="127.0.0.1"
@@ -14,6 +9,11 @@ set_defaults() {
   if [ -z "$REDIS_PORT" ]; then
     REDIS_PORT=6379
   fi
+}
+
+install_redis() {
+  echo "installing redis"
+  apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y redis-server
 }
 
 # accepts arguments $host $port $serviceName $timeout
