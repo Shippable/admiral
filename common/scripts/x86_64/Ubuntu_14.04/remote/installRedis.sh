@@ -1,11 +1,12 @@
 #!/bin/bash -e
 
-sudo apt-get update
+export REDIS_VERSION="4.0.8"
 
+sudo apt-get update
 sudo apt-get install -y build-essential tcl8.5
-wget http://download.redis.io/releases/redis-stable.tar.gz
-tar xzf redis-stable.tar.gz
-pushd redis-stable
+wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz
+tar xzf redis-$REDIS_VERSION.tar.gz
+pushd redis-$REDIS_VERSION
   make
   make test
   sudo make install
