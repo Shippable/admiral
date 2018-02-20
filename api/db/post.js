@@ -53,6 +53,8 @@ function post(req, res) {
       _getNoVerifySSL.bind(null, bag),
       _checkIsInitialized.bind(null, bag),
       _runMigrationsBeforeAPIStart.bind(null, bag),
+      _getOperatingSystem.bind(null, bag),
+      _getArchitecture.bind(null, bag),
       _startFakeAPI.bind(null, bag),
       _runMigrations.bind(null, bag),
       _templateServiceUserAccountFile.bind(null, bag),
@@ -490,15 +492,58 @@ function _runMigrationsBeforeAPIStart(bag, next) {
   );
 }
 
+function _getOperatingSystem(bag, next) {
+  var who = bag.who + '|' + _getOperatingSystem.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('OPERATING_SYSTEM',
+    function (err, operatingSystem) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: OPERATING_SYSTEM')
+        );
+
+      bag.operatingSystem = operatingSystem;
+      logger.debug('Found Operating System');
+
+      return next();
+    }
+  );
+}
+
+function _getArchitecture(bag, next) {
+  var who = bag.who + '|' + _getArchitecture.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('ARCHITECTURE',
+    function (err, architecture) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ARCHITECTURE')
+        );
+
+      bag.architecture = architecture;
+      logger.debug('Found Architecture');
+
+      return next();
+    }
+  );
+}
+
 function _startFakeAPI(bag, next) {
   var who = bag.who + '|' + _startFakeAPI.name;
   logger.verbose(who, 'Inside');
+
+  var startFakeApiScriptPath = path.join(bag.architecture, bag.operatingSystem,
+    'startFakeAPI.sh');
 
   _copyAndRunScript({
       who: who,
       params: {},
       script: '',
-      scriptPath: 'docker/startFakeAPI.sh',
+      scriptPath: startFakeApiScriptPath,
       tmpScriptFilename: '/tmp/startFakeAPI.sh',
       scriptEnvs: {
         'RUNTIME_DIR': global.config.runtimeDir,
