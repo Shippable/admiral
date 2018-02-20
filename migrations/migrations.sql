@@ -4582,37 +4582,37 @@ do $$
 
     -- Add prJobsCount column to projectDailyAggs
     if not exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'prJobsCount') then
-      alter table "projectDailyAggs" add column "prJobsCount" INTEGER DEFAULT 0 NOT NULL;
+      alter table "projectDailyAggs" add column "prJobsCount" INTEGER;
     end if;
 
     -- Add prJobsSuccessful column to projectDailyAggs
     if not exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'prJobsSuccessful') then
-      alter table "projectDailyAggs" add column "prJobsSuccessful" INTEGER DEFAULT 0 NOT NULL;
+      alter table "projectDailyAggs" add column "prJobsSuccessful" INTEGER;
     end if;
 
     -- Add prJobsFailed column to projectDailyAggs
     if not exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'prJobsFailed') then
-      alter table "projectDailyAggs" add column "prJobsFailed" INTEGER DEFAULT 0 NOT NULL;
+      alter table "projectDailyAggs" add column "prJobsFailed" INTEGER;
     end if;
 
     -- Add prJobsUnstable column to projectDailyAggs
     if not exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'prJobsUnstable') then
-      alter table "projectDailyAggs" add column "prJobsUnstable" INTEGER DEFAULT 0 NOT NULL;
+      alter table "projectDailyAggs" add column "prJobsUnstable" INTEGER;
     end if;
 
     -- Add prJobsTimedOut column to projectDailyAggs
     if not exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'prJobsTimedOut') then
-      alter table "projectDailyAggs" add column "prJobsTimedOut" INTEGER DEFAULT 0 NOT NULL;
+      alter table "projectDailyAggs" add column "prJobsTimedOut" INTEGER;
     end if;
 
     -- Add prJobsSkipped column to projectDailyAggs
     if not exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'prJobsSkipped') then
-      alter table "projectDailyAggs" add column "prJobsSkipped" INTEGER DEFAULT 0 NOT NULL;
+      alter table "projectDailyAggs" add column "prJobsSkipped" INTEGER;
     end if;
 
     -- Add prJobsCancelled column to projectDailyAggs
     if not exists (select 1 from information_schema.columns where table_name = 'projectDailyAggs' and column_name = 'prJobsCancelled') then
-      alter table "projectDailyAggs" add column "prJobsCancelled" INTEGER DEFAULT 0 NOT NULL;
+      alter table "projectDailyAggs" add column "prJobsCancelled" INTEGER;
     end if;
 
     -- Add subscriptions.defaultClusterId
