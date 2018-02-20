@@ -33,8 +33,8 @@ __check_os_and_architecture() {
     local os_version="$VERSION_ID"
     local operating_system=$os"_"$os_version
 
-    echo "ARCHITECTURE=$architecture" >> "$ADMIRAL_ENV"
-    echo "OPERATING_SYSTEM=$operating_system" >> "$ADMIRAL_ENV"
+    echo "ARCHITECTURE=\"$architecture\"" >> "$ADMIRAL_ENV"
+    echo "OPERATING_SYSTEM=\"$operating_system\"" >> "$ADMIRAL_ENV"
   fi
 }
 
