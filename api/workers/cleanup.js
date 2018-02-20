@@ -32,6 +32,8 @@ function cleanup(req, res) {
       _getReleaseVersion.bind(null, bag),
       _getPublicImageRegistry.bind(null, bag),
       _getPrivateImageRegistry.bind(null, bag),
+      _getOperatingSystem.bind(null, bag),
+      _getArchitecture.bind(null, bag),
       _generateEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
@@ -156,6 +158,46 @@ function _getPrivateImageRegistry(bag, next) {
   );
 }
 
+function _getOperatingSystem(bag, next) {
+  var who = bag.who + '|' + _getOperatingSystem.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('OPERATING_SYSTEM',
+    function (err, operatingSystem) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: OPERATING_SYSTEM')
+        );
+
+      bag.operatingSystem = operatingSystem;
+      logger.debug('Found Operating System');
+
+      return next();
+    }
+  );
+}
+
+function _getArchitecture(bag, next) {
+  var who = bag.who + '|' + _getArchitecture.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('ARCHITECTURE',
+    function (err, architecture) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ARCHITECTURE')
+        );
+
+      bag.architecture = architecture;
+      logger.debug('Found Architecture');
+
+      return next();
+    }
+  );
+}
+
 function _generateEnvs(bag, next) {
   var who = bag.who + '|' + _generateEnvs.name;
   logger.verbose(who, 'Inside');
@@ -191,7 +233,13 @@ function _generateInitializeScript(bag, next) {
   filePath = path.join(global.config.scriptsDir, '/lib/_helpers.sh');
   helpers = headerScript.concat(__applyTemplate(filePath, bag.params));
 
-  var initializeScript = helpers;
+  var osArchitectureHelpers = helpers;
+  filePath = path.join(global.config.scriptsDir, bag.architecture,
+    bag.operatingSystem, '_helpers.sh');
+  osArchitectureHelpers =
+    osArchitectureHelpers.concat(__applyTemplate(filePath, bag.params));
+
+  var initializeScript = osArchitectureHelpers;
   filePath = path.join(global.config.scriptsDir, 'cleanupWorker.sh');
   initializeScript =
     initializeScript.concat(__applyTemplate(filePath, bag.params));
