@@ -371,7 +371,7 @@ __set_admiral_ip() {
     fi
   else
     if [ "$response" != 'localhost' ]; then
-      if _validate_ip $response ; then
+      if __validate_ip $response ; then
         export ADMIRAL_IP=$response
         __process_msg "Admiral IP is set to $ADMIRAL_IP"
       else
