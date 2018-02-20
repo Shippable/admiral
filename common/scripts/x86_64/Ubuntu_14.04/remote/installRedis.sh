@@ -1,7 +1,11 @@
 #!/bin/bash -e
 
-REDIS_VERSION="4.0.8"
 TIMEOUT=60
+
+install_redis() {
+  echo "installing redis"
+  apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y redis-server
+}
 
 set_defaults() {
   if [ -z "$REDIS_HOST" ]; then
@@ -10,25 +14,6 @@ set_defaults() {
   if [ -z "$REDIS_PORT" ]; then
     REDIS_PORT=6379
   fi
-}
-
-install_redis() {
-  echo "installing redis"
-
-  sudo apt-get update
-  sudo apt-get install -y build-essential tcl8.5
-  wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz
-  tar xzf redis-$REDIS_VERSION.tar.gz
-  pushd redis-$REDIS_VERSION
-    make
-    make test
-    sudo make install
-    sudo REDIS_PORT=$REDIS_PORT \
-      REDIS_CONFIG_FILE=/etc/redis/$REDIS_PORT.conf \
-      REDIS_LOG_FILE=/var/log/redis_$REDIS_PORT.log \
-      REDIS_DATA_DIR=/var/lib/redis/$REDIS_PORT \
-      REDIS_EXECUTABLE=`command -v redis-server` ./utils/install_server.sh
-  popd
 }
 
 # accepts arguments $host $port $serviceName $timeout
@@ -67,15 +52,13 @@ main() {
   set_defaults
 
   {
-    # By default, redis service gets the name of format redis_<REDIS_PORT>
-    check_redis=$(service --status-all 2>&1 | grep redis_$REDIS_PORT)
+    check_redis=$(service --status-all 2>&1 | grep redis-server)
     if ! nc -vz $REDIS_HOST $REDIS_PORT &>/dev/null; then
       check_redis=""
     fi
   } || {
     true
   }
-
   if [ ! -z "$check_redis" ]; then
     echo "Redis already installed, skipping."
     return
