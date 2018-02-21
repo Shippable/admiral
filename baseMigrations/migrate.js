@@ -147,7 +147,8 @@ function _installPsql(bag, next) {
 
   _runScript({
       who: who,
-      scriptPath: '/home/shippable/admiral/common/scripts/install_psql.sh',
+      scriptPath: '/home/shippable/admiral/common/scripts/x86_64' +
+        '/Ubuntu_14.04/install_psql.sh',
       scriptEnvs: {}
     },
     function (err) {

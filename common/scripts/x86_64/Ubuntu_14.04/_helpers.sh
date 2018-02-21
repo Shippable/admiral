@@ -199,7 +199,7 @@ __check_dependencies() {
     __process_msg "'psql' already installed"
   else
     __process_msg "Installing 'psql'"
-    /bin/bash -c "$SCRIPTS_DIR/install_psql.sh"
+    /bin/bash -c "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/install_psql.sh"
     __process_msg "Successfully installed psql"
   fi
 
