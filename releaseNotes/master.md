@@ -4,12 +4,8 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
-
+  - **Chrome addon and Chrome driver**: You can run selenium tests using Chrome in a headless mode.
+ 
 ## Fixes
   - **simple title**: brief description
       - actions required
