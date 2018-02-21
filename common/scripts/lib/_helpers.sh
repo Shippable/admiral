@@ -33,6 +33,14 @@ __check_os_and_architecture() {
     local os_version="$VERSION_ID"
     local operating_system=$os"_"$os_version
 
+    ### default architecture & os to x86_64, Ubuntu_14.04, if empty
+    if [ -z "$architecture" ]; then
+      architecture="x86_64"
+    fi
+    if [ -z "$operating_system" ]; then
+      operating_system="Ubuntu_14.04"
+    fi
+
     echo "ARCHITECTURE=\"$architecture\"" >> "$ADMIRAL_ENV"
     echo "OPERATING_SYSTEM=\"$operating_system\"" >> "$ADMIRAL_ENV"
   fi
