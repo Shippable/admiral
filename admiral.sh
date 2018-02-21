@@ -64,7 +64,7 @@ main() {
     __print_runtime
     source "$SCRIPTS_DIR/installDb.sh"
     source "$SCRIPTS_DIR/create_vault_table.sh"
-    source "$SCRIPTS_DIR/boot_admiral.sh"
+    source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/boot_admiral.sh"
     source "$SCRIPTS_DIR/upgrade.sh"
     source "$SCRIPTS_DIR/restart.sh"
   } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )
