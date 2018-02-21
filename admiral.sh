@@ -27,8 +27,6 @@ readonly SSH_PRIVATE_KEY=$CONFIG_DIR/machinekey
 readonly SSH_PUBLIC_KEY=$CONFIG_DIR/machinekey.pub
 readonly SCRIPTS_DIR_REMOTE="/tmp/shippable"
 readonly MAX_DEFAULT_LOG_COUNT=6
-readonly DOCKER_VERSION=1.13
-readonly AWSCLI_VERSION=1.10.63
 readonly API_TIMEOUT=600
 readonly ADMIRAL_PORT=50003
 export LC_ALL=C
@@ -48,6 +46,7 @@ source "$LIB_DIR/_helpers.sh"
 __bootstrap_admiral_env
 __check_os_and_architecture
 
+source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/_installVersion.env"
 source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/_helpers.sh"
 
 source "$LIB_DIR/_parseArgs.sh"
