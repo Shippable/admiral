@@ -12,6 +12,7 @@ var url = require('url');
 
 var GitLabAdapter = require('../../common/GitLabAdapter.js');
 var APIAdapter = require('../../common/APIAdapter.js');
+var envHandler = require('../../common/envHandler.js');
 
 function getStatus(req, res) {
   var bag = {
@@ -39,6 +40,8 @@ function getStatus(req, res) {
       _getSystemIntegration.bind(null, bag),
       _initializeGitLabAdapter.bind(null, bag),
       _getGitLabUser.bind(null, bag),
+      _getOperatingSystem.bind(null, bag),
+      _getArchitecture.bind(null, bag),
       _generatePortCheckScript.bind(null, bag),
       _writePortCheckScriptToFile.bind(null, bag),
       _checkSSHPort.bind(null, bag),
@@ -139,6 +142,46 @@ function _getGitLabUser(bag, next) {
   );
 }
 
+function _getOperatingSystem(bag, next) {
+  var who = bag.who + '|' + _getOperatingSystem.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('OPERATING_SYSTEM',
+    function (err, operatingSystem) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: OPERATING_SYSTEM')
+        );
+
+      bag.operatingSystem = operatingSystem;
+      logger.debug('Found Operating System');
+
+      return next();
+    }
+  );
+}
+
+function _getArchitecture(bag, next) {
+  var who = bag.who + '|' + _getArchitecture.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('ARCHITECTURE',
+    function (err, architecture) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ARCHITECTURE')
+        );
+
+      bag.architecture = architecture;
+      logger.debug('Found Architecture');
+
+      return next();
+    }
+  );
+}
+
 function _generatePortCheckScript(bag, next) {
   if (bag.resBody.error) return next();
 
@@ -150,7 +193,8 @@ function _generatePortCheckScript(bag, next) {
   var filePath = path.join(global.config.scriptsDir, '/lib/_logger.sh');
   headerScript = headerScript.concat(__applyTemplate(filePath, {}));
 
-  filePath = path.join(global.config.scriptsDir, '/check_port.sh');
+  filePath = path.join(global.config.scriptsDir, bag.architecture,
+    bag.operatingSystem, 'check_port.sh');
   bag.script = headerScript.concat(__applyTemplate(filePath, {}));
 
   return next();
