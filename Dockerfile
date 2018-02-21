@@ -2,7 +2,7 @@ FROM drydock/microbase:master
 
 ADD . /home/shippable/admiral
 
-RUN ./home/shippable/admiral/common/scripts/install_psql.sh
+RUN ./home/shippable/admiral/common/scripts/x86_64/Ubuntu_14.04/install_psql.sh
 
 RUN cd /home/shippable/admiral && npm install --unsafe-perm && \
   ./node_modules/bower/bin/bower --allow-root install && grunt build
