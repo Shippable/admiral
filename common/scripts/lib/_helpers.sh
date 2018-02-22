@@ -29,7 +29,10 @@ __check_os_and_architecture() {
     sed -i '/^ARCHITECTURE/d' "$ADMIRAL_ENV"
 
     local architecture=$(uname -m)
-    local os=$(set -- "$NAME" && echo "$1")
+    # For CentOS, the OS value is defined as "CentOS Linux". We only want
+    # the first part of it, so ignore everything after a space. Ubuntu defines
+    # it as "Ubuntu" so that will not change here.
+    local os=$(echo "$NAME" | cut -f 1 -d ' ')
     local os_version="$VERSION_ID"
     local operating_system=$os"_"$os_version
 
