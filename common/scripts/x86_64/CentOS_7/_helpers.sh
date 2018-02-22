@@ -413,7 +413,7 @@ __check_service_connection() {
   local service_booted=false
 
   while [ $service_booted != true ] && [ $counter -lt $timeout ]; do
-    if nc -v --send-only </dev/null $host $port &>/dev/null; then
+    if nc $host $port < /dev/null &> /dev/null; then
       __process_msg "$service found"
       sleep 5
       service_booted=true
