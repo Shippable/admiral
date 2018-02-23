@@ -13,7 +13,7 @@ download_vault() {
 
 install_vault() {
   echo "Installing Vault..."
-  unzip vault.zip -d /usr/local/bin
+  unzip -o vault.zip -d /usr/local/bin
   chmod 0755 /usr/local/bin/vault
   chown root:root /usr/local/bin/vault
 }
