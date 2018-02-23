@@ -94,11 +94,11 @@ __install_db() {
       $SCRIPTS_DIR_REMOTE/$proxy_script_name"
     __exec_cmd_remote "$DB_IP" "$proxy_config_install_cmd"
 
-    local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
+    local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
     __copy_script_remote "$DB_IP" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
     __exec_cmd_remote "$DB_IP" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
 
-    local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
+    local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
     __exec_cmd_remote "$DB_IP" "mkdir -p $SCRIPTS_DIR_REMOTE"
     __copy_script_remote "$DB_IP" "$script_path" "$SCRIPTS_DIR_REMOTE"
     local db_install_cmd="DB_IP=$DB_IP \
