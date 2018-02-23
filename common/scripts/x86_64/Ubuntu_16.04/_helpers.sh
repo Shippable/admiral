@@ -483,7 +483,7 @@ __copy_script_remote() {
       -o NumberOfPasswordPrompts=0 \
       -p $port \
       -i $SSH_PRIVATE_KEY \
-      -C -c blowfish' \
+      -C' \
       $script_path_local $user@$host:$script_path_remote"
 
   copy_cmd_out=$(eval $copy_cmd)
