@@ -52,7 +52,7 @@ __update_vault_config() {
   __process_msg "Generating vault config"
   cp -vr $SCRIPTS_DIR/configs/vault_config.hcl.template $VAULT_CONFIG_DIR/config.hcl
   cp -vr $SCRIPTS_DIR/configs/policy.hcl $VAULT_CONFIG_DIR/scripts/policy.hcl
-  cp -vr $SCRIPTS_DIR/configs/vault.conf $VAULT_CONFIG_DIR/scripts/vault.conf
+  cp -vr $SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/config/* $VAULT_CONFIG_DIR/scripts/
 }
 
 __update_vault_creds() {
@@ -76,10 +76,6 @@ __update_vault_creds() {
 
 __copy_configs() {
   __process_msg "Creating vault config directories"
-  __process_msg "Copying vault upstart file"
-
-  local upstart_config_path="$VAULT_CONFIG_DIR/scripts/vault.conf"
-  __copy_script_remote "$VAULT_HOST" "$upstart_config_path" "/etc/init"
 
   local vault_config_path="$VAULT_CONFIG_DIR/config.hcl"
   __copy_script_remote "$VAULT_HOST" "$vault_config_path" "/etc/vault.d"
@@ -100,7 +96,7 @@ main() {
     if [ "$ADMIRAL_IP" == "$VAULT_HOST" ]; then
       source "$SCRIPTS_DIR/docker/$script_name"
     else
-      local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
+      local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
       __check_connection "$VAULT_HOST"
 
       local proxy_script_name="configureProxy.sh"
@@ -113,6 +109,8 @@ main() {
       __exec_cmd_remote "$VAULT_HOST" "$proxy_config_install_cmd"
 
       __copy_configs
+
+      source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/configVault.sh"
 
       local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
       __copy_script_remote "$VAULT_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
