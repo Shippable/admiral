@@ -16,15 +16,6 @@ readonly DB_TABLESPACE_NAME=shipts
 
 export DB_TIMEOUT=180
 
-# for testing script
-DB_IP="127.0.0.1"
-DB_IP="localhost"
-DB_PORT="5432"
-DB_USER="apiuser"
-DB_NAME="shipdb"
-DB_PASSWORD="testing1234"
-DB_DIALECT="postgres"
-
 __validate_db_envs() {
   echo "Validating db ENV variables"
   if [ "$DB_IP" == "" ]; then
