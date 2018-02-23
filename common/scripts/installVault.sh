@@ -112,7 +112,7 @@ main() {
 
       source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/configVault.sh"
 
-      local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
+      local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
       __copy_script_remote "$VAULT_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
       __exec_cmd_remote "$VAULT_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
 
