@@ -275,7 +275,9 @@ function _generateInitializeEnvs(bag, next) {
       path.join(global.config.scriptsDir, '/rabbitmqadmin'),
     'SHIPPABLE_HTTP_PROXY': process.env.http_proxy || '',
     'SHIPPABLE_HTTPS_PROXY': process.env.https_proxy || '',
-    'SHIPPABLE_NO_PROXY': process.env.no_proxy || ''
+    'SHIPPABLE_NO_PROXY': process.env.no_proxy || '',
+    'ARCHITECTURE': bag.architecture,
+    'OPERATING_SYSTEM': bag.operatingSystem
   };
 
   return next();
