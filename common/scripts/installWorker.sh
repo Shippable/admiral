@@ -71,7 +71,11 @@ main() {
       __process_msg "Installing worker on admiral node"
       source "$SCRIPTS_DIR/docker/$script_name"
     else
-      local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
+      if [ "$OPERATING_SYSTEM" == "Ubuntu_14.04" ]; then
+        local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
+      else
+        local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
+      fi
       __check_connection "$WORKER_HOST"
 
       local proxy_script_name="configureProxy.sh"
@@ -85,7 +89,11 @@ main() {
 
       __copy_configs
 
-      local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
+      if [ "$OPERATING_SYSTEM" == "Ubuntu_14.04" ]; then
+        local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
+      else
+        local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
+      fi
       __copy_script_remote "$WORKER_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
       __exec_cmd_remote "$WORKER_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
 
@@ -107,13 +115,14 @@ main() {
         $SCRIPTS_DIR_REMOTE/$script_name"
       __exec_cmd_remote "$WORKER_HOST" "$worker_install_cmd"
 
-      if [ "$NO_VERIFY_SSL" == true ]; then
-        local docker_login_cmd="aws ecr --no-verify-ssl --region us-east-1 get-login | bash"
-      else
-        local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+      if [ "$OPERATING_SYSTEM" == "Ubuntu_14.04" ]; then
+        if [ "$NO_VERIFY_SSL" == true ]; then
+          local docker_login_cmd="aws ecr --no-verify-ssl --region us-east-1 get-login | bash"
+        else
+          local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+        fi
+        __exec_cmd_remote "$WORKER_HOST" "$docker_login_cmd"
       fi
-      __exec_cmd_remote "$WORKER_HOST" "$docker_login_cmd"
-
       for image in "${SERVICE_IMAGES[@]}"; do
         image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
         __process_msg "Pulling $image on $WORKER_HOST"

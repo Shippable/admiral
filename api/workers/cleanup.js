@@ -214,7 +214,9 @@ function _generateEnvs(bag, next) {
     'PRIVATE_IMAGE_REGISTRY': bag.privateImageRegistry,
     'PUBLIC_IMAGE_REGISTRY': bag.publicImageRegistry,
     'WORKER_HOST': bag.config.address,
-    'WORKER_PORT': bag.config.port
+    'WORKER_PORT': bag.config.port,
+    'ARCHITECTURE': bag.architecture,
+    'OPERATING_SYSTEM': bag.operatingSystem
   };
 
   return next();
