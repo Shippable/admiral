@@ -21,7 +21,8 @@ function mktgConfig(params, callback) {
     runCommand: '',
     ignoreTLSEnv: 'IGNORE_TLS_ERRORS',
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
-    serviceUserToken: ''
+    serviceUserToken: '',
+    operatingSystem: params.operatingSystem
   };
 
   bag.who = util.format('mktgConfig|%s', self.name);
@@ -215,11 +216,19 @@ function _generateRunCommandCluster(bag, next) {
   var who = bag.who + '|' + _generateRunCommandCluster.name;
   logger.verbose(who, 'Inside');
 
-  var opts = ' --publish mode=host,target=50002,published=50002,protocol=tcp' +
-    ' --network ingress' +
-    ' --mode global' +
-    ' --with-registry-auth' +
-    ' --endpoint-mode vip';
+  var opts;
+  if (bag.operatingSystem === 'Ubuntu_14.04') {
+    opts = ' --publish mode=host,target=50002,published=50002,protocol=tcp' +
+      ' --network ingress' +
+      ' --mode global' +
+      ' --with-registry-auth' +
+      ' --endpoint-mode vip';
+  } else if (bag.operatingSystem === 'Ubuntu_16.04') {
+    opts = ' --publish mode=host,target=50002,published=50002,protocol=tcp' +
+      ' --mode global' +
+      ' --with-registry-auth' +
+      ' --endpoint-mode vip';
+  }
 
   var runCommand = util.format('docker service create ' +
     ' %s %s --name %s %s',

@@ -48,6 +48,7 @@ function post(req, res) {
       _getSecretKey.bind(null, bag),
       _getRegistry.bind(null, bag),
       _getPublicRegistry.bind(null, bag),
+      _getOperatingSystem.bind(null, bag),
       _generateServiceConfig.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
@@ -243,6 +244,26 @@ function _getPublicRegistry(bag, next) {
   );
 }
 
+function _getOperatingSystem(bag, next) {
+  var who = bag.who + '|' + _getOperatingSystem.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('OPERATING_SYSTEM',
+    function (err, operatingSystem) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: OPERATING_SYSTEM')
+        );
+
+      bag.operatingSystem = operatingSystem;
+      logger.debug('Found operating system');
+
+      return next();
+    }
+  );
+}
+
 function _generateServiceConfig(bag, next) {
   var who = bag.who + '|' + _generateServiceConfig.name;
   logger.verbose(who, 'Inside');
@@ -266,7 +287,8 @@ function _generateServiceConfig(bag, next) {
     registry: bag.registry,
     releaseVersion: bag.releaseVersion,
     isSwarmClusterInitialized: bag.isSwarmClusterInitialized,
-    publicRegistry: bag.publicRegistry
+    publicRegistry: bag.publicRegistry,
+    operatingSystem: bag.operatingSystem
   };
 
   if (!configGenerator)
