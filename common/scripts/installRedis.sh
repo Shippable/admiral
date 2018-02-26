@@ -69,11 +69,7 @@ main() {
     if [ "$ADMIRAL_IP" == "$REDIS_HOST" ]; then
       source "$SCRIPTS_DIR/docker/$script_name"
     else
-      if [ "$OPERATING_SYSTEM" == "Ubuntu_14.04" ]; then
-        local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
-      else
-        local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
-      fi
+      local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
       __check_connection "$REDIS_HOST"
 
       local proxy_script_name="configureProxy.sh"
@@ -87,11 +83,7 @@ main() {
 
       __copy_configs
 
-      if [ "$OPERATING_SYSTEM" == "Ubuntu_14.04" ]; then
-        local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
-      else
-        local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
-      fi
+      local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
       __copy_script_remote "$REDIS_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
       __exec_cmd_remote "$REDIS_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
 
