@@ -26,11 +26,7 @@ __cleanup_swarm_worker() {
   if [ "$ADMIRAL_IP" == "$WORKER_HOST" ]; then
     __process_msg "Worker is the same as master, skipping cleanup"
   else
-    if [ "$OPERATING_SYSTEM" == "Ubuntu_14.04" ]; then
-      local node_cleanup_script="$SCRIPTS_DIR/Ubuntu_14.04/cleanupWorker.sh"
-    else
-      local node_cleanup_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/cleanupWorker.sh"
-    fi
+    local node_cleanup_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/cleanupWorker.sh"
     __copy_script_remote "$WORKER_HOST" "$node_cleanup_script" "$SCRIPTS_DIR_REMOTE"
     __exec_cmd_remote "$WORKER_HOST" "$SCRIPTS_DIR_REMOTE/cleanupWorker.sh"
 
