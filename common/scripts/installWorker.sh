@@ -52,10 +52,6 @@ __copy_configs() {
 
   sed "s#{{ACCESS_KEY}}#$ACCESS_KEY#g" $credentials_template > $credentials_file
   sed -i "s#{{SECRET_KEY}}#$SECRET_KEY#g" $credentials_file
-
-  __process_msg "Copying docker login binary"
-  local docker_credentials_binary="$SCRIPTS_DIR/Ubuntu_14.04/docker-credential-ecr-login"
-  sudo cp -vr $docker_credentials_binary $WORKERS_CONFIG_DIR/
 }
 
 main() {
@@ -71,11 +67,7 @@ main() {
       __process_msg "Installing worker on admiral node"
       source "$SCRIPTS_DIR/docker/$script_name"
     else
-      if [ "$OPERATING_SYSTEM" == "Ubuntu_14.04" ]; then
-        local script_path="$SCRIPTS_DIR/Ubuntu_14.04/$script_name"
-      else
-        local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
-      fi
+      local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
       __check_connection "$WORKER_HOST"
 
       local proxy_script_name="configureProxy.sh"
@@ -89,17 +81,9 @@ main() {
 
       __copy_configs
 
-      if [ "$OPERATING_SYSTEM" == "Ubuntu_14.04" ]; then
-        local node_update_script="$SCRIPTS_DIR/Ubuntu_14.04/setupNode.sh"
-      else
-        local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
-      fi
+      local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
       __copy_script_remote "$WORKER_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
       __exec_cmd_remote "$WORKER_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
-
-      __process_msg "Copying docker credential binary"
-      local docker_auth_binary="$WORKERS_CONFIG_DIR/docker-credential-ecr-login"
-      __copy_script_remote "$WORKER_HOST" "$docker_auth_binary" "/usr/bin"
 
       __process_msg "copying ecr credentials file"
       local credentials_file="$WORKERS_CONFIG_DIR/credentials"
