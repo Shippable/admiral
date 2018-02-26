@@ -23,7 +23,8 @@ function apiConfig(params, callback) {
     ignoreTLSEnv: 'IGNORE_TLS_ERRORS',
     vaultTokenEnv: 'VAULT_TOKEN',
     vaultToken: '',
-    port: 50000
+    port: 50000,
+    operatingSystem: params.operatingSystem
   };
 
   bag.who = util.format('apiConfig|%s', self.name);
@@ -224,12 +225,22 @@ function _generateRunCommandCluster(bag, next) {
   var who = bag.who + '|' + _generateRunCommandCluster.name;
   logger.verbose(who, 'Inside');
 
-  var opts = util.format(' --publish mode=host,target=%s,published=%s' +
-    ',protocol=tcp' +
-    ' --network ingress' +
-    ' --mode global' +
-    ' --with-registry-auth' +
-    ' --endpoint-mode vip', bag.port, bag.port);
+  var opts;
+
+  if (bag.operatingSystem === 'Ubuntu_14.04') {
+    opts = util.format(' --publish mode=host,target=%s,published=%s' +
+      ',protocol=tcp' +
+      ' --network ingress' +
+      ' --mode global' +
+      ' --with-registry-auth' +
+      ' --endpoint-mode vip', bag.port, bag.port);
+  } else if (bag.operatingSystem === 'Ubuntu_16.04') {
+    opts = util.format(' --publish mode=host,target=%s,published=%s' +
+      ',protocol=tcp' +
+      ' --mode global' +
+      ' --with-registry-auth' +
+      ' --endpoint-mode vip', bag.port, bag.port);
+  }
 
   var runCommand = util.format('docker service create ' +
     ' %s %s --name %s %s',

@@ -21,7 +21,8 @@ function microConfig(params, callback) {
     runCommand: '',
     ignoreTLSEnv: 'IGNORE_TLS_ERRORS',
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
-    serviceUserToken: ''
+    serviceUserToken: '',
+    operatingSystem: params.operatingSystem
   };
 
   bag.who = util.format('microConfig|%s', self.name);
@@ -321,9 +322,15 @@ function _generateRunCommandCluster(bag, next) {
   if (bag.replicas === 'global')
     replicas = ' --mode global';
 
-  var opts = ' --network ingress' +
-    ' --with-registry-auth' +
-    ' --endpoint-mode vip';
+  var opts;
+  if (bag.operatingSystem === 'Ubuntu_14.04') {
+    opts = ' --network ingress' +
+      ' --with-registry-auth' +
+      ' --endpoint-mode vip';
+  } else if (bag.operatingSystem === 'Ubuntu_16.04') {
+    opts = ' --with-registry-auth' +
+      ' --endpoint-mode vip';
+  }
 
   var runCommand = util.format('docker service create ' +
     ' %s %s %s --name %s %s',
