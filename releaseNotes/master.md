@@ -16,7 +16,8 @@ ${RES_VER_DATE}
   - Running N parallel instances of a job in a subscription that has N (N > 1) minions do not block (N-1) minions.
   - If a subscription ends up with a single Node pool as a result of adding/removing SKU's or Node pools, the Node pool is
     always set as the default Node pool.
-      
+  - CI Projects with special characters can be seen in SPOG `Dry run`.  
+       
 
 ## Custom Nodes
   - **simple title**: brief description
