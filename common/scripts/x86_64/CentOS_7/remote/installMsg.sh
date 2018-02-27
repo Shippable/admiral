@@ -9,7 +9,7 @@ install_deps() {
 }
 
 install_log_rotate() {
-  yum install logrotate
+  yum install -y logrotate
 }
 
 install_rabbitmq() {
