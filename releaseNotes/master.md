@@ -17,6 +17,7 @@ ${RES_VER_DATE}
   - If a subscription ends up with a single Node pool as a result of adding/removing SKU's or Node pools, the Node pool is
     always set as the default Node pool.
   - CI Projects with special characters can be seen in SPOG `Dry run`.  
+  - After a project is enabled for CI, the project name can be clicked so that you can navigate to the project dashboard. This     simplifies the process of triggering a manual build for testing purposes once a project is enabled. 
        
 
 ## Custom Nodes
