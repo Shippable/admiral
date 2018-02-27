@@ -44,7 +44,7 @@ __validate_redis_mounts() {
 
 __update_redis_config() {
   __process_msg "Updating redis config files"
-  cp -vr $SCRIPTS_DIR/configs/redis.conf $REDIS_CONFIG_DIR/redis.conf
+  cp -vr $SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/config/redis.conf $REDIS_CONFIG_DIR/redis.conf
 }
 
 __copy_configs() {

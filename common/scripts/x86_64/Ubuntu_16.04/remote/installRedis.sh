@@ -13,7 +13,7 @@ set_defaults() {
 
 install_redis() {
   echo "installing redis"
-  apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --force-yes -y redis-server
+  apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y redis-server
 }
 
 # accepts arguments $host $port $serviceName $timeout
