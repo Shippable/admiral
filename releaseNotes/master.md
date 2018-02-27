@@ -9,9 +9,10 @@ ${RES_VER_DATE}
   - **Users can make a change to shippable ymls without triggering any jobs attached to gitRepos**: Usecases where gitRepo and syncRepo were identical (point to the same repository) would run into a problem where changes to the shippable yml would trigger rSync and the job attached to the gitRepo in a non-deterministic order. We now only trigger rSync if a commit has any shippable yml file in its changeset.  
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - Windows gitRepo IN does preserve the .git directory. This enables running git commands in the runSh job.
+  - Changes to version pinned resources are immediately reflected in the UI without needing a browser refresh.
+  - Running N parallel instances of a job in a subscription that has N (N > 1) minions do not block (N-1) minions.
+      
 
 ## Custom Nodes
   - **simple title**: brief description
