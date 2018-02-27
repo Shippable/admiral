@@ -6,7 +6,7 @@ VAULTCONFIGDIR=/etc/vault.d
 TIMEOUT=60
 
 download_vault() {
-  yum install -y zip unzip
+  yum install -y zip unzip nc
   echo "Fetching Vault..."
   curl -L $VAULTDOWNLOAD > vault.zip
 }
@@ -25,7 +25,7 @@ create_config_dirs() {
 }
 
 start_vault() {
-  systemclt daemon-reload
+  systemctl daemon-reload
   service vault start
 }
 
@@ -40,7 +40,7 @@ __check_service_connection() {
   local service_booted=false
 
   while [ $service_booted != true ] && [ $counter -lt $timeout ]; do
-    if nc -vz $host $port &>/dev/null; then
+    if nc $host $port </dev/null &>/dev/null; then
       echo "$service found"
       sleep 5
       service_booted=true
