@@ -14,7 +14,8 @@ ${RES_VER_DATE}
   - Running N parallel instances of a job in a subscription that has N (N > 1) minions do not block (N-1) minions.
   - If a subscription ends up with a single Node pool as a result of adding/removing SKU's or Node pools, the Node pool is
     always set as the default Node pool.
-      
+  - Dry Run works for repositories with special characters in name.
+
 
 ## Custom Nodes
   - **simple title**: brief description
