@@ -277,6 +277,9 @@ function _generateRunCommandCluster(bag, next) {
   } else if (bag.operatingSystem === 'Ubuntu_16.04') {
     opts = ' --with-registry-auth' +
       ' --endpoint-mode vip';
+  } else if (bag.operatingSystem === 'CentOS_7') {
+    opts = ' --with-registry-auth' +
+      ' --endpoint-mode vip';
   }
 
   var runCommand = util.format('docker service create ' +

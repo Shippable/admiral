@@ -230,6 +230,11 @@ function _generateRunCommandCluster(bag, next) {
       ' --mode global' +
       ' --with-registry-auth' +
       ' --endpoint-mode vip';
+  } else if (bag.operatingSystem === 'CentOS_7') {
+    opts = ' --publish mode=host,target=50001,published=50001,protocol=tcp' +
+      ' --mode global' +
+      ' --with-registry-auth' +
+      ' --endpoint-mode vip';
   }
 
   var runCommand = util.format('docker service create ' +
