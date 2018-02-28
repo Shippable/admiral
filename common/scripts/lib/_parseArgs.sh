@@ -307,6 +307,24 @@ __prompt_for_inputs() {
   fi
 }
 
+__set_host_services() {
+  sed -i '/^HOST_SERVICES/d' "$ADMIRAL_ENV"
+  echo "HOST_SERVICES=true" >> "$ADMIRAL_ENV"
+  source "$ADMIRAL_ENV"
+
+  ## add ssh key to host's authorized keys
+  local authorized_keys="/root/.ssh/authorized_keys"
+  local tmp_authorized_keys="/root/.ssh/tmp"
+  local ssh_public_key=$(cat "$SSH_PUBLIC_KEY")
+  # remove public key from authorized_keys, if present
+  if grep -v "^$ssh_public_key" "$authorized_keys" > "$tmp_authorized_keys"; then
+    cat "$tmp_authorized_keys" > "$authorized_keys"
+  fi
+  rm -f "$tmp_authorized_keys"
+  # add public key to authorized_keys
+  echo "$ssh_public_key" >> "$authorized_keys"
+}
+
 __parse_args_install() {
   export IS_UPGRADE=false
 
@@ -323,6 +341,9 @@ __parse_args_install() {
           ;;
         --with-proxy-config)
           export WITH_PROXY_CONFIG=true
+          ;;
+        -H|--host_services)
+          __set_host_services
           ;;
         -h|help|--help)
           __print_help_install
