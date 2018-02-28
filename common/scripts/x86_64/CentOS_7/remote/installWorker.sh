@@ -14,7 +14,7 @@ __create_exec_file() {
 
   pushd /tmp
   mkdir -p $node_scripts_location
-  curl -o "./node-$RELEASE.tar.gz" "https://s3.amazonaws.com/shippable-artifacts/node/v6.2.3/node-$RELEASE.tar.gz"
+  curl -o "./node-$RELEASE.tar.gz" $node_s3_location
   tar -xzf node-$RELEASE.tar.gz -C $node_scripts_location --strip-components=1
   rm -rf node-$RELEASE.tar.gz
   popd
