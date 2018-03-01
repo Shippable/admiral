@@ -51,7 +51,7 @@ __validate_db_envs() {
 
 __install_deps() {
   echo "installing dependencies"
-  yum -y update
+  yum check-update || true
   yum install -y nc
 }
 
@@ -64,7 +64,7 @@ __update_sources() {
 
 __install_postgres() {
   echo "Installing Postgres"
-  sudo rpm -ivh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-2.noarch.rpm
+  sudo rpm -ivh --force http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm
   yum install -y postgresql95 postgresql95-server postgresql95-contrib
 
   sudo systemctl enable postgresql-9.5.service
