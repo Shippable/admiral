@@ -21,6 +21,7 @@ ${RES_VER_DATE}
   - After a project is enabled for CI, the project name can be clicked so that you can navigate to the project dashboard. This     simplifies the process of triggering a manual build for testing purposes once a project is enabled. 
   - Key-Value pair integrations when used in a CI project, do not show any key-value pair data in plaintext in the script tab.
   - Text alignment issues in SPOG have been fixed for the Microsoft Edge browser.
+  - Improved the UX of the Billing page.
        
 
 ## Custom Nodes
