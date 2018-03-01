@@ -63,21 +63,9 @@ __update_sources() {
 }
 
 __install_postgres() {
-  echo "Checking existing Postgres installation"
-  local pg_path=""
-  {
-    pg_path=$(which psql)
-  } || {
-    pg_path=""
-  }
-
-  if [ -z "$pg_path" ]; then
-    echo "|_########## Postgres not installed, installing"
-    sudo rpm -ivh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-2.noarch.rpm
-    yum install -y postgresql95 postgresql95-server postgresql95-contrib
-  else
-    echo "|_########## Postgres already installed, skipping"
-  fi
+  echo "Installing Postgres"
+  sudo rpm -ivh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-2.noarch.rpm
+  yum install -y postgresql95 postgresql95-server postgresql95-contrib
 
   sudo systemctl enable postgresql-9.5.service
 }

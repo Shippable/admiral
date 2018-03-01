@@ -66,20 +66,8 @@ __update_sources() {
 }
 
 __install_postgres() {
-  echo "Checking existing Postgres installation"
-  local pg_path=""
-  {
-    pg_path=$(which psql)
-  } || {
-    pg_path=""
-  }
-
-  if [ -z "$pg_path" ]; then
-    echo "|_########## Postgres not installed, installing"
-    apt-get install -y postgresql-$PG_VERSION postgresql-contrib-$PG_VERSION
-  else
-    echo "|_########## Postgres already installed, skipping"
-  fi
+  echo "Installing Postgres"
+  apt-get install -y postgresql-$PG_VERSION postgresql-contrib-$PG_VERSION
 }
 
 __configure_data_dirs() {
