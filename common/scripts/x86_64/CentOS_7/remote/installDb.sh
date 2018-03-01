@@ -51,7 +51,7 @@ __validate_db_envs() {
 
 __install_deps() {
   echo "installing dependencies"
-  yum -y update
+  yum check-update
   yum install -y nc
 }
 
