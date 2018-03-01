@@ -524,3 +524,31 @@ __copy_script_remote() {
 
   copy_cmd_out=$(eval $copy_cmd)
 }
+
+# keeping this separate because package versions might be different for different OS
+__exec_cmd_local() {
+  local user="$SSH_USER"
+  local key="$SSH_PRIVATE_KEY"
+  local timeout=10
+  local port=22
+
+  local host="$1"
+  shift
+  local cmd="$@"
+
+  local local_cmd="ssh \
+    -o StrictHostKeyChecking=no \
+    -o NumberOfPasswordPrompts=0 \
+    -o ConnectTimeout=$timeout \
+    -p $port \
+    -i $key \
+    $user@$host \
+    \"$cmd\""
+
+  {
+    __process_msg "Executing on host: $host ==> '$cmd'" && eval "sudo -E $local_cmd"
+  } || {
+    __process_msg "ERROR: Command failed on host: $host ==> '$cmd'"
+    exit 1
+  }
+}
