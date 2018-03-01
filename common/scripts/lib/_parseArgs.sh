@@ -312,17 +312,14 @@ __set_host_services() {
   echo "HOST_SERVICES=true" >> "$ADMIRAL_ENV"
   source "$ADMIRAL_ENV"
 
-  ## add ssh key to host's authorized keys
-  local authorized_keys="/root/.ssh/authorized_keys"
-  local tmp_authorized_keys="/root/.ssh/tmp"
+  # create .ssh dir, if not present
+  local root_ssh_dir="/root/.ssh"
+  mkdir -p "$root_ssh_dir"
+
+  ## add public ssh key to host's authorized keys
+  local authorized_keys="$root_ssh_dir/authorized_keys"
   local ssh_public_key=$(cat "$SSH_PUBLIC_KEY")
-  # remove public key from authorized_keys, if present
-  if grep -v "^$ssh_public_key" "$authorized_keys" > "$tmp_authorized_keys"; then
-    cat "$tmp_authorized_keys" > "$authorized_keys"
-  fi
-  rm -f "$tmp_authorized_keys"
-  # add public key to authorized_keys
-  echo "$ssh_public_key" >> "$authorized_keys"
+  echo "$ssh_public_key" | tee -a "$authorized_keys" &> /dev/null
 }
 
 __parse_args_install() {
@@ -544,8 +541,8 @@ __parse_args() {
     case $key in
       install)
         shift
-        __parse_args_install "$@"
         __generate_ssh_keys
+        __parse_args_install "$@"
         __accept_shippable_license
         ;;
       switch)
