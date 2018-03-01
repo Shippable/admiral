@@ -25,6 +25,7 @@ ${RES_VER_DATE}
   - Improved the UX of the Billing page.
   - Ubuntu 16.04 Node initialization scripts do not set aufs as a storage driver. Storage driver is not set so that Docker         daemon can choose the most appropriate storage driver.
   - Syncrepo's can be deleted while the pipeline is running.
+  - Debug builds (SSH access to build nodes) option is only shown for on-demand Node pools. 
        
 
 ## Custom Nodes
