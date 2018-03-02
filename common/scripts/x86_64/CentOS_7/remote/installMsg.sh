@@ -17,9 +17,9 @@ install_rabbitmq() {
   yum install -y "erlang-19.3.6.4-1.el7.centos.x86_64.rpm"
   rm -f "erlang-19.3.6.4-1.el7.centos.x86_64.rpm"
 
-  wget "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/3.7.3/rabbitmq-server-3.7.3-1.el7.noarch.rpm"
-  yum install -y "rabbitmq-server-3.7.3-1.el7.noarch.rpm"
-  rm -f "rabbitmq-server-3.7.3-1.el7.noarch.rpm"
+  wget "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/3.6.5/rabbitmq-server-3.6.5-1.noarch.rpm"
+  yum install -y "rabbitmq-server-3.6.5-1.noarch.rpm"
+  rm -f "rabbitmq-server-3.6.5-1.noarch.rpm"
 }
 
 start_rabbitmq() {

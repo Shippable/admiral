@@ -5,14 +5,9 @@ export SSH_TIMEOUT=60
 
 install_deps() {
   echo "installing dependencies"
-  yum install -y curl policycoreutils-python openssh-server openssh-clients firewalld nc
+  yum install -y curl policycoreutils-python openssh-server openssh-clients nc
   systemctl enable sshd
   systemctl start sshd
-  systemctl unmask firewalld
-  systemctl enable firewalld
-  systemctl start firewalld
-  firewall-cmd --permanent --add-service=http
-  systemctl reload firewalld
 }
 
 install_gitlab() {

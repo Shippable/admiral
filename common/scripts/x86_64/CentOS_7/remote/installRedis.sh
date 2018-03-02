@@ -14,11 +14,12 @@ set_defaults() {
 install_redis() {
   echo "installing redis"
   sudo yum install -y epel-release
-  sudo yum update -y
   sudo yum install -y redis
+
   # Move the config that we've copied earlier to the default
   # location of the config in CentOS.
   sudo mv /etc/redis/redis.conf /etc/redis.conf
+
   sudo systemctl start redis
 }
 
