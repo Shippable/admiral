@@ -26,7 +26,10 @@ ${RES_VER_DATE}
   - Improved the UX of the Billing page.
   - Ubuntu 16.04 Node initialization scripts do not set aufs as a storage driver. Storage driver is not set so that Docker         daemon can choose the most appropriate storage driver.
   - Syncrepo's can be deleted while the pipeline is running.
-  - Debug builds (SSH access to build nodes) option is only shown for on-demand Node pools. 
+  - Debug builds (SSH access to build nodes) option is only shown for on-demand Node pools.
+  - Replication of a gitRepo resource to a ciRepo resource in a runSh job works as expected. This is needed for the usecase
+    of triggering CI with the identical commit and branch for which the runSh job was triggered which has a gitRepo resource
+    as an input.
        
 
 ## Custom Nodes
