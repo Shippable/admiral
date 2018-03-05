@@ -19,7 +19,7 @@ function put(req, res) {
     resBody: {},
     params: {},
     tmpScript: '/tmp/update_service.sh',
-    isDevMode: false,
+    devMode: false,
     defaultServiceSettings: require(path.join(global.config.scriptsDir,
       '/configs/services.json'))
   };

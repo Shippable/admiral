@@ -52,8 +52,6 @@ function initialize(req, res) {
       _writeScriptToFile.bind(null, bag),
       _initializeWorker.bind(null, bag),
       _post.bind(null, bag),
-      _getMasterNodeId.bind(null, bag),
-      _drainMaster.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -499,78 +497,6 @@ function _post(bag, next) {
         );
 
       bag.resBody = response;
-      return next();
-    }
-  );
-}
-
-function _getMasterNodeId(bag, next) {
-  var who = bag.who + '|' + _getMasterNodeId.name;
-  logger.verbose(who, 'Inside');
-
-  var command = 'sudo docker node ls -f "role=manager" -q';
-  var exec = spawn('/bin/bash',
-    ['-c', command]
-  );
-
-  exec.stdout.on('data',
-    function (data)  {
-      logger.debug(who, data.toString());
-      bag.master.nodeId = data.toString();
-      bag.master.nodeId = bag.master.nodeId.trim();
-    }
-  );
-
-  exec.stderr.on('data',
-    function (data)  {
-      logger.error(who, data.toString());
-    }
-  );
-
-  exec.on('close',
-    function (exitCode)  {
-      if (exitCode > 0)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Script returned code: ' + exitCode)
-        );
-      return next();
-    }
-  );
-}
-
-function _drainMaster(bag, next) {
-  var who = bag.who + '|' + _drainMaster.name;
-  logger.verbose(who, 'Inside');
-
-  var command =
-    util.format(
-      'sudo docker node update --availability drain %s', bag.master.nodeId);
-  var exec = spawn('/bin/bash',
-    ['-c', command]
-  );
-
-  exec.stdout.on('data',
-    function (data)  {
-      logger.debug(who, data.toString());
-      bag.workerJoinToken = data.toString();
-      bag.workerJoinToken = bag.workerJoinToken.trim();
-    }
-  );
-
-  exec.stderr.on('data',
-    function (data)  {
-      logger.error(who, data.toString());
-    }
-  );
-
-  exec.on('close',
-    function (exitCode)  {
-      if (exitCode > 0)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Script returned code: ' + exitCode)
-        );
       return next();
     }
   );
