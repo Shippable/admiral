@@ -66,7 +66,7 @@ main() {
     __validate_redis_mounts
     __update_redis_config
 
-    if [ "$ADMIRAL_IP" == "$REDIS_HOST" ]; then
+    if [ "$DEV_MODE" == "true" ]; then
       source "$SCRIPTS_DIR/docker/$script_name"
     else
       local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"

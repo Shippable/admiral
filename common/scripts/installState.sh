@@ -89,7 +89,7 @@ main() {
     __validate_state_mounts
     __update_state_config
 
-    if [ "$ADMIRAL_IP" == "$STATE_HOST" ]; then
+    if [ "$DEV_MODE" == "true" ]; then
       source "$SCRIPTS_DIR/docker/$script_name"
     else
       local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"

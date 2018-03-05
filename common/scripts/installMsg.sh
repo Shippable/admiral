@@ -132,7 +132,7 @@ main() {
     __validate_msg_mounts
     __update_msg_config
 
-    if [ "$ADMIRAL_IP" == "$MSG_HOST" ]; then
+    if [ "$DEV_MODE" == "true" ]; then
       source "$SCRIPTS_DIR/docker/$script_name"
     else
       local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"

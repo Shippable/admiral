@@ -93,7 +93,7 @@ main() {
     __update_vault_config
     __update_vault_creds
 
-    if [ "$ADMIRAL_IP" == "$VAULT_HOST" ]; then
+    if [ "$DEV_MODE" == "true" ]; then
       source "$SCRIPTS_DIR/docker/$script_name"
     else
       local script_path="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
