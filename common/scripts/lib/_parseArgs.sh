@@ -319,6 +319,9 @@ __add_ssh_key_to_local() {
 }
 
 __set_dev_mode() {
+  if [ -z "$DEV_MODE" ]; then
+    DEV_MODE=false
+  fi
   sed -i '/^DEV_MODE/d' "$ADMIRAL_ENV"
   echo "DEV_MODE=$DEV_MODE" >> "$ADMIRAL_ENV"
   source "$ADMIRAL_ENV"
@@ -561,9 +564,11 @@ __parse_args() {
       upgrade)
         shift
         __parse_args_upgrade "$@"
+        __set_dev_mode
         ;;
       restart)
         __parse_args_restart
+        __set_dev_mode
         ;;
       status)
         __show_status
