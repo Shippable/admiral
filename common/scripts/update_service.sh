@@ -18,13 +18,13 @@ __validate_service_configs() {
 
 __update_service() {
   __process_msg "Updating service: $SERVICE_NAME"
-  if [ $IS_SWARM_INITIALIZED == true ]; then
+  if [ "$DEV_MODE" != true ]; then
     local update_cmd="sudo docker service scale $SERVICE_NAME=$REPLICAS"
     __process_msg "Executing: $update_cmd"
     local update_output=$($update_cmd)
     __process_msg "Update returned: $update_output"
   else
-    __process_msg "Service $SERVICE_NAME running on onebox, only one replica allowed"
+    __process_msg "Service $SERVICE_NAME running on dev mode, only one replica allowed"
   fi
 }
 

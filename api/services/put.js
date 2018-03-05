@@ -10,6 +10,7 @@ var spawn = require('child_process').spawn;
 var fs = require('fs');
 
 var configHandler = require('../../common/configHandler.js');
+var envHandler = require('../../common/envHandler.js');
 
 function put(req, res) {
   var bag = {
@@ -18,7 +19,7 @@ function put(req, res) {
     resBody: {},
     params: {},
     tmpScript: '/tmp/update_service.sh',
-    isSwarmClusterInitialized: false,
+    isDevMode: false,
     defaultServiceSettings: require(path.join(global.config.scriptsDir,
       '/configs/services.json'))
   };
@@ -29,8 +30,7 @@ function put(req, res) {
   async.series([
       _checkInputParams.bind(null, bag),
       _getServiceConfig.bind(null, bag),
-      _getMaster.bind(null, bag),
-      _getWorkers.bind(null, bag),
+      _getDevMode.bind(null, bag),
       _generateEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
@@ -103,53 +103,21 @@ function _getServiceConfig(bag, next) {
   );
 }
 
-function _getMaster(bag, next) {
-  var who = bag.who + '|' + _getMaster.name;
+function _getDevMode(bag, next) {
+  var who = bag.who + '|' + _getDevMode.name;
   logger.verbose(who, 'Inside');
 
-  configHandler.get('master',
-    function (err, master) {
+  envHandler.get('DEV_MODE',
+    function (err, devMode) {
       if (err)
         return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'Failed to get master', err)
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: DEV_MODE')
         );
 
-      if (_.isEmpty(master))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No configuration in database for master')
-        );
+      bag.devMode = devMode;
+      logger.debug('Found dev mode');
 
-      bag.master = master;
-      return next();
-    }
-  );
-}
-
-function _getWorkers(bag, next) {
-  var who = bag.who + '|' + _getWorkers.name;
-  logger.verbose(who, 'Inside');
-
-  configHandler.get('workers',
-    function (err, workers) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'Failed to get workers', err)
-        );
-
-      if (_.isEmpty(workers))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No configuration in database for workers')
-        );
-      // if even one worker has external IP then swarm cluster is initialized
-      bag.isSwarmClusterInitialized = _.some(workers,
-        function (worker) {
-          return worker.address !== bag.master.address;
-        }
-      );
       return next();
     }
   );
@@ -164,7 +132,7 @@ function _generateEnvs(bag, next) {
     'SCRIPTS_DIR': global.config.scriptsDir,
     'SERVICE_NAME': bag.serviceConfig.serviceName,
     'SERVICE_IMAGE': bag.serviceConfig.image,
-    'IS_SWARM_INITIALIZED': bag.isSwarmClusterInitialized,
+    'DEV_MODE': bag.devMode,
     'REPLICAS': bag.replicas
   };
 
