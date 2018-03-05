@@ -13,7 +13,7 @@ function wwwConfig(params, callback) {
     apiAdapter: params.apiAdapter,
     config: params.config,
     releaseVersion: params.releaseVersion,
-    isSwarmClusterInitialized: params.isSwarmClusterInitialized,
+    devMode: params.devMode,
     name: params.name,
     registry: params.registry,
     envs: '',
@@ -191,7 +191,7 @@ function _generateMounts(bag, next) {
 }
 
 function _generateRunCommandOnebox(bag, next) {
-  if (bag.isSwarmClusterInitialized) return next();
+  if (!bag.devMode) return next();
 
   var who = bag.who + '|' + _generateRunCommandOnebox.name;
   logger.verbose(who, 'Inside');
@@ -212,7 +212,7 @@ function _generateRunCommandOnebox(bag, next) {
 }
 
 function _generateRunCommandCluster(bag, next) {
-  if (!bag.isSwarmClusterInitialized) return next();
+  if (bag.devMode) return next();
 
   var who = bag.who + '|' + _generateRunCommandCluster.name;
   logger.verbose(who, 'Inside');
