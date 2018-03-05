@@ -42,13 +42,12 @@ function post(req, res) {
       _checkInputParams.bind(null, bag),
       _getReleaseVersion.bind(null, bag),
       _getServiceConfig.bind(null, bag),
-      _getMaster.bind(null, bag),
-      _getWorkers.bind(null, bag),
       _getAccessKey.bind(null, bag),
       _getSecretKey.bind(null, bag),
       _getRegistry.bind(null, bag),
       _getPublicRegistry.bind(null, bag),
       _getOperatingSystem.bind(null, bag),
+      _getDevMode.bind(null, bag),
       _generateServiceConfig.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateScript.bind(null, bag),
@@ -152,58 +151,6 @@ function _getServiceConfig(bag, next) {
   );
 }
 
-function _getMaster(bag, next) {
-  var who = bag.who + '|' + _getMaster.name;
-  logger.verbose(who, 'Inside');
-
-  configHandler.get('master',
-    function (err, master) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'Failed to get master', err)
-        );
-
-      if (_.isEmpty(master))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No configuration in database for master')
-        );
-
-      bag.master = master;
-      return next();
-    }
-  );
-}
-
-function _getWorkers(bag, next) {
-  var who = bag.who + '|' + _getWorkers.name;
-  logger.verbose(who, 'Inside');
-
-  configHandler.get('workers',
-    function (err, workers) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'Failed to get ' + bag.component, err)
-        );
-
-      if (_.isEmpty(workers))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No configuration in database for ' + bag.component)
-        );
-      // if even one worker has external IP then swarm cluster is initialized
-      bag.isSwarmClusterInitialized = _.some(workers,
-        function (worker) {
-          return worker.address !== bag.master.address;
-        }
-      );
-      return next();
-    }
-  );
-}
-
 function _getRegistry(bag, next) {
   var who = bag.who + '|' + _getRegistry.name;
   logger.verbose(who, 'Inside');
@@ -264,6 +211,26 @@ function _getOperatingSystem(bag, next) {
   );
 }
 
+function _getDevMode(bag, next) {
+  var who = bag.who + '|' + _getDevMode.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('DEV_MODE',
+    function (err, devMode) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: DEV_MODE')
+        );
+
+      bag.devMode = devMode;
+      logger.debug('Found dev mode');
+
+      return next();
+    }
+  );
+}
+
 function _generateServiceConfig(bag, next) {
   var who = bag.who + '|' + _generateServiceConfig.name;
   logger.verbose(who, 'Inside');
@@ -286,7 +253,7 @@ function _generateServiceConfig(bag, next) {
     name: bag.name,
     registry: bag.registry,
     releaseVersion: bag.releaseVersion,
-    isSwarmClusterInitialized: bag.isSwarmClusterInitialized,
+    devMode: bag.devMode,
     publicRegistry: bag.publicRegistry,
     operatingSystem: bag.operatingSystem
   };
