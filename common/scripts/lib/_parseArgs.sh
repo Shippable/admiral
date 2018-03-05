@@ -307,21 +307,21 @@ __prompt_for_inputs() {
   fi
 }
 
-__set_host_services() {
-  if [ "$HOST_SERVICES" == "true" ]; then
-    sed -i '/^HOST_SERVICES/d' "$ADMIRAL_ENV"
-    echo "HOST_SERVICES=true" >> "$ADMIRAL_ENV"
-    source "$ADMIRAL_ENV"
+__add_ssh_key_to_local() {
+  # create .ssh dir, if not present
+  local root_ssh_dir="/root/.ssh"
+  mkdir -p "$root_ssh_dir"
 
-    # create .ssh dir, if not present
-    local root_ssh_dir="/root/.ssh"
-    mkdir -p "$root_ssh_dir"
+  ## add public ssh key to host's authorized keys
+  local authorized_keys="$root_ssh_dir/authorized_keys"
+  local ssh_public_key=$(cat "$SSH_PUBLIC_KEY")
+  echo "$ssh_public_key" | tee -a "$authorized_keys" &> /dev/null
+}
 
-    ## add public ssh key to host's authorized keys
-    local authorized_keys="$root_ssh_dir/authorized_keys"
-    local ssh_public_key=$(cat "$SSH_PUBLIC_KEY")
-    echo "$ssh_public_key" | tee -a "$authorized_keys" &> /dev/null
-  fi
+__set_dev_mode() {
+  sed -i '/^DEV_MODE/d' "$ADMIRAL_ENV"
+  echo "DEV_MODE=$DEV_MODE" >> "$ADMIRAL_ENV"
+  source "$ADMIRAL_ENV"
 }
 
 __parse_args_install() {
@@ -343,6 +343,9 @@ __parse_args_install() {
           ;;
         -H|--host_services)
           export HOST_SERVICES=true
+          ;;
+        --dev)
+          export DEV_MODE=true
           ;;
         -h|help|--help)
           __print_help_install
@@ -546,7 +549,8 @@ __parse_args() {
         __generate_ssh_keys
         __parse_args_install "$@"
         __accept_shippable_license
-        __set_host_services
+        __set_dev_mode
+        __add_ssh_key_to_local
         ;;
       switch)
         if [ $# -gt 1 ]; then
