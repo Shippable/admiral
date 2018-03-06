@@ -81,7 +81,7 @@ __check_dependencies() {
       __process_msg "'docker' $INSTALLED_DOCKER_VERSION installed"
     else
       __process_msg "Installed Docker version - $INSTALLED_DOCKER_VERSION \
-      not same as expected Docker version - $DOCKER_VERSION."
+      not the same as latest supported version - $DOCKER_VERSION."
     fi
   else
     __process_msg "Docker not installed, installing Docker 1.13"
