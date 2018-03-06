@@ -45,6 +45,7 @@ source "$LIB_DIR/_helpers.sh"
 
 __bootstrap_admiral_env
 __check_os_and_architecture
+__set_installed_docker_version
 
 source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/_installVersion.env"
 source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/_helpers.sh"

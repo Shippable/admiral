@@ -80,7 +80,8 @@ __check_dependencies() {
     if [[ "$INSTALLED_DOCKER_VERSION" == *"$DOCKER_VERSION"* ]]; then
       __process_msg "'docker' $INSTALLED_DOCKER_VERSION installed"
     else
-      __process_msg "Installed Docker version not same as Admiral's docker version."
+      __process_msg "Installed Docker version - $INSTALLED_DOCKER_VERSION \
+      not same as expected Docker version - $DOCKER_VERSION."
     fi
   else
     __process_msg "Docker not installed, installing Docker 1.13"
@@ -110,6 +111,7 @@ __check_dependencies() {
     # Install Docker
     chmod +x installDockerScript.sh
     ./installDockerScript.sh
+    __set_installed_docker_version
     rm installDockerScript.sh
   fi
 

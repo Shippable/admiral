@@ -50,6 +50,14 @@ __check_os_and_architecture() {
   source "$ADMIRAL_ENV"
 }
 
+__set_installed_docker_version() {
+  if command -v "docker" &>/dev/null; then
+    docker_ver=$(docker version --format '{{.Server.Version}}')
+    export INSTALLED_DOCKER_VERSION=$(docker version --format '{{.Server.Version}}')
+    echo "setting INSTALLED_DOCKER_VERSION=$INSTALLED_DOCKER_VERSION"
+  fi
+}
+
 __cleanup() {
   if [ -d $CONFIG_DIR ]; then
     __process_msg "Removing previously created $CONFIG_DIR"
