@@ -13,7 +13,7 @@ __validate_service_configs() {
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "LOGS_FILE: $LOGS_FILE"
   __process_msg "REPLICAS: $REPLICAS"
-  __process_msg "IS_SWARM_INITIALIZED: $IS_SWARM_INITIALIZED"
+  __process_msg "DEV_MODE: $DEV_MODE"
 }
 
 __update_service() {
