@@ -1177,21 +1177,31 @@
               $scope.vm.initializeForm[service].rootToken =
                 $scope.vm.admiralEnv.VAULT_TOKEN || '';
             } else if (service === 'msg') {
-              var msgSystemIntegration = _.findWhere($scope.vm.systemIntegrations,
-                {name: 'msg', masterName: 'rabbitmqCreds'});
+              var msgSystemIntegration =
+                _.findWhere($scope.vm.systemIntegrations,
+                  {name: 'msg', masterName: 'rabbitmqCreds'});
               if (msgSystemIntegration) {
                 var auth = msgSystemIntegration.data.amqpUrlRoot.
                   split('@')[0].split('//')[1];
                 $scope.vm.initializeForm[service].username = auth.split(':')[0];
                 $scope.vm.initializeForm[service].password = auth.split(':')[1];
+              } else {
+                if (_.isEmpty($scope.vm.initializeForm[service].password))
+                  $scope.vm.initializeForm[service].password =
+                    $scope.vm.admiralEnv.DB_PASSWORD;
               }
             } else if (service === 'state') {
               var stateSystemIntegration =
                 _.findWhere($scope.vm.systemIntegrations,
                   {name: 'state', masterName: 'gitlabCreds'});
-              if (stateSystemIntegration)
+              if (stateSystemIntegration) {
                 $scope.vm.initializeForm[service].rootPassword =
                   stateSystemIntegration.data.password;
+              } else {
+                if (_.isEmpty($scope.vm.initializeForm[service].rootPassword))
+                  $scope.vm.initializeForm[service].rootPassword =
+                    $scope.vm.admiralEnv.DB_PASSWORD;
+              }
             }
           }
 
@@ -1968,9 +1978,8 @@
 
       // Set the correct port if GitLab has already been initialized,
       // even if it's Shippable managed:
-      if ($scope.vm.systemSettings.state.isInitialized)
-        stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
-          ($scope.vm.initializeForm.state.initType === 'admiral' ? 2222 : 22);
+      stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
+        ($scope.vm.admiralEnv.DEV_MODE ? 2222 : 22);
 
       var updateInitializeFormBag = {
         inPostServices: true
