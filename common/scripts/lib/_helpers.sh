@@ -122,22 +122,22 @@ __set_proxy_envs() {
 __set_db_ip() {
   __process_msg "Setting value of database IP address"
   local db_ip=$ADMIRAL_IP
-  __process_success "Please enter the IP address of the database or D to set the default ($db_ip)."
+  __process_success "Do you want to install the database on this machine? (Y/n)"
   read response
 
-  if [ "$response" != 'localhost' ]; then
-    if [ "$response" != "D" ] && [ "$response" != "d" ]; then
-      if __validate_ip $response ; then
-        export DB_IP=$response
-      else
-        __process_error "Invalid response, please enter valid IP address"
-        __set_db_ip
-      fi
-    else
-      export DB_IP=$db_ip
-    fi
+  if [ "$response" == "Y" ] || [ "$response" == "y" ]; then
+      export DB_IP=$ADMIRAL_IP
   else
-    export DB_IP=$response
+    __process_success "Please enter the IP address of the database"
+    read response
+    if [ "$response" == "localhost" ]; then
+      export DB_IP=$response
+    elif __validate_ip $response ; then
+      export DB_IP=$response
+    else
+      __process_error "Invalid response, please enter valid IP address"
+      __set_db_ip
+    fi
   fi
 }
 
@@ -191,7 +191,7 @@ __validate_db_password() {
 __set_db_password() {
   __process_msg "Setting database password"
 
-  __process_success "Please enter the password for your database."
+  __process_success "Please enter the password for your database. This password will also be used for gitlab & rabbitmq, by default. This can be changed from the Admiral UI, if required."
   read response
 
   if [ "$response" == "" ]; then
