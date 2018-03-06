@@ -11,7 +11,9 @@ ${RES_VER_DATE}
       - if necessary
 
 ## Fixes
-  - All runs in a runCI matrix job trigger OUT variables correctly. Previously only the first completed run would trigger an OUT variable. 
+  - All runs in a runCI matrix job trigger OUT variables correctly. Previously only the first completed run would trigger an OUT variable.
+  - Beta SPOG allows you to update values of param resources.
+ 
   
 ## Custom Nodes
   - **simple title**: brief description
