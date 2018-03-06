@@ -518,6 +518,11 @@ do $$
       values (10008, 'custom__x86_64__CentOS_7', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
     end if;
 
+    if not exists (select 1 from "systemCodes" where code = 10009) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10009, 'dynamic__x86_64__WindowsServer_2016__c4.large', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-12-12', '2017-12-12');
+    end if;
+
     -- Add systemCodes for jobStatesMap
     if not exists (select 1 from "systemCodes" where code = 201) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
