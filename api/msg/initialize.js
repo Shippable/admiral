@@ -41,6 +41,7 @@ function initialize(req, res) {
       _getReleaseVersion.bind(null, bag),
       _getOperatingSystem.bind(null, bag),
       _getArchitecture.bind(null, bag),
+      _getDevMode.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
@@ -247,6 +248,25 @@ function _getArchitecture(bag, next) {
   );
 }
 
+function _getDevMode(bag, next) {
+  var who = bag.who + '|' + _getDevMode.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('DEV_MODE',
+    function (err, devMode) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: DEV_MODE')
+        );
+      bag.devMode = devMode;
+      logger.debug('Found dev mode');
+
+      return next();
+    }
+  );
+}
+
 function _generateInitializeEnvs(bag, next) {
   if (!bag.config.isShippableManaged) return next();
 
@@ -277,7 +297,8 @@ function _generateInitializeEnvs(bag, next) {
     'SHIPPABLE_HTTPS_PROXY': process.env.https_proxy || '',
     'SHIPPABLE_NO_PROXY': process.env.no_proxy || '',
     'ARCHITECTURE': bag.architecture,
-    'OPERATING_SYSTEM': bag.operatingSystem
+    'OPERATING_SYSTEM': bag.operatingSystem,
+    'DEV_MODE': bag.devMode
   };
 
   return next();

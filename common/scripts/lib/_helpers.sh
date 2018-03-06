@@ -122,6 +122,10 @@ __set_proxy_envs() {
 __set_db_ip() {
   __process_msg "Setting value of database IP address"
   local db_ip=$ADMIRAL_IP
+  if [ "$DEV_MODE" == "true" ]; then
+    export DB_IP=$db_ip
+    return
+  fi
   __process_success "Do you want to install the database on this machine? (Y/n)"
   read response
 

@@ -80,19 +80,8 @@ __install_db() {
      __process_msg "Dropping a test table"
      eval "$drop_table_cmd"
      __process_msg "Successfully tested connection to $DB_IP $DB_PORT"
-  elif [ "$ADMIRAL_IP" == "$DB_IP" ]; then
-    if [ "$HOST_SERVICES" == "true" ]; then
-      local db_install_cmd="DB_IP=$DB_IP \
-        DB_PORT=$DB_PORT \
-        DB_USER=$DB_USER \
-        DB_NAME=$DB_NAME \
-        DB_PASSWORD=$DB_PASSWORD \
-        DB_DIALECT=$DB_DIALECT \
-        $SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/$script_name"
-      __exec_cmd_local "$ADMIRAL_IP" "$db_install_cmd"
-    else
-      source "$SCRIPTS_DIR/docker/$script_name"
-    fi
+  elif [ "$DEV_MODE" == "true" ]; then
+    source "$SCRIPTS_DIR/docker/$script_name"
   else
     __check_connection "$DB_IP"
 
