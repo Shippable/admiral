@@ -77,14 +77,11 @@ __check_dependencies() {
   ################## Install Docker  #####################################
   if type docker &> /dev/null && true; then
     __process_msg "'docker' already installed, checking version"
-    local docker_version=$(docker --version)
-    if [[ "$docker_version" == *"$DOCKER_VERSION"* ]]; then
-      __process_msg "'docker' $docker_version installed"
+    if [[ "$INSTALLED_DOCKER_VERSION" == *"$DOCKER_VERSION"* ]]; then
+      __process_msg "'docker' $INSTALLED_DOCKER_VERSION installed"
     else
-      __process_error "Docker version $docker_version installed, required $DOCKER_VERSION"
-      __process_error "Install Docker Version $DOCKER_VERSION from \"
-      https://docs.docker.com/cs-engine/1.13/#install-on-ubuntu-1404-lts-or-1604-lts"
-      exit 1
+      __process_msg "Installed Docker version - $INSTALLED_DOCKER_VERSION \
+      not the same as latest supported version - $DOCKER_VERSION."
     fi
   else
     __process_msg "Docker not installed, installing Docker 1.13"
@@ -114,6 +111,7 @@ __check_dependencies() {
     # Install Docker
     chmod +x installDockerScript.sh
     ./installDockerScript.sh
+    __set_installed_docker_version
     rm installDockerScript.sh
   fi
 
