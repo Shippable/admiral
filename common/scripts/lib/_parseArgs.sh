@@ -344,9 +344,6 @@ __parse_args_install() {
         --with-proxy-config)
           export WITH_PROXY_CONFIG=true
           ;;
-        -H|--host_services)
-          export HOST_SERVICES=true
-          ;;
         --dev)
           export DEV_MODE=true
           ;;
