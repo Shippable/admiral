@@ -20,9 +20,10 @@ do $$
       end if;
 
       -- x86_64 WindowsServer_2016 Master
+      update "runtimeTemplates" set "defaultTaskImage" = 'w16' where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'Master';
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'Master') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9002, 'Master', 'drydock', 'w16', 'master', 'w16microbase', 'w16reqproc', false, '2018-01-16', '2018-01-16');
+        values (8000, 9002, 'Master', 'drydock', 'w16', 'master', 'w16', 'w16reqproc', false, '2018-01-16', '2018-01-16');
       end if;
 
       -- x86_64 macOS_10.12 Master
