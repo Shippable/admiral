@@ -11,10 +11,8 @@ ${RES_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
-
+  - All runs in a runCI matrix job trigger OUT variables correctly. Previously only the first completed run would trigger an OUT variable. 
+  
 ## Custom Nodes
   - **simple title**: brief description
       - additional details or
