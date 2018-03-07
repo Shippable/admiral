@@ -4824,7 +4824,7 @@ do $$
 
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.2.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9000, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'reqProc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+        values (8000, 9000, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
       end if;
 
       -- x86_64 Ubuntu_16.04
