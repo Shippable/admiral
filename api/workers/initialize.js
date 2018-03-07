@@ -47,6 +47,7 @@ function initialize(req, res) {
       _getReleaseVersion.bind(null, bag),
       _getOperatingSystem.bind(null, bag),
       _getArchitecture.bind(null, bag),
+      _getInstalledDockerVersion.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
@@ -345,6 +346,27 @@ function _getArchitecture(bag, next) {
   );
 }
 
+function _getInstalledDockerVersion(bag, next) {
+  var who = bag.who + '|' + _getArchitecture.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('INSTALLED_DOCKER_VERSION',
+    function (err, installedDockerVersion) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: INSTALLED_DOCKER_VERSION')
+        );
+
+      bag.installedDockerVersion = installedDockerVersion;
+      logger.debug('Found installed docker version');
+
+      return next();
+    }
+  );
+}
+
+
 function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
@@ -373,7 +395,8 @@ function _generateInitializeEnvs(bag, next) {
     'SHIPPABLE_HTTPS_PROXY': process.env.https_proxy || '',
     'SHIPPABLE_NO_PROXY': process.env.no_proxy || '',
     'ARCHITECTURE': bag.architecture,
-    'OPERATING_SYSTEM': bag.operatingSystem
+    'OPERATING_SYSTEM': bag.operatingSystem,
+    'INSTALLED_DOCKER_VERSION': bag.installedDockerVersion
   };
 
   return next();

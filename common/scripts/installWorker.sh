@@ -22,6 +22,9 @@ __validate_worker_envs() {
   __process_msg "ACCESS_KEY: ${#ACCESS_KEY}"
   __process_msg "SECRET_KEY: ${#SECRET_KEY}"
   __process_msg "NO_VERIFY_SSL: $NO_VERIFY_SSL"
+  __process_msg "ARCHITECTURE: $ARCHITECTURE"
+  __process_msg "OPERATING_SYSTEM: $OPERATING_SYSTEM"
+  __process_msg "INSTALLED_DOCKER_VERSION: $INSTALLED_DOCKER_VERSION"
   __process_msg "SHIPPABLE_HTTP_PROXY: $SHIPPABLE_HTTP_PROXY"
   __process_msg "SHIPPABLE_HTTPS_PROXY: $SHIPPABLE_HTTPS_PROXY"
   __process_msg "SHIPPABLE_NO_PROXY: $SHIPPABLE_NO_PROXY"
@@ -96,6 +99,9 @@ main() {
         MASTER_HOST=$MASTER_HOST \
         RELEASE=$RELEASE \
         NO_VERIFY_SSL=$NO_VERIFY_SSL \
+        ARCHITECTURE=$ARCHITECTURE \
+        OPERATING_SYSTEM=$OPERATING_SYSTEM \
+        INSTALLED_DOCKER_VERSION=$INSTALLED_DOCKER_VERSION \
         $SCRIPTS_DIR_REMOTE/$script_name"
       __exec_cmd_remote "$WORKER_HOST" "$worker_install_cmd"
 

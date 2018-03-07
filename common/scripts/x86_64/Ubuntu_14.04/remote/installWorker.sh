@@ -21,7 +21,7 @@ __create_exec_file() {
 
   cat $node_scripts_location/lib/logger.sh >> installDockerScript.sh
   cat $node_scripts_location/lib/headers.sh >> installDockerScript.sh
-  cat $node_scripts_location/initScripts/x86_64/Ubuntu_14.04/Docker_1.13.sh >> installDockerScript.sh
+  cat $node_scripts_location/initScripts/$ARCHITECTURE/$OPERATING_SYSTEM/Docker_$INSTALLED_DOCKER_VERSION.sh >> installDockerScript.sh
 
   rm -rf $node_scripts_location
 }
@@ -43,7 +43,11 @@ __install_ntp() {
 
 __install_ecr() {
   sudo apt-get -y install python-pip
-  sudo pip install awscli==1.10.63
+  if [[ "$INSTALLED_DOCKER_VERSION" != *"1.13"* ]]; then
+    sudo pip install awscli==1.11.91
+  else
+    sudo pip install awscli==1.10.63
+  fi
 }
 
 __initialize_worker() {
