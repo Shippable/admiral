@@ -125,6 +125,7 @@ function _post(bag, next) {
     location: bag.reqBody.location,
     nodeTypeCode: bag.reqBody.nodeTypeCode,
     execImage: bag.execImage,
+    systemClusterId: bag.reqBody.systemClusterId,
     createdBy: '54188262bc4d591ba438d62a',
     updatedBy: '54188262bc4d591ba438d62a'
   };

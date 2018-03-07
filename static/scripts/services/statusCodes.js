@@ -5,6 +5,7 @@
 
   function statusCodes() {
     var statusMap = {
+      0: 'Waiting',
       10: 'queued',
       20: 'processing',
       30: 'success',
@@ -44,6 +45,26 @@
       default: '#a1abab',
       none: '#a1abab ',
       stopped: '#dc5f59'
+    };
+    var statusLabelMap = {
+      waiting: 'label-waiting',
+      processing: 'label-processing',
+      success: 'label-green',
+      skipped: 'label-skipped',
+      unstable: 'label-unstable',
+      timeout: 'label-timeout',
+      cancelled: 'label-cancelled',
+      failed: 'label-failure',
+      error: 'label-error',
+      new: 'label-waiting',
+      initialized: 'label-initialized',
+      default: 'label-waiting',
+      none: 'label-waiting',
+      stopped: 'label-stopped',
+      orphan: 'label-orphan',
+      active: 'label-green',
+      'soft-deleted': 'label-soft-deleted',
+      inconsistent: 'label-inconsistent'
     };
     var idle = createSubset([0, 10, 4000, 4005]);
     var processing = createSubset([20, 4001]);
@@ -111,6 +132,10 @@
       getStatusColor: function (status) {
         var tempStatus = statusMap[status] ? statusMap[status] : 'default';
         return statusColorMap[tempStatus];
+      },
+      getLabel: function (status) {
+        var tempStatus = statusMap[status] ? statusMap[status] : 'default';
+        return 'label ' + statusLabelMap[tempStatus.toLowerCase()];
       }
     };
   }
