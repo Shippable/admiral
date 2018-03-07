@@ -529,6 +529,10 @@
           displayName: '',
           isEnabled: false
         },
+        email: {
+          displayName: 'Email',
+          isEnabled: false
+        },
         TRIPUB: {
           displayName: '',
           isEnabled: false

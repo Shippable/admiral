@@ -955,10 +955,6 @@
                 Initialize
               </div>
             </button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 text-right">
             <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.install()"
               ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-if="!vm.requireRestart">
               <div ng-if="vm.installing">
@@ -968,7 +964,7 @@
                 Install
               </div>
             </button>
-            <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+            <button ng-if="vm.requireRestart" class="btn btn-md btn-primary m-t-10" type="submit"
               ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave"
               ng-click="vm.showSaveModal()">
               <div ng-if="vm.saving">
@@ -978,7 +974,7 @@
                 Save
               </div>
             </button>
-            <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
+            <button ng-if="vm.requireRestart" class="btn btn-md btn-primary m-t-10" type="submit"
               ng-disabled="vm.installing || vm.saving || vm.restartingServices"
               ng-click="vm.showRestartServicesModal()">
               <div ng-if="vm.restartingServices">
@@ -2470,7 +2466,7 @@
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
                                       ng-disabled="vm.installingAddons"
-                                      ng-model="vm.addonsForm.slackKey.isEnabled"
+                                      ng-model="vm.addonsForm.email.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
                                   </td>
