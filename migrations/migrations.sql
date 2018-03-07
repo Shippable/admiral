@@ -4819,7 +4819,7 @@ do $$
 
       -- x86_64 Ubuntu_14.04
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.1.4' and "isDefault" = true) then
-        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.1.4' and "isDefault" = false;
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.1.4' and "isDefault" = true;
       end if;
 
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.2.4') then
@@ -4829,7 +4829,7 @@ do $$
 
       -- x86_64 Ubuntu_16.04
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.1.4' and "isDefault" = true) then
-        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.1.4' and "isDefault" = false;
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.1.4' and "isDefault" = true;
       end if;
 
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.2.4') then
@@ -4839,7 +4839,7 @@ do $$
 
       -- aarch64 Ubuntu_16.04
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4' and "isDefault" = true) then
-        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4' and "isDefault" = false;
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4' and "isDefault" = true;
       end if;
 
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4') then
@@ -4849,7 +4849,7 @@ do $$
 
       -- x86_64 WindowsServer_2016
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v5.10.4' and "isDefault" = true) then
-        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v5.10.4' and "isDefault" = false;
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v5.10.4' and "isDefault" = true;
       end if;
 
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v6.2.4') then
@@ -4859,7 +4859,7 @@ do $$
 
       -- x86_64 macOS_10.12
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v5.10.4' and "isDefault" = true) then
-        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v5.10.4' and "isDefault" = false;
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v5.10.4' and "isDefault" = true;
       end if;
 
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v6.2.4') then
@@ -4869,7 +4869,7 @@ do $$
 
       -- x86_64 CentOS_7
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v5.10.4' and "isDefault" = true) then
-        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v5.10.4' and "isDefault" = false;
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v5.10.4' and "isDefault" = true;
       end if;
 
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v6.2.4') then
