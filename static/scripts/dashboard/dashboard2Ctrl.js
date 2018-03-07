@@ -4,13 +4,13 @@
   /* global _, async */
 
   admiral.controller('dashboard2Ctrl', ['$scope', '$stateParams', '$q', '$state',
-    '$interval', '$timeout', 'admiralApiAdapter', 'popup_horn',
+    '$interval', '$timeout', 'admiralApiAdapter', 'popup_horn', 'statusCodes',
     dashboard2Ctrl
   ]);
 
 
   function dashboard2Ctrl($scope, $stateParams, $q, $state, $interval, $timeout,
-    admiralApiAdapter, popup_horn) {
+    admiralApiAdapter, popup_horn, statusCodes) {
     /* jshint maxstatements:175 */
     var dashboardCtrlDefer = $q.defer();
 
@@ -616,11 +616,10 @@
       hasDefaultArmSystemMachineImage: hasDefaultArmSystemMachineImage,
       logOutOfAdmiral: logOutOfAdmiral,
       switchToggle: switchToggle,
-      systemNodes: {
-        addingSystemNode: false,
-        systemNodes: []
-      },
+      systemNodes: [],
       addSystemNode: addSystemNode,
+      addDefaultSystemCluster: addDefaultSystemCluster,
+      deleteSharedNodePool: deleteSharedNodePoolWorkflow,
       removeSystemNode: removeSystemNode,
       eulaText: '',
       runMode: 'production',
@@ -650,6 +649,7 @@
           getSystemSettingsForAddonsPanel.bind(null, bag),
           updateAddonsFormSystemIntegrations,
           getSuperUsers,
+          getSharedNodePools,
           getSystemNodes
         ],
         function (err) {
@@ -1532,7 +1532,7 @@
 
           if (_.isEmpty(systemCodes))
             return next();
-
+          $scope.vm.systemCodes = systemCodes;
           $scope.vm.archTypes = _.filter(systemCodes, {group: 'archType'});
           $scope.vm.clusterTypes = _.filter(systemCodes, {group:'clusterType'});
           $scope.vm.x86ArchCode = _.findWhere($scope.vm.archTypes,
@@ -1656,7 +1656,9 @@
                 return image;
               }
             );
-
+          $scope.vm.defaultSystemMachineImage = _.findWhere(
+            systemMachineImages, {isDefault: true}
+          );
           return next();
         }
       );
@@ -4126,12 +4128,30 @@
       if (!$scope.vm.systemSettings.db.isInitialized) return next();
       if ($scope.vm.runMode !== 'dev')
         return next();
+      if (!$scope.vm.systemClusters) return next();
 
       admiralApiAdapter.getSystemNodes('',
         function (err, systemNodes) {
           if (err) return popup_horn.error(err);
 
-          $scope.vm.systemNodes.systemNodes = systemNodes;
+          $scope.vm.systemNodes = _.map(_.where(systemNodes,
+            {systemClusterId: $scope.vm.systemClusters.id}),
+            function (clusterNode) {
+              return mapClusterNode(clusterNode);
+            }
+          );
+          return next();
+        }
+      );
+    }
+
+    function getSharedNodePools(next) {
+      var query = 'isDefault=true';
+      admiralApiAdapter.getSystemClusters(query,
+        function (err, systemClusters) {
+          if (err) return popup_horn.error(err);
+
+          $scope.vm.systemClusters = _.first(systemClusters);
           return next();
         }
       );
@@ -4147,9 +4167,186 @@
       );
     }
 
-    function addSystemNode() {
-      $scope.vm.systemNodes.addingSystemNode = true;
+    function addDefaultSystemCluster() {
+      $scope.vm.addingSystemCluster = true;
+      var bag = {
+        systemCodes: $scope.vm.systemCodes
+      };
+      async.series([
+          _getRuntimeTemplates.bind(null, bag),
+          _determineSystemCluster.bind(null, bag),
+          _postDefaultSystemCluster.bind(null, bag)
+        ],
+        function (err) {
+          $scope.vm.addingSystemCluster = false;
+          if (err) return popup_horn.error(err);
 
+          $scope.vm.systemClusters = bag.systemCluster;
+        }
+      );
+    }
+
+    function _getRuntimeTemplates(bag, next) {
+
+      admiralApiAdapter.getRuntimeTemplates(
+        function (err, runtimeTemplates) {
+          if (err)
+            return popup_horn.error(err);
+
+          if (!_.isEmpty(runtimeTemplates))
+            bag.runtimeTemplates = runtimeTemplates;
+          return next();
+        }
+      );
+    }
+
+    function _determineSystemCluster(bag, next) {
+
+      var defaultSMI = $scope.vm.defaultSystemMachineImage;
+      // Use default SMI to figure out the runtimeTemplate
+      var runtimeTemplate;
+
+      if (defaultSMI) {
+        runtimeTemplate = _.findWhere(bag.runtimeTemplates,
+          {
+            id: defaultSMI.runtimeTemplateId
+          }
+        );
+      }
+
+      // If runtimeTemplate is not found, we default to default runtimeTemplate
+      // for x86_64 architecture and Ubuntu_14.04 OS
+      if (!runtimeTemplate) {
+
+        runtimeTemplate = _.findWhere(bag.runtimeTemplates,
+          {
+            archTypeCode: _.findWhere(bag.systemCodes,
+              {name: 'x86_64', group: 'archType'}).code,
+            osTypeCode: _.findWhere(bag.systemCodes,
+              {name: 'Ubuntu_14.04', group: 'osType'}).code,
+            isDefault: true
+          }
+        );
+      }
+
+      // Next, we use the default SMI to figure out the clusterNodeArchitecture.
+      // If this is not defined, we default to x86_64.
+      var clusterNodeArchitecture;
+      var archTypeCodesByCode = _.indexBy(
+        _.where(bag.systemCodes, {group: 'archType'}),
+        'code'
+      );
+      var clusterTypeCodesByName = _.indexBy(
+        _.where(bag.systemCodes, {group: 'clusterType'}),
+        'name'
+      );
+      if (defaultSMI)
+        clusterNodeArchitecture =
+          archTypeCodesByCode[defaultSMI.archTypeCode].name;
+      else
+        clusterNodeArchitecture = 'x86_64';
+
+      // The OS is either Ubuntu_16.04 or Ubuntu_14.04. We first default to
+      // Ubuntu_14.04. If the architecture is aarch64, we modify it to
+      // Ubuntu 16.04 as that is the only OS we support for it.
+      // Later we switch the OS to Ubuntu_16.04 if _any_ one of the nodes
+      // is 16.04.
+
+      var clusterNodeOS = 'Ubuntu_14.04';
+      // for aarch64 architecture we default it to Ubuntu_16.04
+      if (clusterNodeArchitecture === 'aarch64')
+        clusterNodeOS = 'Ubuntu_16.04';
+      else {
+        var someNodeIsUbuntu16 = _.some(bag.systemNodes,
+          function (systemNode) {
+            try {
+              var initScript = JSON.parse(systemNode.initScript);
+              if (initScript && /16\.04/.test(initScript.name))
+                return true;
+            } catch (err) {
+              // Nothing to do. Assume its Ubuntu 14.04.
+            }
+            return false;
+          }
+        );
+
+        if (someNodeIsUbuntu16) {
+          clusterNodeOS = 'Ubuntu_16.04';
+          // Adjust the runtimeTemplate to 16.04.
+          runtimeTemplate = _.findWhere(bag.runtimeTemplates,
+            {
+              archTypeCode: _.findWhere(bag.systemCodes,
+                {name: 'x86_64', group: 'archType'}).code,
+              osTypeCode: _.findWhere(bag.systemCodes,
+                {name: 'Ubuntu_16.04', group: 'osType'}).code,
+              version: runtimeTemplate.version
+            }
+          );
+        }
+      }
+
+      // We can finally determine the clusterTypeName minus the size with the
+      // above fields.
+      var clusterTypeName = 'custom__' + clusterNodeArchitecture + '__' + clusterNodeOS;
+
+      var clusterType = clusterTypeCodesByName[clusterTypeName];
+      var clusterTypeCode;
+      if (clusterType) {
+        clusterTypeCode = clusterType.code;
+      } else {
+        // This is a fail-safe. If for some reason we have bad data
+        // warn and set sane defaults.
+
+        var defaultCustomClusterTypeName = 'custom__x86_64__Ubuntu_14.04';
+        clusterTypeCode =
+          clusterTypeCodesByName[defaultCustomClusterTypeName].code;
+      }
+
+      bag.newSystemCluster = {
+        name: 'default_shared_node_pool',
+        queueName: 'systemNodes.exec',
+        clusterTypeCode: clusterTypeCode,
+        runtimeTemplateId: runtimeTemplate.id,
+        isDefault: true
+      };
+
+      return next();
+    }
+
+    function _postDefaultSystemCluster(bag, next) {
+
+      admiralApiAdapter.postSystemCluster(bag.newSystemCluster,
+        function (err, systemCluster) {
+          if (err) return next(err);
+
+          bag.systemCluster = systemCluster;
+          return next();
+        }
+      );
+    }
+
+    function deleteSharedNodePoolWorkflow(systemClusterId) {
+      var bag = {
+        systemClusterId: systemClusterId
+      };
+      async.series([
+        deleteSystemCluster.bind(null, bag)
+      ],
+        function (err) {
+          if (err) return popup_horn.error(err);
+          $scope.vm.systemClusters = null;
+          popup_horn.success('Successfully deleted the shared node pool');
+        }
+      );
+    }
+
+    function deleteSystemCluster(bag, next) {
+      //to be implemented
+      return next();
+    }
+
+    function addSystemNode() {
+      $scope.vm.addingSystemNode = true;
       var bag = {
         systemNode: null,
         name: $scope.vm.systemNodes.friendlyName
@@ -4159,10 +4356,15 @@
           initializeSystemNode.bind(null, bag)
         ],
         function (err) {
-          $scope.vm.systemNodes.addingSystemNode = false;
+          $scope.vm.addingSystemNode = false;
           if (err) return popup_horn.error(err);
 
-          $scope.vm.systemNodes.systemNodes.push(bag.systemNode);
+          var snode = _.map([bag.systemNode],
+            function (clusterNode) {
+              return mapClusterNode(clusterNode);
+            }
+          );
+          $scope.vm.systemNodes.push(_.first(snode));
         }
       );
     }
@@ -4170,7 +4372,8 @@
     function postSystemNode(bag, next) {
       var time = Date.now();
       var body = {
-        friendlyName: 'system-node-' + time
+        friendlyName: 'system-node-' + time,
+        systemClusterId: $scope.vm.systemClusters.id
       };
       admiralApiAdapter.postSystemNode(body,
         function (err, systemNode) {
@@ -4199,7 +4402,7 @@
     }
 
     function removeSystemNode(systemNode) {
-      $scope.vm.systemNodes.deletingSystemNode = true;
+      $scope.vm.deletingSystemNode = true;
 
       var bag = {
         systemNodeId: systemNode.id
@@ -4208,11 +4411,11 @@
           deleteSystemNode.bind(null, bag)
         ],
         function (err) {
-          $scope.vm.systemNodes.deletingSystemNode = false;
+          $scope.vm.deletingSystemNode = false;
           if (err) return popup_horn.error(err);
 
-          $scope.vm.systemNodes.systemNodes = _.reject(
-            $scope.vm.systemNodes.systemNodes,
+          $scope.vm.systemNodes = _.reject(
+            $scope.vm.systemNodes,
             function (systemNode) {
               return systemNode.id === bag.systemNodeId;
             }
@@ -4279,6 +4482,29 @@
             systemMachineImage.archTypeCode === $scope.vm.armArchCode;
         }
       );
+    }
+
+    function mapClusterNode(clusterNode) {
+      return {
+        id: clusterNode.id,
+        friendlyName: clusterNode.friendlyName,
+        nodeTypeCode: clusterNode.nodeTypeCode,
+        execImage: clusterNode.execImage,
+        isShippableInitialized: clusterNode.isShippableInitialized,
+        agentVersion:
+          clusterNode.execImage && clusterNode.execImage.split(':')[1],
+        createdAt: clusterNode.createdAt,
+        updatedAt: clusterNode.updatedAt,
+        jobId: clusterNode.jobId,
+        statusCode: clusterNode.statusCode,
+        statusTextClass:
+          statusCodes.statusTextClass(clusterNode.statusCode),
+        statusText:
+          statusCodes.statusText(clusterNode.statusCode),
+        label: statusCodes.getLabel(clusterNode.statusCode),
+        isProcessing: statusCodes.isProcessing(clusterNode.statusCode),
+        clusterId: clusterNode.clusterId
+      };
     }
   }
 }());

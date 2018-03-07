@@ -52,6 +52,10 @@
         return API.put('/api/masterIntegrations/' +
           masterIntegrationId, body, callback);
       },
+      // runtime templates Routes
+      getRuntimeTemplates: function (callback) {
+        return API.get('/api/runtimeTemplates', callback);
+      },
       // superUser Routes
       getSuperUsers: function (callback) {
         return API.get('/api/superUsers', callback);
@@ -66,6 +70,13 @@
       // SystemCodes Routes
       getSystemCodes: function (query, callback) {
         return API.get('/api/systemCodes?' + query, callback);
+      },
+      // SystemClusters Routes
+      getSystemClusters: function (query, callback) {
+       return API.get('/api/systemClusters?' + query, callback);
+      },
+      postSystemCluster: function (body, callback) {
+        return API.post('/api/systemClusters', body, callback);
       },
       // System Machine Image Routes
       getSystemMachineImages: function (query, callback) {
