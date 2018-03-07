@@ -61,7 +61,7 @@ __docker_login() {
       ecr_cmd="$ecr_cmd --region us-east-1 get-login"
     fi
 
-    docker_login_cmd=$( $ecr_cmd )
+    docker_login_cmd=$( eval "$ecr_cmd" )
 
     __process_msg "Docker login generated, logging into ecr"
     eval "$docker_login_cmd"
