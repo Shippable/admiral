@@ -4721,7 +4721,7 @@ do $$
       -- x86_64 Ubuntu_14.04 v6.1.4
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.1.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9000, 'v6.1.4', 'drydock', 'u16', 'v6.1.4', 'microbase', 'reqproc', true, '2018-01-24', '2018-01-24');
+        values (8000, 9000, 'v6.1.4', 'drydock', 'u16', 'v6.1.4', 'microbase', 'reqproc', false, '2018-01-24', '2018-01-24');
       end if;
 
       -- x86_64 Ubuntu_16.04 Stable
@@ -4786,32 +4786,97 @@ do $$
       -- x86_64 Ubuntu_16.04 v6.1.4
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.1.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9001, 'v6.1.4', 'drydock', 'u16', 'v6.1.4', 'microbase', 'reqproc', true, '2018-01-24', '2018-01-24');
+        values (8000, 9001, 'v6.1.4', 'drydock', 'u16', 'v6.1.4', 'microbase', 'reqproc', false, '2018-01-24', '2018-01-24');
       end if;
 
       -- aarch64 Ubuntu_16.04 v5.9.4
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8001, 9001, 'v5.9.4', 'drydockaarch64', 'u16', 'v5.9.4', 'microbase', 'reqproc', true, '2017-12-19', '2017-12-19');
+        values (8001, 9001, 'v5.9.4', 'drydockaarch64', 'u16', 'v5.9.4', 'microbase', 'reqproc', false, '2017-12-19', '2017-12-19');
       end if;
 
       -- x86_64 WindowsServer_2016 v5.10.4
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v5.10.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9002, 'v5.10.4', 'drydock', 'w16', 'v5.10.4', 'w16microbase', 'w16reqproc', true, '2017-12-19', '2017-12-19');
+        values (8000, 9002, 'v5.10.4', 'drydock', 'w16', 'v5.10.4', 'w16microbase', 'w16reqproc', false, '2017-12-19', '2017-12-19');
       end if;
 
       -- x86_64 macOS_10.12 v5.10.4
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v5.10.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9003, 'v5.10.4', 'drydock', 'u16', 'v5.10.4', 'microbase', 'm10reqproc', true, '2017-12-19', '2017-12-19');
+        values (8000, 9003, 'v5.10.4', 'drydock', 'u16', 'v5.10.4', 'microbase', 'm10reqproc', false, '2017-12-19', '2017-12-19');
       end if;
 
       -- x86_64 CentOS_7 v5.10.4
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v5.10.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9004, 'v5.10.4', 'drydock', 'u16', 'v5.10.4', 'microbase', 'reqproc', true, '2017-12-19', '2017-12-19');
+        values (8000, 9004, 'v5.10.4', 'drydock', 'u16', 'v5.10.4', 'microbase', 'reqproc', false, '2017-12-19', '2017-12-19');
       end if;
+
+      --------------------------------------------------------
+      -------------- v6.2.4 Templates ------------------------
+      --------------------------------------------------------
+
+      -- x86_64 Ubuntu_14.04
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.1.4' and "isDefault" = true) then
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.1.4' and "isDefault" = false;
+      end if;
+
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.2.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9000, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'reqProc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+      end if;
+
+      -- x86_64 Ubuntu_16.04
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.1.4' and "isDefault" = true) then
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.1.4' and "isDefault" = false;
+      end if;
+
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.2.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9001, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+      end if;
+
+      -- aarch64 Ubuntu_16.04
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4' and "isDefault" = true) then
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4' and "isDefault" = false;
+      end if;
+
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8001, 9001, 'v6.2.4', 'drydockaarch64', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+      end if;
+
+      -- x86_64 WindowsServer_2016
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v5.10.4' and "isDefault" = true) then
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v5.10.4' and "isDefault" = false;
+      end if;
+
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v6.2.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9002, 'v6.2.4', 'drydock', 'w16', 'v6.2.4', 'w16microbase', 'w16reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+      end if;
+
+      -- x86_64 macOS_10.12
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v5.10.4' and "isDefault" = true) then
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v5.10.4' and "isDefault" = false;
+      end if;
+
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v6.2.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9003, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'm10reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+      end if;
+
+      -- x86_64 CentOS_7
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v5.10.4' and "isDefault" = true) then
+        update "runtimeTemplates" set "isDefault" = false where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v5.10.4' and "isDefault" = false;
+      end if;
+
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v6.2.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9004, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+      end if;
+
     end if;
 
     -- Add addedJobResourceCount column to dailyAggs
