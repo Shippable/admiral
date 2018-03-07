@@ -13,6 +13,7 @@ ${RES_VER_DATE}
 ## Fixes
   - All runs in a runCI matrix job trigger OUT variables correctly. Previously only the first completed run would trigger an OUT variable.
   - Beta SPOG allows you to update values of param resources.
+  - For upgrade deployments on ECS with a load balancer resource, if the applied image changes, the replica count is set correctly. Previously, the replica count was always being set to 0.
  
   
 ## Custom Nodes
