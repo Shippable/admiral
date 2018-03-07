@@ -58,3 +58,13 @@ RabbitMQAdapter.prototype.getUser = function (name, callback) {
 RabbitMQAdapter.prototype.getUserPermissions = function (name, callback) {
   this.get('users/' + name + '/permissions', callback);
 };
+
+// Vhost API calls
+
+RabbitMQAdapter.prototype.getVhostQueue = function (vhost, queue, callback) {
+  this.get('queues/' + vhost + '/' + queue, callback);
+};
+
+RabbitMQAdapter.prototype.deleteQueue = function (vhost, queue, callback) {
+  this.delete('queues/' + vhost + '/' + queue, callback);
+};

@@ -4341,8 +4341,14 @@
     }
 
     function deleteSystemCluster(bag, next) {
-      //to be implemented
-      return next();
+      admiralApiAdapter.deleteSystemClusterById(bag.systemClusterId,
+        function (err, systemCluster) {
+          if (err) return next(err);
+
+          bag.systemCluster = systemCluster;
+          return next();
+        }
+      );
     }
 
     function addSystemNode() {

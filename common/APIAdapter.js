@@ -255,6 +255,12 @@ APIAdapter.prototype.getSystemNodes =
     this.get(url, callback);
   };
 
+APIAdapter.prototype.deleteSystemNodeById =
+  function (systemNodeId, callback) {
+    var url = '/api/systemNodes/' + systemNodeId;
+    this.delete(url, callback);
+  };
+
 APIAdapter.prototype.putSystemNodeById =
   function (systemNodeId, body, callback) {
     var url = '/api/systemNodes/' + systemNodeId;
