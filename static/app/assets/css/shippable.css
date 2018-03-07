@@ -710,3 +710,7 @@ a:active {
   border-color: rgba(239, 83, 80, 0.5) !important;
   color: #ef5350;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
