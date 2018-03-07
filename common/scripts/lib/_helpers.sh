@@ -52,10 +52,16 @@ __check_os_and_architecture() {
 
 __set_installed_docker_version() {
   if command -v "docker" &>/dev/null; then
-    docker_ver=$(docker version --format '{{.Server.Version}}')
-    export INSTALLED_DOCKER_VERSION=$(docker version --format '{{.Server.Version}}')
-    echo "setting INSTALLED_DOCKER_VERSION=$INSTALLED_DOCKER_VERSION"
+    sed -i '/^INSTALLED_DOCKER_VERSION/d' "$ADMIRAL_ENV"
+
+    local version=$(docker version --format '{{.Server.Version}}')
+    # split and extract major.minor version eg. to extract 17.06 from 17.06.0-ce
+    local docker_version="${version%.*}"
+
+    echo "setting INSTALLED_DOCKER_VERSION=$docker_version"
+    echo "INSTALLED_DOCKER_VERSION=\"$docker_version\"" >> "$ADMIRAL_ENV"
   fi
+  source "$ADMIRAL_ENV"
 }
 
 __cleanup() {
