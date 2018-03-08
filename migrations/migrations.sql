@@ -251,6 +251,11 @@ do $$
       alter table "clusters" alter column "name" type varchar(255);
     end if;
 
+    -- add "timeoutMS" to clusters table
+    if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'timeoutMS') then
+      alter table "clusters" add column "timeoutMS" INTEGER;
+    end if;
+
     -- Add "isInternal" to accountTokens table
     if not exists (select 1 from information_schema.columns where table_name = 'accountTokens' and column_name = 'isInternal') then
       alter table "accountTokens" add column "isInternal" BOOLEAN DEFAULT false;
