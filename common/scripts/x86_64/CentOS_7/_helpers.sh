@@ -111,6 +111,8 @@ __check_dependencies() {
     # Install Docker
     chmod +x installDockerScript.sh
     ./installDockerScript.sh
+    # sets env INSTALLED_DOCKER_VERSION
+    __set_installed_docker_version
     rm installDockerScript.sh
   fi
 
