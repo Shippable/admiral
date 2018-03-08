@@ -347,7 +347,7 @@ function _getArchitecture(bag, next) {
 }
 
 function _getInstalledDockerVersion(bag, next) {
-  var who = bag.who + '|' + _getArchitecture.name;
+  var who = bag.who + '|' + _getInstalledDockerVersion.name;
   logger.verbose(who, 'Inside');
 
   envHandler.get('INSTALLED_DOCKER_VERSION',
