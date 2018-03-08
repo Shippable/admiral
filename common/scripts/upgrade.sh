@@ -335,6 +335,19 @@ __move_system_to_grisham() {
   fi
 }
 
+__mark_swarm_manager_as_active() {
+  __process_marker "Marking swarm manager as active"
+  local manager_node_id=$(docker node ls -q --filter role=manager)
+  local manager_node_status=$(docker inspect --format='{{.Spec.Availability}}' "$manager_node_id")
+  manager_node_status=$(echo $manager_node_status | awk '{print tolower($0)}')
+  if [ "$manager_node_status" == "active" ]; then
+    __process_msg "Swarm manager already active"
+    return
+  fi
+  docker node update --availability active "$manager_node_id"
+  __process_msg "Swarm manager marked active"
+}
+
 __cleanup_master() {
   __process_marker "Cleaning up swarm master node"
   _shippable_post_master_cleanup
@@ -413,6 +426,7 @@ main() {
     if [ $IS_SERVER == true ]; then
       __move_system_to_grisham
     fi
+    __mark_swarm_manager_as_active
     __cleanup_master
     __cleanup_workers
   fi
