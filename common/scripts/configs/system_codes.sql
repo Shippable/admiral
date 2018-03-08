@@ -650,6 +650,11 @@ do $$
       values (408, 'showBetaSPOGView', 'viewObjectType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    if not exists (select 1 from "systemCodes" where code = 409) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (409, 'defaultSpogLayout', 'viewObjectType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-08', '2018-03-08');
+    end if;
+
     if not exists (select 1 from "systemCodes" where code = 500) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (500, 'accountDashboard', 'viewType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
