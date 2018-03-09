@@ -1,0 +1,146 @@
+#!/bin/bash -e
+
+# Global variables ########################################
+###########################################################
+readonly IFS=$'\n\t'
+readonly ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+readonly CONFIG_DIR="/etc/shippable"
+readonly RUNTIME_DIR="/var/lib/shippable"
+readonly MIGRATIONS_DIR="$ROOT_DIR/migrations"
+readonly POST_INSTALL_MIGRATIONS_DIR="$MIGRATIONS_DIR/post_install"
+readonly SCRIPTS_DIR="$ROOT_DIR/common/scripts"
+readonly LIB_DIR="$SCRIPTS_DIR/lib"
+readonly LOGS_DIR="$RUNTIME_DIR/logs"
+readonly TIMESTAMP="$(date +%Y%m%d%H%M)"
+readonly LOG_FILE="$LOGS_DIR/${TIMESTAMP}_cli.txt"
+readonly LOCAL_SCRIPTS_DIR="$SCRIPTS_DIR/local"
+readonly ADMIRAL_ENV="$CONFIG_DIR/admiral.env"
+readonly SSH_PRIVATE_KEY=$CONFIG_DIR/machinekey
+readonly SSH_PUBLIC_KEY=$CONFIG_DIR/machinekey.pub
+readonly SCRIPTS_DIR_REMOTE="/tmp/shippable"
+readonly MAX_DEFAULT_LOG_COUNT=6
+readonly API_TIMEOUT=600
+readonly ADMIRAL_PORT=50003
+export LC_ALL=C
+export is_db_initialized=false
+export is_default_system_cluster_available=false
+export is_default_system_node_available=false
+export default_runtime_template_id=null
+export archType=null
+export osType=null
+export cluster_type_code=null
+export default_system_cluster_id=null
+
+source "$LIB_DIR/_admiralAdapter.sh"
+source "$LIB_DIR/_logger.sh"
+source "$LIB_DIR/_helpers.sh"
+source $ADMIRAL_ENV
+
+__check_dbStatus() {
+  __process_marker "Checking db status"
+  _shippable_get_systemSettings
+  is_db_initialized=$(echo $response \
+    | jq -r '.db' \
+    | jq -r '.isInitialized')
+
+  __process_msg "is_db_initialized: $is_db_initialized"
+  __process_msg "db status check completed successfully"
+}
+
+__get_systemClusters() {
+  __process_marker "getting systemClusters"
+  _shippable_get_systemClusters 'isDefault=true'
+  if [ "$(echo $response | jq -r '.[0]')" != null ]; then
+    is_default_system_cluster_available=true
+    default_system_cluster_id=$(echo $response | jq -r '.[0].id')
+  fi
+
+   __process_msg "is_default_system_cluster_available: $is_default_system_cluster_available"
+   __process_msg "systemClusters get completed successfully"
+}
+
+
+__get_systemCodes() {
+  __process_marker "getting systemCodes"
+  _shippable_get_systemCodes
+  if [ "$response" != "" ]; then
+  	systemCodes=$response
+    archType=$(echo $response \
+      | jq --arg ARCHITECTURE "$ARCHITECTURE" '.[]
+      | select((.name==$ARCHITECTURE) and (.group=="archType")) | .code')
+    osType=$(echo $response \
+      | jq --arg OPERATING_SYSTEM "$OPERATING_SYSTEM" '.[] 
+      | select((.name==$OPERATING_SYSTEM) and (.group=="osType")) | .code')
+    clusterName='custom__'$ARCHITECTURE'__'$OPERATING_SYSTEM
+    cluster_type_code=$(echo $response \
+      | jq --arg clusterName "$clusterName" '.[] 
+      | select((.name==$clusterName) and (.group=="clusterType")) | .code')
+  fi
+
+   __process_msg "systemCodes get completed successfully"
+}
+
+__get_runtimetemplates() {
+  __process_marker "getting runtimeTemplates"
+    _shippable_get_runtimeTemplates
+    default_runtime_template_id=$(echo $response \
+      | jq --arg archType "$archType" --arg osType "$osType" '.[]
+      | select((.archTypeCode=='$archType') and (.osTypeCode=='$osType') and .isDefault) | .id') 
+    
+    echo "default_runtime_template_id: $default_runtime_template_id"
+    __process_msg "runtimeTemplates get completed successfully"
+}
+
+__post_systemClusters() {
+  __process_marker "posting systemClusters"
+  body='{"name": "default_cluster", "queueName": "systemNodes.exec", "clusterTypeCode": "'$cluster_type_code'", "runtimeTemplateId": "'$default_runtime_template_id'", "isDefault": true}'
+  _shippable_post_systemClusters $body
+  default_system_cluster_id=$(echo $response | jq -r '.id')
+
+  echo "default_system_cluster_id: $default_system_cluster_id"
+   __process_msg "default system cluster posted successfully"
+}
+
+__get_systemNode() {
+  __process_marker "getting systemNodes"
+  _shippable_get_systemNodes 'systemClusterId='$default_system_cluster_id
+  if [ "$(echo $response | jq -r '.[0]')" != null ]; then
+    is_default_system_node_available=true
+  fi
+
+   echo "is_default_system_node_available: $is_default_system_node_available"
+   __process_msg "systemNodes get completed successfully"
+}
+
+__post_systemNode() {
+  __process_marker "posting systemNodes"
+  body='{"friendlyName": "default_system_node_dev", "systemClusterId": "'$default_system_cluster_id'"}'
+  _shippable_post_systemNodes $body
+
+   __process_msg "system node posted successfully"
+}
+
+main() {
+  __check_dbStatus
+  if [ $is_db_initialized ]; then
+    __get_systemClusters
+    if [ $is_default_system_cluster_available != true ]; then
+      __get_systemCodes
+      __get_runtimetemplates
+      __post_systemClusters
+      __post_systemNode
+    else
+      echo "default_cluster is available"
+      __get_systemNode
+      if [ $is_default_system_node_available != true ]; then
+        __post_systemNode
+      else
+        echo "system node is available"
+      fi
+    fi
+  else
+    echo "database is not initialized please initialize database first"
+  fi
+}
+
+main

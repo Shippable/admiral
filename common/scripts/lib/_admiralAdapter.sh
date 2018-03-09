@@ -194,6 +194,42 @@ _shippable_get_masterIntegrations() {
   __shippable_get $masterIntegrations_get_endpoint
 }
 
+_shippable_get_systemCodes() {
+  local query="$1"
+  local systemCodes_get_endpoint="systemCodes"
+  if [ "$query" != "" ]; then
+    systemCodes_get_endpoint="systemCodes?$query"
+  fi
+  __shippable_get $systemCodes_get_endpoint
+}
+
+_shippable_get_systemClusters() {
+  local query="$1"
+  local systemClusters_get_endpoint="systemClusters"
+  if [ "$query" != "" ]; then
+    systemClusters_get_endpoint="systemClusters?$query"
+  fi
+  __shippable_get $systemClusters_get_endpoint
+}
+
+_shippable_get_systemNodes() {
+  local query="$1"
+  local systemNodes_get_endpoint="systemNodes"
+  if [ "$query" != "" ]; then
+    systemNodes_get_endpoint="systemNodes?$query"
+  fi
+  __shippable_get $systemNodes_get_endpoint
+}
+
+_shippable_get_runtimeTemplates() {
+  local query="$1"
+  local runtimeTemplates_get_endpoint="runtimeTemplates"
+  if [ "$query" != "" ]; then
+    runtimeTemplates_get_endpoint="runtimeTemplates?$query"
+  fi
+  __shippable_get $runtimeTemplates_get_endpoint
+}
+
 ### POST
 _shippable_post_db() {
   local body="{}"
@@ -233,6 +269,19 @@ _shippable_post_move_system_to_grisham() {
   local move_system_to_grisham="passthrough/grisham"
   __shippable_post $move_system_to_grisham
 }
+
+_shippable_post_systemClusters() {
+  local body="$1"
+  local db_post_endpoint="systemClusters"
+  __shippable_post $db_post_endpoint "$body"
+}
+
+_shippable_post_systemNodes() {
+  local body="$1"
+  local db_post_endpoint="systemNodes"
+  __shippable_post $db_post_endpoint "$body"
+}
+
 
 ### PUT
 
