@@ -22,14 +22,14 @@ readonly MAX_DEFAULT_LOG_COUNT=6
 readonly API_TIMEOUT=600
 readonly ADMIRAL_PORT=50003
 export LC_ALL=C
-is_db_initialized=false
-is_default_system_cluster_available=false
-is_default_system_node_available=false
-default_runtime_template_id=null
-archType=null
-osType=null
-cluster_type_code=null
-default_system_cluster_id=null
+export is_db_initialized=false
+export is_default_system_cluster_available=false
+export is_default_system_node_available=false
+export default_runtime_template_id=null
+export archType=null
+export osType=null
+export cluster_type_code=null
+export default_system_cluster_id=null
 
 source "$LIB_DIR/_admiralAdapter.sh"
 source "$LIB_DIR/_logger.sh"
@@ -40,7 +40,8 @@ __check_dbStatus() {
   __process_marker "Checking db status"
   _shippable_get_systemSettings
   is_db_initialized=$(echo $response \
-    | jq -r '.db' | jq -r '.isInitialized')
+    | jq -r '.db' \
+    | jq -r '.isInitialized')
 
   __process_msg "is_db_initialized: $is_db_initialized"
   __process_msg "db status check completed successfully"
@@ -64,10 +65,16 @@ __get_systemCodes() {
   _shippable_get_systemCodes
   if [ "$response" != "" ]; then
   	systemCodes=$response
-    archType=$(echo $response | jq --arg ARCHITECTURE "$ARCHITECTURE" '.[] | select((.name==$ARCHITECTURE) and (.group=="archType")) | .code')
-    osType=$(echo $response | jq --arg OPERATING_SYSTEM "$OPERATING_SYSTEM" '.[] | select((.name==$OPERATING_SYSTEM) and (.group=="osType")) | .code')
+    archType=$(echo $response \
+    | jq --arg ARCHITECTURE "$ARCHITECTURE" '.[]
+    | select((.name==$ARCHITECTURE) and (.group=="archType")) | .code')
+    osType=$(echo $response \
+    | jq --arg OPERATING_SYSTEM "$OPERATING_SYSTEM" '.[] 
+    | select((.name==$OPERATING_SYSTEM) and (.group=="osType")) | .code')
     clusterName='custom__'$ARCHITECTURE'__'$OPERATING_SYSTEM
-    cluster_type_code=$(echo $response | jq --arg clusterName "$clusterName" '.[] | select((.name==$clusterName) and (.group=="clusterType")) | .code')
+    cluster_type_code=$(echo $response \
+    | jq --arg clusterName "$clusterName" '.[] 
+    | select((.name==$clusterName) and (.group=="clusterType")) | .code')
   fi
 
    __process_msg "systemCodes get completed successfully"
@@ -76,7 +83,9 @@ __get_systemCodes() {
 __get_runtimetemplates() {
   __process_marker "getting runtimeTemplates"
     _shippable_get_runtimeTemplates
-    default_runtime_template_id=$(echo $response | jq --arg archType "$archType" --arg osType "$osType" '.[] | select((.archTypeCode=='$archType') and (.osTypeCode=='$osType') and .isDefault) | .id') 
+    default_runtime_template_id=$(echo $response \
+    | jq --arg archType "$archType" --arg osType "$osType" '.[]
+    | select((.archTypeCode=='$archType') and (.osTypeCode=='$osType') and .isDefault) | .id') 
     
     echo "default_runtime_template_id: $default_runtime_template_id"
     __process_msg "runtimeTemplates get completed successfully"
