@@ -51,6 +51,12 @@
       disableRedisUrl: true,
       disableStateUrl: true,
       disableRabbitMqUrl: true,
+      isEmailEnabled: false,
+      isEmailMethodEnabled: false,
+      isEditingUIUrl: false,
+      isEditingAPIUrl: false,
+      isEditingInternalAPIUrl: false,
+      isEditingConsoleAPIUrl: false,
       globalServices: [
         'api',
         'mktg',
@@ -111,6 +117,24 @@
       formValuesChanged: function (url, masterName) {
         validateSCMUrlWorkflow(url, masterName);
       },
+      editUIUrl: function () {
+        $scope.vm.installForm.www.url.edited = $scope.vm.installForm.www.url.data.url;
+        $scope.vm.isEditingUIUrl = true;
+      },
+      editAPIUrl: function () {
+        $scope.vm.installForm.api.url.edited = $scope.vm.installForm.api.url.data.url;
+        $scope.vm.isEditingAPIUrl = true;
+      },
+      editInternalAPIUrl: function () {
+        $scope.vm.installForm.internalAPI.url.edited =
+          $scope.vm.installForm.internalAPI.url.data.url;
+        $scope.vm.isEditingInternalAPIUrl = true;
+      },
+      editConsoleAPIUrl: function () {
+        $scope.vm.installForm.consoleAPI.url.edited =
+          $scope.vm.installForm.consoleAPI.url.data.url;
+        $scope.vm.isEditingConsoleAPIUrl = true;
+      },
       editStateUrl: function () {
         var url = $scope.vm.installForm.state.gitlabCreds.data.url;
         $scope.vm.installForm.state.gitlabCreds.address =
@@ -125,7 +149,7 @@
       },
       editRedisUrl: function () {
         var url = $scope.vm.installForm.redis.url.data.url;
-        $scope.vm.installForm.redis.url.address = url.split(':')[0];
+        $scope.vm.installForm.redis.url.editAddress = url.split(':')[0];
         $scope.vm.isEditingRedisUrl = true;
       },
       checkRedisUrl: function (address) {
@@ -149,6 +173,42 @@
       cancelRabbitMqUpdate: function () {
         $scope.vm.isEditingRabbitMqUrl = false;
       },
+      cancelUIUpdate: function () {
+        $scope.vm.installForm.www.url.edited = $scope.vm.installForm.www.url.data.url;
+        $scope.vm.isEditingUIUrl = false;
+      },
+      saveUIUpdate: function () {
+        $scope.vm.installForm.www.url.data.url = $scope.vm.installForm.www.url.edited;
+        $scope.vm.isEditingUIUrl = false;
+      },
+      cancelAPIUpdate: function () {
+        $scope.vm.installForm.api.url.edited = $scope.vm.installForm.api.url.data.url;
+        $scope.vm.isEditingAPIUrl = false;
+      },
+      saveAPIUpdate: function () {
+        $scope.vm.installForm.api.url.data.url = $scope.vm.installForm.api.url.edited;
+        $scope.vm.isEditingAPIUrl = false;
+      },
+      cancelInternalAPIUpdate: function () {
+        $scope.vm.installForm.internalAPI.url.edited =
+          $scope.vm.installForm.internalAPI.url.data.url;
+        $scope.vm.isEditingInternalAPIUrl = false;
+      },
+      saveInternalAPIUpdate: function () {
+        $scope.vm.installForm.internalAPI.url.data.url =
+          $scope.vm.installForm.internalAPI.url.edited;
+        $scope.vm.isEditingInternalAPIUrl = false;
+      },
+      cancelConsoleAPIUpdate: function () {
+        $scope.vm.installForm.consoleAPI.url.edited =
+          $scope.vm.installForm.consoleAPI.url.data.url;
+        $scope.vm.isEditingConsoleAPIUrl = false;
+      },
+      saveConsoleAPIUpdate: function () {
+        $scope.vm.installForm.consoleAPI.url.data.url =
+          $scope.vm.installForm.consoleAPI.url.edited;
+        $scope.vm.isEditingConsoleAPIUrl = false;
+      },
       updateStateUrl: function (updatedAddress) {
         var url = $scope.vm.installForm.state.gitlabCreds.data.url;
         $scope.vm.installForm.state.gitlabCreds.data.url =
@@ -170,8 +230,26 @@
       },
       updateRedisUrl: function (updatedAddress) {
         var url = $scope.vm.installForm.redis.url.data.url;
+        var hasErr = validateIP(updatedAddress);
+        if (hasErr !== 'has-error')
+          $scope.vm.installForm.redis.url.address = updatedAddress;
         $scope.vm.installForm.redis.url.data.url = updatedAddress + ':' + url.split(':')[1];
         $scope.vm.isEditingRedisUrl = false;
+      },
+      checkEmailMethod: function (method) {
+        if (method === 'gmail') {
+          $scope.vm.installForm.notification.gmailCreds.isEnabled = true;
+          $scope.vm.installForm.notification.mailgunCreds.isEnabled = false;
+          $scope.vm.installForm.notification.smtpCreds.isEnabled = false;
+        } else if (method === 'mailgun') {
+          $scope.vm.installForm.notification.mailgunCreds.isEnabled = true;
+          $scope.vm.installForm.notification.smtpCreds.isEnabled = false;
+          $scope.vm.installForm.notification.gmailCreds.isEnabled = false;
+        } else if (method === 'smtp') {
+          $scope.vm.installForm.notification.smtpCreds.isEnabled = true;
+          $scope.vm.installForm.notification.mailgunCreds.isEnabled = false;
+          $scope.vm.installForm.notification.gmailCreds.isEnabled = false;
+        }
       },
       // map by systemInt name, then masterName
       installForm: {
@@ -180,6 +258,8 @@
           url: {
             isEnabled: true,
             masterName: 'url',
+            edited: '',
+            address: '',
             data: {
               url: ''
             }
@@ -189,6 +269,8 @@
           url: {
             isEnabled: false,
             masterName: 'url',
+            edited: '',
+            address: '',
             data: {
               url: ''
             }
@@ -198,6 +280,8 @@
           url: {
             isEnabled: false,
             masterName: 'url',
+            edited: '',
+            address: '',
             data: {
               url: ''
             }
@@ -286,6 +370,7 @@
           url: {
             isEnabled: true,
             masterName: 'url',
+            address: '',
             data: {
               url: ''
             }
@@ -359,6 +444,7 @@
             isEnabled: true,
             masterName: 'url',
             address: '',
+            editAddress: '',
             data: {
               url: ''
             }
@@ -381,6 +467,8 @@
           url: {
             isEnabled: true,
             masterName: 'url',
+            edited: '',
+            address: '',
             data: {
               url: ''
             }
@@ -722,6 +810,7 @@
           setBreadcrumb.bind(null, bag),
           getAdmiralEnv.bind(null, bag),
           getSystemSettings.bind(null, bag),
+          getCoreServiceSettings.bind(null, bag),
           setupSystemIntDefaults.bind(null, bag),
           getSystemIntegrations.bind(null, bag),
           updateInitializeForm.bind(null, bag),
@@ -796,6 +885,33 @@
       );
     }
 
+    function getCoreServiceSettings(bag, next) {
+      if (!$scope.vm.systemSettings.db.isInitialized) return next();
+      var coreServices =
+        ['db', 'secrets', 'msg', 'state', 'redis', 'master'];
+      async.each(coreServices,
+        function (service, done) {
+          admiralApiAdapter.getCoreService(service,
+            function (err, configs) {
+              if (err)
+                return done(err);
+              if (_.isEmpty(configs)) {
+                // if empty, we can't do anything yet
+                return done();
+              }
+              $scope.vm.systemSettings[service] =
+                _.extend($scope.vm.systemSettings[service],
+                  (configs));
+              return done();
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
     function getSystemSettings(bag, next) {
       admiralApiAdapter.getSystemSettings(
         function (err, systemSettings) {
@@ -806,7 +922,6 @@
             // if empty, we can't do anything yet
             return next();
           }
-
           $scope.vm.systemSettings.db =
             _.extend($scope.vm.systemSettings.db,
               (systemSettings.db && JSON.parse(systemSettings.db)));
@@ -1173,6 +1288,15 @@
                   systemIntegration.data
                 );
                 $scope.vm.installForm[sysIntName][masterName].isEnabled = true;
+                if ($scope.vm.installForm[sysIntName][masterName].data.url) {
+                  var url = $scope.vm.installForm[sysIntName][masterName].data.url;
+                  if (url.split('://').length === 1)
+                    url = url.split('://')[0];
+                  else
+                    url = url.split('://')[1];
+
+                  $scope.vm.installForm[sysIntName][masterName].address = url.split(':')[0].split('/')[0];
+                }
                 if (sysIntName === 'auth') {
                   var providerAuthName = providerAuthNames[masterName];
                   if (!_.isEmpty(providerAuthName)) {
@@ -1185,7 +1309,6 @@
               }
             }
           );
-
           return next();
         }
       );
@@ -1665,7 +1788,6 @@
                 systemSettings[key];
             }
           );
-
           $scope.vm.runMode = systemSettings.runMode;
 
           return next();
@@ -3850,12 +3972,16 @@
 
           $scope.vm.selectedService.configs = [];
 
+          var validKeys = ['isInitialized', 'isInstalled',
+            'isShippableManaged', 'isSecure'];
           _.each(configs,
             function (value, key) {
-              $scope.vm.selectedService.configs.push({
-                key: key,
-                value: value
-              });
+              if (_.contains(validKeys, key)) {
+                $scope.vm.selectedService.configs.push({
+                  key: key,
+                  value: value
+                });
+              }
             }
           );
 

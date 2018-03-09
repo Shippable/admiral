@@ -714,3 +714,11 @@ a:active {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.alignTextCenter {
+  text-align: center !important;
+}
+
+.textAlignNone {
+  text-align: unset !important;
+}
