@@ -66,15 +66,15 @@ __get_systemCodes() {
   if [ "$response" != "" ]; then
   	systemCodes=$response
     archType=$(echo $response \
-    | jq --arg ARCHITECTURE "$ARCHITECTURE" '.[]
-    | select((.name==$ARCHITECTURE) and (.group=="archType")) | .code')
+      | jq --arg ARCHITECTURE "$ARCHITECTURE" '.[]
+      | select((.name==$ARCHITECTURE) and (.group=="archType")) | .code')
     osType=$(echo $response \
-    | jq --arg OPERATING_SYSTEM "$OPERATING_SYSTEM" '.[] 
-    | select((.name==$OPERATING_SYSTEM) and (.group=="osType")) | .code')
+      | jq --arg OPERATING_SYSTEM "$OPERATING_SYSTEM" '.[] 
+      | select((.name==$OPERATING_SYSTEM) and (.group=="osType")) | .code')
     clusterName='custom__'$ARCHITECTURE'__'$OPERATING_SYSTEM
     cluster_type_code=$(echo $response \
-    | jq --arg clusterName "$clusterName" '.[] 
-    | select((.name==$clusterName) and (.group=="clusterType")) | .code')
+      | jq --arg clusterName "$clusterName" '.[] 
+      | select((.name==$clusterName) and (.group=="clusterType")) | .code')
   fi
 
    __process_msg "systemCodes get completed successfully"
@@ -84,8 +84,8 @@ __get_runtimetemplates() {
   __process_marker "getting runtimeTemplates"
     _shippable_get_runtimeTemplates
     default_runtime_template_id=$(echo $response \
-    | jq --arg archType "$archType" --arg osType "$osType" '.[]
-    | select((.archTypeCode=='$archType') and (.osTypeCode=='$osType') and .isDefault) | .id') 
+      | jq --arg archType "$archType" --arg osType "$osType" '.[]
+      | select((.archTypeCode=='$archType') and (.osTypeCode=='$osType') and .isDefault) | .id') 
     
     echo "default_runtime_template_id: $default_runtime_template_id"
     __process_msg "runtimeTemplates get completed successfully"
