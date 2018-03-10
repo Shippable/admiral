@@ -8,7 +8,7 @@ readonly CONFIG_DIR="/etc/shippable"
 readonly RUNTIME_DIR="/var/lib/shippable"
 readonly MIGRATIONS_DIR="$ROOT_DIR/migrations"
 readonly POST_INSTALL_MIGRATIONS_DIR="$MIGRATIONS_DIR/post_install"
-readonly SCRIPTS_DIR="$ROOT_DIR/common/scripts"
+export SCRIPTS_DIR="$ROOT_DIR/common/scripts"
 readonly LIB_DIR="$SCRIPTS_DIR/lib"
 readonly LOGS_DIR="$RUNTIME_DIR/logs"
 readonly TIMESTAMP="$(date +%Y%m%d%H%M)"
@@ -30,7 +30,29 @@ export archType=null
 export osType=null
 export cluster_type_code=null
 export default_system_cluster_id=null
-
+export runtime_template=null
+export system_settings=null
+export system_cluster=null
+export EXEC_IMAGE=null
+export LISTEN_QUEUE=null
+export NODE_ARCHITECTURE=null
+export NODE_ID=null
+export NODE_OPERATING_SYSTEM=null
+export NODE_TYPE_CODE=7002
+export RUN_MODE=null
+export SHIPPABLE_AMQP_DEFAULT_EXCHANGE=null
+export SHIPPABLE_AMQP_URL=null
+export SHIPPABLE_API_URL=null
+export SHIPPABLE_RELEASE_VERSION=null
+export REQKICK_DOWNLOAD_URL=null
+export CEXEC_DOWNLOAD_URL=null
+export REPORTS_DOWNLOAD_URL=null
+export docker_client_location="/opt/docker/docker"
+export NODE_SCRIPTS_DOWNLOAD_LOCATION="/tmp/shippable/node.tar.gz"
+export NODE_SCRIPTS_LOCATION="/root/node"
+export NODE_DATA_LOCATION="/etc/shippable"
+export NODE_LOGS_LOCATION="$NODE_DATA_LOCATION/logs"
+export SHIPPABLE_API_TOKEN=null
 source "$LIB_DIR/_admiralAdapter.sh"
 source "$LIB_DIR/_logger.sh"
 source "$LIB_DIR/_helpers.sh"
@@ -39,6 +61,7 @@ source $ADMIRAL_ENV
 __check_dbStatus() {
   __process_marker "Checking db status"
   _shippable_get_systemSettings
+  system_settings=$response
   is_db_initialized=$(echo $response \
     | jq -r '.db' \
     | jq -r '.isInitialized')
@@ -50,6 +73,7 @@ __check_dbStatus() {
 __get_systemClusters() {
   __process_marker "getting systemClusters"
   _shippable_get_systemClusters 'isDefault=true'
+  system_cluster=$response
   if [ "$(echo $response | jq -r '.[0]')" != null ]; then
     is_default_system_cluster_available=true
     default_system_cluster_id=$(echo $response | jq -r '.[0].id')
@@ -85,8 +109,12 @@ __get_runtimetemplates() {
     _shippable_get_runtimeTemplates
     default_runtime_template_id=$(echo $response \
       | jq --arg archType "$archType" --arg osType "$osType" '.[]
-      | select((.archTypeCode=='$archType') and (.osTypeCode=='$osType') and .isDefault) | .id') 
-    
+      | select((.archTypeCode=='$archType') and (.osTypeCode=='$osType') and .isDefault) | .id')
+
+    runtime_template=$(echo $response \
+      | jq --arg default_runtime_template_id "$default_runtime_template_id" '.[]
+      | select(.id=='$default_runtime_template_id')')
+
     echo "default_runtime_template_id: $default_runtime_template_id"
     __process_msg "runtimeTemplates get completed successfully"
 }
@@ -95,6 +123,7 @@ __post_systemClusters() {
   __process_marker "posting systemClusters"
   body='{"name": "default_cluster", "queueName": "systemNodes.exec", "clusterTypeCode": "'$cluster_type_code'", "runtimeTemplateId": "'$default_runtime_template_id'", "isDefault": true}'
   _shippable_post_systemClusters $body
+  system_cluster=$response
   default_system_cluster_id=$(echo $response | jq -r '.id')
 
   echo "default_system_cluster_id: $default_system_cluster_id"
@@ -106,6 +135,7 @@ __get_systemNode() {
   _shippable_get_systemNodes 'systemClusterId='$default_system_cluster_id
   if [ "$(echo $response | jq -r '.[0]')" != null ]; then
     is_default_system_node_available=true
+    NODE_ID=$(echo $response | jq -r '.[0].id')
   fi
 
    echo "is_default_system_node_available: $is_default_system_node_available"
@@ -116,17 +146,376 @@ __post_systemNode() {
   __process_marker "posting systemNodes"
   body='{"friendlyName": "default_system_node_dev", "systemClusterId": "'$default_system_cluster_id'"}'
   _shippable_post_systemNodes $body
+  NODE_ID=$(echo $response | jq -r '.[0].id')
 
    __process_msg "system node posted successfully"
 }
 
+__create_symlink() {
+  __process_marker "creating symlink"
+  if [ ! -f /usr/local/bin/node ]; then
+    node_path=$(echo $(which node))
+    echo $node_path
+    sudo ln -s "$node_path" /usr/local/bin/node
+  fi
+}
+
+__get_systemIntegrations() {
+  __process_marker "getting systemIntegrations"
+  _shippable_get_systemIntegrations
+
+  local api_url=$(echo $response \
+      | jq '.[]
+      | select(.name=="api") | .data' | jq '.url')
+  temp="${api_url%\"}"
+  SHIPPABLE_API_URL="${temp#\"}"
+  REQKICK_DOWNLOAD_URL=$SHIPPABLE_API_URL"/passthrough/repoArchives/reqKick.tar.gz"
+  CEXEC_DOWNLOAD_URL=$SHIPPABLE_API_URL"/passthrough/repoArchives/cexec.tar.gz"
+  REPORTS_DOWNLOAD_URL=$SHIPPABLE_API_URL"/passthrough/binaries/reports/reports-"$ARCHITECTURE"-"$OPERATING_SYSTEM".tar.gz"
+  local amqp_url=$(echo $response \
+    | jq '.[]
+    | select(.name=="msg") | .data' | jq '.amqpUrl')
+  temp="${amqp_url%\"}"
+  SHIPPABLE_AMQP_URL="${temp#\"}"
+  local amqp_default_exchange=$(echo $response \
+    | jq '.[]
+    | select(.name=="msg") | .data' | jq '.amqpDefaultExchange')
+  temp="${amqp_default_exchange%\"}"
+  SHIPPABLE_AMQP_DEFAULT_EXCHANGE="${temp#\"}"
+}
+
+__export_envs() {
+  __process_marker "exporting envs"
+  SHIPPABLE_API_TOKEN=$(echo $system_settings \
+    | jq -r '.serviceUserToken')
+
+  RUN_MODE=$(echo $system_settings \
+    | jq -r '.runMode')
+
+  SHIPPABLE_RELEASE_VERSION=$(echo $system_settings \
+    | jq -r '.releaseVersion')
+
+  EXEC_IMAGE=$(echo $runtime_template \
+    | jq -r '.drydockOrg')/$(echo $runtime_template \
+    | jq -r '.reqProcImage'):$SHIPPABLE_RELEASE_VERSION
+
+  LISTEN_QUEUE=$(echo $system_cluster \
+    | jq -r '.[0].queueName')
+
+  NODE_ARCHITECTURE=$ARCHITECTURE
+  NODE_OPERATING_SYSTEM=$OPERATING_SYSTEM
+  export SHIPPABLE_RUNTIME_DIR="/var/lib/shippable"
+  if [ "$NODE_TYPE_CODE" -eq 7001 ]; then
+    export BASE_DIR="$SHIPPABLE_RUNTIME_DIR"
+  else
+    BASE_UUID="shippable_dev"
+    export BASE_DIR="$SHIPPABLE_RUNTIME_DIR/$BASE_UUID"
+  fi
+  export REQPROC_DIR="$BASE_DIR/reqProc"
+  export REQEXEC_DIR="$BASE_DIR/reqExec"
+  export REQEXEC_BIN_PATH="$REQEXEC_DIR/$NODE_ARCHITECTURE/$NODE_OPERATING_SYSTEM/dist/main/main"
+  export REQKICK_DIR="$BASE_DIR/reqKick"
+  export REQKICK_SERVICE_DIR="$REQKICK_DIR/init/$NODE_ARCHITECTURE/$NODE_OPERATING_SYSTEM"
+  export REQKICK_CONFIG_DIR="/etc/shippable/reqKick"
+  export BUILD_DIR="$BASE_DIR/build"
+  export STATUS_DIR=$BUILD_DIR/status
+  export SCRIPTS_DIR=$BUILD_DIR/scripts
+  # This is set while booting dynamic nodes
+  export REQPROC_MOUNTS="$REQPROC_MOUNTS"
+  export REQPROC_ENVS="$REQPROC_ENVS"
+  export REQPROC_OPTS="$REQPROC_OPTS"
+  export REQPROC_CONTAINER_NAME_PATTERN="reqProc"
+  export EXEC_CONTAINER_NAME_PATTERN="shippable-exec"
+
+  if [ "$NODE_TYPE_CODE" -eq 7001 ]; then
+    export REQPROC_CONTAINER_NAME="$REQPROC_CONTAINER_NAME_PATTERN-$NODE_ID"
+  else
+    export REQPROC_CONTAINER_NAME="$REQPROC_CONTAINER_NAME_PATTERN-$BASE_UUID"
+  fi
+  export REQKICK_SERVICE_NAME_PATTERN="shippable-reqKick"
+  export LEGACY_CI_CACHE_STORE_LOCATION="/home/shippable/cache"
+  export LEGACY_CI_KEY_STORE_LOCATION="/tmp/ssh"
+  export LEGACY_CI_MESSAGE_STORE_LOCATION="/tmp/cexec"
+  export LEGACY_CI_BUILD_LOCATION="/build"
+  export LEGACY_CI_CEXEC_LOCATION_ON_HOST="/home/shippable/cexec"
+  export LEGACY_CI_DOCKER_CLIENT_LATEST="/opt/docker/docker"
+  export LEGACY_CI_DOCKER_CLIENT="/usr/bin/docker"
+  export IS_DOCKER_LEGACY=false
+  export DEFAULT_TASK_CONTAINER_MOUNTS="-v $BUILD_DIR:$BUILD_DIR \
+    -v $REQEXEC_DIR:/reqExec"
+  export TASK_CONTAINER_COMMAND="/reqExec/$NODE_ARCHITECTURE/$NODE_OPERATING_SYSTEM/dist/main/main"
+  export DEFAULT_TASK_CONTAINER_OPTIONS="-d"
+  export DOCKER_VERSION="$(sudo docker version --format {{.Server.Version}})"
+}
+
+__setup_dirs() {
+  __process_marker "creating directories"
+  mkdir -p $BASE_DIR
+  mkdir -p $REQPROC_DIR
+  mkdir -p $REQEXEC_DIR
+  mkdir -p $REQKICK_DIR
+  mkdir -p $BUILD_DIR
+  mkdir -p $LEGACY_CI_CACHE_STORE_LOCATION
+  mkdir -p $LEGACY_CI_KEY_STORE_LOCATION
+  mkdir -p $LEGACY_CI_MESSAGE_STORE_LOCATION
+  mkdir -p $LEGACY_CI_BUILD_LOCATION
+}
+
+__setup_mounts() {
+  __process_marker "setting mounts"
+  local docker_client_location=$LEGACY_CI_DOCKER_CLIENT_LATEST
+  if [ ! -f "$LEGACY_CI_DOCKER_CLIENT_LATEST" ]; then
+    IS_DOCKER_LEGACY=true
+    docker_client_location=$LEGACY_CI_DOCKER_CLIENT
+  fi
+
+  REQPROC_MOUNTS="$REQPROC_MOUNTS \
+    -v $BASE_DIR:$BASE_DIR \
+    -v /usr/lib/x86_64-linux-gnu/libapparmor.so.1.1.0:/lib/x86_64-linux-gnu/libapparmor.so.1:rw \
+    -v /var/run:/var/run:rw \
+    -v $docker_client_location:/usr/bin/docker \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v $LEGACY_CI_CACHE_STORE_LOCATION:$LEGACY_CI_CACHE_STORE_LOCATION:rw \
+    -v $LEGACY_CI_KEY_STORE_LOCATION:$LEGACY_CI_KEY_STORE_LOCATION:rw \
+    -v $LEGACY_CI_MESSAGE_STORE_LOCATION:$LEGACY_CI_MESSAGE_STORE_LOCATION:rw \
+    -v $LEGACY_CI_BUILD_LOCATION:$LEGACY_CI_BUILD_LOCATION:rw"
+
+  DEFAULT_TASK_CONTAINER_MOUNTS="$DEFAULT_TASK_CONTAINER_MOUNTS \
+    -v $docker_client_location:/usr/bin/docker \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v $NODE_SCRIPTS_LOCATION:/var/lib/shippable/node"
+}
+
+__setup_envs() {
+  __process_marker "setting envs"
+  REQPROC_ENVS="$REQPROC_ENVS \
+    -e SHIPPABLE_AMQP_URL=$SHIPPABLE_AMQP_URL \
+    -e SHIPPABLE_AMQP_DEFAULT_EXCHANGE=$SHIPPABLE_AMQP_DEFAULT_EXCHANGE \
+    -e SHIPPABLE_API_URL=$SHIPPABLE_API_URL \
+    -e LISTEN_QUEUE=$LISTEN_QUEUE \
+    -e NODE_ID=$NODE_ID \
+    -e RUN_MODE=$RUN_MODE \
+    -e SUBSCRIPTION_ID=$SUBSCRIPTION_ID \
+    -e NODE_TYPE_CODE=$NODE_TYPE_CODE \
+    -e BASE_DIR=$BASE_DIR \
+    -e REQPROC_DIR=$REQPROC_DIR \
+    -e REQEXEC_DIR=$REQEXEC_DIR \
+    -e REQEXEC_BIN_DIR=$REQEXEC_BIN_DIR \
+    -e REQKICK_DIR=$REQKICK_DIR \
+    -e BUILD_DIR=$BUILD_DIR \
+    -e REQPROC_CONTAINER_NAME=$REQPROC_CONTAINER_NAME \
+    -e DEFAULT_TASK_CONTAINER_MOUNTS='$DEFAULT_TASK_CONTAINER_MOUNTS' \
+    -e TASK_CONTAINER_COMMAND=$TASK_CONTAINER_COMMAND \
+    -e DEFAULT_TASK_CONTAINER_OPTIONS='$DEFAULT_TASK_CONTAINER_OPTIONS' \
+    -e CACHE_STORE_LOCATION=$LEGACY_CI_CACHE_STORE_LOCATION \
+    -e KEY_STORE_LOCATION=$LEGACY_CI_KEY_STORE_LOCATION \
+    -e MESSAGE_STORE_LOCATION=$LEGACY_CI_MESSAGE_STORE_LOCATION \
+    -e BUILD_LOCATION=$LEGACY_CI_BUILD_LOCATION \
+    -e EXEC_IMAGE=$EXEC_IMAGE \
+    -e DOCKER_CLIENT_LATEST=$LEGACY_CI_DOCKER_CLIENT_LATEST \
+    -e DOCKER_CLIENT_LEGACY=$LEGACY_CI_DOCKER_CLIENT \
+    -e SHIPPABLE_DOCKER_VERSION=$DOCKER_VERSION \
+    -e IS_DOCKER_LEGACY=$IS_DOCKER_LEGACY \
+    -e SHIPPABLE_NODE_ARCHITECTURE=$NODE_ARCHITECTURE \
+    -e SHIPPABLE_NODE_OPERATING_SYSTEM=$NODE_OPERATING_SYSTEM \
+    -e SHIPPABLE_RELEASE_VERSION=$SHIPPABLE_RELEASE_VERSION \
+    -e SHIPPABLE_NODE_SCRIPTS_LOCATION=$NODE_SCRIPTS_LOCATION"
+
+  if [ ! -z "$SHIPPABLE_HTTP_PROXY" ]; then
+    REQPROC_ENVS="$REQPROC_ENVS \
+      -e http_proxy=$SHIPPABLE_HTTP_PROXY"
+  fi
+
+  if [ ! -z "$SHIPPABLE_HTTPS_PROXY" ]; then
+    REQPROC_ENVS="$REQPROC_ENVS \
+      -e https_proxy=$SHIPPABLE_HTTPS_PROXY"
+  fi
+
+  if [ ! -z "$SHIPPABLE_NO_PROXY" ]; then
+    REQPROC_ENVS="$REQPROC_ENVS \
+      -e no_proxy=$SHIPPABLE_NO_PROXY"
+  fi
+}
+
+__setup_opts() {
+  __process_marker "setting opts"
+  REQPROC_OPTS="$REQPROC_OPTS \
+    -d \
+    --restart=always \
+    --name=$REQPROC_CONTAINER_NAME \
+    "
+}
+
+__remove_genexec() {
+  __process_marker "Removing exisiting genexec containers..."
+
+  local running_container_ids=$(docker ps -a \
+    | grep $EXEC_CONTAINER_NAME_PATTERN \
+    | awk '{print $1}')
+
+  if [ ! -z "$running_container_ids" ]; then
+    docker rm -f -v $running_container_ids || true
+  fi
+}
+
+__remove_reqProc() {
+  __process_marker "Removing exisiting reqProc containers..."
+
+  local running_container_ids=$(docker ps -a \
+    | grep $REQPROC_CONTAINER_NAME_PATTERN \
+    | awk '{print $1}')
+
+  if [ ! -z "$running_container_ids" ]; then
+    docker rm -f -v $running_container_ids || true
+  fi
+}
+
+__remove_reqKick() {
+  __process_marker "Removing existing reqKick services..."
+
+  sudo initctl list | ( grep -o "^$REQKICK_SERVICE_NAME_PATTERN[a-zA-Z0-9-]*" || true ) | while read -r service; do
+    sudo service $service stop || true
+    sudo rm -rf /var/log/upstart/$REQKICK_SERVICE_NAME_PATTERN*
+    sudo rm -rf /etc/init/$service.conf
+  done
+
+  sudo initctl reload-configuration
+}
+
+__install_ntp() {
+  __process_marker "Checking ntp"
+  {
+    check_ntp=$(service --status-all 2>&1 | grep ntp)
+  } || {
+    true
+  }
+
+  if [ ! -z "$check_ntp" ]; then
+    echo "NTP already installed, skipping."
+  else
+    echo "Installing NTP"
+    sudo apt-get install -y ntp
+    sudo service ntp restart
+  fi
+}
+
+__fetch_cexec() {
+  __process_marker "Fetching cexec..."
+  local cexec_tar_file="cexec.tar.gz"
+
+  if [ -d "$LEGACY_CI_CEXEC_LOCATION_ON_HOST" ]; then
+    sudo rm -rf $LEGACY_CI_CEXEC_LOCATION_ON_HOST
+  fi
+  rm -rf $cexec_tar_file
+  pushd /tmp
+    wget $CEXEC_DOWNLOAD_URL -O $cexec_tar_file
+    mkdir -p $LEGACY_CI_CEXEC_LOCATION_ON_HOST
+    tar -xzf $cexec_tar_file -C $LEGACY_CI_CEXEC_LOCATION_ON_HOST --strip-components=1
+    rm -rf $cexec_tar_file
+  popd
+
+  # Download and extract reports bin file into a path that cexec expects it in
+  local reports_dir="$LEGACY_CI_CEXEC_LOCATION_ON_HOST/bin"
+  local reports_tar_file="reports.tar.gz"
+  rm -rf $reports_dir
+  mkdir -p $reports_dir
+  pushd $reports_dir
+    wget $REPORTS_DOWNLOAD_URL -O $reports_tar_file
+    tar -xf $reports_tar_file
+    rm -rf $reports_tar_file
+  popd
+}
+
+__pull_node() {
+  __process_marker "Pulling node repo"
+  mkdir -p $NODE_SCRIPTS_LOCATION
+  mkdir -p $NODE_DATA_LOCATION
+  mkdir -p $NODE_LOGS_LOCATION
+  mkdir -p /tmp/shippable
+
+  local download_url="$SHIPPABLE_API_URL/passthrough/nodes/scripts?getArchive=true"
+
+  curl -LkSs \
+    --connect-timeout 60 \
+    --max-time 120 \
+    "$download_url" \
+    -H authorization:"apiToken $SHIPPABLE_API_TOKEN" \
+    -o $NODE_SCRIPTS_DOWNLOAD_LOCATION
+
+  echo 'Un-taring Shippable node init repo'
+  tar -xvzf \
+    "$NODE_SCRIPTS_DOWNLOAD_LOCATION" \
+    -C $NODE_SCRIPTS_LOCATION \
+    --strip-components=1
+}
+
+__pull_reqProc() {
+  __process_marker "Pulling reqProc..."
+  docker pull $EXEC_IMAGE
+}
+
+__fetch_reqKick() {
+  __process_marker "Fetching reqKick..."
+  local reqKick_tar_file="reqKick.tar.gz"
+
+  rm -rf $REQKICK_DIR
+  rm -rf $reqKick_tar_file
+  pushd /tmp
+    wget $REQKICK_DOWNLOAD_URL -O $reqKick_tar_file
+    mkdir -p $REQKICK_DIR
+    tar -xzf $reqKick_tar_file -C $REQKICK_DIR --strip-components=1
+    rm -rf $reqKick_tar_file
+  popd
+  pushd $REQKICK_DIR
+    npm install
+  popd
+}
+
+__boot_reqProc() {
+  __process_marker "Booting up reqProc..."
+  local start_cmd="docker run $REQPROC_OPTS $REQPROC_MOUNTS $REQPROC_ENVS $EXEC_IMAGE"
+  eval "$start_cmd"
+}
+
+__boot_reqKick() {
+  __process_marker "Booting up reqKick service..."
+
+  if [ ! -z $BASE_UUID ]; then
+    local reqKick_service_name=$REQKICK_SERVICE_NAME_PATTERN-$BASE_UUID
+  else
+    local reqKick_service_name=$REQKICK_SERVICE_NAME_PATTERN
+  fi
+  local reqKick_config_file=/etc/init/$reqKick_service_name.conf
+
+  cp $REQKICK_SERVICE_DIR/shippable-reqKick.conf.template $reqKick_config_file
+
+  sed -i "s#{{STATUS_DIR}}#$STATUS_DIR#g" $reqKick_config_file
+  sed -i "s#{{SCRIPTS_DIR}}#$SCRIPTS_DIR#g" $reqKick_config_file
+  sed -i "s#{{REQEXEC_BIN_PATH}}#$REQEXEC_BIN_PATH#g" $reqKick_config_file
+  sed -i "s#{{RUN_MODE}}#$RUN_MODE#g" $reqKick_config_file
+  sed -i "s#{{UUID}}#$BASE_UUID#g" $reqKick_config_file
+
+  sudo service $reqKick_service_name start
+
+  {
+    echo "Checking if $reqKick_service_name is active"
+    local check_reqKick_is_active=$(sudo initctl status $reqKick_service_name)
+    echo $check_reqKick_is_active
+  } ||
+  {
+    echo "$reqKick_service_name failed to start"
+    sudo tail -n 100 /var/log/upstart/$reqKick_service_name.log || true
+    exit 1
+  }
+}
+
 main() {
   __check_dbStatus
-  if [ $is_db_initialized ]; then
+  if [ $is_db_initialized != null ]; then
     __get_systemClusters
+    __get_systemCodes
+    __get_runtimetemplates
     if [ $is_default_system_cluster_available != true ]; then
-      __get_systemCodes
-      __get_runtimetemplates
       __post_systemClusters
       __post_systemNode
     else
@@ -138,6 +527,23 @@ main() {
         echo "system node is available"
       fi
     fi
+    __create_symlink
+    __get_systemIntegrations
+    __export_envs
+    __setup_dirs
+    __setup_mounts
+    __setup_envs
+    __setup_opts
+    __remove_genexec
+    __remove_reqProc
+    __remove_reqKick
+    __install_ntp
+    __fetch_cexec
+    __pull_node
+    __pull_reqProc
+    __fetch_reqKick
+    __boot_reqProc
+    __boot_reqKick
   else
     echo "database is not initialized please initialize database first"
   fi
