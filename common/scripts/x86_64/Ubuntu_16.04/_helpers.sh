@@ -301,9 +301,9 @@ __pull_images_master() {
       sudo docker pull $image
     else
       if [ "$NO_VERIFY_SSL" == true ]; then
-        local docker_login_cmd=$(aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login)
+        local docker_login_cmd="aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login | bash"
       else
-        local docker_login_cmd=$(aws ecr --no-include-email --region us-east-1 get-login)
+        local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
       fi
       __exec_cmd_remote "$master_ip" "$docker_login_cmd"
 
@@ -357,8 +357,11 @@ __pull_images_workers() {
       __process_msg "Images already pulled on admiral host, skipping"
       continue
     fi
-
-    local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+    if [ "$NO_VERIFY_SSL" == true ]; then
+      local docker_login_cmd="aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login | bash"
+    else
+      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+    fi
     __exec_cmd_remote "$host" "$docker_login_cmd"
 
     for image in "${SERVICE_IMAGES[@]}"; do

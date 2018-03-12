@@ -304,13 +304,18 @@ __pull_images_master() {
       __process_msg "Pulling $image"
       sudo docker pull $image
     else
+      local docker_login_cmd="aws ecr "
       if [[ "$INSTALLED_DOCKER_VERSION" != *"1.13"* ]]; then
-        local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
-      else
-        local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+        docker_login_cmd="$docker_login_cmd --no-include-email "
       fi
 
-      __exec_cmd_remote "$master_ip" "$docker_login_cmd"
+      if [ "$NO_VERIFY_SSL" == true ]; then
+        docker_login_cmd="$docker_login_cmd --no-verify-ssl --region us-east-1 get-login"
+      else
+        docker_login_cmd="$docker_login_cmd --region us-east-1 get-login"
+      fi
+
+      __exec_cmd_remote "$master_ip" "$docker_login_cmd | bash"
 
       __process_msg "Pulling $image on $master_ip"
       __exec_cmd_remote "$master_ip" "$pull_cmd"
@@ -363,12 +368,17 @@ __pull_images_workers() {
       continue
     fi
 
+    local docker_login_cmd="aws ecr "
     if [[ "$INSTALLED_DOCKER_VERSION" != *"1.13"* ]]; then
-      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
-    else
-      local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+      docker_login_cmd="$docker_login_cmd --no-include-email "
     fi
-    __exec_cmd_remote "$host" "$docker_login_cmd"
+
+    if [ "$NO_VERIFY_SSL" == true ]; then
+      docker_login_cmd="$docker_login_cmd --no-verify-ssl --region us-east-1 get-login"
+    else
+      docker_login_cmd="$docker_login_cmd --region us-east-1 get-login"
+    fi
+    __exec_cmd_remote "$host" "$docker_login_cmd | bash"
 
     for image in "${SERVICE_IMAGES[@]}"; do
       image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
