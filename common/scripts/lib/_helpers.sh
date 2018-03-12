@@ -32,7 +32,8 @@ __check_os_and_architecture() {
     if [ "$NAME" == "Red Hat Enterprise Linux Server" ]; then
       # For RHEL, the OS value is defined as "Red Hat Enterprise Linux Server". We want
       # the want this to be consistent with the other OS names, so we will be calling
-      # this RHEL
+      # this RHEL. Also in RHEL version comes as major.minor but we want to have
+      # only major version in our directory name so trimming to have only major version only.
       local os="RHEL"
       local os_version=$(echo "$VERSION_ID" | cut -f 1 -d '.')
     else
