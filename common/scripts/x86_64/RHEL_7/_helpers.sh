@@ -387,7 +387,7 @@ __pull_images_master() {
       sudo docker pull $image
     else
       # TODO: have a function which returns the docker login command instead of figuring it out everytime
-      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+      local docker_login_cmd="aws ecr --no-include-email --no-ssl-verify --region us-east-1 get-login | bash"
       __exec_cmd_remote "$master_ip" "$docker_login_cmd"
 
       __process_msg "Pulling $image on $master_ip"
