@@ -300,7 +300,11 @@ __pull_images_master() {
       __process_msg "Pulling $image"
       sudo docker pull $image
     else
-      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+      if [ "$NO_VERIFY_SSL" == true ]; then
+        local docker_login_cmd=$(aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login)
+      else
+        local docker_login_cmd=$(aws ecr --no-include-email --region us-east-1 get-login)
+      fi
       __exec_cmd_remote "$master_ip" "$docker_login_cmd"
 
       __process_msg "Pulling $image on $master_ip"
