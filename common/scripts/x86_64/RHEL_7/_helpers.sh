@@ -336,12 +336,6 @@ __pull_stateful_service_images() {
     __process_msg "Pulling $image"
     sudo docker pull $image
   done
-
-  for image in "${SERVICE_IMAGES[@]}"; do
-    image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
-    __process_msg "Pulling $image"
-    sudo docker pull $image
-  done
 }
 
 __pull_admiral_image() {
