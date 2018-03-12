@@ -32,11 +32,12 @@ __check_os_and_architecture() {
     # For CentOS, the OS value is defined as "CentOS Linux". We only want
     # the first part of it, so ignore everything after a space. Ubuntu defines
     # it as "Ubuntu" so that will not change here.
-    local os=$(echo "$NAME" | cut -f 1 -d ' ')
-    local os_version="$VERSION_ID"
-    if [ "$os" == "Red" ]; then
-      os="RHEL"
-      os_version=$(echo "$VERSION_ID" | cut -f 1 -d '.')
+    if [ "$NAME" == "Red Hat Enterprise Linux Server" ]; then
+      local os="RHEL"
+      local os_version=$(echo "$VERSION_ID" | cut -f 1 -d '.')
+    else
+      local os=$(echo "$NAME" | cut -f 1 -d ' ')
+      local os_version="$VERSION_ID"
     fi
 
     local operating_system=$os"_"$os_version
