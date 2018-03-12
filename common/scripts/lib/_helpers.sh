@@ -37,8 +37,6 @@ __check_os_and_architecture() {
     if [ "$os" == "Red" ]; then
       os="RHEL"
       os_version=$(echo "$VERSION_ID" | cut -f 1 -d '.')
-      echo $os
-     echo $os_version
     fi
 
     local operating_system=$os"_"$os_version
