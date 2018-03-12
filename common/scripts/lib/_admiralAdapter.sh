@@ -194,6 +194,11 @@ _shippable_get_secrets_status() {
   __shippable_get $secrets_status_get_endpoint
 }
 
+_shippable_get_master() {
+  local master_get_endpoint="master"
+  __shippable_get $master_get_endpoint
+}
+
 _shippable_get_masterIntegrations() {
   local query="$1"
   local masterIntegrations_get_endpoint="masterIntegrations"

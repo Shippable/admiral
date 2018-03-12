@@ -358,23 +358,65 @@ __prompt_for_inputs() {
   fi
 }
 
-__add_ssh_key_to_local() {
-  # create .ssh dir, if not present
-  local root_ssh_dir="/root/.ssh"
-  mkdir -p "$root_ssh_dir"
-
-  ## add public ssh key to host's authorized keys
-  local authorized_keys="$root_ssh_dir/authorized_keys"
-  local ssh_public_key=$(cat "$SSH_PUBLIC_KEY")
-  echo "$ssh_public_key" | tee -a "$authorized_keys" &> /dev/null
-}
-
 __set_dev_mode() {
   if [ -z "$DEV_MODE" ]; then
     DEV_MODE=false
   fi
   sed -i '/^DEV_MODE/d' "$ADMIRAL_ENV"
   echo "DEV_MODE=$DEV_MODE" >> "$ADMIRAL_ENV"
+}
+
+__set_onebox_mode_on_existing_install() {
+  if [ ! -z "$ONEBOX_MODE" ]; then
+    return
+  fi
+
+  if [ "$DEV_MODE" == "true" ]; then
+    return
+  fi
+
+  if [ "$ADMIRAL_IP" != "$DB_IP" ]; then
+    ONEBOX_MODE="false"
+  fi
+
+  if [ -z "$ONEBOX_MODE" ]; then
+    _shippable_get_secrets
+    local secrets_ip=$(echo "$response" | jq -r '.address')
+    if [ "$secrets_ip" != "$ADMIRAL_IP" ]; then
+      ONEBOX_MODE="false"
+    fi
+  fi
+
+  if [ -z "$ONEBOX_MODE" ]; then
+    _shippable_get_msg
+    local msg_ip=$(echo "$response" | jq -r '.address')
+    if [ "$msg_ip" != "$ADMIRAL_IP" ]; then
+      ONEBOX_MODE="false"
+    fi
+  fi
+
+  if [ -z "$ONEBOX_MODE" ]; then
+    _shippable_get_redis
+    local redis_ip=$(echo "$response" | jq -r '.address')
+    if [ "$redis_ip" != "$ADMIRAL_IP" ]; then
+      ONEBOX_MODE="false"
+    fi
+  fi
+
+  if [ -z "$ONEBOX_MODE" ]; then
+    _shippable_get_state
+    local state_ip=$(echo "$response" | jq -r '.address')
+    if [ "$state_ip" != "$ADMIRAL_IP" ]; then
+      ONEBOX_MODE="false"
+    fi
+  fi
+
+  if [ -z "$ONEBOX_MODE" ]; then
+    ONEBOX_MODE="true"
+  fi
+
+  sed -i '/^ONEBOX_MODE/d' "$ADMIRAL_ENV"
+  echo "ONEBOX_MODE=\"$ONEBOX_MODE\"" >> "$ADMIRAL_ENV"
 }
 
 __parse_args_install() {
@@ -637,10 +679,12 @@ __parse_args() {
         shift
         __parse_args_upgrade "$@"
         __set_dev_mode
+        __set_onebox_mode_on_existing_install
         ;;
       restart)
         __parse_args_restart
         __set_dev_mode
+        __set_onebox_mode_on_existing_install
         ;;
       status)
         __show_status

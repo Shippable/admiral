@@ -35,8 +35,14 @@ function initialize(req, res) {
       _checkConfig.bind(null, bag),
       _setProcessingFlag.bind(null, bag),
       _sendResponse.bind(null, bag),
+      _getAccessKey.bind(null, bag),
+      _getSecretKey.bind(null, bag),
+      _getNoVerifySSL.bind(null, bag),
       _getOperatingSystem.bind(null, bag),
       _getArchitecture.bind(null, bag),
+      _getReleaseVersion.bind(null, bag),
+      _getPrivateImageRegistry.bind(null, bag),
+      _getDevMode.bind(null, bag),
       _generateInitializeEnvs.bind(null, bag),
       _generateInitializeScript.bind(null, bag),
       _writeScriptToFile.bind(null, bag),
@@ -147,6 +153,65 @@ function _sendResponse(bag, next) {
   return next();
 }
 
+function _getAccessKey(bag, next) {
+  var who = bag.who + '|' + _getAccessKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('ACCESS_KEY',
+    function (err, accessKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ACCESS_KEY')
+        );
+
+      bag.accessKey = accessKey;
+      logger.debug('Found access key');
+
+      return next();
+    }
+  );
+}
+
+function _getSecretKey(bag, next) {
+  var who = bag.who + '|' + _getSecretKey.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('SECRET_KEY',
+    function (err, secretKey) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: ' + bag.secretKeyEnv)
+        );
+
+      bag.secretKey = secretKey;
+      logger.debug('Found secret key');
+
+      return next();
+    }
+  );
+}
+
+function _getNoVerifySSL(bag, next) {
+  var who = bag.who + '|' + _getNoVerifySSL.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('NO_VERIFY_SSL',
+    function (err, noVerifySSL) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env NO_VERIFY_SSL')
+        );
+
+      bag.noVerifySSL = noVerifySSL;
+
+      return next();
+    }
+  );
+}
+
 function _getOperatingSystem(bag, next) {
   var who = bag.who + '|' + _getOperatingSystem.name;
   logger.verbose(who, 'Inside');
@@ -187,6 +252,65 @@ function _getArchitecture(bag, next) {
   );
 }
 
+function _getReleaseVersion(bag, next) {
+  var who = bag.who + '|' + _getReleaseVersion.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get system settings : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = systemSettings.releaseVersion;
+
+      return next();
+    }
+  );
+}
+
+function _getPrivateImageRegistry(bag, next) {
+  var who = bag.who + '|' + _getPrivateImageRegistry.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('PRIVATE_IMAGE_REGISTRY',
+    function (err, privateImageRegistry) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: PRIVATE_IMAGE_REGISTRY')
+        );
+
+      bag.privateImageRegistry = privateImageRegistry;
+      logger.debug('Found private image registry');
+
+      return next();
+    }
+  );
+}
+
+function _getDevMode(bag, next) {
+  var who = bag.who + '|' + _getDevMode.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('DEV_MODE',
+    function (err, devMode) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: DEV_MODE')
+        );
+      bag.devMode = devMode;
+      logger.debug('Found dev mode');
+
+      return next();
+    }
+  );
+}
+
 function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
@@ -194,13 +318,27 @@ function _generateInitializeEnvs(bag, next) {
   bag.scriptEnvs = {
     'ADMIRAL_IP': global.config.admiralIP,
     'RUNTIME_DIR': global.config.runtimeDir,
+    'SSH_PRIVATE_KEY': path.join(global.config.configDir, 'machinekey'),
+    'SSH_PUBLIC_KEY': path.join(global.config.configDir, 'machinekey.pub'),
     'CONFIG_DIR': global.config.configDir,
     'RELEASE': bag.releaseVersion,
     'SCRIPTS_DIR': global.config.scriptsDir,
     'IS_INITIALIZED': bag.config.isInitialized,
     'IS_INSTALLED': bag.config.isInstalled,
+    'SSH_USER': global.config.sshUser,
     'MASTER_HOST': bag.config.address,
-    'MASTER_PORT': bag.config.port
+    'MASTER_PORT': bag.config.port,
+    'PRIVATE_IMAGE_REGISTRY': bag.privateImageRegistry,
+    'DB_USER': global.config.dbUsername,
+    'DB_NAME': global.config.dbName,
+    'DB_IP': global.config.dbHost,
+    'DB_PORT': global.config.dbPort,
+    'DB_PASSWORD': global.config.dbPassword,
+    'ACCESS_KEY': bag.accessKey,
+    'SECRET_KEY': bag.secretKey,
+    'NO_VERIFY_SSL': bag.noVerifySSL,
+    'INSTALLED_DOCKER_VERSION': bag.installedDockerVersion,
+    'DEV_MODE': bag.devMode
   };
 
   return next();

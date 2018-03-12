@@ -59,8 +59,11 @@ main() {
   __validate_runtime
   __configure_proxy
   __check_dependencies
-  __pull_images
-  __pull_images_workers
+  __pull_admiral_image
+  if [ "$DEV_MODE" == "true" ]; then
+    __pull_stateful_service_images
+  fi
+  __check_ssh_key_present
   {
     __print_runtime
     source "$SCRIPTS_DIR/installDb.sh"
