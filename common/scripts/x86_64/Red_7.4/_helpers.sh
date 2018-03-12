@@ -24,7 +24,7 @@ __check_dependencies() {
     __process_msg "'jq' already installed"
   else
     __process_msg "Installing 'jq'"
-    curl https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     yum install -y epel-release-latest-7.noarch.rpm
     yum install -y jq
   fi
