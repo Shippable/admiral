@@ -34,6 +34,7 @@ __check_os_and_architecture() {
     # it as "Ubuntu" so that will not change here.
     local os=$(echo "$NAME" | cut -f 1 -d ' ')
     local os_version="$VERSION_ID"
+    echo "#######################os##########################"
     if [ os == "RED"]; then
       $os="RHEL"
       $os_version=$(echo "$VERSION_ID" | cut -f 1 -d '.')
