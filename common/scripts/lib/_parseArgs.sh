@@ -93,6 +93,7 @@ __prompt_for_inputs() {
 
   local setAccessKey=false
   local setSecretKey=false
+  local setOneboxMode=false
   local setAdmiralIP=false
   local setDBIP=false
   local setDBInstalled=false
@@ -119,6 +120,21 @@ __prompt_for_inputs() {
     setSecretKey=true
   else
     __process_msg "SECRET_KEY already set, skipping"
+  fi
+
+  ############## check one-box/multi-box install ####################
+  if [ -z "$ONEBOX_MODE" ] && [ "$DEV_MODE" != "true" ]; then
+    __process_msg "Do you want to install all the stateful services(rabbitmq, redis, gitlab, vault) on this machine? This will be a onebox install. (Y/n)"
+    __set_onebox_mode
+    setOneboxMode=true
+  else
+    __process_msg "ONEBOX_MODE already set, skipping"
+  fi
+
+  if [ "$ONEBOX_MODE" == "true" ]; then
+    __get_private_ip
+    ADMIRAL_IP="$PRIVATE_IP"
+    DB_IP="$ADMIRAL_IP"
   fi
 
   ################## check host ip #################################
@@ -178,8 +194,31 @@ __prompt_for_inputs() {
     setProxy=true
   fi
 
+  if [ "$ONEBOX_MODE" == "true" ] || [ "$DEV_MODE" == "true" ]; then
+    sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$ACCESS_KEY'"/g' $ADMIRAL_ENV
+
+    local escaped_secret_key=$(echo $SECRET_KEY | sed -e 's/[\/&]/\\&/g')
+    sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$escaped_secret_key'"/g' $ADMIRAL_ENV
+
+    sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$ADMIRAL_IP'"/g' $ADMIRAL_ENV
+
+    sed -i 's/.*DB_IP=.*/DB_IP="'$DB_IP'"/g' $ADMIRAL_ENV
+    sed -i 's/.*DB_INSTALLED=.*/DB_INSTALLED=false/g' $ADMIRAL_ENV
+    sed -i 's/.*DB_PORT=.*/DB_PORT="'$DB_PORT'"/g' $ADMIRAL_ENV
+    sed -i 's#.*DB_PASSWORD=.*#DB_PASSWORD="'$DB_PASSWORD'"#g' $ADMIRAL_ENV
+
+    sed -i 's#^SHIPPABLE_HTTP_PROXY=.*#SHIPPABLE_HTTP_PROXY="'$SHIPPABLE_HTTP_PROXY'"#g' $ADMIRAL_ENV
+    sed -i 's#^SHIPPABLE_HTTPS_PROXY=.*#SHIPPABLE_HTTPS_PROXY="'$SHIPPABLE_HTTPS_PROXY'"#g' $ADMIRAL_ENV
+    sed -i 's#^SHIPPABLE_NO_PROXY=.*#SHIPPABLE_NO_PROXY="'$SHIPPABLE_NO_PROXY'"#g' $ADMIRAL_ENV
+
+    sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$PUBLIC_IMAGE_REGISTRY'"#g' $ADMIRAL_ENV
+
+    sed -i 's#^ONEBOX_MODE=.*#ONEBOX_MODE="'$ONEBOX_MODE'"#g' $ADMIRAL_ENV
+    return
+  fi
+
   ################## confirm values #######################################
-  if $setAccessKey || $setSecretKey || $setAdmiralIP || $setDBIP || $setDBPort || $setDBPassword || $setPublicImageRegistry || $setProxy ; then
+  if $setAccessKey || $setSecretKey || $setAdmiralIP || $setDBIP || $setDBPort || $setDBPassword || $setPublicImageRegistry || $setProxy || $setOneboxMode; then
     __process_success "These values are easy to set now, but hard to change later! Please confirm that they are correct:"
     if $setAccessKey ; then
       local escaped_access_key=$(echo $ACCESS_KEY | sed -e 's/[\/&]/\\&/g')
@@ -220,6 +259,10 @@ __prompt_for_inputs() {
       echo "http_proxy:               $SHIPPABLE_HTTP_PROXY"
       echo "https_proxy:              $SHIPPABLE_HTTPS_PROXY"
       echo "no_proxy:                 $SHIPPABLE_NO_PROXY"
+    fi
+
+    if $setOneboxMode; then
+      echo "Onebox mode:               $ONEBOX_MODE"
     fi
 
     __process_success "Enter Y to confirm or N to re-enter these values."
@@ -265,11 +308,19 @@ __prompt_for_inputs() {
         sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$PUBLIC_IMAGE_REGISTRY'"#g' $ADMIRAL_ENV
         __process_msg "Saved public image registry"
       fi
+
       if $setProxy ; then
         sed -i 's#^SHIPPABLE_HTTP_PROXY=.*#SHIPPABLE_HTTP_PROXY="'$SHIPPABLE_HTTP_PROXY'"#g' $ADMIRAL_ENV
         sed -i 's#^SHIPPABLE_HTTPS_PROXY=.*#SHIPPABLE_HTTPS_PROXY="'$SHIPPABLE_HTTPS_PROXY'"#g' $ADMIRAL_ENV
         sed -i 's#^SHIPPABLE_NO_PROXY=.*#SHIPPABLE_NO_PROXY="'$SHIPPABLE_NO_PROXY'"#g' $ADMIRAL_ENV
         __process_msg "Saved proxy configuration"
+      fi
+
+      if $setOneboxMode; then
+        sed -i 's#^ONEBOX_MODE=.*#ONEBOX_MODE="'$ONEBOX_MODE'"#g' $ADMIRAL_ENV
+        sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$ADMIRAL_IP'"/g' $ADMIRAL_ENV
+        sed -i 's/.*DB_IP=.*/DB_IP="'$DB_IP'"/g' $ADMIRAL_ENV
+        __process_msg "Saved onebox configuration"
       fi
 
       if $setDBIP && [ "$DB_IP" != "$ADMIRAL_IP" ] && [ "$DB_INSTALLED" == "false" ]; then
@@ -324,7 +375,6 @@ __set_dev_mode() {
   fi
   sed -i '/^DEV_MODE/d' "$ADMIRAL_ENV"
   echo "DEV_MODE=$DEV_MODE" >> "$ADMIRAL_ENV"
-  source "$ADMIRAL_ENV"
 }
 
 __parse_args_install() {
@@ -346,6 +396,31 @@ __parse_args_install() {
           ;;
         --dev)
           export DEV_MODE=true
+          export ADMIRAL_IP="127.0.0.1"
+          export DB_IP="$ADMIRAL_IP"
+          export DB_PORT="5432"
+          export DB_INSTALLED=false
+          ;;
+        --installer-access-key)
+          shift
+          export ACCESS_KEY="$1"
+          sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$ACCESS_KEY'"/g' $ADMIRAL_ENV
+          ;;
+        --installer-secret-key)
+          shift
+          export SECRET_KEY="$1"
+          local escaped_secret_key=$(echo $SECRET_KEY | sed -e 's/[\/&]/\\&/g')
+          sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$escaped_secret_key'"/g' $ADMIRAL_ENV
+          ;;
+        --onebox)
+          export ONEBOX_MODE=true
+          export DB_PORT="5432"
+          export DB_INSTALLED="false"
+          ;;
+        --password)
+          shift
+          export DB_PASSWORD="$1"
+          sed -i 's#.*DB_PASSWORD=.*#DB_PASSWORD="'$DB_PASSWORD'"#g' $ADMIRAL_ENV
           ;;
         -h|help|--help)
           __print_help_install
