@@ -421,6 +421,7 @@ main() {
     __stop_stateless_services
     __run_migrations
     __remove_stateful_services
+    __mark_swarm_manager_as_active
     __start_api
     __start_stateful_services
     __start_stateless_services
@@ -428,7 +429,6 @@ main() {
     if [ $IS_SERVER == true ]; then
       __move_system_to_grisham
     fi
-    __mark_swarm_manager_as_active
     __cleanup_master
     __cleanup_workers
   fi
