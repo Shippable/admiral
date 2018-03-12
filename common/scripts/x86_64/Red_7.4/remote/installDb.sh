@@ -65,7 +65,7 @@ __update_sources() {
 __install_postgres() {
   echo "Installing Postgres"
   #sudo rpm -ivh --force http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-3.noarch.rpm
-  yum install -y https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-3.noarch.rpm
+  #yum install -y https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-3.noarch.rpm
   yum install -y postgresql95 postgresql95-server postgresql95-contrib
 #yum install -y https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-3.noarch.rpm
   sudo systemctl enable postgresql-9.5.service
