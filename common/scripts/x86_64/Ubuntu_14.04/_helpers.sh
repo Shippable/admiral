@@ -227,7 +227,9 @@ __registry_login() {
     sed -i "s#{{SECRET_KEY}}#$SECRET_KEY#g" $credentials_file
 
     mkdir -p ~/.aws
-    mv -v $credentials_file ~/.aws
+    mkdir -p /root/.aws
+    cp -v $credentials_file ~/.aws
+    mv -v $credentials_file /root/.aws
 
     local ecr_cmd="aws ecr "
     if [[ "$INSTALLED_DOCKER_VERSION" != *"1.13"* ]]; then

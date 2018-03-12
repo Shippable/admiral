@@ -337,6 +337,8 @@ function _generateInitializeEnvs(bag, next) {
     'ACCESS_KEY': bag.accessKey,
     'SECRET_KEY': bag.secretKey,
     'NO_VERIFY_SSL': bag.noVerifySSL,
+    'ARCHITECTURE': bag.architecture,
+    'OPERATING_SYSTEM': bag.operatingSystem,
     'INSTALLED_DOCKER_VERSION': bag.installedDockerVersion,
     'DEV_MODE': bag.devMode
   };

@@ -32,11 +32,47 @@ __init_swarm_master() {
   sudo docker swarm init --advertise-addr $MASTER_HOST || true
 }
 
+__copy_configs() {
+  __process_msg "Copying master configuration files"
+
+  if [ ! -d "$MASTER_CONFIG_DIR" ]; then
+    __process_msg "Creating config directory $MASTER_CONFIG_DIR"
+    sudo mkdir -p $MASTER_CONFIG_DIR
+  else
+    __process_msg "Config directory already present: $MASTER_CONFIG_DIR"
+  fi
+
+  local credentials_template="$SCRIPTS_DIR/configs/credentials.template"
+  local credentials_file="$MASTER_CONFIG_DIR/credentials"
+
+  sed "s#{{ACCESS_KEY}}#$ACCESS_KEY#g" $credentials_template > $credentials_file
+  sed -i "s#{{SECRET_KEY}}#$SECRET_KEY#g" $credentials_file
+}
+
 main() {
   __process_marker "Installing swarm master"
   if [ "$IS_INSTALLED" == true ]; then
     __process_msg "Swarm master already installed, skipping"
   else
+    local proxy_script_name="configureProxy.sh"
+    local proxy_config_script="$SCRIPTS_DIR/$proxy_script_name"
+    __copy_script_remote "$MASTER_HOST" "$proxy_config_script" "$SCRIPTS_DIR_REMOTE"
+    local proxy_config_install_cmd="SHIPPABLE_HTTP_PROXY=$SHIPPABLE_HTTP_PROXY \
+      SHIPPABLE_HTTPS_PROXY=$SHIPPABLE_HTTPS_PROXY \
+      SHIPPABLE_NO_PROXY=$SHIPPABLE_NO_PROXY \
+      $SCRIPTS_DIR_REMOTE/$proxy_script_name"
+    __exec_cmd_remote "$MASTER_HOST" "$proxy_config_install_cmd"
+
+    __copy_configs
+
+    local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
+    __copy_script_remote "$MASTER_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
+    __exec_cmd_remote "$MASTER_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
+
+    __process_msg "copying ecr credentials file"
+    local credentials_file="$MASTER_CONFIG_DIR/credentials"
+    __copy_script_remote "$MASTER_HOST" "$credentials_file" "/root/.aws"
+
     __pull_images_master
     __validate_master_envs
     __init_swarm_master
