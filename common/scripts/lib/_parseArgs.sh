@@ -132,8 +132,7 @@ __prompt_for_inputs() {
   fi
 
   if [ "$ONEBOX_MODE" == "true" ]; then
-    __get_private_ip
-    ADMIRAL_IP="$PRIVATE_IP"
+    ADMIRAL_IP="127.0.0.1"
     DB_IP="$ADMIRAL_IP"
   fi
 

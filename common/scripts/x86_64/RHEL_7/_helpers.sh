@@ -243,18 +243,6 @@ __set_admiral_ip() {
   fi
 }
 
-__get_private_ip() {
-  export PRIVATE_IP=""
-  local private_ip=""
-  {
-    private_ip=$(ip route get 1)
-  } || return
-  {
-    private_ip=$(echo "$private_ip" | awk '{print $NF;exit}')
-  } || return
-  PRIVATE_IP=$private_ip
-}
-
 __check_existing_database() {
   if [ "$DB_INSTALLED" == "true" ]; then
     __process_marker "Checking database connection"
