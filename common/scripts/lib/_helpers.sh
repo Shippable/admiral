@@ -29,13 +29,16 @@ __check_os_and_architecture() {
     sed -i '/^ARCHITECTURE/d' "$ADMIRAL_ENV"
 
     local architecture=$(uname -m)
-    # For CentOS, the OS value is defined as "CentOS Linux". We only want
-    # the first part of it, so ignore everything after a space. Ubuntu defines
-    # it as "Ubuntu" so that will not change here.
     if [ "$NAME" == "Red Hat Enterprise Linux Server" ]; then
+      # For RHEL, the OS value is defined as "Red Hat Enterprise Linux Server". We want
+      # the want this to be consistent with the other OS names, so we will be calling
+      # this RHEL
       local os="RHEL"
       local os_version=$(echo "$VERSION_ID" | cut -f 1 -d '.')
     else
+      # For CentOS, the OS value is defined as "CentOS Linux". We only want
+      # the first part of it, so ignore everything after a space. Ubuntu defines
+      # it as "Ubuntu" so that will not change here.
       local os=$(echo "$NAME" | cut -f 1 -d ' ')
       local os_version="$VERSION_ID"
     fi
