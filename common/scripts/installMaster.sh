@@ -15,6 +15,12 @@ __validate_master_envs() {
   __process_msg "SCRIPTS_DIR: $SCRIPTS_DIR"
   __process_msg "MASTER_HOST: $MASTER_HOST"
   __process_msg "MASTER_PORT: $MASTER_PORT"
+  __process_msg "ACCESS_KEY: ${#ACCESS_KEY}"
+  __process_msg "SECRET_KEY: ${#SECRET_KEY}"
+  __process_msg "NO_VERIFY_SSL: $NO_VERIFY_SSL"
+  __process_msg "ARCHITECTURE: $ARCHITECTURE"
+  __process_msg "OPERATING_SYSTEM: $OPERATING_SYSTEM"
+  __process_msg "INSTALLED_DOCKER_VERSION: $INSTALLED_DOCKER_VERSION"
 }
 
 __init_swarm_master() {
@@ -31,6 +37,7 @@ main() {
   if [ "$IS_INSTALLED" == true ]; then
     __process_msg "Swarm master already installed, skipping"
   else
+    __pull_images_master
     __validate_master_envs
     __init_swarm_master
   fi

@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec" "genexec")
+declare -a PRIVATE_REGISTRY_IMAGES=("postgres" "vault" "rabbitmq" "gitlab" "redis")
+export ADMIRAL_IMAGE="admiral"
+
 __check_dependencies() {
   __process_marker "Checking dependencies"
 
@@ -321,8 +325,8 @@ __registry_login() {
   fi
 }
 
-__pull_images() {
-  __process_marker "Pulling latest service images"
+__pull_stateful_service_images() {
+  __process_marker "Pulling latest stateful service images"
   __process_msg "Registry: $PRIVATE_IMAGE_REGISTRY"
   __registry_login
 
@@ -336,6 +340,57 @@ __pull_images() {
     image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
     __process_msg "Pulling $image"
     sudo docker pull $image
+  done
+}
+
+__pull_admiral_image() {
+  __process_marker "Pulling latest admiral image"
+  __process_msg "Registry: $PRIVATE_IMAGE_REGISTRY"
+  __registry_login
+
+  image="$PRIVATE_IMAGE_REGISTRY/$ADMIRAL_IMAGE:$RELEASE"
+  sudo docker pull $image
+}
+
+__pull_images_master() {
+  __process_marker "Pulling latest service images on master"
+  __process_msg "Registry: $PRIVATE_IMAGE_REGISTRY"
+  __registry_login
+
+  local master_ip=""
+
+  if [ "$DEV_MODE" != "true" ]; then
+    local get_master_query="PGPASSWORD=$DB_PASSWORD \
+      psql \
+      -U $DB_USER \
+      -d $DB_NAME \
+      -h $DB_IP \
+      -p $DB_PORT \
+      -v ON_ERROR_STOP=1 \
+      -tc 'SELECT master from \"systemSettings\"; '"
+
+    {
+      local master=`eval $get_master_query` &&
+      __process_msg "'systemSettings' table exists, finding master IP"
+      master_ip=$(echo "$master" | jq '.address')
+    } || {
+      __process_msg "'systemSettings' table does not exist, skipping"
+    }
+  fi
+
+  for image in "${SERVICE_IMAGES[@]}"; do
+    image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
+    local pull_cmd="sudo docker pull $image"
+    if [ -z "$master_ip" ]; then
+      __process_msg "Pulling $image"
+      sudo docker pull $image
+    else
+      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+      __exec_cmd_remote "$master_ip" "$docker_login_cmd"
+
+      __process_msg "Pulling $image on $master_ip"
+      __exec_cmd_remote "$master_ip" "$pull_cmd"
+    fi
   done
 }
 

@@ -413,6 +413,8 @@ __cleanup_workers() {
 main() {
   if [ $IS_UPGRADE == true ]; then
     __process_marker "Upgrading Shippable installation"
+    __pull_images_master
+    __pull_images_workers
     __check_admiral
     __check_release
     __update_release

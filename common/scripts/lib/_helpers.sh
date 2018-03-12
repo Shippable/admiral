@@ -7,7 +7,8 @@
 # files after we add release and re-install features
 
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec" "genexec")
-declare -a PRIVATE_REGISTRY_IMAGES=("admiral" "postgres" "vault" "rabbitmq" "gitlab" "redis")
+declare -a PRIVATE_REGISTRY_IMAGES=("postgres" "vault" "rabbitmq" "gitlab" "redis")
+export ADMIRAL_IMAGE=admiral""
 
 __bootstrap_admiral_env() {
   ################## load env file  ###########################
@@ -76,6 +77,31 @@ __cleanup() {
     rm -rf $RUNTIME_DIR
   fi
   mkdir -p $RUNTIME_DIR
+}
+
+__add_ssh_key_to_local() {
+  # create .ssh dir, if not present
+  local root_ssh_dir="/root/.ssh"
+  mkdir -p "$root_ssh_dir"
+
+  ## add public ssh key to host's authorized keys
+  local authorized_keys="$root_ssh_dir/authorized_keys"
+  local ssh_public_key=$(cat "$SSH_PUBLIC_KEY")
+  echo "$ssh_public_key" | tee -a "$authorized_keys" &> /dev/null
+}
+
+__check_ssh_key_present() {
+  local add_ssh_key="true"
+  local authorized_keys="/root/.ssh/authorized_keys"
+  if [ -f "$authorized_keys" ]; then
+    local ssh_public_key=$(cat $SSH_PUBLIC_KEY)
+    if grep -F "$ssh_public_key" "$authorized_keys" &> /dev/null; then
+      add_ssh_key="false"
+    fi
+  fi
+  if [ "$add_ssh_key" == "true" ]; then
+    __add_ssh_key_to_local
+  fi
 }
 
 __print_runtime() {
