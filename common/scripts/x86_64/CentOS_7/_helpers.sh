@@ -242,18 +242,6 @@ __set_admiral_ip() {
   fi
 }
 
-__get_private_ip() {
-  export PRIVATE_IP=""
-  local private_ip=""
-  {
-    private_ip=$(ip route get 1)
-  } || return
-  {
-    private_ip=$(echo "$private_ip" | awk '{print $NF;exit}')
-  } || return
-  PRIVATE_IP=$private_ip
-}
-
 __check_existing_database() {
   if [ "$DB_INSTALLED" == "true" ]; then
     __process_marker "Checking database connection"
@@ -335,12 +323,6 @@ __pull_stateful_service_images() {
     __process_msg "Pulling $image"
     sudo docker pull $image
   done
-
-  for image in "${SERVICE_IMAGES[@]}"; do
-    image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
-    __process_msg "Pulling $image"
-    sudo docker pull $image
-  done
 }
 
 __pull_admiral_image() {
@@ -386,7 +368,11 @@ __pull_images_master() {
       sudo docker pull $image
     else
       # TODO: have a function which returns the docker login command instead of figuring it out everytime
-      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+      if [ "$NO_VERIFY_SSL" == true ]; then
+        local docker_login_cmd="aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login | bash"
+      else
+        local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+      fi
       __exec_cmd_remote "$master_ip" "$docker_login_cmd"
 
       __process_msg "Pulling $image on $master_ip"
@@ -440,7 +426,11 @@ __pull_images_workers() {
       continue
     fi
 
-    local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+    if [ "$NO_VERIFY_SSL" == true ]; then
+      local docker_login_cmd="aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login | bash"
+    else
+      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+    fi
     __exec_cmd_remote "$host" "$docker_login_cmd"
 
     for image in "${SERVICE_IMAGES[@]}"; do

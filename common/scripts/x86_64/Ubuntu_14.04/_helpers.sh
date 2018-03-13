@@ -260,12 +260,6 @@ __pull_stateful_service_images() {
     __process_msg "Pulling $image"
     sudo docker pull $image
   done
-
-  for image in "${SERVICE_IMAGES[@]}"; do
-    image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
-    __process_msg "Pulling $image"
-    sudo docker pull $image
-  done
 }
 
 __pull_admiral_image() {
@@ -310,13 +304,18 @@ __pull_images_master() {
       __process_msg "Pulling $image"
       sudo docker pull $image
     else
+      local docker_login_cmd="aws ecr "
       if [[ "$INSTALLED_DOCKER_VERSION" != *"1.13"* ]]; then
-        local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
-      else
-        local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+        docker_login_cmd="$docker_login_cmd --no-include-email "
       fi
 
-      __exec_cmd_remote "$master_ip" "$docker_login_cmd"
+      if [ "$NO_VERIFY_SSL" == true ]; then
+        docker_login_cmd="$docker_login_cmd --no-verify-ssl --region us-east-1 get-login"
+      else
+        docker_login_cmd="$docker_login_cmd --region us-east-1 get-login"
+      fi
+
+      __exec_cmd_remote "$master_ip" "$docker_login_cmd | bash"
 
       __process_msg "Pulling $image on $master_ip"
       __exec_cmd_remote "$master_ip" "$pull_cmd"
@@ -369,12 +368,17 @@ __pull_images_workers() {
       continue
     fi
 
+    local docker_login_cmd="aws ecr "
     if [[ "$INSTALLED_DOCKER_VERSION" != *"1.13"* ]]; then
-      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
-    else
-      local docker_login_cmd="aws ecr --region us-east-1 get-login | bash"
+      docker_login_cmd="$docker_login_cmd --no-include-email "
     fi
-    __exec_cmd_remote "$host" "$docker_login_cmd"
+
+    if [ "$NO_VERIFY_SSL" == true ]; then
+      docker_login_cmd="$docker_login_cmd --no-verify-ssl --region us-east-1 get-login"
+    else
+      docker_login_cmd="$docker_login_cmd --region us-east-1 get-login"
+    fi
+    __exec_cmd_remote "$host" "$docker_login_cmd | bash"
 
     for image in "${SERVICE_IMAGES[@]}"; do
       image="$PRIVATE_IMAGE_REGISTRY/$image:$RELEASE"
@@ -482,18 +486,6 @@ __check_connection() {
   local host="$1"
   __process_msg "Checking connection status for : $host"
   __exec_cmd_remote "$host" "echo 'Successfully pinged $host'"
-}
-
-__get_private_ip() {
-  export PRIVATE_IP=""
-  local private_ip=""
-  {
-    private_ip=$(ip route get 1)
-  } || return
-  {
-    private_ip=$(echo "$private_ip" | awk '{print $NF;exit}')
-  } || return
-  PRIVATE_IP=$private_ip
 }
 
 __check_existing_database() {

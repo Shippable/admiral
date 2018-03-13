@@ -300,7 +300,11 @@ __pull_images_master() {
       __process_msg "Pulling $image"
       sudo docker pull $image
     else
-      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+      if [ "$NO_VERIFY_SSL" == true ]; then
+        local docker_login_cmd="aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login | bash"
+      else
+        local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+      fi
       __exec_cmd_remote "$master_ip" "$docker_login_cmd"
 
       __process_msg "Pulling $image on $master_ip"
@@ -353,8 +357,11 @@ __pull_images_workers() {
       __process_msg "Images already pulled on admiral host, skipping"
       continue
     fi
-
-    local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+    if [ "$NO_VERIFY_SSL" == true ]; then
+      local docker_login_cmd="aws ecr --no-include-email --no-verify-ssl --region us-east-1 get-login | bash"
+    else
+      local docker_login_cmd="aws ecr --no-include-email --region us-east-1 get-login | bash"
+    fi
     __exec_cmd_remote "$host" "$docker_login_cmd"
 
     for image in "${SERVICE_IMAGES[@]}"; do
@@ -463,18 +470,6 @@ __check_connection() {
   local host="$1"
   __process_msg "Checking connection status for : $host"
   __exec_cmd_remote "$host" "echo 'Successfully pinged $host'"
-}
-
-__get_private_ip() {
-  export PRIVATE_IP=""
-  local private_ip=""
-  {
-    private_ip=$(ip route get 1)
-  } || return
-  {
-    private_ip=$(echo "$private_ip" | awk '{print $NF;exit}')
-  } || return
-  PRIVATE_IP=$private_ip
 }
 
 __check_existing_database() {

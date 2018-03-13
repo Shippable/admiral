@@ -345,12 +345,13 @@ function _generateRunCommandCluster(bag, next) {
 
   var opts;
 
-  if (bag.installedDockerVersion === '1.13')
+  if (bag.installedDockerVersion === 1.13)
     opts = ' --network ingress' +
       ' --with-registry-auth' +
       ' --endpoint-mode vip';
   else
     opts = ' --with-registry-auth' +
+      ' --network host' +
       ' --endpoint-mode vip';
 
   var runCommand = util.format('docker service create ' +

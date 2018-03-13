@@ -240,7 +240,7 @@ function _generateRunCommandCluster(bag, next) {
 
   var opts;
 
-  if (bag.installedDockerVersion === '1.13')
+  if (bag.installedDockerVersion === 1.13)
     opts = ' --publish mode=host,target=50001,published=50001,protocol=tcp' +
       ' --network ingress' +
       ' --mode global' +
@@ -249,6 +249,7 @@ function _generateRunCommandCluster(bag, next) {
   else
     opts = ' --publish mode=host,target=50001,published=50001,protocol=tcp' +
       ' --mode global' +
+      ' --network host' +
       ' --with-registry-auth' +
       ' --endpoint-mode vip';
 
