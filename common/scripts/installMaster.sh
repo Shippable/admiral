@@ -54,27 +54,30 @@ main() {
   if [ "$IS_INSTALLED" == true ]; then
     __process_msg "Swarm master already installed, skipping"
   else
-    local proxy_script_name="configureProxy.sh"
-    local proxy_config_script="$SCRIPTS_DIR/$proxy_script_name"
-    __copy_script_remote "$MASTER_HOST" "$proxy_config_script" "$SCRIPTS_DIR_REMOTE"
-    local proxy_config_install_cmd="SHIPPABLE_HTTP_PROXY=$SHIPPABLE_HTTP_PROXY \
-      SHIPPABLE_HTTPS_PROXY=$SHIPPABLE_HTTPS_PROXY \
-      SHIPPABLE_NO_PROXY=$SHIPPABLE_NO_PROXY \
-      $SCRIPTS_DIR_REMOTE/$proxy_script_name"
-    __exec_cmd_remote "$MASTER_HOST" "$proxy_config_install_cmd"
+    __validate_master_envs
 
-    __copy_configs
+    if [ "$DEV_MODE" != "true" ]; then
+      local proxy_script_name="configureProxy.sh"
+      local proxy_config_script="$SCRIPTS_DIR/$proxy_script_name"
+      __copy_script_remote "$MASTER_HOST" "$proxy_config_script" "$SCRIPTS_DIR_REMOTE"
+      local proxy_config_install_cmd="SHIPPABLE_HTTP_PROXY=$SHIPPABLE_HTTP_PROXY \
+        SHIPPABLE_HTTPS_PROXY=$SHIPPABLE_HTTPS_PROXY \
+        SHIPPABLE_NO_PROXY=$SHIPPABLE_NO_PROXY \
+        $SCRIPTS_DIR_REMOTE/$proxy_script_name"
+      __exec_cmd_remote "$MASTER_HOST" "$proxy_config_install_cmd"
 
-    local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
-    __copy_script_remote "$MASTER_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
-    __exec_cmd_remote "$MASTER_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
+      __copy_configs
 
-    __process_msg "copying ecr credentials file"
-    local credentials_file="$MASTER_CONFIG_DIR/credentials"
-    __copy_script_remote "$MASTER_HOST" "$credentials_file" "/root/.aws"
+      local node_update_script="$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/setupNode.sh"
+      __copy_script_remote "$MASTER_HOST" "$node_update_script" "$SCRIPTS_DIR_REMOTE"
+      __exec_cmd_remote "$MASTER_HOST" "$SCRIPTS_DIR_REMOTE/setupNode.sh"
+
+      __process_msg "copying ecr credentials file"
+      local credentials_file="$MASTER_CONFIG_DIR/credentials"
+      __copy_script_remote "$MASTER_HOST" "$credentials_file" "/root/.aws"
+    fi
 
     __pull_images_master
-    __validate_master_envs
     __init_swarm_master
   fi
   __process_msg "Swarm master installed successfully"
