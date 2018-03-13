@@ -131,7 +131,7 @@ __prompt_for_inputs() {
     __process_msg "ONEBOX_MODE already set, skipping"
   fi
 
-  if [ "$ONEBOX_MODE" == "true" ]; then
+  if [ "$ONEBOX_MODE" == "true" ] && [ -z "$ADMIRAL_IP" ] && [ -z "$DB_IP" ]; then
     ADMIRAL_IP="127.0.0.1"
     DB_IP="$ADMIRAL_IP"
   fi
@@ -193,27 +193,29 @@ __prompt_for_inputs() {
     setProxy=true
   fi
 
-  if [ "$ONEBOX_MODE" == "true" ] || [ "$DEV_MODE" == "true" ]; then
-    sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$ACCESS_KEY'"/g' $ADMIRAL_ENV
+  if [ "$IS_UPGRADE" == "false" ] && [ "$IS_RESTART" != "true" ]; then
+    if [ "$ONEBOX_MODE" == "true" ] || [ "$DEV_MODE" == "true" ]; then
+      sed -i 's/.*ACCESS_KEY=.*/ACCESS_KEY="'$ACCESS_KEY'"/g' $ADMIRAL_ENV
 
-    local escaped_secret_key=$(echo $SECRET_KEY | sed -e 's/[\/&]/\\&/g')
-    sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$escaped_secret_key'"/g' $ADMIRAL_ENV
+      local escaped_secret_key=$(echo $SECRET_KEY | sed -e 's/[\/&]/\\&/g')
+      sed -i 's/.*SECRET_KEY=.*/SECRET_KEY="'$escaped_secret_key'"/g' $ADMIRAL_ENV
 
-    sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$ADMIRAL_IP'"/g' $ADMIRAL_ENV
+      sed -i 's/.*ADMIRAL_IP=.*/ADMIRAL_IP="'$ADMIRAL_IP'"/g' $ADMIRAL_ENV
 
-    sed -i 's/.*DB_IP=.*/DB_IP="'$DB_IP'"/g' $ADMIRAL_ENV
-    sed -i 's/.*DB_INSTALLED=.*/DB_INSTALLED=false/g' $ADMIRAL_ENV
-    sed -i 's/.*DB_PORT=.*/DB_PORT="'$DB_PORT'"/g' $ADMIRAL_ENV
-    sed -i 's#.*DB_PASSWORD=.*#DB_PASSWORD="'$DB_PASSWORD'"#g' $ADMIRAL_ENV
+      sed -i 's/.*DB_IP=.*/DB_IP="'$DB_IP'"/g' $ADMIRAL_ENV
+      sed -i 's/.*DB_INSTALLED=.*/DB_INSTALLED=false/g' $ADMIRAL_ENV
+      sed -i 's/.*DB_PORT=.*/DB_PORT="'$DB_PORT'"/g' $ADMIRAL_ENV
+      sed -i 's#.*DB_PASSWORD=.*#DB_PASSWORD="'$DB_PASSWORD'"#g' $ADMIRAL_ENV
 
-    sed -i 's#^SHIPPABLE_HTTP_PROXY=.*#SHIPPABLE_HTTP_PROXY="'$SHIPPABLE_HTTP_PROXY'"#g' $ADMIRAL_ENV
-    sed -i 's#^SHIPPABLE_HTTPS_PROXY=.*#SHIPPABLE_HTTPS_PROXY="'$SHIPPABLE_HTTPS_PROXY'"#g' $ADMIRAL_ENV
-    sed -i 's#^SHIPPABLE_NO_PROXY=.*#SHIPPABLE_NO_PROXY="'$SHIPPABLE_NO_PROXY'"#g' $ADMIRAL_ENV
+      sed -i 's#^SHIPPABLE_HTTP_PROXY=.*#SHIPPABLE_HTTP_PROXY="'$SHIPPABLE_HTTP_PROXY'"#g' $ADMIRAL_ENV
+      sed -i 's#^SHIPPABLE_HTTPS_PROXY=.*#SHIPPABLE_HTTPS_PROXY="'$SHIPPABLE_HTTPS_PROXY'"#g' $ADMIRAL_ENV
+      sed -i 's#^SHIPPABLE_NO_PROXY=.*#SHIPPABLE_NO_PROXY="'$SHIPPABLE_NO_PROXY'"#g' $ADMIRAL_ENV
 
-    sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$PUBLIC_IMAGE_REGISTRY'"#g' $ADMIRAL_ENV
+      sed -i 's#.*PUBLIC_IMAGE_REGISTRY=.*#PUBLIC_IMAGE_REGISTRY="'$PUBLIC_IMAGE_REGISTRY'"#g' $ADMIRAL_ENV
 
-    sed -i 's#^ONEBOX_MODE=.*#ONEBOX_MODE="'$ONEBOX_MODE'"#g' $ADMIRAL_ENV
-    return
+      sed -i 's#^ONEBOX_MODE=.*#ONEBOX_MODE="'$ONEBOX_MODE'"#g' $ADMIRAL_ENV
+      return
+    fi
   fi
 
   ################## confirm values #######################################
