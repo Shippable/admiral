@@ -1751,6 +1751,26 @@ do $$
       roleCode := 6060
     );
 
+
+    -- set externalCI routeRoles
+    perform set_route_role(
+      routePattern := '/externalCI',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/externalCI',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/externalCI',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
     -- set jobConsoles Roles
 
     perform set_route_role(
@@ -4804,9 +4824,9 @@ do $$
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
         values (8001, 9001, 'v5.9.4', 'drydockaarch64', 'u16', 'v5.9.4', 'microbase', 'reqproc', false, '2017-12-19', '2017-12-19');
       end if;
-      -- update drydock image info for aarch64 v5.9.4 
+      -- update drydock image info for aarch64 v5.9.4
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4') then
-        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'  
+        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'
           where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4';
       end if;
 
@@ -4861,9 +4881,9 @@ do $$
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
         values (8001, 9001, 'v6.2.4', 'drydockaarch64', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
       end if;
-      -- update drydock image info for aarch64 v6.2.4 
+      -- update drydock image info for aarch64 v6.2.4
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4') then
-        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'  
+        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'
           where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4';
       end if;
 
