@@ -4917,6 +4917,12 @@ do $$
         values (8000, 9004, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
       end if;
 
+      -- x86_64 RHEL_7
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9005 and "version" = 'v6.2.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9005, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+      end if;
+
     -- end runtimeTemplates
     end if;
 
