@@ -218,7 +218,7 @@ __start_stateful_services() {
     __process_msg "Successfully fetched services list"
     services=$(echo $response | jq '.')
     services=$(echo $services \
-      | jq '[ .[] | select (.isCore==true)]')
+      | jq '[ .[] | select (.isCore==true) | select (.serviceName!="api")]')
   fi
 
   local services_count=$(echo $services | jq '. | length')
@@ -415,6 +415,9 @@ main() {
     __process_marker "Upgrading Shippable installation"
     __pull_images_master
     __pull_images_workers
+    if [ "$INSTALLED_DOCKER_VERSION" != "$DOCKER_VERSION" ]; then
+      source $SCRIPTS_DIR/upgrade_docker.sh
+    fi
     __check_admiral
     __check_release
     __update_release
