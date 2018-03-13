@@ -481,6 +481,11 @@ do $$
       values (9004, 'CentOS_7', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-07-06', '2017-07-06');
     end if;
 
+    if not exists (select 1 from "systemCodes" where code = 9005) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (9005, 'RHEL_7', 'osType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-07-06', '2017-07-06');
+    end if;
+
     -- Add systemCodes for clusterTypes
     if not exists (select 1 from "systemCodes" where code = 10000) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -531,6 +536,11 @@ do $$
     if not exists (select 1 from "systemCodes" where code = 10009) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (10009, 'dynamic__x86_64__WindowsServer_2016__c4.large', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-06', '2018-03-06');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10010) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10010, 'custom__x86_64__RHEL_7', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-06', '2018-03-06');
     end if;
 
     -- Add systemCodes for jobStatesMap
