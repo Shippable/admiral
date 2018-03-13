@@ -1751,6 +1751,26 @@ do $$
       roleCode := 6060
     );
 
+
+    -- set externalCI routeRoles
+    perform set_route_role(
+      routePattern := '/externalCI',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/externalCI',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/externalCI',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
     -- set jobConsoles Roles
 
     perform set_route_role(
