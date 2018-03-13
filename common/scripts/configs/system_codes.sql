@@ -538,9 +538,10 @@ do $$
       values (10009, 'dynamic__x86_64__WindowsServer_2016__c4.large', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-06', '2018-03-06');
     end if;
 
-    if not exists (select 1 from "systemCodes" where code = 10010) then
+    -- leaving code 10010 for dynamic__x86_64__Ubuntu_16.04__c4.large
+    if not exists (select 1 from "systemCodes" where code = 10011) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (10010, 'custom__x86_64__RHEL_7', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-06', '2018-03-06');
+      values (10011, 'custom__x86_64__RHEL_7', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-06', '2018-03-06');
     end if;
 
     -- Add systemCodes for jobStatesMap
