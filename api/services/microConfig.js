@@ -20,7 +20,6 @@ function microConfig(params, callback) {
     mounts: '',
     runCommand: '',
     ignoreTLSEnv: 'IGNORE_TLS_ERRORS',
-    dockerVersionEnv: 'INSTALLED_DOCKER_VERSION',
     serviceUserTokenEnv: 'SERVICE_USER_TOKEN',
     serviceUserToken: '',
     operatingSystem: params.operatingSystem
@@ -83,26 +82,6 @@ function _getIgnoreTLSEnv(bag, next) {
 
       bag.shouldIgnoreTls = shouldIgnoreTls;
       logger.debug('Found ignoreTLS env: ', shouldIgnoreTls);
-
-      return next();
-    }
-  );
-}
-
-function _getInstalledDockerVersion(bag, next) {
-  var who = bag.who + '|' + _getInstalledDockerVersion.name;
-  logger.verbose(who, 'Inside');
-
-  envHandler.get(bag.dockerVersionEnv,
-    function (err, installedDockerVersion) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Cannot get env: ' + bag.dockerVersionEnv)
-        );
-
-      bag.installedDockerVersion = installedDockerVersion;
-      logger.debug('Found installedDockerVersion env: ', installedDockerVersion);
 
       return next();
     }
@@ -343,14 +322,7 @@ function _generateRunCommandCluster(bag, next) {
   if (bag.replicas === 'global')
     replicas = ' --mode global';
 
-  var opts;
-
-  if (bag.installedDockerVersion === 1.13)
-    opts = ' --network ingress' +
-      ' --with-registry-auth' +
-      ' --endpoint-mode vip';
-  else
-    opts = ' --with-registry-auth' +
+  var opts = ' --with-registry-auth' +
       ' --network host' +
       ' --endpoint-mode vip';
 
