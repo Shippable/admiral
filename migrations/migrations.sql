@@ -4883,7 +4883,7 @@ do $$
       end if;
       -- update drydock image info for aarch64 v6.2.4
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4') then
-        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'
+        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'  
           where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4';
       end if;
 
