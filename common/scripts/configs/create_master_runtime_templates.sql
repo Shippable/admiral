@@ -41,7 +41,7 @@ do $$
       -- x86_64 RHEL_7 Master
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9005 and "version" = 'Master') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9005, 'Master', 'drydock', 'u16', 'master', 'microbase', 'reqproc', true, '2018-03-13', '2018-03-13');
+        values (8000, 9005, 'Master', 'drydock', 'u16', 'master', 'microbase', 'reqproc', false, '2018-03-13', '2018-03-13');
       end if;
     end if;
   end
