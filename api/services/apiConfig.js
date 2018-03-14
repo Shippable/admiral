@@ -19,7 +19,6 @@ function apiConfig(params, callback) {
     mounts: '',
     runCommand: '',
     vaultUrlEnv: 'VAULT_URL',
-    dockerVersionEnv: 'INSTALLED_DOCKER_VERSION',
     vaultUrl: '',
     ignoreTLSEnv: 'IGNORE_TLS_ERRORS',
     vaultTokenEnv: 'VAULT_TOKEN',
@@ -37,7 +36,6 @@ function apiConfig(params, callback) {
       _getIgnoreTLSEnv.bind(null, bag),
       _getVaultURL.bind(null, bag),
       _getVaultToken.bind(null, bag),
-      _getInstalledDockerVersion.bind(null, bag),
       _generateImage.bind(null, bag),
       _generateEnvs.bind(null, bag),
       _generateMounts.bind(null, bag),
@@ -82,26 +80,6 @@ function _getIgnoreTLSEnv(bag, next) {
 
       bag.shouldIgnoreTls = shouldIgnoreTls;
       logger.debug('Found ignoreTLS env: ', shouldIgnoreTls);
-
-      return next();
-    }
-  );
-}
-
-function _getInstalledDockerVersion(bag, next) {
-  var who = bag.who + '|' + _getInstalledDockerVersion.name;
-  logger.verbose(who, 'Inside');
-
-  envHandler.get(bag.dockerVersionEnv,
-    function (err, installedDockerVersion) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Cannot get env: ' + bag.dockerVersionEnv)
-        );
-
-      bag.installedDockerVersion = installedDockerVersion;
-      logger.debug('Found installedDockerVersion env: ', installedDockerVersion);
 
       return next();
     }
@@ -247,17 +225,7 @@ function _generateRunCommandCluster(bag, next) {
   var who = bag.who + '|' + _generateRunCommandCluster.name;
   logger.verbose(who, 'Inside');
 
-  var opts;
-
-  if (bag.installedDockerVersion === 1.13)
-    opts = util.format(' --publish mode=host,target=%s,published=%s' +
-      ',protocol=tcp' +
-      ' --network ingress' +
-      ' --mode global' +
-      ' --with-registry-auth' +
-      ' --endpoint-mode vip', bag.port, bag.port);
-  else
-    opts = util.format(' --publish mode=host,target=%s,published=%s' +
+  var opts = util.format(' --publish mode=host,target=%s,published=%s' +
       ',protocol=tcp' +
       ' --network host' +
       ' --mode global' +
