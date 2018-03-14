@@ -8,7 +8,7 @@
 
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec" "genexec")
 declare -a PRIVATE_REGISTRY_IMAGES=("postgres" "vault" "rabbitmq" "gitlab" "redis")
-export ADMIRAL_IMAGE="admiral"
+export ADMIRAL_IMAGE="u14admiral"
 
 __check_dependencies() {
   __process_marker "Checking dependencies"
