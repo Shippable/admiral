@@ -131,11 +131,6 @@ __prompt_for_inputs() {
     __process_msg "ONEBOX_MODE already set, skipping"
   fi
 
-  if [ "$ONEBOX_MODE" == "true" ] && [ -z "$ADMIRAL_IP" ] && [ -z "$DB_IP" ]; then
-    ADMIRAL_IP="127.0.0.1"
-    DB_IP="$ADMIRAL_IP"
-  fi
-
   ################## check host ip #################################
   if [ "$ADMIRAL_IP" == "" ]; then
     __process_msg "ADMIRAL_IP not set"
@@ -143,6 +138,10 @@ __prompt_for_inputs() {
     setAdmiralIP=true
   else
     __process_msg "ADMIRAL_IP already set, skipping"
+  fi
+
+  if [ "$ONEBOX_MODE" == "true" ] && [ -z "$DB_IP" ]; then
+    DB_IP="$ADMIRAL_IP"
   fi
 
   ################## check db url ##################################
