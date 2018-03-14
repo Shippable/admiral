@@ -4824,9 +4824,9 @@ do $$
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
         values (8001, 9001, 'v5.9.4', 'drydockaarch64', 'u16', 'v5.9.4', 'microbase', 'reqproc', false, '2017-12-19', '2017-12-19');
       end if;
-      -- update drydock image info for aarch64 v5.9.4 
+      -- update drydock image info for aarch64 v5.9.4
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4') then
-        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'  
+        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'
           where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4';
       end if;
 
@@ -4881,9 +4881,9 @@ do $$
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
         values (8001, 9001, 'v6.2.4', 'drydockaarch64', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
       end if;
-      -- update drydock image info for aarch64 v6.2.4 
+      -- update drydock image info for aarch64 v6.2.4
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4') then
-        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'  
+        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'
           where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4';
       end if;
 
@@ -4922,6 +4922,26 @@ do $$
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
         values (8000, 9005, 'v6.2.4', 'drydock', 'u16', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
       end if;
+
+      -- update all x86_64 OSes that use reqproc so far (based on u16) to use u16reqproc instead
+      -- that is u16, rhel, centos
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "reqProcImage" = 'reqproc' and ("osTypeCode" = 9001 OR "osTypeCode"=9005 OR "osTypeCode"=9004)) then
+        update "runtimeTemplates" set "reqProcImage" = 'u16reqproc' where "archTypeCode" = 8000 and "reqProcImage" = 'reqproc' and ("osTypeCode" = 9001 OR "osTypeCode"=9005 OR "osTypeCode"=9004);
+      end if;
+
+      -- update all aarch64 OSes that use reqproc so far (based on u16) to use aarch64_u16reqproc instead
+      -- that is u16
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "reqProcImage" = 'reqproc') then
+        update "runtimeTemplates" set "reqProcImage" = 'aarch64_u16reqproc' where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "reqProcImage" = 'reqproc';
+      end if;
+
+      -- update all x86_64 u14 to use u14reqproc
+      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "reqProcImage" = 'reqproc') then
+        update "runtimeTemplates" set "reqProcImage" = 'u14reqproc' where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "reqProcImage" = 'reqproc';
+      end if;
+
+      -- insert additional runtimeTemplates down here
+
 
     -- end runtimeTemplates
     end if;
