@@ -16,6 +16,15 @@ __check_upgrade_required() {
   fi
 }
 
+__remove_services() {
+  __process_msg "Removing all the services"
+
+  local current_services=$(sudo docker service ls -q)
+  if [ ! -z "$current_services" ]; then
+    sudo docker service rm $current_services || true
+  fi
+}
+
 __create_install_docker_script() {
   if $DOCKER_UPGRADE_REQUIRED; then
     __process_msg "Creating docker install script"
@@ -135,6 +144,7 @@ __restart_admiral() {
 __restart() {
   if $DOCKER_UPGRADE_REQUIRED; then
     IS_RESTART=true
+    export skip_starting_services=true
     source $SCRIPTS_DIR/restart.sh
     IS_RESTART=false
   fi
@@ -144,6 +154,7 @@ main() {
   __process_marker "Upgrading docker"
 
   __check_upgrade_required
+  __remove_services
   __upgrade_docker_version_on_swarm_workers
   __upgrade_docker_version
   __upgrade_awscli_version

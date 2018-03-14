@@ -269,7 +269,9 @@ main() {
     __start_msg
     __start_state
     __start_redis
-    __start_services
+    if [ "$skip_starting_services" != "true" ]; then
+      __start_services
+    fi
   fi
 }
 
