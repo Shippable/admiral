@@ -247,7 +247,7 @@
                     <div class="col-md-4">
                       <h5>Install Secrets on:</h5>
                       <select class="form-control"
-                        ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                        ng-disabled="vm.admiralEnv.ONEBOX_MODE === "true" || vm.systemSettings.secrets.isInitialized || vm.initializing"
                         ng-change="vm.showInstallLocationModal('secrets', 'dropdown')"
                         ng-model="vm.initializeForm.secrets.initType">
                         <option value="admiral">This node</option>
@@ -321,7 +321,7 @@
                     <div class="col-md-4">
                       <h5>Install RabbitMQ on:</h5>
                       <select class="form-control"
-                        ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                        ng-disabled="vm.admiralEnv.ONEBOX_MODE === "true" || vm.systemSettings.msg.isInitialized || vm.initializing"
                         ng-change="vm.showInstallLocationModal('msg', 'dropdown')"
                         ng-model="vm.initializeForm.msg.initType">
                         <option value="admiral">This node</option>
@@ -441,7 +441,7 @@
                     <div class="col-md-4">
                       <h5>Install State on:</h5>
                       <select class="form-control"
-                        ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                        ng-disabled="vm.admiralEnv.ONEBOX_MODE === "true" || vm.systemSettings.state.isInitialized || vm.initializing"
                         ng-change="vm.showInstallLocationModal('state', 'dropdown')"
                         ng-model="vm.initializeForm.state.initType">
                         <option value="admiral">This node</option>
@@ -521,7 +521,7 @@
                     <div class="col-md-4">
                       <h5>Install Redis on:</h5>
                       <select class="form-control"
-                        ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                        ng-disabled="vm.admiralEnv.ONEBOX_MODE === "true" || vm.systemSettings.redis.isInitialized || vm.initializing"
                         ng-change="vm.showInstallLocationModal('redis', 'dropdown')"
                         ng-model="vm.initializeForm.redis.initType">
                         <option value="admiral">This node</option>
