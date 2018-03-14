@@ -82,6 +82,7 @@ __install_db() {
      __process_msg "Successfully tested connection to $DB_IP $DB_PORT"
   elif [ "$DEV_MODE" == "true" ]; then
     source "$SCRIPTS_DIR/docker/$script_name"
+    DB_INSTALLED="true"
   else
     __check_connection "$DB_IP"
 
@@ -109,6 +110,7 @@ __install_db() {
       DB_DIALECT=$DB_DIALECT \
       $SCRIPTS_DIR_REMOTE/$script_name"
     __exec_cmd_remote "$DB_IP" "$db_install_cmd"
+    DB_INSTALLED="true"
   fi
 }
 
