@@ -1,4 +1,4 @@
-FROM drydock/${ADMIRAL_OS}microbase:master
+FROM drydock/u${ADMIRAL_OS}microbase:master
 
 ADD . /home/shippable/admiral
 
