@@ -761,9 +761,9 @@
             $scope.vm.systemSettings.msg.isInitialized &&
             $scope.vm.systemSettings.state.isInitialized &&
             $scope.vm.systemSettings.redis.isInitialized &&
-            $scope.vm.systemSettings.master.isInitialized &&
-            $scope.vm.systemSettings.workers.length &&
-            _.every($scope.vm.systemSettings.workers,
+            $scope.vm.systemSettings.master.isInitialized;
+          if ($scope.vm.systemSettings.workers.length)
+           $scope.vm.initialized = _.every($scope.vm.systemSettings.workers,
               function (worker) {
                 return worker.isInitialized;
               }
@@ -1911,23 +1911,8 @@
       var masterUpdate = {
         address: $scope.vm.admiralEnv.ADMIRAL_IP
       };
-      var workersList = [
-        {
-          address: $scope.vm.admiralEnv.ADMIRAL_IP,
-          name: 'worker'
-        }
-      ];
-
-      // if the user had tried to add a new worker, then switched to
-      // an admiral initType, remove any non-admiral workers
-      var deletedWorkers =
-        $scope.vm.initializeForm.workers.deletedWorkers.concat(
-          _.filter($scope.vm.initializeForm.workers.workers,
-            function (worker) {
-              return worker.address !== $scope.vm.admiralEnv.ADMIRAL_IP;
-            }
-          )
-        );
+      var workersList = $scope.vm.initializeForm.workers.workers;
+      var deletedWorkers = $scope.vm.initializeForm.workers.deletedWorkers;
 
       if ($scope.vm.initializeForm.msg.initType === 'new')
         msgUpdate.address = $scope.vm.initializeForm.msg.address;
@@ -1939,11 +1924,6 @@
 
       if ($scope.vm.initializeForm.redis.initType === 'new')
         redisUpdate.address = $scope.vm.initializeForm.redis.address;
-
-      if ($scope.vm.initializeForm.workers.initType === 'new') {
-        workersList = $scope.vm.initializeForm.workers.workers;
-        deletedWorkers = $scope.vm.initializeForm.workers.deletedWorkers;
-      }
 
       if ($scope.vm.initializeForm.msg.initType === 'existing') {
         msgUpdate.address = $scope.vm.initializeForm.msg.address;
@@ -2226,6 +2206,22 @@
     }
 
     function addWorker(worker) {
+      if (!worker.name.length) {
+        popup_horn.error('A swarm worker should have a valid name');
+        return;
+      }
+
+      if (validateIP(worker.address) === 'has-error') {
+        popup_horn.error('A swarm worker should have a valid IP address');
+        return;
+      }
+
+      if (worker.address === $scope.vm.admiralEnv.ADMIRAL_IP) {
+        popup_horn.error('The swarm worker cannot have the same IP as the ' +
+          'swarm master');
+        return;
+      }
+
       var nameInUse = _.some($scope.vm.initializeForm.workers.workers,
         function (existingWorker) {
           return existingWorker.name === worker.name;

@@ -80,7 +80,7 @@
                       <th>State</th>
                       <th>Redis</th>
                       <th>Swarm Master</th>
-                      <th>Swarm Workers</th>
+                      <th ng-show="vm.initializeForm.workers.workers.length">Swarm Workers</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -113,7 +113,7 @@
                         <i class="fa fa-check" style="color: green;" ng-if="(node|contains:'master') && vm.systemSettings.master.isInstalled && vm.systemSettings.master.isInitialized"></i>
                         <i class="fa fa-times" style="color: red;" ng-if="(node|contains:'master') && vm.systemSettings.master.isFailed"></i>
                       </td>
-                      <td class="text-center">
+                      <td class="text-center" ng-show="vm.initializeForm.workers.workers.length">
                         <i class="fa fa-check" style="color: green;" ng-if="(node|contains:'worker') && vm.systemSettings.workers[0].isInstalled && vm.systemSettings.workers[0].isInitialized"></i>
                         <i class="fa fa-times" style="color: red;" ng-if="(node|contains:'worker') && vm.systemSettings.workers[0].isFailed"></i>
                       </td>
@@ -247,7 +247,7 @@
                     <div class="col-md-4">
                       <h5>Install Secrets on:</h5>
                       <select class="form-control"
-                        ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                        ng-disabled="vm.admiralEnv.ONEBOX_MODE === 'true' || vm.systemSettings.secrets.isInitialized || vm.initializing"
                         ng-change="vm.showInstallLocationModal('secrets', 'dropdown')"
                         ng-model="vm.initializeForm.secrets.initType">
                         <option value="admiral">This node</option>
@@ -321,7 +321,7 @@
                     <div class="col-md-4">
                       <h5>Install RabbitMQ on:</h5>
                       <select class="form-control"
-                        ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                        ng-disabled="vm.admiralEnv.ONEBOX_MODE === 'true' || vm.systemSettings.msg.isInitialized || vm.initializing"
                         ng-change="vm.showInstallLocationModal('msg', 'dropdown')"
                         ng-model="vm.initializeForm.msg.initType">
                         <option value="admiral">This node</option>
@@ -441,7 +441,7 @@
                     <div class="col-md-4">
                       <h5>Install State on:</h5>
                       <select class="form-control"
-                        ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                        ng-disabled="vm.admiralEnv.ONEBOX_MODE === 'true' || vm.systemSettings.state.isInitialized || vm.initializing"
                         ng-change="vm.showInstallLocationModal('state', 'dropdown')"
                         ng-model="vm.initializeForm.state.initType">
                         <option value="admiral">This node</option>
@@ -521,7 +521,7 @@
                     <div class="col-md-4">
                       <h5>Install Redis on:</h5>
                       <select class="form-control"
-                        ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                        ng-disabled="vm.admiralEnv.ONEBOX_MODE === 'true' || vm.systemSettings.redis.isInitialized || vm.initializing"
                         ng-change="vm.showInstallLocationModal('redis', 'dropdown')"
                         ng-model="vm.initializeForm.redis.initType">
                         <option value="admiral">This node</option>
@@ -598,27 +598,9 @@
 
               <div id="bg-master" class="panel-collapse collapse in">
                 <div class="portlet-body">
-                  <div class="row m-b-20">
-                    <div class="col-md-4">
-                      <h5>Worker Install Location:</h5>
-                      <select class="form-control"
-                        ng-disabled="((vm.initializeForm.workers.workers[0].isInitialized || vm.initializeForm.workers.workers[0].isFailed) && vm.initializeForm.workers.workers[0].address !== vm.admiralEnv.ADMIRAL_IP) || (vm.admiralEnv.IS_SERVER && vm.admiralEnv.DB_IP === vm.admiralEnv.ADMIRAL_IP) || vm.initializing"
-                        ng-model="vm.initializeForm.workers.initType">
-                        <option value="admiral">This node</option>
-                        <option value="new">New node(s)</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4 alignTextRight">
-                      <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')"
-                        ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
-                      <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')"
-                        ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">logs</button>
-                    </div>
-                  </div>
-                  <div class="card-box" ng-if="vm.initializeForm.workers.initType === 'new'">
+                  <div class="card-box">
                     <div class="row">
-                      <div class="col-md-12">
+                      <div class="col-md-6">
                         <h5>Swarm master</h5>
                         <div class="col-md-2">
                           <label class="control-label">IP:</label> {{vm.initializeForm.master.address || vm.admiralEnv.ADMIRAL_IP}}
@@ -627,10 +609,17 @@
                           <label class="control-label">Port:</label> {{vm.initializeForm.master.port || 2377}}
                         </div>
                       </div>
+                      <div class="col-md-2"></div>
+                      <div class="col-md-4 alignTextRight">
+                        <button class="btn btn-sm btn-default" ng-click="vm.showConfigModal('master')"
+                          ng-disabled="!vm.systemSettings.db.isInitialized">config</button>
+                        <button class="btn btn-sm btn-default" ng-click="vm.showLogModal('master')"
+                          ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized">logs</button>
+                      </div>
                     </div>
                     <div class="row" >
                       <div class="col-md-12">
-                        <h5>Swarm workers</h5>
+                        <h5>Swarm workers (Optional)</h5>
                         <div class="col-md-4">
                           <span>Worker names must be unique</span>
                         </div>
@@ -647,14 +636,14 @@
                           <h5>Add Worker:</h5>
                           <div class="col-md-4">
                             <span class="text-dark">Name:</span>
-                            <div ng-class="!vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.newWorker.name.length ? 'has-error' : ''">
+                            <div>
                               <input type="text" class="form-control input-sm" name="workerName" placeholder="worker name" ng-disabled="vm.initializing"
                               ng-model="vm.initializeForm.workers.newWorker.name"/>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <span class="text-dark">IP:</span>
-                            <div ng-class="vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)">
+                            <div ng-class="vm.initializeForm.workers.newWorker.address.length && vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)">
                               <input type="text" class="form-control input-sm" name="workerAddress" placeholder="0.0.0.0" ng-disabled="vm.initializing"
                               ng-model="vm.initializeForm.workers.newWorker.address"/>
                             </div>
@@ -739,7 +728,7 @@
         <div class="row">
           <div class="col-md-12 text-right">
             <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.initialize()"
-              ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.initType === 'new' && !vm.initializeForm.workers.confirmCommand)">
+              ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.confirmCommand)">
               <div ng-if="vm.initializing">
                 Initializing...
               </div>
