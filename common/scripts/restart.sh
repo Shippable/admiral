@@ -39,11 +39,10 @@ __start_secrets() {
       sudo docker start $secrets_container
       sleep 3
     else
-      __process_error "No secrets container found in stopped state, exiting"
-      exit 1
+      __process_msg "Secrets installed on host, skipping secrets state check"
     fi
   else
-    __process_msg "Secrets running on a separate machine, skipping db state check"
+    __process_msg "Secrets running on a separate machine, skipping secrets state check"
   fi
 }
 
@@ -138,8 +137,7 @@ __start_msg() {
       sudo docker start $msg_container
       sleep 3
     else
-      __process_error "No msg container found in stopped state, exiting"
-      exit 1
+      __process_msg "msg running on host, skipping msg state check"
     fi
   else
     __process_msg "msg running on a separate machine, skipping db state check"
@@ -170,11 +168,10 @@ __start_state() {
       sudo docker start $state_container
       sleep 3
     else
-      __process_error "No state container found in stopped state, exiting"
-      exit 1
+      __process_msg "state running on host, skipping state check"
     fi
   else
-    __process_msg "state running on a separate machine, skipping db check"
+    __process_msg "state running on a separate machine, skipping state check"
   fi
 }
 
@@ -202,11 +199,10 @@ __start_redis() {
       sudo docker start $redis_container
       sleep 3
     else
-      __process_error "No redis container found in stopped state, exiting"
-      exit 1
+      __process_msg "redis running on host, skipping redis state check"
     fi
   else
-    __process_msg "redis running on a separate machine, skipping db check"
+    __process_msg "redis running on a separate machine, skipping redis state check"
   fi
 }
 
