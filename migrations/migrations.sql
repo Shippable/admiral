@@ -4920,7 +4920,7 @@ do $$
       -- x86_64 RHEL_7
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9005 and "version" = 'v6.2.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8000, 9005, 'v6.2.4', 'drydock', 'c7', 'v6.2.4', 'microbase', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
+        values (8000, 9005, 'v6.2.4', 'drydock', 'c7', 'v6.2.4', 'c7all', 'reqproc', true, '2018-03-05 00:00:00+00', '2018-03-05 00:00:00+00');
       end if;
 
       -- update all x86_64 OSes that use reqproc so far (based on u16) to use u16reqproc instead
