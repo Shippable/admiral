@@ -27,6 +27,7 @@ create_config_dirs() {
 start_vault() {
   systemctl daemon-reload
   service vault start
+  systemctl enable vault
 }
 
 # accepts arguments $host $port $serviceName $timeout
