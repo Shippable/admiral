@@ -49,6 +49,10 @@ RabbitMQAdapter.prototype.get = function (path, callback) {
   this.request(path, 'GET', null, callback);
 };
 
+RabbitMQAdapter.prototype.delete = function (path, callback) {
+  this.request(path, 'DELETE', null, callback);
+};
+
 // User API calls
 
 RabbitMQAdapter.prototype.getUser = function (name, callback) {
