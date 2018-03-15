@@ -511,8 +511,7 @@ __parse_args_restart() {
       __process_msg "Found a stopped database container, starting it"
       sudo docker start $db_container
     else
-      __process_error "No database container found in stopped state, exiting"
-      exit 1
+      __process_msg "DB installed on host, skipping db state check"
     fi
   else
     __process_msg "DB running on a separate machine, skipping db state check"
