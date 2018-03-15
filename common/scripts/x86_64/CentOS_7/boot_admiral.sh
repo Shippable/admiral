@@ -54,7 +54,7 @@ __boot_admiral() {
     -v $docker_location:/usr/bin/docker \
     -v /var/run/docker.sock:/var/run/docker.sock"
 
-  local admiral_image="$PRIVATE_IMAGE_REGISTRY/u16admiral:$RELEASE"
+  local admiral_image="$PRIVATE_IMAGE_REGISTRY/$ADMIRAL_IMAGE:$RELEASE"
 
   local boot_cmd="sudo docker run -d \
     $envs \
