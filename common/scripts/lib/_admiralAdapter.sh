@@ -320,3 +320,9 @@ _shippable_delete_service() {
   local service_delete_by_name_endpoint="services/$serviceName"
   __shippable_delete $service_delete_by_name_endpoint $body
 }
+
+_shippable_delete_system_cluster() {
+  local system_cluster_id="$1"
+  local system_cluster_delete_by_id_endpoint="systemClusters/$system_cluster_id"
+  __shippable_delete $system_cluster_delete_by_id_endpoint
+}
