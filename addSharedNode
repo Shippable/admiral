@@ -73,7 +73,8 @@ __check_dbStatus() {
 __get_systemClusters() {
   __process_marker "getting systemClusters"
   _shippable_get_systemClusters 'isDefault=true'
-  system_cluster=$response
+  system_cluster=$(echo $response \
+    | jq -r '.[0]')
   if [ "$(echo $response | jq -r '.[0]')" != null ]; then
     is_default_system_cluster_available=true
     default_system_cluster_id=$(echo $response | jq -r '.[0].id')
@@ -123,7 +124,8 @@ __post_systemClusters() {
   __process_marker "posting systemClusters"
   body='{"name": "default_cluster", "queueName": "systemNodes.exec", "clusterTypeCode": "'$cluster_type_code'", "runtimeTemplateId": "'$default_runtime_template_id'", "isDefault": true}'
   _shippable_post_systemClusters $body
-  system_cluster=$response
+  system_cluster=$(echo $response \
+    | jq -r '.')
   default_system_cluster_id=$(echo $response | jq -r '.id')
 
   echo "default_system_cluster_id: $default_system_cluster_id"
@@ -146,7 +148,7 @@ __post_systemNode() {
   __process_marker "posting systemNodes"
   body='{"friendlyName": "default_system_node_dev", "systemClusterId": "'$default_system_cluster_id'"}'
   _shippable_post_systemNodes $body
-  NODE_ID=$(echo $response | jq -r '.[0].id')
+  NODE_ID=$(echo $response | jq -r '.id')
 
    __process_msg "system node posted successfully"
 }
@@ -200,7 +202,7 @@ __export_envs() {
     | jq -r '.reqProcImage'):$SHIPPABLE_RELEASE_VERSION
 
   LISTEN_QUEUE=$(echo $system_cluster \
-    | jq -r '.[0].queueName')
+    | jq -r '.queueName')
 
   NODE_ARCHITECTURE=$ARCHITECTURE
   NODE_OPERATING_SYSTEM=$OPERATING_SYSTEM
