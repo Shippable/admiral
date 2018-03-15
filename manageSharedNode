@@ -524,56 +524,92 @@ __remove_directories() {
   __process_msg "directories removed successfully"
 }
 
-main() {
-  if [ $1 == "--clean" ]; then
-    __process_marker "Cleaning..."
-    __export_envs
-    __get_systemClusters
-    if [ "$(echo $system_cluster | jq -r '.')" != null ]; then
-      __delete_systemCluster
-    fi
-    __remove_reqProc
-    __remove_reqKick
-    __remove_directories
-  else
-    __check_dbStatus
-    if [ $is_db_initialized != null ]; then
-      __get_systemClusters
-      __get_systemCodes
-      __get_runtimetemplates
-      if [ $is_default_system_cluster_available != true ]; then
-        __post_systemClusters
-        __post_systemNode
-      else
-        echo "default_cluster is available"
-        __get_systemNode
-        if [ $is_default_system_node_available != true ]; then
-          __post_systemNode
-        else
-          echo "system node is available"
+__print_help() {
+  echo "
+  Usage:
+    $0 <command>
+
+  Examples:
+    $0 add
+
+  Commmands:
+    add         Adds shared nodes to run builds
+    clean       Removes all the system node components and remove the shared folders 
+    help        Print this message
+  "
+  exit 0
+}
+
+__parse_args() {
+  if [[ $# -gt 0 ]]; then
+    key="$1"
+
+    case $key in
+      clean)
+        __process_marker "Cleaning..."
+        __export_envs
+        __get_systemClusters
+        if [ "$(echo $system_cluster | jq -r '.')" != null ]; then
+          __delete_systemCluster
         fi
-      fi
-      __create_symlink
-      __get_systemIntegrations
-      __export_envs
-      __setup_dirs
-      __setup_mounts
-      __setup_envs
-      __setup_opts
-      __remove_genexec
-      __remove_reqProc
-      __remove_reqKick
-      __install_ntp
-      __fetch_cexec
-      __pull_node
-      __pull_reqProc
-      __fetch_reqKick
-      __boot_reqProc
-      __boot_reqKick
-    else
-      echo "database is not initialized please initialize database first"
-    fi
+        __remove_reqProc
+        __remove_reqKick
+        __remove_directories
+        ;;
+      add)
+        __check_dbStatus
+        if [ $is_db_initialized != null ]; then
+          __get_systemClusters
+          __get_systemCodes
+          __get_runtimetemplates
+          if [ $is_default_system_cluster_available != true ]; then
+            __post_systemClusters
+            __post_systemNode
+          else
+            echo "default_cluster is available"
+            __get_systemNode
+            if [ $is_default_system_node_available != true ]; then
+              __post_systemNode
+            else
+              echo "system node is available"
+            fi
+          fi
+          __create_symlink
+          __get_systemIntegrations
+          __export_envs
+          __setup_dirs
+          __setup_mounts
+          __setup_envs
+          __setup_opts
+          __remove_genexec
+          __remove_reqProc
+          __remove_reqKick
+          __install_ntp
+          __fetch_cexec
+          __pull_node
+          __pull_reqProc
+          __fetch_reqKick
+          __boot_reqProc
+          __boot_reqKick
+        else
+          echo "database is not initialized please initialize database first"
+        fi
+        ;;
+      help)
+        __print_help
+        ;;
+      *)
+        echo "Invalid option: $key"
+        __print_help
+        ;;
+    esac
+  else
+    __print_help
   fi
+}
+
+main() {
+  __parse_args "$@"
 }
 
 main "$@"
