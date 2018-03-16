@@ -223,8 +223,8 @@
                                           </div>
                                           <button ng-if="vm.isEditingUIUrl" class="btn btn-sm btn-primary"
                                             ng-disabled="vm.wwwInstallForm.wwwUrl.$error.url"
-                                            ng-click="vm.saveUIUpdate(vm.installForm.www.url.isSecure,
-                                              vm.installForm.www.url.fqdn)">Save</button>
+                                            ng-click="vm.saveServiceUrl(vm.installForm.www.url.isSecure,
+                                              vm.installForm.www.url.fqdn, 'www')">Save</button>
                                           <button ng-if="vm.isEditingUIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelUIUpdate()">Cancel</button>
                                         </div>
                                       </div>
@@ -317,8 +317,8 @@
                                           </div>
                                           <button ng-if="vm.isEditingAPIUrl" class="btn btn-sm btn-primary"
                                             ng-disabled="vm.apiInstallForm.apiUrl.$error.url"
-                                            ng-click="vm.saveAPIUpdate(vm.installForm.api.url.isSecure,
-                                              vm.installForm.api.url.fqdn)">Save</button>
+                                            ng-click="vm.saveServiceUrl(vm.installForm.api.url.isSecure,
+                                              vm.installForm.api.url.fqdn, 'api')">Save</button>
                                           <button ng-if="vm.isEditingAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelAPIUpdate()">Cancel</button>
                                         </div>
                                       </div>
@@ -392,8 +392,8 @@
                                                       </div>
                                                       <button ng-if="vm.isEditingInternalAPIUrl" class="btn btn-sm btn-primary"
                                                         ng-disabled="vm.internalApiInstallForm.internalApiUrl.$error.url"
-                                                        ng-click="vm.saveInternalAPIUpdate(vm.installForm.internalAPI.url.isSecure,
-                                                          vm.installForm.internalAPI.url.fqdn)">Save</button>
+                                                        ng-click="vm.saveServiceUrl(vm.installForm.internalAPI.url.isSecure,
+                                                          vm.installForm.internalAPI.url.fqdn, 'internalAPI')">Save</button>
                                                       <button ng-if="vm.isEditingInternalAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelInternalAPIUpdate()">Cancel</button>
                                                     </div>
                                                   </div>
@@ -466,8 +466,8 @@
                                                       </div>
                                                       <button ng-if="vm.isEditingConsoleAPIUrl" class="btn btn-sm btn-primary"
                                                         ng-disabled="vm.consoleApiInstallForm.consoleApiUrl.$error.url"
-                                                        ng-click="vm.saveConsoleAPIUpdate(vm.installForm.consoleAPI.url.isSecure,
-                                                          vm.installForm.consoleAPI.url.fqdn)">Save</button>
+                                                        ng-click="vm.saveServiceUrl(vm.installForm.consoleAPI.url.isSecure,
+                                                          vm.installForm.consoleAPI.url.fqdn, 'consoleAPI')">Save</button>
                                                       <button ng-if="vm.isEditingConsoleAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelConsoleAPIUpdate()">Cancel</button>
                                                     </div>
                                                   </div>
@@ -571,8 +571,8 @@
                                           </div>
                                           <button ng-if="vm.isEditingMktgUrl" class="btn btn-sm btn-primary"
                                             ng-disabled="vm.mktgInstallForm.mktgUrl.$error.url"
-                                            ng-click="vm.saveMktgUpdate(vm.installForm.mktg.url.isSecure,
-                                              vm.installForm.mktg.url.fqdn)">Save</button>
+                                            ng-click="vm.saveServiceUrl(vm.installForm.mktg.url.isSecure,
+                                              vm.installForm.mktg.url.fqdn, 'mktg')">Save</button>
                                           <button ng-if="vm.isEditingMktgUrl" class="btn btn-sm btn-default" ng-click="vm.cancelMktgUpdate()">Cancel</button>
                                         </div>
                                       </div>
@@ -601,12 +601,8 @@
                 </h3>
                 <div class="col-md-2 alignTextCenter" style="padding: 5px;">
                   <span class="divider"></span>
-                  <span class="label label-green" ng-if="vm.installForm.auth.bitbucketKeys.callbackUrl ||
-                    vm.installForm.auth.githubKeys.callbackUrl || vm.installForm.auth.bitbucketServerKeys.callbackUrl ||
-                    vm.installForm.auth.gitlabKeys.callbackUrl || vm.installForm.auth.githubEnterpriseKeys.callbackUrl">initialized</span>
-                  <span class="label label-waiting" ng-if="!vm.installForm.auth.bitbucketKeys.callbackUrl &&
-                    !vm.installForm.auth.githubKeys.callbackUrl && !vm.installForm.auth.bitbucketServerKeys.callbackUrl &&
-                    !vm.installForm.auth.gitlabKeys.callbackUrl && !vm.installForm.auth.githubEnterpriseKeys.callbackUrl">
+                  <span class="label label-green" ng-if="vm.isAuthInitialized">initialized</span>
+                  <span class="label label-waiting" ng-if="!vm.isAuthInitialized">
                     not initialized
                   </span>
                 </div>
@@ -1408,23 +1404,14 @@
                                   </div>
                                   <div class="col-md-12 m-t-10">
                                     <div ng-if="vm.isEditingRabbitMqUrl">
-                                      <label class="control-label textAlignNone col-md-2">Admin FQDN</label>
-                                      <div class="col-md-6">
-                                        <input type="text" class="form-control" name="msgAdminUrl"
-                                          ng-model="vm.installForm.msg.rabbitmqCreds.adminFqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
-                                        <dd class="text-danger" ng-show="vm.msgInstallForm.msgAdminUrl.$dirty">
-                                          <span ng-show="vm.msgInstallForm.msgAdminUrl.$error.pattern">URL is invalid.</span>
-                                        </dd>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-12 m-t-10">
-                                    <div ng-if="vm.isEditingRabbitMqUrl">
                                       <div>
-                                        <label class="col-md-2 control-label textAlignNone">Root Queue List</label>
+                                        <label class="control-label textAlignNone col-md-2">Admin FQDN</label>
                                         <div class="col-md-6">
-                                          <input type="text" class="form-control" name="msgRootQueueList"
-                                            ng-model="vm.installForm.msg.rabbitmqCreds.rootQueueListEdit" ng-disabled="vm.installing || vm.saving"/>
+                                          <input type="text" class="form-control" name="msgAdminUrl"
+                                            ng-model="vm.installForm.msg.rabbitmqCreds.adminFqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                          <dd class="text-danger" ng-show="vm.msgInstallForm.msgAdminUrl.$dirty">
+                                            <span ng-show="vm.msgInstallForm.msgAdminUrl.$error.pattern">URL is invalid.</span>
+                                          </dd>
                                         </div>
                                         <button ng-if="vm.isEditingRabbitMqUrl" class="btn btn-sm btn-primary"
                                           ng-disabled="vm.msgInstallForm.msgUrl.$error.url || vm.msgInstallForm.msgRootUrl.$error.url || vm.msgInstallForm.msgAdminUrl.$error.url"
@@ -1570,7 +1557,7 @@
                                 <input id="checkbox_for_state_url" type="checkbox"
                                   ng-model="vm.isEditingStateUrl"  ng-disabled="vm.installing || vm.saving"/>
                                 <label for="checkbox_for_state_url">
-                                  <b> Do you want to change friendly urlof State? </b>
+                                  <b> Do you want to change friendly url of State? </b>
                                 </label>
                               </div>
                               <div class="row" ng-if="vm.isEditingStateUrl">
@@ -1891,44 +1878,6 @@
           <div class="col-md-12 text-right">
             <button class="btn btn-md btn-primary waves-light m-t-10" ng-click="vm.showApplyChangesModal()"
               ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.confirmCommand) || vm.installing || vm.saving || vm.restartingServices || vm.disableSave">Apply</button>
-            <!-- <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.initialize()"
-              ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.initType === 'new' && !vm.initializeForm.workers.confirmCommand)">
-              <div ng-if="vm.initializing">
-                Initializing...
-              </div>
-              <div ng-if="!vm.initializing">
-                Initialize
-              </div>
-            </button>
-            <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.install()"
-              ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-if="!vm.requireRestart && vm.initialized">
-              <div ng-if="vm.installing">
-                Installing...
-              </div>
-              <div ng-if="!vm.installing">
-                Install
-              </div>
-            </button>
-            <button ng-if="vm.requireRestart" class="btn btn-md btn-primary m-t-10" type="submit"
-              ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave"
-              ng-click="vm.showSaveModal()">
-              <div ng-if="vm.saving">
-                Saving...
-              </div>
-              <div ng-if="!vm.saving">
-                Save
-              </div>
-            </button>
-            <button ng-if="vm.requireRestart" class="btn btn-md btn-primary m-t-10" type="submit"
-              ng-disabled="vm.installing || vm.saving || vm.restartingServices"
-              ng-click="vm.showRestartServicesModal()">
-              <div ng-if="vm.restartingServices">
-                Restarting...
-              </div>
-              <div ng-if="!vm.restartingServices">
-                Restart Services
-              </div>
-            </button> -->
           </div>
         </div>
       </section>
@@ -1940,23 +1889,12 @@
             </div>
           </div>
         </div>
-        <section ng-if="!vm.initialized">
+        <section ng-if="!vm.initialized || !vm.requireRestart">
           <div class="row">
             <div class="col-md-12">
               <div class="card-box">
                 <h5 class="text-custom m-t-20 m-b-5">
-                  Please initialize Control panel before starting configuration
-                </h5>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section ng-if="!vm.requireRestart">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card-box">
-                <h5 class="text-custom m-t-20 m-b-5">
-                  Please configure the installation before installing addons
+                  Please configure control plane before starting build configuration
                 </h5>
               </div>
             </div>
@@ -2485,23 +2423,12 @@
             </div>
           </div>
         </div>
-        <section ng-if="!vm.initialized">
+        <section ng-if="!vm.initialized || !vm.requireRestart">
           <div class="row">
             <div class="col-md-12">
               <div class="card-box">
                 <h5 class="text-custom m-t-20 m-b-5">
-                  Please initialize Control Panel before installing addons
-                </h5>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section ng-if="!vm.requireRestart">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card-box">
-                <h5 class="text-custom m-t-20 m-b-5">
-                  Please configure the installation before installing addons
+                  Please configure control plane before installing addons
                 </h5>
               </div>
             </div>
@@ -3582,24 +3509,12 @@
           </div>
         </div>
 
-        <section ng-if="!vm.initialized">
+        <section ng-if="!vm.initialized || !vm.requireRestart">
           <div class="row">
             <div class="col-md-12">
               <div class="card-box">
                 <h5 class="text-custom m-t-20 m-b-5">
-                  Please initialize Control Panel before changing system settings
-                </h5>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section ng-if="!vm.requireRestart">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card-box">
-                <h5 class="text-custom m-t-20 m-b-5">
-                  Please configure the installation before changing system settings
+                  Please configure control plane before changing system settings
                 </h5>
               </div>
             </div>
@@ -3783,60 +3698,6 @@
             </div><!-- END col-md-12 -->
           </div><!-- END ROW -->
           <!-- END Manage System Superusers -->
-
-          <!-- START Manage System Nodes -->
-          <div class="row" ng-if="vm.runMode === 'dev'">
-            <div class="col-md-12">
-              <div class="portlet">
-                <div data-toggle="collapse" class="portlet-heading">
-                  <h3 class="portlet-title text-dark">
-                    Manage System Nodes
-                  </h3>
-                  <div class="portlet-widgets">
-                    <a data-toggle="collapse" data-target="#systemNodes"><i class="ion-minus-round"></i></a>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-                <div id="systemNodes" class="panel-collapse collapse">
-                  <div class="portlet-body">
-                    <div class="row">
-                      <div class="col-md-2">
-                        <h5 class="m-t-20"><b>Add system node:</b></h5>
-                      </div>
-                      <div class="col-md-4 m-t-15">
-                        <button class="btn btn-primary" ng-click="vm.addSystemNode()" ng-disabled="vm.systemNodes.addingSystemNode">
-                          Initialize system node
-                        </button>
-                      </div>
-                    </div><!-- END row -->
-                    <div class="row">
-                      <div class="col-md-2">
-                        <h5 class="m-t-20"><b>Current system nodes:</b></h5>
-                      </div>
-                      <div class="col-md-10 m-t-15">
-                        <div ng-if="!vm.systemNodes.systemNodes.length">
-                          <i>No current SystemNodes</i>
-                        </div>
-                        <div class="row m-t-10" ng-repeat="systemNode in vm.systemNodes.systemNodes" ng-if="vm.systemNodes.systemNodes.length">
-                          <div class="col-md-3">
-                            <p class="m-t-5">{{systemNode.friendlyName}}</p>
-                          </div>
-                          <div class="col-md-9">
-                            <button class="btn btn-danger btn-sm" ng-click="vm.removeSystemNode(systemNode)"
-                              ng-disabled="vm.systemNodes.deletingSystemNode">
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                      </div><!-- END row -->
-                    </div><!-- END row -->
-                  </div><!-- END portlet-body -->
-                </div><!-- END systemNodes -->
-                <!-- END ROW -->
-              </div><!-- END portlet -->
-            </div><!-- END col-md-12 -->
-          </div><!-- END ROW -->
-          <!-- END Manage System Nodes -->
 
           <!-- Save and Restart Buttons on System Settings-->
           <div class="row">
