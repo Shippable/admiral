@@ -2247,9 +2247,8 @@
 
       // Set the correct port if GitLab has already been initialized,
       // even if it's Shippable managed:
-      if ($scope.vm.systemSettings.state.isInitialized)
-        stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
-          ($scope.vm.initializeForm.state.initType === 'admiral' ? 2222 : 22);
+      stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
+        ($scope.vm.admiralEnv.DEV_MODE ? 2222 : 22);
 
       var updateInitializeFormBag = {
         inPostServices: true
