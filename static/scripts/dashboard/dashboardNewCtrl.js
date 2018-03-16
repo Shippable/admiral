@@ -1997,6 +1997,7 @@
     }
 
     function apply() {
+      $('#applyModal').modal('hide');
       async.series([
           initialize,
           install,
