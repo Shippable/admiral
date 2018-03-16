@@ -410,6 +410,30 @@ __cleanup_workers() {
   fi
 }
 
+export system_cluster=null
+__upgrade_local_system_node_components() {
+  __process_marker "upgrading local system nodes"
+  __get_systemClusters
+  if [ "$(echo $system_cluster | jq -r '.')" != null ]; then
+    sudo ./manageSharedNode clean
+    sudo ./manageSharedNode add
+  fi
+}
+
+__get_systemClusters() {
+  __process_marker "getting systemClusters"
+  _shippable_get_systemClusters 'isDefault=true'
+  echo $response
+  system_cluster=$(echo $response \
+    | jq -r '.[0]')
+  if [ "$(echo $response | jq -r '.[0]')" != null ]; then
+    is_default_system_cluster_available=true
+  fi
+
+   __process_msg "is_default_system_cluster_available: $is_default_system_cluster_available"
+   __process_msg "systemClusters get completed successfully"
+}
+
 main() {
   if [ $IS_UPGRADE == true ]; then
     __process_marker "Upgrading Shippable installation"
@@ -434,6 +458,9 @@ main() {
     fi
     __cleanup_master
     __cleanup_workers
+    if [ "$DEV_MODE" == "true" ]; then
+      __upgrade_local_system_node_components
+    fi
   fi
 }
 
