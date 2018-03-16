@@ -51,10 +51,13 @@ __boot_admiral() {
   local docker_location=$(which docker)
   local mounts=" -v $CONFIG_DIR:$CONFIG_DIR \
     -v $RUNTIME_DIR:$RUNTIME_DIR \
-    -v $docker_location:/usr/bin/docker \
-    -v /usr/lib/x86_64-linux-gnu/libapparmor.so.1.1.0:/lib/x86_64-linux-gnu/libapparmor.so.1:rw \
-    -v /usr/lib/x86_64-linux-gnu/libltdl.so.7.3.0:/lib/x86_64-linux-gnu/libltdl.so.7:rw \
     -v /var/run/docker.sock:/var/run/docker.sock"
+
+  if [[ "$INSTALLED_DOCKER_VERSION" == *"1.13"* ]]; then
+    mounts=$mounts" -v $docker_location:/usr/bin/docker \
+      -v /usr/lib/x86_64-linux-gnu/libapparmor.so.1.1.0:/lib/x86_64-linux-gnu/libapparmor.so.1:rw \
+      -v /usr/lib/x86_64-linux-gnu/libltdl.so.7.3.0:/lib/x86_64-linux-gnu/libltdl.so.7:rw"
+  fi
 
   local admiral_image="$PRIVATE_IMAGE_REGISTRY/$ADMIRAL_IMAGE:$RELEASE"
 
