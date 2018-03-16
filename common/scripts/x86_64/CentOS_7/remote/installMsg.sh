@@ -28,6 +28,7 @@ start_rabbitmq() {
   chown -R rabbitmq:rabbitmq /var/log/rabbitmq
   ulimit -n 65536
   service rabbitmq-server restart
+  systemctl enable rabbitmq-server
 }
 
 # accepts arguments $host $port $serviceName $timeout

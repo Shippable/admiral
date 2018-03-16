@@ -21,6 +21,7 @@ install_redis() {
   sudo mv /etc/redis/redis.conf /etc/redis.conf
 
   sudo systemctl start redis
+  sudo systemctl enable redis
 }
 
 # accepts arguments $host $port $serviceName $timeout
