@@ -13,7 +13,7 @@ readonly LIB_DIR="$SCRIPTS_DIR/lib"
 readonly LOGS_DIR="$RUNTIME_DIR/logs"
 readonly TIMESTAMP="$(date +%Y%m%d%H%M)"
 readonly LOG_FILE="$LOGS_DIR/${TIMESTAMP}_cli.txt"
-readonly LOCAL_SCRIPTS_DIR="$SCRIPTS_DIR/local"
+readonly LOCAL_SCRIPTS_DIR="$SCRIPTS_DIR"
 readonly ADMIRAL_ENV="$CONFIG_DIR/admiral.env"
 readonly SSH_PRIVATE_KEY=$CONFIG_DIR/machinekey
 readonly SSH_PUBLIC_KEY=$CONFIG_DIR/machinekey.pub
@@ -155,6 +155,7 @@ __post_systemNode() {
 
 __create_symlink() {
   __process_marker "creating symlink"
+  /bin/bash -c "$LOCAL_SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/install_node.sh"
   if [ ! -f /usr/local/bin/node ]; then
     node_path=$(echo $(which node))
     echo $node_path
@@ -374,31 +375,12 @@ __remove_reqProc() {
 
 __remove_reqKick() {
   __process_marker "Removing existing reqKick services..."
-
-  sudo initctl list | ( grep -o "^$REQKICK_SERVICE_NAME_PATTERN-shippable_dev" || true ) | while read -r service; do
-    sudo service $service stop || true
-    sudo rm -rf /var/log/upstart/$REQKICK_SERVICE_NAME_PATTERN*
-    sudo rm -rf /etc/init/$service.conf
-  done
-
-  sudo initctl reload-configuration
+  /bin/bash -c "$LOCAL_SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remove_reqKick.sh"
 }
 
 __install_ntp() {
   __process_marker "Checking ntp"
-  {
-    check_ntp=$(service --status-all 2>&1 | grep ntp)
-  } || {
-    true
-  }
-
-  if [ ! -z "$check_ntp" ]; then
-    echo "NTP already installed, skipping."
-  else
-    echo "Installing NTP"
-    sudo apt-get install -y ntp
-    sudo service ntp restart
-  fi
+  /bin/bash -c "$LOCAL_SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/install_ntp.sh"
 }
 
 __fetch_cexec() {

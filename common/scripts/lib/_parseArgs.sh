@@ -600,6 +600,7 @@ __wipe_clean() {
       for id in ${container_ids[@]}; do
         eval "$remove_cmd $id"
       done
+      sudo rm -rf /var/lib/shippable/shippable_dev
     else
       __process_msg "No containers found. Skipping removal."
     fi

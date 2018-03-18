@@ -2,6 +2,7 @@
 
 readonly MAX_ERROR_LOG_COUNT=100
 export IS_SERVER=false
+export system_cluster=null
 
 __check_admiral() {
   __process_msg "Checking if admiral container is running"
@@ -410,7 +411,6 @@ __cleanup_workers() {
   fi
 }
 
-export system_cluster=null
 __upgrade_local_system_node_components() {
   __process_marker "upgrading local system nodes"
   __get_systemClusters
