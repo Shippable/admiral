@@ -211,7 +211,7 @@ __export_envs() {
   if [ "$NODE_TYPE_CODE" -eq 7001 ]; then
     export BASE_DIR="$SHIPPABLE_RUNTIME_DIR"
   else
-    BASE_UUID="shippable_dev"
+    export BASE_UUID="shippable_dev"
     export BASE_DIR="$SHIPPABLE_RUNTIME_DIR/$BASE_UUID"
   fi
   export REQPROC_DIR="$BASE_DIR/reqProc"
