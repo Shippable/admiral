@@ -5,6 +5,7 @@ ${RES_VER_DATE}
 
 ## Features
   - **Improved usability of the Nodes dashboard**: You can see the OS and architecture of your nodes when you click on any node in the Node pool.
+  - **Ability to specify timeout for runCI and runSh jobs**: You can specify the timeout of your runSh jobs in yml or Shippable UI. In the UI, timeout can be specified at the Node pool or Subscription level in the Node pool or Subscription settings respectively. Please read the [runSh](http://rcdocs.shippable.com/platform/workflow/job/runsh/) documentation on timeoutMinutes for more inforamtion on how to specify the timeout in your yml file.  
 
 ## Fixes
   - When deploy jobs are removed from the yml, the services that they deployed are deleted automatically.
