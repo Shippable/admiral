@@ -4,7 +4,6 @@ var self = deleteById;
 module.exports = self;
 
 var async = require('async');
-var RabbitAdapter = require('../../common/RabbitMQAdapter.js');
 var APIAdapter = require('../../common/APIAdapter.js');
 var _ = require('underscore');
 
@@ -26,9 +25,6 @@ function deleteById(req, res) {
       _getProcessingSystemCode.bind(null, bag),
       _getSystemNodes.bind(null, bag),
       _deleteSystemNodes.bind(null, bag),
-      _getSystemIntegration.bind(null, bag),
-      _getQueue.bind(null, bag),
-      _deleteQueue.bind(null, bag),
       _deleteById.bind(null, bag)
     ],
     function (err) {
@@ -156,80 +152,6 @@ function _deleteSystemNodes(bag, next) {
     },
     function (err) {
       return next(err);
-    }
-  );
-}
-
-function _getSystemIntegration(bag, next) {
-  var who = bag.who + '|' + _getSystemIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  bag.apiAdapter.getSystemIntegrations('name=msg&masterName=rabbitmqCreds',
-    function (err, systemIntegrations) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to get system integration: ' + util.inspect(err))
-        );
-
-      if (_.isEmpty(systemIntegrations))
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            'No msg system integration found')
-        );
-
-      bag.systemIntegration = systemIntegrations[0];
-      bag.amqpUrlAdmin = bag.systemIntegration.data.amqpUrlAdmin;
-      bag.rabbitAdapter = new RabbitAdapter(bag.amqpUrlAdmin);
-      return next();
-    }
-  );
-}
-
-function _getQueue(bag, next) {
-  if (!bag.systemCluster.queueName) return next();
-
-  var who = bag.who + '|' + _getQueue.name;
-  logger.verbose(who, 'Inside');
-
-  bag.rabbitAdapter.getVhostQueue('shippable', bag.systemCluster.queueName,
-    function (err, res) {
-      if (err) {
-        if (err === 404)
-          return next();
-
-        err = err || res;
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'failed to getVhostQueue for systemCluster: ' +
-            bag.systemCluster.name + ' with error: ' + err)
-          );
-      }
-
-      bag.rabbitMQQueue = res.name;
-      return next();
-    }
-  );
-}
-
-function _deleteQueue(bag, next) {
-  if (!bag.rabbitMQQueue) return next();
-
-  var who = bag.who + '|' + _deleteQueue.name;
-  logger.verbose(who, 'Inside');
-
-  bag.rabbitAdapter.deleteQueue('shippable', bag.rabbitMQQueue,
-    function (err, res) {
-      if (err) {
-        err = err || res;
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'failed to deleteQueue for systemCluster: ' +
-            bag.systemCluster.name + ' with error: ' + err)
-          );
-      }
-
-      return next();
     }
   );
 }
