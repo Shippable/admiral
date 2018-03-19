@@ -12,6 +12,7 @@ ${RES_VER_DATE}
 
 ## Fixes
   - When deploy jobs are removed from the yml, the services that they deployed are deleted automatically.
+  - When a soft deleted syncRepo is restored from the UI, all the jobs and resources created by the syncRepo are correctly restored.
 
 ## Custom Nodes
   - **simple title**: brief description
