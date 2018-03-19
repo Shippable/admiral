@@ -4,11 +4,7 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Improved usability of the Nodes dashboard**: You can see the OS and architecture of your nodes when you click on any node in the Node pool.
 
 ## Fixes
   - When deploy jobs are removed from the yml, the services that they deployed are deleted automatically.
