@@ -503,11 +503,11 @@ __parse_args_upgrade() {
 
 __parse_args_restart() {
   export IS_RESTART=true
-  local db_container=$(sudo docker ps -a -q -f "name=db" | awk '{print $1}')
+  local db_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "db") || true
 
   if [ "$DB_IP" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking database container"
-    if [ "$db_container" != "" ]; then
+    if [ ! -z "$db_container" ]; then
       __process_msg "Found a stopped database container, starting it"
       sudo docker start $db_container
     else

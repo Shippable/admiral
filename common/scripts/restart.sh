@@ -33,10 +33,10 @@ __start_secrets() {
 
   if [ "$secrets_ip" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking secrets container"
-    local secrets_container=$(sudo docker ps -a -q -f "name=secrets" | awk '{print $1}')
-    if [ "$secrets_container" != "" ]; then
+    local secrets_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "secrets") || true
+    if [ ! -z "$secrets_container" ]; then
       __process_msg "Found a stopped secrets container, starting it"
-      sudo docker start $secrets_container
+      sudo docker start secrets
       sleep 3
     else
       __process_msg "Secrets installed on host, skipping secrets state check"
@@ -80,7 +80,6 @@ __unseal() {
   else
     __process_msg "Successfully called secrets unseal route"
   fi
-
 }
 
 __check_unseal_status() {
@@ -131,10 +130,10 @@ __start_msg() {
 
   if [ "$msg_ip" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking msg container"
-    local msg_container=$(sudo docker ps -a -q -f "name=msg" | awk '{print $1}')
-    if [ "$msg_container" != "" ]; then
+    local msg_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "msg") || true
+    if [ ! -z "$msg_container" ]; then
       __process_msg "Found a stopped msg container, starting it"
-      sudo docker start $msg_container
+      sudo docker start msg
       sleep 3
     else
       __process_msg "msg running on host, skipping msg state check"
@@ -162,10 +161,10 @@ __start_state() {
 
   if [ "$state_ip" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking state container"
-    local state_container=$(sudo docker ps -a -q -f "name=state" | awk '{print $1}')
-    if [ "$state_container" != "" ]; then
+    local state_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "state") || true
+    if [ ! -z "$state_container" ]; then
       __process_msg "Found a stopped state container, starting it"
-      sudo docker start $state_container
+      sudo docker start state
       sleep 3
     else
       __process_msg "state running on host, skipping state check"
@@ -193,10 +192,10 @@ __start_redis() {
 
   if [ "$redis_ip" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking redis container"
-    local redis_container=$(sudo docker ps -a -q -f "name=redis" | awk '{print $1}')
-    if [ "$redis_container" != "" ]; then
+    local redis_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "redis") || true
+    if [ ! -z "$redis_container" ]; then
       __process_msg "Found a stopped redis container, starting it"
-      sudo docker start $redis_container
+      sudo docker start redis
       sleep 3
     else
       __process_msg "redis running on host, skipping redis state check"
