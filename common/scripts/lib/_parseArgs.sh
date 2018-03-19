@@ -591,7 +591,9 @@ __wipe_clean() {
   confirmation=$(echo $confirmation | awk '{print toupper($0)}')
 
   if [[ "$confirmation" =~ "Y" ]]; then
-
+    if [ "$DEV_MODE" == "true" ]; then
+      sudo ./manageSharedNode clean
+    fi
     local count=$(docker ps -aq | wc -l)
     if [[ "$count" -ne 0 ]]; then
       local container_ids=$(docker ps -aq)
@@ -600,7 +602,6 @@ __wipe_clean() {
       for id in ${container_ids[@]}; do
         eval "$remove_cmd $id"
       done
-      sudo rm -rf /var/lib/shippable/shippable_dev
     else
       __process_msg "No containers found. Skipping removal."
     fi

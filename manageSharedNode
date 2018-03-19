@@ -70,7 +70,7 @@ __check_dbStatus() {
   __process_msg "db status check completed successfully"
 }
 
-__get_systemClusters() {
+__get_default_systemCluster() {
   __process_marker "getting systemClusters"
   _shippable_get_systemClusters 'isDefault=true'
   system_cluster=$(echo $response \
@@ -483,7 +483,7 @@ __parse_args() {
       clean)
         __process_marker "Cleaning..."
         __export_envs
-        __get_systemClusters
+        __get_default_systemCluster
         if [ "$(echo $system_cluster | jq -r '.')" != null ]; then
           __delete_systemCluster
         fi
@@ -494,7 +494,7 @@ __parse_args() {
       add)
         __check_dbStatus
         if [ $is_db_initialized != null ]; then
-          __get_systemClusters
+          __get_default_systemCluster
           __get_systemCodes
           __get_runtimetemplates
           if [ $is_default_system_cluster_available != true ]; then
