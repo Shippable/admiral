@@ -592,7 +592,9 @@ __wipe_clean() {
   confirmation=$(echo $confirmation | awk '{print toupper($0)}')
 
   if [[ "$confirmation" =~ "Y" ]]; then
-
+    if [ "$DEV_MODE" == "true" ]; then
+      sudo ./manageSharedNode clean
+    fi
     local count=$(docker ps -aq | wc -l)
     if [[ "$count" -ne 0 ]]; then
       local container_ids=$(docker ps -aq)

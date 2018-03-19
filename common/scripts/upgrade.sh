@@ -2,6 +2,7 @@
 
 readonly MAX_ERROR_LOG_COUNT=100
 export IS_SERVER=false
+export system_cluster=null
 
 __check_admiral() {
   __process_msg "Checking if admiral container is running"
@@ -422,6 +423,25 @@ __cleanup_workers() {
   fi
 }
 
+__upgrade_local_system_node_components() {
+  __process_marker "upgrading local system nodes"
+  get_default_systemCluster
+  if [ "$(echo $system_cluster | jq -r '.')" != null ]; then
+    sudo ./manageSharedNode clean
+    sudo ./manageSharedNode add
+  fi
+}
+
+get_default_systemCluster() {
+  __process_marker "getting systemClusters"
+  _shippable_get_systemClusters 'isDefault=true'
+  echo $response
+  system_cluster=$(echo $response \
+    | jq -r '.[0]')
+
+   __process_msg "systemClusters get completed successfully"
+}
+
 main() {
   if [ $IS_UPGRADE == true ]; then
     __process_marker "Upgrading Shippable installation"
@@ -447,6 +467,9 @@ main() {
     __delete_swarm_master_from_workers
     __cleanup_master
     __cleanup_workers
+    if [ "$DEV_MODE" == "true" ]; then
+      __upgrade_local_system_node_components
+    fi
   fi
 }
 
