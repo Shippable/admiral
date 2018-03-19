@@ -789,6 +789,11 @@ do $$
       alter table "jobs" add constraint "jobs_versionId_fkey" foreign key ("versionId") references "versions"(id) on update restrict on delete restrict;
     end if;
 
+    -- Add jobVersionIdI Index on jobs
+    if not exists (select 1 from pg_indexes where tablename = 'jobs' and indexname = 'jobVersionIdI') then
+      create index "jobVersionIdI" on "jobs" using btree("versionId");
+    end if;
+
     -- remove outdated routeRoles
     if exists (select 1 from information_schema.columns where table_name = 'routeRoles') then
       delete from "routeRoles" where "routePattern"='/accounts/:id' and "httpVerb"='GET';
