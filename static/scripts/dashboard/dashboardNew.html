@@ -185,7 +185,8 @@
                               <div class="col-md-12">
                                 <div class="checkbox checkbox-primary">
                                   <input id="checkbox_for_www_url" type="checkbox"
-                                    ng-model="vm.isEditingUIUrl"  ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="vm.isEditingUIUrl"  ng-disabled="vm.initializing ||
+                                    vm.installing || vm.saving || vm.restartingServices"/>
                                   <label for="checkbox_for_www_url">
                                     <b> Do you want to change friendly url? </b>
                                   </label>
@@ -282,7 +283,9 @@
                               <div class="col-md-12">
                                 <div class="checkbox checkbox-primary">
                                   <input id="checkbox_for_api_url" type="checkbox"
-                                    ng-model="vm.isEditingAPIUrl"  ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="vm.isEditingAPIUrl"
+                                    ng-disabled="vm.initializing || vm.installing || vm.saving ||
+                                    vm.restartingServices"/>
                                   <label for="checkbox_for_api_url">
                                     <b> Do you want to change friendly url of API? </b>
                                   </label>
@@ -337,7 +340,9 @@
                                 <div class="card-box">
                                   <div class="checkbox checkbox-primary">
                                     <input id="checkbox_for_internal_api" type="checkbox"
-                                      ng-model="vm.installForm.internalAPI.url.isEnabled"  ng-disabled="vm.installing || vm.saving"/>
+                                      ng-model="vm.installForm.internalAPI.url.isEnabled"
+                                      ng-disabled="vm.initializing || vm.installing || vm.saving ||
+                                      vm.restartingServices"/>
                                     <label for="checkbox_for_internal_api">
                                       <b> Dedicated Internal API </b>
                                     </label>
@@ -411,7 +416,9 @@
                                 <div class="card-box">
                                   <div class="checkbox checkbox-primary">
                                     <input id="checkbox_for_console_api" type="checkbox"
-                                      ng-model="vm.installForm.consoleAPI.url.isEnabled"  ng-disabled="vm.installing || vm.saving"/>
+                                      ng-model="vm.installForm.consoleAPI.url.isEnabled"
+                                      ng-disabled="vm.initializing || vm.installing || vm.saving ||
+                                      vm.restartingServices"/>
                                     <label for="checkbox_for_console_api">
                                       <b> Dedicated Console API </b>
                                     </label>
@@ -533,7 +540,8 @@
                               <div class="col-md-12">
                                 <div class="checkbox checkbox-primary">
                                   <input id="checkbox_for_mktg_url" type="checkbox"
-                                    ng-model="vm.isEditingMktgUrl"  ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="vm.isEditingMktgUrl"  ng-disabled="vm.initializing ||
+                                    vm.installing || vm.saving || vm.restartingServices"/>
                                   <label for="checkbox_for_mktg_url">
                                     <b> Do you want to change friendly url? </b>
                                   </label>
@@ -1066,7 +1074,8 @@
                                     <div class="col-md-12">
                                       <div class="checkbox checkbox-primary">
                                         <input id="checkbox_for_adding_worker" type="checkbox"
-                                          ng-model="vm.addNewWorker" ng-disabled="vm.installing || vm.saving"/>
+                                          ng-model="vm.addNewWorker" ng-disabled="vm.initializing ||
+                                          vm.installing || vm.saving || vm.restartingServices"/>
                                         <label for="checkbox_for_adding_worker">
                                           <b> Add a new swarm worker </b>
                                         </label>
@@ -1356,7 +1365,8 @@
                             <div class="col-md-12">
                               <div class="checkbox checkbox-primary">
                                 <input id="checkbox_for_msg_url" type="checkbox"
-                                  ng-model="vm.isEditingRabbitMqUrl"  ng-disabled="vm.installing || vm.saving"/>
+                                  ng-model="vm.isEditingRabbitMqUrl"  ng-disabled="vm.initializing ||
+                                  vm.installing || vm.saving || vm.restartingServices"/>
                                 <label for="checkbox_for_msg_url">
                                   <b> Do you want to change friendly url of RammitMq? </b>
                                 </label>
@@ -1555,7 +1565,8 @@
                             <div class="col-md-12">
                               <div class="checkbox checkbox-primary">
                                 <input id="checkbox_for_state_url" type="checkbox"
-                                  ng-model="vm.isEditingStateUrl"  ng-disabled="vm.installing || vm.saving"/>
+                                  ng-model="vm.isEditingStateUrl"  ng-disabled="vm.initializing ||
+                                  vm.installing || vm.saving || vm.restartingServices"/>
                                 <label for="checkbox_for_state_url">
                                   <b> Do you want to change friendly url of State? </b>
                                 </label>
@@ -1692,7 +1703,8 @@
                             <div class="col-md-12">
                               <div class="checkbox checkbox-primary">
                                 <input id="checkbox_for_redis_url" type="checkbox"
-                                  ng-model="vm.isEditingRedisUrl"  ng-disabled="vm.installing || vm.saving"/>
+                                  ng-model="vm.isEditingRedisUrl"  ng-disabled="vm.initializing ||
+                                  vm.installing || vm.saving || vm.restartingServices"/>
                                 <label for="checkbox_for_redis_url">
                                   <b> Do you want to change friendly url of Redis? </b>
                                 </label>
