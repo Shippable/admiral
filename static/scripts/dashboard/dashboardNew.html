@@ -3584,6 +3584,16 @@
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <h5 class="m-t-20"><b>Root Queue List:</b></h5>
+                  </div>
+                  <div class="col-md-5 m-t-15">
+                    <input type="text" class="form-control input-sm" name="msgRootQueueList"
+                      ng-model="vm.installForm.msg.rabbitmqCreds.data.rootQueueList"
+                      ng-disabled="vm.installing || vm.saving"/>
+                  </div>
+                </div>
               </div>
             </div>
           </div><!-- END ROW -->
