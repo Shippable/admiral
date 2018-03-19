@@ -348,6 +348,18 @@ __mark_swarm_manager_as_active() {
   __process_msg "Swarm manager marked active"
 }
 
+__delete_swarm_master_from_workers() {
+  __process_marker "Getting swarm master"
+  _shippable_get_master
+  local master_address=$(echo $response | jq -r '.address')
+
+  _shippable_get_workers
+  local worker_name=$(echo $response | jq -r '.[] | select (.address=="'$master_address'") | .name')
+  if [ ! -z "$worker_name" ]; then
+    _shippable_delete_worker_by_name "$worker_name"
+  fi
+}
+
 __cleanup_master() {
   __process_marker "Cleaning up swarm master node"
   _shippable_post_master_cleanup
@@ -432,6 +444,7 @@ main() {
     if [ $IS_SERVER == true ]; then
       __move_system_to_grisham
     fi
+    __delete_swarm_master_from_workers
     __cleanup_master
     __cleanup_workers
   fi
