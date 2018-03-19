@@ -2,7 +2,7 @@
 
 declare -a SERVICE_IMAGES=("api" "www" "micro" "mktg" "nexec" "genexec")
 declare -a PRIVATE_REGISTRY_IMAGES=("postgres" "vault" "rabbitmq" "gitlab" "redis")
-export ADMIRAL_IMAGE="u14admiral"
+export ADMIRAL_IMAGE="u16admiral"
 
 __check_dependencies() {
   __process_marker "Checking dependencies"
@@ -79,81 +79,35 @@ __check_dependencies() {
   sudo chown -R shippable:shippable /home/shippable/
 
   ################## Install Docker  #####################################
-  if type docker &> /dev/null && true; then
-    __process_msg "'docker' already installed, checking version"
-    local docker_version=$(docker --version)
-    if [[ "$docker_version" == *"$DOCKER_VERSION"* ]]; then
-      __process_msg "'docker' $docker_version installed"
-    else
-      __process_error "Docker version $docker_version installed, required $DOCKER_VERSION"
-      __process_error "Install Docker Version $DOCKER_VERSION from \"
-      https://docs.docker.com/v17.06/engine/installation/linux/docker-ce/centos/"
-      exit 1
-    fi
-  else
-    __process_msg "Docker not installed, installing Docker $DOCKER_VERSION"
-    rm -f installDockerScript.sh
-    touch installDockerScript.sh
-    echo '#!/bin/bash' >> installDockerScript.sh
-    echo 'install_docker_only="true"' >> installDockerScript.sh
+  __process_msg "Installing Docker $DOCKER_VERSION"
+  rm -f installDockerScript.sh
+  touch installDockerScript.sh
+  echo '#!/bin/bash' >> installDockerScript.sh
+  echo 'install_docker_only="true"' >> installDockerScript.sh
+  echo "SHIPPABLE_HTTP_PROXY=\"$SHIPPABLE_HTTP_PROXY\"" >> installDockerScript.sh
+  echo "SHIPPABLE_HTTPS_PROXY=\"$SHIPPABLE_HTTPS_PROXY\"" >> installDockerScript.sh
+  echo "SHIPPABLE_NO_PROXY=\"$SHIPPABLE_NO_PROXY\"" >> installDockerScript.sh
 
-    local node_scripts_location=/tmp/node
-    local node_s3_location="https://s3.amazonaws.com/shippable-artifacts/node/$RELEASE/node-$RELEASE.tar.gz"
+  local node_scripts_location=/tmp/node
+  local node_s3_location="https://s3.amazonaws.com/shippable-artifacts/node/$RELEASE/node-$RELEASE.tar.gz"
+  pushd /tmp
+    mkdir -p $node_scripts_location
+    curl -O $node_s3_location
+    tar -xzf node-$RELEASE.tar.gz -C $node_scripts_location --strip-components=1
+    rm -rf node-$RELEASE.tar.gz
+  popd
 
-    pushd /tmp
-      mkdir -p $node_scripts_location
-      curl -O $node_s3_location
-      tar -xzf node-$RELEASE.tar.gz -C $node_scripts_location --strip-components=1
-      rm -rf node-$RELEASE.tar.gz
-    popd
+  cat $node_scripts_location/lib/logger.sh >> installDockerScript.sh
+  cat $node_scripts_location/lib/headers.sh >> installDockerScript.sh
+  cat $node_scripts_location/initScripts/$ARCHITECTURE/$OPERATING_SYSTEM/Docker_$DOCKER_VERSION.sh >> installDockerScript.sh
 
-    cat $node_scripts_location/lib/logger.sh >> installDockerScript.sh
-    cat $node_scripts_location/lib/headers.sh >> installDockerScript.sh
-    cat $node_scripts_location/initScripts/$ARCHITECTURE/$OPERATING_SYSTEM/Docker_$DOCKER_VERSION.sh >> installDockerScript.sh
-
-    rm -rf $node_scripts_location
-    # Install Docker
-    chmod +x installDockerScript.sh
-    ./installDockerScript.sh
-    # sets env INSTALLED_DOCKER_VERSION
-    __set_installed_docker_version
-    rm installDockerScript.sh
-  fi
-
-  #
-  # Configure proxy for docker
-  #
-  docker_restart=false
-  mkdir -p /etc/systemd/system/docker.service.d
-
-  proxy_envs="[Service]\nEnvironment="
-
-  if [ ! -z "$SHIPPABLE_HTTP_PROXY" ]; then
-    proxy_envs="$proxy_envs \"HTTP_PROXY=$SHIPPABLE_HTTP_PROXY\""
-  fi
-
-  if [ ! -z "$SHIPPABLE_HTTPS_PROXY" ]; then
-    proxy_envs="$proxy_envs \"HTTPS_PROXY=$SHIPPABLE_HTTPS_PROXY\""
-  fi
-
-  if [ ! -z "$SHIPPABLE_NO_PROXY" ]; then
-    proxy_envs="$proxy_envs \"NO_PROXY=$SHIPPABLE_NO_PROXY\""
-  fi
-
-  local docker_proxy_config_file="/etc/systemd/system/docker.service.d/proxy.conf"
-
-  if [ -f "$docker_proxy_config_file" ] && [ "$(echo -e $proxy_envs)" == "$(cat $docker_proxy_config_file)" ]; then
-    docker_restart=false
-  else
-    docker_restart=true
-    echo -e "$proxy_envs" > "$docker_proxy_config_file"
-  fi
-
-  if [ $docker_restart == true ]; then
-    __process_msg "Restarting docker"
-    systemctl daemon-reload
-    systemctl restart docker
-  fi
+  rm -rf $node_scripts_location
+  # Install Docker
+  chmod +x installDockerScript.sh
+  ./installDockerScript.sh
+  # sets env INSTALLED_DOCKER_VERSION
+  __set_installed_docker_version
+  rm installDockerScript.sh
 
   ################## Install awscli  #####################################
   if type aws &> /dev/null && true; then

@@ -5,10 +5,11 @@ __create_exec_file() {
   rm -f installDockerScript.sh
   touch installDockerScript.sh
   echo '#!/bin/bash' >> installDockerScript.sh
-  echo 'readonly MESSAGE_STORE_LOCATION="/tmp/cexec"' >> installDockerScript.sh
-  echo 'readonly KEY_STORE_LOCATION="/tmp/ssh"' >> installDockerScript.sh
-  echo 'readonly BUILD_LOCATION="/build"' >> installDockerScript.sh
   echo 'install_docker_only="true"' >> installDockerScript.sh
+  echo "SHIPPABLE_HTTP_PROXY=\"$SHIPPABLE_HTTP_PROXY\"" >> installDockerScript.sh
+  echo "SHIPPABLE_HTTPS_PROXY=\"$SHIPPABLE_HTTPS_PROXY\"" >> installDockerScript.sh
+  echo "SHIPPABLE_NO_PROXY=\"$SHIPPABLE_NO_PROXY\"" >> installDockerScript.sh
+
   local node_scripts_location=/tmp/node
   local node_s3_location="https://s3.amazonaws.com/shippable-artifacts/node/$RELEASE/node-$RELEASE.tar.gz"
 

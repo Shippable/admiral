@@ -76,27 +76,28 @@ __check_dependencies() {
   sudo chown -R shippable:shippable /home/shippable/
 
   ################## Install Docker  #####################################
+  install_docker=true
+
   if type docker &> /dev/null && true; then
-    __process_msg "'docker' already installed, checking version"
-    if [[ "$INSTALLED_DOCKER_VERSION" == *"$DOCKER_VERSION"* ]]; then
-      __process_msg "'docker' $INSTALLED_DOCKER_VERSION installed"
-    else
-      __process_msg "Installed Docker version - $INSTALLED_DOCKER_VERSION \
-      not the same as latest supported version - $DOCKER_VERSION."
+    __set_installed_docker_version
+    # An upgrade flow later will handle this case.
+    if [[ "$INSTALLED_DOCKER_VERSION" == *"1.13"* ]]; then
+      install_docker=false
     fi
-  else
-    __process_msg "Docker not installed, installing Docker 1.13"
+  fi
+
+  if [[ $install_docker == true ]]; then
+    __process_msg "Installing Docker $DOCKER_VERSION"
     rm -f installDockerScript.sh
     touch installDockerScript.sh
     echo '#!/bin/bash' >> installDockerScript.sh
-    echo 'readonly MESSAGE_STORE_LOCATION="/tmp/cexec"' >> installDockerScript.sh
-    echo 'readonly KEY_STORE_LOCATION="/tmp/ssh"' >> installDockerScript.sh
-    echo 'readonly BUILD_LOCATION="/build"' >> installDockerScript.sh
     echo 'install_docker_only="true"' >> installDockerScript.sh
+    echo "SHIPPABLE_HTTP_PROXY=\"$SHIPPABLE_HTTP_PROXY\"" >> installDockerScript.sh
+    echo "SHIPPABLE_HTTPS_PROXY=\"$SHIPPABLE_HTTPS_PROXY\"" >> installDockerScript.sh
+    echo "SHIPPABLE_NO_PROXY=\"$SHIPPABLE_NO_PROXY\"" >> installDockerScript.sh
 
     local node_scripts_location=/tmp/node
     local node_s3_location="https://s3.amazonaws.com/shippable-artifacts/node/$RELEASE/node-$RELEASE.tar.gz"
-
     pushd /tmp
     mkdir -p $node_scripts_location
     wget $node_s3_location
@@ -114,75 +115,6 @@ __check_dependencies() {
     ./installDockerScript.sh
     __set_installed_docker_version
     rm installDockerScript.sh
-  fi
-
-  #
-  # Configure proxy for docker
-  #
-  docker_restart=false
-  if [ ! -z "$SHIPPABLE_HTTP_PROXY" ]; then
-    http_proxy_env="export http_proxy=\"$SHIPPABLE_HTTP_PROXY\""
-    http_proxy_exists=$(grep "^$http_proxy_env$" /etc/default/docker || echo "")
-    if [ -z $http_proxy_exists ]; then
-      __process_msg "Configuring docker http_proxy"
-      sed -i '/^export http_proxy/d' /etc/default/docker
-      echo "$http_proxy_env" >> /etc/default/docker
-      docker_restart=true
-    fi
-  else
-    # Clean up any env configured already if we do not find it in our
-    # environment
-    http_proxy_exists=$(grep "^export http_proxy=" /etc/default/docker || echo "")
-    if [ ! -z "$http_proxy_exists" ]; then
-      __process_msg "Removing docker http_proxy"
-      sed -i '/^export http_proxy/d' /etc/default/docker
-      docker_restart=true
-    fi
-  fi
-
-  if [ ! -z "$SHIPPABLE_HTTPS_PROXY" ]; then
-    https_proxy_env="export https_proxy=\"$SHIPPABLE_HTTPS_PROXY\""
-    https_proxy_exists=$(grep "^$https_proxy_env$" /etc/default/docker || echo "")
-    if [ -z $https_proxy_exists ]; then
-      __process_msg "Configuring docker https_proxy"
-      sed -i '/^export https_proxy/d' /etc/default/docker
-      echo "$https_proxy_env" >> /etc/default/docker
-      docker_restart=true
-    fi
-  else
-    # Clean up any env configured already if we do not find it in our
-    # environment
-    https_proxy_exists=$(grep "^export https_proxy=" /etc/default/docker || echo "")
-    if [ ! -z "$https_proxy_exists" ]; then
-      __process_msg "Removing docker https_proxy"
-      sed -i '/^export https_proxy/d' /etc/default/docker
-      docker_restart=true
-    fi
-  fi
-
-  if [ ! -z "$SHIPPABLE_NO_PROXY" ]; then
-    no_proxy_env="export no_proxy=\"$SHIPPABLE_NO_PROXY\""
-    no_proxy_exists=$(grep "^$no_proxy_env$" /etc/default/docker || echo "")
-    if [ -z $no_proxy_exists ]; then
-      __process_msg "Configuring docker no_proxy"
-      sed -i '/^export no_proxy/d' /etc/default/docker
-      echo "$no_proxy_env" >> /etc/default/docker
-      docker_restart=true
-    fi
-  else
-    # Clean up any env configured already if we do not find it in our
-    # environment
-    no_proxy_exists=$(grep "^export no_proxy=" /etc/default/docker || echo "")
-    if [ ! -z "$no_proxy_exists" ]; then
-      __process_msg "Removing docker no_proxy"
-      sed -i '/^export no_proxy/d' /etc/default/docker
-      docker_restart=true
-    fi
-  fi
-
-  if [ $docker_restart == true ]; then
-    __process_msg "Restarting docker"
-    service docker restart
   fi
 
   ################## Install awscli  #####################################
