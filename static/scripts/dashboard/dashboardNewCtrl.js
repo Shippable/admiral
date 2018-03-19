@@ -60,6 +60,7 @@
       isEditingMktgUrl: false,
       addNewWorker: false,
       isAuthInitialized: false,
+      showServiceStatus: false,
       globalServices: [
         'api',
         'mktg',
@@ -1893,6 +1894,14 @@
             );
           }
 
+          var enabledServices = _.filter($scope.vm.allServices,
+            function(svc){
+              return svc.isEnabled === true;
+            }
+          );
+          if (!_.isEmpty(enabledServices))
+            $scope.vm.showServiceStatus = true;
+
           return next();
         }
       );
@@ -2833,6 +2842,7 @@
       $scope.vm.installing = true;
 
       async.series([
+          postInitFlow,
           validateInstallForm,
           updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
