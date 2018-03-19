@@ -75,7 +75,7 @@ __get_default_systemCluster() {
   _shippable_get_systemClusters 'isDefault=true'
   if [ $response_status_code == "200" ]; then
     system_cluster=$(echo $response \
-      | jq -r '')
+      | jq -r '.[0]')
     if [ "$(echo $response | jq -r '.[0]')" != null ]; then
       is_default_system_cluster_available=true
       default_system_cluster_id=$(echo $response | jq -r '.[0].id')
