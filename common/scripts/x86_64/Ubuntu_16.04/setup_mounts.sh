@@ -1,4 +1,3 @@
-#!/bin/bash -e
 
 main() {
   local docker_client_location=$LEGACY_CI_DOCKER_CLIENT_LATEST

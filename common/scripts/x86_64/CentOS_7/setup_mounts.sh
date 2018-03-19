@@ -1,4 +1,3 @@
-#!/bin/bash -e
 
 main() {
   rm -rf $SHIPPABLE_RUNTIME_DIR

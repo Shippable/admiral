@@ -266,6 +266,7 @@ __setup_dirs() {
 
 __setup_mounts() {
   __process_marker "setting mounts"
+  source "$LOCAL_SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/setup_mounts.sh"
   /bin/bash -c "$LOCAL_SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/setup_mounts.sh"
 }
 
