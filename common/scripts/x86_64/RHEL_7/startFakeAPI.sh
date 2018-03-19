@@ -61,6 +61,12 @@ __docker_login() {
   fi
 }
 
+__pull_api_image() {
+  __process_msg "Pulling api image"
+
+  sudo docker pull $API_IMAGE
+}
+
 __run_api() {
   __process_msg "Running api container"
 
@@ -134,6 +140,7 @@ main() {
 
   __validate_api_envs
   __docker_login
+  __pull_api_image
   __run_api
   __check_api
 
