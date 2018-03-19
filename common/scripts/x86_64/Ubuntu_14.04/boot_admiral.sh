@@ -48,12 +48,8 @@ __boot_admiral() {
   fi
 
   __process_msg "Generating admiral mounts"
-  local docker_location=$(which docker)
   local mounts=" -v $CONFIG_DIR:$CONFIG_DIR \
     -v $RUNTIME_DIR:$RUNTIME_DIR \
-    -v $docker_location:/usr/bin/docker \
-    -v /usr/lib/x86_64-linux-gnu/libapparmor.so.1.1.0:/lib/x86_64-linux-gnu/libapparmor.so.1:rw \
-    -v /usr/lib/x86_64-linux-gnu/libltdl.so.7.3.0:/lib/x86_64-linux-gnu/libltdl.so.7:rw \
     -v /var/run/docker.sock:/var/run/docker.sock"
 
   local admiral_image="$PRIVATE_IMAGE_REGISTRY/$ADMIRAL_IMAGE:$RELEASE"

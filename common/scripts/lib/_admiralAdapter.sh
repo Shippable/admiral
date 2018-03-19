@@ -326,3 +326,9 @@ _shippable_delete_system_cluster() {
   local system_cluster_delete_by_id_endpoint="systemClusters/$system_cluster_id"
   __shippable_delete $system_cluster_delete_by_id_endpoint
 }
+
+_shippable_delete_worker_by_name() {
+  local worker_name="$1"
+  local worker_delete_by_name_endpoint="workers/$worker_name"
+  __shippable_delete $worker_delete_by_name_endpoint
+}
