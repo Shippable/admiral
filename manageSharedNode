@@ -73,15 +73,19 @@ __check_dbStatus() {
 __get_default_systemCluster() {
   __process_marker "getting systemClusters"
   _shippable_get_systemClusters 'isDefault=true'
-  system_cluster=$(echo $response \
-    | jq -r '.[0]')
-  if [ "$(echo $response | jq -r '.[0]')" != null ]; then
-    is_default_system_cluster_available=true
-    default_system_cluster_id=$(echo $response | jq -r '.[0].id')
-  fi
+  if [ $response_status_code == "200" ]; then
+    system_cluster=$(echo $response \
+      | jq -r '')
+    if [ "$(echo $response | jq -r '.[0]')" != null ]; then
+      is_default_system_cluster_available=true
+      default_system_cluster_id=$(echo $response | jq -r '.[0].id')
+    fi
 
-   __process_msg "is_default_system_cluster_available: $is_default_system_cluster_available"
-   __process_msg "systemClusters get completed successfully"
+     __process_msg "is_default_system_cluster_available: $is_default_system_cluster_available"
+     __process_msg "systemClusters get completed successfully"
+  else
+    echo "default system cluster not found!"
+  fi
 }
 
 
