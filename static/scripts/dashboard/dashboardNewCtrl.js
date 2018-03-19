@@ -2833,6 +2833,7 @@
       $scope.vm.installing = true;
 
       async.series([
+          postInitFlow,
           validateInstallForm,
           updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
