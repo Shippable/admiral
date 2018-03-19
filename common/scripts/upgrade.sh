@@ -413,24 +413,20 @@ __cleanup_workers() {
 
 __upgrade_local_system_node_components() {
   __process_marker "upgrading local system nodes"
-  __get_systemClusters
+  get_default_systemCluster
   if [ "$(echo $system_cluster | jq -r '.')" != null ]; then
     sudo ./manageSharedNode clean
     sudo ./manageSharedNode add
   fi
 }
 
-__get_systemClusters() {
+get_default_systemCluster() {
   __process_marker "getting systemClusters"
   _shippable_get_systemClusters 'isDefault=true'
   echo $response
   system_cluster=$(echo $response \
     | jq -r '.[0]')
-  if [ "$(echo $response | jq -r '.[0]')" != null ]; then
-    is_default_system_cluster_available=true
-  fi
 
-   __process_msg "is_default_system_cluster_available: $is_default_system_cluster_available"
    __process_msg "systemClusters get completed successfully"
 }
 
