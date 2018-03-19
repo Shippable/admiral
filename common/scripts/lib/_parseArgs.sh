@@ -503,13 +503,14 @@ __parse_args_upgrade() {
 
 __parse_args_restart() {
   export IS_RESTART=true
-  local db_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "db") || true
+  local db_container_name="db"
+  local db_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "$db_container_name") || true
 
   if [ "$DB_IP" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking database container"
     if [ ! -z "$db_container" ]; then
-      __process_msg "Found a stopped database container, starting it"
-      sudo docker start $db_container
+      __process_msg "Found a stopped $db_container_name container, starting it"
+      sudo docker start $db_container_name
     else
       __process_msg "DB installed on host, skipping db state check"
     fi

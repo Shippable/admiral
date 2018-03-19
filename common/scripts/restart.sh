@@ -16,6 +16,7 @@ __check_admiral() {
 }
 
 __start_secrets() {
+  local secrets_container_name="secrets"
   __process_marker "Starting secrets"
   __process_msg "Getting secrets config from DB"
   local secrets=""
@@ -32,11 +33,11 @@ __start_secrets() {
   local secrets_ip=$(echo $secrets | jq -r '.address')
 
   if [ "$secrets_ip" == "$ADMIRAL_IP" ]; then
-    __process_msg "Checking secrets container"
-    local secrets_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "secrets") || true
+    __process_msg "Checking $secrets_container_name container"
+    local secrets_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "$secrets_container_name") || true
     if [ ! -z "$secrets_container" ]; then
-      __process_msg "Found a stopped secrets container, starting it"
-      sudo docker start secrets
+      __process_msg "Found a stopped $secrets_container_name container, starting it"
+      sudo docker start "$secrets_container_name"
       sleep 3
     else
       __process_msg "Secrets installed on host, skipping secrets state check"
@@ -115,6 +116,7 @@ __check_unseal_status() {
 __start_msg() {
   __process_marker "Starting msg"
   __process_msg "Getting msg config from DB"
+  local msg_container_name="msg"
   local msg=""
   _shippable_get_msg
   if [ $response_status_code -gt 299 ]; then
@@ -130,10 +132,10 @@ __start_msg() {
 
   if [ "$msg_ip" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking msg container"
-    local msg_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "msg") || true
+    local msg_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "$msg_container_name") || true
     if [ ! -z "$msg_container" ]; then
-      __process_msg "Found a stopped msg container, starting it"
-      sudo docker start msg
+      __process_msg "Found a stopped $msg_container_name container, starting it"
+      sudo docker start "$msg_container_name"
       sleep 3
     else
       __process_msg "msg running on host, skipping msg state check"
@@ -147,6 +149,7 @@ __start_state() {
   __process_marker "Starting state"
   __process_msg "Getting state config from DB"
   local state=""
+  local state_container_name="state"
   _shippable_get_state
   if [ $response_status_code -gt 299 ]; then
     __process_error "Error getting state: $response"
@@ -161,10 +164,10 @@ __start_state() {
 
   if [ "$state_ip" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking state container"
-    local state_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "state") || true
+    local state_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "$state_container_name") || true
     if [ ! -z "$state_container" ]; then
-      __process_msg "Found a stopped state container, starting it"
-      sudo docker start state
+      __process_msg "Found a stopped $state_container_name container, starting it"
+      sudo docker start "$state_container_name"
       sleep 3
     else
       __process_msg "state running on host, skipping state check"
@@ -178,6 +181,7 @@ __start_redis() {
   __process_marker "Starting redis"
   __process_msg "Getting redis config from DB"
   local redis=""
+  local redis_container_name="redis"
   _shippable_get_redis
   if [ $response_status_code -gt 299 ]; then
     __process_error "Error getting redis: $response"
@@ -192,10 +196,10 @@ __start_redis() {
 
   if [ "$redis_ip" == "$ADMIRAL_IP" ]; then
     __process_msg "Checking redis container"
-    local redis_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "redis") || true
+    local redis_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "$redis_container_name") || true
     if [ ! -z "$redis_container" ]; then
-      __process_msg "Found a stopped redis container, starting it"
-      sudo docker start redis
+      __process_msg "Found a stopped $redis_container_name container, starting it"
+      sudo docker start "$redis_container_name"
       sleep 3
     else
       __process_msg "redis running on host, skipping redis state check"

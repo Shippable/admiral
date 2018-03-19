@@ -144,10 +144,11 @@ __upgrade_awscli_version() {
 
 __restart_db_container() {
   if $DOCKER_UPGRADE_REQUIRED; then
+    local db_container_name="db"
     local db_container=$(sudo docker ps -a --format "{{.Names}}" | grep -w "db") || true
     if [ ! -z "$db_container" ]; then
-      __process_msg "Found a stopped db container, starting it"
-      sudo docker start db
+      __process_msg "Found a stopped $db_container_name container, starting it"
+      sudo docker start "$db_container_name"
       sleep 3
     else
       __process_msg "DB not running as a container"
