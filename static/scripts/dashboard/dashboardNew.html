@@ -1519,7 +1519,7 @@
                         <span style="word-wrap: break-word;" class="col-md-2">
                           {{vm.installForm.state.gitlabCreds.data.url}}</span>
                       </div>
-                      <div class="col-md-12" ng-if="vm.systemSettings.state.address">
+                      <div class="col-md-12" ng-if="vm.installForm.state.gitlabCreds.localAddress">
                         <label class="control-label textAlignNone col-md-2">Local Address: </label>
                         <span style="word-wrap: break-word;" class="col-md-2">
                           {{vm.installForm.state.gitlabCreds.localAddress}}</span>
@@ -1682,7 +1682,7 @@
                         <label class="control-label textAlignNone col-md-2">URL: </label>
                         <span style="word-wrap: break-word;" class="col-md-2">{{vm.installForm.redis.url.data.url}}</span>
                       </div>
-                      <div class="col-md-12" ng-if="vm.systemSettings.redis.address">
+                      <div class="col-md-12" ng-if="vm.installForm.redis.url.localAddress">
                         <label class="control-label textAlignNone col-md-2">Local Address: </label>
                         <span style="word-wrap: break-word;" class="col-md-2">{{vm.installForm.redis.url.localAddress}}</span>
                       </div>

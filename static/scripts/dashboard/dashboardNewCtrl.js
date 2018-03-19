@@ -1317,7 +1317,8 @@
                   }
                   if (sysIntName === 'redis') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      $scope.vm.systemSettings.redis.address + ':6379';
+                      $scope.vm.systemSettings.redis.address + ':' +
+                      $scope.vm.systemSettings.redis.port;
                   }
                   if (sysIntName === 'state') {
                     var path =
