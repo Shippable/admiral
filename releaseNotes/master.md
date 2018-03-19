@@ -22,11 +22,8 @@ ${RES_VER_DATE}
 
 ## Shippable Server
 
-  - Features
-      - **simple title**: brief description
-  - Fixes
-      - **simple title**: brief description
-
+  - **Admiral allows specification of HTTP proxy servers**: Admiral downloads artifcats and packages needed for install using the HTTP protocol. If your corporate intranet routes HTTP traffic using a proxy, you can specify the proxy in Admiral UI.
+  
 ## History
 
 To view Shippable's release history, check out our [releases page on github](https://github.com/Shippable/admiral/releases).
