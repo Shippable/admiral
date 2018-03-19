@@ -266,27 +266,7 @@ __setup_dirs() {
 
 __setup_mounts() {
   __process_marker "setting mounts"
-  local docker_client_location=$LEGACY_CI_DOCKER_CLIENT_LATEST
-  if [ ! -f "$LEGACY_CI_DOCKER_CLIENT_LATEST" ]; then
-    IS_DOCKER_LEGACY=true
-    docker_client_location=$LEGACY_CI_DOCKER_CLIENT
-  fi
-
-  REQPROC_MOUNTS="$REQPROC_MOUNTS \
-    -v $BASE_DIR:$BASE_DIR \
-    -v /usr/lib/x86_64-linux-gnu/libapparmor.so.1.1.0:/lib/x86_64-linux-gnu/libapparmor.so.1:rw \
-    -v /var/run:/var/run:rw \
-    -v $docker_client_location:/usr/bin/docker \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v $LEGACY_CI_CACHE_STORE_LOCATION:$LEGACY_CI_CACHE_STORE_LOCATION:rw \
-    -v $LEGACY_CI_KEY_STORE_LOCATION:$LEGACY_CI_KEY_STORE_LOCATION:rw \
-    -v $LEGACY_CI_MESSAGE_STORE_LOCATION:$LEGACY_CI_MESSAGE_STORE_LOCATION:rw \
-    -v $LEGACY_CI_BUILD_LOCATION:$LEGACY_CI_BUILD_LOCATION:rw"
-
-  DEFAULT_TASK_CONTAINER_MOUNTS="$DEFAULT_TASK_CONTAINER_MOUNTS \
-    -v $docker_client_location:/usr/bin/docker \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v $NODE_SCRIPTS_LOCATION:/var/lib/shippable/node"
+  /bin/bash -c "$LOCAL_SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/setup_mounts.sh"
 }
 
 __setup_envs() {
@@ -463,34 +443,7 @@ __boot_reqProc() {
 
 __boot_reqKick() {
   __process_marker "Booting up reqKick service..."
-
-  if [ ! -z $BASE_UUID ]; then
-    local reqKick_service_name=$REQKICK_SERVICE_NAME_PATTERN-$BASE_UUID
-  else
-    local reqKick_service_name=$REQKICK_SERVICE_NAME_PATTERN
-  fi
-  local reqKick_config_file=/etc/init/$reqKick_service_name.conf
-
-  cp $REQKICK_SERVICE_DIR/shippable-reqKick.conf.template $reqKick_config_file
-
-  sed -i "s#{{STATUS_DIR}}#$STATUS_DIR#g" $reqKick_config_file
-  sed -i "s#{{SCRIPTS_DIR}}#$SCRIPTS_DIR#g" $reqKick_config_file
-  sed -i "s#{{REQEXEC_BIN_PATH}}#$REQEXEC_BIN_PATH#g" $reqKick_config_file
-  sed -i "s#{{RUN_MODE}}#$RUN_MODE#g" $reqKick_config_file
-  sed -i "s#{{UUID}}#$BASE_UUID#g" $reqKick_config_file
-
-  sudo service $reqKick_service_name start
-
-  {
-    echo "Checking if $reqKick_service_name is active"
-    local check_reqKick_is_active=$(sudo initctl status $reqKick_service_name)
-    echo $check_reqKick_is_active
-  } ||
-  {
-    echo "$reqKick_service_name failed to start"
-    sudo tail -n 100 /var/log/upstart/$reqKick_service_name.log || true
-    exit 1
-  }
+  /bin/bash -c "$LOCAL_SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/boot_reqKick.sh"
 }
 
 __delete_systemCluster() {
