@@ -11,9 +11,7 @@ ${RES_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - When deploy jobs are removed from the yml, the services that they deployed are deleted automatically.
 
 ## Custom Nodes
   - **simple title**: brief description
