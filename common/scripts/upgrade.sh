@@ -349,7 +349,7 @@ __mark_swarm_manager_as_active() {
 }
 
 __delete_swarm_master_from_workers() {
-  __process_marker "Getting swarm master"
+  __process_msg "Getting swarm master"
   _shippable_get_master
   local master_address=$(echo $response | jq -r '.address')
 
