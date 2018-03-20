@@ -20,6 +20,7 @@ ${RES_VER_DATE}
 ## Shippable Server
 
   - **Admiral allows specification of HTTP proxy servers**: Admiral downloads artifcats and packages needed for install using the HTTP protocol. If your corporate intranet routes HTTP traffic using a proxy, you can specify the proxy in Admiral UI.
+  - **Support for public GIT repos for GitHub Enterprise**: Public gitRepo's can be specified as an input for runSh/runCLI jobs. 
   
 ## History
 
