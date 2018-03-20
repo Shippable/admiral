@@ -1568,6 +1568,7 @@
             'jobConsoleBufferTimeIntervalMS',
             'apiRetryIntervalMS',
             'accountSyncFrequencyHr',
+            'maxDiskUsagePercentage',
             'rootS3Bucket',
             'nodeScriptsLocation',
             'enforcePrivateJobQuota',

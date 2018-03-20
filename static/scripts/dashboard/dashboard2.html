@@ -3071,6 +3071,15 @@
                       ng-model="vm.installForm.systemSettings.accountSyncFrequencyHr" ng-disabled="vm.installing || vm.saving"/>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <h5 class="m-t-20"><b>Max Disk Usage (in Percentage):</b></h5>
+                  </div>
+                  <div class="col-md-5 m-t-15">
+                    <input type="number" min="1" max="99" class="form-control input-sm" name="maxDiskUsagePercentage"
+                      ng-model="vm.installForm.systemSettings.maxDiskUsagePercentage" ng-disabled="vm.installing || vm.saving"/>
+                  </div>
+                </div>
                 <div class="row m-t-15" ng-if="vm.admiralEnv.IS_SERVER === false">
                   <div class="col-md-12">
                     <div class="checkbox checkbox-primary">
