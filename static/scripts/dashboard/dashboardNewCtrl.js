@@ -1257,7 +1257,7 @@
               apiIntegration.data.url.split('://')[1];
             var protocol = apiIntegration.data.url.split('://')[0];
             $scope.vm.installForm.internalAPI.url.localAddress =
-              protocol + '://' + $scope.vm.systemSettings.master.address + ':50000';
+              concatWorkerAddress(protocol, '50000');
           }
 
           var consoleAPIIntegration =
@@ -1272,7 +1272,7 @@
               apiIntegration.data.url.split('://')[1];
             var protocol = apiIntegration.data.url.split('://')[0];
             $scope.vm.installForm.consoleAPI.url.localAddress =
-              protocol + '://' + $scope.vm.systemSettings.master.address + ':50000';
+              concatWorkerAddress(protocol, '50000');
           }
 
           $scope.vm.systemIntegrations = systemIntegrations;
@@ -1309,16 +1309,16 @@
                     $scope.vm.installForm[sysIntName][masterName].data.url.split('://')[0];
                   if (sysIntName === 'www') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      protocol + '://' + $scope.vm.systemSettings.master.address + ':50001';
+                      concatWorkerAddress(protocol, '50001');
                   }
                   if (sysIntName === 'mktg') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      protocol + '://' + $scope.vm.systemSettings.master.address + ':50002';
+                      concatWorkerAddress(protocol, '50002');
                   }
                   if (sysIntName === 'api' || sysIntName === 'internalAPI'
                     || sysIntName === 'consoleAPI') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      protocol + '://' + $scope.vm.systemSettings.master.address + ':50000';
+                      concatWorkerAddress(protocol, '50000');
                   }
                   if (sysIntName === 'redis') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
@@ -1377,6 +1377,19 @@
           return next();
         }
       );
+    }
+
+    function concatWorkerAddress(protocol, port) {
+      var masterAddress = protocol + '://' + $scope.vm.systemSettings.master.address + ':' + port;
+      var workerAddress = '';
+      _.each($scope.vm.systemSettings.workers,
+        function (worker) {
+          var address = protocol + '://' + worker.address + ':' + port;
+          workerAddress = workerAddress.concat(', ' + address);
+        }
+      );
+      masterAddress = masterAddress.concat(workerAddress);
+      return masterAddress;
     }
 
     function validateSCMUrlWorkflow(url, masterName) {
