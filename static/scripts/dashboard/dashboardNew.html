@@ -123,22 +123,24 @@
               </p>
               <p ng-if="vm.showServiceStatus">
                 <label class="control-label">Services Status</label>
-                <table class="table table-bordered m-0">
-                  <thead>
-                    <tr>
-                      <th ng-repeat="service in vm.allServices | orderBy: 'serviceName'"
-                      ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">{{service.serviceName}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="text-center" ng-repeat="service in vm.allServices | orderBy: 'serviceName'"
-                      ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">
-                        <i class="fa fa-check" style="color: green;"></i>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div style="overflow: auto;">
+                  <table class="table table-bordered m-0">
+                    <thead>
+                      <tr>
+                        <th ng-repeat="service in vm.allServices | orderBy: 'serviceName'"
+                        ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">{{service.serviceName}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="text-center" ng-repeat="service in vm.allServices | orderBy: 'serviceName'"
+                        ng-if="service.isEnabled && (service.serviceName !== 'mktg' || !vm.admiralEnv.IS_SERVER)">
+                          <i class="fa fa-check" style="color: green;"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </p>
             </div>
           </div>
