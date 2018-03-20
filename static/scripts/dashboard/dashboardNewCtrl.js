@@ -1255,8 +1255,9 @@
               apiIntegration.data.url;
             $scope.vm.installForm.internalAPI.url.fqdn =
               apiIntegration.data.url.split('://')[1];
+            var protocol = apiIntegration.data.url.split('://')[0];
             $scope.vm.installForm.internalAPI.url.localAddress =
-              'http://' + $scope.vm.systemSettings.master.address + ':50000';
+              protocol + '://' + $scope.vm.systemSettings.master.address + ':50000';
           }
 
           var consoleAPIIntegration =
@@ -1269,8 +1270,9 @@
               apiIntegration.data.url;
             $scope.vm.installForm.consoleAPI.url.fqdn =
               apiIntegration.data.url.split('://')[1];
+            var protocol = apiIntegration.data.url.split('://')[0];
             $scope.vm.installForm.consoleAPI.url.localAddress =
-              'http://' + $scope.vm.systemSettings.master.address + ':50000';
+              protocol + '://' + $scope.vm.systemSettings.master.address + ':50000';
           }
 
           $scope.vm.systemIntegrations = systemIntegrations;
@@ -1303,18 +1305,20 @@
                   $scope.vm.installForm[sysIntName][masterName].fqdn = url;
                   $scope.vm.installForm[sysIntName][masterName].address =
                     url.split(':')[0].split('/')[0];
+                  var protocol =
+                    $scope.vm.installForm[sysIntName][masterName].data.url.split('://')[0];
                   if (sysIntName === 'www') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      'http://' + $scope.vm.systemSettings.master.address + ':50001';
+                      protocol + '://' + $scope.vm.systemSettings.master.address + ':50001';
                   }
                   if (sysIntName === 'mktg') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      'http://' + $scope.vm.systemSettings.master.address + ':50002';
+                      protocol + '://' + $scope.vm.systemSettings.master.address + ':50002';
                   }
                   if (sysIntName === 'api' || sysIntName === 'internalAPI'
                     || sysIntName === 'consoleAPI') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      'http://' + $scope.vm.systemSettings.master.address + ':50000';
+                      protocol + '://' + $scope.vm.systemSettings.master.address + ':50000';
                   }
                   if (sysIntName === 'redis') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
@@ -1325,7 +1329,7 @@
                     var path =
                       $scope.vm.installForm[sysIntName][masterName].data.url.split('/api')[1];
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      'http://' + $scope.vm.systemSettings.state.address + '/api' + path;
+                      protocol + '://' + $scope.vm.systemSettings.state.address + '/api' + path;
                   }
                 }
                 if (sysIntName === 'msg') {
@@ -1877,7 +1881,6 @@
           }
 
           $scope.vm.allServices = services;
-
           if (!$scope.vm.installing && !$scope.vm.saving) {
             // Don't change this while installing
             $scope.vm.requireRestart = _.some($scope.vm.allServices,
