@@ -18,6 +18,7 @@ do $$
         "jobConsoleBatchSize" INTEGER DEFAULT 10 NOT NULL,
         "jobConsoleBufferTimeIntervalMS" INTEGER DEFAULT 3000 NOT NULL,
         "apiRetryIntervalMS" INTEGER DEFAULT 3000 NOT NULL,
+        "maxDiskUsagePercentage" INTEGER DEFAULT 90 NOT NULL,
         "truck" BOOLEAN DEFAULT false NOT NULL,
         "rootS3Bucket" VARCHAR(64) NOT NULL,
         "nodeScriptsLocation" VARCHAR(255) NOT NULL,
@@ -85,6 +86,10 @@ do $$
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'lastIntercomRSyncScanAt') then
       alter table "systemSettings" add column "lastIntercomRSyncScanAt" TIMESTAMP WITH TIME ZONE;
+    end if;
+
+    if not exists(select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'maxDiskUsagePercentage') then
+      alter table "systemSettings" add column "maxDiskUsagePercentage" INTEGER DEFAULT 90 NOT NULL;
     end if;
 
   end
