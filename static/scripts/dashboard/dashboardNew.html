@@ -1210,11 +1210,11 @@
                     <div class="col-md-9" ng-if="vm.systemSettings.secrets.isInitialized">
                       <div class="col-md-12" ng-if="vm.systemSettings.secrets.address">
                         <label class="control-label textAlignNone col-md-2">Secrets Address: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">{{vm.systemSettings.secrets.address}}</span>
+                        <span style="word-wrap: break-word;" class="col-md-4">{{vm.systemSettings.secrets.address}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.systemSettings.secrets.port">
                         <label class="control-label textAlignNone col-md-2">Secrets Port: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">{{vm.systemSettings.secrets.port}}</span>
+                        <span style="word-wrap: break-word;" class="col-md-4">{{vm.systemSettings.secrets.port}}</span>
                       </div>
                     </div>
                   </div><!--row ends-->
@@ -1294,9 +1294,9 @@
                       </div>
                     </div>
                     <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.msg.initType === 'new' || vm.initializeForm.msg.initType === 'existing' && !vm.systemSettings.msg.isInitialized">
-                      <div ng-if="vm.initializeForm.msg.address">
-                        <h5>IP address where RabbitMQ is installed:</h5>
-                        <span>{{vm.initializeForm.msg.address}}</span>
+                      <div class="col-md-12" ng-if="vm.initializeForm.msg.address">
+                        <label class="control-label textAlignNone col-md-3">IP address where RabbitMQ is installed: </label>
+                        <span style="word-wrap: break-word;" class="col-md-4">{{vm.initializeForm.msg.address}}</span>
                       </div>
                     </div>
                     <div class="col-md-9" ng-if="vm.systemSettings.msg.isInitialized">
@@ -1323,40 +1323,40 @@
                       <h4 class="control-label col-md-2 textAlignNone m-t-10">Service Addresses:</h4>
                       <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrl">
                         <label class="control-label textAlignNone col-md-3">AMQP URL: </label>
-                        <span style="word-wrap: break-word;" class="col-md-6">
+                        <span style="word-wrap: break-word;" class="col-md-8">
                           {{vm.installForm.msg.rabbitmqCreds.data.amqpUrl}}</span>
                       </div>
                       <div class="col-md-12">
                         <label class="control-label textAlignNone col-md-3"
                           ng-if="vm.installForm.msg.rabbitmqCreds.localAddress">Local AMQP Address: </label>
-                        <span style="word-wrap: break-word;" class="col-md-6">
+                        <span style="word-wrap: break-word;" class="col-md-8">
                           {{vm.installForm.msg.rabbitmqCreds.localAddress}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot">
                         <label class="control-label textAlignNone col-md-3">AMQP Root URL: </label>
-                        <span style="word-wrap: break-word;" class="col-md-6">
+                        <span style="word-wrap: break-word;" class="col-md-8">
                           {{vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot}}</span>
                       </div>
                       <div class="col-md-12">
                         <label class="control-label textAlignNone col-md-3"
                           ng-if="vm.installForm.msg.rabbitmqCreds.localRootAddress">Local AMQP Root Address: </label>
-                        <span style="word-wrap: break-word;" class="col-md-6">
+                        <span style="word-wrap: break-word;" class="col-md-8">
                           {{vm.installForm.msg.rabbitmqCreds.localRootAddress}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin">
                         <label class="control-label textAlignNone col-md-3">AMQP Admin URL: </label>
-                        <span style="word-wrap: break-word;" class="col-md-6">
+                        <span style="word-wrap: break-word;" class="col-md-8">
                           {{vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin}}</span>
                       </div>
                       <div class="col-md-12">
                         <label class="control-label textAlignNone col-md-3"
                           ng-if="vm.installForm.msg.rabbitmqCreds.localAdminAddress">Local AMQP Admin Address: </label>
-                        <span style="word-wrap: break-word;" class="col-md-6">
+                        <span style="word-wrap: break-word;" class="col-md-8">
                           {{vm.installForm.msg.rabbitmqCreds.localAdminAddress}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange">
                         <label class="control-label textAlignNone col-md-3">AMQP Default URL: </label>
-                        <span style="word-wrap: break-word;" class="col-md-6">
+                        <span style="word-wrap: break-word;" class="col-md-8">
                           {{vm.installForm.msg.rabbitmqCreds.data.amqpDefaultExchange}}</span>
                       </div>
                       <div class="col-md-12 m-t-10">
@@ -1526,37 +1526,37 @@
                     <div class="col-md-9" ng-if="vm.systemSettings.state.isInitialized">
                       <div class="col-md-12" ng-if="vm.installForm.state.gitlabCreds.fqdn">
                         <label class="control-label textAlignNone col-md-2">Url: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">
+                        <span style="word-wrap: break-word;" class="col-md-4">
                           {{vm.installForm.state.gitlabCreds.data.url}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.installForm.state.gitlabCreds.localAddress">
                         <label class="control-label textAlignNone col-md-2">Local Address: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">
+                        <span style="word-wrap: break-word;" class="col-md-4">
                           {{vm.installForm.state.gitlabCreds.localAddress}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.installForm.state.gitlabCreds.data.password">
                         <label class="control-label textAlignNone col-md-2">State Password: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">
+                        <span style="word-wrap: break-word;" class="col-md-4">
                           {{vm.installForm.state.gitlabCreds.data.password}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.installForm.state.gitlabCreds.data.username">
                         <label class="control-label textAlignNone col-md-2">State Username: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">
+                        <span style="word-wrap: break-word;" class="col-md-4">
                           {{vm.installForm.state.gitlabCreds.data.username}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.systemSettings.state.port">
                         <label class="control-label textAlignNone col-md-2">State Port: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">
+                        <span style="word-wrap: break-word;" class="col-md-4">
                           {{vm.systemSettings.state.port}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.systemSettings.state.sshPort">
                         <label class="control-label textAlignNone col-md-2">State SSH Port: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">
+                        <span style="word-wrap: break-word;" class="col-md-4">
                           {{vm.systemSettings.state.sshPort}}</span>
                       </div>
                       <div class="col-md-12" ng-if="vm.systemSettings.state.securePort">
                         <label class="control-label textAlignNone col-md-2">State Secure Port: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2">
+                        <span style="word-wrap: break-word;" class="col-md-4">
                           {{vm.systemSettings.state.securePort}}</span>
                       </div>
                       <div class="col-md-12 m-t-10">
@@ -1795,34 +1795,34 @@
                     <div class="col-md-9">
                       <div class="col-md-12">
                         <label class="control-label textAlignNone col-md-2">Database Address: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.address">
+                        <span style="word-wrap: break-word;" class="col-md-8" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.address">
                           {{vm.systemSettings.db.address}}</span>
                         <span style="word-wrap: break-word;" class="col-md-2" ng-if="!vm.systemSettings.db.isInitialized">-</span>
                       </div>
                       <div class="col-md-12">
                         <label class="control-label textAlignNone col-md-2">Database Port: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.port">
+                        <span style="word-wrap: break-word;" class="col-md-8" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.port">
                           {{vm.systemSettings.db.port}}
                         </span>
                         <span style="word-wrap: break-word;" class="col-md-2" ng-if="!vm.systemSettings.db.isInitialized">-</span>
                       </div>
                       <div class="col-md-12">
                         <label class="control-label textAlignNone col-md-2">Database Name: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.dbName">
+                        <span style="word-wrap: break-word;" class="col-md-8" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.dbName">
                           {{vm.systemSettings.db.dbName}}
                         </span>
                         <span style="word-wrap: break-word;" class="col-md-2" ng-if="!vm.systemSettings.db.isInitialized">-</span>
                       </div>
                       <div class="col-md-12">
                         <label class="control-label textAlignNone col-md-2">Database User: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.dbUser">
+                        <span style="word-wrap: break-word;" class="col-md-8" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.dbUser">
                           {{vm.systemSettings.db.dbUser}}
                         </span>
                         <span style="word-wrap: break-word;" class="col-md-2" ng-if="!vm.systemSettings.db.isInitialized">-</span>
                       </div>
                       <div class="col-md-12">
                         <label class="control-label textAlignNone col-md-2">Database Password: </label>
-                        <span style="word-wrap: break-word;" class="col-md-2" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.dbPassword">
+                        <span style="word-wrap: break-word;" class="col-md-8" ng-if="vm.systemSettings.db.isInitialized && vm.systemSettings.db.dbPassword">
                           {{vm.systemSettings.db.dbPassword}}
                         </span>
                         <span style="word-wrap: break-word;" class="col-md-2" ng-if="!vm.systemSettings.db.isInitialized">-</span>
