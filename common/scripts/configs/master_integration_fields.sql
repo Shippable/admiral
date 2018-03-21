@@ -679,6 +679,22 @@ do $$
       values (273, '59e71aa80552d20500e76bb1', 'tenant', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-15', '2017-11-15');
     end if;
 
+    -- masterIntegrationFields for jira
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 274) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (274, '59e71aa80552d20500e76bb2', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-21', '2018-03-21');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 275) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (275, '59e71aa80552d20500e76bb2', 'username', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-21', '2018-03-21');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 276) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (276, '59e71aa80552d20500e76bb2', 'token', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-21', '2018-03-21');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
