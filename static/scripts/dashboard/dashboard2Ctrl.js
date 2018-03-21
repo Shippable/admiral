@@ -449,6 +449,10 @@
           displayName: '',
           isEnabled: false
         },
+        jira: {
+          displayName: '',
+          isEnabled: false
+        },
         TRIPUB: {
           displayName: '',
           isEnabled: false
