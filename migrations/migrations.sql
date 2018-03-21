@@ -5070,5 +5070,10 @@ do $$
       end if;
     end if;
 
+    -- Add maxDiskUsagePercentage flag to systemClusters
+    if not exists (select 1 from information_schema.columns where table_name = 'systemClusters' and column_name = 'maxDiskUsagePercentage') then
+      alter table "systemClusters" add column "maxDiskUsagePercentage" INTEGER;
+    end if;
+
   end
 $$;
