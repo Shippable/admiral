@@ -304,6 +304,12 @@ do $$
       values ('59e71aa80552d20500e76bb1', 87, 'azureKeys', 'Azure Keys', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-15', '2017-11-15');
     end if;
 
+    -- adds jira master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'jira' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('59e71aa80552d20500e76bb2', 88, 'jira', 'Jira', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-21', '2017-03-21');
+    end if;
+
     -- END adding master integrations
 
     -- Remove masterIntegrations
