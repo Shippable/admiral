@@ -760,6 +760,8 @@
       addWorker: addWorker,
       removeWorker: removeWorker,
       addSystemMachineImage: addSystemMachineImage,
+      updateSMI: updateSMI,
+      editSystemMachineImage: editSystemMachineImage,
       removeSystemMachineImage: removeSystemMachineImage,
       apply: apply,
       install: install,
@@ -1819,6 +1821,7 @@
             return next();
 
           $scope.vm.archTypes = _.filter(systemCodes, {group: 'archType'});
+          $scope.vm.archTypesByCode = _.groupBy($scope.vm.archTypes, 'code');
           $scope.vm.clusterTypes = _.filter(systemCodes, {group:'clusterType'});
           $scope.vm.x86ArchCode = _.findWhere($scope.vm.archTypes,
             {name: 'x86_64'}).code;
@@ -1938,7 +1941,6 @@
               'Please reinitialize.');
             return next();
           }
-
           $scope.vm.installForm.systemMachineImages =
             _.map(systemMachineImages,
               function (image) {
@@ -1947,7 +1949,8 @@
                 return image;
               }
             );
-
+          $scope.vm.installForm.systemMachineImagesById =
+            _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
           return next();
         }
       );
@@ -2034,7 +2037,7 @@
         function (err) {
           if (err)
             return popup_horn.error(err);
-
+          popup_horn.success('Successfully applied changes');
         }
       );
     }
@@ -2600,7 +2603,25 @@
         sshPort: 22
       };
 
-      $scope.vm.installForm.systemMachineImages.push(newSystemMachineImage);
+      $scope.vm.selectedSMI = newSystemMachineImage;
+      $('#smi-edit-modal').modal('show');
+    }
+
+    function updateSMI(image) {
+      $scope.vm.selectedSMI =_.clone(
+        _.first($scope.vm.installForm.systemMachineImagesById[image.id]));
+      $('#smi-edit-modal').modal('show');
+    }
+
+    function editSystemMachineImage(image) {
+      var smi = _.findWhere($scope.vm.installForm.systemMachineImages,
+        { id: image.id });
+      if (!smi)
+        $scope.vm.installForm.systemMachineImages.push(image);
+      else
+        _.extend(_.findWhere(
+          $scope.vm.installForm.systemMachineImages, { id: image.id }), image);
+      $('#smi-edit-modal').modal('hide');
     }
 
     function removeSystemMachineImage(image) {
