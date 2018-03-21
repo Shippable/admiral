@@ -2366,6 +2366,62 @@ do $$
       roleCode := 6020
     );
 
+    -- Allow admins of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/issueTypes',
+      httpVerb := 'GET',
+      roleCode := 6020
+    );
+
+    -- Allow collabs of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/issueTypes',
+      httpVerb := 'GET',
+      roleCode := 6010
+    );
+
+    -- Allow members of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/issueTypes',
+      httpVerb := 'GET',
+      roleCode := 6000
+    );
+
+    -- Allow justUsers of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/issueTypes',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
+    -- Allow admins of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/projects',
+      httpVerb := 'GET',
+      roleCode := 6020
+    );
+
+    -- Allow collabs of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/projects',
+      httpVerb := 'GET',
+      roleCode := 6010
+    );
+
+    -- Allow members of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/projects',
+      httpVerb := 'GET',
+      roleCode := 6000
+    );
+
+    -- Allow justUsers of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/projects',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
     --set payments routeRoles
     perform set_route_role(
       routePattern := '/payments/clienttoken',
