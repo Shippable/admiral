@@ -638,6 +638,14 @@
 .checkbox-inverse input[type="checkbox"]:checked + label::after {
   color: #ffffff;
 }
+.toggle-bar .switchery {
+  width: 30px !important;
+  height: 20px !important;
+}
+.toggle-bar .switchery small{
+  width: 20px !important;
+  height: 20px !important;
+}
 .radio {
   padding-left: 20px;
 }

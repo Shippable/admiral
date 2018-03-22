@@ -122,99 +122,142 @@
         validateSCMUrlWorkflow(url, masterName);
       },
       cancelStateUpdate: function () {
-        $scope.vm.isEditingStateUrl = false;
+        $timeout(function () {
+          $scope.vm.isEditingStateUrl = false;
+          $('#checkbox_for_state_url').trigger('click');
+        }, 0);
       },
       cancelRedisUpdate: function () {
-        $scope.vm.isEditingRedisUrl = false;
+        $timeout(function () {
+          $scope.vm.isEditingRedisUrl = false;
+          $('#checkbox_for_redis_url').trigger('click');
+        }, 0);
       },
       cancelRabbitMqUpdate: function () {
-        $scope.vm.isEditingRabbitMqUrl = false;
+        $timeout(function () {
+          $scope.vm.isEditingRabbitMqUrl = false;
+          $('#checkbox_for_msg_url').trigger('click');
+        }, 0);
       },
       cancelUIUpdate: function () {
-        $scope.vm.isEditingUIUrl = false;
+        $timeout(function () {
+          $scope.vm.isEditingUIUrl = false;
+          $('#checkbox_for_www_url').trigger('click');
+        }, 0);
       },
       cancelMktgUpdate: function () {
-        $scope.vm.isEditingMktgUrl = false;
+        $timeout(function () {
+          $scope.vm.isEditingMktgUrl = false;
+          $('#checkbox_for_mktg_url').trigger('click');
+        }, 0);
       },
       cancelAPIUpdate: function () {
-        $scope.vm.isEditingAPIUrl = false;
+        $timeout(function () {
+          $scope.vm.isEditingAPIUrl = false;
+          $('#checkbox_for_api_url').trigger('click');
+        }, 0);
       },
       cancelInternalAPIUpdate: function () {
-        $scope.vm.isEditingInternalAPIUrl = false;
+        $timeout(function () {
+          $scope.vm.isEditingInternalAPIUrl = false;
+          $('#checkbox_for_editing_internalApi_url').trigger('click');
+        }, 0);
       },
       cancelConsoleAPIUpdate: function () {
-        $scope.vm.isEditingConsoleAPIUrl = false;
+        $timeout(function () {
+          $scope.vm.isEditingConsoleAPIUrl = false;
+          $('#checkbox_for_editing_consoleApi_url').trigger('click');
+        }, 0);
       },
       cancelAddWorker: function () {
-        $scope.vm.addNewWorker = false;
+        $timeout(function () {
+          $scope.vm.addNewWorker = false;
+          $('#checkbox_for_adding_worker').trigger('click');
+        }, 0);
       },
       updateStateUrl: function (isSecure, updatedAddress) {
-        var protocol = '';
-        if (isSecure === true)
-          protocol = 'https';
-        else
-          protocol = 'http';
-        $scope.vm.installForm.state.gitlabCreds.data.url =
-          protocol + '://' + updatedAddress;
-        $scope.vm.installForm.consoleAPI.url.fqdn = updatedAddress;
-        $scope.vm.isEditingStateUrl = false;
+        $timeout(function () {
+          var protocol = '';
+          if (isSecure === true)
+            protocol = 'https';
+          else
+            protocol = 'http';
+          $scope.vm.installForm.state.gitlabCreds.data.url =
+            protocol + '://' + updatedAddress;
+          $scope.vm.installForm.consoleAPI.url.fqdn = updatedAddress;
+          $scope.vm.isEditingStateUrl = false;
+          $('#checkbox_for_state_url').trigger('click');
+        }, 0);
       },
       updateRabbitMqUrl: function (isSecure, updatedAddress, updatedRootAdd,
         updatedAdminAdd) {
-        var adminProtocol = '';
-        var protocol = '';
-        if (isSecure === true) {
-          protocol = 'amqps';
-          adminProtocol = 'https';
-        } else {
-          protocol = 'amqp';
-          adminProtocol = 'http';
-        }
-        var amqpUrl = $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrl;
-        $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrl =
-          protocol + '://' + amqpUrl.split('://')[1].split('@')[0] + '@' +
-          updatedAddress + '/' + amqpUrl.split('@')[1].split('/')[1];
-        var amqpUrlRoot =
-          $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot;
-        $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot =
-          protocol + '://' + amqpUrlRoot.split('://')[1].split('@')[0] + '@' +
-          updatedRootAdd + '/' + amqpUrlRoot.split('@')[1].split('/')[1];
-        var amqpUrlAdmin =
-          $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin;
-        $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin =
-          adminProtocol + '://' + amqpUrlAdmin.split('://')[1].split('@')[0] +
-          '@' + updatedAdminAdd;
-        $scope.vm.isEditingRabbitMqUrl = false;
+        $timeout(function () {
+          var adminProtocol = '';
+          var protocol = '';
+          if (isSecure === true) {
+            protocol = 'amqps';
+            adminProtocol = 'https';
+          } else {
+            protocol = 'amqp';
+            adminProtocol = 'http';
+          }
+          var amqpUrl = $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrl;
+          $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrl =
+            protocol + '://' + amqpUrl.split('://')[1].split('@')[0] + '@' +
+            updatedAddress + '/' + amqpUrl.split('@')[1].split('/')[1];
+          var amqpUrlRoot =
+            $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot;
+          $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlRoot =
+            protocol + '://' + amqpUrlRoot.split('://')[1].split('@')[0] + '@' +
+            updatedRootAdd + '/' + amqpUrlRoot.split('@')[1].split('/')[1];
+          var amqpUrlAdmin =
+            $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin;
+          $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin =
+            adminProtocol + '://' + amqpUrlAdmin.split('://')[1].split('@')[0] +
+            '@' + updatedAdminAdd;
+          $scope.vm.isEditingRabbitMqUrl = false;
+          $('#checkbox_for_msg_url').trigger('click');
+        }, 0);
       },
       updateRedisUrl: function (updatedAddress) {
-        $scope.vm.installForm.redis.url.data.url = updatedAddress;
-        $scope.vm.installForm.redis.url.fqdn = updatedAddress;
-        $scope.vm.isEditingRedisUrl = false;
+        $timeout(function () {
+          $scope.vm.installForm.redis.url.data.url = updatedAddress;
+          $scope.vm.installForm.redis.url.fqdn = updatedAddress;
+          $scope.vm.isEditingRedisUrl = false;
+          $('#checkbox_for_redis_url').trigger('click');
+        }, 0);
       },
       saveServiceUrl: function (isSecure, updatedAddress, service) {
-        var protocol = '';
-        if (isSecure === true)
-          protocol = 'https';
-        else
-          protocol = 'http';
-        $scope.vm.installForm[service].url.data.url =
-          protocol + '://' + updatedAddress;
-        $scope.vm.installForm[service].url.fqdn = updatedAddress;
-        if (service === 'www') {
-          $scope.vm.isEditingUIUrl = false;
-        }
-        if (service === 'api') {
-          $scope.vm.isEditingAPIUrl = false;
-        }
-        if (service === 'mktg') {
-          $scope.vm.isEditingMktgUrl = false;
-        }
-        if (service === 'internalAPI') {
-          $scope.vm.isEditingInternalAPIUrl = false;
-        }
-        if (service === 'consoleAPI') {
-          $scope.vm.isEditingConsoleAPIUrl = false;
-        }
+        $timeout(function () {
+          var protocol = '';
+          if (isSecure === true)
+            protocol = 'https';
+          else
+            protocol = 'http';
+          $scope.vm.installForm[service].url.data.url =
+            protocol + '://' + updatedAddress;
+          $scope.vm.installForm[service].url.fqdn = updatedAddress;
+          if (service === 'www') {
+            $scope.vm.isEditingUIUrl = false;
+            $('#checkbox_for_www_url').trigger('click');
+          }
+          if (service === 'api') {
+            $scope.vm.isEditingAPIUrl = false;
+            $('#checkbox_for_api_url').trigger('click');
+          }
+          if (service === 'mktg') {
+            $scope.vm.isEditingMktgUrl = false;
+            $('#checkbox_for_mktg_url').trigger('click');
+          }
+          if (service === 'internalAPI') {
+            $scope.vm.isEditingInternalAPIUrl = false;
+            $('#checkbox_for_editing_internalApi_url').trigger('click');
+          }
+          if (service === 'consoleAPI') {
+            $scope.vm.isEditingConsoleAPIUrl = false;
+            $('#checkbox_for_editing_consoleApi_url').trigger('click');
+          }
+        }, 0);
       },
       checkEmailMethod: function (method) {
         if (method === 'gmail') {
@@ -766,6 +809,7 @@
       apply: apply,
       install: install,
       save: save,
+      saveAndRestart: saveAndRestart,
       saveServices: saveServices,
       restartServices: restartServices,
       installAddons: installAddons,
@@ -780,6 +824,7 @@
       showSaveServicesModal: showSaveServicesModal,
       showRestartServicesModal: showRestartServicesModal,
       showApplyChangesModal: showApplyChangesModal,
+      showSaveAndRestartModal: showSaveAndRestartModal,
       showEULAModal: showEULAModal,
       refreshLogs: refreshLogs,
       isGlobalService: isGlobalService,
@@ -842,6 +887,13 @@
           }
         }
       );
+    }
+
+    function triggerSwitchery(id) {
+      $timeout(function () {
+        id = '#' + id;
+        $(id).trigger('click');
+      }, 0);
     }
 
     function setBreadcrumb(bag, next) {
@@ -2525,54 +2577,57 @@
     }
 
     function addWorker(worker) {
-      if (!worker.name.length) {
-        popup_horn.error('A swarm worker should have a valid name');
-        return;
-      }
-
-      if (validateIP(worker.address) === 'has-error') {
-        popup_horn.error('A swarm worker should have a valid IP address');
-        return;
-      }
-
-      if (worker.address === $scope.vm.admiralEnv.ADMIRAL_IP) {
-        popup_horn.error('The swarm worker cannot have the same IP as the ' +
-          'swarm master');
-        return;
-      }
-
-      var nameInUse = _.some($scope.vm.initializeForm.workers.workers,
-        function (existingWorker) {
-          return existingWorker.name === worker.name;
+      $timeout(function () {
+        if (!worker.name.length) {
+          popup_horn.error('A swarm worker should have a valid name');
+          return;
         }
-      );
 
-      if (nameInUse) {
-        popup_horn.error('A swarm worker already exists with that name. ' +
-          'Worker names must be unique.'
-        );
-        return;
-      }
-
-      var addressInUse = _.some($scope.vm.initializeForm.workers.workers,
-        function (existingWorker) {
-          return existingWorker.address === worker.address;
+        if (validateIP(worker.address) === 'has-error') {
+          popup_horn.error('A swarm worker should have a valid IP address');
+          return;
         }
-      );
 
-      if (addressInUse) {
-        popup_horn.error('A swarm worker already exists with that address. ' +
-          'Worker addresses must be unique.'
+        if (worker.address === $scope.vm.admiralEnv.ADMIRAL_IP) {
+          popup_horn.error('The swarm worker cannot have the same IP as the ' +
+            'swarm master');
+          return;
+        }
+
+        var nameInUse = _.some($scope.vm.initializeForm.workers.workers,
+          function (existingWorker) {
+            return existingWorker.name === worker.name;
+          }
         );
-        return;
-      }
 
-      $scope.vm.initializeForm.workers.workers.push(worker);
-      $scope.vm.initializeForm.workers.newWorker = {
-        name: '',
-        address: ''
-      };
-      $scope.vm.addNewWorker = false;
+        if (nameInUse) {
+          popup_horn.error('A swarm worker already exists with that name. ' +
+            'Worker names must be unique.'
+          );
+          return;
+        }
+
+        var addressInUse = _.some($scope.vm.initializeForm.workers.workers,
+          function (existingWorker) {
+            return existingWorker.address === worker.address;
+          }
+        );
+
+        if (addressInUse) {
+          popup_horn.error('A swarm worker already exists with that address. ' +
+            'Worker addresses must be unique.'
+          );
+          return;
+        }
+
+        $scope.vm.initializeForm.workers.workers.push(worker);
+        $scope.vm.initializeForm.workers.newWorker = {
+          name: '',
+          address: ''
+        };
+        $scope.vm.addNewWorker = false;
+        $('#checkbox_for_adding_worker').trigger('click');
+      }, 0);
     }
 
     function removeWorker (worker) {
@@ -2933,6 +2988,20 @@
 
           if (next)
             return next();
+        }
+      );
+    }
+
+    function saveAndRestart() {
+      $('#save-restart-modal').modal('hide')
+      async.series([
+          save,
+          restartServices
+        ],
+        function (err) {
+          if (err)
+            return popup_horn.error(err);
+          popup_horn.success('Successfully Restarted');
         }
       );
     }
@@ -4140,6 +4209,10 @@
       $('#applyModal').modal('show');
     }
 
+    function showSaveAndRestartModal() {
+      $('#save-restart-modal').modal('show');
+    }
+
     function hideRestartServicesModal() {
       $('#restartServicesModal').modal('hide');
     }
@@ -4188,6 +4261,7 @@
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
           updateIrcService,
+          updateFilestoreSystemIntegration,
           getEnabledServices.bind(null, bag),
           deleteAddonServices.bind(null, bag),
           deleteIrcService.bind(null, bag),
