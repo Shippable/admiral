@@ -32,6 +32,7 @@
       githubEnterpriseKeys: 'ghe',
       gitlabKeys: 'gitlab'
     };
+    var systemMachineImagesById;
     $scope.vm = {
       isLoaded: false,
       resetSwitchForAmazonKeys: false,
@@ -2005,7 +2006,7 @@
                 return image;
               }
             );
-          $scope.vm.installForm.systemMachineImagesById =
+          systemMachineImagesById =
             _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
           return next();
         }
@@ -2668,7 +2669,7 @@
 
     function updateSMI(image) {
       $scope.vm.selectedSMI =_.clone(
-        _.first($scope.vm.installForm.systemMachineImagesById[image.id]));
+        _.first(systemMachineImagesById[image.id]));
       $('#smi-edit-modal').modal('show');
     }
 
