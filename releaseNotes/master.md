@@ -4,13 +4,16 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **Improved usability of the Nodes dashboard**: You can see the OS and architecture of your nodes when you click on any node in the Node pool.
-  - **Ability to specify timeout for runCI and runSh jobs**: You can specify the timeout of your runSh jobs in yml or Shippable UI. In the UI, timeout can be specified at the Node pool or Subscription level in the Node pool or Subscription settings respectively. Please read the [runSh](http://rcdocs.shippable.com/platform/workflow/job/runsh/) documentation on timeoutMinutes for more inforamtion on how to specify the timeout in your yml file.  
+  - **simple title**: brief description. [link to docs](#).
+      - itemized
+      - list
+      - for details
+      - if necessary
 
 ## Fixes
-  - When deploy jobs are removed from the yml, the services that they deployed are deleted automatically.
-  - When a soft deleted syncRepo is restored from the UI, all the jobs and resources created by the syncRepo are correctly restored.
-  - The DELETE method on the /resources route works as expected.
+  - **simple title**: brief description
+      - actions required
+      - or additional details
 
 ## Custom Nodes
   - **simple title**: brief description
@@ -19,9 +22,11 @@ ${RES_VER_DATE}
 
 ## Shippable Server
 
-  - **Admiral allows specification of HTTP proxy servers**: Admiral downloads artifcats and packages needed for install using the HTTP protocol. If your corporate intranet routes HTTP traffic using a proxy, you can specify the proxy in Admiral UI.
-  - **Support for public GIT repos for GitHub Enterprise**: Public gitRepo's can be specified as an input for runSh/runCLI jobs. 
-  
+  - Features
+      - **simple title**: brief description
+  - Fixes
+      - **simple title**: brief description
+
 ## History
 
 To view Shippable's release history, check out our [releases page on github](https://github.com/Shippable/admiral/releases).
