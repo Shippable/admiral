@@ -1317,6 +1317,8 @@
             $scope.vm.installForm.internalAPI.url.fqdn =
               apiIntegration.data.url.split('://')[1];
             var protocol = apiIntegration.data.url.split('://')[0];
+            $scope.vm.installForm.internalAPI.url.isSecure =
+              protocol === 'https' ? true : false;
             $scope.vm.installForm.internalAPI.url.localAddress =
               concatWorkerAddress(protocol, '50000');
           }
@@ -1332,6 +1334,8 @@
             $scope.vm.installForm.consoleAPI.url.fqdn =
               apiIntegration.data.url.split('://')[1];
             var protocol = apiIntegration.data.url.split('://')[0];
+            $scope.vm.installForm.consoleAPI.url.isSecure =
+              protocol === 'https' ? true : false;
             $scope.vm.installForm.consoleAPI.url.localAddress =
               concatWorkerAddress(protocol, '50000');
           }
@@ -1368,6 +1372,9 @@
                     url.split(':')[0].split('/')[0];
                   var protocol =
                     $scope.vm.installForm[sysIntName][masterName].data.url.split('://')[0];
+                  if (protocol)
+                    $scope.vm.installForm[sysIntName][masterName].isSecure =
+                      protocol === 'https' ? true : false;
                   if (sysIntName === 'www') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
                       concatWorkerAddress(protocol, '50001');
@@ -1421,6 +1428,8 @@
                   $scope.vm.installForm[sysIntName][masterName].localAdminAddress =
                     amqpUrlAdmin.split('@')[0] + '@' + defaultAddress + ':' +
                     $scope.vm.systemSettings.msg.adminPort;
+                  $scope.vm.installForm[sysIntName][masterName].isSecure =
+                    amqpUrl.split('://')[0] === 'amqps' ? true : false;
                 }
                 if (sysIntName === 'auth') {
                   var providerAuthName = providerAuthNames[masterName];
