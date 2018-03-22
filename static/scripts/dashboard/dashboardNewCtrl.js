@@ -2681,12 +2681,16 @@
       else
         _.extend(_.findWhere(
           $scope.vm.installForm.systemMachineImages, { id: image.id }), image);
+      systemMachineImagesById =
+        _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
       $('#smi-edit-modal').modal('hide');
     }
 
     function removeSystemMachineImage(image) {
       $scope.vm.installForm.systemMachineImages =
         _.without($scope.vm.installForm.systemMachineImages, image);
+      systemMachineImagesById =
+        _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
     }
 
     function updateReleaseVersion(bag, next) {

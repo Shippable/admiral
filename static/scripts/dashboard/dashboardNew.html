@@ -2066,7 +2066,7 @@
                                   </div>
                                   <div class="col-md-12 m-t-15">
                                     <div class="row has-error" ng-if="!vm.hasDefaultx86SystemMachineImage() && vm.installForm.systemSettings.allowDynamicNodes">
-                                      <div class="help-block m-b-20 font-14 col-md-offset-1 col-md-4">
+                                      <div class="help-block m-b-20 font-14 col-md-4">
                                         One machine image must be default.
                                       </div>
                                     </div>
@@ -2289,7 +2289,7 @@
           <div class="row">
             <div class="col-md-12 text-right">
               <button class="btn btn-md btn-primary waves-light" type="submit" ng-click="vm.showSaveAndRestartModal()"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave">
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave || (!vm.hasDefaultx86SystemMachineImage() && vm.installForm.systemSettings.allowDynamicNodes)">
                 <div ng-if="vm.saving">
                   Saving...
                 </div>
