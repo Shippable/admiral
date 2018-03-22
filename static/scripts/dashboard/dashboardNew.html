@@ -185,15 +185,16 @@
                           <div class="card-box col-md-12">
                             <div class="row">
                               <div class="col-md-12">
-                                <div class="checkbox checkbox-primary">
+                                <div class="toggle-bar">
                                   <input id="checkbox_for_www_url" type="checkbox"
                                     ng-model="vm.isEditingUIUrl"  ng-disabled="vm.initializing ||
-                                    vm.installing || vm.saving || vm.restartingServices"/>
+                                    vm.installing || vm.saving || vm.restartingServices"
+                                    class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_www_url">
                                     <b> Do you want to change friendly url? </b>
                                   </label>
                                 </div>
-                                <div class="row" ng-if="vm.isEditingUIUrl">
+                                <div class="row m-t-10" ng-if="vm.isEditingUIUrl">
                                   <form class="form-horizontal" role="form" name="vm.wwwInstallForm" novalidate>
                                     <div class="col-md-12" ng-if="vm.isEditingUIUrl">
                                       <label class="control-label textAlignNone col-md-1">Protocol</label>
@@ -283,16 +284,16 @@
                           <div class="card-box col-md-12">
                             <div class="row">
                               <div class="col-md-12">
-                                <div class="checkbox checkbox-primary">
+                                <div class="toggle-bar">
                                   <input id="checkbox_for_api_url" type="checkbox"
                                     ng-model="vm.isEditingAPIUrl"
                                     ng-disabled="vm.initializing || vm.installing || vm.saving ||
-                                    vm.restartingServices"/>
+                                    vm.restartingServices" class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_api_url">
                                     <b> Do you want to change friendly url of API? </b>
                                   </label>
                                 </div>
-                                <div class="row" ng-if="vm.isEditingAPIUrl">
+                                <div class="row m-t-10" ng-if="vm.isEditingAPIUrl">
                                   <form class="form-horizontal" role="form" name="vm.apiInstallForm" novalidate>
                                     <div class="col-md-12" ng-if="vm.isEditingAPIUrl">
                                       <label class="control-label textAlignNone col-md-1">Protocol</label>
@@ -340,16 +341,16 @@
                             <div class="row">
                               <div class="col-md-12">
                                 <div class="card-box">
-                                  <div class="checkbox checkbox-primary">
+                                  <div class="toggle-bar">
                                     <input id="checkbox_for_internal_api" type="checkbox"
                                       ng-model="vm.installForm.internalAPI.url.isEnabled"
                                       ng-disabled="vm.initializing || vm.installing || vm.saving ||
-                                      vm.restartingServices"/>
+                                      vm.restartingServices" class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                     <label for="checkbox_for_internal_api">
                                       <b> Dedicated Internal API </b>
                                     </label>
                                   </div>
-                                  <div class="row" ng-if="vm.installForm.internalAPI.url.isEnabled">
+                                  <div class="row m-t-10" ng-if="vm.installForm.internalAPI.url.isEnabled">
                                     <div class="col-md-12">
                                       <label class="control-label textAlignNone col-md-2">Internal API URL:</label>
                                       <span style="word-wrap: break-word;" class="col-md-2">{{vm.installForm.internalAPI.url.data.url}}</span>
@@ -362,14 +363,16 @@
                                       <div class="card-box col-md-12">
                                         <div class="row">
                                           <div class="col-md-12">
-                                            <div class="checkbox checkbox-primary">
+                                            <div class="toggle-bar">
                                               <input id="checkbox_for_editing_internalApi_url" type="checkbox"
-                                                ng-model="vm.isEditingInternalAPIUrl"  ng-disabled="vm.installing || vm.saving"/>
+                                                ng-model="vm.isEditingInternalAPIUrl"
+                                                ng-disabled="vm.installing || vm.saving"
+                                                class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                               <label for="checkbox_for_editing_internalApi_url">
                                                 <b> Do you want to change friendly url of Internal API? </b>
                                               </label>
                                             </div>
-                                            <div class="row" ng-if="vm.isEditingInternalAPIUrl">
+                                            <div class="row m-t-10" ng-if="vm.isEditingInternalAPIUrl">
                                               <form class="form-horizontal" role="form" name="vm.internalApiInstallForm" novalidate>
                                                 <div class="col-md-12" ng-if="vm.isEditingInternalAPIUrl">
                                                   <label class="control-label textAlignNone col-md-1">Protocol</label>
@@ -416,16 +419,16 @@
                               </div>
                               <div class="col-md-12">
                                 <div class="card-box">
-                                  <div class="checkbox checkbox-primary">
+                                  <div class="toggle-bar">
                                     <input id="checkbox_for_console_api" type="checkbox"
                                       ng-model="vm.installForm.consoleAPI.url.isEnabled"
                                       ng-disabled="vm.initializing || vm.installing || vm.saving ||
-                                      vm.restartingServices"/>
+                                      vm.restartingServices" class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                     <label for="checkbox_for_console_api">
                                       <b> Dedicated Console API </b>
                                     </label>
                                   </div>
-                                  <div class="row" ng-if="vm.installForm.consoleAPI.url.isEnabled">
+                                  <div class="row m-t-10" ng-if="vm.installForm.consoleAPI.url.isEnabled">
                                     <div class="col-md-12">
                                       <label class="control-label textAlignNone col-md-2">Console API URL:</label>
                                       <span style="word-wrap: break-word;" class="col-md-2">{{vm.installForm.consoleAPI.url.data.url}}</span>
@@ -438,14 +441,16 @@
                                       <div class="card-box col-md-12">
                                         <div class="row">
                                           <div class="col-md-12">
-                                            <div class="checkbox checkbox-primary">
+                                            <div class="toggle-bar">
                                               <input id="checkbox_for_editing_consoleApi_url" type="checkbox"
-                                                ng-model="vm.isEditingConsoleAPIUrl"  ng-disabled="vm.installing || vm.saving"/>
+                                                ng-model="vm.isEditingConsoleAPIUrl"
+                                                ng-disabled="vm.installing || vm.saving"
+                                                class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                               <label for="checkbox_for_editing_consoleApi_url">
                                                 <b> Do you want to change friendly url of Console API? </b>
                                               </label>
                                             </div>
-                                            <div class="row" ng-if="vm.isEditingConsoleAPIUrl">
+                                            <div class="row m-t-10" ng-if="vm.isEditingConsoleAPIUrl">
                                               <form class="form-horizontal" role="form" name="vm.consoleApiInstallForm" novalidate>
                                                 <div class="col-md-12" ng-if="vm.isEditingConsoleAPIUrl">
                                                   <label class="control-label textAlignNone col-md-1">Protocol</label>
@@ -540,10 +545,11 @@
                           <div class="card-box col-md-12">
                             <div class="row">
                               <div class="col-md-12">
-                                <div class="checkbox checkbox-primary">
+                                <div class="toggle-bar">
                                   <input id="checkbox_for_mktg_url" type="checkbox"
                                     ng-model="vm.isEditingMktgUrl"  ng-disabled="vm.initializing ||
-                                    vm.installing || vm.saving || vm.restartingServices"/>
+                                    vm.installing || vm.saving || vm.restartingServices"
+                                    class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_mktg_url">
                                     <b> Do you want to change friendly url? </b>
                                   </label>
@@ -631,16 +637,19 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bb_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.bitbucketKeys.isEnabled"  ng-change="vm.toggleAuthProvider('bitbucket')"/>
+                                  ng-model="vm.installForm.auth.bitbucketKeys.isEnabled"  ng-change="vm.toggleAuthProvider('bitbucket')"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bb_auth">
                                   <b> Auth </b>
                                 </label>
                               </div>
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bb_scm" type="checkbox"
-                                  ng-model="vm.installForm.scm.bitbucket.isEnabled" ng-disabled="vm.installForm.auth.bitbucketKeys.isEnabled"/>
+                                  ng-model="vm.installForm.scm.bitbucket.isEnabled"
+                                  ng-disabled="vm.installForm.auth.bitbucketKeys.isEnabled"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bb_scm">
                                   <b> SCM </b>
                                 </label>
@@ -700,16 +709,20 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bbs_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled"  ng-change="vm.toggleAuthProvider('bitbucketServer')"/>
+                                  ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled"
+                                  ng-change="vm.toggleAuthProvider('bitbucketServer')"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bbs_auth">
                                   <b> Auth </b>
                                 </label>
                               </div>
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bbs_scm" type="checkbox"
-                                  ng-model="vm.installForm.scm.bitbucketServer.isEnabled" ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled"/>
+                                  ng-model="vm.installForm.scm.bitbucketServer.isEnabled"
+                                  ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bbs_scm">
                                   <b> SCM </b>
                                 </label>
@@ -776,16 +789,19 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_github_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.githubKeys.isEnabled"  ng-change="vm.toggleAuthProvider('github')"/>
+                                  ng-model="vm.installForm.auth.githubKeys.isEnabled"
+                                  ng-change="vm.toggleAuthProvider('github')"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_github_auth">
                                   <b> Auth </b>
                                 </label>
                               </div>
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_github_scm" type="checkbox"
-                                  ng-model="vm.installForm.scm.github.isEnabled" ng-disabled="vm.installForm.auth.githubKeys.isEnabled"/>
+                                  ng-model="vm.installForm.scm.github.isEnabled" ng-disabled="vm.installForm.auth.githubKeys.isEnabled"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_github_scm">
                                   <b> SCM </b>
                                 </label>
@@ -845,16 +861,20 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_ghe_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled"  ng-change="vm.toggleAuthProvider('githubEnterprise')"/>
+                                  ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled"
+                                  ng-change="vm.toggleAuthProvider('githubEnterprise')"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_ghe_auth">
                                   <b> Auth </b>
                                 </label>
                               </div>
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_ghe_scm" type="checkbox"
-                                  ng-model="vm.installForm.scm.githubEnterprise.isEnabled" ng-disabled="vm.installForm.auth.githubEnterpriseKeys.isEnabled"/>
+                                  ng-model="vm.installForm.scm.githubEnterprise.isEnabled"
+                                  ng-disabled="vm.installForm.auth.githubEnterpriseKeys.isEnabled"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_ghe_scm">
                                   <b> SCM </b>
                                 </label>
@@ -921,16 +941,20 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_gitlab_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.gitlabKeys.isEnabled"  ng-change="vm.toggleAuthProvider('gitlab')"/>
+                                  ng-model="vm.installForm.auth.gitlabKeys.isEnabled"
+                                  ng-change="vm.toggleAuthProvider('gitlab')"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_gitlab_auth">
                                   <b> Auth </b>
                                 </label>
                               </div>
-                              <div class="checkbox checkbox-primary checkbox-inline">
+                              <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_gitlab_scm" type="checkbox"
-                                  ng-model="vm.installForm.scm.gitlab.isEnabled" ng-disabled="vm.installForm.auth.gitlabKeys.isEnabled"/>
+                                  ng-model="vm.installForm.scm.gitlab.isEnabled"
+                                  ng-disabled="vm.installForm.auth.gitlabKeys.isEnabled"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_gitlab_scm">
                                   <b> SCM </b>
                                 </label>
@@ -1074,10 +1098,11 @@
                                 <div class="card-box col-md-12">
                                   <div class="row">
                                     <div class="col-md-12">
-                                      <div class="checkbox checkbox-primary">
+                                      <div class="toggle-bar">
                                         <input id="checkbox_for_adding_worker" type="checkbox"
                                           ng-model="vm.addNewWorker" ng-disabled="vm.initializing ||
-                                          vm.installing || vm.saving || vm.restartingServices"/>
+                                          vm.installing || vm.saving || vm.restartingServices"
+                                          class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                         <label for="checkbox_for_adding_worker">
                                           <b> Add a new swarm worker </b>
                                         </label>
@@ -1365,10 +1390,11 @@
                         <div class="card-box col-md-12">
                           <div class="row">
                             <div class="col-md-12">
-                              <div class="checkbox checkbox-primary">
+                              <div class="toggle-bar">
                                 <input id="checkbox_for_msg_url" type="checkbox"
                                   ng-model="vm.isEditingRabbitMqUrl"  ng-disabled="vm.initializing ||
-                                  vm.installing || vm.saving || vm.restartingServices"/>
+                                  vm.installing || vm.saving || vm.restartingServices"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_msg_url">
                                   <b> Do you want to change friendly url of RammitMq? </b>
                                 </label>
@@ -1565,10 +1591,11 @@
                         <div class="card-box col-md-12">
                           <div class="row">
                             <div class="col-md-12">
-                              <div class="checkbox checkbox-primary">
+                              <div class="toggle-bar">
                                 <input id="checkbox_for_state_url" type="checkbox"
                                   ng-model="vm.isEditingStateUrl"  ng-disabled="vm.initializing ||
-                                  vm.installing || vm.saving || vm.restartingServices"/>
+                                  vm.installing || vm.saving || vm.restartingServices"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_state_url">
                                   <b> Do you want to change friendly url of State? </b>
                                 </label>
@@ -1703,10 +1730,11 @@
                         <div class="card-box col-md-12">
                           <div class="row">
                             <div class="col-md-12">
-                              <div class="checkbox checkbox-primary">
+                              <div class="toggle-bar">
                                 <input id="checkbox_for_redis_url" type="checkbox"
                                   ng-model="vm.isEditingRedisUrl"  ng-disabled="vm.initializing ||
-                                  vm.installing || vm.saving || vm.restartingServices"/>
+                                  vm.installing || vm.saving || vm.restartingServices"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_redis_url">
                                   <b> Do you want to change friendly url of Redis? </b>
                                 </label>
@@ -1944,46 +1972,6 @@
                 </div>
                 <div id="buildConfig" class="panel-collapse {{vm.initialized ? 'collapse' : 'collapse in'}}">
                   <div class="portlet-body">
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div class="card-box">
-                          <div class="checkbox checkbox-primary">
-                            <input id="checkbox_for_artifacts_upload" type="checkbox"
-                              ng-model="vm.installForm.filestore.amazonKeys.isEnabled"  ng-disabled="vm.installing || vm.saving"/>
-                            <label for="checkbox_for_artifacts_upload">
-                              <b> Enable build artifact caching using AWS S3 </b>
-                            </label>
-                          </div>
-                          <div class="row" ng-if="vm.installForm.filestore.amazonKeys.isEnabled">
-                            <div class="col-md-12">
-                              <form class="form-horizontal" role="form">
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">Access Key</label>
-                                  <div class="col-md-6">
-                                    <input type="text" class="form-control" name="filestoreAccessKey"
-                                    ng-model="vm.installForm.filestore.amazonKeys.data.accessKey" ng-disabled="vm.installing || vm.saving"/>
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">Secret Key</label>
-                                  <div class="col-md-6">
-                                    <input type="text" class="form-control" name="filestoreSecretKey"
-                                    ng-model="vm.installForm.filestore.amazonKeys.data.secretKey" ng-disabled="vm.installing || vm.saving"/>
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">Root S3 Bucket</label>
-                                  <div class="col-md-6">
-                                    <input type="text" class="form-control" name="rootS3Bucket"
-                                    ng-model="vm.installForm.systemSettings.rootS3Bucket" ng-disabled="vm.installing || vm.saving"/>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <!-- Nodes -->
                     <div class="row">
                       <div class="col-sm-12">
@@ -1992,32 +1980,35 @@
                           <div class="row">
                             <div class="col-sm-12">
                               <div class="card-box">
-                                <div class="checkbox checkbox-primary">
+                                <div class="toggle-bar">
                                   <input id="checkbox_for_system_nodes" type="checkbox"
-                                    ng-model="vm.installForm.systemSettings.allowSystemNodes" ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="vm.installForm.systemSettings.allowSystemNodes" ng-disabled="vm.installing || vm.saving"
+                                    class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_system_nodes">
                                     <b> Enable system nodes (always-running nodes, available to any user) </b>
                                   </label>
                                 </div>
                                 <div>&nbsp</div>
-                                <div class="checkbox checkbox-primary">
+                                <div class="toggle-bar">
                                   <input id="checkbox_for_custom_nodes" type="checkbox"
-                                    ng-model="vm.installForm.systemSettings.allowCustomNodes" ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="vm.installForm.systemSettings.allowCustomNodes" ng-disabled="vm.installing || vm.saving"
+                                    class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_custom_nodes">
                                     <b> Enable custom nodes (users can attach always-running nodes to their subscription) </b>
                                   </label>
                                 </div>
-                                <div class="checkbox checkbox-primary col-md-offset-1" ng-if="vm.installForm.systemSettings.allowCustomNodes">
+                                <div class="toggle-bar col-md-offset-1" ng-if="vm.installForm.systemSettings.allowCustomNodes">
                                   <input id="checkbox_for_custom_nodes_admin" type="checkbox"
-                                    ng-model="vm.installForm.systemSettings.customNodesAdminOnly" ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="vm.installForm.systemSettings.customNodesAdminOnly" ng-disabled="vm.installing || vm.saving"
+                                    class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_custom_nodes_admin">
                                     <b> Restrict custom node creation to superUsers only </b>
                                   </label>
                                 </div>
                                 <div>&nbsp</div>
-                                <div class="checkbox checkbox-primary">
+                                <div class="toggle-bar">
                                   <input id="checkbox_for_dynamic_nodes" type="checkbox"
-                                    ng-model="vm.installForm.systemSettings.allowDynamicNodes" ng-change="vm.installForm.provision.amazonKeys.isEnabled = vm.installForm.systemSettings.allowDynamicNodes" ng-disabled="vm.installing || vm.saving"/>
+                                    ng-model="vm.installForm.systemSettings.allowDynamicNodes" ng-change="vm.installForm.provision.amazonKeys.isEnabled = vm.installForm.systemSettings.allowDynamicNodes" ng-disabled="vm.installing || vm.saving" class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_dynamic_nodes">
                                     <b> Enable dynamic nodes (nodes are created and deleted as needed) </b>
                                   </label>
@@ -2248,9 +2239,11 @@
                                 </div>
                                 <div class="row">
                                   <div class="col-md-12">
-                                    <div class="checkbox checkbox-primary">
+                                    <div class="toggle-bar">
                                       <input id="checkbox_for_auto_select" type="checkbox"
-                                      ng-model="vm.installForm.systemSettings.autoSelectBuilderToken" ng-disabled="vm.installing || vm.saving"/>
+                                      ng-model="vm.installForm.systemSettings.autoSelectBuilderToken"
+                                      ng-disabled="vm.installing || vm.saving"
+                                      class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                       <label for="checkbox_for_auto_select">
                                         <b> Auto-select the token used to run webhook builds </b>
                                       </label>
@@ -2260,9 +2253,11 @@
                                 </div>
                                 <div class="row">
                                   <div class="col-md-12">
-                                    <div class="checkbox checkbox-primary">
+                                    <div class="toggle-bar">
                                       <input id="checkbox_for_pvt_job_quota" type="checkbox"
-                                      ng-model="vm.installForm.systemSettings.enforcePrivateJobQuota" ng-disabled="vm.installing || vm.saving"/>
+                                      ng-model="vm.installForm.systemSettings.enforcePrivateJobQuota"
+                                      ng-disabled="vm.installing || vm.saving"
+                                      class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                       <label for="checkbox_for_pvt_job_quota">
                                         <b> Limit number of builds allowed for private repos </b>
                                       </label>
@@ -2293,33 +2288,16 @@
           <!-- Install and Save buttons -->
           <div class="row">
             <div class="col-md-12 text-right">
-              <button class="btn btn-md btn-primary waves-light m-t-10" type="submit" ng-click="vm.install()"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices" ng-if="!vm.requireRestart">
-                <div ng-if="vm.installing">
-                  Installing...
-                </div>
-                <div ng-if="!vm.installing">
-                  Install
-                </div>
-              </button>
-              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave"
-                ng-click="vm.showSaveModal()">
+              <button class="btn btn-md btn-primary waves-light" type="submit" ng-click="vm.showSaveAndRestartModal()"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave">
                 <div ng-if="vm.saving">
                   Saving...
                 </div>
-                <div ng-if="!vm.saving">
-                  Save
-                </div>
-              </button>
-              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices"
-                ng-click="vm.showRestartServicesModal()">
                 <div ng-if="vm.restartingServices">
                   Restarting...
                 </div>
-                <div ng-if="!vm.restartingServices">
-                  Restart Services
+                <div ng-if="!vm.saving && !vm.restartingServices">
+                  Save & Restart Services
                 </div>
               </button>
             </div>
@@ -2740,7 +2718,7 @@
                                     </tr>
                                     <tr>
                                       <td>IRC</td>
-                                      <td class="text-right">
+                                      <td class="text-right col-md-6">
                                         <input type="checkbox" class="js-switch" id="checkbox_irc"
                                           ng-model="vm.installForm.notification.irc.isEnabled"
                                           ng-disabled="vm.installing || vm.saving || vm.addonsForm.irc.isEnabled"
@@ -2748,8 +2726,190 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td>Email</td>
-                                      <td class="text-right">
+                                      <td class="col-md-8">Email
+                                        <div class="row" ng-if="vm.isEmailEnabled">
+                                          <div class="col-md-12">
+                                            <div class="radio radio-inline m-t-20">
+                                              <span class="col-md-3">  
+                                                <input type="radio" id="gmail" ng-model="vm.isEmailMethodEnabled" value="gmailCreds" ng-change="vm.checkEmailMethod('gmail')">
+                                                <label class="control-label" for="gmail">Gmail</label>
+                                              </span>
+                                            </div>
+                                            <div class="radio radio-inline m-t-20">
+                                              <span class="col-md-3">
+                                                <input type="radio" id="mailgun" ng-model="vm.isEmailMethodEnabled" value="mailgunCreds" ng-change="vm.checkEmailMethod('mailgun')">
+                                                <label class="control-label" for="mailgun">Mailgun</label>
+                                              </span>
+                                            </div>
+                                            <div class="radio radio-inline m-t-20">
+                                              <span class="col-md-3">
+                                                <input type="radio" id="smtp" ng-model="vm.isEmailMethodEnabled" value="smtpCreds" ng-change="vm.checkEmailMethod('smtp')">
+                                                <label class="control-label" for="smtp">SMTP</label>
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-12" ng-if="vm.isEmailMethodEnabled">
+                                            <div ng-if="vm.installForm.notification.gmailCreds.isEnabled">
+                                              <div>
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Username:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="gmailUsername"
+                                                      ng-model="vm.installForm.notification.gmailCreds.data.username" ng-disabled="vm.installing || vm.saving" placeholder="Username" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Password:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="gmailPassword"
+                                                      ng-model="vm.installForm.notification.gmailCreds.data.password" ng-disabled="vm.installing || vm.saving" placeholder="Password" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Proxy:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="gmailProxy"
+                                                      ng-model="vm.installForm.notification.gmailCreds.data.proxy" ng-disabled="vm.installing || vm.saving" placeholder="Proxy" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Email Sender:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="gmailEmailSender"
+                                                      ng-model="vm.installForm.notification.gmailCreds.data.emailSender" ng-disabled="vm.installing || vm.saving" placeholder="Email Sender" />
+                                                  </div>
+                                                </div><!-- END row -->
+
+                                              </div> <!-- if -->
+                                            </div>
+                                            <div ng-if="vm.installForm.notification.mailgunCreds.isEnabled">
+                                              <div>
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>API Key:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="mailgunApiKey"
+                                                      ng-model="vm.installForm.notification.mailgunCreds.data.apiKey" ng-disabled="vm.installing || vm.saving" placeholder="API Key" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Domain:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="mailgunDomain"
+                                                      ng-model="vm.installForm.notification.mailgunCreds.data.domain" ng-disabled="vm.installing || vm.saving" placeholder="Domain" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Proxy:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="mailgunProxy"
+                                                      ng-model="vm.installForm.notification.mailgunCreds.data.proxy" ng-disabled="vm.installing || vm.saving" placeholder="Proxy" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Email Sender:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="mailgunEmailSender"
+                                                      ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing || vm.saving" placeholder="Proxy" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                              </div><!-- if -->
+                                            </div>
+                                            <div ng-if="vm.installForm.notification.smtpCreds.isEnabled">
+                                              <div>
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Email Auth User:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="smtpEmailAuthUser"
+                                                      ng-model="vm.installForm.notification.smtpCreds.data.emailAuthUser" ng-disabled="vm.installing || vm.saving" placeholder="Email Auth User" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Email Auth Password:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="smtpEmailAuthPassword"
+                                                      ng-model="vm.installForm.notification.smtpCreds.data.emailAuthPassword" ng-disabled="vm.installing || vm.saving" placeholder="Email Auth Password" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Email Sender:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="smtpEmailSender"
+                                                      ng-model="vm.installForm.notification.smtpCreds.data.emailSender" ng-disabled="vm.installing || vm.saving" placeholder="Email Sender" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Host:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="smtpHost"
+                                                      ng-model="vm.installForm.notification.smtpCreds.data.host" ng-disabled="vm.installing || vm.saving" placeholder="Host" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Port:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="smtpPort"
+                                                      ng-model="vm.installForm.notification.smtpCreds.data.port" ng-disabled="vm.installing || vm.saving" placeholder="Port" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Secure:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="smtpSecure"
+                                                      ng-model="vm.installForm.notification.smtpCreds.data.secure" ng-disabled="vm.installing || vm.saving" placeholder="Secure" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Hostname:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="smtpHostname"
+                                                      ng-model="vm.installForm.notification.smtpCreds.data.hostname" ng-disabled="vm.installing || vm.saving" placeholder="Hostname" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                                <div>
+                                                  <div class="col-md-3">
+                                                    <h5 class="m-t-20"><b>Proxy:</b></h5>
+                                                  </div>
+                                                  <div class="col-md-9 m-t-15">
+                                                    <input type="text" class="form-control input-sm" name="smtpProxy"
+                                                      ng-model="vm.installForm.notification.smtpCreds.data.proxy" ng-disabled="vm.installing || vm.saving" placeholder="Proxy" />
+                                                  </div>
+                                                </div><!-- END row -->
+                                              </div><!-- if -->
+                                            </div>  
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td class=" col-md-4 text-right">
                                         <input type="checkbox" class="js-switch"
                                           ng-disabled="vm.installingAddons"
                                           ng-model="vm.isEmailEnabled"
@@ -2759,196 +2919,6 @@
                                     </tr>
                                   </tbody>
                                 </table>
-                              </div>
-                              <div class="col-md-7 m-t-10" ng-if="vm.isEmailEnabled">
-                                <div>
-                                  <div class="card-box" style="vertical-align: middle;">
-                                    <div class="row">
-                                      <div class="col-md-12">
-                                        <div class="col-md-2">
-                                          <label class="control-label textAlignNone">Email Provider: </label>
-                                        </div>
-                                        <div class="radio radio-inline">
-                                          <span class="col-md-3">  
-                                            <input type="radio" id="gmail" ng-model="vm.isEmailMethodEnabled" value="gmailCreds" ng-change="vm.checkEmailMethod('gmail')">
-                                            <label class="control-label" for="gmail">Gmail</label>
-                                          </span>
-                                        </div>
-                                        <div class="radio radio-inline">
-                                          <span class="col-md-3">
-                                            <input type="radio" id="mailgun" ng-model="vm.isEmailMethodEnabled" value="mailgunCreds" ng-change="vm.checkEmailMethod('mailgun')">
-                                            <label class="control-label" for="mailgun">Mailgun</label>
-                                          </span>
-                                        </div>
-                                        <div class="radio radio-inline">
-                                          <span class="col-md-3">
-                                            <input type="radio" id="smtp" ng-model="vm.isEmailMethodEnabled" value="smtpCreds" ng-change="vm.checkEmailMethod('smtp')">
-                                            <label class="control-label" for="smtp">SMTP</label>
-                                          </span>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-12" ng-if="vm.isEmailMethodEnabled">
-                                        <div class="portlet-body" ng-if="vm.installForm.notification.gmailCreds.isEnabled">
-                                          <div>
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Username:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="gmailUsername"
-                                                  ng-model="vm.installForm.notification.gmailCreds.data.username" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Password:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="gmailPassword"
-                                                  ng-model="vm.installForm.notification.gmailCreds.data.password" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Proxy:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="gmailProxy"
-                                                  ng-model="vm.installForm.notification.gmailCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Email Sender:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="gmailEmailSender"
-                                                  ng-model="vm.installForm.notification.gmailCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-
-                                          </div> <!-- if -->
-                                        </div>
-                                        <div class="portlet-body" ng-if="vm.installForm.notification.mailgunCreds.isEnabled">
-                                          <div>
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>API Key:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="mailgunApiKey"
-                                                  ng-model="vm.installForm.notification.mailgunCreds.data.apiKey" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Domain:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="mailgunDomain"
-                                                  ng-model="vm.installForm.notification.mailgunCreds.data.domain" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Proxy:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="mailgunProxy"
-                                                  ng-model="vm.installForm.notification.mailgunCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Email Sender:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="mailgunEmailSender"
-                                                  ng-model="vm.installForm.notification.mailgunCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                          </div><!-- if -->
-                                        </div>
-                                        <div class="portlet-body" ng-if="vm.installForm.notification.smtpCreds.isEnabled">
-                                          <div>
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Email Auth User:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="smtpEmailAuthUser"
-                                                  ng-model="vm.installForm.notification.smtpCreds.data.emailAuthUser" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Email Auth Password:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="smtpEmailAuthPassword"
-                                                  ng-model="vm.installForm.notification.smtpCreds.data.emailAuthPassword" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Email Sender:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="smtpEmailSender"
-                                                  ng-model="vm.installForm.notification.smtpCreds.data.emailSender" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Host:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="smtpHost"
-                                                  ng-model="vm.installForm.notification.smtpCreds.data.host" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Port:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="smtpPort"
-                                                  ng-model="vm.installForm.notification.smtpCreds.data.port" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Secure:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="smtpSecure"
-                                                  ng-model="vm.installForm.notification.smtpCreds.data.secure" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Hostname:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="smtpHostname"
-                                                  ng-model="vm.installForm.notification.smtpCreds.data.hostname" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                            <div class="row">
-                                              <div class="col-md-3">
-                                                <h5 class="m-t-20"><b>Proxy:</b></h5>
-                                              </div>
-                                              <div class="col-md-5 m-t-15">
-                                                <input type="text" class="form-control" name="smtpProxy"
-                                                  ng-model="vm.installForm.notification.smtpCreds.data.proxy" ng-disabled="vm.installing || vm.saving"/>
-                                              </div>
-                                            </div><!-- END row -->
-                                          </div><!-- if -->
-                                        </div>  
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
                               </div>
                             </div>
                           </div>
@@ -3382,6 +3352,43 @@
                                     />
                                   </td>
                                 </tr>
+                                <tr>
+                                  <td>Enable build artifact caching using AWS S3
+                                    <div class="m-t-20" ng-if="vm.installForm.filestore.amazonKeys.isEnabled">
+                                      <div class="col-md-12">
+                                        <form class="form-horizontal" role="form">
+                                          <div class="form-group">
+                                            <label class="col-md-2 control-label">Access Key</label>
+                                            <div class="col-md-8">
+                                              <input type="text" class="form-control input-sm" name="filestoreAccessKey"
+                                              ng-model="vm.installForm.filestore.amazonKeys.data.accessKey" ng-disabled="vm.installing || vm.saving"/>
+                                            </div>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="col-md-2 control-label">Secret Key</label>
+                                            <div class="col-md-8">
+                                              <input type="text" class="form-control input-sm" name="filestoreSecretKey"
+                                              ng-model="vm.installForm.filestore.amazonKeys.data.secretKey" ng-disabled="vm.installing || vm.saving"/>
+                                            </div>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="col-md-2 control-label">Root S3 Bucket</label>
+                                            <div class="col-md-8">
+                                              <input type="text" class="form-control input-sm" name="rootS3Bucket"
+                                              ng-model="vm.installForm.systemSettings.rootS3Bucket" ng-disabled="vm.installing || vm.saving"/>
+                                            </div>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-model="vm.installForm.filestore.amazonKeys.isEnabled"
+                                      ng-disabled="vm.installing || vm.saving"
+                                      ui-switch="{color: '#00b19d'}"/>
+                                  </td>
+                                </tr>
                               </tbody>
                             </table>
                           </div>
@@ -3475,10 +3482,11 @@
                 </div>
                 <div class="row m-t-15" ng-if="vm.admiralEnv.IS_SERVER === false">
                   <div class="col-md-12">
-                    <div class="checkbox checkbox-primary">
+                    <div class="toggle-bar">
                       <input type="checkbox" id="checkbox_link_status"
                       ng-model="vm.installForm.systemSettings.technicalSupportAvailable"
-                      ng-disabled="vm.installing || vm.saving"/>
+                      ng-disabled="vm.installing || vm.saving"
+                      class="js-switch" ui-switch="{color: '#00b19d'}"/>
                       <label for="checkbox_link_status"><b>Show Link to Shippable Status</b></label>
                     </div>
                   </div>
@@ -3538,10 +3546,11 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card-box">
-                <div class="checkbox checkbox-primary">
+                <div class="toggle-bar">
                   <input type="checkbox" id="checkbox_tls"
                     ng-model="vm.installForm.ignoreTLSErrors"
-                    ng-disabled="vm.installing || vm.saving">
+                    ng-disabled="vm.installing || vm.saving"
+                    class="js-switch" ui-switch="{color: '#00b19d'}"/>
                   <label for="checkbox_tls"><b>Ignore TLS Errors (optional)</b></label>
                 </div>
                 <div class="row">
@@ -3623,28 +3632,10 @@
           <!-- Save and Restart Buttons on System Settings-->
           <div class="row">
             <div class="col-md-12 text-right">
-              <p>
-                &nbsp;
-              </p>
-              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave"
-                ng-click="vm.showSaveModal()">
-                <div ng-if="vm.saving">
-                  Saving...
-                </div>
-                <div ng-if="!vm.saving">
-                  Save
-                </div>
-              </button>
-              <button ng-if="vm.requireRestart" class="btn btn-md btn-primary" type="submit"
-                ng-disabled="vm.installing || vm.saving || vm.restartingServices"
-                ng-click="vm.showRestartServicesModal()">
-                <div ng-if="vm.restartingServices">
-                  Restarting...
-                </div>
-                <div ng-if="!vm.restartingServices">
-                  Restart Services
-                </div>
+              <button class="btn btn-md btn-primary waves-light" ng-click="vm.showApplyChangesModal()"
+                ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.confirmCommand) || vm.installing || vm.saving || vm.restartingServices || vm.disableSave">
+                  <div ng-if="vm.initializing || vm.installing || vm.saving || vm.restartingServices">Applying...</div>
+                  <div ng-if="!vm.initializing && !vm.installing && !vm.saving && !vm.restartingServices">Apply</div>
               </button>
             </div>
           </div>
@@ -3667,8 +3658,8 @@
 
 </div>
 
-<!-- Save Modal -->
-<div class="modal fade" id="saveModal"
+<!-- Save and Restart Modal -->
+<div class="modal fade" id="save-restart-modal"
   tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -3678,17 +3669,17 @@
           <span aria-hidden="true">&times;</span>
         </button>
         <h4 class="modal-title">
-          Restart Required
+          Save & Restart Services
         </h4>
       </div>
       <div class="modal-body">
         <div>
-          A restart is required for your changes to take effect.
+          Are you sure you want to save and restart services?
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-md btn-primary" type="submit" ng-click="vm.save()">
-          Save
+        <button class="btn btn-md btn-primary" type="submit" ng-click="vm.saveAndRestart()">
+          Yes
         </button>
         <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
           Cancel
@@ -3718,37 +3709,6 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-md btn-primary" type="submit" ng-click="vm.apply()">
-          Yes
-        </button>
-        <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Restart Services Modal -->
-<div class="modal fade" id="restartServicesModal"
-  tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"
-          aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">
-          Restart Services
-        </h4>
-      </div>
-      <div class="modal-body">
-        <div>
-          This will restart all your services. Are you sure?
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-md btn-primary" type="submit" ng-click="vm.restartServices()">
           Yes
         </button>
         <button class="btn btn-md btn-default" type="button" class="close" data-dismiss="modal">
@@ -3960,11 +3920,6 @@
               <button class="btn btn-sm btn-primary"
                 ng-click="vm.editSystemMachineImage(vm.selectedSMI)">Save</button>
               <button class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
-              <!-- <button class="btn btn-danger btn-sm"
-                ng-disabled="vm.installForm.systemMachineImages.length === 1"
-                ng-click="vm.removeSystemMachineImage(machineImage)">
-                Remove
-              </button> -->
             </div>
           </div>
           <hr/>
