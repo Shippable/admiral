@@ -174,6 +174,7 @@
         $timeout(function () {
           $scope.vm.addNewWorker = false;
           $('#checkbox_for_adding_worker').trigger('click');
+          $scope.vm.initializeForm.workers.confirmCommand = true;
         }, 0);
       },
       updateStateUrl: function (isSecure, updatedAddress) {
@@ -806,6 +807,7 @@
       validateIP: validateIP,
       validateWorkerAddress: validateWorkerAddress,
       addWorker: addWorker,
+      showAddNewWorker: showAddNewWorker,
       removeWorker: removeWorker,
       addSystemMachineImage: addSystemMachineImage,
       updateSMI: updateSMI,
@@ -2581,6 +2583,10 @@
       );
     }
 
+    function showAddNewWorker() {
+      $scope.vm.initializeForm.workers.confirmCommand = false;
+    }
+
     function addWorker(worker) {
       $timeout(function () {
         if (!worker.name.length) {
@@ -2632,6 +2638,7 @@
         };
         $scope.vm.addNewWorker = false;
         $('#checkbox_for_adding_worker').trigger('click');
+        $scope.vm.initializeForm.workers.confirmCommand = true;
       }, 0);
     }
 

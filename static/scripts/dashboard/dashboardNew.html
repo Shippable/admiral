@@ -1102,7 +1102,7 @@
                                         <input id="checkbox_for_adding_worker" type="checkbox"
                                           ng-model="vm.addNewWorker" ng-disabled="vm.initializing ||
                                           vm.installing || vm.saving || vm.restartingServices"
-                                          class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                                          class="js-switch-small" ui-switch="{color: '#00b19d'}" ng-click="vm.showAddNewWorker()"/>
                                         <label for="checkbox_for_adding_worker">
                                           <b> Add a new swarm worker </b>
                                         </label>
@@ -1161,7 +1161,9 @@
                                             <div class="col-md-12 m-t-10">
                                               <div class="col-md-offset-4 col-md-2">
                                                 <button class="btn btn-sm btn-primary"
-                                                  ng-disabled="!vm.initializeForm.workers.confirmCommand"
+                                                  ng-disabled="!vm.initializeForm.workers.confirmCommand ||
+                                                  !vm.initializeForm.workers.newWorker.name ||
+                                                  vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)"
                                                   ng-click="vm.addWorker(vm.initializeForm.workers.newWorker)">Save</button>
                                                 <button class="btn btn-sm btn-default" ng-click="vm.cancelAddWorker()">Cancel</button>
                                               </div>
