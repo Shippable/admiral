@@ -657,6 +657,10 @@
           displayName: '',
           isEnabled: false
         },
+        jira: {
+          displayName: '',
+          isEnabled: false
+        },
         email: {
           displayName: 'Email',
           isEnabled: false
