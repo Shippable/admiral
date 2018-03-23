@@ -3547,7 +3547,16 @@
                     <h5 class="m-t-20"><b>Admiral Environment:</b></h5>
                   </div>
                   <div class="col-md-10 m-t-15">
-                    <button class="btn btn-sm btn-primary" ng-click="vm.showAdmiralEnvModal()">Config</button>
+                    <button class="btn btn-sm btn-default" ng-click="vm.showAdmiralEnvModal()">Config</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 text-right">
+                    <button class="btn btn-md btn-primary waves-light" ng-click="vm.showApplyChangesModal()"
+                      ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.confirmCommand) || vm.installing || vm.saving || vm.restartingServices || vm.disableSave">
+                        <div ng-if="vm.initializing || vm.installing || vm.saving || vm.restartingServices">Applying...</div>
+                        <div ng-if="!vm.initializing && !vm.installing && !vm.saving && !vm.restartingServices">Apply</div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -3644,10 +3653,17 @@
           <!-- Save and Restart Buttons on System Settings-->
           <div class="row">
             <div class="col-md-12 text-right">
-              <button class="btn btn-md btn-primary waves-light" ng-click="vm.showApplyChangesModal()"
-                ng-disabled="vm.initializing || (vm.initializeForm.secrets.initType === 'new' && !vm.initializeForm.secrets.confirmCommand) || (vm.initializeForm.msg.initType === 'new' && !vm.initializeForm.msg.confirmCommand) || (vm.initializeForm.state.initType === 'new' && !vm.initializeForm.state.confirmCommand) || (vm.initializeForm.redis.initType === 'new' && !vm.initializeForm.redis.confirmCommand) || (vm.initializeForm.workers.workers.length && !vm.initializeForm.workers.confirmCommand) || vm.installing || vm.saving || vm.restartingServices || vm.disableSave">
-                  <div ng-if="vm.initializing || vm.installing || vm.saving || vm.restartingServices">Applying...</div>
-                  <div ng-if="!vm.initializing && !vm.installing && !vm.saving && !vm.restartingServices">Apply</div>
+              <button class="btn btn-md btn-primary waves-light" type="submit" ng-click="vm.showSaveAndRestartModal()"
+                ng-disabled="vm.installing || vm.saving || vm.restartingServices || vm.disableSave || (!vm.hasDefaultx86SystemMachineImage() && vm.installForm.systemSettings.allowDynamicNodes)">
+                <div ng-if="vm.saving">
+                  Saving...
+                </div>
+                <div ng-if="vm.restartingServices">
+                  Restarting...
+                </div>
+                <div ng-if="!vm.saving && !vm.restartingServices">
+                  Save & Restart Services
+                </div>
               </button>
             </div>
           </div>
