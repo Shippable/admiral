@@ -391,6 +391,11 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'runs' and column_name = 'isPipelineTriggered') then
       alter table "runs" add column "isPipelineTriggered" BOOLEAN;
     end if;
+   
+    -- Adds runs propertyBag
+    if not exists (select 1 from information_schema.columns where table_name = 'runs' and column_name = 'propertyBag') then
+      alter table "runs" add column "propertyBag" TEXT;
+    end if;
 
     -- Add projects.ownerAccountId
     if not exists (select 1 from information_schema.columns where table_name = 'projects' and column_name = 'ownerAccountId') then
@@ -2419,6 +2424,34 @@ do $$
     perform set_route_role(
       routePattern := '/passthrough/jira/:subscriptionIntegrationId/projects',
       httpVerb := 'GET',
+      roleCode := 6060
+    );
+
+    -- Allow admins of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/issue',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    -- Allow collabs of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/issue',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
+    -- Allow members of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/issue',
+      httpVerb := 'POST',
+      roleCode := 6000
+    );
+
+    -- Allow justUsers of subscriptions to access the route.
+    perform set_route_role(
+      routePattern := '/passthrough/jira/:subscriptionIntegrationId/issue',
+      httpVerb := 'POST',
       roleCode := 6060
     );
 

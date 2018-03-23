@@ -145,6 +145,14 @@
       ]
     },
     {
+      "name": "jira",
+      "type": "generic",
+      "services": [
+        "nf",
+        "jira"
+      ]
+    },
+    {
       "name": "hipchatKey",
       "type": "generic",
       "services": [
@@ -348,6 +356,11 @@
     },
     {
       "name": "irc",
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
+    },
+    {
+      "name": "jira",
       "repository": "micro",
       "apiUrlIntegration": "internalAPI"
     },
