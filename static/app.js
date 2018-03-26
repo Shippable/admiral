@@ -22,10 +22,10 @@ admiral.config(['$stateProvider', '$locationProvider', '$httpProvider',
       }
     );
 
-    $stateProvider.state('dashboard2', {
+    $stateProvider.state('dashboardNew', {
       url: '/',
-      templateUrl: SRC_PATH + 'dashboard/dashboard2.html',
-      controller: 'dashboard2Ctrl'
+      templateUrl: SRC_PATH + 'dashboard/dashboardNew.html',
+      controller: 'dashboardNewCtrl'
     });
 
     $urlRouterProvider.otherwise('/');
