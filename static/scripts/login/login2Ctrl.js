@@ -76,7 +76,7 @@
 
           e.preventDefault();
           $scope._r.loginToken = loginToken;
-          $state.go('dashboard2', $state.params);
+          $state.go('dashboardNew', $state.params);
           window.scrollTo(0, 0);
         }
       );
