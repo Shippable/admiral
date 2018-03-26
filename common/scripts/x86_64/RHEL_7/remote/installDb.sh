@@ -5,6 +5,7 @@ readonly PG_USER=postgres
 readonly PG_DEFAULT_CONFIG_PATH=/var/lib/pgsql/$PG_VERSION/data
 readonly PG_CONFIG_PATH=$PG_DEFAULT_CONFIG_PATH/postgresql.conf
 readonly PG_BIN_PATH=/usr/pgsql-$PG_VERSION/bin/postgresql95-setup
+readonly PGDG_PKG=pgdg-redhat95-9.5-3.noarch
 
 readonly ROOT_MOUNT_PATH=/pg
 readonly ROOT_CONFIG_PATH="$ROOT_MOUNT_PATH"/config
@@ -65,7 +66,9 @@ __update_sources() {
 __install_postgres() {
   echo "Installing Postgres"
   sudo rm /etc/yum.repos.d/redhat-rhui.repo
-  yum install -y https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-3.noarch.rpm
+  if [[ $(rpm -q $PGDG_PKG) != $PGDG_PKG ]]; then
+    yum install -y https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/$PGDG_PKG.rpm
+  fi
   yum install -y postgresql95 postgresql95-server postgresql95-contrib
   sudo systemctl enable postgresql-9.5.service
 }
