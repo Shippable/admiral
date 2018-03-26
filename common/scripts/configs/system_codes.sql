@@ -544,6 +544,31 @@ do $$
       values (10011, 'custom__x86_64__RHEL_7', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-06', '2018-03-06');
     end if;
 
+    if not exists (select 1 from "systemCodes" where code = 10012) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10012, 'dynamic__x86_64__WindowsServer_2016__c4.xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-26', '2018-03-26');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10013) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10013, 'dynamic__x86_64__WindowsServer_2016__c4.2xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-26', '2018-03-26');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10014) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10014, 'dynamic__x86_64__CentOS_7__c4.large', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-26', '2018-03-26');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10015) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10015, 'dynamic__x86_64__CentOS_7__c4.xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-26', '2018-03-26');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10016) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10016, 'dynamic__x86_64__CentOS_7__c4.2xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-26', '2018-03-26');
+    end if;
+
     -- Add systemCodes for jobStatesMap
     if not exists (select 1 from "systemCodes" where code = 201) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
