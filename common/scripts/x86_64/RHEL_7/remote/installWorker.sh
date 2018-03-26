@@ -43,7 +43,11 @@ __install_ntp() {
 }
 
 __install_ecr() {
-  yum -y install epel-release
+  local epel_rpm_package="epel-release-latest-7.noarch.rpm"
+  curl -O "https://dl.fedoraproject.org/pub/epel/$epel_rpm_package"
+  yum install -y "$epel_rpm_package"
+  rm "$epel_rpm_package"
+
   sudo yum -y install python-pip
   sudo pip install awscli==1.11.91
 }
