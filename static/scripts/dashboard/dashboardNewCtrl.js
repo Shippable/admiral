@@ -897,7 +897,7 @@
       $scope._r.crumbList = [];
 
       var crumb = {
-        name: 'Dashboard2'
+        name: 'DashboardNew'
       };
       $scope._r.crumbList.push(crumb);
       $scope._r.showCrumb = true;
