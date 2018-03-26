@@ -6,17 +6,7 @@
   admiral.controller('dashboardNewCtrl', ['$scope', '$stateParams', '$q', '$state',
     '$interval', '$timeout', 'admiralApiAdapter', 'popup_horn',
     dashboardNewCtrl
-  ])
-  .config(['$stateProvider', 'SRC_PATH',
-    function ($stateProvider, SRC_PATH) {
-      $stateProvider.state('dashboardNew', {
-        url: '/indexNew',
-        templateUrl: SRC_PATH + 'dashboard/dashboardNew.html',
-        controller: 'dashboardNewCtrl'
-      });
-    }
   ]);
-
 
   function dashboardNewCtrl($scope, $stateParams, $q, $state, $interval, $timeout,
     admiralApiAdapter, popup_horn) {

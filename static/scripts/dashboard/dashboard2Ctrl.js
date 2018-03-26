@@ -6,6 +6,14 @@
   admiral.controller('dashboard2Ctrl', ['$scope', '$stateParams', '$q', '$state',
     '$interval', '$timeout', 'admiralApiAdapter', 'popup_horn', 'statusCodes',
     dashboard2Ctrl
+  ]).config(['$stateProvider', 'SRC_PATH',
+    function ($stateProvider, SRC_PATH) {
+      $stateProvider.state('dashboard2', {
+        url: '/indexOld',
+        templateUrl: SRC_PATH + 'dashboard/dashboard2.html',
+        controller: 'dashboard2Ctrl'
+      });
+    }
   ]);
 
 
