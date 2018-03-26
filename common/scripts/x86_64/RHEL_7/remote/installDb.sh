@@ -59,16 +59,16 @@ __update_sources() {
   echo "Updating source repo information"
 
   ## so that posgres dependency do not resolve to base repo
-  echo "exclude=postgresql*" | tee -a "/etc/yum.repos.d/CentOS-Base.repo"
+  echo "exclude=postgresql*" | tee -a "/etc/yum.repos.d/redhat-rhui.repo"
 }
 
 __install_postgres() {
   echo "Installing Postgres"
-  sudo rm /etc/yum.repos.d/CentOS-Base.repo
+  sudo rm /etc/yum.repos.d/redhat-rhui.repo
+  yum install -y https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-3.noarch.rpm
   yum install -y postgresql95 postgresql95-server postgresql95-contrib
   sudo systemctl enable postgresql-9.5.service
 }
-
 
 __configure_data_dirs() {
   echo "Configuring Postgres data directory"
