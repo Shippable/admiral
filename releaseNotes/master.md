@@ -16,6 +16,9 @@ ${RES_VER_DATE}
           - IN: features_repo
           - script: echo "executing job"
         ```
+  - **Adjustable custom node disk usage limit**: You can now define a maximum disk usage limit for all nodes in a subscription node pool from the subscription node pools page, for both subscription node pools and system node pools (for server admins). 
+      - A default of 90% maximum disk usage limit will be applied if none is specified.
+      - Disk usage limits can be specified per Node pool.
 
 ## Fixes
   - **simple title**: brief description
