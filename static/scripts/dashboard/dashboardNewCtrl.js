@@ -2642,7 +2642,8 @@
     }
 
     function removeWorker (worker) {
-      $scope.vm.initializeForm.workers.deletedWorkers.push(worker);
+      if (worker.isInitialized)
+        $scope.vm.initializeForm.workers.deletedWorkers.push(worker);
       $scope.vm.initializeForm.workers.workers =
         _.without($scope.vm.initializeForm.workers.workers,
           _.findWhere($scope.vm.initializeForm.workers.workers,

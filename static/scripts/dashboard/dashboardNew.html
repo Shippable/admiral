@@ -90,7 +90,7 @@
                         <i class="fa fa-check" style="color: green;" ng-if="node|contains:'admiral'"></i>
                       </td>
                       <td class="text-center">
-                        <i class="fa fa-check" style="color: green;" ng-if="(node|contains:'db') && vm.systemSettings.db.isInstalled && vm.systemSettings.db.isInitialized"></i>
+                        <i class="fa fa-check" style="color: green;" ng-if="(node|contains:'db') && vm.systemSettings.db.isInstalled && vm.systemSettings.db.isInitialized && !vm.systemSettings.db.isFailed"></i>
                         <i class="fa fa-times" style="color: red;" ng-if="(node|contains:'db') && vm.systemSettings.db.isFailed"></i>
                       </td>
                       <td class="text-center">
