@@ -21,9 +21,10 @@ ${RES_VER_DATE}
       - Disk usage limits can be specified per Node pool.
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **sFixed job triggering bugs**
+      - The last state of a input job will be used when determining if a job should run. So a cancelled `job A` whose previous status was success and which is an IN to `job B`, will not prevent `job B` from triggering.
+      - In the scenario `job A` -> `img` -> `job B`, if you soft-delete `job A`, `job B` will no longer automatically trigger.
+      - With 2 minions, and 2 not-connected runCI and runSh jobs, the runSh and runCI jobs will execute in parallel.
 
 ## Custom Nodes
   - **simple title**: brief description
