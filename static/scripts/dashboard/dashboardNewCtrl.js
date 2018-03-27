@@ -2649,6 +2649,13 @@
           _.findWhere($scope.vm.initializeForm.workers.workers,
             {name: worker.name})
         );
+
+      if (!worker.isInitialized)
+        $scope.vm.systemSettings.workers =
+          _.without($scope.vm.systemSettings.workers,
+            _.findWhere($scope.vm.systemSettings.workers,
+              {name: worker.name})
+          );
     }
 
     function addSystemMachineImage() {
