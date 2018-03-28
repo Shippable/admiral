@@ -155,8 +155,6 @@ function _generateEnvs(bag, next) {
   var internalApiUrl = bag.internalApiIntegration.data &&
     bag.internalApiIntegration.data.url;
 
-  internalApiUrl = internalApiUrl || publicApiUrl;
-
   if (!publicApiUrl)
     return next(
       new ActErr(who, ActErr.OperationFailed,
