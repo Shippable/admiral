@@ -128,6 +128,8 @@ function _getAPISystemIntegration(bag, next) {
       bag.internalApiIntegration = _.findWhere(
         systemIntegrations, {name: 'internalAPI'});
 
+      bag.internalApiIntegration =
+        bag.internalApiIntegration || bag.publicApiIntegration;
       return next();
     }
   );
