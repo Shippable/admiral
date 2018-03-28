@@ -165,8 +165,6 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_API_TOKEN', bag.serviceUserToken);
   envs = util.format('%s -e %s=%s',
-    envs, 'SHIPPABLE_API_URL', publicApiUrl);
-  envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_PUBLIC_API_URL', publicApiUrl);
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_INT_API_URL', internalApiUrl);
