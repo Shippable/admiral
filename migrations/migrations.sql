@@ -5025,7 +5025,7 @@ do $$
       -- aarch64 Ubuntu_16.04
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.3.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8001, 9001, 'v6.3.4', 'drydock', 'aarch64_u16', 'v6.3.4', 'aarch64_u16all', 'aarch64_reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+        values (8001, 9001, 'v6.3.4', 'drydock', 'aarch64_u16', 'v6.3.4', 'aarch64_u16all', 'aarch64_u16reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
       end if;
 
       -- x86_64 WindowsServer_2016
