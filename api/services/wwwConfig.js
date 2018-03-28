@@ -123,12 +123,10 @@ function _getAPISystemIntegration(bag, next) {
             'No systemIntegration found for query: ' + query)
         );
 
-      var defaultAPIIntegration = _.findWhere(
+      bag.publicApiIntegration = _.findWhere(
         systemIntegrations, {name: 'api'});
-      var serviceAPIIntegration = _.findWhere(
-        systemIntegrations, {name: bag.config.apiUrlIntegration});
-
-      bag.apiSystemIntegration = serviceAPIIntegration || defaultAPIIntegration;
+      bag.internalApiIntegration = _.findWhere(
+        systemIntegrations, {name: 'internalAPI'});
 
       return next();
     }
@@ -149,10 +147,15 @@ function _generateEnvs(bag, next) {
   var who = bag.who + '|' + _generateEnvs.name;
   logger.verbose(who, 'Inside');
 
-  var apiUrl = bag.apiSystemIntegration.data &&
-    bag.apiSystemIntegration.data.url;
+  var publicApiUrl = bag.publicApiIntegration.data &&
+    bag.publicApiIntegration.data.url;
 
-  if (!apiUrl)
+  var internalApiUrl = bag.internalApiIntegration.data &&
+    bag.internalApiIntegration.data.url;
+
+  internalApiUrl = internalApiUrl || publicApiUrl;
+
+  if (!publicApiUrl)
     return next(
       new ActErr(who, ActErr.OperationFailed,
         'No apiUrl found.')
@@ -162,7 +165,11 @@ function _generateEnvs(bag, next) {
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_API_TOKEN', bag.serviceUserToken);
   envs = util.format('%s -e %s=%s',
-    envs, 'SHIPPABLE_API_URL', apiUrl);
+    envs, 'SHIPPABLE_API_URL', publicApiUrl);
+  envs = util.format('%s -e %s=%s',
+    envs, 'SHIPPABLE_PUBLIC_API_URL', publicApiUrl);
+  envs = util.format('%s -e %s=%s',
+    envs, 'SHIPPABLE_INT_API_URL', internalApiUrl);
 
   if (bag.shouldIgnoreTls && bag.shouldIgnoreTls === 'true')
     envs = util.format('%s -e %s=%s', envs, 'NODE_TLS_REJECT_UNAUTHORIZED', 0);
