@@ -538,7 +538,11 @@ do $$
       values (10009, 'dynamic__x86_64__WindowsServer_2016__c4.large', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-06', '2018-03-06');
     end if;
 
-    -- leaving code 10010 for dynamic__x86_64__Ubuntu_16.04__c4.large
+    if not exists (select 1 from "systemCodes" where code = 10010) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10010, 'dynamic__x86_64__Ubuntu_16.04__c4.large', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-28', '2018-03-28');
+    end if;
+
     if not exists (select 1 from "systemCodes" where code = 10011) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (10011, 'custom__x86_64__RHEL_7', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-06', '2018-03-06');
@@ -567,6 +571,16 @@ do $$
     if not exists (select 1 from "systemCodes" where code = 10016) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (10016, 'dynamic__x86_64__CentOS_7__c4.2xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-26', '2018-03-26');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10017) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10017, 'dynamic__x86_64__Ubuntu_16.04__c4.xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-28', '2018-03-28');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10018) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10018, 'dynamic__x86_64__Ubuntu_16.04__c4.2xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-28', '2018-03-28');
     end if;
 
     -- Add systemCodes for jobStatesMap
