@@ -4915,7 +4915,7 @@ do $$
       end if;
       -- update drydock image info for aarch64 v5.9.4
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4') then
-        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'
+        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_u16reqproc', "drydockFamily" = 'aarch64_u16'
           where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v5.9.4';
       end if;
 
@@ -4960,7 +4960,7 @@ do $$
       end if;
       -- update drydock image info for aarch64 v6.2.4
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4') then
-        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_reqproc'
+        update "runtimeTemplates" set "drydockOrg" = 'drydock', "defaultTaskImage" = 'aarch64_microbase', "reqProcImage" = 'aarch64_u16reqproc', "drydockFamily" = 'aarch64_u16'
           where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.2.4';
       end if;
 
@@ -4992,12 +4992,6 @@ do $$
       -- that is u16, rhel, centos
       if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "reqProcImage" = 'reqproc' and ("osTypeCode" = 9001 OR "osTypeCode"=9005 OR "osTypeCode"=9004)) then
         update "runtimeTemplates" set "reqProcImage" = 'u16reqproc' where "archTypeCode" = 8000 and "reqProcImage" = 'reqproc' and ("osTypeCode" = 9001 OR "osTypeCode"=9005 OR "osTypeCode"=9004);
-      end if;
-
-      -- update all aarch64 OSes that use reqproc so far (based on u16) to use aarch64_u16reqproc instead
-      -- that is u16
-      if exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "reqProcImage" = 'reqproc') then
-        update "runtimeTemplates" set "reqProcImage" = 'aarch64_u16reqproc' where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "reqProcImage" = 'reqproc';
       end if;
 
       -- update all x86_64 u14 to use u14reqproc
