@@ -4,7 +4,7 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **Integration with JIRA**: You can create tickets in JIRA directly from the runSh and runCI job console dashboard. A JIRA integration allows you to specify your JIRA credentials. Thereafter, with a single click in your job console page, you can create a story/task/bug type of issue for a project and also attach the console logs.
+  - **Integration with JIRA**: You can create tickets in JIRA directly from the runSh and runCI job console dashboard. A JIRA integration allows you to specify your JIRA Server URL, username and token. Thereafter, with a single click in your job console page, you can create a story/task/bug type of issue for any of your projects and also attach the console logs.
   
   - **Setting priority on runSh and runCI jobs**: You can now set priority on runSh and runCI jobs.
       - All jobs will have default priority as 9999.
