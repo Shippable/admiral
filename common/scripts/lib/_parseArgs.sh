@@ -595,6 +595,17 @@ __wipe_clean() {
     if [ "$DEV_MODE" == "true" ]; then
       sudo ./manageSharedNode clean
     fi
+    local service_count=$(docker service ls -q | wc -l)
+    if [[ "$service_count" -ne 0 ]]; then
+      local service_ids=$(docker service ls -q)
+      local remove_service_cmd="docker service rm"
+      __process_msg "Executing: $remove_service_cmd"
+      for id in ${service_ids[@]}; do
+        eval "$remove_service_cmd $id"
+      done
+    else
+      __process_msg "No services found. Skipping removal."
+    fi
     local count=$(docker ps -aq | wc -l)
     if [[ "$count" -ne 0 ]]; then
       local container_ids=$(docker ps -aq)
@@ -613,8 +624,6 @@ __wipe_clean() {
     __process_error "Cancelling clean"
     exit 1
   fi
-
-
 }
 
 __accept_shippable_license() {
