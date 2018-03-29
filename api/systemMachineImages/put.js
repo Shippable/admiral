@@ -123,6 +123,9 @@ function _put(bag, next) {
   if (_.has(bag.reqBody, 'sshPort'))
     updates.push(util.format('"sshPort"=%s', bag.reqBody.sshPort));
 
+  if (_.has(bag.reqBody, 'runtimeTemplateId'))
+    updates.push(util.format('"runtimeTemplateId"=%s', bag.reqBody.runtimeTemplateId));
+
   if (_.has(bag.reqBody, 'securityGroup'))
     updates.push(
       util.format('"securityGroup"=\'%s\'', bag.reqBody.securityGroup));

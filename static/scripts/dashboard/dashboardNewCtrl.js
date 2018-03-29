@@ -23,7 +23,9 @@
       gitlabKeys: 'gitlab'
     };
     var systemMachineImagesById;
+    var runtimeTemplates;
     $scope.vm = {
+      supportedOsTypes: [],
       isLoaded: false,
       resetSwitchForAmazonKeys: false,
       initializing: false,
@@ -801,6 +803,8 @@
       removeWorker: removeWorker,
       addSystemMachineImage: addSystemMachineImage,
       updateSMI: updateSMI,
+      computeOs: computeOs,
+      computeRuntimeTemplateId: computeRuntimeTemplateId,
       editSystemMachineImage: editSystemMachineImage,
       removeSystemMachineImage: removeSystemMachineImage,
       apply: apply,
@@ -855,6 +859,7 @@
           getServices.bind(null, bag),
           getSystemMachineImages,
           getSystemCodes,
+          getRuntimeTemplates,
           getSystemSettingsForAddonsPanel.bind(null, bag),
           updateAddonsFormSystemIntegrations,
           getSuperUsers
@@ -1879,6 +1884,7 @@
             return next();
 
           $scope.vm.archTypes = _.filter(systemCodes, {group: 'archType'});
+          $scope.vm.osTypes = _.filter(systemCodes, {group: 'osType'});
           $scope.vm.archTypesByCode = _.groupBy($scope.vm.archTypes, 'code');
           $scope.vm.clusterTypes = _.filter(systemCodes, {group:'clusterType'});
           $scope.vm.x86ArchCode = _.findWhere($scope.vm.archTypes,
@@ -2009,6 +2015,21 @@
             );
           systemMachineImagesById =
             _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
+          return next();
+        }
+      );
+    }
+
+    function getRuntimeTemplates(next) {
+      if (!$scope.vm.initialized) return next();
+      admiralApiAdapter.getRuntimeTemplates(
+        function (err, runtimeTemps) {
+          if (err) {
+            popup_horn.error(err);
+            return next();
+          }
+
+          runtimeTemplates = runtimeTemps;
           return next();
         }
       );
@@ -2642,7 +2663,7 @@
     }
 
     function removeWorker (worker) {
-      if (worker.isInitialized)
+      if (worker.isInitialized || worker.isFailed)
         $scope.vm.initializeForm.workers.deletedWorkers.push(worker);
       $scope.vm.initializeForm.workers.workers =
         _.without($scope.vm.initializeForm.workers.workers,
@@ -2674,7 +2695,8 @@
         drydockTag: '',
         drydockFamily: '',
         sshUser: 'ubuntu',
-        sshPort: 22
+        sshPort: 22,
+        runtimeTemplateId: null,
       };
 
       $scope.vm.selectedSMI = newSystemMachineImage;
@@ -2684,13 +2706,46 @@
     function updateSMI(image) {
       $scope.vm.selectedSMI =_.clone(
         _.first(systemMachineImagesById[image.id]));
+      if (image.runtimeTemplateId)
+        $scope.vm.selectedSMI.osTypeCode = _.findWhere(
+          runtimeTemplates, {id: image.runtimeTemplateId}).osTypeCode;
+      computeOs();
       $('#smi-edit-modal').modal('show');
+    }
+
+    function computeOs() {
+      var supportedOsTypes = [];
+      var supportedOsCodes = _.unique(_.pluck(_.where(
+        runtimeTemplates,
+        {
+          archTypeCode: $scope.vm.selectedSMI.archTypeCode
+        }
+      ), 'osTypeCode'));
+      _.each(supportedOsCodes,
+        function(osCode) {
+          supportedOsTypes.push(_.findWhere($scope.vm.osTypes, {code: osCode}));
+        }
+      );
+      $scope.vm.supportedOsTypes = supportedOsTypes;
+      computeRuntimeTemplateId();
+    }
+
+    function computeRuntimeTemplateId() {
+      $scope.vm.supportedRuntimeTemplates = _.where(
+        runtimeTemplates,
+        {
+          osTypeCode: $scope.vm.selectedSMI.osTypeCode,
+          archTypeCode: $scope.vm.selectedSMI.archTypeCode
+        }
+      );
     }
 
     function editSystemMachineImage(image) {
       var smi = _.findWhere($scope.vm.installForm.systemMachineImages,
         { id: image.id });
-      if (!smi)
+      var smiByName = _.findWhere($scope.vm.installForm.systemMachineImages,
+        { name: image.name });
+      if (!smi && !smiByName)
         $scope.vm.installForm.systemMachineImages.push(image);
       else
         _.extend(_.findWhere(
