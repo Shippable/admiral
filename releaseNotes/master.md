@@ -35,11 +35,8 @@ ${RES_VER_DATE}
 
 ## Shippable Server
 
-  - Features
-      - **simple title**: brief description
-  - Fixes
-      - **simple title**: brief description
-
+  - Bitbucket Sever OAUTH plugin works correctly in a proxy environment. Assuming the BitBucket Server is running on bbs.example.com, the proxy could be configured to reject requests for this URL because the traffic is meant to be routed locally. Users can now add bbs.example.com to the no_proxy setting when prompted by Admiral.
+ 
 ## History
 
 To view Shippable's release history, check out our [releases page on github](https://github.com/Shippable/admiral/releases).
