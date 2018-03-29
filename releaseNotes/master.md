@@ -32,6 +32,8 @@ ${RES_VER_DATE}
 
 ## Shippable Server
 
+  - Shippable Server UX has been significantly improved. Configuration has been cleanly separated into Control and Build planes and we have added support for Onebox installation.
+  
   - Bitbucket Sever OAUTH plugin works correctly in a proxy environment. Assuming the BitBucket Server is running on bbs.example.com, the proxy could be configured to reject requests for this URL because the traffic is meant to be routed locally. Users can now add bbs.example.com to the no_proxy setting when prompted by Admiral.
  
 ## History
