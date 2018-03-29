@@ -3831,7 +3831,8 @@
             accessKey: $scope.vm.installForm.provision.amazonKeys.data.accessKey,
             secretKey: $scope.vm.installForm.provision.amazonKeys.data.secretKey,
             region: body.region,
-            amiId: body.externalId
+            amiId: body.externalId,
+            systemMachineImageName: body.name
           };
           async.series([
               __getImageByAmiId.bind(null, seriesBag),
@@ -3869,7 +3870,8 @@
             accessKey: $scope.vm.installForm.provision.amazonKeys.data.accessKey,
             secretKey: $scope.vm.installForm.provision.amazonKeys.data.secretKey,
             region: body.region,
-            amiId: body.externalId
+            amiId: body.externalId,
+            systemMachineImageName: body.name
           };
           async.series([
               __getImageByAmiId.bind(null, seriesBag),
@@ -3900,7 +3902,8 @@
             return next(err);
 
           if (_.isEmpty(imageId))
-            return next('Error: Entered ami-id is not correct');
+            return next('Error: Entered ami-id is not correct for system ' +
+              'machine image: ' + bag.systemMachineImageName);
 
           return next();
         }
