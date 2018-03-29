@@ -22,7 +22,9 @@ ${RES_VER_DATE}
       - A default of 90% maximum disk usage limit will be applied if none is specified.
       - Disk usage limits can be specified per Node pool.
       
-  - **Manually triggered jobs in the SPOG can be easily found**: The SPOG renders jobs which need to be manually triggered with a dark gray border, when an update to any of its input occurs. This allows you to quickly scan the SPOG and find jobs that need to be manually triggered. Manually triggered jobs have `switch: off` applied to one or more of their inputs. Triggering the job resets the border.    
+  - **Manually triggered jobs in the SPOG can be easily found**: The SPOG renders jobs which need to be manually triggered with a dark gray border, when an update to any of its input occurs. This allows you to quickly scan the SPOG and find jobs that need to be manually triggered. Manually triggered jobs have `switch: off` applied to one or more of their inputs. Triggering the job resets the border. 
+  
+  - **Search jobs and resources in the SPOG**: You can search for jobs and resources in the SPOG by either clicking on the search icon on the top-right corner in the SPOG view or by using the keyboard shortcut `ctrl` + `space`. This opens a search box which has intellisense allowing you to quickly select the jobs/resources you want to view. Once a selection is made, the target is brought into focus and highlighted with a yellow border.
 
 ## Fixes
   - **Fixed job triggering issues**
