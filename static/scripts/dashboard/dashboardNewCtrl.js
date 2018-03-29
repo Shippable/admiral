@@ -2747,6 +2747,9 @@
         { name: image.name });
       if (!smi && !smiByName)
         $scope.vm.installForm.systemMachineImages.push(image);
+      else if (!smi && smiByName)
+        _.extend(_.findWhere(
+          $scope.vm.installForm.systemMachineImages, { name: image.name }), image);
       else
         _.extend(_.findWhere(
           $scope.vm.installForm.systemMachineImages, { id: image.id }), image);
