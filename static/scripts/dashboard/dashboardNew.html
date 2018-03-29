@@ -3831,7 +3831,31 @@
               <select class="form-control"
                 ng-model="vm.selectedSMI.archTypeCode"
                 ng-init="vm.selectedSMI.archTypeCode = vm.selectedSMI.archTypeCode || vm.archTypes[0].code"
+                ng-change="vm.computeOs()"
                 ng-options="arch.code as arch.name for arch in vm.archTypes">
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">OS</label>
+            <div class="col-md-9">
+              <select class="form-control"
+                ng-model="vm.selectedSMI.osTypeCode"
+                ng-init="vm.selectedSMI.osTypeCode"
+                ng-disabled="!vm.selectedSMI.archTypeCode"
+                ng-change="vm.computeRuntimeTemplateId()"
+                ng-options="os.code as os.name for os in vm.supportedOsTypes">
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">Runtime Version</label>
+            <div class="col-md-9">
+              <select class="form-control"
+                ng-model="vm.selectedSMI.runtimeTemplateId"
+                ng-init="vm.selectedSMI.runtimeTemplateId"
+                ng-disabled="!vm.selectedSMI.archTypeCode || !vm.selectedSMI.osTypeCode"
+                ng-options="runtimeTemplate.id  as runtimeTemplate.version for runtimeTemplate in vm.supportedRuntimeTemplates">
               </select>
             </div>
           </div>

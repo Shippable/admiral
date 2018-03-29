@@ -117,14 +117,13 @@ function _post(bag, next) {
   logger.verbose(who, 'Inside');
 
   bag.systemMachineImageId = mongoose.Types.ObjectId().toString();
-
   var insertStatement = util.format('INSERT INTO "systemMachineImages" ' +
     '("id", "name", "description", "externalId", "provider", "isAvailable", ' +
     '"isDefault", "region", "keyName", "runShImage", "securityGroup", ' +
     '"subnetId", "drydockTag", "drydockFamily", "archTypeCode", ' +
-    '"createdBy", "updatedBy", "createdAt", "updatedAt") ' +
+    '"runtimeTemplateId", "createdBy", "updatedBy", "createdAt", "updatedAt") ' +
     'values (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', %s,' +
-    '%s, \'%s\', \'%s\', \'%s\', \'%s\', %s, \'%s\', \'%s\', %s, ' +
+    '%s, \'%s\', \'%s\', \'%s\', \'%s\', %s, \'%s\', \'%s\', %s, %s,' +
     ' \'54188262bc4d591ba438d62a\', \'54188262bc4d591ba438d62a\',' +
     ' CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
     bag.systemMachineImageId, bag.reqBody.name, bag.reqBody.description,
@@ -134,7 +133,8 @@ function _post(bag, next) {
     (!_.has(bag.reqBody.subnetId) || bag.reqBody.subnetId === null) ?
       'NULL' : util.format('\'%s\'', bag.reqBody.subnetId),
     bag.reqBody.drydockTag, bag.reqBody.drydockFamily,
-    bag.reqBody.archTypeCode);
+    bag.reqBody.archTypeCode, _.has(bag.reqBody, 'runtimeTemplateId') ?
+    bag.reqBody.runtimeTemplateId : null);
 
   global.config.client.query(insertStatement,
     function (err) {
