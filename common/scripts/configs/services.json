@@ -426,7 +426,7 @@
       "name": "rSync",
       "repository": "micro",
       "isCore": true,
-      "apiUrlIntegration": "api"
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "slack",
