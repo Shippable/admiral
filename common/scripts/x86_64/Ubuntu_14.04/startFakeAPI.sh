@@ -3,6 +3,7 @@
 export COMPONENT="db"
 export API_IMAGE="$PRIVATE_IMAGE_REGISTRY/api:$RELEASE"
 export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
+export FAKE_API_CONTAINER_NAME="fakeapi"
 
 ## Write logs of this script to component specific file
 exec &> >(tee -a "$LOGS_FILE")
@@ -79,6 +80,7 @@ __pull_api_image() {
 __run_api() {
   __process_msg "Running api container"
 
+  sudo docker rm -fv $FAKE_API_CONTAINER_NAME || true
   local run_cmd="sudo docker run \
     -d \
     -e DBNAME=$DBNAME \
@@ -89,7 +91,7 @@ __run_api() {
     -e DBDIALECT=$DBDIALECT \
     --net=host \
     --privileged=true \
-    --name=fakeapi \
+    --name=$FAKE_API_CONTAINER_NAME \
     $API_IMAGE
   "
 
@@ -107,7 +109,7 @@ __check_api() {
 
   while [ $is_booted != true ] && [ $counter -lt $timeout ]; do
     local running_api_container=$(sudo docker ps | \
-      grep fakeapi | awk '{print $1}')
+      grep $FAKE_API_CONTAINER_NAME | awk '{print $1}')
 
     if [ "$running_api_container" != "" ]; then
       __process_msg "Waiting thrity seconds before stopping API container"
@@ -115,7 +117,7 @@ __check_api() {
       sleep 30
 
       # Check if it's still running
-      local api_container=$(sudo docker ps | grep fakeapi | awk '{print $1}')
+      local api_container=$(sudo docker ps | grep $FAKE_API_CONTAINER_NAME | awk '{print $1}')
 
       if [ "$api_container" != "" ]; then
         __process_msg "Stopping API container"
@@ -125,7 +127,7 @@ __check_api() {
       sudo docker rm $running_api_container
     else
       local exited_api_container=$(sudo docker ps -a --filter status=exited | \
-        grep fakeapi | awk '{print $1}')
+        grep $FAKE_API_CONTAINER_NAME | awk '{print $1}')
 
       if [ "$exited_api_container" != "" ]; then
         __process_msg "Removing API container"
