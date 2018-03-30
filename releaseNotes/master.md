@@ -4,11 +4,11 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **On-demand nodes for Ubuntu 16.04, Windows Server 2016 and CentOS7**: You can now purchase On-demand SKU's for Ubuntu 16.04, Windows Server 2016 and CentOS7. 
+  - **On-demand nodes for Ubuntu 16.04, Windows Server 2016 and CentOS 7**: You can now purchase on-demand SKU's for Ubuntu 16.04, Windows Server 2016, and CentOS 7. 
 
   - **Integration with JIRA**: You can create tickets in JIRA directly from the runSh and runCI job console dashboard. A JIRA integration allows you to specify your JIRA Server URL, username and token. Thereafter, with a single click in your job console page, you can create a story/task/bug type of issue for any of your projects and also attach the console logs.
   
-  - **Setting priority on runSh and runCI jobs**: You can now set priority on runSh and runCI jobs.
+  - **Setting priority on runSh and runCI jobs**: You can now set priority on runSh and runCI jobs. This may be set to any value from 0 to 10000 inclusive, with 0 being the highest priority and 10000 being the lowest priority.
       - All jobs will have default priority as 9999.
       - All waiting jobs will be sorted first according to creation time and then by priority before being queued.
       - Example:
@@ -30,15 +30,14 @@ ${RES_VER_DATE}
 
 ## Fixes
   - **Fixed job triggering issues**
-      - The last state of a input job will be used when determining if a job should run. So a cancelled `job A` whose previous status was success and which is an IN to `job B`, will not prevent `job B` from triggering.
-      - In the scenario `job A` -> `img` -> `job B`, if you soft-delete `job A`, `job B` will no longer automatically trigger.
-      - With 2 minions, and 2 not-connected runCI and runSh jobs, the runSh and runCI jobs will execute in parallel.
+      - Soft-deleted jobs will no longer prevent connected jobs from automatically triggering.
+      - runSh jobs are no longer serialized when the parent syncRepo is serialized in CI.
 
 ## Shippable Server
 
   - Shippable Server UX has been significantly improved. Configuration has been cleanly separated into Control and Build planes and we have added support for Onebox installation.
   
-  - Bitbucket Sever OAUTH plugin works correctly in a proxy environment. Assuming the BitBucket Server is running on bbs.example.com, the proxy could be configured to reject requests for this URL because the traffic is meant to be routed locally. Users can now add bbs.example.com to the no_proxy setting when prompted by Admiral.
+  - Bitbucket Sever OAUTH plugin works correctly in a proxy environment. Assuming the Bitbucket Server is running on bbs.example.com, the proxy could be configured to reject requests for this URL because the traffic is meant to be routed locally. Users can now add bbs.example.com to the no_proxy setting when prompted by Admiral.
  
 ## History
 
