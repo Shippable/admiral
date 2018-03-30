@@ -4,6 +4,8 @@
 ${RES_VER_DATE}
 
 ## Features
+  - **On-demand nodes for Ubuntu 16.04, Windows Server 2016 and CentOS7**: You can now purchase On-demand SKU's for Ubuntu 16.04, Windows Server 2016 and CentOS7. 
+
   - **Integration with JIRA**: You can create tickets in JIRA directly from the runSh and runCI job console dashboard. A JIRA integration allows you to specify your JIRA Server URL, username and token. Thereafter, with a single click in your job console page, you can create a story/task/bug type of issue for any of your projects and also attach the console logs.
   
   - **Setting priority on runSh and runCI jobs**: You can now set priority on runSh and runCI jobs.
