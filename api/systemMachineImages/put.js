@@ -102,6 +102,9 @@ function _put(bag, next) {
   if (_.has(bag.reqBody, 'name'))
     updates.push(util.format('"name"=\'%s\'', bag.reqBody.name));
 
+  if (_.has(bag.reqBody, 'description'))
+    updates.push(util.format('"description"=\'%s\'', bag.reqBody.description));
+
   if (_.has(bag.reqBody, 'isAvailable'))
     updates.push(util.format('"isAvailable"=\'%s\'', bag.reqBody.isAvailable));
 

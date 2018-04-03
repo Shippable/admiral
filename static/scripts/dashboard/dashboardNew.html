@@ -2121,7 +2121,9 @@
                                             <td>{{smi.sshUser}}:{{smi.sshPort}}</td>
                                             <td>
                                               <button class="btn btn-sm btn-default"
-                                                ng-click="vm.updateSMI(smi)">Edit</button>
+                                                ng-click="vm.updateSMI(smi)"
+                                                ng-disabled="!vm.installForm.provision.amazonKeys.data.accessKey ||
+                                                !vm.installForm.provision.amazonKeys.data.secretKey">Edit</button>
                                               <button class="btn btn-danger btn-sm"
                                                 ng-disabled="vm.installForm.systemMachineImages.length === 1"
                                                 ng-click="vm.showRemoveSMIModal(smi)">
