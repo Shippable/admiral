@@ -805,6 +805,8 @@
       updateSMI: updateSMI,
       computeOs: computeOs,
       computeRuntimeTemplateId: computeRuntimeTemplateId,
+      createSystemMachineImage: createSystemMachineImage,
+      validSMI: validSMI,
       editSystemMachineImage: editSystemMachineImage,
       removeSystemMachineImage: removeSystemMachineImage,
       apply: apply,
@@ -2740,6 +2742,49 @@
       );
     }
 
+    function validSMI(newImage) {
+      var valid = true;
+      valid = valid && !!newImage.name;
+      valid = valid && !!newImage.description;
+      valid = valid && !!newImage.externalId;
+      valid = valid && !!newImage.region;
+      valid = valid && !!newImage.keyName;
+      valid = valid && !!newImage.runShImage;
+      valid = valid && !!newImage.securityGroup;
+      valid = valid && !!newImage.drydockTag;
+      valid = valid && !!newImage.drydockFamily;
+      valid = valid && !!newImage.archTypeCode;
+      return valid;
+    }
+
+    function createSystemMachineImage(newImage) {
+      var body = _.clone(newImage);
+      if (body.subnetId === '')
+        body.subnetId = null;
+
+      var bag = {
+        body: body,
+        accessKey: $scope.vm.installForm.provision.amazonKeys.data.accessKey,
+        secretKey: $scope.vm.installForm.provision.amazonKeys.data.secretKey,
+        region: body.region,
+        amiId: body.externalId,
+        systemMachineImageName: body.name
+      };
+      async.series([
+          __getImageByAmiId.bind(null, bag),
+          __postSystemMachineImage.bind(null, bag)
+        ],
+        function (err) {
+          if (err)
+            popup_horn.error(err);
+          else
+            $scope.vm.installForm.systemMachineImages.push(newImage);
+
+          $('#smi-edit-modal').modal('hide');
+        }
+      );
+    }
+
     function editSystemMachineImage(image) {
       var smi = _.findWhere($scope.vm.installForm.systemMachineImages,
         { id: image.id });
@@ -3893,9 +3938,6 @@
     }
 
     function __getImageByAmiId(bag, next) {
-      if (!bag.secretKey || !bag.accessKey)
-        return next();
-
       if (bag.body.archTypeCode === $scope.vm.armArchCode) return next();
 
       var query = 'region=' + bag.region;
