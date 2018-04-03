@@ -807,7 +807,7 @@
       computeRuntimeTemplateId: computeRuntimeTemplateId,
       createSystemMachineImage: createSystemMachineImage,
       validSMI: validSMI,
-      editSystemMachineImage: editSystemMachineImage,
+      updateSystemMachineImage: updateSystemMachineImage,
       removeSystemMachineImage: removeSystemMachineImage,
       apply: apply,
       install: install,
@@ -824,6 +824,7 @@
       showLogModal: showLogModal,
       showWorkersLogModal: showWorkersLogModal,
       showSaveModal: showSaveModal,
+      showRemoveSMIModal: showRemoveSMIModal,
       showSaveServicesModal: showSaveServicesModal,
       showRestartServicesModal: showRestartServicesModal,
       showApplyChangesModal: showApplyChangesModal,
@@ -2777,37 +2778,64 @@
         function (err) {
           if (err)
             popup_horn.error(err);
-          else
+          else {
             $scope.vm.installForm.systemMachineImages.push(newImage);
+            systemMachineImagesById =
+              _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
+          }
 
           $('#smi-edit-modal').modal('hide');
         }
       );
     }
 
-    function editSystemMachineImage(image) {
-      var smi = _.findWhere($scope.vm.installForm.systemMachineImages,
-        { id: image.id });
-      var smiByName = _.findWhere($scope.vm.installForm.systemMachineImages,
-        { name: image.name });
-      if (!smi && !smiByName)
-        $scope.vm.installForm.systemMachineImages.push(image);
-      else if (!smi && smiByName)
-        _.extend(_.findWhere(
-          $scope.vm.installForm.systemMachineImages, { name: image.name }), image);
-      else
-        _.extend(_.findWhere(
-          $scope.vm.installForm.systemMachineImages, { id: image.id }), image);
-      systemMachineImagesById =
-        _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
-      $('#smi-edit-modal').modal('hide');
+    function removeSystemMachineImage(deletedImage) {
+      $('#remove-smi-modal').modal('hide');
+      admiralApiAdapter.deleteSystemMachineImage(deletedImage.id,
+        function (err) {
+          if (err) {
+            popup_horn.error(err);
+          } else {
+            $scope.vm.installForm.systemMachineImages =
+              _.without($scope.vm.installForm.systemMachineImages, deletedImage);
+            systemMachineImagesById =
+              _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
+          }
+        }
+      );
     }
 
-    function removeSystemMachineImage(image) {
-      $scope.vm.installForm.systemMachineImages =
-        _.without($scope.vm.installForm.systemMachineImages, image);
-      systemMachineImagesById =
-        _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
+    function updateSystemMachineImage(updatedImage) {
+      var body = _.clone(updatedImage);
+      if (body.subnetId === '')
+        body.subnetId = null;
+
+      var bag = {
+        id: updatedImage.id,
+        body: body,
+        accessKey: $scope.vm.installForm.provision.amazonKeys.data.accessKey,
+        secretKey: $scope.vm.installForm.provision.amazonKeys.data.secretKey,
+        region: body.region,
+        amiId: body.externalId,
+        systemMachineImageName: body.name
+      };
+      async.series([
+          __getImageByAmiId.bind(null, bag),
+          __putSystemMachineImage.bind(null, bag)
+        ],
+        function (err) {
+          if (err)
+            popup_horn.error(err);
+          else {
+            _.extend(_.findWhere($scope.vm.installForm.systemMachineImages,
+              { id: updatedImage.id }), updatedImage);
+            systemMachineImagesById =
+              _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
+          }
+
+          $('#smi-edit-modal').modal('hide');
+        }
+      );
     }
 
     function updateReleaseVersion(bag, next) {
@@ -3080,7 +3108,7 @@
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
           updateProvisionSystemIntegration,
-          updateSystemMachineImages,
+          getSystemMachineImages,
           startAPI,
           startInternalAPI,
           startConsoleAPI,
@@ -3156,7 +3184,7 @@
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
           updateProvisionSystemIntegration,
-          updateSystemMachineImages,
+          getSystemMachineImages,
           updateFilestoreSystemIntegration,
           updateInternalAPIService,
           updateConsoleAPIService,
@@ -3794,39 +3822,6 @@
       );
     }
 
-    function updateSystemMachineImages(next) {
-      if (!$scope.vm.installForm.systemMachineImages) return next();
-
-      var bag = {
-        updatedSystemMachineImages: $scope.vm.installForm.systemMachineImages,
-        currentSystemMachineImages: []
-      };
-
-      async.series([
-          getCurrentSystemMachineImages.bind(null, bag),
-          deleteSystemMachineImages.bind(null, bag),
-          putSystemMachineImages.bind(null, bag),
-          postSystemMachineImages.bind(null, bag),
-          getSystemMachineImages
-        ],
-        function (err) {
-          return next(err);
-        }
-      );
-    }
-
-    function getCurrentSystemMachineImages(bag, next) {
-      admiralApiAdapter.getSystemMachineImages('',
-        function (err, systemMachineImages) {
-          if (err)
-            return next(err);
-
-          bag.currentSystemMachineImages = systemMachineImages;
-          return next();
-        }
-      );
-    }
-
     function deleteSystemMachineImages(bag, next) {
       var deletedSystemMachineImages = _.filter(bag.currentSystemMachineImages,
         function (currentImage) {
@@ -4313,6 +4308,11 @@
 
     function showSaveModal() {
       $('#saveModal').modal('show');
+    }
+
+    function showRemoveSMIModal(image) {
+      $scope.vm.selectedSMI = image;
+      $('#remove-smi-modal').modal('show');
     }
 
     function hideSaveModal() {
