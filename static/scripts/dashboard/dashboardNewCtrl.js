@@ -1937,11 +1937,14 @@
             'customNodesAdminOnly',
             'allowedSystemImageFamily',
             'defaultMinionInstanceSize',
-            'defaultClusterType'
+            'defaultClusterType',
+            'nodeCacheIntervalMS'
           ];
 
           _.each(installPanelSystemSettings,
             function (key) {
+              if (key === 'nodeCacheIntervalMS')
+                systemSettings[key] = systemSettings[key] / ( 1000 * 60 );
               $scope.vm.installForm.systemSettings[key] =
                 systemSettings[key];
             }
@@ -3809,7 +3812,13 @@
     function updateInstallPanelSystemSettings(next) {
       if (!$scope.vm.systemSettingsId) return next();
 
-      var update = $scope.vm.installForm.systemSettings;
+      var update = _.clone($scope.vm.installForm.systemSettings);
+      if (Number.isInteger(update.nodeCacheIntervalMS) &&
+        update.nodeCacheIntervalMS > 0)
+        update.nodeCacheIntervalMS =
+          update.nodeCacheIntervalMS * 1000 * 60;
+      else
+        return next('Node cache interval should be a positive integer.');
 
       admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
         function (err) {
