@@ -92,6 +92,10 @@ do $$
       alter table "systemSettings" add column "maxDiskUsagePercentage" INTEGER DEFAULT 90 NOT NULL;
     end if;
 
+    if not exists(select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'nodeCacheIntervalMS') then
+      alter table "systemSettings" add column "nodeCacheIntervalMS" INTEGER DEFAULT 600000 NOT NULL;
+    end if;
+
   end
 $$;
 
