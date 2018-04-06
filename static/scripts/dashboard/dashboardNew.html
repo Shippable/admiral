@@ -2083,7 +2083,30 @@
                                         </div>
                                       </div>
                                     </form>
-                                    <hr/>
+                                  </div>
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                          <span title="This is the day of week on which cached nodes will be stopped.">Day of week when Cached nodes are Stopped
+                                            <span class="glyphicon glyphicon-info-sign"></span>
+                                          </span>
+                                        </label>
+                                        <div class="col-md-6">
+                                          <select class="form-control"
+                                            ng-disabled="vm.installing || vm.saving"
+                                            ng-model="vm.installForm.systemSettings.nodeStopDayOfWeek">
+                                            <option value="0">Sunday</option>
+                                            <option value="1">Monday</option>
+                                            <option value="2">Tuesday</option>
+                                            <option value="3">Wednesday</option>
+                                            <option value="4">Thursday</option>
+                                            <option value="5">Friday</option>
+                                            <option value="6">Saturday</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </form>
                                   </div>
                                 </div>
                                 <div>&nbsp</div>

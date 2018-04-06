@@ -1938,7 +1938,8 @@
             'allowedSystemImageFamily',
             'defaultMinionInstanceSize',
             'defaultClusterType',
-            'nodeCacheIntervalMS'
+            'nodeCacheIntervalMS',
+            'nodeStopDayOfWeek'
           ];
 
           _.each(installPanelSystemSettings,
