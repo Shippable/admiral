@@ -96,6 +96,10 @@ do $$
       alter table "systemSettings" add column "nodeCacheIntervalMS" INTEGER DEFAULT 600000 NOT NULL;
     end if;
 
+    if not exists(select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'nodeStopDayOfWeek') then
+      alter table "systemSettings" add column "nodeStopDayOfWeek" INTEGER DEFAULT 0 NOT NULL;
+    end if;
+
   end
 $$;
 
