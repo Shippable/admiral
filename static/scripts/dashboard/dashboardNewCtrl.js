@@ -1939,7 +1939,8 @@
             'defaultMinionInstanceSize',
             'defaultClusterType',
             'nodeCacheIntervalMS',
-            'nodeStopDayOfWeek'
+            'nodeStopDayOfWeek',
+            'nodeStopIntervalDays'
           ];
 
           _.each(installPanelSystemSettings,
@@ -3820,6 +3821,10 @@
           update.nodeCacheIntervalMS * 1000 * 60;
       else
         return next('Node cache interval should be a positive integer.');
+
+      if (!Number.isInteger(update.nodeStopIntervalDays) ||
+        update.nodeStopIntervalDays < 1)
+        return next('Node stop interval should be a positive integer.');
 
       admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
         function (err) {

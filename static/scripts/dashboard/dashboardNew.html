@@ -2108,6 +2108,21 @@
                                       </div>
                                     </form>
                                   </div>
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                          <span title="This is the interval after which the Cached node goes into Stopped state.">Node stop interval (in days)
+                                            <span class="glyphicon glyphicon-info-sign"></span>
+                                          </span>
+                                        </label>
+                                        <div class="col-md-6">
+                                          <input type="number" min="1" class="form-control" name="nodeStopIntervalDays"
+                                          ng-model="vm.installForm.systemSettings.nodeStopIntervalDays" ng-disabled="vm.installing || vm.saving"/>
+                                        </div>
+                                      </div>
+                                    </form></hr>
+                                  </div>
                                 </div>
                                 <div>&nbsp</div>
                                 <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
