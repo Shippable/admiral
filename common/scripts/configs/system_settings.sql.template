@@ -100,6 +100,10 @@ do $$
       alter table "systemSettings" add column "nodeStopDayOfWeek" INTEGER DEFAULT 0 NOT NULL;
     end if;
 
+    if not exists(select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'nodeStopIntervalDays') then
+      alter table "systemSettings" add column "nodeStopIntervalDays" INTEGER DEFAULT 30 NOT NULL;
+    end if;
+
   end
 $$;
 
