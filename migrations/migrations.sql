@@ -5188,5 +5188,10 @@ do $$
       alter table "clusters" add column "maxDiskUsagePercentage" INTEGER;
     end if;
 
+    -- Add propertyBag column to clusters
+    if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'propertyBag') then
+      alter table "clusters" add column "propertyBag" TEXT;
+    end if;
+
   end
 $$;
