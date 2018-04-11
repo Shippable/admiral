@@ -52,6 +52,14 @@ do $$
         values (8000, 9005, 'Master', 'drydock', 'c7', 'master', 'c7all', 'reqproc', false, '2018-03-13', '2018-03-13');
       end if;
 
+      -- aarch64 Ubuntu_16.04 Master
+      update "runtimeTemplates" set "defaultTaskImage" = 'aarch32_u16' where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'Master';
+      update "runtimeTemplates" set "drydockOrg" = 'drydock' where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'Master';
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'Master') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8002, 9001, 'Master', 'drydock', 'u16', 'master', 'aarch32_u16', 'reqproc', false, '2018-04-11', '2018-04-11');
+      end if;
+
     end if;
   end
 $$;
