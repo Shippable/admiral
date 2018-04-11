@@ -455,6 +455,11 @@ do $$
       values (8001, 'aarch64', 'archType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    if not exists (select 1 from "systemCodes" where code = 8002) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (8002, 'aarch32', 'archType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-04-11', '2018-04-11');
+    end if;
+
     -- Add systemCodes for operatingSystem
     if not exists (select 1 from "systemCodes" where code = 9000) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -581,6 +586,11 @@ do $$
     if not exists (select 1 from "systemCodes" where code = 10018) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
       values (10018, 'dynamic__x86_64__Ubuntu_16.04__c4.2xlarge', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-28', '2018-03-28');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 10019) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10019, 'custom__aarch32__Ubuntu_16.04', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-04-11', '2018-04-11');
     end if;
 
     -- Add systemCodes for jobStatesMap
