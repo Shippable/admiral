@@ -9,11 +9,11 @@ ${RES_VER_DATE}
   - **CI jobs in Assembly lines render YML**: You can view the complete YML for a CI job used in an Assembly Line.
   - **Fine grain control on replication of a gitRepo resource**: A common use case is to trigger a managed deploy job or runSh **AFTER** CI in an Assembly line, using the same branch and SHA as CI using the `replicate` feature. Customers often want to trigger CI for PRs but they do not want their managed and unmanaged jobs downstream to be triggered for PRs. You can enable this scenario by specifying `replicateOnPullRequest: false`.
 
-```
+```yaml
 jobs:
- - name: myrepo_runCI
-   type: runCI
-   steps:
+  - name: myrepo_runCI
+    type: runCI
+    steps:
      - OUT: myGitRepoResource
        replicate: myrepo_ciRepo
        replicateOnPullRequest: false
@@ -21,7 +21,20 @@ jobs:
 
   - **Added support to deploy job for forced deployment with release inputs**
       - Consider the following assembly line: `image->manifest->release->deploy`. In the deploy job, you can now attach `force: true` to the `release` IN step and the deploy job will deploy the manifests in your release, regardless of whether or not they have changed since the previous deployment.
+ - **Added support to trigger downstream jobs even if an upstream job fails**
+      - Consider this scenario: you has a pipeline setup which provisions new infrastructure in `Job A`, does some testing in `Job B` and then deprovisions that infrastructure in `Job C`. You most likely want your deprovision `Job C` to run even when test `Job B` fails. 
 
+You can specify flags `triggerOnSuccess` and `triggerOnFailure` to enable such scenarios. Specifically, by setting `triggerOnFailure: true` on `Job C`, `Job C` will run if `Job B` fails.
+
+```yaml
+jobs:
+  - name: C
+    type: runSh
+    steps:
+      - IN: B
+        triggerOnFailure: true  (default false)
+        triggerOnSuccess: true  (default true)
+```
 
 ## Fixes
   - Navigation from a Shared view to another works as expected. 
@@ -31,7 +44,6 @@ jobs:
   - Billing page enabled the "Save" button and updates the total price correctly if there are any changes to the SKUs.
   - Jira issue created for a non-matrix CI builds create issue links in the CI build console page immediately. 
   - UX issues for Subscription and Project Insights have been fixed for Chrome on OSX.
-  - 
 
 ## Shippable Server
 
