@@ -4,11 +4,9 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **UX improvement for Node Pools**: While creating or editing a node pool, the `Runtime versions` dropdown is sorted in descending order.
+  - **Added support for ClearLinux custom images in CI**
+  -     
 
 ## Fixes
   - Navigation from a Shared view to another works as expected. 
