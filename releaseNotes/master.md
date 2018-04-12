@@ -7,7 +7,17 @@ ${RES_VER_DATE}
   - **UX improvement for Node Pools**: While creating or editing a node pool, the `Runtime versions` dropdown is sorted in descending order.
   - **Added support for ClearLinux custom images in CI**
   - **CI jobs in Assembly lines render YML**: You can view the complete YML for a CI job used in an Assembly Line.
-  - 
+  - **Fine grain control on replication of a gitRepo resource**: A common use case is to trigger a managed deploy job or runSh **AFTER** CI in an Assembly line, using the same branch and SHA as CI using the `replicate` feature. Customers often want to trigger CI for PRs but they do not want their managed and unmanaged jobs downstream to be triggered for PRs. You can enable this scenario by specifying `replicateOnPullRequest: false`.
+
+```
+jobs:
+ - name: myrepo_runCI
+   type: runCI
+   steps:
+     - OUT: myGitRepoResource
+       replicate: myrepo_ciRepo
+       replicateOnPullRequest: false
+```
 
 ## Fixes
   - Navigation from a Shared view to another works as expected. 
@@ -18,6 +28,11 @@ ${RES_VER_DATE}
   - Jira issue created for a non-matrix CI builds create issue links in the CI build console page immediately. 
   - UX issues for Subscription and Project Insights have been fixed for Chrome on OSX.
   - 
+
+## Shippable Server
+
+  - WebHook integrations work in CI and the `NOTIFY` step of your Assembly line jobs on a fresh install.
+
  
 ## History
 
