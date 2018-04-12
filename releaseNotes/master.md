@@ -8,6 +8,8 @@ ${RES_VER_DATE}
   - **Added support for ClearLinux custom images in CI**
   - **CI jobs in Assembly lines render YML**: You can view the complete YML for a CI job used in an Assembly Line.
   - **Fine grain control on replication of a gitRepo resource**: A common use case is to trigger a managed deploy job or runSh **AFTER** CI in an Assembly line, using the same branch and SHA as CI using the `replicate` feature. Customers often want to trigger CI for PRs but they do not want their managed and unmanaged jobs downstream to be triggered for PRs. You can enable this scenario by specifying `replicateOnPullRequest: false`.
+  - **Added support to deploy job for forced deployment with release inputs**
+      - Consider the following assembly line: `image->manifest->release->deploy`. In the deploy job, you can now attach `force: true` to the `release` IN step and the deploy job will deploy the manifests in your release, regardless of whether or not they have changed since the previous deployment.
 
 ```
 jobs:
