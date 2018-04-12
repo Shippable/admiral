@@ -15,7 +15,9 @@ ${RES_VER_DATE}
   - After a CI build completes, its status is reflected correctly in the *Latest Status* grid.
   - SSH access to Ubuntu 16.04 nodes for debug CI runs works as expected.
   - Running a Jenkins CI job, using an external CI integration, triggers downstream jobs which have the external CI job as an IN.
-  -  
+  - Billing page enabled the "Save" button and updates the total price correctly if there are any changes to the SKUs.
+  - Jira issue created for a non-matrix CI builds create issue links in the CI build console page immediately. 
+  - 
 
 ## Shippable Server
 
