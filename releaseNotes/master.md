@@ -11,14 +11,11 @@ ${RES_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
-
-## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
+  - Navigation from a Shared view to another works as expected. 
+  - After a CI build completes, its status is reflected correctly in the *Latest Status* grid.
+  - SSH access to Ubuntu 16.04 nodes for debug CI runs works as expected.
+  - Running a Jenkins CI job, using an external CI integration, triggers downstream jobs which have the external CI job as an IN.
+  -  
 
 ## Shippable Server
 
