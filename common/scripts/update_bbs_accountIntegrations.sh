@@ -40,15 +40,15 @@ __migrate() {
 
   local migrations_location="$DB_CONFIG_DIR/update_bbs_accountIntegrations.sql"
 
-  local upsert_cmd="PGHOST=$DBHOST \
-    PGPORT=$DBPORT \
-    PGDATABASE=$DBNAME \
-    PGUSER=$DBUSERNAME \
-    PGPASSWORD=$DBPASSWORD \
+  local upsert_cmd="PGHOST=$DB_IP \
+    PGPORT=$DB_PORT \
+    PGDATABASE=$DB_NAME \
+    PGUSER=$DB_USER \
+    PGPASSWORD=$DB_PASSWORD \
     psql \
-    -U $DBUSERNAME \
-    -d $DBNAME \
-    -h $DBHOST \
+    -U $DB_USER \
+    -d $DB_NAME \
+    -h $DB_IP \
     -v ON_ERROR_STOP=1 \
     -f $migrations_location"
 
