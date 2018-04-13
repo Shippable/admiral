@@ -99,9 +99,6 @@ function _generateScript(bag, next) {
   filePath = path.join(global.config.scriptsDir, 'post_install.sh');
   script = script.concat(__applyTemplate(filePath, bag.params));
 
-  filePath = path.join(global.config.scriptsDir, 'update_bbs_accountIntegrations.sh');
-  script = script.concat(__applyTemplate(filePath, bag.params));
-
   bag.script = script;
   return next();
 }

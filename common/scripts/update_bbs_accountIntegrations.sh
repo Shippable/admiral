@@ -19,7 +19,7 @@ __compare_versions() {
   if [ "$current_release" != "master" ]
     ## remove "v" from version
     current_release="${current_release:1}"
-    if [ "$(get_version "$current_release")" -lte "$(version "$BBS_MIGRATION_VERSION")" ]; then
+    if [ "$(get_version "$current_release")" -le "$(version "$BBS_MIGRATION_VERSION")" ]; then
       SHOULD_RUN_BBS_MIGRATION=true
     fi
   fi
