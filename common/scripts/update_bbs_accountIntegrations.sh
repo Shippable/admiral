@@ -58,7 +58,6 @@ __migrate() {
 __update_bbs_accountIntegrations() {
   __compare_versions $1
   if $SHOULD_RUN_BBS_MIGRATION ; then
-    __process_marker "Executing update bbs accountIntegrations migrations"
     __validate_db_envs
     __copy_migrations
     __migrate
