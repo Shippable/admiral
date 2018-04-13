@@ -279,11 +279,6 @@ _shippable_post_secrets_initialize() {
   __shippable_post $secrets_post_initialize_endpoint
 }
 
-_shippable_post_move_system_to_grisham() {
-  local move_system_to_grisham="passthrough/grisham"
-  __shippable_post $move_system_to_grisham
-}
-
 _shippable_post_systemClusters() {
   local body="$1"
   local db_post_endpoint="systemClusters"
