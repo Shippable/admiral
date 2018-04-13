@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-readonly BBS_MIGRATION_VERSION=6.3.4
+readonly BBS_MIGRATION_VERSION=v6.3.4
 SHOULD_RUN_BBS_MIGRATION=false
 export COMPONENT="db"
 export DB_DATA_DIR="$RUNTIME_DIR/$COMPONENT/data"
@@ -10,16 +10,10 @@ export LOGS_FILE="$RUNTIME_DIR/logs/$COMPONENT.log"
 ## Write logs of this script to component specific file
 exec &> >(tee -a "$LOGS_FILE")
 
-function get_version {
-  echo "$@" | awk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }';
-}
-
 __compare_versions() {
   local current_release = "$1"
   if [ "$current_release" != "master" ]
-    ## remove "v" from version
-    current_release="${current_release:1}"
-    if [ "$(get_version "$current_release")" -le "$(version "$BBS_MIGRATION_VERSION")" ]; then
+    if [  "$current_release" = "`echo -e "$current_release\n$BBS_MIGRATION_VERSION" | sort -V | head -n1`" ]; then
       SHOULD_RUN_BBS_MIGRATION=true
     fi
   fi
