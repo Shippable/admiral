@@ -12,7 +12,7 @@ exec &> >(tee -a "$LOGS_FILE")
 
 __compare_versions() {
   local current_release = "$1"
-  if [ "$current_release" != "master" ]
+  if [ "$current_release" != "master" ]; then
     if [  "$current_release" = "`echo -e "$current_release\n$BBS_MIGRATION_VERSION" | sort -V | head -n1`" ]; then
       SHOULD_RUN_BBS_MIGRATION=true
     fi
