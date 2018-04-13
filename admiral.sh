@@ -52,6 +52,7 @@ source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/_helpers.sh"
 
 source "$LIB_DIR/_parseArgs.sh"
 source "$LIB_DIR/_admiralAdapter.sh"
+source "$SCRIPTS_DIR/update_bbs_accountIntegrations.sh"
 
 main() {
   __check_logsdir

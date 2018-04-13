@@ -26,6 +26,7 @@ __check_release() {
 
   __process_msg "Current release: $current_release"
   __process_msg "New release: $RELEASE"
+  __update_bbs_accountIntegrations $current_release
 }
 
 __update_release() {
