@@ -27,12 +27,12 @@ __validate_db_envs() {
 }
 
 __copy_migrations() {
-  __process_msg "Copying update bbs accountIntegrations sql to db container"
+  __process_msg "Copying update bbs accountIntegrations sql to db config dir"
   local migrations_host_location="$MIGRATIONS_DIR/bitbucket_server/update_bbs_accountIntegrations.sql"
-  local migrations_container_location="$CONFIG_DIR/db/update_bbs_accountIntegrations.sql"
+  local migrations_container_location="$DB_CONFIG_DIR/update_bbs_accountIntegrations.sql"
   sudo cp -vr $migrations_host_location $migrations_container_location
 
-  __process_msg "Successfully copied update_bbs_accountIntegrations.sql to db container"
+  __process_msg "Successfully copied update_bbs_accountIntegrations.sql to db config dir"
 }
 
 __migrate() {
