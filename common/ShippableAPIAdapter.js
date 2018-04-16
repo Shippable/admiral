@@ -22,15 +22,6 @@ function ShippableAPIAdapter(url, token) {
 /* Sorted alphabetically by folder name. */
 /*****************************************/
 
-// passthrough moveToGrisham
-ShippableAPIAdapter.prototype.moveToGrisham =
-  function (json, callback) {
-    var url = util.format(
-      '/passthrough/subscriptions/%s/grisham', json.subscriptionId
-    );
-    this.post(url, json, callback);
-  };
-
 // subscriptions
 ShippableAPIAdapter.prototype.getSubscriptions =
   function (query, callback) {
