@@ -11,9 +11,7 @@ ${RES_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - Listing a webhook subscription integration with no linked account integration in a CI shippable.yml now creates a run with the same error message as other integration types.
 
 ## Custom Nodes
   - **simple title**: brief description
