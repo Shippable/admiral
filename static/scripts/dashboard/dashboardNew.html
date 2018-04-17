@@ -150,7 +150,7 @@
         <!-- WWW Config Section -->
         <div class="row" ng-if="vm.isLoaded && vm.initialized">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#www">
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3">
                   UI
@@ -163,7 +163,7 @@
                   </span>
                 </div>
                 <div class="portlet-widgets">
-                  <a data-toggle="collapse" data-target="#www"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#www" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -258,7 +258,7 @@
 
         <div class="row" ng-if="vm.isLoaded && vm.initialized">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#api">
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3">
                   API
@@ -271,7 +271,7 @@
                   </span>
                 </div>
                 <div class="portlet-widgets">
-                  <a data-toggle="collapse" data-target="#api"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#api" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -518,7 +518,7 @@
         <!-- mktg Config Section -->
         <div class="row" ng-if="!vm.admiralEnv.IS_SERVER">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#mktg">
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3">
                   mktg
@@ -531,7 +531,7 @@
                   </span>
                 </div>
                 <div class="portlet-widgets">
-                  <a data-toggle="collapse" data-target="#mktg"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#mktg" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -618,7 +618,7 @@
 
         <div class="row" ng-if="vm.isLoaded && vm.initialized">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#auth">
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-5">
                   Authorization and Source Control Management (SCM) Providers
@@ -631,7 +631,7 @@
                   </span>
                 </div>
                 <div class="portlet-widgets">
-                  <a data-toggle="collapse" data-target="#auth"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#auth" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -1028,7 +1028,7 @@
 
         <div class="row">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#bg-master">
 
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3">
@@ -1046,7 +1046,7 @@
                   <span class="divider"></span>
                   <a class="btn" ng-click="vm.showLogModal('master')" ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized" tooltip-placement="top"
                     uib-tooltip="logs"><i class="fa fa-paperclip"></i></a>
-                  <a data-toggle="collapse" data-target="#bg-master"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#bg-master" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -1200,7 +1200,7 @@
         <!-- START Secrets -->
         <div class="row">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#bg-secrets">
 
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3">
@@ -1218,7 +1218,7 @@
                   <span class="divider"></span>
                   <a class="btn" ng-click="vm.showLogModal('secrets')" tooltip-placement="top"
                     uib-tooltip="logs" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized"><i class="fa fa-paperclip"></i></a>
-                  <a data-toggle="collapse" data-target="#bg-secrets"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#bg-secrets" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -1283,7 +1283,7 @@
         <!-- START RabbitMQ -->
         <div class="row">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#bg-rabbitmq">
 
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3">
@@ -1302,7 +1302,7 @@
                   <a class="btn" ng-click="vm.showLogModal('msg')"
                     ng-disabled="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed && !vm.systemSettings.msg.isInitialized" tooltip-placement="top"
                     uib-tooltip="logs"><i class="fa fa-paperclip"></i></a>
-                  <a data-toggle="collapse" data-target="#bg-rabbitmq"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#bg-rabbitmq" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -1507,7 +1507,7 @@
         <!-- START State -->
         <div class="row">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#state">
 
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3">
@@ -1526,7 +1526,7 @@
                   <a class="btn" ng-click="vm.showLogModal('state')"
                     ng-disabled="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed && !vm.systemSettings.state.isInitialized" tooltip-placement="top"
                     uib-tooltip="logs"><i class="fa fa-paperclip"></i></a>
-                  <a data-toggle="collapse" data-target="#state"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#state" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -1685,7 +1685,7 @@
         <!-- START Redis -->
         <div class="row">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#bg-redis">
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3" data-target="#bg-redis">
                     REDIS
@@ -1702,7 +1702,7 @@
                     <span class="divider"></span>
                     <a class="btn cursor-pointer" ng-click="vm.showLogModal('redis')" tooltip-placement="top" uib-tooltip="Logs" ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">
                     <i class="fa fa-paperclip"></i></a>
-                    <a data-toggle="collapse" data-target="#bg-redis"><i class="ion-minus-round cursor-pointer"></i></a>
+                    <a data-toggle="collapse" data-target="#bg-redis" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -1805,7 +1805,7 @@
         <!-- START Database -->
         <div class="row">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#database">
 
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark col-md-3">
@@ -1823,7 +1823,7 @@
                   <span class="divider"></span>
                   <a class="btn" ng-click="vm.showLogModal('db')" tooltip-placement="top"
                     uib-tooltip="logs" ng-disabled="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed && !vm.systemSettings.db.isInitialized"><i class="fa fa-paperclip"></i></a>
-                  <a data-toggle="collapse" data-target="#database"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#database" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -1882,13 +1882,13 @@
         <!-- Services Section -->
         <div class="row" ng-if="vm.requireRestart">
           <div class="col-md-12">
-            <div class="portlet">
+            <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#servicesConfig">
               <div data-toggle="collapse" class="portlet-heading">
                 <h3 class="portlet-title text-dark">
                   Services
                 </h3>
                 <div class="portlet-widgets">
-                  <a data-toggle="collapse" data-target="#servicesConfig"><i class="ion-minus-round cursor-pointer"></i></a>
+                  <a data-toggle="collapse" data-target="#servicesConfig" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -1970,13 +1970,13 @@
           <!-- Builds Config Section -->
           <div class="row">
             <div class="col-md-12">
-              <div class="portlet">
+              <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#buildConfig">
                 <div data-toggle="collapse" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
                     Build Configuration
                   </h3>
                   <div class="portlet-widgets">
-                    <a data-toggle="collapse" data-target="#buildConfig"><i class="ion-minus-round cursor-pointer"></i></a>
+                    <a data-toggle="collapse" data-target="#buildConfig" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                   </div>
                   <div class="clearfix"></div>
                 </div>
@@ -2401,15 +2401,14 @@
           <!-- start enable cloudproviders section -->
           <div class="row">
             <div class="col-md-12">
-              <div class="portlet">
-
+              <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#enable-addons">
                 <div data-toggle="collapse" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
                     Cloud Providers
                   </h3>
                   <div class="portlet-widgets">
                     <span class="divider"></span>
-                    <a data-toggle="collapse" data-target="#enable-addons"><i class="ion-minus-round cursor-pointer"></i></a>
+                    <a data-toggle="collapse" data-target="#enable-addons" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                   </div>
                   <div class="clearfix"></div>
                 </div>
@@ -2678,7 +2677,7 @@
           <!-- start enable notifications section -->
           <div class="row">
             <div class="col-md-12">
-              <div class="portlet">
+              <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#enable-addons-notifications">
 
                 <div data-toggle="collapse" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
@@ -2686,7 +2685,7 @@
                   </h3>
                   <div class="portlet-widgets">
                     <span class="divider"></span>
-                    <a data-toggle="collapse" data-target="#enable-addons-notifications"><i class="ion-minus-round cursor-pointer"></i></a>
+                    <a data-toggle="collapse" data-target="#enable-addons-notifications" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                   </div>
                   <div class="clearfix"></div>
                 </div>
@@ -3019,7 +3018,7 @@
           <!-- start enable Registries section -->
           <div class="row">
             <div class="col-md-12">
-              <div class="portlet">
+              <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#enable-addons-registries">
 
                 <div data-toggle="collapse" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
@@ -3027,7 +3026,7 @@
                   </h3>
                   <div class="portlet-widgets">
                     <span class="divider"></span>
-                    <a data-toggle="collapse" data-target="#enable-addons-registries"><i class="ion-minus-round cursor-pointer"></i></a>
+                    <a data-toggle="collapse" data-target="#enable-addons-registries" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                   </div>
                   <div class="clearfix"></div>
                 </div>
@@ -3191,7 +3190,7 @@
           <!-- start enable Others section -->
           <div class="row">
             <div class="col-md-12">
-              <div class="portlet">
+              <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#enable-addons-others">
 
                 <div data-toggle="collapse" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
@@ -3199,7 +3198,7 @@
                   </h3>
                   <div class="portlet-widgets">
                     <span class="divider"></span>
-                    <a data-toggle="collapse" data-target="#enable-addons-others"><i class="ion-minus-round cursor-pointer"></i></a>
+                    <a data-toggle="collapse" data-target="#enable-addons-others" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                   </div>
                   <div class="clearfix"></div>
                 </div>
@@ -3665,13 +3664,13 @@
           <!-- START Manage System Superusers -->
           <div class="row">
             <div class="col-md-12">
-              <div class="portlet">
+              <div class="portlet cursor-pointer" data-toggle="collapse" data-target="#systemSuperusers">
                 <div data-toggle="collapse" class="portlet-heading">
                   <h3 class="portlet-title text-dark">
                     Manage System Superusers
                   </h3>
                   <div class="portlet-widgets">
-                    <a data-toggle="collapse" data-target="#systemSuperusers"><i class="ion-minus-round cursor-pointer"></i></a>
+                    <a data-toggle="collapse" data-target="#systemSuperusers" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                   </div>
                   <div class="clearfix"></div>
                 </div>
