@@ -3,13 +3,13 @@
 
   /* global _, async */
 
-  admiral.controller('dashboardNewCtrl', ['$scope', '$stateParams', '$q', '$state',
-    '$interval', '$timeout', 'admiralApiAdapter', 'popup_horn',
-    dashboardNewCtrl
+  admiral.controller('dashboardNewCtrl', ['$scope', '$stateParams', '$q',
+    '$state', '$interval', '$timeout', '$location', 'admiralApiAdapter',
+    'popup_horn', dashboardNewCtrl
   ]);
 
-  function dashboardNewCtrl($scope, $stateParams, $q, $state, $interval, $timeout,
-    admiralApiAdapter, popup_horn) {
+  function dashboardNewCtrl($scope, $stateParams, $q, $state,
+    $interval, $timeout, $location, admiralApiAdapter, popup_horn) {
     /* jshint maxstatements:175 */
     var dashboardNewCtrlDefer = $q.defer();
 
@@ -818,6 +818,16 @@
       runMode: 'production',
       allNodes: {}
     };
+
+    var locationHashSectionNameMap = {
+      'control-plane': 'infrastructure',
+      'build-plane': 'config',
+      'addons-panel': 'addons',
+      'system-settings-panel': 'system'
+    };
+    var locationHash = $location.hash();
+    if (locationHash && locationHashSectionNameMap[locationHash])
+      $scope.vm.sectionSelected = locationHashSectionNameMap[locationHash];
 
     var systemIntDataDefaults = {};
 
