@@ -206,7 +206,7 @@
                                   <form class="form-horizontal" role="form" name="vm.wwwInstallForm" novalidate>
                                     <div class="col-md-12" ng-if="vm.isEditingUIUrl">
                                       <label class="control-label textAlignNone col-md-1">Protocol</label>
-                                      <div class="col-md-1 m-t-5">
+                                      <div class="col-md-3 m-t-5">
                                         <span>
                                           <input type="radio" ng-model="vm.installForm.www.url.isSecure"
                                             ng-value="false">
@@ -298,14 +298,14 @@
                                     ng-disabled="vm.initializing || vm.installing || vm.saving ||
                                     vm.restartingServices" class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_api_url">
-                                    <b> Do you want to change friendly url of API? </b>
+                                    <b> Do you want to change the friendly url of API? </b>
                                   </label>
                                 </div>
                                 <div class="row m-t-10" ng-if="vm.isEditingAPIUrl">
                                   <form class="form-horizontal" role="form" name="vm.apiInstallForm" novalidate>
                                     <div class="col-md-12" ng-if="vm.isEditingAPIUrl">
                                       <label class="control-label textAlignNone col-md-1">Protocol</label>
-                                      <div class="col-md-1 m-t-5">
+                                      <div class="col-md-3 m-t-5">
                                         <span>
                                           <input type="radio" ng-model="vm.installForm.api.url.isSecure"
                                             ng-value="false">
@@ -377,14 +377,14 @@
                                                 ng-disabled="vm.installing || vm.saving"
                                                 class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                               <label for="checkbox_for_editing_internalApi_url">
-                                                <b> Do you want to change friendly url of Internal API? </b>
+                                                <b> Do you want to change the friendly url of Internal API? </b>
                                               </label>
                                             </div>
                                             <div class="row m-t-10" ng-if="vm.isEditingInternalAPIUrl">
                                               <form class="form-horizontal" role="form" name="vm.internalApiInstallForm" novalidate>
                                                 <div class="col-md-12" ng-if="vm.isEditingInternalAPIUrl">
                                                   <label class="control-label textAlignNone col-md-1">Protocol</label>
-                                                  <div class="col-md-1 m-t-5">
+                                                  <div class="col-md-3 m-t-5">
                                                     <span>
                                                       <input type="radio" ng-model="vm.installForm.internalAPI.url.isSecure"
                                                         ng-value="false">
@@ -455,14 +455,14 @@
                                                 ng-disabled="vm.installing || vm.saving"
                                                 class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                               <label for="checkbox_for_editing_consoleApi_url">
-                                                <b> Do you want to change friendly url of Console API? </b>
+                                                <b> Do you want to change the friendly url of Console API? </b>
                                               </label>
                                             </div>
                                             <div class="row m-t-10" ng-if="vm.isEditingConsoleAPIUrl">
                                               <form class="form-horizontal" role="form" name="vm.consoleApiInstallForm" novalidate>
                                                 <div class="col-md-12" ng-if="vm.isEditingConsoleAPIUrl">
                                                   <label class="control-label textAlignNone col-md-1">Protocol</label>
-                                                  <div class="col-md-1 m-t-5">
+                                                  <div class="col-md-3 m-t-5">
                                                     <span>
                                                       <input type="radio" ng-model="vm.installForm.consoleAPI.url.isSecure"
                                                         ng-value="false">
@@ -559,14 +559,14 @@
                                     vm.installing || vm.saving || vm.restartingServices"
                                     class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                   <label for="checkbox_for_mktg_url">
-                                    <b> Do you want to change friendly url? </b>
+                                    <b> Do you want to change the friendly url of UI? </b>
                                   </label>
                                 </div>
                                 <div class="row" ng-if="vm.isEditingMktgUrl">
                                   <form class="form-horizontal" role="form" name="vm.mktgInstallForm" novalidate>
                                     <div class="col-md-12" ng-if="vm.isEditingMktgUrl">
                                       <label class="control-label textAlignNone col-md-1">Protocol</label>
-                                      <div class="col-md-1 m-t-5">
+                                      <div class="col-md-3 m-t-5">
                                         <span>
                                           <input type="radio" ng-model="vm.installForm.mktg.url.isSecure"
                                             ng-value="false">
@@ -1043,7 +1043,7 @@
                 </div>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <a class="btn" ng-click="vm.showLogModal('master')" ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized" tooltip-placement="top"
+                  <a class="btn" ng-click="vm.showLogModal('master'); $event.stopPropagation();" ng-disabled="!vm.systemSettings.master.isProcessing && !vm.systemSettings.master.isFailed && !vm.systemSettings.master.isInitialized" tooltip-placement="top"
                     uib-tooltip="logs"><i class="fa fa-paperclip"></i></a>
                   <a data-toggle="collapse" data-target="#bg-master" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
@@ -1214,7 +1214,7 @@
                 </div>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <a class="btn" ng-click="vm.showLogModal('secrets')" tooltip-placement="top"
+                  <a class="btn" ng-click="vm.showLogModal('secrets'); $event.stopPropagation();" tooltip-placement="top"
                     uib-tooltip="logs" ng-disabled="!vm.systemSettings.secrets.isProcessing && !vm.systemSettings.secrets.isFailed && !vm.systemSettings.secrets.isInitialized"><i class="fa fa-paperclip"></i></a>
                   <a data-toggle="collapse" data-target="#bg-secrets" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
@@ -1296,7 +1296,7 @@
                 </div>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <a class="btn" ng-click="vm.showLogModal('msg')"
+                  <a class="btn" ng-click="vm.showLogModal('msg'); $event.stopPropagation();"
                     ng-disabled="!vm.systemSettings.msg.isProcessing && !vm.systemSettings.msg.isFailed && !vm.systemSettings.msg.isInitialized" tooltip-placement="top"
                     uib-tooltip="logs"><i class="fa fa-paperclip"></i></a>
                   <a data-toggle="collapse" data-target="#bg-rabbitmq" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
@@ -1403,14 +1403,14 @@
                                   vm.installing || vm.saving || vm.restartingServices"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_msg_url">
-                                  <b> Do you want to change friendly url of RammitMq? </b>
+                                  <b> Do you want to change the friendly url of Messaging? </b>
                                 </label>
                               </div>
                               <div class="row" ng-if="vm.isEditingRabbitMqUrl">
                                 <form class="form-horizontal" role="form" name="vm.msgInstallForm" novalidate>
                                   <div class="col-md-12" ng-if="vm.isEditingRabbitMqUrl">
-                                    <label class="control-label textAlignNone col-md-1">Protocol</label>
-                                    <div class="col-md-2 m-t-5">
+                                    <label class="control-label textAlignNone col-md-2">Protocol</label>
+                                    <div class="col-md-3 m-t-5">
                                       <span>
                                         <input type="radio" ng-model="vm.installForm.msg.rabbitmqCreds.isSecure"
                                           ng-value="false">
@@ -1519,7 +1519,7 @@
                 </div>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <a class="btn" ng-click="vm.showLogModal('state')"
+                  <a class="btn" ng-click="vm.showLogModal('state'); $event.stopPropagation();"
                     ng-disabled="!vm.systemSettings.state.isProcessing && !vm.systemSettings.state.isFailed && !vm.systemSettings.state.isInitialized" tooltip-placement="top"
                     uib-tooltip="logs"><i class="fa fa-paperclip"></i></a>
                   <a data-toggle="collapse" data-target="#state" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
@@ -1603,14 +1603,14 @@
                                   vm.installing || vm.saving || vm.restartingServices"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_state_url">
-                                  <b> Do you want to change friendly url of State? </b>
+                                  <b> Do you want to change the friendly url of State? </b>
                                 </label>
                               </div>
                               <div class="row" ng-if="vm.isEditingStateUrl">
                                 <form class="form-horizontal" role="form" name="vm.stateInstallForm" novalidate>
                                   <div class="col-md-12" ng-if="vm.isEditingStateUrl">
                                     <label class="control-label textAlignNone col-md-1">Protocol</label>
-                                    <div class="col-md-2 m-t-5">
+                                    <div class="col-md-3 m-t-5">
                                       <span>
                                         <input type="radio" ng-model="vm.installForm.state.gitlabCreds.isSecure"
                                           ng-value="false">
@@ -1696,7 +1696,7 @@
                 </div>
                 <div class="portlet-widgets">
                     <span class="divider"></span>
-                    <a class="btn cursor-pointer" ng-click="vm.showLogModal('redis')" tooltip-placement="top" uib-tooltip="Logs" ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">
+                    <a class="btn cursor-pointer" ng-click="vm.showLogModal('redis'); $event.stopPropagation();" tooltip-placement="top" uib-tooltip="Logs" ng-disabled="!vm.systemSettings.redis.isProcessing && !vm.systemSettings.redis.isFailed && !vm.systemSettings.redis.isInitialized">
                     <i class="fa fa-paperclip"></i></a>
                     <a data-toggle="collapse" data-target="#bg-redis" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>
@@ -1742,7 +1742,7 @@
                                   vm.installing || vm.saving || vm.restartingServices"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_redis_url">
-                                  <b> Do you want to change friendly url of Redis? </b>
+                                  <b> Do you want to change the friendly url of Redis? </b>
                                 </label>
                               </div>
                               <div class="row" ng-if="vm.isEditingRedisUrl">
@@ -1816,7 +1816,7 @@
                 </div>
                 <div class="portlet-widgets">
                   <span class="divider"></span>
-                  <a class="btn" ng-click="vm.showLogModal('db')" tooltip-placement="top"
+                  <a class="btn" ng-click="vm.showLogModal('db'); $event.stopPropagation();" tooltip-placement="top"
                     uib-tooltip="logs" ng-disabled="!vm.systemSettings.db.isProcessing && !vm.systemSettings.db.isFailed && !vm.systemSettings.db.isInitialized"><i class="fa fa-paperclip"></i></a>
                   <a data-toggle="collapse" data-target="#database" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
                 </div>

@@ -179,8 +179,7 @@
           $scope.vm.installForm.state.gitlabCreds.data.url =
             protocol + '://' + updatedAddress;
           $scope.vm.installForm.consoleAPI.url.fqdn = updatedAddress;
-          $scope.vm.isEditingStateUrl = false;
-          $('#checkbox_for_state_url').trigger('click');
+          popup_horn.success('Updated FQDN');
         }, 0);
       },
       updateRabbitMqUrl: function (isSecure, updatedAddress, updatedRootAdd,
@@ -209,16 +208,14 @@
           $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin =
             adminProtocol + '://' + amqpUrlAdmin.split('://')[1].split('@')[0] +
             '@' + updatedAdminAdd;
-          $scope.vm.isEditingRabbitMqUrl = false;
-          $('#checkbox_for_msg_url').trigger('click');
+          popup_horn.success('Updated FQDN');
         }, 0);
       },
       updateRedisUrl: function (updatedAddress) {
         $timeout(function () {
           $scope.vm.installForm.redis.url.data.url = updatedAddress;
           $scope.vm.installForm.redis.url.fqdn = updatedAddress;
-          $scope.vm.isEditingRedisUrl = false;
-          $('#checkbox_for_redis_url').trigger('click');
+          popup_horn.success('Updated FQDN');
         }, 0);
       },
       saveServiceUrl: function (isSecure, updatedAddress, service) {
@@ -231,26 +228,7 @@
           $scope.vm.installForm[service].url.data.url =
             protocol + '://' + updatedAddress;
           $scope.vm.installForm[service].url.fqdn = updatedAddress;
-          if (service === 'www') {
-            $scope.vm.isEditingUIUrl = false;
-            $('#checkbox_for_www_url').trigger('click');
-          }
-          if (service === 'api') {
-            $scope.vm.isEditingAPIUrl = false;
-            $('#checkbox_for_api_url').trigger('click');
-          }
-          if (service === 'mktg') {
-            $scope.vm.isEditingMktgUrl = false;
-            $('#checkbox_for_mktg_url').trigger('click');
-          }
-          if (service === 'internalAPI') {
-            $scope.vm.isEditingInternalAPIUrl = false;
-            $('#checkbox_for_editing_internalApi_url').trigger('click');
-          }
-          if (service === 'consoleAPI') {
-            $scope.vm.isEditingConsoleAPIUrl = false;
-            $('#checkbox_for_editing_consoleApi_url').trigger('click');
-          }
+          popup_horn.success('Updated FQDN');
         }, 0);
       },
       checkEmailMethod: function (method) {
