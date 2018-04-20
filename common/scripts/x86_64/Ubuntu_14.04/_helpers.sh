@@ -85,7 +85,7 @@ __check_dependencies() {
       install_docker=false
 
       if [[ "$IS_UPGRADE" == "false" ]]; then
-        __process_error "Docker version $DOCKER_VERSION is required."
+        __process_error "Shippable requires docker version $DOCKER_VERSION to use orchestration and other features are only available in docker $DOCKER_VERSION and higher. Please upgrade to version $DOCKER_VERSION or higher to proceed with the installation"
         exit 1
       fi
     fi
