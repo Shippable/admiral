@@ -130,7 +130,7 @@ function _post(bag, next) {
     bag.reqBody.externalId, bag.reqBody.provider, bag.reqBody.isAvailable,
     bag.reqBody.isDefault, bag.reqBody.region, bag.reqBody.keyName,
     bag.reqBody.runShImage, bag.reqBody.securityGroup,
-    (!_.has(bag.reqBody.subnetId) || bag.reqBody.subnetId === null) ?
+    (!_.has(bag.reqBody, 'subnetId') || bag.reqBody.subnetId === null) ?
       'NULL' : util.format('\'%s\'', bag.reqBody.subnetId),
     bag.reqBody.drydockTag, bag.reqBody.drydockFamily,
     bag.reqBody.archTypeCode, _.has(bag.reqBody, 'runtimeTemplateId') ?
