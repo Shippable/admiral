@@ -83,6 +83,11 @@ __check_dependencies() {
     # An upgrade flow later will handle this case.
     if [[ "$INSTALLED_DOCKER_VERSION" == *"1.13"* ]]; then
       install_docker=false
+
+      if [[ "$IS_UPGRADE" == "false" ]]; then
+        __process_error "Docker version $DOCKER_VERSION is required."
+        exit 1
+      fi
     fi
   fi
 
