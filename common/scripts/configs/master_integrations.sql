@@ -86,7 +86,7 @@ do $$
     -- amazonKeys masterIntegration
     if not exists (select 1 from "masterIntegrations" where "name" = 'amazonKeys' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('57467326b3cbfc0c004f9111', 46, 'amazonKeys', 'AWS Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values ('57467326b3cbfc0c004f9111', 46, 'amazonKeys', 'AWS Keys', 'generic', true, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- Alter displayName of amazonKeys integration from Amazon Keys to AWS Keys.
@@ -173,13 +173,13 @@ do $$
     -- keyValuePair master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'keyValuePair' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58a160e8c2845c9d5fb82042', 63, 'keyValuePair', 'Key-Value pair', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
+      values ('58a160e8c2845c9d5fb82042', 63, 'keyValuePair', 'Key-Value pair', 'generic', true, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-02-13', '2017-02-13');
     end if;
 
     -- Digital Ocean master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'DOC' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('58ecb1a8f318373d7f5645f7', 67, 'DOC', 'Digital Ocean', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values ('58ecb1a8f318373d7f5645f7', 67, 'DOC', 'Digital Ocean', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- these masterIntegrations (rabbitmq, and url) are not in base
@@ -199,7 +199,7 @@ do $$
     -- Add Git Credential integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'gitCredential' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('596d9b49fa1a3f979c10b5a5', 70, 'gitCredential', 'Git Credential', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values ('596d9b49fa1a3f979c10b5a5', 70, 'gitCredential', 'Git Credential', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- Add sshKey integration
@@ -211,55 +211,55 @@ do $$
     -- Add pemKey integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'pemKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59d3692f0c3f421becfae3f0', 72, 'pemKey', 'PEM Key', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values ('59d3692f0c3f421becfae3f0', 72, 'pemKey', 'PEM Key', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- adds artifactoryKey integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'artifactoryKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('596d9b49fa1a3f979c10b5a7', 73, 'artifactoryKey', 'JFrog Artifactory', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+      values ('596d9b49fa1a3f979c10b5a7', 73, 'artifactoryKey', 'JFrog Artifactory', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
     -- adds quayLogin integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'quayLogin' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('580ee981a337bd12008fc43f', 74, 'quayLogin', 'Quay.io', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+      values ('580ee981a337bd12008fc43f', 74, 'quayLogin', 'Quay.io', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
     end if;
 
     -- adds hipchatKey integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'hipchatKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59df56e9b3a7f6d8361c226a', 75, 'hipchatKey', 'HipChat', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-12', '2017-10-12');
+      values ('59df56e9b3a7f6d8361c226a', 75, 'hipchatKey', 'HipChat', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-12', '2017-10-12');
     end if;
 
     -- adds gcloudKey integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'gcloudKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59df35075ece921592b443f6', 76, 'gcloudKey', 'Google Cloud', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
+      values ('59df35075ece921592b443f6', 76, 'gcloudKey', 'Google Cloud', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-04', '2017-10-04');
     end if;
 
     -- adds dockerRegistryLogin integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'dockerRegistryLogin' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59d5e0104bfbba06001df4d6', 77, 'dockerRegistryLogin', 'Docker Registry', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-13', '2017-10-13');
+      values ('59d5e0104bfbba06001df4d6', 77, 'dockerRegistryLogin', 'Docker Registry', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-13', '2017-10-13');
     end if;
 
     -- adds slackkey integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'slackKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59eee00ef7bcf03ff7b62fc7', 78, 'slackKey', 'Slack', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-24', '2017-10-24');
+      values ('59eee00ef7bcf03ff7b62fc7', 78, 'slackKey', 'Slack', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-24', '2017-10-24');
     end if;
 
     -- adds nodeCluster integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'nodeCluster' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59eee00ef7bcf03ff7b62fc8', 79, 'nodeCluster', 'Node Cluster', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-25', '2017-10-25');
+      values ('59eee00ef7bcf03ff7b62fc8', 79, 'nodeCluster', 'Node Cluster', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-25', '2017-10-25');
     end if;
 
     -- azureDcosKey master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'azureDcosKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59eee00ef7bcf03ff7b62fc9', 80, 'azureDcosKey', 'Azure DC/OS', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+      values ('59eee00ef7bcf03ff7b62fc9', 80, 'azureDcosKey', 'Azure DC/OS', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
     -- amazonIamRole master integration
@@ -271,43 +271,43 @@ do $$
     -- ddcKey master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'ddcKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59e71aa80552d20500e76ba8', 82, 'ddcKey', 'Docker DataCenter', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+      values ('59e71aa80552d20500e76ba8', 82, 'ddcKey', 'Docker DataCenter', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
     -- webhookV2
     if not exists (select 1 from "masterIntegrations" where "name" = 'webhookV2' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59e71aa80552d20500e76ba9', 83, 'webhookV2', 'Webhook', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
+      values ('59e71aa80552d20500e76ba9', 83, 'webhookV2', 'Webhook', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
     end if;
 
     -- adds dclKey master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'dclKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59faf7b67fb80d78e55245bb', 84, 'dclKey', 'Docker Cloud', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
+      values ('59faf7b67fb80d78e55245bb', 84, 'dclKey', 'Docker Cloud', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-10-31', '2017-10-31');
     end if;
 
     -- joyentTritonKey master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'joyentTritonKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('569cd11a1895ca4474700f95', 85, 'joyentTritonKey', 'Joyent Triton', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
+      values ('569cd11a1895ca4474700f95', 85, 'joyentTritonKey', 'Joyent Triton', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
     end if;
 
     -- adds kubernetesConfig master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'kubernetesConfig' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59e71aa80552d20500e76bb0', 86, 'kubernetesConfig', 'Kubernetes', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
+      values ('59e71aa80552d20500e76bb0', 86, 'kubernetesConfig', 'Kubernetes', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-03', '2017-11-03');
     end if;
 
     -- adds azureKeys master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'azureKeys' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59e71aa80552d20500e76bb1', 87, 'azureKeys', 'Azure Keys', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-15', '2017-11-15');
+      values ('59e71aa80552d20500e76bb1', 87, 'azureKeys', 'Azure Keys', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2017-11-15', '2017-11-15');
     end if;
 
     -- adds jira master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'jira' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('59e71aa80552d20500e76bb2', 88, 'jira', 'Jira', 'generic', false, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-21', '2017-03-21');
+      values ('59e71aa80552d20500e76bb2', 88, 'jira', 'Jira', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-21', '2017-03-21');
     end if;
 
     -- END adding master integrations
