@@ -109,7 +109,8 @@
         },
         sshCommand: '',
         installerAccessKey: '',
-        installerSecretKey: ''
+        installerSecretKey: '',
+        smiSearchString: ''
       },
       formValuesChanged: function (url, masterName) {
         validateSCMUrlWorkflow(url, masterName);

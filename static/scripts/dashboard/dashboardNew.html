@@ -2178,6 +2178,12 @@
                                 Add another machine image
                               </button>
                             </div>
+                            <div class="col-md-12">
+                              <label class="col-md-3 textAlignNone control-label">
+                                Search:
+                                <input ng-model="smiSearchString" class="form-control" placeholder="Search">
+                              </label>
+                            </div>
                             <div class="col-md-12 m-t-15">
                               <div class="row has-error" ng-if="!vm.hasDefaultx86SystemMachineImage() && vm.installForm.systemSettings.allowDynamicNodes">
                                 <div class="help-block m-b-20 font-14 col-md-4">
@@ -2203,7 +2209,7 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr ng-repeat="smi in vm.installForm.systemMachineImages">
+                                    <tr ng-repeat="smi in vm.installForm.systemMachineImages | filter: smiSearchString">
                                       <td>
                                         <span class="label label-info" ng-if="smi.isDefault" tooltip-placement="top" uib-tooltip="Default">D</span>
                                         {{smi.name}}
