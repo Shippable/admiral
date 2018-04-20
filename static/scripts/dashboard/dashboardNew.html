@@ -666,6 +666,13 @@
                                 <div class="col-md-12">
                                   <form class="form-horizontal" role="form">
                                     <div class="form-group">
+                                      <label class="col-md-2 control-label">Name (Optional)</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="Bitbucket" name="bitbucketCustomName"
+                                        ng-model="vm.installForm.auth.bitbucketKeys.data.customName" ng-disabled="vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="bitbucketClientId"
@@ -738,6 +745,13 @@
                               <div class="row" ng-if="vm.installForm.auth.bitbucketServerKeys.isEnabled">
                                 <div class="col-md-12">
                                   <form class="form-horizontal" role="form" name="vm.bbsInstallForm" novalidate>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">Name (Optional)</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="BitBucket Server" name="bitbucketServerCustomName"
+                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.customName" ng-disabled="vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
@@ -818,6 +832,13 @@
                                 <div class="col-md-12">
                                   <form class="form-horizontal" role="form">
                                     <div class="form-group">
+                                      <label class="col-md-2 control-label">Name (Optional)</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="GitHub" name="githubCustomName"
+                                        ng-model="vm.installForm.auth.githubKeys.data.customName" ng-disabled="vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubClientId"
@@ -890,6 +911,13 @@
                               <div class="row" ng-if="vm.installForm.auth.githubEnterpriseKeys.isEnabled">
                                 <div class="col-md-12">
                                   <form class="form-horizontal" role="form" name="vm.gheInstallForm" novalidate>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">Name (Optional)</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="GitHub Enterprise" name="githubEnterpriseCustomName"
+                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.customName" ng-disabled="vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
@@ -970,6 +998,13 @@
                               <div class="row" ng-if="vm.installForm.auth.gitlabKeys.isEnabled">
                                 <div class="col-md-12">
                                   <form class="form-horizontal" role="form" name="vm.gitlabInstallForm" novalidate>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">Name (Optional)</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="Gitlab" name="gitlabCustomName"
+                                        ng-model="vm.installForm.auth.gitlabKeys.data.customName" ng-disabled="vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Application ID</label>
                                       <div class="col-md-6">

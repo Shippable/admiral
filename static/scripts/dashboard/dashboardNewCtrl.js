@@ -291,6 +291,7 @@
             isEnabled: false,
             masterName: 'bitbucketKeys',
             data: {
+              customName: '',
               clientId: '',
               clientSecret: '',
               wwwUrl: '',
@@ -301,6 +302,7 @@
             isEnabled: false,
             masterName: 'bitbucketServerKeys',
             data: {
+              customName: '',
               clientId: '',
               clientSecret: '',
               wwwUrl: '',
@@ -311,6 +313,7 @@
             isEnabled: false,
             masterName: 'githubKeys',
             data: {
+              customName: '',
               clientId: '',
               clientSecret: '',
               wwwUrl: '',
@@ -321,6 +324,7 @@
             isEnabled: false,
             masterName: 'githubEnterpriseKeys',
             data: {
+              customName: '',
               clientId: '',
               clientSecret: '',
               wwwUrl: '',
@@ -331,6 +335,7 @@
             isEnabled: false,
             masterName: 'gitlabKeys',
             data: {
+              customName: '',
               clientId: '',
               clientSecret: '',
               wwwUrl: '',
