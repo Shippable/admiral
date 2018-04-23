@@ -147,6 +147,12 @@ do $$
       values ('577de63321333398d11a1119', 54, 'bitbucketServerKeys', 'Bitbucket Server Keys', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    -- bitbucketServerBasicAuth master integration
+    if not exists (select 1 from "masterIntegrations" where "name" = 'bitbucketServerBasicAuth' and "typeCode" = 5012) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('577de63321333398d11a1120', 54, 'bitbucketServerBasicAuth', 'Bitbucket Server Basic Auth', 'generic', false, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
     -- update githubenterpriseKeys to githubEnterpriseKeys
     if exists (select 1 from "masterIntegrations" where "name" = 'githubenterpriseKeys' and "typeCode" = 5012) then
         update "masterIntegrations" set "name" = 'githubEnterpriseKeys' where "name" = 'githubenterpriseKeys' and "typeCode" = 5012;
