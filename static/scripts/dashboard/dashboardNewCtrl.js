@@ -882,6 +882,7 @@
               $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP].push('admiral');
             else
               $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP] = ['admiral'];
+            installAddons();
             dashboardNewCtrlDefer.resolve();
           }
         }
