@@ -308,11 +308,13 @@
                                       <div class="col-md-3 m-t-5">
                                         <span>
                                           <input type="radio" ng-model="vm.installForm.api.url.isSecure"
+                                            ng-disabled="vm.initializing || vm.installing || vm.saving"
                                             ng-value="false">
                                           http
                                         </span>
                                         <span>
                                           <input type="radio" ng-model="vm.installForm.api.url.isSecure"
+                                            ng-disabled="vm.initializing || vm.installing || vm.saving"
                                             ng-value="true">
                                           https
                                         </span>
@@ -324,16 +326,16 @@
                                           <label class="control-label textAlignNone col-md-1">FQDN</label>
                                           <div class="col-md-4">
                                             <input type="text" class="form-control" name="apiUrl"
-                                              ng-model="vm.installForm.api.url.fqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                              ng-model="vm.installForm.api.url.fqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                             <dd class="text-danger" ng-show="vm.apiInstallForm.apiUrl.$dirty">
                                               <span ng-show="vm.apiInstallForm.apiUrl.$error.pattern">URL is invalid.</span>
                                             </dd>
                                           </div>
                                           <button ng-if="vm.isEditingAPIUrl" class="btn btn-sm btn-primary"
-                                            ng-disabled="vm.apiInstallForm.apiUrl.$error.url"
+                                            ng-disabled="vm.apiInstallForm.apiUrl.$error.url || vm.initializing || vm.installing || vm.saving"
                                             ng-click="vm.saveServiceUrl(vm.installForm.api.url.isSecure,
                                               vm.installForm.api.url.fqdn, 'api')">Save</button>
-                                          <button ng-if="vm.isEditingAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelAPIUpdate()">Cancel</button>
+                                          <button ng-if="vm.isEditingAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelAPIUpdate()" ng-disabled="vm.initializing || vm.installing || vm.saving">Cancel</button>
                                         </div>
                                       </div>
                                     </div>
@@ -374,7 +376,7 @@
                                             <div class="toggle-bar">
                                               <input id="checkbox_for_editing_internalApi_url" type="checkbox"
                                                 ng-model="vm.isEditingInternalAPIUrl"
-                                                ng-disabled="vm.installing || vm.saving"
+                                                ng-disabled="vm.initializing || vm.installing || vm.saving"
                                                 class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                               <label for="checkbox_for_editing_internalApi_url">
                                                 <b> Do you want to change the friendly url of Internal API? </b>
@@ -387,11 +389,13 @@
                                                   <div class="col-md-3 m-t-5">
                                                     <span>
                                                       <input type="radio" ng-model="vm.installForm.internalAPI.url.isSecure"
+                                                        ng-disabled="vm.initializing || vm.installing || vm.saving"
                                                         ng-value="false">
                                                       http
                                                     </span>
                                                     <span>
                                                       <input type="radio" ng-model="vm.installForm.internalAPI.url.isSecure"
+                                                        ng-disabled="vm.initializing || vm.installing || vm.saving"
                                                         ng-value="true">
                                                       https
                                                     </span>
@@ -403,16 +407,16 @@
                                                       <label class="control-label textAlignNone col-md-1">FQDN</label>
                                                       <div class="col-md-4">
                                                         <input type="text" class="form-control" name="internalApiUrl"
-                                                          ng-model="vm.installForm.internalAPI.url.fqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                                          ng-model="vm.installForm.internalAPI.url.fqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                                         <dd class="text-danger" ng-show="vm.internalApiInstallForm.apiUrl.$dirty">
                                                           <span ng-show="vm.internalApiInstallForm.internalApiUrl.$error.pattern">URL is invalid.</span>
                                                         </dd>
                                                       </div>
                                                       <button ng-if="vm.isEditingInternalAPIUrl" class="btn btn-sm btn-primary"
-                                                        ng-disabled="vm.internalApiInstallForm.internalApiUrl.$error.url"
+                                                        ng-disabled="vm.internalApiInstallForm.internalApiUrl.$error.url || vm.initializing || vm.installing || vm.saving"
                                                         ng-click="vm.saveServiceUrl(vm.installForm.internalAPI.url.isSecure,
                                                           vm.installForm.internalAPI.url.fqdn, 'internalAPI')">Save</button>
-                                                      <button ng-if="vm.isEditingInternalAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelInternalAPIUpdate()">Cancel</button>
+                                                      <button ng-if="vm.isEditingInternalAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelInternalAPIUpdate()" ng-disabled="vm.initializing || vm.installing || vm.saving">Cancel</button>
                                                     </div>
                                                   </div>
                                                 </div>
@@ -452,7 +456,7 @@
                                             <div class="toggle-bar">
                                               <input id="checkbox_for_editing_consoleApi_url" type="checkbox"
                                                 ng-model="vm.isEditingConsoleAPIUrl"
-                                                ng-disabled="vm.installing || vm.saving"
+                                                ng-disabled="vm.initializing || vm.installing || vm.saving"
                                                 class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                               <label for="checkbox_for_editing_consoleApi_url">
                                                 <b> Do you want to change the friendly url of Console API? </b>
@@ -465,11 +469,13 @@
                                                   <div class="col-md-3 m-t-5">
                                                     <span>
                                                       <input type="radio" ng-model="vm.installForm.consoleAPI.url.isSecure"
+                                                        ng-disabled="vm.initializing || vm.installing || vm.saving"
                                                         ng-value="false">
                                                       http
                                                     </span>
                                                     <span>
                                                       <input type="radio" ng-model="vm.installForm.consoleAPI.url.isSecure"
+                                                        ng-disabled="vm.initializing || vm.installing || vm.saving"
                                                         ng-value="true">
                                                       https
                                                     </span>
@@ -481,16 +487,16 @@
                                                       <label class="control-label textAlignNone col-md-1">FQDN</label>
                                                       <div class="col-md-4">
                                                         <input type="text" class="form-control" name="consoleApiUrl"
-                                                          ng-model="vm.installForm.consoleAPI.url.fqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                                          ng-model="vm.installForm.consoleAPI.url.fqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                                         <dd class="text-danger" ng-show="vm.consoleApiInstallForm.consoleApiUrl.$dirty">
                                                           <span ng-show="vm.consoleApiInstallForm.consoleApiUrl.$error.pattern">URL is invalid.</span>
                                                         </dd>
                                                       </div>
                                                       <button ng-if="vm.isEditingConsoleAPIUrl" class="btn btn-sm btn-primary"
-                                                        ng-disabled="vm.consoleApiInstallForm.consoleApiUrl.$error.url"
+                                                        ng-disabled="vm.consoleApiInstallForm.consoleApiUrl.$error.url || vm.initializing || vm.installing || vm.saving"
                                                         ng-click="vm.saveServiceUrl(vm.installForm.consoleAPI.url.isSecure,
                                                           vm.installForm.consoleAPI.url.fqdn, 'consoleAPI')">Save</button>
-                                                      <button ng-if="vm.isEditingConsoleAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelConsoleAPIUpdate()">Cancel</button>
+                                                      <button ng-if="vm.isEditingConsoleAPIUrl" class="btn btn-sm btn-default" ng-click="vm.cancelConsoleAPIUpdate()" ng-disabled="vm.initializing || vm.installing || vm.saving">Cancel</button>
                                                     </div>
                                                   </div>
                                                 </div>
@@ -569,11 +575,13 @@
                                       <div class="col-md-3 m-t-5">
                                         <span>
                                           <input type="radio" ng-model="vm.installForm.mktg.url.isSecure"
+                                            ng-disabled="vm.initializing || vm.installing || vm.saving"
                                             ng-value="false">
                                           http
                                         </span>
                                         <span>
                                           <input type="radio" ng-model="vm.installForm.mktg.url.isSecure"
+                                            ng-disabled="vm.initializing || vm.installing || vm.saving"
                                             ng-value="true">
                                           https
                                         </span>
@@ -585,7 +593,7 @@
                                           <label class="control-label textAlignNone col-md-1">FQDN</label>
                                           <div class="col-md-4">
                                             <input type="text" class="form-control" name="mktgUrl"
-                                              ng-model="vm.installForm.mktg.url.fqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                              ng-model="vm.installForm.mktg.url.fqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                             <dd class="text-danger" ng-show="vm.mktgInstallForm.mktgUrl.$dirty">
                                               <span ng-show="vm.mktgInstallForm.mktgUrl.$error.pattern">URL is invalid.</span>
                                             </dd>
@@ -594,10 +602,10 @@
                                             </span>
                                           </div>
                                           <button ng-if="vm.isEditingMktgUrl" class="btn btn-sm btn-primary"
-                                            ng-disabled="vm.mktgInstallForm.mktgUrl.$error.url"
+                                            ng-disabled="vm.mktgInstallForm.mktgUrl.$error.url || vm.initializing || vm.installing || vm.saving"
                                             ng-click="vm.saveServiceUrl(vm.installForm.mktg.url.isSecure,
                                               vm.installForm.mktg.url.fqdn, 'mktg')">Save</button>
-                                          <button ng-if="vm.isEditingMktgUrl" class="btn btn-sm btn-default" ng-click="vm.cancelMktgUpdate()">Cancel</button>
+                                          <button ng-if="vm.isEditingMktgUrl" ng-disabled="vm.initializing || vm.installing || vm.saving" class="btn btn-sm btn-default" ng-click="vm.cancelMktgUpdate()">Cancel</button>
                                         </div>
                                       </div>
                                     </div>
@@ -648,6 +656,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bb_auth" type="checkbox"
                                   ng-model="vm.installForm.auth.bitbucketKeys.isEnabled"  ng-change="vm.toggleAuthProvider('bitbucket')"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bb_auth">
                                   <b> Auth </b>
@@ -656,7 +665,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bb_scm" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucket.isEnabled"
-                                  ng-disabled="vm.installForm.auth.bitbucketKeys.isEnabled"
+                                  ng-disabled="vm.installForm.auth.bitbucketKeys.isEnabled || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bb_scm">
                                   <b> SCM </b>
@@ -676,14 +685,14 @@
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="bitbucketClientId"
-                                        ng-model="vm.installForm.auth.bitbucketKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.bitbucketKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client Secret</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="bitbucketClientSecret"
-                                        ng-model="vm.installForm.auth.bitbucketKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.bitbucketKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -727,6 +736,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bbs_auth" type="checkbox"
                                   ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
                                   ng-change="vm.toggleAuthProvider('bitbucketServer')"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bbs_auth">
@@ -736,7 +746,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bbs_scm" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucketServer.isEnabled"
-                                  ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled"
+                                  ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bbs_scm">
                                   <b> SCM </b>
@@ -756,14 +766,14 @@
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="bitbucketServerClientId"
-                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client Secret</label>
                                       <div class="col-md-6">
                                         <textarea rows="3" class="form-control" name="bitbucketServerClientSecret"
-                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving" placeholder="-----BEGIN ENCRYPTED PRIVATE KEY----- MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIS2qgprFqPxECAggA MBQGCCqGSIb3DQMHBAgD1kGN4ZslJgSCBMi1xk9jhlPxP3FyaMIUq8QmckXCs3Sa 9g73NQbtqZwI+9X5OhpSg/2ALxlCCjbqvzgSu8gfFZ4yo+Xd8VucZDmDSpzZGDod A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  X0R+meOaudPTBxoSgCCM51poFgaqt4l6VlTN4FRpj+c/WZeoMM/BVXO+nayuIMyH blK948UAda/bWVmZjXfY4Tztah0CuqlAldOQBzu8TwE7WDwo5S7lo5u0EXEoqCCq H0ga/iLNvWYexG7FHLRiq5hTj0g9mUPEbeTXuPtOkTEb/0ckVE2iZH9l7g5edmUZ GEs= -----END ENCRYPTED PRIVATE KEY----- -----BEGIN CERTIFICATE----- MIIDXTCCAkWgAwIBAgIJAJC1HiIAZAiIMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTExMjMxMDg1OTQ0WhcNMTIxMjMwMDg1OTQ0WjBF A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  JjyzfN746vaInA1KxYEeI1Rx5KXY8zIdj6a7hhphpj2E04LDdw7r495dv3UgEgpR C3Fayua4DRHyZOLmlvQ6tIChY0ClXXuefbmVSDeUHwc8YufRAERp2GfQnL2JlPUL B7xxt8BVc69rLeHV15A0qyx77CLSj3tCx2IUXVqRs5mlSbq094NBxsauYcm0A6Jq vA== -----END CERTIFICATE-----">
+                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving" placeholder="-----BEGIN ENCRYPTED PRIVATE KEY----- MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIS2qgprFqPxECAggA MBQGCCqGSIb3DQMHBAgD1kGN4ZslJgSCBMi1xk9jhlPxP3FyaMIUq8QmckXCs3Sa 9g73NQbtqZwI+9X5OhpSg/2ALxlCCjbqvzgSu8gfFZ4yo+Xd8VucZDmDSpzZGDod A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  X0R+meOaudPTBxoSgCCM51poFgaqt4l6VlTN4FRpj+c/WZeoMM/BVXO+nayuIMyH blK948UAda/bWVmZjXfY4Tztah0CuqlAldOQBzu8TwE7WDwo5S7lo5u0EXEoqCCq H0ga/iLNvWYexG7FHLRiq5hTj0g9mUPEbeTXuPtOkTEb/0ckVE2iZH9l7g5edmUZ GEs= -----END ENCRYPTED PRIVATE KEY----- -----BEGIN CERTIFICATE----- MIIDXTCCAkWgAwIBAgIJAJC1HiIAZAiIMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTExMjMxMDg1OTQ0WhcNMTIxMjMwMDg1OTQ0WjBF A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  JjyzfN746vaInA1KxYEeI1Rx5KXY8zIdj6a7hhphpj2E04LDdw7r495dv3UgEgpR C3Fayua4DRHyZOLmlvQ6tIChY0ClXXuefbmVSDeUHwc8YufRAERp2GfQnL2JlPUL B7xxt8BVc69rLeHV15A0qyx77CLSj3tCx2IUXVqRs5mlSbq094NBxsauYcm0A6Jq vA== -----END CERTIFICATE-----">
                                         </textarea>
                                       </div>
                                     </div>
@@ -771,9 +781,9 @@
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
                                         <input type="url" class="form-control" name="bitbucketServerUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.bitbucketServerKeys.data.url, 'bitbucketServerKeys')"
-                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                         <dd class="text-danger" ng-if="vm.isNotValidurl['bitbucketServerKeys']">
-                                          <span>Please give a valid bitbucketServer endpoint url</span>
+                                          <span>Please give a valid Bitbucket Server endpoint url</span>
                                         </dd>
                                         <dd class="text-danger" ng-if="!vm.isNotValidurl['bitbucketServerKeys']">
                                           <span ng-show="vm.bbsInstallForm.bitbucketServerUrl.$error.url">URL is invalid.</span>
@@ -814,6 +824,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_github_auth" type="checkbox"
                                   ng-model="vm.installForm.auth.githubKeys.isEnabled"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
                                   ng-change="vm.toggleAuthProvider('github')"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_github_auth">
@@ -822,7 +833,7 @@
                               </div>
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_github_scm" type="checkbox"
-                                  ng-model="vm.installForm.scm.github.isEnabled" ng-disabled="vm.installForm.auth.githubKeys.isEnabled"
+                                  ng-model="vm.installForm.scm.github.isEnabled" ng-disabled="vm.installForm.auth.githubKeys.isEnabled || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_github_scm">
                                   <b> SCM </b>
@@ -842,14 +853,14 @@
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubClientId"
-                                        ng-model="vm.installForm.auth.githubKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.githubKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client Secret</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubClientSecret"
-                                        ng-model="vm.installForm.auth.githubKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.githubKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -893,6 +904,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_ghe_auth" type="checkbox"
                                   ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
                                   ng-change="vm.toggleAuthProvider('githubEnterprise')"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_ghe_auth">
@@ -922,14 +934,14 @@
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubEnterpriseClientId"
-                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client Secret</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubEnterpriseClientSecret"
-                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving" />
+                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving" />
                                         </textarea>
                                       </div>
                                     </div>
@@ -937,9 +949,9 @@
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
                                         <input type="url" class="form-control" name="githubEnterpriseUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.githubEnterpriseKeys.data.url, 'githubEnterpriseKeys')"
-                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                         <dd class="text-danger" ng-if="vm.isNotValidurl['githubEnterpriseKeys']">
-                                          <span>Please give a valid githubEnterprise endpoint url</span>
+                                          <span>Please give a valid Github Enterprise endpoint url</span>
                                         </dd>
                                         <dd class="text-danger" ng-if="!vm.isNotValidurl['githubEnterpriseKeys']">
                                           <span ng-show="vm.gheInstallForm.githubEnterpriseUrl.$error.url">URL is invalid.</span>
@@ -980,6 +992,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_gitlab_auth" type="checkbox"
                                   ng-model="vm.installForm.auth.gitlabKeys.isEnabled"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
                                   ng-change="vm.toggleAuthProvider('gitlab')"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_gitlab_auth">
@@ -1009,21 +1022,21 @@
                                       <label class="col-md-2 control-label">Application ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="gitlabClientId"
-                                        ng-model="vm.installForm.auth.gitlabKeys.data.clientId" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.gitlabKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Secret</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="gitlabClientSecret"
-                                        ng-model="vm.installForm.auth.gitlabKeys.data.clientSecret" ng-disabled="vm.installing || vm.saving"/>
+                                        ng-model="vm.installForm.auth.gitlabKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
                                         <input type="url" class="form-control" name="gitlabUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.gitlabKeys.data.url, 'gitlabKeys')"
-                                        ng-model="vm.installForm.auth.gitlabKeys.data.url" ng-disabled="false"/>
+                                        ng-model="vm.installForm.auth.gitlabKeys.data.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                         <dd class="text-danger" ng-if="vm.isNotValidurl['gitlabKeys']">
                                           <span>Please give a valid gitlab endpoint url</span>
                                         </dd>
@@ -1157,7 +1170,7 @@
                                                 <label class="control-label textAlignNone col-md-1">Name:</label>
                                                 <div class="col-md-4">
                                                   <input type="text" class="form-control" name="workerName"
-                                                    placeholder="worker name" ng-model="vm.initializeForm.workers.newWorker.name" ng-disabled="vm.initializing"/>
+                                                    placeholder="worker name" ng-model="vm.initializeForm.workers.newWorker.name" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                                 </div>
                                               </div>
                                             </div>
@@ -1166,7 +1179,7 @@
                                                 <label class="control-label textAlignNone col-md-1">IP:</label>
                                                 <div class="col-md-4" ng-class="vm.initializeForm.workers.newWorker.address.length && vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)">
                                                   <input type="text" class="form-control" name="workerAddress"
-                                                    placeholder="0.0.0.0" ng-disabled="vm.initializing"
+                                                    placeholder="0.0.0.0" ng-disabled="vm.initializing || vm.installing || vm.saving"
                                                     ng-model="vm.initializeForm.workers.newWorker.address"/>
                                                 </div>
                                               </div>
@@ -1192,7 +1205,7 @@
                                             <div class="col-md-12 m-t-10">
                                               <div class="checkbox checkbox-success m-t-0" ng-class="vm.initializeForm.workers.confirmCommand ? '' : 'has-error'">
                                                 <div class="checkbox">
-                                                  <input id="checkbox_confirmCommand" type="checkbox" ng-model="vm.initializeForm.workers.confirmCommand"/>
+                                                  <input id="checkbox_confirmCommand" type="checkbox" ng-model="vm.initializeForm.workers.confirmCommand" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                                   <label for="checkbox_confirmCommand">
                                                     Click here once you have run the above command on
                                                     {{vm.initializeForm.workers.workers.length > 1 ? 'every' : 'your'}} worker node
@@ -1205,9 +1218,10 @@
                                                 <button class="btn btn-sm btn-primary"
                                                   ng-disabled="!vm.initializeForm.workers.confirmCommand ||
                                                   !vm.initializeForm.workers.newWorker.name ||
-                                                  vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address)"
+                                                  vm.validateWorkerAddress(vm.initializeForm.workers.newWorker.address) ||
+                                                  vm.initializing || vm.installing || vm.saving"
                                                   ng-click="vm.addWorker(vm.initializeForm.workers.newWorker)">Save</button>
-                                                <button class="btn btn-sm btn-default" ng-click="vm.cancelAddWorker()">Cancel</button>
+                                                <button class="btn btn-sm btn-default" ng-click="vm.cancelAddWorker()" ng-disabled="vm.initializing || vm.installing || vm.saving">Cancel</button>
                                               </div>
                                             </div>
                                           </div>
@@ -1291,7 +1305,7 @@
                   <div class="row" ng-if="vm.initializeForm.secrets.initType !== 'admiral'">
                     <div class="col-md-3" ng-if="!vm.systemSettings.secrets.isInitialized && !vm.initializing">
                       <button class="btn btn-default waves-effect waves-light m-t-10"
-                        ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing"
+                        ng-disabled="vm.systemSettings.secrets.isInitialized || vm.initializing || vm.installing || vm.saving"
                         ng-click="vm.showInstallLocationModal('secrets', 'button')">
                         Add new/existing node details
                       </button>
@@ -1359,7 +1373,7 @@
                       <h5 ng-if="vm.initializeForm.msg.initType === 'existing'">RabbitMQ Password:</h5>
                       <div ng-class="vm.validatePassword(vm.initializeForm.msg.password)" class="m-b-10">
                         <input type="text" class="form-control input-sm" name="msgPassword"
-                        ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"/>
+                        ng-model="vm.initializeForm.msg.password" placeholder="8 or more characters" ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing || vm.installing || vm.saving"/>
                       </div>
                     </div>
                     <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.msg.initType === 'new' || vm.initializeForm.msg.initType === 'existing' && !vm.systemSettings.msg.isInitialized">
@@ -1448,11 +1462,13 @@
                                     <div class="col-md-3 m-t-5">
                                       <span>
                                         <input type="radio" ng-model="vm.installForm.msg.rabbitmqCreds.isSecure"
+                                          ng-disabled="vm.initializing || vm.installing || vm.saving"
                                           ng-value="false">
                                         amqp
                                       </span>
                                       <span>
                                         <input type="radio" ng-model="vm.installForm.msg.rabbitmqCreds.isSecure"
+                                          ng-disabled="vm.initializing || vm.installing || vm.saving"
                                           ng-value="true">
                                         amqps
                                       </span>
@@ -1463,7 +1479,7 @@
                                       <label class="control-label textAlignNone col-md-2">FQDN</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="msgUrl"
-                                          ng-model="vm.installForm.msg.rabbitmqCreds.fqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                          ng-model="vm.installForm.msg.rabbitmqCreds.fqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                         <dd class="text-danger" ng-show="vm.msgInstallForm.msgUrl.$dirty">
                                           <span ng-show="vm.msgInstallForm.msgUrl.$error.pattern">URL is invalid.</span>
                                         </dd>
@@ -1475,7 +1491,7 @@
                                       <label class="control-label textAlignNone col-md-2">Root FQDN</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="msgRootUrl"
-                                          ng-model="vm.installForm.msg.rabbitmqCreds.rootFqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                          ng-model="vm.installForm.msg.rabbitmqCreds.rootFqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                         <dd class="text-danger" ng-show="vm.msgInstallForm.msgRootUrl.$dirty">
                                           <span ng-show="vm.msgInstallForm.msgRootUrl.$error.pattern">URL is invalid.</span>
                                         </dd>
@@ -1488,13 +1504,13 @@
                                         <label class="control-label textAlignNone col-md-2">Admin FQDN</label>
                                         <div class="col-md-6">
                                           <input type="text" class="form-control" name="msgAdminUrl"
-                                            ng-model="vm.installForm.msg.rabbitmqCreds.adminFqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                            ng-model="vm.installForm.msg.rabbitmqCreds.adminFqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                           <dd class="text-danger" ng-show="vm.msgInstallForm.msgAdminUrl.$dirty">
                                             <span ng-show="vm.msgInstallForm.msgAdminUrl.$error.pattern">URL is invalid.</span>
                                           </dd>
                                         </div>
                                         <button ng-if="vm.isEditingRabbitMqUrl" class="btn btn-sm btn-primary"
-                                          ng-disabled="vm.msgInstallForm.msgUrl.$error.url || vm.msgInstallForm.msgRootUrl.$error.url || vm.msgInstallForm.msgAdminUrl.$error.url"
+                                          ng-disabled="vm.msgInstallForm.msgUrl.$error.url || vm.msgInstallForm.msgRootUrl.$error.url || vm.msgInstallForm.msgAdminUrl.$error.url || vm.initializing || vm.installing || vm.saving"
                                           ng-click="vm.updateRabbitMqUrl(vm.installForm.msg.rabbitmqCreds.isSecure,
                                             vm.installForm.msg.rabbitmqCreds.fqdn, vm.installForm.msg.rabbitmqCreds.rootFqdn, vm.installForm.msg.rabbitmqCreds.adminFqdn)">Save</button>
                                         <button ng-if="vm.isEditingRabbitMqUrl" class="btn btn-sm btn-default" ng-click="vm.cancelRabbitMqUpdate()">Cancel</button>
@@ -1513,7 +1529,7 @@
                   <div class="row" ng-if="vm.initializeForm.msg.initType !== 'admiral' && !vm.systemSettings.msg.isInitialized">
                     <div class="col-md-3" ng-if="!vm.systemSettings.msg.isInitialized && !vm.initializing">
                       <button class="btn btn-default waves-effect waves-light m-t-10"
-                        ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing"
+                        ng-disabled="vm.systemSettings.msg.isInitialized || vm.initializing || vm.installing || vm.saving"
                         ng-click="vm.showInstallLocationModal('msg', 'button')">
                         Add new/existing node details
                       </button>
@@ -1581,7 +1597,7 @@
                       <h5 ng-if="vm.initializeForm.state.initType !== 'existing'">Choose a password for State:</h5>
                       <div ng-class="vm.validatePassword(vm.initializeForm.state.rootPassword)" class="m-b-10">
                         <input type="text" class="form-control input-sm" name="statePassword"
-                        ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"/>
+                        ng-model="vm.initializeForm.state.rootPassword" placeholder="8 or more characters" ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing || vm.installing || vm.saving"/>
                       </div>
                     </div>
                     <div class="col-md-4 m-t-5" ng-if="vm.initializeForm.state.initType !== 'admiral' &&
@@ -1648,11 +1664,13 @@
                                     <div class="col-md-3 m-t-5">
                                       <span>
                                         <input type="radio" ng-model="vm.installForm.state.gitlabCreds.isSecure"
+                                          ng-disabled="vm.initializing || vm.installing || vm.saving"
                                           ng-value="false">
                                         http
                                       </span>
                                       <span>
                                         <input type="radio" ng-model="vm.installForm.state.gitlabCreds.isSecure"
+                                          ng-disabled="vm.initializing || vm.installing || vm.saving"
                                           ng-value="true">
                                         https
                                       </span>
@@ -1664,7 +1682,7 @@
                                         <label class="control-label textAlignNone col-md-1">FQDN</label>
                                         <div class="col-md-4">
                                           <input type="text" class="form-control" name="stateUrl"
-                                            ng-model="vm.installForm.state.gitlabCreds.fqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                            ng-model="vm.installForm.state.gitlabCreds.fqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                           <dd class="text-danger" ng-show="vm.stateInstallForm.stateUrl.$dirty">
                                             <span ng-show="vm.stateInstallForm.stateUrl.$error.pattern">URL is invalid.</span>
                                           </dd>
@@ -1673,10 +1691,10 @@
                                           </span>
                                         </div>
                                         <button ng-if="vm.isEditingStateUrl" class="btn btn-sm btn-primary"
-                                          ng-disabled="vm.stateInstallForm.stateUrl.$error.url"
+                                          ng-disabled="vm.stateInstallForm.stateUrl.$error.url || vm.initializing || vm.installing || vm.saving"
                                           ng-click="vm.updateStateUrl(vm.installForm.state.gitlabCreds.isSecure,
                                             vm.installForm.state.gitlabCreds.fqdn)">Save</button>
-                                        <button ng-if="vm.isEditingStateUrl" class="btn btn-sm btn-default" ng-click="vm.cancelStateUpdate()">Cancel</button>
+                                        <button ng-if="vm.isEditingStateUrl" class="btn btn-sm btn-default" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-click="vm.cancelStateUpdate()">Cancel</button>
                                       </div>
                                     </div>
                                   </div>
@@ -1692,7 +1710,7 @@
                   <div class="row" ng-if="vm.initializeForm.state.initType !== 'admiral' && !vm.systemSettings.state.isInitialized">
                     <div class="col-md-3" ng-if="!vm.systemSettings.state.isInitialized && !vm.initializing">
                       <button class="btn btn-default waves-effect waves-light m-t-10"
-                        ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing"
+                        ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing || vm.installing || vm.saving"
                         ng-click="vm.showInstallLocationModal('state', 'button')">
                         Add new/existing node details
                       </button>
@@ -1787,7 +1805,7 @@
                                       <label class="control-label textAlignNone col-md-1">FQDN</label>
                                       <div class="col-md-4">
                                         <input type="text" class="form-control" name="redisUrl"
-                                          ng-model="vm.installForm.redis.url.fqdn" ng-disabled="vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
+                                          ng-model="vm.installForm.redis.url.fqdn" ng-disabled="vm.initializing || vm.installing || vm.saving" ng-pattern="vm.urlRegex"/>
                                         <dd class="text-danger" ng-show="vm.redisInstallForm.redisUrl.$dirty">
                                           <span ng-show="vm.redisInstallForm.redisUrl.$error.pattern">URL is invalid.</span>
                                         </dd>
@@ -1796,9 +1814,9 @@
                                         </span>
                                       </div>
                                       <button ng-if="vm.isEditingRedisUrl" class="btn btn-sm btn-primary"
-                                        ng-disabled="vm.redisInstallForm.redisUrl.$error.url"
+                                        ng-disabled="vm.redisInstallForm.redisUrl.$error.url || vm.initializing || vm.installing || vm.saving"
                                         ng-click="vm.updateRedisUrl(vm.installForm.redis.url.fqdn)">Save</button>
-                                      <button ng-if="vm.isEditingRedisUrl" class="btn btn-sm btn-default" ng-click="vm.cancelRedisUpdate()">Cancel</button>
+                                      <button ng-if="vm.isEditingRedisUrl" class="btn btn-sm btn-default" ng-click="vm.cancelRedisUpdate()" ng-disabled="vm.initializing || vm.installing || vm.saving">Cancel</button>
                                     </div>
                                   </div>
                                 </form>
@@ -1813,7 +1831,7 @@
                   <div class="row" ng-if="vm.initializeForm.redis.initType !== 'admiral' && !vm.systemSettings.redis.isInitialized">
                     <div class="col-md-3" ng-if="!vm.systemSettings.redis.isInitialized && !vm.initializing">
                       <button class="btn btn-default waves-effect waves-light m-t-10"
-                        ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing"
+                        ng-disabled="vm.systemSettings.redis.isInitialized || vm.initializing || vm.installing || vm.saving"
                         ng-click="vm.showInstallLocationModal('redis', 'button')">
                         Add new/existing node details
                       </button>
@@ -1942,7 +1960,9 @@
                           <span ng-if="vm.isGlobalService(service.serviceName)">
                             {{service.replicas}}
                           </span>
-                          <input ng-if="!vm.isGlobalService(service.serviceName)"
+                          <input
+                            ng-disabled="vm.initializing || vm.installing || vm.saving"
+                            ng-if="!vm.isGlobalService(service.serviceName)"
                             class="form-control input-sm"
                             type=number ng-model="service.replicas" />
                         </td>
