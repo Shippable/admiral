@@ -505,7 +505,7 @@
         },
         artifactoryKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         AWS: {
           displayName: '',
@@ -513,7 +513,7 @@
         },
         amazonKeys: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         AWS_IAM: {
           displayName: '',
@@ -529,11 +529,11 @@
         },
         azureDcosKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         azureKeys: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         CLUSTER: {
           displayName: '',
@@ -541,7 +541,7 @@
         },
         nodeCluster: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         DCL: {
           displayName: '',
@@ -549,7 +549,7 @@
         },
         dclKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         DDC: {
           displayName: '',
@@ -557,7 +557,7 @@
         },
         ddcKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         Docker: {
           displayName: '',
@@ -577,7 +577,7 @@
         },
         gcloudKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         GKE: {
           displayName: '',
@@ -589,7 +589,7 @@
         },
         hipchatKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         irc: {
           displayName: '',
@@ -601,7 +601,7 @@
         },
         kubernetesConfig: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         'pem-key': {
           displayName: '',
@@ -609,7 +609,7 @@
         },
         pemKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         'Private Docker Registry': {
           displayName: '',
@@ -621,11 +621,11 @@
         },
         quayLogin: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         dockerRegistryLogin: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         Slack: {
           displayName: '',
@@ -633,11 +633,11 @@
         },
         slackKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         jira: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         email: {
           displayName: 'Email',
@@ -649,7 +649,7 @@
         },
         joyentTritonKey: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         webhook: {
           displayName: '',
@@ -657,15 +657,15 @@
         },
         webhookV2: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         DOC: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         keyValuePair: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         MAZ: {
           displayName: '',
@@ -677,7 +677,7 @@
         },
         gitCredential: {
           displayName: '',
-          isEnabled: false
+          isEnabled: true
         },
         systemSettings: {},
         systemIntegrations: {
@@ -882,7 +882,6 @@
               $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP].push('admiral');
             else
               $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP] = ['admiral'];
-            installAddons();
             dashboardNewCtrlDefer.resolve();
           }
         }
@@ -2114,7 +2113,8 @@
           install,
           save,
           restartServices,
-          postInitFlow
+          postInitFlow,
+          installAddons
         ],
         function (err) {
           if (err)
@@ -4380,7 +4380,7 @@
       );
     }
 
-    function installAddons() {
+    function installAddons(next) {
       $scope.vm.installingAddons = true;
       if (!$scope.vm.isEmailEnabled) {
         $scope.vm.isEmailMethodEnabled = false;
@@ -4410,6 +4410,7 @@
           if (err)
             return popup_horn.error(err);
           getMasterIntegrations({}, function () {});
+          if (next) return next();
         }
       );
     }
