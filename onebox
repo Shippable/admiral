@@ -7,6 +7,7 @@ export COMPONENT_NAME="admiral"
 export ONEBOX_NAME="admiral_onebox"
 export LATEST_MICROBASE_TAG="master"
 export ADMIRAL_ENV="/etc/shippable/admiral.env"
+source "$ADMIRAL_ENV"
 export CONFIG_DIR="/etc/shippable"
 export RUNTIME_DIR="/var/lib/shippable"
 export MIGRATIONS_DIR="$ROOT_DIR/migrations"
@@ -24,13 +25,20 @@ stop_component() {
 
 build_image() {
   echo "Building image..."
-  sed -i "s/{{%TAG%}}/$LATEST_MICROBASE_TAG/g" Dockerfile
+
+  export ADMIRAL_OS="16"
+  if [[ $OPERATING_SYSTEM == "Ubuntu_14.04" ]]; then
+    export ADMIRAL_OS="14"
+  fi
+
+  envsubst < Dockerfile > Dockerfile.tmp
+  rm Dockerfile
+  mv Dockerfile.tmp Dockerfile
   sudo docker build -t shipimg/admiral:onebox .
 }
 
 run_component() {
   echo "Starting admiral..."
-  source "$ADMIRAL_ENV"
   local envs=" -e DBNAME=$DB_NAME \
     -e DBUSERNAME=$DB_USER \
     -e DBPASSWORD=$DB_PASSWORD \
@@ -50,9 +58,7 @@ run_component() {
   run_cmd="$run_cmd $envs"
   run_cmd="$run_cmd -e RUN_MODE=dev"
   run_cmd="$run_cmd -p $PORT:$PORT "
-  run_cmd="$run_cmd -v /usr/bin/docker:/usr/bin/docker:rw -v /var/run/docker.sock:/var/run/docker.sock:rw "
-  run_cmd="$run_cmd -v /usr/lib/x86_64-linux-gnu/libapparmor.so.1.1.0:/lib/x86_64-linux-gnu/libapparmor.so.1:rw "
-  run_cmd="$run_cmd -v /usr/lib/x86_64-linux-gnu/libltdl.so.7.3.0:/lib/x86_64-linux-gnu/libltdl.so.7:rw "
+  run_cmd="$run_cmd -v /var/run/docker.sock:/var/run/docker.sock:rw"
   run_cmd="$run_cmd -v $CONFIG_DIR:$CONFIG_DIR:rw "
   run_cmd="$run_cmd -v $RUNTIME_DIR:$RUNTIME_DIR:rw "
   run_cmd="$run_cmd -v $(pwd):/home/shippable/admiral:rw "
