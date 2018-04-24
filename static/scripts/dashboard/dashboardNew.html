@@ -730,7 +730,7 @@
                     <div class="col-sm-12">
                       <div class="card-box">
                         <h4 class="m-t-0 header-title"><b>Bitbucket Server</b></h4>
-                        <div class="row">
+                        <div class="row" ng-if="!vm.installForm.auth.bitbucketServerBasicAuth.isEnabled">
                           <div class="col-sm-12">
                             <div class="card-box">
                               <div class="toggle-bar checkbox-inline">
@@ -746,10 +746,18 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bbs_scm" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucketServer.isEnabled"
-                                  ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled || vm.initializing || vm.installing || vm.saving"
-                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                                  ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled || vm.installForm.auth.bitbucketServerKeys.isEnabled || vm.initializing || vm.installing || vm.saving"                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bbs_scm">
                                   <b> SCM </b>
+                                </label>
+                              </div>
+                              <div class="toggle-bar checkbox-inline">
+                                <input id="checkbox_for_bbs_auth_type" type="checkbox"
+                                  ng-model="vm.installForm.auth.bitbucketServerBasicAuth.isEnabled"
+                                  ng-change="vm.toggleAuthType('bitbucketServer', 'basic')"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                                <label for="checkbox_for_bbs_auth_type">
+                                  <b> Basic Auth </b>
                                 </label>
                               </div>
                               <div class="row" ng-if="vm.installForm.auth.bitbucketServerKeys.isEnabled">
@@ -810,9 +818,76 @@
                             </div>
                           </div>
                         </div>
+                        <div class="row" ng-if="vm.installForm.auth.bitbucketServerBasicAuth.isEnabled">
+                          <div class="col-sm-12">
+                            <div class="card-box">
+                              <div class="toggle-bar checkbox-inline">
+                                <input id="checkbox_for_bbs_basic_auth" type="checkbox"
+                                  ng-model="vm.installForm.auth.bitbucketServerBasicAuth.isEnabled"
+                                  ng-change="vm.toggleAuthProvider('bitbucketServer', 'basic')"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                                <label for="checkbox_for_bbs_basic_auth">
+                                  <b> Auth </b>
+                                </label>
+                              </div>
+                              <div class="toggle-bar checkbox-inline">
+                                <input id="checkbox_for_bbs_basic_scm" type="checkbox"
+                                  ng-model="vm.installForm.scm.bitbucketServerBasic.isEnabled"
+                                  ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled || vm.installForm.auth.bitbucketServerKeys.isEnabled || vm.initializing || vm.installing || vm.saving"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                                <label for="checkbox_for_bbs_basic_scm">
+                                  <b> SCM </b>
+                                </label>
+                              </div>
+                              <div class="toggle-bar checkbox-inline">
+                                <input id="checkbox_for_bbs_basic_auth_type" type="checkbox"
+                                  ng-model="vm.installForm.auth.bitbucketServerBasicAuth.isEnabled"
+                                  ng-change="vm.toggleAuthType('bitbucketServer')"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                                <label for="checkbox_for_bbs_basic_auth_type">
+                                  <b> Basic Auth </b>
+                                </label>
+                              </div>
+                              <div class="row" ng-if="vm.installForm.auth.bitbucketServerBasicAuth.isEnabled">
+                                <div class="col-md-12">
+                                  <form class="form-horizontal" role="form" name="vm.bbsBasicInstallForm" novalidate>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">Name (Optional)</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="BitBucket Server Basic Auth" name="bitbucketServerBasicCustomName"
+                                        ng-model="vm.installForm.auth.bitbucketServerBasicAuth.data.customName" ng-disabled="vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">URL</label>
+                                      <div class="col-md-6">
+                                        <input type="url" class="form-control" name="bitbucketServerBasicUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.bitbucketServerBasicAuth.data.url, 'bitbucketServerBasicAuth')"
+                                        ng-model="vm.installForm.auth.bitbucketServerBasicAuth.data.url" ng-disabled="vm.installing || vm.saving"/>
+                                        <dd class="text-danger" ng-if="vm.isNotValidurl['bitbucketServerBasicAuth']">
+                                          <span>Please give a valid bitbucketServer endpoint url</span>
+                                        </dd>
+                                        <dd class="text-danger" ng-if="!vm.isNotValidurl['bitbucketServerBasicAuth']">
+                                          <span ng-show="vm.bbsBasicInstallForm.bitbucketServerUrl.$error.url">URL is invalid.</span>
+                                        </dd>
+                                      </div>
+                                    </div>
+                                    <div class="form-group" ng-if="!vm.installForm.auth.bitbucketServerBasicAuth.data.url">
+                                      <div class="col-md-offset-2 col-md-6">
+                                        <dd class="text-danger">
+                                          <span>All these are required fields. Please fill them all before continuing further.</span>
+                                        </dd>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+
                   <!-- Github -->
                   <div class="row">
                     <div class="col-sm-12">
