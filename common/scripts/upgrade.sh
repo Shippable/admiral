@@ -321,6 +321,22 @@ __run_post_migrations() {
   fi
 }
 
+__move_system_to_grisham() {
+  __process_marker "Moving system to grisham"
+  __process_msg "Waiting thirty seconds before moving system to grisham"
+  local wait_time=30
+  sleep $wait_time
+
+  _shippable_post_move_system_to_grisham
+  if [ $response_status_code -gt 299 ]; then
+    __process_error "Error running passthrough route move system to grisham: $response"
+    __process_error "Status code: $response_status_code"
+    exit 1
+  else
+    __process_msg "Successfully ran passthrough route move system to grisham"
+  fi
+}
+
 __mark_swarm_manager_as_active() {
   __process_marker "Marking swarm manager as active"
   local manager_node_id=$(docker node ls -q --filter role=manager)
@@ -446,6 +462,9 @@ main() {
     __start_stateful_services
     __start_stateless_services
     __run_post_migrations
+    if [ $IS_SERVER == true ]; then
+      __move_system_to_grisham
+    fi
     __delete_swarm_master_from_workers
     __cleanup_master
     __cleanup_workers
