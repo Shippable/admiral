@@ -4,6 +4,8 @@
 ${RES_VER_DATE}
 
 ## Features
+  - **Failure logs in email notifications**: Email notifications for both CI and Assembly Lines can be configured to include log output of failing commands with the `sendFailingSnippet` option. To enable this, see the [CI email](http://docs.shippable.com/ci/email-notifications/) or [Assembly Lines configuration](http://docs.shippable.com/platform/workflow/config/#assembly-lines-configuration) documentation.
+
   - **simple title**: brief description. [link to docs](#).
       - itemized
       - list
