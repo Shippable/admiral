@@ -5179,5 +5179,9 @@ do $$
       alter table "clusters" add column "propertyBag" TEXT;
     end if;
 
+    -- Add setAsStopped column to clusterNodes table
+    if not exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'setAsStopped') then
+      alter table "clusterNodes" add column "setAsStopped" BOOLEAN;
+    end if;
   end
 $$;
