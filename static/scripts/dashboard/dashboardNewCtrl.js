@@ -18,7 +18,6 @@
     var providerAuthNames = {
       bitbucketKeys: 'bitbucket',
       bitbucketServerKeys: 'bitbucketServer',
-      bitbucketServerBasicAuth: 'bitbucketServer',
       githubKeys: 'github',
       githubEnterpriseKeys: 'ghe',
       gitlabKeys: 'gitlab'
