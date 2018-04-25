@@ -1933,6 +1933,7 @@
             'jobConsoleBufferTimeIntervalMS',
             'apiRetryIntervalMS',
             'accountSyncFrequencyHr',
+            'maxNodeCheckInDelayInMinutes',
             'rootS3Bucket',
             'nodeScriptsLocation',
             'enforcePrivateJobQuota',

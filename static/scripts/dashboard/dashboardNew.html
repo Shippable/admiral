@@ -2431,6 +2431,19 @@
                                 <hr/>
                               </div>
                             </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <form class="form-horizontal" role="form">
+                                  <div class="form-group">
+                                    <label class="col-md-2 control-label">Maximum time between successful node status checks (in minutes):</label>
+                                    <div class="col-md-6">
+                                      <input type="text" class="form-control" name="maxNodeCheckInDelayInMinutes"
+                                        ng-model="vm.installForm.systemSettings.maxNodeCheckInDelayInMinutes" ng-disabled="vm.installing || vm.saving"/>
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
