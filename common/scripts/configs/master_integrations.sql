@@ -78,6 +78,12 @@ do $$
       values ('572af430ead9631100f7f64d', 22, 'bitbucketServer', 'BitBucket Server', 'scm', false, 'account', 5000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    -- bitbucketServerBasic
+    if not exists (select 1 from "masterIntegrations" where "name" = 'bitbucketServerBasic' and "typeCode" = 5000) then
+      insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values ('5ae04fb34828842719e77242', 90, 'bitbucketServerBasic', 'BitBucket Server Basic', 'scm', false, 'account', 5000, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
     --- Deprecate Jenkins integration
     if exists (select 1 from "masterIntegrations" where "name" = 'Jenkins' and "typeCode" = 5009 and "isDeprecated" = false) then
       update "masterIntegrations" set "isDeprecated" = true where "name" = 'Jenkins' and "typeCode" = 5009;
