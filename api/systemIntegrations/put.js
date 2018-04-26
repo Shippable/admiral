@@ -228,8 +228,6 @@ function _postProvider(bag, next) {
   var name = bag.reqBody.masterName;
   if (name.endsWith('Keys'))
     name = name.replace('Keys', '');
-  else if (name.endsWith('BasicAuth'))
-    name = name.replace('BasicAuth', '');
   var provider = {
     url: bag.reqBody.data.url,
     name: name
