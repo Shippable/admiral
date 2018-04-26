@@ -1,5 +1,6 @@
 FROM drydock/u${ADMIRAL_OS}microbase:master
 
+RUN chmod 777 /tmp
 ADD . /home/shippable/admiral
 
 RUN ./home/shippable/admiral/common/scripts/x86_64/Ubuntu_${ADMIRAL_OS}.04/install_psql.sh
