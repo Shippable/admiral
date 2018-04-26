@@ -23,7 +23,29 @@ ${RES_VER_DATE}
 ## Shippable Server
 
   - Features
-      - **simple title**: brief description
+      - **Addons are enabled by default in fresh installation of Shippable** - After a [fresh installation of Shippable](http://docs.shippable.com/platform/server/install-onebox/), the following Addons will be enabled by default.
+          - [AWS Keys](http://docs.shippable.com/platform/integration/aws-keys/)
+          - [Azure DC/OS](http://docs.shippable.com/platform/integration/azureDcosKey/)
+          - [Azure Keys](http://docs.shippable.com/platform/integration/azure-keys/)
+          - [Node Cluster](http://docs.shippable.com/platform/integration/nodeCluster/)
+          - [Docker Cloud](http://docs.shippable.com/platform/integration/dclKey/)
+          - [Docker DataCenter](http://docs.shippable.com/platform/integration/ddcKey/)
+          - [Kubernetes](http://docs.shippable.com/platform/integration/kubernetes/)
+          - [Joyent Triton](http://docs.shippable.com/platform/integration/joyentTritonKey/)
+          - [Digital Ocean](http://docs.shippable.com/platform/integration/do/)
+          - [Google Cloud](http://docs.shippable.com/platform/integration/gcloudKey/)
+          - [Webhook](http://docs.shippable.com/platform/integration/webhook/)
+          - [HipChat](http://docs.shippable.com/platform/integration/hipchatKey/)
+          - [Slack](http://docs.shippable.com/platform/integration/slackKey/)
+          - [Jira](http://docs.shippable.com/platform/integration/jira/)
+          - [AWS Keys (ECR)](http://docs.shippable.com/platform/integration/aws-keys/)
+          - [JFrog Artifactory](http://docs.shippable.com/platform/integration/jfrog-artifactoryKey/)
+          - [Quay.io](http://docs.shippable.com/platform/integration/quayLogin/)
+          - [Docker Registry](http://docs.shippable.com/platform/integration/dockerRegistryLogin/)
+          - [PEM Key](http://docs.shippable.com/platform/integration/pemKey/)
+          - [Key-Value pair](http://docs.shippable.com/platform/integration/key-value/)
+          - [Git Credential](http://docs.shippable.com/platform/integration/git-credential/)
+
   - Fixes
       - **simple title**: brief description
 
