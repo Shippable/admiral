@@ -199,6 +199,17 @@ function _validateMasterIntegrationFields(bag, next) {
 
   var errors = [];
 
+  _.each(bag.reqBody.data,
+    function (value, key) {
+      if (!_.findWhere(bag.masterIntegrationFields, {name: key})) {
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            util.format('Can not save %s as there is no masterIntegrationField named %s.', key, key))
+        );
+      }
+    }
+  );
+
   _.each(bag.masterIntegrationFields,
     function (miField) {
       if (miField.isRequired && !_.has(bag.reqBody.data, miField.name)) {
