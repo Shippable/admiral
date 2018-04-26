@@ -3537,8 +3537,7 @@
             isEnabled: systemInt.isEnabled
           };
 
-          if (systemInt.masterName !== 'bitbucketServerBasicAuth')
-            bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
+          bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
 
           updateSystemIntegration(bag,
             function (err) {
