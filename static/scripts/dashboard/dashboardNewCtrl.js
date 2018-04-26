@@ -309,14 +309,6 @@
               url: ''
             }
           },
-          bitbucketServerBasicAuth: {
-            isEnabled: false,
-            masterName: 'bitbucketServerBasicAuth',
-            data: {
-              customName: '',
-              url: ''
-            }
-          },
           githubKeys: {
             isEnabled: false,
             masterName: 'githubKeys',
@@ -809,7 +801,6 @@
       restartServices: restartServices,
       installAddons: installAddons,
       toggleAuthProvider: toggleAuthProvider,
-      toggleAuthType: toggleAuthType,
       addSuperUser: addSuperUser,
       removeSuperUser: removeSuperUser,
       showAdmiralEnvModal: showAdmiralEnvModal,
@@ -4545,33 +4536,10 @@
       }
     );
 
-    function toggleAuthType(providerName, type) {
-      if (providerName !== 'bitbucketServer')
-        return;
-      var oauthSystemInt = $scope.vm.installForm.auth[providerName + 'Keys'];
-      var basicSystemInt = $scope.vm.installForm.auth[providerName + 'BasicAuth'];
-      if (type === 'basic') {
-        // disable oauth and enable basic auth
-        oauthSystemInt.isEnabled = false;
-        toggleAuthProvider(providerName);
-        basicSystemInt.isEnabled = true;
-        toggleAuthProvider(providerName, 'basic');
-      } else {
-        // disable basic auth and enable oauth
-        basicSystemInt.isEnabled = false;
-        toggleAuthProvider(providerName, 'basic');
-        oauthSystemInt.isEnabled = true;
-        toggleAuthProvider(providerName);
-      }
-    }
-
-    function toggleAuthProvider(providerName, type) {
+    function toggleAuthProvider(providerName) {
       var systemInt = $scope.vm.installForm.auth[providerName + 'Keys'];
-      if (type === 'basic') {
-        systemInt = $scope.vm.installForm.auth[providerName + 'BasicAuth'];
-      } else {
-        $scope.vm.installForm.scm[providerName].isEnabled = systemInt.isEnabled;
-      }
+
+      $scope.vm.installForm.scm[providerName].isEnabled = systemInt.isEnabled;
 
       var bag = {
         name: 'auth',
@@ -4580,8 +4548,7 @@
         isEnabled: systemInt.isEnabled
       };
 
-      if (type !== 'basic')
-        bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
+      bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
 
       if (systemInt.isEnabled) {
         async.series([
@@ -4591,7 +4558,7 @@
           function (err) {
             if (err)
               return popup_horn.error(err);
-            if (bag.systemIntegrationId && type !== 'basic') {
+            if (bag.systemIntegrationId) {
               var providerAuthName = providerAuthNames[bag.masterName];
               if (!_.isEmpty(providerAuthName))
                 $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
