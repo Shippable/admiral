@@ -181,7 +181,9 @@ function _validateMasterIntegrationFields(bag, next) {
       if (!_.findWhere(bag.masterIntegrationFields, {name: key})) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            util.format('Can not save %s as there is no masterIntegrationField named %s.', key, key))
+            util.format('Can not save %s as there is no masterIntegrationField ' +
+              'named %s for masterIntegration name: %s.',
+              key, key, bag.masterIntegration.name))
         );
       }
     }
