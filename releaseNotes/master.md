@@ -46,7 +46,6 @@ ${RES_VER_DATE}
           - [Key-Value pair](http://docs.shippable.com/platform/integration/key-value/)
           - [Git Credential](http://docs.shippable.com/platform/integration/git-credential/)
 
-      - **simple title**: brief description
   - Fixes
       - **simple title**: brief description
 
