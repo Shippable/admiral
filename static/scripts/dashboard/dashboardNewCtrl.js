@@ -2693,11 +2693,11 @@
         isDefault: false,
         region: '',
         keyName: '',
-        runShImage: '',
+        runShImage: 'dummy/dummy:dummy',
         securityGroup: '',
         subnetId: '',
-        drydockTag: '',
-        drydockFamily: '',
+        drydockTag: 'dummy',
+        drydockFamily: 'dummy',
         sshUser: 'ubuntu',
         sshPort: 22,
         runtimeTemplateId: null,
@@ -2751,10 +2751,7 @@
       valid = valid && !!newImage.externalId;
       valid = valid && !!newImage.region;
       valid = valid && !!newImage.keyName;
-      valid = valid && !!newImage.runShImage;
       valid = valid && !!newImage.securityGroup;
-      valid = valid && !!newImage.drydockTag;
-      valid = valid && !!newImage.drydockFamily;
       valid = valid && !!newImage.archTypeCode;
       return valid;
     }
