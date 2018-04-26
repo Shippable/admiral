@@ -280,6 +280,11 @@ do $$
       values (280, '577de63321333398d11a1117', 'customName', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 289) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (289, '577de63321333398d11a1117', 'url', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-04-26', '2018-04-26');
+    end if;
+
     -- masterIntegrationFields for bitbucketKeys
     if not exists (select 1 from "masterIntegrationFields" where "id" = 179) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -306,6 +311,11 @@ do $$
       values (277, '577de63321333398d11a1118', 'customName', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 288) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (288, '577de63321333398d11a1118', 'url', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-04-26', '2018-04-26');
+    end if;
+
     -- masterIntegrationFields for bitbucketServerKeys
     if not exists (select 1 from "masterIntegrationFields" where "id" = 183) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -330,6 +340,11 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 278) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (278, '577de63321333398d11a1119', 'customName', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 292) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (292, '577de63321333398d11a1119', 'url', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-04-26', '2018-04-26');
     end if;
 
     -- masterIntegrationFields for bitbucketServerBasicAuth
@@ -374,6 +389,11 @@ do $$
       values (279, '507f1f77bcf86cd799431120', 'customName', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 291) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (291, '507f1f77bcf86cd799431120', 'url', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-04-26', '2018-04-26');
+    end if;
+
     -- masterIntegrationFields for Hubspot
     if not exists (select 1 from "masterIntegrationFields" where "id" = 191) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
@@ -409,6 +429,11 @@ do $$
     if not exists (select 1 from "masterIntegrationFields" where "id" = 281) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
       values (281, '58a160e8c2845c9d5fb82041', 'customName', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 290) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (290, '58a160e8c2845c9d5fb82041', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-04-26', '2018-04-26');
     end if;
 
     -- masterIntegrationFields for keyValuePair
