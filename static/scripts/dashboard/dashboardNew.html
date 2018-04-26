@@ -2251,35 +2251,27 @@
                                     <tr>
                                       <th>Name</th>
                                       <th>Description</th>
-                                      <th>Architecture</th>
                                       <th>Shippable AMI Id</th>
                                       <th>Region</th>
                                       <th>Key pair name</th>
-                                      <th>runSh Image</th>
                                       <th>Security group</th>
                                       <th>Subnet ID</th>
-                                      <th>Drydock</th>
-                                      <th>SSH User:Port</th>
+                                      <th>SSH User</th>
+                                      <th>SSH Port</th>
                                       <th>Action</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr ng-repeat="smi in vm.installForm.systemMachineImages | filter: smiSearchString">
-                                      <td>
-                                        <span class="label label-info" ng-if="smi.isDefault" tooltip-placement="top" uib-tooltip="Default">D</span>
-                                        {{smi.name}}
-                                        <i class="fa fa-check" style="color: green;" tooltip-placement="top" uib-tooltip="Availabe" ng-if="smi.isAvailable"></i>
-                                      </td>
+                                      <td>{{smi.name}}</td>
                                       <td>{{smi.description}}</td>
-                                      <td>{{vm.archTypesByCode[smi.archTypeCode][0].name}}</td>
                                       <td>{{smi.externalId}}</td>
                                       <td>{{smi.region}}</td>
                                       <td>{{smi.keyName}}</td>
-                                      <td>{{smi.runShImage}}</td>
                                       <td>{{smi.securityGroup}}</td>
                                       <td>{{smi.subnetId}}</td>
-                                      <td>{{smi.drydockFamily}}:{{smi.drydockTag}}</td>
-                                      <td>{{smi.sshUser}}:{{smi.sshPort}}</td>
+                                      <td>{{smi.sshUser}}</td>
+                                      <td>{{smi.sshPort}}</td>
                                       <td>
                                         <button class="btn btn-sm btn-default"
                                           ng-click="vm.updateSMI(smi)"
@@ -4089,39 +4081,7 @@
           </div>
           <div class="form-group">
             <label class="col-md-3 control-label">
-              isAvailable
-              <span title="This is available for the user to select form the dropdown in the subscription settings.">
-                <span class="glyphicon glyphicon-info-sign"></span>
-              </span>
-            </label>
-            <div class="col-md-9">
-              <div class="checkbox checkbox-primary">
-                <input type="checkbox" name="IsAvailable"
-                ng-model="vm.selectedSMI.isAvailable" ng-disabled="vm.installing || vm.saving || vm.isDefault"/>
-                <label></label>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">
-              isDefault
-              <span title="This is the default machine image.">
-                <span class="glyphicon glyphicon-info-sign"></span>
-              </span>
-            </label>
-            <div class="col-md-9">
-              <div class="checkbox checkbox-primary">
-                <input type="checkbox" name="IsDefault"
-                ng-model="vm.selectedSMI.isDefault" ng-disabled="vm.installing || vm.saving ||
-                (!vm.selectedSMI.isDefault && vm.selectedSMI.archTypeCode === vm.x86ArchCode && vm.hasDefaultx86SystemMachineImage()) ||
-                (!vm.selectedSMI.isDefault && vm.selectedSMI.archTypeCode === vm.armArchCode && vm.hasDefaultArmSystemMachineImage())"/>
-                <label></label>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">
-              Shippable AMI Id
+              Shippable AMI ID
                 <span title="Please click here to see the list of all the ami with their versions">
                   <a target="_blank" href="http://docs.shippable.com/platform/runtime/machine-image/ami-overview/" style="color: #606060;">
                     <span class="glyphicon glyphicon-info-sign"></span>
@@ -4148,21 +4108,14 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label">Key pair name</label>
+            <label class="col-md-3 control-label">Key Pair Name</label>
             <div class="col-md-9" ng-class="vm.selectedSMI.keyName ? '' : 'has-error'">
               <input type="text" class="form-control" name="KeyName"
               ng-model="vm.selectedSMI.keyName" ng-disabled="vm.installing || vm.saving"/>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label">runSh Image</label>
-            <div class="col-md-9" ng-class="vm.selectedSMI.runShImage ? '' : 'has-error'">
-              <input type="text" class="form-control" name="RunShImage"
-              ng-model="vm.selectedSMI.runShImage" ng-disabled="vm.installing || vm.saving"/>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">Security group id</label>
+            <label class="col-md-3 control-label">Security Group ID</label>
             <div class="col-md-9" ng-class="vm.selectedSMI.securityGroup ? '' : 'has-error'">
               <input type="text" class="form-control" name="SecurityGroup"
               ng-model="vm.selectedSMI.securityGroup" ng-disabled="vm.installing || vm.saving"/>
@@ -4173,20 +4126,6 @@
             <div class="col-md-9">
               <input type="text" class="form-control" name="SubnetId"
               ng-model="vm.selectedSMI.subnetId" ng-disabled="vm.installing || vm.saving"/>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">Drydock Tag</label>
-            <div class="col-md-9" ng-class="vm.selectedSMI.drydockTag ? '' : 'has-error'">
-              <input type="text" class="form-control" name="DrydockTag"
-              ng-model="vm.selectedSMI.drydockTag" ng-disabled="vm.installing || vm.saving"/>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">Drydock Family</label>
-            <div class="col-md-9" ng-class="vm.selectedSMI.drydockFamily ? '' : 'has-error'">
-              <input type="text" class="form-control" name="DrydockFamily"
-              ng-model="vm.selectedSMI.drydockFamily" ng-disabled="vm.installing || vm.saving"/>
             </div>
           </div>
           <div class="form-group">
