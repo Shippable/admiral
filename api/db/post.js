@@ -60,8 +60,6 @@ function post(req, res) {
       _templateServiceUserAccountFile.bind(null, bag),
       _upsertServiceUserAccount.bind(null, bag),
       _getPublicRegistry.bind(null, bag),
-      _templateDefaultSystemMachineImageFile.bind(null, bag),
-      _upsertDefaultSystemMachineImage.bind(null, bag),
       _insertMasterRuntimeTemplates.bind(null, bag),
       _getRootBucket.bind(null, bag),
       _setRootBucket.bind(null, bag),
@@ -669,64 +667,6 @@ function _getPublicRegistry(bag, next) {
       logger.debug('Found public registry');
 
       return next();
-    }
-  );
-}
-
-function _templateDefaultSystemMachineImageFile(bag, next) {
-  var who = bag.who + '|' + _templateDefaultSystemMachineImageFile.name;
-  logger.verbose(who, 'Inside');
-
-  var filePath = util.format('%s/db/default_system_machine_image.sql',
-    global.config.configDir);
-  var templatePath =
-    util.format('%s/configs/default_system_machine_image.sql.template',
-      global.config.scriptsDir);
-  var dataObj = {
-    releaseVersion: bag.releaseVersion,
-    publicRegistry: bag.publicRegistry
-  };
-
-  var script = {
-    tmpScriptFilename: filePath,
-    script: __applyTemplate(templatePath, dataObj)
-  };
-
-  _writeScriptToFile(script,
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed, 'Failed to write script', err)
-        );
-
-      return next();
-    }
-  );
-}
-
-function _upsertDefaultSystemMachineImage(bag, next) {
-  var who = bag.who + '|' + _upsertDefaultSystemMachineImage.name;
-  logger.verbose(who, 'Inside');
-
-  _copyAndRunScript({
-      who: who,
-      params: {},
-      script: '',
-      scriptPath: 'create_default_system_machine_image.sh',
-      tmpScriptFilename: '/tmp/defaultSystemMachineImage.sh',
-      scriptEnvs: {
-        'RUNTIME_DIR': global.config.runtimeDir,
-        'CONFIG_DIR': global.config.configDir,
-        'SCRIPTS_DIR': global.config.scriptsDir,
-        'DBUSERNAME': global.config.dbUsername,
-        'DBNAME': global.config.dbName,
-        'DBHOST': global.config.dbHost,
-        'DBPORT': global.config.dbPort,
-        'DBPASSWORD': global.config.dbPassword
-      }
-    },
-    function (err) {
-      return next(err);
     }
   );
 }

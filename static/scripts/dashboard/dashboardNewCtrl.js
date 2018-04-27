@@ -2003,11 +2003,6 @@
             return next();
           }
 
-          if (_.isEmpty(systemMachineImages)) {
-            popup_horn.error('No default system machine image found. ' +
-              'Please reinitialize.');
-            return next();
-          }
           $scope.vm.installForm.systemMachineImages =
             _.map(systemMachineImages,
               function (image) {
