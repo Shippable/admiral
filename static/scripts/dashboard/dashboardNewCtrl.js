@@ -816,8 +816,6 @@
       showEULAModal: showEULAModal,
       refreshLogs: refreshLogs,
       isGlobalService: isGlobalService,
-      hasDefaultx86SystemMachineImage: hasDefaultx86SystemMachineImage,
-      hasDefaultArmSystemMachineImage: hasDefaultArmSystemMachineImage,
       logOutOfAdmiral: logOutOfAdmiral,
       switchToggle: switchToggle,
       eulaText: '',
@@ -4669,29 +4667,6 @@
 
     function isGlobalService(service) {
       return _.contains($scope.vm.globalServices, service);
-    }
-
-    function hasDefaultx86SystemMachineImage() {
-      if (!$scope.vm.installForm.systemMachineImages ||
-        !$scope.vm.installForm.systemMachineImages.length)
-        return false;
-      return _.some($scope.vm.installForm.systemMachineImages,
-        function (systemMachineImage) {
-          return systemMachineImage.isDefault &&
-            systemMachineImage.archTypeCode === $scope.vm.x86ArchCode;
-        }
-      );
-    }
-    function hasDefaultArmSystemMachineImage() {
-      if (!$scope.vm.installForm.systemMachineImages ||
-        !$scope.vm.installForm.systemMachineImages.length)
-        return false;
-      return _.some($scope.vm.installForm.systemMachineImages,
-        function (systemMachineImage) {
-          return systemMachineImage.isDefault &&
-            systemMachineImage.archTypeCode === $scope.vm.armArchCode;
-        }
-      );
     }
   }
 }());
