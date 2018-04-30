@@ -17,9 +17,7 @@ ${RES_VER_DATE}
   - When a build's webhook payload fails to send due to a parsing error, a helpful message will be displayed in the logs.
 
 ## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
+  - **Node status updated when nodes do not report a status**: If a node has not sent updated node statistics for 15 minutes (configurable in Shippable Server installations), the node status will be updated to failed and jobs will not be queued for that node.
 
 ## Shippable Server
 
