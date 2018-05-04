@@ -12,6 +12,8 @@ var validateBaseUrl = {
   gitlabKeys: require('../../common/gitlab/validateBaseUrl.js'),
   bitbucketServerKeys: require(
     '../../common/bitbucketServer/validateBaseUrl.js'),
+  bitbucketServerBasicAuth: require(
+    '../../common/bitbucketServer/validateBaseUrl.js'),
   githubEnterpriseKeys: require('../../common/ghe/validateBaseUrl.js')
 };
 

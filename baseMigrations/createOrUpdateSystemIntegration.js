@@ -173,7 +173,8 @@ function _createProvider(bag, next) {
   var name = bag.systemIntegration.masterName;
   if (name.endsWith('Keys'))
     name = name.replace('Keys', '');
-
+  else if (name.endsWith('BasicAuth'))
+    name = name.replace('BasicAuth', '');
   async.retry(retryOpts,
     function (callback) {
 
