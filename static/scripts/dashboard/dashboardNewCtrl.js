@@ -62,6 +62,7 @@
         'consoleAPI'
       ],
       isNotValidurl: [],
+      isDuplicateUrl: [],
       urlRegex: /(http(s)?:\/\/)?([a-zA-Z0-9]+([a-zA-Z0-9]+)+.*)$/,
       x86ArchCode: null,
       armArchCode: null,
@@ -298,6 +299,15 @@
               url: ''
             }
           },
+          bitbucketServerBasicAuth: {
+            isEnabled: false,
+            masterName: 'bitbucketServerBasicAuth',
+            data: {
+              customName: '',
+              wwwUrl: '',
+              url: ''
+            }
+          },
           bitbucketServerKeys: {
             isEnabled: false,
             masterName: 'bitbucketServerKeys',
@@ -345,6 +355,9 @@
         },
         scm: {
           bitbucket: {
+            isEnabled: false
+          },
+          bitbucketServerBasic: {
             isEnabled: false
           },
           bitbucketServer: {
@@ -1097,6 +1110,10 @@
             wwwUrl: '',
             url: 'https://api.bitbucket.org'
           },
+          bitbucketServerBasicAuth: {
+            wwwUrl: '',
+            url: ''
+          },
           bitbucketServerKeys: {
             clientId: '',
             clientSecret: '',
@@ -1467,6 +1484,18 @@
           $scope.vm.isNotValidurl[bag.masterName] =
             bag.isNotValidurl[bag.masterName];
           $scope.vm.disableSave = bag.isNotValidurl[bag.masterName];
+          if (!$scope.vm.disableSave) {
+            var urls = _.filter($scope.vm.installForm.auth,
+              function (auth) {
+                return auth.data.url !==  '' && auth.data.url === bag.url;
+              }
+            );
+            if (urls && urls.length > 1)
+              $scope.vm.isDuplicateUrl[bag.masterName] = true;
+            else
+              $scope.vm.isDuplicateUrl[bag.masterName] = false;
+            $scope.vm.disableSave = $scope.vm.isDuplicateUrl[bag.masterName];
+          }
          }
        );
      }
@@ -4525,10 +4554,12 @@
       }
     );
 
-    function toggleAuthProvider(providerName) {
-      var systemInt = $scope.vm.installForm.auth[providerName + 'Keys'];
+    function toggleAuthProvider(masterName) {
+      var systemInt = $scope.vm.installForm.auth[masterName + 'Keys'];
+      if (_.isEmpty(systemInt))
+        systemInt = $scope.vm.installForm.auth[masterName + 'Auth'];
 
-      $scope.vm.installForm.scm[providerName].isEnabled = systemInt.isEnabled;
+      $scope.vm.installForm.scm[masterName].isEnabled = systemInt.isEnabled;
 
       var bag = {
         name: 'auth',
