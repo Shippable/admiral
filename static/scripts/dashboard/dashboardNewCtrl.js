@@ -1483,19 +1483,18 @@
          function () {
           $scope.vm.isNotValidurl[bag.masterName] =
             bag.isNotValidurl[bag.masterName];
-          $scope.vm.disableSave = bag.isNotValidurl[bag.masterName];
-          if (!$scope.vm.disableSave) {
-            var urls = _.filter($scope.vm.installForm.auth,
-              function (auth) {
-                return auth.data.url !==  '' && auth.data.url === bag.url;
-              }
-            );
-            if (urls && urls.length > 1)
-              $scope.vm.isDuplicateUrl[bag.masterName] = true;
-            else
-              $scope.vm.isDuplicateUrl[bag.masterName] = false;
-            $scope.vm.disableSave = $scope.vm.isDuplicateUrl[bag.masterName];
-          }
+          var urls = _.filter($scope.vm.installForm.auth,
+            function (auth) {
+              return auth.data.url !==  '' && auth.data.url === bag.url;
+            }
+          );
+          if (urls && urls.length > 1)
+            $scope.vm.isDuplicateUrl[bag.masterName] = true;
+          else
+            $scope.vm.isDuplicateUrl[bag.masterName] = false;
+
+          $scope.vm.disableSave =  bag.isNotValidurl[bag.masterName] ||
+            $scope.vm.isDuplicateUrl[bag.masterName];
          }
        );
      }
