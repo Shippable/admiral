@@ -2714,7 +2714,7 @@
     function addSystemMachineImage() {
       var newSystemMachineImage = {
         externalId: '',
-        provider: 'AWS',
+        provider: null,
         name: '',
         description: '',
         isAvailable: true,
@@ -2730,7 +2730,8 @@
         sshPort: 22,
         runtimeTemplateId: null,
       };
-
+      $scope.vm.providers = getProviders();
+      newSystemMachineImage.provider = $scope.vm.providers[0].name;
       $scope.vm.selectedSMI = newSystemMachineImage;
       $('#smi-edit-modal').modal('show');
     }
@@ -2742,7 +2743,33 @@
         $scope.vm.selectedSMI.osTypeCode = _.findWhere(
           runtimeTemplates, {id: image.runtimeTemplateId}).osTypeCode;
       computeOs();
+      $scope.vm.providers = getProviders();
       $('#smi-edit-modal').modal('show');
+    }
+
+    function getProviders() {
+      var supportedProviderMap = {
+        amazonKeys: {
+          displayName: 'AWS',
+          name: 'AWS'
+        },
+        gcloudKey: {
+          displayName: 'Google Cloud',
+          name: 'gcloudKey'
+        }
+      };
+
+      var supportedProviders = [];
+      _.each($scope.vm.installForm.provision,
+        function (provisionIntegration) {
+          if (provisionIntegration.isEnabled)
+            supportedProviders.push(
+              supportedProviderMap[provisionIntegration.masterName]
+            );
+        }
+      );
+
+      return supportedProviders;
     }
 
     function computeOs() {
@@ -3982,6 +4009,8 @@
     }
 
     function __getImageByAmiId(bag, next) {
+      // TODO: Add validation for gcloudKey integrations later.
+      if (bag.body.provider === 'gcloudKey') return next();
       if (bag.body.archTypeCode === $scope.vm.armArchCode) return next();
 
       var query = 'region=' + bag.region;
