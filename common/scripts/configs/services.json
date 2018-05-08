@@ -125,7 +125,9 @@
       "name": "gcloudKey",
       "type": "generic",
       "services": [
-        "provision"
+        "provision",
+        "gce",
+        "marshaller"
       ]
     },
     {
@@ -343,6 +345,11 @@
       "name": "email",
       "repository": "micro",
       "apiUrlIntegration": "internalAPI"
+    },
+    {
+      "name": "gce",
+      "repository": "micro",
+      "apiUrlIntegration": "consoleAPI"
     },
     {
       "name": "hipchat",
