@@ -465,6 +465,13 @@
               accessKey: '',
               secretKey: ''
             }
+          },
+          gcloudKey: {
+            isEnabled: false,
+            masterName: 'gcloudKey',
+            data: {
+              JSON_key: ''
+            }
           }
         },
         redis:  {
@@ -3677,14 +3684,27 @@
     }
 
     function updateProvisionSystemIntegration(next) {
-      var bag = {
-        name: 'provision',
-        masterName: $scope.vm.installForm.provision.amazonKeys.masterName,
-        data: $scope.vm.installForm.provision.amazonKeys.data,
-        isEnabled: $scope.vm.installForm.provision.amazonKeys.isEnabled
-      };
+      async.eachSeries($scope.vm.installForm.provision,
+        function (provisionIntegration, nextIntegration) {
+          var bag = {
+            name: 'provision',
+            masterName: provisionIntegration.masterName,
+            data: provisionIntegration.data,
+            isEnabled: provisionIntegration.isEnabled
+          };
 
-      updateSystemIntegration(bag,
+          // TODO: Remove this once all the references in the system
+          // have been updated to correctly handle multiple "provision"
+          // providers.
+          if (bag.masterName === 'gcloudKey')
+            bag.name = 'provision-gcloud';
+
+          updateSystemIntegration(bag,
+            function (err) {
+              return nextIntegration(err);
+            }
+          );
+        },
         function (err) {
           return next(err);
         }
