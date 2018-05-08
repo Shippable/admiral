@@ -2175,174 +2175,206 @@
                 </div>
                 <div id="on-demand-nodes" class="panel-collapse {{vm.initialized ? 'collapse' : 'collapse in'}}">
                   <div class="portlet-body">
+
+                    <!--
+                      Keys for AWS dynamic nodes
+                    -->
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>AWS</b></h4>
+                          <br />
                           <div class="toggle-bar">
                             <input id="checkbox_for_dynamic_nodes" type="checkbox"
-                              ng-model="vm.installForm.systemSettings.allowDynamicNodes" ng-change="vm.installForm.provision.amazonKeys.isEnabled = vm.installForm.systemSettings.allowDynamicNodes" ng-disabled="vm.installing || vm.saving" class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                              ng-model="vm.installForm.provision.amazonKeys.isEnabled" ng-change="vm.installForm.systemSettings.allowDynamicNodes = vm.installForm.provision.amazonKeys.isEnabled || vm.installForm.provision.gcloudKey.isEnabled" ng-disabled="vm.installing || vm.saving" class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                             <label for="checkbox_for_dynamic_nodes">
-                              <b>Enable on-demand node pools</b>
+                              <b>Enable AWS on-demand node pools</b>
                             </label>
-                            <p class="text-muted font-13 help-block">Enabling and configuring this will allow on-demand node pools to be created. Nodes in this pool will be automatically provisioned and destroyed.</p>
+                            <p class="text-muted font-13 help-block">Enabling and configuring this will allow on-demand node pools to be created on AWS. Nodes in this pool will be automatically provisioned and destroyed.</p>
                           </div>
-                          <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
-                            <div class="col-md-12">
-                              <form class="form-horizontal" role="form">
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">AWS Access Key</label>
-                                  <div class="col-md-6">
-                                    <input type="text" class="form-control" name="provisionAccessKey"
-                                    ng-model="vm.installForm.provision.amazonKeys.data.accessKey" ng-disabled="vm.installing || vm.saving"/>
-                                  </div>
+                          <div ng-if="vm.installForm.provision.amazonKeys.isEnabled">
+                            <form class="form-horizontal" role="form">
+                              <div class="form-group">
+                                <label class="col-md-2 control-label">AWS Access Key</label>
+                                <div class="col-md-6">
+                                  <input type="text" class="form-control" name="provisionAccessKey"
+                                  ng-model="vm.installForm.provision.amazonKeys.data.accessKey" ng-disabled="vm.installing || vm.saving"/>
                                 </div>
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">AWS Secret Key</label>
-                                  <div class="col-md-6">
-                                    <input type="text" class="form-control" name="provisionSecretKey"
-                                    ng-model="vm.installForm.provision.amazonKeys.data.secretKey" ng-disabled="vm.installing || vm.saving"/>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
-                          <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
-                            <div class="col-md-12">
-                              <form class="form-horizontal" role="form">
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">Default Instance size</label>
-                                  <div class="col-md-6">
-                                    <input type="text" class="form-control" name="defaultMinionInstanceSize"
-                                    ng-model="vm.installForm.systemSettings.defaultMinionInstanceSize" ng-disabled="vm.installing || vm.saving"/>
-                                  </div>
-                                </div>
-                              </form>
-                              <hr/>
-                            </div>
-                          </div>
-                          <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
-                            <div class="col-md-12">
-                              <form class="form-horizontal" role="form">
-                                <div class="m-b-20 font-14 col-md-offset-1">
-                                </div>
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">
-                                    <span title="This is the interval after which the node goes into cached state if it is idle.">Node cache interval (in mins)
-                                      <span class="glyphicon glyphicon-info-sign"></span>
-                                    </span>
-                                  </label>
-                                  <div class="col-md-6">
-                                    <input type="number" min="1" class="form-control" name="nodeCacheIntervalMS"
-                                    ng-model="vm.installForm.systemSettings.nodeCacheIntervalMS" ng-disabled="vm.installing || vm.saving"/>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                            <div class="col-md-12">
-                              <form class="form-horizontal" role="form">
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">
-                                    <span title="This is the day of week on which cached nodes will be stopped.">Day of week when Cached nodes are Stopped
-                                      <span class="glyphicon glyphicon-info-sign"></span>
-                                    </span>
-                                  </label>
-                                  <div class="col-md-6">
-                                    <select class="form-control"
-                                      ng-disabled="vm.installing || vm.saving"
-                                      ng-model="vm.installForm.systemSettings.nodeStopDayOfWeek">
-                                      <option value="0">Sunday</option>
-                                      <option value="1">Monday</option>
-                                      <option value="2">Tuesday</option>
-                                      <option value="3">Wednesday</option>
-                                      <option value="4">Thursday</option>
-                                      <option value="5">Friday</option>
-                                      <option value="6">Saturday</option>
-                                    </select>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                            <div class="col-md-12">
-                              <form class="form-horizontal" role="form">
-                                <div class="form-group">
-                                  <label class="col-md-2 control-label">
-                                    <span title="This is the interval after which the Cached node goes into Stopped state.">Node stop interval (in days)
-                                      <span class="glyphicon glyphicon-info-sign"></span>
-                                    </span>
-                                  </label>
-                                  <div class="col-md-6">
-                                    <input type="number" min="1" class="form-control" name="nodeStopIntervalDays"
-                                    ng-model="vm.installForm.systemSettings.nodeStopIntervalDays" ng-disabled="vm.installing || vm.saving"/>
-                                  </div>
-                                </div>
-                              </form></hr>
-                            </div>
-                          </div>
-                          <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
-                            <hr />
-                            <div class="col-md-12">
-                              <label class="col-md-3 textAlignNone control-label">System Machine Images</label>
-                              <button class="btn btn-sm btn-default pull-right"
-                                ng-if="vm.installForm.systemSettings.allowDynamicNodes"
-                                ng-click="vm.addSystemMachineImage()"
-                                ng-disabled="!vm.installForm.provision.amazonKeys.data.accessKey ||
-                                  !vm.installForm.provision.amazonKeys.data.secretKey">
-                                Add another machine image
-                              </button>
-                            </div>
-                            <div class="col-md-12">
-                              <label class="col-md-3 textAlignNone control-label">
-                                Search:
-                                <input ng-model="smiSearchString" class="form-control" placeholder="Search">
-                              </label>
-                            </div>
-                            <div class="col-md-12 m-t-15">
-                              <div style="overflow: auto;">
-                                <table class="table table-striped table-bordered table-condensed m-0">
-                                  <thead>
-                                    <tr>
-                                      <th>Name</th>
-                                      <th>Description</th>
-                                      <th>Shippable AMI Id</th>
-                                      <th>Region</th>
-                                      <th>Key pair name</th>
-                                      <th>Security group</th>
-                                      <th>Subnet ID</th>
-                                      <th>SSH User</th>
-                                      <th>SSH Port</th>
-                                      <th>Action</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr ng-repeat="smi in vm.installForm.systemMachineImages | filter: smiSearchString">
-                                      <td>{{smi.name}}</td>
-                                      <td>{{smi.description}}</td>
-                                      <td>{{smi.externalId}}</td>
-                                      <td>{{smi.region}}</td>
-                                      <td>{{smi.keyName}}</td>
-                                      <td>{{smi.securityGroup}}</td>
-                                      <td>{{smi.subnetId}}</td>
-                                      <td>{{smi.sshUser}}</td>
-                                      <td>{{smi.sshPort}}</td>
-                                      <td>
-                                        <button class="btn btn-sm btn-default"
-                                          ng-click="vm.updateSMI(smi)"
-                                          ng-disabled="!vm.installForm.provision.amazonKeys.data.accessKey ||
-                                          !vm.installForm.provision.amazonKeys.data.secretKey">Edit</button>
-                                        <button class="btn btn-danger btn-sm"
-                                          ng-click="vm.showRemoveSMIModal(smi)">
-                                          Remove
-                                        </button>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
                               </div>
+                              <div class="form-group">
+                                <label class="col-md-2 control-label">AWS Secret Key</label>
+                                <div class="col-md-6">
+                                  <input type="text" class="form-control" name="provisionSecretKey"
+                                  ng-model="vm.installForm.provision.amazonKeys.data.secretKey" ng-disabled="vm.installing || vm.saving"/>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--
+                      Keys for GCloud dynamic nodes
+                      TODO: Enable this for server installs once things calm down.
+                    -->
+                    <div class="row" ng-if="vm.admiralEnv.IS_SERVER === false">
+                      <div class="col-sm-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Google Cloud</b></h4>
+                          <br />
+                          <div class="toggle-bar">
+                            <input id="checkbox_for_dynamic_nodes" type="checkbox"
+                              ng-model="vm.installForm.provision.gcloudKey.isEnabled" ng-change="vm.installForm.systemSettings.allowDynamicNodes = vm.installForm.provision.amazonKeys.isEnabled || vm.installForm.provision.gcloudKey.isEnabled" ng-disabled="vm.installing || vm.saving" class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                            <label for="checkbox_for_dynamic_nodes">
+                              <b>Enable Google Cloud on-demand node pools</b>
+                            </label>
+                            <p class="text-muted font-13 help-block">Enabling and configuring this will allow on-demand node pools to be created on Google Cloud. Nodes in this pool will be automatically provisioned and destroyed.</p>
+                          </div>
+                          <div ng-if="vm.installForm.provision.gcloudKey.isEnabled">
+                            <form class="form-horizontal" role="form">
+                              <div class="form-group">
+                                <label class="col-md-2 control-label">JSON Key</label>
+                                <div class="col-md-6">
+                                  <textarea type="text" class="form-control" ng-model="vm.installForm.provision.gcloudKey.data.JSON_key" ng-disabled="vm.installing || vm.saving"/>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--
+                      System Machine Images
+                    -->
+                    <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                      <div class="col-md-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>System Machine Images</b></h4>
+                          <br />
+                          <label>
+                            <input ng-model="smiSearchString" class="form-control" placeholder="Search">
+                          </label>
+                          <button class="btn btn-sm btn-default pull-right"
+                            ng-if="vm.installForm.systemSettings.allowDynamicNodes"
+                            ng-click="vm.addSystemMachineImage()"
+                            ng-disabled="!vm.installForm.provision.amazonKeys.data.accessKey ||
+                              !vm.installForm.provision.amazonKeys.data.secretKey">
+                            Add another machine image
+                          </button>
+
+                          <div class="m-t-15">
+                            <div style="overflow: auto;">
+                              <table class="table table-striped table-bordered table-condensed m-0">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Shippable AMI Id</th>
+                                    <th>Region</th>
+                                    <th>Key pair name</th>
+                                    <th>Security group</th>
+                                    <th>Subnet ID</th>
+                                    <th>SSH User</th>
+                                    <th>SSH Port</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr ng-repeat="smi in vm.installForm.systemMachineImages | filter: smiSearchString">
+                                    <td>{{smi.name}}</td>
+                                    <td>{{smi.description}}</td>
+                                    <td>{{smi.externalId}}</td>
+                                    <td>{{smi.region}}</td>
+                                    <td>{{smi.keyName}}</td>
+                                    <td>{{smi.securityGroup}}</td>
+                                    <td>{{smi.subnetId}}</td>
+                                    <td>{{smi.sshUser}}</td>
+                                    <td>{{smi.sshPort}}</td>
+                                    <td>
+                                      <button class="btn btn-sm btn-default"
+                                        ng-click="vm.updateSMI(smi)"
+                                        ng-disabled="!vm.installForm.provision.amazonKeys.data.accessKey ||
+                                        !vm.installForm.provision.amazonKeys.data.secretKey">Edit</button>
+                                      <button class="btn btn-danger btn-sm"
+                                        ng-click="vm.showRemoveSMIModal(smi)">
+                                        Remove
+                                      </button>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+
+
+                    <!--
+                      Cache configuration for dynamic nodes
+                    -->
+                    <div class="row" ng-if="vm.installForm.systemSettings.allowDynamicNodes">
+                      <div class="col-md-12">
+                        <div class="card-box">
+                          <h4 class="m-t-0 header-title"><b>Cache Config</b></h4>
+                          <form class="form-horizontal" role="form">
+                            <div class="m-b-20 font-14 col-md-offset-1">
+                            </div>
+                            <div class="form-group">
+                              <label class="col-md-2 control-label">
+                                <span title="This is the interval after which the node goes into cached state if it is idle.">Node cache interval (in mins)
+                                  <span class="glyphicon glyphicon-info-sign"></span>
+                                </span>
+                              </label>
+                              <div class="col-md-6">
+                                <input type="number" min="1" class="form-control" name="nodeCacheIntervalMS"
+                                ng-model="vm.installForm.systemSettings.nodeCacheIntervalMS" ng-disabled="vm.installing || vm.saving"/>
+                              </div>
+                            </div>
+                          </form>
+
+                          <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                              <label class="col-md-2 control-label">
+                                <span title="This is the day of week on which cached nodes will be stopped.">Day of week when Cached nodes are Stopped
+                                  <span class="glyphicon glyphicon-info-sign"></span>
+                                </span>
+                              </label>
+                              <div class="col-md-6">
+                                <select class="form-control"
+                                  ng-disabled="vm.installing || vm.saving"
+                                  ng-model="vm.installForm.systemSettings.nodeStopDayOfWeek">
+                                  <option value="0">Sunday</option>
+                                  <option value="1">Monday</option>
+                                  <option value="2">Tuesday</option>
+                                  <option value="3">Wednesday</option>
+                                  <option value="4">Thursday</option>
+                                  <option value="5">Friday</option>
+                                  <option value="6">Saturday</option>
+                                </select>
+                              </div>
+                            </div>
+                          </form>
+
+                          <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                              <label class="col-md-2 control-label">
+                                <span title="This is the interval after which the Cached node goes into Stopped state.">Node stop interval (in days)
+                                  <span class="glyphicon glyphicon-info-sign"></span>
+                                </span>
+                              </label>
+                              <div class="col-md-6">
+                                <input type="number" min="1" class="form-control" name="nodeStopIntervalDays"
+                                ng-model="vm.installForm.systemSettings.nodeStopIntervalDays" ng-disabled="vm.installing || vm.saving"/>
+                              </div>
+                            </div>
+                          </form></hr>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
