@@ -2258,9 +2258,7 @@
                           </label>
                           <button class="btn btn-sm btn-default pull-right"
                             ng-if="vm.installForm.systemSettings.allowDynamicNodes"
-                            ng-click="vm.addSystemMachineImage()"
-                            ng-disabled="!vm.installForm.provision.amazonKeys.data.accessKey ||
-                              !vm.installForm.provision.amazonKeys.data.secretKey">
+                            ng-click="vm.addSystemMachineImage()">
                             Add another machine image
                           </button>
 
@@ -2270,6 +2268,7 @@
                                 <thead>
                                   <tr>
                                     <th>Name</th>
+                                    <th>Provider</th>
                                     <th>Description</th>
                                     <th>Shippable AMI Id</th>
                                     <th>Region</th>
@@ -2284,6 +2283,7 @@
                                 <tbody>
                                   <tr ng-repeat="smi in vm.installForm.systemMachineImages | filter: smiSearchString">
                                     <td>{{smi.name}}</td>
+                                    <td>{{smi.provider}}</td>
                                     <td>{{smi.description}}</td>
                                     <td>{{smi.externalId}}</td>
                                     <td>{{smi.region}}</td>
@@ -2293,12 +2293,10 @@
                                     <td>{{smi.sshUser}}</td>
                                     <td>{{smi.sshPort}}</td>
                                     <td>
-                                      <button class="btn btn-sm btn-default"
-                                        ng-click="vm.updateSMI(smi)"
-                                        ng-disabled="!vm.installForm.provision.amazonKeys.data.accessKey ||
-                                        !vm.installForm.provision.amazonKeys.data.secretKey">Edit</button>
-                                      <button class="btn btn-danger btn-sm"
-                                        ng-click="vm.showRemoveSMIModal(smi)">
+                                      <button class="btn btn-sm btn-default" ng-click="vm.updateSMI(smi)">
+                                        Edit
+                                      </button>
+                                      <button class="btn btn-danger btn-sm" ng-click="vm.showRemoveSMIModal(smi)">
                                         Remove
                                       </button>
                                     </td>
@@ -4179,8 +4177,9 @@
           <div class="form-group">
             <label class="col-md-3 control-label">Provider</label>
             <div class="col-md-9" ng-class="vm.selectedSMI.provider ? '' : 'has-error'">
-              <input type="text" class="form-control" name="Provider"
-              ng-model="vm.selectedSMI.provider" ng-disabled="true"/>
+              <select class="form-control" ng-model="vm.selectedSMI.provider"
+                ng-options="provider.name as provider.displayName for provider in vm.providers">
+              </select>
             </div>
           </div>
           <div class="form-group">
