@@ -13,6 +13,8 @@ export ADMIRAL_IMAGE="u16admiral"
 __check_dependencies() {
   __process_marker "Checking dependencies"
 
+  apt-get update
+
   ################## Install rsync  ######################################
   if type rsync &> /dev/null && true; then
     __process_msg "'rsync' already installed"
