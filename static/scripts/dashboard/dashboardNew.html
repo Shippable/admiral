@@ -3396,6 +3396,103 @@
             </div>
           </div><!-- END col-md-12 -->
 
+          <!-- start enable SCMs section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet">
+                <div data-toggle="collapse" class="portlet-heading cursor-pointer" data-target="#enable-addons-scms">
+                  <h3 class="portlet-title text-dark">
+                    Source Control Management Providers
+                  </h3>
+                  <div class="portlet-widgets">
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-target="#enable-addons-scms" class="{{vm.initialized ? 'collapsed' : ''}}"><i class="ion-minus-round cursor-pointer"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div id="enable-addons-scms" class="panel-collapse collapse">
+                  <div class="portlet-body">
+
+                    <div class="portlet m-t-30">
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                          <div class="card-box">
+                            <table class="table table-striped m-0">
+                              <tbody>
+                                <tr>
+                                  <td>{{vm.addonsForm.bitbucket.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
+                                      ng-model="vm.addonsForm.bitbucket.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.bitbucketServer.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch" ng-change="vm.switchToggle()"
+                                      ng-disabled="vm.installingAddons || vm.resetSwitchForAmazonKeys"
+                                      ng-model="vm.addonsForm.bitbucketServer.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.bitbucketServerBasic.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
+                                      ng-model="vm.bitbucketServerBasic.Docker.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.github.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
+                                      ng-model="vm.addonsForm.github.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.githubEnterprise.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
+                                      ng-model="vm.addonsForm.githubEnterprise.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{{vm.addonsForm.gitlab.displayName}}</td>
+                                  <td class="text-right">
+                                    <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
+                                      ng-model="vm.addonsForm.gitlab.isEnabled"
+                                      ui-switch="{color: '#00b19d'}"
+                                    />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- end scms -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- END col-md-12 -->
+
           <!-- start enable Others section -->
           <div class="row">
             <div class="col-md-12">

@@ -555,6 +555,18 @@
           displayName: '',
           isEnabled: true
         },
+        bitbucket: {
+          displayName: '',
+          isEnabled: false
+        },
+        bitbucketServer: {
+          displayName: '',
+          isEnabled: false
+        },
+        bitbucketServerBasic: {
+          displayName: '',
+          isEnabled: false
+        },
         CLUSTER: {
           displayName: '',
           isEnabled: false
@@ -598,6 +610,18 @@
         gcloudKey: {
           displayName: '',
           isEnabled: true
+        },
+        github: {
+          displayName: '',
+          isEnabled: false
+        },
+        githubEnterprise: {
+          displayName: '',
+          isEnabled: false
+        },
+        gitlab: {
+          displayName: '',
+          isEnabled: false
         },
         GKE: {
           displayName: '',
@@ -3854,6 +3878,8 @@
               if (err)
                 return done(err);
 
+              $scope.vm.addonsForm[scmName].isEnabled = scmObject.isEnabled;
+
               return done();
             }
           );
@@ -4503,7 +4529,14 @@
 
           admiralApiAdapter.putMasterIntegration(masterInt.id, update,
             function (err) {
-              return done(err);
+              if (err)
+                return done(err);
+
+              if ($scope.vm.installForm.scm[masterIntName])
+                $scope.vm.installForm.scm[masterIntName].isEnabled =
+                  addonsMasterInt.isEnabled;
+
+              return done();
             }
           );
         },
