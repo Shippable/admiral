@@ -3433,8 +3433,8 @@
                                 <tr>
                                   <td>{{vm.addonsForm.bitbucketServer.displayName}}</td>
                                   <td class="text-right">
-                                    <input type="checkbox" class="js-switch" ng-change="vm.switchToggle()"
-                                      ng-disabled="vm.installingAddons || vm.resetSwitchForAmazonKeys"
+                                    <input type="checkbox" class="js-switch"
+                                      ng-disabled="vm.installingAddons"
                                       ng-model="vm.addonsForm.bitbucketServer.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
@@ -3445,7 +3445,7 @@
                                   <td class="text-right">
                                     <input type="checkbox" class="js-switch"
                                       ng-disabled="vm.installingAddons"
-                                      ng-model="vm.bitbucketServerBasic.Docker.isEnabled"
+                                      ng-model="vm.addonsForm.bitbucketServerBasic.isEnabled"
                                       ui-switch="{color: '#00b19d'}"
                                     />
                                   </td>
