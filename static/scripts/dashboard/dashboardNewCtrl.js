@@ -3720,12 +3720,6 @@
             isEnabled: provisionIntegration.isEnabled
           };
 
-          // TODO: Remove this once all the references in the system
-          // have been updated to correctly handle multiple "provision"
-          // providers.
-          if (bag.masterName === 'gcloudKey')
-            bag.name = 'provision-gcloud';
-
           updateSystemIntegration(bag,
             function (err) {
               return nextIntegration(err);
