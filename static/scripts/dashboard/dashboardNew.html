@@ -665,7 +665,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bb_scm" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucket.isEnabled"
-                                  ng-disabled="vm.installForm.auth.bitbucketKeys.isEnabled || vm.initializing || vm.installing || vm.saving"
+                                  ng-disabled="vm.installForm.scm.bitbucket.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bb_scm">
                                   <b> SCM </b>
@@ -746,7 +746,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bbs_scm" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucketServer.isEnabled"
-                                  ng-disabled="vm.installForm.auth.bitbucketServerKeys.isEnabled || vm.initializing || vm.installing || vm.saving"
+                                  ng-disabled="vm.installForm.scm.bitbucketServer.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bbs_scm">
                                   <b> SCM </b>
@@ -829,7 +829,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_bbs_basic_scm" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucketServerBasic.isEnabled"
-                                  ng-disabled="vm.installForm.auth.bitbucketServerBasicAuth.isEnabled || vm.initializing || vm.installing || vm.saving"
+                                  ng-disabled="vm.installForm.scm.bitbucketServerBasic.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_bbs_basic_scm">
                                   <b> SCM </b>
@@ -890,7 +890,7 @@
                               </div>
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_github_scm" type="checkbox"
-                                  ng-model="vm.installForm.scm.github.isEnabled" ng-disabled="vm.installForm.auth.githubKeys.isEnabled || vm.initializing || vm.installing || vm.saving"
+                                  ng-model="vm.installForm.scm.github.isEnabled" ng-disabled="vm.installForm.scm.github.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_github_scm">
                                   <b> SCM </b>
@@ -971,7 +971,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_ghe_scm" type="checkbox"
                                   ng-model="vm.installForm.scm.githubEnterprise.isEnabled"
-                                  ng-disabled="vm.installForm.auth.githubEnterpriseKeys.isEnabled"
+                                  ng-disabled="vm.installForm.scm.githubEnterprise.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_ghe_scm">
                                   <b> SCM </b>
@@ -1059,7 +1059,7 @@
                               <div class="toggle-bar checkbox-inline">
                                 <input id="checkbox_for_gitlab_scm" type="checkbox"
                                   ng-model="vm.installForm.scm.gitlab.isEnabled"
-                                  ng-disabled="vm.installForm.auth.gitlabKeys.isEnabled"
+                                  ng-disabled="vm.installForm.scm.gitlab.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
                                 <label for="checkbox_for_gitlab_scm">
                                   <b> SCM </b>
