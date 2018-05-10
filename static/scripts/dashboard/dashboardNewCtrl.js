@@ -4634,7 +4634,10 @@
       if (_.isEmpty(systemInt))
         systemInt = $scope.vm.installForm.auth[masterName + 'Auth'];
 
-      $scope.vm.installForm.scm[masterName].isEnabled = systemInt.isEnabled;
+      $scope.vm.installForm.scm[masterName].disableToggle = true;
+
+      if (systemInt.isEnabled)
+        $scope.vm.installForm.scm[masterName].isEnabled = true;
 
       var bag = {
         name: 'auth',
@@ -4650,6 +4653,7 @@
             postSystemIntegration.bind(null, bag)
           ],
           function (err) {
+            $scope.vm.installForm.scm[masterName].disableToggle = false;
             if (err)
               return popup_horn.error(err);
             if (bag.systemIntegrationId) {
@@ -4671,6 +4675,7 @@
             deleteSystemIntegration.bind(null, bag)
           ],
           function (err) {
+            $scope.vm.installForm.scm[masterName].disableToggle = false;
             if (err)
               return popup_horn.error(err);
           }
