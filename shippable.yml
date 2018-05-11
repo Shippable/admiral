@@ -29,7 +29,7 @@ jobs:
       nodePool: x86_u1404_dyn_large_01
     steps:
       - IN: admiral_sh_repo
-      - IN: u14microbase_dd_img
+#      - IN: u14microbase_dd_img
       - IN: shipit_bits_access_cli
         switch: off
         scopes:
@@ -65,7 +65,7 @@ jobs:
     dependencyMode: strict
     steps:
       - IN: admiral_sh_repo
-      - IN: u16microbase_dd_img
+#      - IN: u16microbase_dd_img
       - IN: shipit_bits_access_cli
         switch: off
         scopes:
