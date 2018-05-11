@@ -4600,6 +4600,11 @@ do $$
       alter table "accountIntegrations" add column "isInternal" BOOLEAN;
     end if;
 
+    -- Add isBasic column to accountIntegrations table
+    if not exists (select 1 from information_schema.columns where table_name = 'accountIntegrations' and column_name = 'isBasic') then
+      alter table "accountIntegrations" add column "isBasic" BOOLEAN;
+    end if;
+
     -- Add projectId column to jobTestReports table and populate projectId for existing jobTestReports
     if not exists (select 1 from information_schema.columns where table_name = 'jobTestReports' and column_name = 'projectId') then
       alter table "jobTestReports" add column "projectId" varchar(24);
