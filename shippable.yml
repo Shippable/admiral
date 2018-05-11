@@ -201,3 +201,35 @@ jobs:
     on_success:
       script:
         - shipctl put_resource_state_multi $JOB_NAME "versionName=$REL_VER" "TAG_COMMIT_SHA=$REPO_COMMIT" "TAG_IMG=$REL_VER"
+
+  - name: u16admiral_file_pack
+    type: runSh
+    triggerMode: parallel
+    dependencyMode: strict
+    steps:
+      - IN: u16admiral_tag
+      - IN: admiral_sh_repo
+        switch: off
+      - IN: shipit_bits_access_cli
+        switch: off
+      - TASK:
+          name: u16admiral_pack
+          runtime:
+            options:
+              env:
+                - ARTIFACTS_BUCKET: "s3://shippable-artifacts/admiral"
+                - RES_VER: "u16admiral_tag"
+                - RES_REPO: "admiral_sh_repo"
+                - CONTEXT: "admiral"
+          script:
+            - REPO_COMMIT=$(shipctl get_resource_version_key "$RES_REPO" "shaData.commitSha")
+            - REL_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
+            - BINARY_TAR="$CONTEXT-$REL_VER-.tar.gz"
+            - ARTIFACT_TAR="/tmp/$CONTEXT-$REL_VER.tar.gz"
+            - S3_BUCKET_BINARY_DIR="$ARTIFACTS_BUCKET/$REL_VER/"
+            - pushd $(shipctl get_resource_state "$RES_REPO")
+            - git archive --format=tar.gz --output=$ARTIFACT_TAR --prefix=$CONTEXT/ $REL_VER
+            - aws s3 cp --acl public-read "$ARTIFACT_TAR" "$S3_BUCKET_BINARY_DIR"
+    on_success:
+      script:
+        - shipctl put_resource_state_multi $JOB_NAME "versionName=$REPO_COMMIT" "FILE_REPO_COMMIT_SHA=$REPO_COMMIT" "S3_BUCKET=$S3_BUCKET_BINARY_DIR" "S3_FILENAME=$ARTIFACT_TAR"
