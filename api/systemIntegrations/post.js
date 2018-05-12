@@ -256,11 +256,13 @@ function _postProvider(bag, next) {
     return next();
   }
 
-  // Strip 'Keys' from the end of the name
+  // Strip 'Keys' and 'BasicAuth' from the end of the name
   // This is to deal with the fact that providers will be dynamically created
   // for auth providers when the system integration is created. The system
-  // integrations are named "githubKeys", "bitbucketKeys', etc., whereas the
-  // SCM account integrations are always named "github" and "bitbucket".
+  // integrations are named "githubKeys", "bitbucketKeys', "bitbucketServerKeys'
+  // "bitbucketServerBasicAuth' etc., whereas the
+  // SCM account integrations are always named "github", "bitbucket",
+  // "bitbucketServer" and "bitbucketServerBasic"
   var name = bag.reqBody.masterName;
   if (name.endsWith('Keys'))
     name = name.replace('Keys', '');
