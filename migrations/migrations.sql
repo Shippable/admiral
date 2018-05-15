@@ -246,21 +246,6 @@ do $$
       alter table "projects" alter column "sourceDefaultBranch" type varchar(255);
     end if;
 
-    -- change type of "name" to varchar(255) in clusters table
-    if exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'name') then
-      alter table "clusters" alter column "name" type varchar(255);
-    end if;
-
-    -- add "timeoutMS" to clusters table
-    if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'timeoutMS') then
-      alter table "clusters" add column "timeoutMS" INTEGER;
-    end if;
-
-    -- add "timeoutMS" to systemClusters table
-    if not exists (select 1 from information_schema.columns where table_name = 'systemClusters' and column_name = 'timeoutMS') then
-      alter table "systemClusters" add column "timeoutMS" INTEGER;
-    end if;
-
     -- Add "isInternal" to accountTokens table
     if not exists (select 1 from information_schema.columns where table_name = 'accountTokens' and column_name = 'isInternal') then
       alter table "accountTokens" add column "isInternal" BOOLEAN DEFAULT false;
@@ -5111,7 +5096,6 @@ do $$
         update "runtimeTemplates" set "isDefault" = true where "version" = 'v6.4.4' and "isDefault" = false;
       end if;
 
-
     -- end runtimeTemplates
     end if;
 
@@ -5202,11 +5186,6 @@ do $$
       update "dailyAggs" set "buildJobCount"=0 WHERE "buildJobCount" IS NULL;
     end if;
 
-    -- Remove not null constraint on clusters.queueName
-    if exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'queueName') then
-      alter table "clusters" alter "queueName" drop not null;
-    end if;
-
     -- Remove lastHubspotSyncAt field from the accounts schema
     if exists (select 1 from information_schema.columns where table_name = 'accounts' and column_name = 'lastHubspotSyncAt') then
       alter table "accounts" drop column "lastHubspotSyncAt";
@@ -5227,21 +5206,43 @@ do $$
       if not exists (select 1 from pg_constraint where conname = 'sytemNodes_systemClusterId_fkey') then
         alter table "systemNodes" add constraint "sytemNodes_systemClusterId_fkey" foreign key ("systemClusterId") references "systemClusters"(id) on update restrict on delete restrict;
       end if;
+
+      -- Add maxDiskUsagePercentage flag to systemClusters
+      if not exists (select 1 from information_schema.columns where table_name = 'systemClusters' and column_name = 'maxDiskUsagePercentage') then
+        alter table "systemClusters" add column "maxDiskUsagePercentage" INTEGER;
+      end if;
+
+      -- add "timeoutMS" to systemClusters table
+      if not exists (select 1 from information_schema.columns where table_name = 'systemClusters' and column_name = 'timeoutMS') then
+        alter table "systemClusters" add column "timeoutMS" INTEGER;
+      end if;
     end if;
 
-    -- Add maxDiskUsagePercentage flag to systemClusters
-    if not exists (select 1 from information_schema.columns where table_name = 'systemClusters' and column_name = 'maxDiskUsagePercentage') then
-      alter table "systemClusters" add column "maxDiskUsagePercentage" INTEGER;
-    end if;
+    if exists (select 1 from information_schema.columns where table_name = 'clusters') then
+      -- Add maxDiskUsagePercentage flag to clusters
+      if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'maxDiskUsagePercentage') then
+        alter table "clusters" add column "maxDiskUsagePercentage" INTEGER;
+      end if;
 
-    -- Add maxDiskUsagePercentage flag to clusters
-    if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'maxDiskUsagePercentage') then
-      alter table "clusters" add column "maxDiskUsagePercentage" INTEGER;
-    end if;
+      -- Add propertyBag column to clusters
+      if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'propertyBag') then
+        alter table "clusters" add column "propertyBag" TEXT;
+      end if;
 
-    -- Add propertyBag column to clusters
-    if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'propertyBag') then
-      alter table "clusters" add column "propertyBag" TEXT;
+      -- change type of "name" to varchar(255) in clusters table
+      if exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'name') then
+        alter table "clusters" alter column "name" type varchar(255);
+      end if;
+
+      -- add "timeoutMS" to clusters table
+      if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'timeoutMS') then
+        alter table "clusters" add column "timeoutMS" INTEGER;
+      end if;
+
+      -- Remove not null constraint on clusters.queueName
+      if exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'queueName') then
+        alter table "clusters" alter "queueName" drop not null;
+      end if;
     end if;
 
     -- Add setAsStopped column to clusterNodes table
