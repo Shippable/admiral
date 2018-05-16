@@ -366,6 +366,8 @@ function _linkSystemNodesToDefaultCluster(bag, next) {
 }
 
 function _getSubscriptions(bag, next) {
+  if (!_.isEmpty(bag.defaultSystemCluster)) return next();
+
   var who = bag.who + '|' + _getSubscriptions.name;
   logger.verbose(who, 'Inside');
 
@@ -383,6 +385,8 @@ function _getSubscriptions(bag, next) {
 }
 
 function _moveSubscriptionsToGrisham(bag, next) {
+  if (!_.isEmpty(bag.defaultSystemCluster)) return next();
+
   var who = bag.who + '|' + _moveSubscriptionsToGrisham.name;
   logger.verbose(who, 'Inside');
 
