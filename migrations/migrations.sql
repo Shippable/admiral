@@ -5102,6 +5102,16 @@ do $$
         alter table "runtimeTemplates" add column "isAvailable" BOOLEAN NOT NULL DEFAULT true;
       end if;
 
+      -- Marking deprecated runtimeTemplates as unavailable
+
+      if exists (select 1 from "runtimeTemplates" where "version" = 'Stable' and "isAvailable" = true) then
+        update "runtimeTemplates" set "isAvailable" = false where "version" = 'Stable' and "isAvailable" = true;
+      end if;
+
+      if exists (select 1 from "runtimeTemplates" where "version" = 'Unstable' and "isAvailable" = true) then
+        update "runtimeTemplates" set "isAvailable" = false where "version" = 'Unstable' and "isAvailable" = true;
+      end if;
+
     -- end runtimeTemplates
     end if;
 
