@@ -5096,6 +5096,22 @@ do $$
         update "runtimeTemplates" set "isDefault" = true where "version" = 'v6.4.4' and "isDefault" = false;
       end if;
 
+      -- Add isAvailable column to runtimeTemplates
+
+      if not exists (select 1 from information_schema.columns where table_name = 'runtimeTemplates' and column_name = 'isAvailable') then
+        alter table "runtimeTemplates" add column "isAvailable" BOOLEAN NOT NULL DEFAULT true;
+      end if;
+
+      -- Marking deprecated runtimeTemplates as unavailable
+
+      if exists (select 1 from "runtimeTemplates" where "version" = 'Stable' and "isAvailable" = true) then
+        update "runtimeTemplates" set "isAvailable" = false where "version" = 'Stable' and "isAvailable" = true;
+      end if;
+
+      if exists (select 1 from "runtimeTemplates" where "version" = 'Unstable' and "isAvailable" = true) then
+        update "runtimeTemplates" set "isAvailable" = false where "version" = 'Unstable' and "isAvailable" = true;
+      end if;
+
     -- end runtimeTemplates
     end if;
 
