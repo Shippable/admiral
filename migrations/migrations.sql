@@ -88,9 +88,9 @@ do $$
       values ('sysVersionFormat', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a',  '2016-06-01', '2016-06-01');
     end if;
 
-    -- Drop sysWebhookExternalId column from systemProperties
-    if exists (select 1 from information_schema.columns where table_name = 'systemProperties' and column_name = 'sysWebhookExternalId') then
-      alter table "systemProperties" drop column "sysWebhookExternalId";
+    -- Delete sysWebhookExternalId from systemProperties
+    if exists (select 1 from information_schema.columns where table_name = 'systemProperties' and column_name = 'fieldName') then
+      delete from "systemProperties" where "fieldName"='sysWebhookExternalId';
     end if;
 
     -- Drop masterIntegration dependency from providers
