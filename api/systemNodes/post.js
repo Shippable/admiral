@@ -24,8 +24,9 @@ function post(req, res) {
   async.series(
     [
       _checkInputParams.bind(null, bag),
-      _getDefaultArchCode.bind(null, bag),
-      _getDefaultSystemMachineImage.bind(null, bag),
+      _getSystemCluster.bind(null, bag),
+      _getRuntimeTemplates.bind(null, bag),
+      _getAdmiralEnv.bind(null, bag),
       _post.bind(null, bag),
       _getSystemNode.bind(null, bag)
     ],
@@ -108,6 +109,72 @@ function _getDefaultSystemMachineImage(bag, next) {
   );
 }
 
+function _getSystemCluster(bag, next) {
+  var who = bag.who + '|' + _getSystemCluster.name;
+  logger.verbose(who, 'Inside');
+
+  var query = '';
+  bag.apiAdapter.getSystemClusters(query,
+    function (err, systemClusters) {
+      if (err)
+        return next(
+          new ActErr(who, err.id,
+            'getSystemClusters failed for query: ' + query +
+            ' with error: ' + err.message)
+        );
+
+      bag.systemCluster = _.findWhere(
+        systemClusters, { id: parseInt(bag.reqBody.systemClusterId) }
+      );
+
+      if (_.isEmpty(bag.systemCluster))
+        return next(
+          new ActErr(who, ActErr.DBEntityNotFound,
+            'System Cluster not found for id: ' + bag.reqBody.systemClusterId)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getRuntimeTemplates(bag, next) {
+
+  var who = bag.who + '|' + _getRuntimeTemplates.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getRuntimeTemplates(
+    function (err, runtimeTemplates) {
+      if (err)
+        return next(who, ActErr.OperationFailed,
+          'Failed to get runtimeTemplates:' + util.inspect(err));
+
+      bag.systemClusterRuntimeTemplate = _.findWhere(
+        runtimeTemplates, { id: bag.systemCluster.runtimeTemplateId }
+      );
+      return next();
+    }
+  );
+}
+
+function _getAdmiralEnv(bag, next) {
+  var who = bag.who + '|' + _getAdmiralEnv.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.getAdmiralEnv(
+    function (err, admiralEnv) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to get admiralEnv : ' + util.inspect(err))
+        );
+
+      bag.releaseVersion = admiralEnv.RELEASE;
+      return next();
+    }
+  );
+}
+
 function _post(bag, next) {
   var who = bag.who + '|' + _post.name;
   logger.verbose(who, 'Inside');
@@ -124,7 +191,10 @@ function _post(bag, next) {
     sourceId: bag.reqBody.sourceId,
     location: bag.reqBody.location,
     nodeTypeCode: bag.reqBody.nodeTypeCode,
-    execImage: bag.execImage,
+    execImage:  util.format(
+      '%s/%s:%s', bag.systemClusterRuntimeTemplate.drydockOrg,
+      bag.systemClusterRuntimeTemplate.reqProcImage,
+      bag.releaseVersion),
     systemClusterId: bag.reqBody.systemClusterId,
     createdBy: '54188262bc4d591ba438d62a',
     updatedBy: '54188262bc4d591ba438d62a'
