@@ -2906,6 +2906,24 @@ do $$
     );
 
     perform set_route_role(
+      routePattern := '/resources/:resourceId/version',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/resources/:resourceId/version',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/resources/:resourceId/version',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
       routePattern := '/resources',
       httpVerb := 'POST',
       roleCode := 6010
