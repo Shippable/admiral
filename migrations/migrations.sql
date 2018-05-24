@@ -5101,17 +5101,63 @@ do $$
         values (8000, 9005, 'v6.4.4', 'drydock', 'c7', 'v6.4.4', 'c7all', 'u16reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
       end if;
 
+      --------------------------------------------------------
+      -------------- v6.5.4 Templates ------------------------
+      --------------------------------------------------------
+
+      -- x86_64 Ubuntu_14.04
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v6.5.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9000, 'v6.5.4', 'drydock', 'u16', 'v6.5.4', 'u14all', 'u14reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+      end if;
+
+      -- x86_64 Ubuntu_16.04
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9001 and "version" = 'v6.5.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9001, 'v6.5.4', 'drydock', 'u16', 'v6.5.4', 'u16all', 'u16reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+      end if;
+
+      -- aarch64 Ubuntu_16.04
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'v6.5.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8001, 9001, 'v6.5.4', 'drydock', 'aarch64_u16', 'v6.5.4', 'aarch64_u16all', 'aarch64_u16reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+      end if;
+
+      -- x86_64 WindowsServer_2016
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9002 and "version" = 'v6.5.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9002, 'v6.5.4', 'drydock', 'w16', 'v6.5.4', 'w16', 'w16reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+      end if;
+
+      -- x86_64 macOS_10.12
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v6.5.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9003, 'v6.5.4', 'drydock', 'u16', 'v6.5.4', 'microbase', 'm10reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+      end if;
+
+      -- x86_64 CentOS_7
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9004 and "version" = 'v6.5.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9004, 'v6.5.4', 'drydock', 'c7', 'v6.5.4', 'c7all', 'u16reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+      end if;
+
+      -- x86_64 RHEL_7
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9005 and "version" = 'v6.5.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
+        values (8000, 9005, 'v6.5.4', 'drydock', 'c7', 'v6.5.4', 'c7all', 'u16reqproc', false, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+      end if;
+
       -- insert additional runtimeTemplates down here
 
       --------------------------------------------------------
       -------------- Update isDefault Templates --------------
       --------------------------------------------------------
-      if exists (select 1 from "runtimeTemplates" where "version" != 'v6.4.4' and "isDefault" = true) then
-        update "runtimeTemplates" set "isDefault" = false where "version" != 'v6.4.4' and "isDefault" = true;
+      if exists (select 1 from "runtimeTemplates" where "version" != 'v6.5.4' and "isDefault" = true) then
+        update "runtimeTemplates" set "isDefault" = false where "version" != 'v6.5.4' and "isDefault" = true;
       end if;
 
-      if exists (select 1 from "runtimeTemplates" where "version" = 'v6.4.4' and "isDefault" = false) then
-        update "runtimeTemplates" set "isDefault" = true where "version" = 'v6.4.4' and "isDefault" = false;
+      if exists (select 1 from "runtimeTemplates" where "version" = 'v6.5.4' and "isDefault" = false) then
+        update "runtimeTemplates" set "isDefault" = true where "version" = 'v6.5.4' and "isDefault" = false;
       end if;
 
       -- Add isAvailable column to runtimeTemplates
@@ -5128,6 +5174,18 @@ do $$
 
       if exists (select 1 from "runtimeTemplates" where "version" = 'Unstable' and "isAvailable" = true) then
         update "runtimeTemplates" set "isAvailable" = false where "version" = 'Unstable' and "isAvailable" = true;
+      end if;
+
+      if exists (select 1 from "runtimeTemplates" where "version" = 'v5.3.2' and "isAvailable" = true) then
+        update "runtimeTemplates" set "isAvailable" = false where "version" = 'v5.3.2' and "isAvailable" = true;
+      end if;
+
+      if exists (select 1 from "runtimeTemplates" where "version" = 'v5.4.1' and "isAvailable" = true) then
+        update "runtimeTemplates" set "isAvailable" = false where "version" = 'v5.4.1' and "isAvailable" = true;
+      end if;
+
+      if exists (select 1 from "runtimeTemplates" where "version" = 'v5.5.1' and "isAvailable" = true) then
+        update "runtimeTemplates" set "isAvailable" = false where "version" = 'v5.5.1' and "isAvailable" = true;
       end if;
 
     -- end runtimeTemplates
