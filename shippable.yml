@@ -149,6 +149,7 @@ jobs:
                  git push --delete up $REL_VER
                fi
             - |
+               export REL_VER_DATE=$(date +"%A, %b %d %Y")
                local template_file="releaseNotes/template.md"
                local master_notes="releaseNotes/master.md"
                local new_notes="releaseNotes/$REL_VER.md"
