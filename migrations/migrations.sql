@@ -5117,18 +5117,6 @@ do $$
         update "runtimeTemplates" set "isAvailable" = false where "version" = 'Unstable' and "isAvailable" = true;
       end if;
 
-      if exists (select 1 from "runtimeTemplates" where "version" = 'v5.3.2' and "isAvailable" = true) then
-        update "runtimeTemplates" set "isAvailable" = false where "version" = 'v5.3.2' and "isAvailable" = true;
-      end if;
-
-      if exists (select 1 from "runtimeTemplates" where "version" = 'v5.4.1' and "isAvailable" = true) then
-        update "runtimeTemplates" set "isAvailable" = false where "version" = 'v5.4.1' and "isAvailable" = true;
-      end if;
-
-      if exists (select 1 from "runtimeTemplates" where "version" = 'v5.5.1' and "isAvailable" = true) then
-        update "runtimeTemplates" set "isAvailable" = false where "version" = 'v5.5.1' and "isAvailable" = true;
-      end if;
-
     -- end runtimeTemplates
     end if;
 
