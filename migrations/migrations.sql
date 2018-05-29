@@ -5093,13 +5093,8 @@ do $$
       --------------------------------------------------------
       -------------- Update isDefault Templates --------------
       --------------------------------------------------------
-      if exists (select 1 from "runtimeTemplates" where "version" != 'v6.5.4' and "isDefault" = true) then
-        update "runtimeTemplates" set "isDefault" = false where "version" != 'v6.5.4' and "isDefault" = true;
-      end if;
-
-      if exists (select 1 from "runtimeTemplates" where "version" = 'v6.5.4' and "isDefault" = false) then
-        update "runtimeTemplates" set "isDefault" = true where "version" = 'v6.5.4' and "isDefault" = false;
-      end if;
+      update "runtimeTemplates" set "isDefault" = false where "version" != 'v6.5.4' and "isDefault" = true;
+      update "runtimeTemplates" set "isDefault" = true where "version" = 'v6.5.4' and "isDefault" = false;
 
       -- Add isAvailable column to runtimeTemplates
 
