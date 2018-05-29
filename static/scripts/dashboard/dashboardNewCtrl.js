@@ -251,6 +251,7 @@
       // map by systemInt name, then masterName
       installForm: {
         ignoreTLSErrors: false,
+        updatingAutoSync: false,
         api: {
           url: {
             isEnabled: true,
@@ -862,6 +863,7 @@
       isGlobalService: isGlobalService,
       logOutOfAdmiral: logOutOfAdmiral,
       switchToggle: switchToggle,
+      updateAutoSync: updateAutoSync,
       eulaText: '',
       runMode: 'production',
       allNodes: {}
@@ -1992,7 +1994,8 @@
             'defaultClusterType',
             'nodeCacheIntervalMS',
             'nodeStopDayOfWeek',
-            'nodeStopIntervalDays'
+            'nodeStopIntervalDays',
+            'autoSync'
           ];
 
           _.each(installPanelSystemSettings,
@@ -4682,6 +4685,25 @@
         );
       }
     }
+
+    function updateAutoSync() {
+      $scope.vm.updatingAutoSync = true;
+
+      var update = {
+        autoSync: !!$scope.vm.installForm.systemSettings.autoSync
+      };
+
+      admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
+        function (err) {
+          $scope.vm.updatingAutoSync = false;
+          if (err) {
+            $scope.vm.installForm.systemSettings.autoSync =
+              !$scope.vm.installForm.systemSettings.autoSync;
+            return popup_horn.error(err);
+          }
+        }
+      );
+    };
 
     function addSuperUser() {
       $scope.vm.superUsers.addingSuperUser = true;
