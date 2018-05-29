@@ -5073,7 +5073,7 @@ do $$
       -- x86_64 macOS_10.12
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9003 and "version" = 'v6.5.4') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "isAvailable", "createdAt", "updatedAt")
-        values (8000, 9003, 'v6.5.4', 'drydock', 'u16', 'v6.5.4', 'microbase', 'm10reqproc', false, true, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+        values (8000, 9003, 'v6.5.4', 'drydock', 'u16', 'v6.5.4', 'u16all', 'm10reqproc', false, true, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
       end if;
 
       -- x86_64 CentOS_7
