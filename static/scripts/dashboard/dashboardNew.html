@@ -3965,6 +3965,22 @@
           </div>
           <!-- END TLS -->
 
+          <!-- START AUTO-SYNC -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card-box">
+                <div class="toggle-bar">
+                  <input type="checkbox" id="checkbox_sync"
+                    ng-model="vm.installForm.systemSettings.autoSync"
+                    ng-disabled="vm.updatingAutoSync"
+                    ng-change="vm.updateAutoSync()"
+                    class="js-switch" ui-switch="{color: '#00b19d'}"/>
+                  <label for="checkbox_sync"><b>Automatically synchronize SCM (optional)</b></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END AUTO-SYNC -->
 
           <!-- START Manage System Superusers -->
           <div class="row">
