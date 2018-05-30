@@ -95,7 +95,40 @@ jobs:
         - shipctl put_resource_state_multi $JOB_NAME "versionName=$REL_VER" "IMG_REPO_COMMIT_SHA=$REPO_COMMIT"
         - shipctl put_resource_state_multi $IMG_OUT "versionName=$REL_VER" "IMG_REPO_COMMIT_SHA=$REPO_COMMIT" "BUILD_NUMBER=$BUILD_NUMBER"
 
-  - name: u16admiral_tag
+  - name: admiral_file_pack
+    type: runSh
+    triggerMode: parallel
+    dependencyMode: strict
+    steps:
+      - IN: admiral_sh_repo
+      - IN: shipit_bits_access_cli
+        switch: off
+      - TASK:
+          name: admiral_file_pack
+          runtime:
+            options:
+              env:
+                - CONTEXT: "admiral"
+                - TAG_VER: "master"
+                - S3_URL: "s3://shippable-artifacts/admiral"
+                - WEB_URL: "https://s3.amazonaws.com/shippable-artifacts/admiral"
+                - RES_REPO: "admiral_sh_repo"
+          script:
+            - REPO_COMMIT=$(shipctl get_resource_version_key "$RES_REPO" "shaData.commitSha")
+            - pushd $(shipctl get_resource_state "$RES_REPO")
+            - |
+               TAR_FILENAME="$CONTEXT-$TAG_VER.tar.gz"
+               git archive --format=tar.gz --output="/tmp/$TAR_FILENAME" --prefix=$CONTEXT/ $TAG_VER
+               aws s3 cp --acl public-read "/tmp/$TAR_FILENAME" "$S3_URL/$TAG_VER/"
+            - |
+               ZIP_FILENAME="$CONTEXT-$TAG_VER.zip"
+               git archive --format=zip --output="/tmp/$ZIP_FILENAME" $TAG_VER
+               aws s3 cp --acl public-read "/tmp/$ZIP_FILENAME" "$S3_URL/$TAG_VER/"
+    on_success:
+      script:
+        - shipctl put_resource_state_multi $JOB_NAME "versionName=$REPO_COMMIT" "TAG_VER=$TAG_VER" "FILE_REPO_COMMIT_SHA=$REPO_COMMIT" "WEB_URL=$WEB_URL" "S3_URL=$S3_URL" "TAR_FILENAME=$TAR_FILENAME" "ZIP_FILENAME=$ZIP_FILENAME"
+
+  - name: admiral_repo_tag
     type: runSh
     triggerMode: parallel
     dependencyMode: strict
@@ -103,41 +136,24 @@ jobs:
       - IN: prod_release
       - IN: admiral_sh_repo
         switch: off
-      - IN: u16admiral_sh_img
-        switch: off
       - IN: shipit_gh_ssh
         switch: off
-      - IN: shipit_bits_access_cli
-        switch: off
-        scopes:
-          - ecr
       - TASK:
-          name: u16_tag
+          name: admiral_repo_tag
           runtime:
             options:
               env:
                 - RES_VER: "prod_release"
-                - RES_IMG: "u16admiral_sh_img"
                 - RES_REPO: "admiral_sh_repo"
                 - GIT_PATH: "git@github.com:Shippable/admiral.git"
           script:
             - REL_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
-            - |
-               IMG_NAME=$(shipctl get_resource_version_key "$RES_IMG" "sourceName")
-               UP_IMG_TAG=$(shipctl get_resource_version_key "$RES_IMG" "versionName")
             - |
                pushd $(shipctl get_resource_meta "shipit_gh_ssh")
                  shipctl get_json_value integration.json 'privateKey' > gh_ssh.key
                  chmod 600 gh_ssh.key
                  ssh-add gh_ssh.key
                popd
-            - docker pull "$IMG_NAME:$UP_IMG_TAG"
-            - |
-               docker tag "$IMG_NAME:$UP_IMG_TAG" "$IMG_NAME:$REL_VER"
-               docker push "$IMG_NAME:$REL_VER"
-            - |
-               docker tag "$IMG_NAME:$UP_IMG_TAG" "$IMG_NAME:latest"
-               docker push "$IMG_NAME:latest"
             - pushd $(shipctl get_resource_state "$RES_REPO")
             - |
                git remote add up $GIT_PATH
@@ -167,12 +183,48 @@ jobs:
       script:
         - shipctl put_resource_state_multi $JOB_NAME "versionName=$REL_VER" "TAG_COMMIT_SHA=$REPO_COMMIT" "TAG_IMG=$REL_VER"
 
+  - name: u16admiral_tag
+    type: runSh
+    triggerMode: parallel
+    dependencyMode: strict
+    steps:
+      - IN: admiral_repo_tag
+      - IN: u16admiral_sh_img
+        switch: off
+      - IN: shipit_bits_access_cli
+        switch: off
+        scopes:
+          - ecr
+      - TASK:
+          name: u16admiral_tag
+          runtime:
+            options:
+              env:
+                - RES_VER: "admiral_repo_tag"
+                - RES_IMG: "u16admiral_sh_img"
+          script:
+            - REL_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
+            - REPO_COMMIT=$(shipctl get_resource_version_key "$RES_IMG" "shaData.commitSha")
+            - |
+               IMG_NAME=$(shipctl get_resource_version_key "$RES_IMG" "sourceName")
+               UP_IMG_TAG=$(shipctl get_resource_version_key "$RES_IMG" "versionName")
+            - docker pull "$IMG_NAME:$UP_IMG_TAG"
+            - |
+               docker tag "$IMG_NAME:$UP_IMG_TAG" "$IMG_NAME:$REL_VER"
+               docker push "$IMG_NAME:$REL_VER"
+            - |
+               docker tag "$IMG_NAME:$UP_IMG_TAG" "$IMG_NAME:latest"
+               docker push "$IMG_NAME:latest"
+    on_success:
+      script:
+        - shipctl put_resource_state_multi $JOB_NAME "versionName=$REL_VER" "TAG_COMMIT_SHA=$REPO_COMMIT" "TAG_IMG=$REL_VER"
+
   - name: u14admiral_tag
     type: runSh
     triggerMode: parallel
     dependencyMode: strict
     steps:
-      - IN: prod_release
+      - IN: admiral_repo_tag
       - IN: u14admiral_sh_img
         switch: off
       - IN: shipit_bits_access_cli
@@ -184,7 +236,7 @@ jobs:
           runtime:
             options:
               env:
-                - RES_VER: "prod_release"
+                - RES_VER: "admiral_repo_tag"
                 - RES_IMG: "u14admiral_sh_img"
           script:
             - REL_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
@@ -203,18 +255,22 @@ jobs:
       script:
         - shipctl put_resource_state_multi $JOB_NAME "versionName=$REL_VER" "TAG_COMMIT_SHA=$REPO_COMMIT" "TAG_IMG=$REL_VER"
 
-  - name: u16admiral_file_pack
+  - name: admiral_file_tag
     type: runSh
     triggerMode: parallel
     dependencyMode: strict
     steps:
       - IN: u16admiral_tag
+      - IN: u14admiral_tag
+        switch: off
+      - IN: admiral_file_pack
+        switch: off
       - IN: admiral_sh_repo
         switch: off
       - IN: shipit_bits_access_cli
         switch: off
       - TASK:
-          name: u16admiral_pack
+          name: admiral_file_tag
           runtime:
             options:
               env:
