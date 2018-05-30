@@ -26,7 +26,7 @@ jobs:
     triggerMode: parallel
     dependencyMode: strict
     runtime:
-      nodePool: x86_u1404_dyn_large_01
+      nodePool: u14_cache_x86
     steps:
       - IN: admiral_sh_repo
       - IN: u14microbase_dd_img
