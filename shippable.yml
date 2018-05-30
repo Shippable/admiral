@@ -120,13 +120,9 @@ jobs:
                TAR_FILENAME="$CONTEXT-$TAG_VER.tar.gz"
                git archive --format=tar.gz --output="/tmp/$TAR_FILENAME" --prefix=$CONTEXT/ $TAG_VER
                aws s3 cp --acl public-read "/tmp/$TAR_FILENAME" "$S3_URL/$TAG_VER/"
-            - |
-               ZIP_FILENAME="$CONTEXT-$TAG_VER.zip"
-               git archive --format=zip --output="/tmp/$ZIP_FILENAME" $TAG_VER
-               aws s3 cp --acl public-read "/tmp/$ZIP_FILENAME" "$S3_URL/$TAG_VER/"
     on_success:
       script:
-        - shipctl put_resource_state_multi $JOB_NAME "versionName=$REPO_COMMIT" "TAG_VER=$TAG_VER" "FILE_REPO_COMMIT_SHA=$REPO_COMMIT" "WEB_URL=$WEB_URL" "S3_URL=$S3_URL" "TAR_FILENAME=$TAR_FILENAME" "ZIP_FILENAME=$ZIP_FILENAME"
+        - shipctl put_resource_state_multi $JOB_NAME "versionName=$REPO_COMMIT" "TAG_VER=$TAG_VER" "FILE_REPO_COMMIT_SHA=$REPO_COMMIT" "WEB_URL=$WEB_URL" "S3_URL=$S3_URL" "TAR_FILENAME=$TAR_FILENAME"
 
   - name: admiral_repo_tag
     type: runSh
@@ -276,17 +272,19 @@ jobs:
               env:
                 - ARTIFACTS_BUCKET: "s3://shippable-artifacts/admiral"
                 - RES_VER: "u16admiral_tag"
+                - RES_FILE: "admiral_file_pack"
                 - RES_REPO: "admiral_sh_repo"
                 - CONTEXT: "admiral"
           script:
+            - TAG_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
+            - S3_URL=$(shipctl get_resource_version_key "$RES_FILE" "S3_URL")
             - REPO_COMMIT=$(shipctl get_resource_version_key "$RES_REPO" "shaData.commitSha")
-            - REL_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
-            - BINARY_TAR="$CONTEXT-$REL_VER-.tar.gz"
-            - ARTIFACT_TAR="/tmp/$CONTEXT-$REL_VER.tar.gz"
-            - S3_BUCKET_BINARY_DIR="$ARTIFACTS_BUCKET/$REL_VER/"
-            - pushd $(shipctl get_resource_state "$RES_REPO")
-            - git archive --format=tar.gz --output=$ARTIFACT_TAR --prefix=$CONTEXT/ $REL_VER
-            - aws s3 cp --acl public-read "$ARTIFACT_TAR" "$S3_BUCKET_BINARY_DIR"
+            - UP_TAG_VER=$(shipctl get_resource_version_key "$RES_FILE" "versionName")
+            - UP_TAR_FILENAME=$(shipctl get_resource_version_key "$RES_FILE" "TAR_FILENAME")
+            - S3_URL=$(shipctl get_resource_version_key "$RES_FILE" "S3_URL")
+            - WEB_URL=$(shipctl get_resource_version_key "$RES_FILE" "WEB_URL")
+            - TAR_FILENAME=$CONTEXT-$TAG_VER.tar.gz
+            - aws s3 cp --acl public-read "$S3_URL/$UP_TAG_VER/$UP_TAR_FILENAME" "$S3_URL/$TAG_VER/$TAR_FILENAME"
     on_success:
       script:
-        - shipctl put_resource_state_multi $JOB_NAME "versionName=$REPO_COMMIT" "FILE_REPO_COMMIT_SHA=$REPO_COMMIT" "S3_BUCKET=$S3_BUCKET_BINARY_DIR" "S3_FILENAME=$ARTIFACT_TAR"
+        - shipctl put_resource_state_multi $JOB_NAME "versionName=$REPO_COMMIT" "FILE_REPO_COMMIT_SHA=$REPO_COMMIT" "WEB_URL=$WEB_URL" "S3_URL=$S3_URL" "TAR_FILENAME=$TAR_FILENAME"
