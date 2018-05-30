@@ -28,7 +28,7 @@ Full documentation for all the components is available [here](http://docs.shippa
     - 4 core (min)
     - 8 Gb memory
     - 100 Gb disk
-    - Ubuntu 14.04 LTS
+    - Ubuntu 14.04 LTS/Ubuntu 16.04 LTS/CentOS 7/RHEL 7
 - The following ports must be exposed on this instance:
     - 22: ssh into the machine
     - 80: internal gitlab server api endpoint
@@ -116,4 +116,3 @@ $ sudo ./admiral.sh install
 
 - Open this address in a web browser and use the login token to
   continue the installation.
-
