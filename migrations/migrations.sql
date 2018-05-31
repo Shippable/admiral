@@ -672,6 +672,26 @@ do $$
       create unique index "projAccAccIdProjIdRoleCodeU" on "projectAccounts" using btree("accountId", "projectId", "roleCode");
     end if;
 
+   -- Add accountIntegrationId column in projectAccounts table
+   if not exists (select 1 from information_schema.columns where table_name = 'projectAccounts' and column_name = 'accountIntegrationId') then
+     alter table "projectAccounts" add column "accountIntegrationId" varchar(24);
+   end if;
+
+   -- add foreign key for projectAccounts.accountIntegrationId
+   if not exists (select 1 from pg_constraint where conname = 'projectAccounts_accountIntegrationId_fkey') then
+     alter table "projectAccounts" add constraint "projectAccounts_accountIntegrationId_fkey" foreign key ("accountIntegrationId") references "accountIntegrations"(id) on update restrict on delete restrict;
+   end if;
+
+   -- Add accountIntegrationId column in subscriptionAccounts table
+   if not exists (select 1 from information_schema.columns where table_name = 'subscriptionAccounts' and column_name = 'accountIntegrationId') then
+     alter table "subscriptionAccounts" add column "accountIntegrationId" varchar(24);
+   end if;
+
+   -- add foreign key for subscriptionAccounts.accountIntegrationId
+   if not exists (select 1 from pg_constraint where conname = 'subscriptionAccounts_accountIntegrationId_fkey') then
+     alter table "subscriptionAccounts" add constraint "subscriptionAccounts_accountIntegrationId_fkey" foreign key ("accountIntegrationId") references "accountIntegrations"(id) on update restrict on delete restrict;
+   end if;
+
     -- Reindex subsAccSubsIdAccIdU to subsAccSubsIdAccIdRoleCodeU in subscriptionAccounts table
     if exists (select 1 from pg_indexes where tablename = 'subscriptionAccounts' and indexname = 'subsAccSubsIdAccIdU') then
       drop index "subsAccSubsIdAccIdU";
