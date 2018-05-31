@@ -2279,6 +2279,36 @@ do $$
 
     -- set passthrough routeRoles
     perform set_route_role(
+      routePattern := '/passthrough/accounts/:accountId/projects',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/accounts/:accountId/projects/:projectId',
+      httpVerb := 'DELETE',
+      roleCode := 6000
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/accounts/:accountId/projects/:projectId',
+      httpVerb := 'DELETE',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/accounts/:accountId/projects/:projectId',
+      httpVerb := 'DELETE',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/accounts/:accountId/projects/:projectId',
+      httpVerb := 'DELETE',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
       routePattern := '/passthrough/discounts/:discountId',
       httpVerb := 'GET',
       roleCode := 6000
