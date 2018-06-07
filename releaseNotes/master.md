@@ -1,7 +1,7 @@
-# ${RES_VER_NAME} Release Notes
+# ${REL_VER} Release Notes
 
 ## Release Date
-${RES_VER_DATE}
+${REL_VER_DATE}
 
 ## Features
   - **Dry Run YML Builder**: The Dry Run feature has been enhanced to include the ability to build the Assembly Line YML from scratch. [See the docs for more details](http://docs.shippable.com/validate/single-pane-of-glass-spog/#testing-your-pipeline-config).

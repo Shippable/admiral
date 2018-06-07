@@ -1,7 +1,7 @@
-# ${RES_VER_NAME} Release Notes
+# ${REL_VER} Release Notes
 
 ## Release Date
-${RES_VER_DATE}
+${REL_VER_DATE}
 
 ## Features
   - **simple title**: brief description. [link to docs](#).
