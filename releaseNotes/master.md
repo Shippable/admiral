@@ -4,28 +4,28 @@
 ${RES_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Dry Run YML Builder**: The Dry Run feature has been enhanced to include the ability to build the Assembly Line YML from scratch. [See the docs for more details](http://docs.shippable.com/validate/single-pane-of-glass-spog/#testing-your-pipeline-config).
+  - **Saving OUT resource during failure**: A new flag `on_failure: true` can be added to `OUT` resources for cases when you want a version of the resource to be created even if the job fails. [see docs for a description](http://docs.shippable.com/platform/workflow/config/#jobs)
+  - **Integrations for public projects**: Used to be blocked on all PRs, but now will be used when the PR is coming from an internal branch.
+  - **Rerun pull request sha selections**: A pull request rerun now gives the user the option to run against the original base sha instead of latest sha.
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
-
-## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
+  - **Node Cluster integration**: Adding a Node Cluster account integration will no longer produce an error.
+  - **YML block notation logging**: Extra logs that were present due to yml block notation have been removed.  The output should look similar to single line statements now.
+  - **Postgres service sleep**: Postgres will no longer arbitrarily sleep for 30 seconds before stopping.
+  - **Windows shipctl replace**: This now supports replacing environment variables that use the braces format `${name}`. Other operating systems already have this functionality.
+  - **Windows shipctl copy**: The `shipctl copy_file_to_state` utility now works properly on windows hosts.
+  - **Payloads not saved on failure**: When a custom webhook payload is sent on failure, it will now properly contain the desired values.
+  - **Queued status for gitRepo**: Jobs with `gitRepo` `IN` resources that are using the `showBuildStatus: true` option will now correctly post their queued status to the provider.
 
 ## Shippable Server
 
   - Features
-      - **simple title**: brief description
+      - **Account sync disabling**: Server admins can now choose to disable automatic account sync.
+        - Only the projects specifically added by the user will be present on Shippable.
+        - Each user must manually add the projects that they want to use.
   - Fixes
-      - **simple title**: brief description
+      - **SuperUser trigger from SPOG**: Jobs can now be triggered from SPOG by system superUsers regardless of project permissions.
 
 ## History
 
