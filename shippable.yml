@@ -168,8 +168,9 @@ jobs:
                shipctl replace $master_notes
                cp $master_notes $new_notes
                cp $template_file $master_notes
+               echo "$REL_VER" > "version.txt"
                git add .
-               git commit -m "updating version.txt to $RES_VER_NAME and adding release notes" || true
+               git commit -m "updating version.txt to $REL_VER and adding release notes" || true
                git push up master
             - |
                REPO_COMMIT=$(git rev-parse HEAD)
@@ -279,7 +280,7 @@ jobs:
             - TAG_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
             - S3_URL=$(shipctl get_resource_version_key "$RES_FILE" "S3_URL")
             - REPO_COMMIT=$(shipctl get_resource_version_key "$RES_REPO" "shaData.commitSha")
-            - UP_TAG_VER=$(shipctl get_resource_version_key "$RES_FILE" "versionName")
+            - UP_TAG_VER=$(shipctl get_resource_version_key "$RES_FILE" "TAG_VER")
             - UP_TAR_FILENAME=$(shipctl get_resource_version_key "$RES_FILE" "TAR_FILENAME")
             - S3_URL=$(shipctl get_resource_version_key "$RES_FILE" "S3_URL")
             - WEB_URL=$(shipctl get_resource_version_key "$RES_FILE" "WEB_URL")
