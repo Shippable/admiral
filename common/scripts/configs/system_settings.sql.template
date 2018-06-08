@@ -19,7 +19,6 @@ do $$
         "jobConsoleBufferTimeIntervalMS" INTEGER DEFAULT 3000 NOT NULL,
         "apiRetryIntervalMS" INTEGER DEFAULT 3000 NOT NULL,
         "maxDiskUsagePercentage" INTEGER DEFAULT 90 NOT NULL,
-        "truck" BOOLEAN DEFAULT false NOT NULL,
         "rootS3Bucket" VARCHAR(64) NOT NULL,
         "nodeScriptsLocation" VARCHAR(255) NOT NULL,
         "enforcePrivateJobQuota" BOOLEAN DEFAULT false NOT NULL,
@@ -112,6 +111,10 @@ do $$
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'autoSync') then
       alter table "systemSettings" add column "autoSync" BOOLEAN DEFAULT true NOT NULL;
+    end if;
+
+    if exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'truck') then
+      alter table "systemSettings" drop column "truck";
     end if;
 
   end

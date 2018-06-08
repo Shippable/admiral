@@ -263,7 +263,6 @@ function _getValuesForSystemSettings(bag, next) {
       __getValueForSystemSettings(bag, 'jobConsoleBufferTimeInterval', 3000),
     apiRetryIntervalMS:
       __getValueForSystemSettings(bag, 'apiRetryInterval', 3),
-    truck: __getValueForSystemSettings(bag, 'truck', false),
     rootS3Bucket:
       __getValueForSystemSettings(bag, 'rootS3Bucket', ''),
     nodeScriptsLocation:
