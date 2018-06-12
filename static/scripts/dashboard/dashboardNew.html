@@ -653,63 +653,60 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_bb_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.bitbucketKeys.isEnabled"  ng-change="vm.toggleAuthProvider('bitbucket')"
-                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
-                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_bb_auth">
-                                  <b> Auth </b>
-                                </label>
-                              </div>
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_bb_scm" type="checkbox"
+                              <div class="toggle-bar">
+                                <input id="checkbox_for_scm_bitbucket" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucket.isEnabled"
+                                  ng-change="vm.toggleSCMMasterIntegration('bitbucket')"
                                   ng-disabled="vm.installForm.scm.bitbucket.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_bb_scm">
+                                <label for="checkbox_for_scm_bitbucket">
                                   <b> SCM </b>
                                 </label>
                               </div>
-                              <div class="row" ng-if="vm.installForm.auth.bitbucketKeys.isEnabled">
+                              </br>
+                              <div class="row" ng-repeat="bbAuth in vm.installForm.auth.bitbucketKeys.authorizations">
                                 <div class="col-md-12">
-                                  <form class="form-horizontal" role="form">
+                                  <form name="vm.bbInstallForm" class="form-horizontal" role="form">
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Name (Optional)</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" placeholder="Bitbucket" name="bitbucketCustomName"
-                                        ng-model="vm.installForm.auth.bitbucketKeys.data.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="bbAuth.sysInt.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="bitbucketClientId"
-                                        ng-model="vm.installForm.auth.bitbucketKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="bbAuth.sysInt.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client Secret</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="bitbucketClientSecret"
-                                        ng-model="vm.installForm.auth.bitbucketKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="bbAuth.sysInt.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
                                         <input type="url" class="form-control" name="bitbucketUrl"
-                                        ng-model="vm.installForm.auth.bitbucketKeys.data.url" ng-disabled="true"/>
+                                        ng-model="bbAuth.sysInt.url" ng-disabled="true"/>
                                       </div>
                                     </div>
-                                    <div class="form-group" ng-if="vm.installForm.auth.bitbucketKeys.callbackUrl">
+                                    <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" name="bitbucketCallbackUrl"
-                                        ng-model="vm.installForm.auth.bitbucketKeys.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="bbAuth.callbackUrl" readonly />
                                       </div>
+                                      <button class="btn btn-danger"
+                                        ng-click="vm.deleteAuthencation('bitbucketKeys', bbAuth.systemIntegrationId)"
+                                        ng-disabled="vm.installForm.auth.bitbucketKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
+                                        Delete
+                                      </button>
                                     </div>
-                                    <div class="form-group" ng-if="!vm.installForm.auth.bitbucketKeys.data.clientId || !vm.installForm.auth.bitbucketKeys.data.clientSecret">
+                                    <div class="form-group" ng-if="!bbAuth.sysInt.clientId || !bbAuth.sysInt.clientSecret">
                                       <div class="col-md-offset-2 col-md-6">
                                         <dd class="text-danger">
                                           <span>All these are required fields. Please fill them all before continuing further.</span>
@@ -718,6 +715,18 @@
                                     </div>
                                   </form>
                                 </div>
+                                &nbsp;
+                              </div>
+                              </br>
+                              <div ng-if="vm.installForm.auth.bitbucketKeys.isAddingAuth && vm.installForm.auth.bitbucketKeys.authorizations.length < 1">
+                                Adding..
+                              </div>
+                              <div class="row" ng-if="vm.installForm.auth.bitbucketKeys.authorizations.length < 1">
+                                <button class="btn btn-default pull-left" ng-click="vm.addAuthentication('bitbucketKeys')"
+                                  ng-if="!vm.installForm.auth.bitbucketKeys.isAddingAuth"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving">
+                                  Add
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -733,74 +742,72 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_bbs_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.bitbucketServerKeys.isEnabled"
-                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
-                                  ng-change="vm.toggleAuthProvider('bitbucketServer')"
-                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_bbs_auth">
-                                  <b> Oauth </b>
+                              <div class="toggle-bar">
+                                <label>
+                                  <b>Oauth  </b>
                                 </label>
-                              </div>
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_bbs_scm" type="checkbox"
+                                &nbsp;
+                                <input id="checkbox_for_scm_bitbucketServer" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucketServer.isEnabled"
+                                  ng-change="vm.toggleSCMMasterIntegration('bitbucketServer')"
                                   ng-disabled="vm.installForm.scm.bitbucketServer.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_bbs_scm">
-                                  <b> SCM </b>
+                                <label for="checkbox_for_scm_bitbucketServer">
+                                  <b>SCM </b>
                                 </label>
                               </div>
-                              <div class="row" ng-if="vm.installForm.auth.bitbucketServerKeys.isEnabled">
+                              </br>
+                              <div class="row" ng-repeat="bbsAuth in vm.installForm.auth.bitbucketServerKeys.authorizations">
                                 <div class="col-md-12">
-                                  <form class="form-horizontal" role="form" name="vm.bbsInstallForm" novalidate>
+                                  <form name="vm.bbsInstallForm" class="form-horizontal" role="form">
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Name (Optional)</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" placeholder="BitBucket Server" name="bitbucketServerCustomName"
-                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        <input type="text" class="form-control" placeholder="Bitbucket Server" name="bitbucketServerCustomName"
+                                        ng-model="bbsAuth.sysInt.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="bitbucketServerClientId"
-                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="bbsAuth.sysInt.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client Secret</label>
                                       <div class="col-md-6">
                                         <textarea rows="3" class="form-control" name="bitbucketServerClientSecret"
-                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving" placeholder="-----BEGIN ENCRYPTED PRIVATE KEY----- MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIS2qgprFqPxECAggA MBQGCCqGSIb3DQMHBAgD1kGN4ZslJgSCBMi1xk9jhlPxP3FyaMIUq8QmckXCs3Sa 9g73NQbtqZwI+9X5OhpSg/2ALxlCCjbqvzgSu8gfFZ4yo+Xd8VucZDmDSpzZGDod A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  X0R+meOaudPTBxoSgCCM51poFgaqt4l6VlTN4FRpj+c/WZeoMM/BVXO+nayuIMyH blK948UAda/bWVmZjXfY4Tztah0CuqlAldOQBzu8TwE7WDwo5S7lo5u0EXEoqCCq H0ga/iLNvWYexG7FHLRiq5hTj0g9mUPEbeTXuPtOkTEb/0ckVE2iZH9l7g5edmUZ GEs= -----END ENCRYPTED PRIVATE KEY----- -----BEGIN CERTIFICATE----- MIIDXTCCAkWgAwIBAgIJAJC1HiIAZAiIMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTExMjMxMDg1OTQ0WhcNMTIxMjMwMDg1OTQ0WjBF A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  JjyzfN746vaInA1KxYEeI1Rx5KXY8zIdj6a7hhphpj2E04LDdw7r495dv3UgEgpR C3Fayua4DRHyZOLmlvQ6tIChY0ClXXuefbmVSDeUHwc8YufRAERp2GfQnL2JlPUL B7xxt8BVc69rLeHV15A0qyx77CLSj3tCx2IUXVqRs5mlSbq094NBxsauYcm0A6Jq vA== -----END CERTIFICATE-----">
+                                        ng-model="bbsAuth.sysInt.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving" placeholder="-----BEGIN ENCRYPTED PRIVATE KEY----- MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIS2qgprFqPxECAggA MBQGCCqGSIb3DQMHBAgD1kGN4ZslJgSCBMi1xk9jhlPxP3FyaMIUq8QmckXCs3Sa 9g73NQbtqZwI+9X5OhpSg/2ALxlCCjbqvzgSu8gfFZ4yo+Xd8VucZDmDSpzZGDod A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  X0R+meOaudPTBxoSgCCM51poFgaqt4l6VlTN4FRpj+c/WZeoMM/BVXO+nayuIMyH blK948UAda/bWVmZjXfY4Tztah0CuqlAldOQBzu8TwE7WDwo5S7lo5u0EXEoqCCq H0ga/iLNvWYexG7FHLRiq5hTj0g9mUPEbeTXuPtOkTEb/0ckVE2iZH9l7g5edmUZ GEs= -----END ENCRYPTED PRIVATE KEY----- -----BEGIN CERTIFICATE----- MIIDXTCCAkWgAwIBAgIJAJC1HiIAZAiIMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTExMjMxMDg1OTQ0WhcNMTIxMjMwMDg1OTQ0WjBF A .... MANY LINES LIKE THAT .... .... MANY LINES LIKE THAT ....  JjyzfN746vaInA1KxYEeI1Rx5KXY8zIdj6a7hhphpj2E04LDdw7r495dv3UgEgpR C3Fayua4DRHyZOLmlvQ6tIChY0ClXXuefbmVSDeUHwc8YufRAERp2GfQnL2JlPUL B7xxt8BVc69rLeHV15A0qyx77CLSj3tCx2IUXVqRs5mlSbq094NBxsauYcm0A6Jq vA== -----END CERTIFICATE-----">
                                         </textarea>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
-                                        <input type="url" class="form-control" name="bitbucketServerUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.bitbucketServerKeys.data.url, 'bitbucketServerKeys')"
-                                        ng-model="vm.installForm.auth.bitbucketServerKeys.data.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
-                                        <dd class="text-danger" ng-if="vm.isNotValidurl['bitbucketServerKeys']">
+                                        <input type="url" class="form-control" name="bitbucketServerUrl"
+                                          ng-blur="vm.formValuesChanged(bbsAuth.systemIntegrationId, bbsAuth.sysInt.url, 'bitbucketServerKeys')"
+                                          ng-model="bbsAuth.sysInt.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        <dd class="text-danger" ng-if="!bbsAuth.isValidUrl">
                                           <span>Please give a valid Bitbucket Server endpoint url</span>
                                         </dd>
-                                        <dd class="text-danger" ng-if="!vm.isNotValidurl['bitbucketServerKeys']">
-                                          <span ng-show="vm.bbsInstallForm.bitbucketServerUrl.$error.url">URL is invalid.</span>
-                                        </dd>
-                                        <dd class="text-danger" ng-if="vm.isDuplicateUrl['bitbucketServerKeys']">
+                                        <dd class="text-danger" ng-if="bbsAuth.isDuplicateUrl">
                                           <span>Duplicate URLs found. Multiple authorizations to a provider with same URLs is not allowed.</span>
                                         </dd>
                                       </div>
                                     </div>
-                                    <div class="form-group" ng-if="vm.installForm.auth.bitbucketServerKeys.callbackUrl">
+                                    <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" name="bitbucketCallbackUrl"
-                                        ng-model="vm.installForm.auth.bitbucketServerKeys.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="bbsAuth.callbackUrl" readonly />
                                       </div>
+                                      <button class="btn btn-danger"
+                                        ng-click="vm.deleteAuthencation('bitbucketServerKeys', bbsAuth.systemIntegrationId)"
+                                        ng-disabled="vm.installForm.auth.bitbucketServerKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
+                                        Delete
+                                      </button>
                                     </div>
-                                    <div class="form-group" ng-if="!vm.installForm.auth.bitbucketServerKeys.data.clientId || !vm.installForm.auth.bitbucketServerKeys.data.clientSecret || !vm.installForm.auth.bitbucketServerKeys.data.url">
+                                    <div class="form-group" ng-if="!bbsAuth.sysInt.clientId || !bbsAuth.sysInt.clientSecret || !bbsAuth.sysInt.url">
                                       <div class="col-md-offset-2 col-md-6">
                                         <dd class="text-danger">
                                           <span>All these are required fields. Please fill them all before continuing further.</span>
@@ -809,60 +816,93 @@
                                     </div>
                                   </form>
                                 </div>
+                                &nbsp;
+                              </div>
+                              </br>
+                              <div ng-if="vm.installForm.auth.bitbucketServerKeys.isAddingAuth">
+                                Adding..
+                              </div>
+                              <div class="row">
+                                <button class="btn btn-default pull-left"
+                                  ng-click="vm.addAuthentication('bitbucketServerKeys')"
+                                  ng-if="!vm.installForm.auth.bitbucketServerKeys.isAddingAuth"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving">
+                                  Add
+                                </button>
                               </div>
                             </div>
                           </div>
                         </div>
+
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_bbs_basic_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.bitbucketServerBasicAuth.isEnabled"
-                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
-                                  ng-change="vm.toggleAuthProvider('bitbucketServerBasic')"
-                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_bbs_basic_auth">
-                                  <b> Basic Auth </b>
+                              <div class="toggle-bar">
+                                <label>
+                                  <b>Basic Auth</b>
                                 </label>
-                              </div>
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_bbs_basic_scm" type="checkbox"
+                                &nbsp;
+                                <input id="checkbox_for_scm_bitbucketServerBasic" type="checkbox"
                                   ng-model="vm.installForm.scm.bitbucketServerBasic.isEnabled"
-                                  ng-disabled="vm.installForm.scm.bitbucketServerBasic.disableToggle || vm.initializing || vm.installing || vm.saving"
+                                  ng-change="vm.toggleSCMMasterIntegration('bitbucketServerBasic')"
+                                  ng-disabled="vm.installForm.scm.bitbucketServer.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_bbs_basic_scm">
-                                  <b> SCM </b>
+                                <label for="checkbox_for_scm_bitbucketServerBasic">
+                                  <b>SCM </b>
                                 </label>
                               </div>
-                              <div class="row" ng-if="vm.installForm.auth.bitbucketServerBasicAuth.isEnabled">
+                              </br>
+                              <div class="row" ng-repeat="bbsBasicAuth in vm.installForm.auth.bitbucketServerBasicAuth.authorizations">
                                 <div class="col-md-12">
-                                  <form class="form-horizontal" role="form" name="vm.bbsBasicInstallForm" novalidate>
+                                  <form name="vm.bbsBasicInstallForm" class="form-horizontal" role="form">
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Name (Optional)</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" placeholder="BitBucket Server" name="bitbucketServerBasicCustomName"
-                                        ng-model="vm.installForm.auth.bitbucketServerBasicAuth.data.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        <input type="text" class="form-control" placeholder="Bitbucket Server Basic" name="bitbucketServerBasicCustomName"
+                                        ng-model="bbsBasicAuth.sysInt.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
-                                        <input type="url" class="form-control" name="bitbucketServerBasicUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.bitbucketServerBasicAuth.data.url, 'bitbucketServerBasicAuth')"
-                                        ng-model="vm.installForm.auth.bitbucketServerBasicAuth.data.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
-                                        <dd class="text-danger" ng-if="vm.isNotValidurl['bitbucketServerBasicAuth']">
+                                        <input type="url" class="form-control" name="bitbucketServerBasicUrl"
+                                          ng-blur="vm.formValuesChanged(bbsBasicAuth.systemIntegrationId, bbsBasicAuth.sysInt.url, 'bitbucketServerBasicAuth')"
+                                          ng-model="bbsBasicAuth.sysInt.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        <dd class="text-danger" ng-if="!bbsBasicAuth.isValidUrl">
                                           <span>Please give a valid Bitbucket Server endpoint url</span>
                                         </dd>
-                                        <dd class="text-danger" ng-if="!vm.isNotValidurl['bitbucketServerBasicAuth']">
-                                          <span ng-show="vm.bbsBasicInstallForm.bitbucketServerBasicUrl.$error.url">URL is invalid.</span>
-                                        </dd>
-                                        <dd class="text-danger" ng-if="vm.isDuplicateUrl['bitbucketServerBasicAuth']">
+                                        <dd class="text-danger" ng-if="bbsBasicAuth.isDuplicateUrl">
                                           <span>Duplicate URLs found. Multiple authorizations to a provider with same URLs is not allowed.</span>
+                                        </dd>
+                                      </div>
+                                      <button class="btn btn-danger"
+                                        ng-click="vm.deleteAuthencation('bitbucketServerBasicAuth', bbsBasicAuth.systemIntegrationId)"
+                                        ng-disabled="vm.installForm.auth.bitbucketServerBasicAuth.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
+                                        Delete
+                                      </button>
+                                    </div>
+                                    <div class="form-group" ng-if="!bbsBasicAuth.sysInt.url">
+                                      <div class="col-md-offset-2 col-md-6">
+                                        <dd class="text-danger">
+                                          <span>All these are required fields. Please fill them all before continuing further.</span>
                                         </dd>
                                       </div>
                                     </div>
                                   </form>
                                 </div>
+                                &nbsp;
+                              </div>
+                              </br>
+                              <div ng-if="vm.installForm.auth.bitbucketServerBasicAuth.isAddingAuth">
+                                Adding..
+                              </div>
+                              <div class="row">
+                                <button class="btn btn-default pull-left"
+                                  ng-click="vm.addAuthentication('bitbucketServerBasicAuth')"
+                                  ng-if="!vm.installForm.auth.bitbucketServerBasicAuth.isAddingAuth"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving">
+                                  Add
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -878,63 +918,60 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_github_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.githubKeys.isEnabled"
-                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
-                                  ng-change="vm.toggleAuthProvider('github')"
+                              <div class="toggle-bar">
+                                <input id="checkbox_for_scm_github" type="checkbox"
+                                  ng-model="vm.installForm.scm.github.isEnabled"
+                                  ng-change="vm.toggleSCMMasterIntegration('github')"
+                                  ng-disabled="vm.installForm.scm.github.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_github_auth">
-                                  <b> Auth </b>
+                                <label for="checkbox_for_scm_github">
+                                  <b>SCM </b>
                                 </label>
                               </div>
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_github_scm" type="checkbox"
-                                  ng-model="vm.installForm.scm.github.isEnabled" ng-disabled="vm.installForm.scm.github.disableToggle || vm.initializing || vm.installing || vm.saving"
-                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_github_scm">
-                                  <b> SCM </b>
-                                </label>
-                              </div>
-                              <div class="row" ng-if="vm.installForm.auth.githubKeys.isEnabled">
+                              </br>
+                              <div class="row" ng-repeat="githubAuth in vm.installForm.auth.githubKeys.authorizations">
                                 <div class="col-md-12">
-                                  <form class="form-horizontal" role="form">
+                                  <form name="vm.bbsInstallForm" class="form-horizontal" role="form">
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Name (Optional)</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" placeholder="GitHub" name="githubCustomName"
-                                        ng-model="vm.installForm.auth.githubKeys.data.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="githubAuth.sysInt.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubClientId"
-                                        ng-model="vm.installForm.auth.githubKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="githubAuth.sysInt.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client Secret</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubClientSecret"
-                                        ng-model="vm.installForm.auth.githubKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="githubAuth.sysInt.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
                                         <input type="url" class="form-control" name="githubUrl"
-                                        ng-model="vm.installForm.auth.githubKeys.data.url" ng-disabled="true"/>
+                                          ng-model="githubAuth.sysInt.url" ng-disabled="true"/>
                                       </div>
                                     </div>
-                                    <div class="form-group" ng-if="vm.installForm.auth.githubKeys.callbackUrl">
+                                    <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" name="githubCallbackUrl"
-                                        ng-model="vm.installForm.auth.githubKeys.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="githubAuth.callbackUrl" readonly />
                                       </div>
+                                      <button class="btn btn-danger"
+                                        ng-click="vm.deleteAuthencation('githubKeys', githubAuth.systemIntegrationId)"
+                                        ng-disabled="vm.installForm.auth.githubKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
+                                        Delete
+                                      </button>
                                     </div>
-                                    <div class="form-group" ng-if="!vm.installForm.auth.githubKeys.data.clientId || !vm.installForm.auth.githubKeys.data.clientSecret">
+                                    <div class="form-group" ng-if="!githubAuth.sysInt.clientId || !githubAuth.sysInt.clientSecret">
                                       <div class="col-md-offset-2 col-md-6">
                                         <dd class="text-danger">
                                           <span>All these are required fields. Please fill them all before continuing further.</span>
@@ -943,6 +980,21 @@
                                     </div>
                                   </form>
                                 </div>
+                                &nbsp;
+                              </div>
+                              </br>
+                              <div ng-if="vm.installForm.auth.githubKeys.isAddingAuth &&
+                                vm.installForm.auth.githubKeys.authorizations.length < 1">
+                                Adding..
+                              </div>
+                              <div class="row">
+                                <button class="btn btn-default pull-left"
+                                  ng-click="vm.addAuthentication('githubKeys')"
+                                  ng-if="!vm.installForm.auth.githubKeys.isAddingAuth &&
+                                    vm.installForm.auth.githubKeys.authorizations.length < 1"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving">
+                                  Add
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -958,71 +1010,67 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_ghe_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.githubEnterpriseKeys.isEnabled"
-                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
-                                  ng-change="vm.toggleAuthProvider('githubEnterprise')"
-                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_ghe_auth">
-                                  <b> Auth </b>
-                                </label>
-                              </div>
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_ghe_scm" type="checkbox"
+                              <div class="toggle-bar">
+                                <input id="checkbox_for_scm_githubEnterprise" type="checkbox"
                                   ng-model="vm.installForm.scm.githubEnterprise.isEnabled"
+                                  ng-change="vm.toggleSCMMasterIntegration('githubEnterprise')"
                                   ng-disabled="vm.installForm.scm.githubEnterprise.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_ghe_scm">
-                                  <b> SCM </b>
+                                <label for="checkbox_for_scm_githubEnterprise">
+                                  <b>SCM </b>
                                 </label>
                               </div>
-                              <div class="row" ng-if="vm.installForm.auth.githubEnterpriseKeys.isEnabled">
+                              </br>
+                              <div class="row" ng-repeat="gheAuth in vm.installForm.auth.githubEnterpriseKeys.authorizations">
                                 <div class="col-md-12">
-                                  <form class="form-horizontal" role="form" name="vm.gheInstallForm" novalidate>
+                                  <form name="vm.gheInstallForm" class="form-horizontal" role="form">
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Name (Optional)</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" placeholder="GitHub Enterprise" name="githubEnterpriseCustomName"
-                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="gheAuth.sysInt.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubEnterpriseClientId"
-                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="gheAuth.sysInt.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Client Secret</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="githubEnterpriseClientSecret"
-                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving" />
-                                        </textarea>
+                                          ng-model="gheAuth.sysInt.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving" />
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
-                                        <input type="url" class="form-control" name="githubEnterpriseUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.githubEnterpriseKeys.data.url, 'githubEnterpriseKeys')"
-                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.data.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
-                                        <dd class="text-danger" ng-if="vm.isNotValidurl['githubEnterpriseKeys']">
+                                        <input type="url" class="form-control" name="githubEnterpriseUrl"
+                                          ng-blur="vm.formValuesChanged(gheAuth.systemIntegrationId, gheAuth.sysInt.url, 'githubEnterpriseKeys')"
+                                          ng-model="gheAuth.sysInt.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        <dd class="text-danger" ng-if="!gheAuth.isValidUrl">
                                           <span>Please give a valid Github Enterprise endpoint url</span>
                                         </dd>
-                                        <dd class="text-danger" ng-if="!vm.isNotValidurl['githubEnterpriseKeys']">
-                                          <span ng-show="vm.gheInstallForm.githubEnterpriseUrl.$error.url">URL is invalid.</span>
+                                        <dd class="text-danger" ng-if="gheAuth.isDuplicateUrl">
+                                          <span>Duplicate URLs found. Multiple authorizations to a provider with same URLs is not allowed.</span>
                                         </dd>
                                       </div>
                                     </div>
-                                    <div class="form-group" ng-if="vm.installForm.auth.githubEnterpriseKeys.callbackUrl">
+                                    <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" name="githubEnterpriseCallbackUrl"
-                                        ng-model="vm.installForm.auth.githubEnterpriseKeys.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="gheAuth.callbackUrl" readonly />
                                       </div>
+                                      <button class="btn btn-danger"
+                                        ng-click="vm.deleteAuthencation('githubEnterpriseKeys', gheAuth.systemIntegrationId)"
+                                        ng-disabled="vm.installForm.auth.githubEnterpriseKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
+                                        Delete
+                                      </button>
                                     </div>
-                                    <div class="form-group" ng-if="!vm.installForm.auth.githubEnterpriseKeys.data.clientId || !vm.installForm.auth.githubEnterpriseKeys.data.clientSecret || !vm.installForm.auth.githubEnterpriseKeys.data.url">
+                                    <div class="form-group" ng-if="!gheAuth.sysInt.clientId || !gheAuth.sysInt.clientSecret || !gheAuth.sysInt.url">
                                       <div class="col-md-offset-2 col-md-6">
                                         <dd class="text-danger">
                                           <span>All these are required fields. Please fill them all before continuing further.</span>
@@ -1031,6 +1079,19 @@
                                     </div>
                                   </form>
                                 </div>
+                                &nbsp;
+                              </div>
+                              </br>
+                              <div ng-if="vm.installForm.auth.githubEnterpriseKeys.isAddingAuth">
+                                Adding..
+                              </div>
+                              <div class="row">
+                                <button class="btn btn-default pull-left"
+                                  ng-click="vm.addAuthentication('githubEnterpriseKeys')"
+                                  ng-if="!vm.installForm.auth.githubEnterpriseKeys.isAddingAuth"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving">
+                                  Add
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -1046,70 +1107,67 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card-box">
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_gitlab_auth" type="checkbox"
-                                  ng-model="vm.installForm.auth.gitlabKeys.isEnabled"
-                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
-                                  ng-change="vm.toggleAuthProvider('gitlab')"
-                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_gitlab_auth">
-                                  <b> Auth </b>
-                                </label>
-                              </div>
-                              <div class="toggle-bar checkbox-inline">
-                                <input id="checkbox_for_gitlab_scm" type="checkbox"
+                              <div class="toggle-bar">
+                                <input id="checkbox_for_scm_gitlab" type="checkbox"
                                   ng-model="vm.installForm.scm.gitlab.isEnabled"
+                                  ng-change="vm.toggleSCMMasterIntegration('gitlab')"
                                   ng-disabled="vm.installForm.scm.gitlab.disableToggle || vm.initializing || vm.installing || vm.saving"
                                   class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
-                                <label for="checkbox_for_gitlab_scm">
-                                  <b> SCM </b>
+                                <label for="checkbox_for_scm_gitlab">
+                                  <b>SCM </b>
                                 </label>
                               </div>
-                              <div class="row" ng-if="vm.installForm.auth.gitlabKeys.isEnabled">
+                              </br>
+                              <div class="row" ng-repeat="gitlabAuth in vm.installForm.auth.gitlabKeys.authorizations">
                                 <div class="col-md-12">
-                                  <form class="form-horizontal" role="form" name="vm.gitlabInstallForm" novalidate>
+                                  <form name="vm.bbsInstallForm" class="form-horizontal" role="form">
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Name (Optional)</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" placeholder="Gitlab" name="gitlabCustomName"
-                                        ng-model="vm.installForm.auth.gitlabKeys.data.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        <input type="text" class="form-control" placeholder="GitLab" name="gitlabCustomName"
+                                        ng-model="gitlabAuth.sysInt.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Application ID</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="gitlabClientId"
-                                        ng-model="vm.installForm.auth.gitlabKeys.data.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        ng-model="gitlabAuth.sysInt.clientId" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Secret</label>
                                       <div class="col-md-6">
                                         <input type="text" class="form-control" name="gitlabClientSecret"
-                                        ng-model="vm.installForm.auth.gitlabKeys.data.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                          ng-model="gitlabAuth.sysInt.clientSecret" ng-disabled="vm.initializing || vm.installing || vm.saving" />
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">URL</label>
                                       <div class="col-md-6">
-                                        <input type="url" class="form-control" name="gitlabUrl" ng-blur="vm.formValuesChanged(vm.installForm.auth.gitlabKeys.data.url, 'gitlabKeys')"
-                                        ng-model="vm.installForm.auth.gitlabKeys.data.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
-                                        <dd class="text-danger" ng-if="vm.isNotValidurl['gitlabKeys']">
-                                          <span>Please give a valid gitlab endpoint url</span>
+                                        <input type="url" class="form-control" name="gitlabUrl"
+                                          ng-blur="vm.formValuesChanged(gitlabAuth.systemIntegrationId, gitlabAuth.sysInt.url, 'gitlabKeys')"
+                                          ng-model="gitlabAuth.sysInt.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        <dd class="text-danger" ng-if="!gitlabAuth.isValidUrl">
+                                          <span>Please give a valid gitlab Enterprise endpoint url</span>
                                         </dd>
-                                        <dd class="text-danger" ng-if="!vm.isNotValidurl['gitlabKeys']">
-                                          <span ng-show="vm.gitlabInstallForm.gitlabUrl.$error.url">URL is invalid.</span>
+                                        <dd class="text-danger" ng-if="gitlabAuth.isDuplicateUrl">
+                                          <span>Duplicate URLs found. Multiple authorizations to a provider with same URLs is not allowed.</span>
                                         </dd>
                                       </div>
                                     </div>
-                                    <div class="form-group" ng-if="vm.installForm.auth.gitlabKeys.callbackUrl">
+                                    <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" name="gitlabCallbackUrl"
-                                        ng-model="vm.installForm.auth.gitlabKeys.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="gitlabAuth.callbackUrl" readonly />
                                       </div>
+                                      <button class="btn btn-danger"
+                                        ng-click="vm.deleteAuthencation('gitlabKeys', gitlabAuth.systemIntegrationId)"
+                                        ng-disabled="vm.installForm.auth.gitlabKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
+                                        Delete
+                                      </button>
                                     </div>
-                                    <div class="form-group" ng-if="!vm.installForm.auth.gitlabKeys.data.clientId || !vm.installForm.auth.gitlabKeys.data.clientSecret || !vm.installForm.auth.gitlabKeys.data.url">
+                                    <div class="form-group" ng-if="!gitlabAuth.sysInt.clientId || !gitlabAuth.sysInt.clientSecret || !gitlabAuth.sysInt.url">
                                       <div class="col-md-offset-2 col-md-6">
                                         <dd class="text-danger">
                                           <span>All these are required fields. Please fill them all before continuing further.</span>
@@ -1118,6 +1176,19 @@
                                     </div>
                                   </form>
                                 </div>
+                                &nbsp;
+                              </div>
+                              </br>
+                              <div ng-if="vm.installForm.auth.gitlabKeys.isAddingAuth">
+                                Adding..
+                              </div>
+                              <div class="row">
+                                <button class="btn btn-default pull-left"
+                                  ng-click="vm.addAuthentication('gitlabKeys')"
+                                  ng-if="!vm.installForm.auth.gitlabKeys.isAddingAuth"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving">
+                                  Add
+                                </button>
                               </div>
                             </div>
                           </div>
