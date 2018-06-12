@@ -72,7 +72,7 @@ function _getById(bag, next) {
   var who = bag.who + '|' + _getById.name;
   logger.verbose(who, 'Inside');
 
-  var query = "systemIntegrationIds=" + bag.systemIntegrationId;
+  var query = "systemIntegrationId=" + bag.systemIntegrationId;
   bag.apiAdapter.getSystemIntegrations('',
     function (err, systemIntegrations) {
       if (err)

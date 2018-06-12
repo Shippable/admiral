@@ -15,11 +15,20 @@
 
     $scope._r.showCrumb = false;
     $scope.dashboardNewCtrlPromise = dashboardNewCtrlDefer.promise;
-    var providerAuthNames = {
+    var mappingForCallbackUrl = {
       bitbucketKeys: 'bitbucket',
       bitbucketServerKeys: 'bitbucketServer',
+      bitbucketServerBasicAuth: 'bitbucketServerBasic',
       githubKeys: 'github',
       githubEnterpriseKeys: 'ghe',
+      gitlabKeys: 'gitlab'
+    };
+    var authSCMMapping = {
+      bitbucketKeys: 'bitbucket',
+      bitbucketServerKeys: 'bitbucketServer',
+      bitbucketServerBasicAuth: 'bitbucketServerBasic',
+      githubKeys: 'github',
+      githubEnterpriseKeys: 'githubEnterprise',
       gitlabKeys: 'gitlab'
     };
     var systemMachineImagesById;
@@ -61,8 +70,6 @@
         'internalAPI',
         'consoleAPI'
       ],
-      isNotValidurl: [],
-      isDuplicateUrl: [],
       urlRegex: /(http(s)?:\/\/)?([a-zA-Z0-9]+([a-zA-Z0-9]+)+.*)$/,
       x86ArchCode: null,
       armArchCode: null,
@@ -113,8 +120,8 @@
         installerSecretKey: '',
         smiSearchString: ''
       },
-      formValuesChanged: function (url, masterName) {
-        validateSCMUrlWorkflow(url, masterName);
+      formValuesChanged: function (systemIntegrationId, url, masterName) {
+        validateSCMUrlWorkflow(systemIntegrationId, url, masterName);
       },
       cancelStateUpdate: function () {
         $timeout(function () {
@@ -290,67 +297,109 @@
         },
         auth: {
           bitbucketKeys: {
-            isEnabled: false,
             masterName: 'bitbucketKeys',
-            data: {
-              customName: '',
-              clientId: '',
-              clientSecret: '',
-              wwwUrl: '',
-              url: ''
+            isAddingAuth: false,
+            isDeletingAuth: false,
+            authorizations: [],
+            data: { // authorizations has these objects
+              sysInt: {
+                customName: '',
+                clientId: '',
+                clientSecret: '',
+                wwwUrl: '',
+                url: 'https://api.bitbucket.org'
+              },
+              callbackUrl: '',
+              systemIntegrationId: '',
+              isValidUrl: true
             }
           },
           bitbucketServerBasicAuth: {
-            isEnabled: false,
             masterName: 'bitbucketServerBasicAuth',
-            data: {
-              customName: '',
-              wwwUrl: '',
-              url: ''
+            isAddingAuth: false,
+            isDeletingAuth: false,
+            authorizations: [],
+            data: { // authorizations has these objects
+              sysInt: {
+                customName: '',
+                wwwUrl: '',
+                url: ''
+              },
+              callbackUrl: '',
+              systemIntegrationId: '',
+              isValidUrl: true
             }
           },
           bitbucketServerKeys: {
-            isEnabled: false,
             masterName: 'bitbucketServerKeys',
-            data: {
-              customName: '',
-              clientId: '',
-              clientSecret: '',
-              wwwUrl: '',
-              url: ''
+            isAddingAuth: false,
+            isDeletingAuth: false,
+            authorizations: [],
+            data: { // authorizations has these objects
+              sysInt: {
+                customName: '',
+                clientId: '',
+                clientSecret: '',
+                wwwUrl: '',
+                url: ''
+              },
+              callbackUrl: '',
+              systemIntegrationId: '',
+              isValidUrl: true
             }
           },
           githubKeys: {
-            isEnabled: false,
             masterName: 'githubKeys',
-            data: {
-              customName: '',
-              clientId: '',
-              clientSecret: '',
-              wwwUrl: '',
-              url: ''
+            isAddingAuth: false,
+            isDeletingAuth: false,
+            authorizations: [],
+            data: { // authorizations has these objects
+              sysInt: {
+                customName: '',
+                clientId: '',
+                clientSecret: '',
+                wwwUrl: '',
+                url: 'https://api.github.com'
+              },
+              callbackUrl: '',
+              systemIntegrationId: '',
+              isValidUrl: true
             }
           },
           githubEnterpriseKeys: {
-            isEnabled: false,
             masterName: 'githubEnterpriseKeys',
-            data: {
-              customName: '',
-              clientId: '',
-              clientSecret: '',
-              wwwUrl: '',
-              url: ''
+            isAddingAuth: false,
+            isDeletingAuth: false,
+            authorizations: [],
+            data: { // authorizations has these objects
+              sysInt: {
+                customName: '',
+                clientId: '',
+                clientSecret: '',
+                wwwUrl: '',
+                url: ''
+              },
+              callbackUrl: '',
+              systemIntegrationId: '',
+              isValidUrl: true
             }
           },
           gitlabKeys: {
-            isEnabled: false,
             masterName: 'gitlabKeys',
-            data: {
-              customName: '',
-              clientId: '',
-              clientSecret: '',
-              wwwUrl: '',
-              url: ''
+            isAddingAuth: false,
+            isDeletingAuth: false,
+            authorizations: [],
+            data: { // authorizations has these objects
+              sysInt: {
+                customName: '',
+                clientId: '',
+                clientSecret: '',
+                wwwUrl: '',
+                url: ''
+              },
+              callbackUrl: '',
+              systemIntegrationId: '',
+              isValidUrl: true
             }
           }
         },
@@ -846,6 +895,9 @@
       restartServices: restartServices,
       installAddons: installAddons,
       toggleAuthProvider: toggleAuthProvider,
+      addAuthentication: addAuthentication,
+      deleteAuthencation: deleteAuthencation,
+      toggleSCMMasterIntegration: toggleSCMMasterIntegration,
       addSuperUser: addSuperUser,
       removeSuperUser: removeSuperUser,
       showAdmiralEnvModal: showAdmiralEnvModal,
@@ -1136,42 +1188,6 @@
             url: 'http://' + defaultWorkerAddress + ':50000'
           }
         },
-        auth: {
-          bitbucketKeys: {
-            clientId: '',
-            clientSecret: '',
-            wwwUrl: '',
-            url: 'https://api.bitbucket.org'
-          },
-          bitbucketServerBasicAuth: {
-            wwwUrl: '',
-            url: ''
-          },
-          bitbucketServerKeys: {
-            clientId: '',
-            clientSecret: '',
-            wwwUrl: '',
-            url: ''
-          },
-          githubKeys: {
-            clientId: '',
-            clientSecret: '',
-            wwwUrl: '',
-            url: 'https://api.github.com'
-          },
-          githubEnterpriseKeys: {
-            clientId: '',
-            clientSecret: '',
-            wwwUrl: '',
-            url: ''
-          },
-          gitlabKeys: {
-            clientId: '',
-            clientSecret: '',
-            wwwUrl: '',
-            url: 'https://gitlab.com/api/v3'
-          }
-        },
         filestore:{
           amazonKeys: {
             accessKey: '',
@@ -1291,7 +1307,7 @@
       if (!$scope.vm.systemSettings.secrets.isInitialized) return next();
 
       var installFormNonSystemInts = ['systemMachineImages',
-        'scm', 'systemSettings'];
+        'scm', 'auth', 'systemSettings'];
 
       // reset all systemIntegrations to their defaults
       _.each($scope.vm.installForm,
@@ -1335,7 +1351,7 @@
           //map the used masterName with sshKeys systemIntegration
           $scope.vm.installForm.sshKeys[sshKeyMasterName] = sshKeysForm;
           systemIntDataDefaults.sshKeys[sshKeyMasterName] = sshKeysDefault;
-          if (sshKeyMasterName === 'ssh-key'){
+          if (sshKeyMasterName === 'ssh-key') {
             $scope.vm.addonsForm.sshKey = {
               displayName: '',
               isEnabled: false
@@ -1390,10 +1406,31 @@
 
               if ($scope.vm.installForm[sysIntName] &&
                 $scope.vm.installForm[sysIntName][masterName]) {
-                _.extend(
-                  $scope.vm.installForm[sysIntName][masterName].data,
-                  systemIntegration.data
-                );
+                if (sysIntName !== 'auth') {
+                  _.extend(
+                    $scope.vm.installForm[sysIntName][masterName].data,
+                    systemIntegration.data
+                  );
+                } else {
+                  var auth = {
+                    sysInt: systemIntegration.data,
+                    systemIntegrationId: systemIntegration.id,
+                    isValidUrl: true
+                  };
+                  auth.callbackUrl = systemIntegration.data.wwwUrl +
+                    '/auth/' + mappingForCallbackUrl[masterName] + '/' +
+                    systemIntegration.id + '/identify';
+                  var hasAuth = _.findWhere(
+                    $scope.vm.installForm.auth[masterName].authorizations,
+                    {systemIntegrationId: systemIntegration.id});
+                  if (hasAuth)
+                    _.extend(hasAuth.data, systemIntegration.data)
+                  else
+                    $scope.vm.installForm.auth[masterName].authorizations.push(auth);
+
+                  $scope.vm.isAuthInitialized = true;
+                }
+
                 $scope.vm.installForm[sysIntName][masterName].isEnabled = true;
                 if (sysIntName === 'notification' &&
                   $scope.vm.installForm[sysIntName][masterName].isEnabled) {
@@ -1471,19 +1508,10 @@
                   $scope.vm.installForm[sysIntName][masterName].isSecure =
                     amqpUrl.split('://')[0] === 'amqps' ? true : false;
                 }
-                if (sysIntName === 'auth') {
-                  var providerAuthName = providerAuthNames[masterName];
-                  if (!_.isEmpty(providerAuthName)) {
-                    $scope.vm.installForm[sysIntName][masterName].callbackUrl =
-                      systemIntegration.data.wwwUrl + '/auth/' +
-                      providerAuthName + '/' + systemIntegration.id +
-                      '/identify';
-                  }
-                  $scope.vm.isAuthInitialized = true;
-                }
               }
             }
           );
+
           return next();
         }
       );
@@ -1502,32 +1530,39 @@
       return masterAddress;
     }
 
-    function validateSCMUrlWorkflow(url, masterName) {
+    function validateSCMUrlWorkflow(systemIntegrationId, url, masterName) {
        var bag = {
          url: url,
-         name: 'auth',
-         masterName: masterName,
-         isNotValidurl: []
+         systemIntegrationId: systemIntegrationId
        };
        async.series([
-         getSystemIntegration.bind(null, bag),
          validateSCMUrl.bind(null, bag)
        ],
-         function () {
-          $scope.vm.isNotValidurl[bag.masterName] =
-            bag.isNotValidurl[bag.masterName];
-          var urls = _.filter($scope.vm.installForm.auth,
+         function (err) {
+          var auth = _.findWhere(
+            $scope.vm.installForm.auth[masterName].authorizations, {
+              systemIntegrationId: systemIntegrationId
+            });
+          if (_.isEmpty(auth))
+            return;
+
+          if (err)
+            auth.isValidUrl = false;
+          else
+            auth.isValidUrl = true;
+
+          var urls = _.filter(
+            $scope.vm.installForm.auth[masterName].authorizations,
             function (auth) {
-              return auth.data.url !==  '' && auth.data.url === bag.url;
+              return auth.sysInt.url !==  '' && auth.sysInt.url === bag.url;
             }
           );
           if (urls && urls.length > 1)
-            $scope.vm.isDuplicateUrl[bag.masterName] = true;
+            auth.isDuplicateUrl = true;
           else
-            $scope.vm.isDuplicateUrl[bag.masterName] = false;
+            auth.isDuplicateUrl = false;
 
-          $scope.vm.disableSave =  bag.isNotValidurl[bag.masterName] ||
-            $scope.vm.isDuplicateUrl[bag.masterName];
+          $scope.vm.disableSave =  !auth.isValidUrl || auth.isDuplicateUrl;
          }
        );
      }
@@ -1536,14 +1571,9 @@
        var validateBody = {
          url: bag.url
        };
-       admiralApiAdapter.validateUrl(bag.systemIntegration.id, validateBody,
+       admiralApiAdapter.validateUrl(bag.systemIntegrationId, validateBody,
          function (err, res) {
-           if (err) {
-             bag.isNotValidurl[bag.masterName] = true;
-             return next();
-           }
-           bag.isNotValidurl[bag.masterName] = false;
-           return next();
+           return next(err);
          }
        );
      }
@@ -3598,31 +3628,36 @@
     }
 
     function updateAuthSystemIntegrations(next) {
-      async.each($scope.vm.installForm.auth,
-        function (systemInt, done) {
+      var auths = {};
+      _.each($scope.vm.installForm.auth,
+        function (provider) {
+          _.each(provider.authorizations,
+            function (auth) {
+              auths[auth.systemIntegrationId] = {
+                data: auth.sysInt,
+                systemIntegrationId: auth.systemIntegrationId,
+                masterName: provider.masterName
+              }
+            }
+          );
+        }
+      );
+
+      async.each(auths,
+        function (auth, done) {
           var bag = {
             name: 'auth',
-            masterName: systemInt.masterName,
-            data: systemInt.data,
-            isEnabled: systemInt.isEnabled
+            systemIntegration: {
+              id: auth.systemIntegrationId
+            },
+            data: auth.data,
+            masterName: auth.masterName,
+            isEnabled: true
           };
 
-          bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
-
-          updateSystemIntegration(bag,
+          putSystemIntegration(bag,
             function (err) {
-              if (err)
-                return done(err);
-              if (bag.systemIntegrationId) {
-                var providerAuthName = providerAuthNames[bag.masterName];
-                if (!_.isEmpty(providerAuthName)) {
-                  $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
-                    bag.data.wwwUrl + '/auth/' + providerAuthName +
-                    '/' + bag.systemIntegrationId + '/identify';
-                }
-              }
-              return done();
-
+              return done(err);
             }
           );
         },
@@ -3787,6 +3822,21 @@
       );
     }
 
+    function getSystemIntegrationById(bag, next) {
+      var query = 'systemIntegrationId=' + bag.systemIntegrationId;
+      admiralApiAdapter.getSystemIntegrations(query,
+        function (err, systemIntegrations) {
+          if (err)
+            return next(err);
+
+          if (systemIntegrations.length)
+            bag.systemIntegration = systemIntegrations[0];
+
+          return next();
+        }
+      );
+    }
+
     function postSystemIntegration(bag, next) {
       if (bag.systemIntegration) return next();
       if (!bag.isEnabled) return next();
@@ -3837,6 +3887,7 @@
           var masterName = bag.masterName;
 
           if (!sysIntName || ! masterName) return next();
+          if (sysIntName === 'auth') return next();
 
           if ($scope.vm.installForm[sysIntName] &&
             $scope.vm.installForm[sysIntName][masterName]) {
@@ -3860,6 +3911,24 @@
       if (!sysIntName || !masterName) return;
       _.extend($scope.vm.installForm[sysIntName][masterName].data,
         systemIntDataDefaults[sysIntName][masterName]);
+    }
+
+    function putMasterIntegration(bag, next) {
+      if (!bag.masterIntegrationId) return next();
+
+      var update = {
+        isEnabled: bag.isEnabled
+      };
+
+      admiralApiAdapter.putMasterIntegration(bag.masterIntegrationId, update,
+        function (err, masterIntegration) {
+          if (err)
+            return next(err);
+
+          bag.masterIntegration = masterIntegration;
+          return next();
+        }
+      );
     }
 
     function enableSCMMasterIntegrations(next) {
@@ -4621,16 +4690,127 @@
     $scope.$watch('vm.installForm.www.url.data.url',
       function () {
         _.each($scope.vm.installForm.auth,
-          function (auth) {
-            if (auth.callbackUrl) {
-              var url = auth.callbackUrl;
-              auth.callbackUrl = $scope.vm.installForm.www.url.data.url +
-                '/auth/' + url.split('/auth/')[1];
-            }
+          function (provider) {
+            _.each(provider.authorizations,
+              function (auth) {
+                if (auth.callbackUrl)
+                  auth.callbackUrl = $scope.vm.installForm.www.url.data.url +
+                    '/auth/' + auth.callbackUrl.split('/auth/')[1];
+              }
+            );
           }
         );
       }
     );
+
+    function addAuthentication(masterName) {
+      // while adding new authentication method,
+      // if SCM masterIntegration is not enabled then enable it
+      $scope.vm.installForm.auth[masterName].isAddingAuth = true;
+
+      var sysInt = _.clone($scope.vm.installForm.auth[masterName].data.sysInt);
+      sysInt.wwwUrl = $scope.vm.installForm.www.url.data.url;
+
+      var SCMMasterInt = _.findWhere($scope.vm.masterIntegrations, {
+          name: authSCMMapping[masterName],
+          type: 'scm'
+        });
+
+      var bag = {
+        name: 'auth',
+        masterName: masterName,
+        data: sysInt,
+        isEnabled: true
+      };
+
+      if (!SCMMasterInt.isEnabled)
+        bag.masterIntegrationId = SCMMasterInt && SCMMasterInt.id;
+
+      async.series([
+        putMasterIntegration.bind(null, bag),
+        postSystemIntegration.bind(null, bag)
+      ],
+        function (err) {
+          $scope.vm.installForm.auth[masterName].isAddingAuth = false;
+          if (err)
+            return popup_horn.error(err);
+
+          if (bag.masterIntegration && bag.masterIntegration.isEnabled &&
+            !$scope.vm.installForm.scm[SCMMasterInt.name].isEnabled)
+            triggerSwitchery('checkbox_for_scm_' + SCMMasterInt.name);
+
+          if (bag.systemIntegrationId) {
+            var data = {
+              sysInt: sysInt
+            };
+            data.systemIntegrationId = bag.systemIntegrationId;
+            data.isValidUrl = true;
+            data.callbackUrl = bag.data.wwwUrl + '/auth/' +
+              mappingForCallbackUrl[masterName] + '/' +
+              bag.systemIntegrationId + '/identify';
+
+            $scope.vm.installForm.auth[masterName].authorizations.push(data);
+          }
+        }
+      );
+    }
+
+    function deleteAuthencation(masterName, systemIntegrationId) {
+      // while deleting an authentication method,
+      // do not enable/disable SCM masterIntegration
+      $scope.vm.installForm.auth[masterName].isDeletingAuth = true;
+      var bag = {
+        name: 'auth',
+        masterName: masterName,
+        systemIntegrationId: systemIntegrationId,
+      };
+
+      async.series([
+        getSystemIntegrationById.bind(null, bag),
+        deleteSystemIntegration.bind(null, bag)
+      ],
+        function (err) {
+          $scope.vm.installForm.auth[masterName].isDeletingAuth = false;
+          if (err)
+            return popup_horn.error(err);
+
+          if (bag.systemIntegration)
+            $scope.vm.installForm.auth[masterName].authorizations =
+              _.reject($scope.vm.installForm.auth[masterName].authorizations,
+                function (auth) {
+                  return auth.systemIntegrationId === systemIntegrationId;
+                }
+              );
+        }
+      );
+    }
+
+    function toggleSCMMasterIntegration(scmMasterName) {
+      $scope.vm.installForm.scm[scmMasterName].disableToggle = true;
+
+      var SCMMasterInt = _.findWhere($scope.vm.masterIntegrations, {
+          name: scmMasterName,
+          type: 'scm'
+        });
+
+      if (_.isEmpty(SCMMasterInt))
+        return;
+
+      var bag = {
+        masterIntegrationId: SCMMasterInt.id,
+        isEnabled: $scope.vm.installForm.scm[scmMasterName].isEnabled
+      };
+
+      async.series([
+        putMasterIntegration.bind(null, bag)
+      ],
+        function (err) {
+          $scope.vm.installForm.scm[scmMasterName].disableToggle = false;
+          if (err)
+            return popup_horn.error(err);
+        }
+      );
+    }
 
     function toggleAuthProvider(masterName) {
       var systemInt = $scope.vm.installForm.auth[masterName + 'Keys'];
@@ -4660,7 +4840,7 @@
             if (err)
               return popup_horn.error(err);
             if (bag.systemIntegrationId) {
-              var providerAuthName = providerAuthNames[bag.masterName];
+              var providerAuthName = mappingForCallbackUrl[bag.masterName];
               if (!_.isEmpty(providerAuthName))
                 $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
                   bag.data.wwwUrl + '/auth/' + providerAuthName +

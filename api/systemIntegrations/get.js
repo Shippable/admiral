@@ -104,6 +104,9 @@ function _constructQuery(bag, next) {
   var query = 'SELECT * FROM "systemIntegrations"';
   var queries = [];
 
+  if (_.has(bag.reqQuery, 'systemIntegrationId'))
+    queries.push(util.format('id=\'%s\'', bag.reqQuery.systemIntegrationId));
+
   if (_.has(bag.reqQuery, 'name'))
     queries.push(util.format('name=\'%s\'', bag.reqQuery.name));
 
