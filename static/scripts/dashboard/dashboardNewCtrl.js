@@ -894,7 +894,6 @@
       saveServices: saveServices,
       restartServices: restartServices,
       installAddons: installAddons,
-      toggleAuthProvider: toggleAuthProvider,
       addAuthentication: addAuthentication,
       deleteAuthencation: deleteAuthencation,
       toggleSCMMasterIntegration: toggleSCMMasterIntegration,
@@ -3633,6 +3632,7 @@
         function (provider) {
           _.each(provider.authorizations,
             function (auth) {
+              auth.sysInt.wwwUrl = $scope.vm.installForm.www.url.data.url;
               auths[auth.systemIntegrationId] = {
                 data: auth.sysInt,
                 systemIntegrationId: auth.systemIntegrationId,
@@ -4810,60 +4810,6 @@
             return popup_horn.error(err);
         }
       );
-    }
-
-    function toggleAuthProvider(masterName) {
-      var systemInt = $scope.vm.installForm.auth[masterName + 'Keys'];
-      if (_.isEmpty(systemInt))
-        systemInt = $scope.vm.installForm.auth[masterName + 'Auth'];
-
-      $scope.vm.installForm.scm[masterName].disableToggle = true;
-
-      if (systemInt.isEnabled)
-        $scope.vm.installForm.scm[masterName].isEnabled = true;
-
-      var bag = {
-        name: 'auth',
-        masterName: systemInt.masterName,
-        data: systemInt.data,
-        isEnabled: systemInt.isEnabled
-      };
-      bag.data.wwwUrl = $scope.vm.installForm.www.url.data.url;
-
-      if (systemInt.isEnabled) {
-        async.series([
-            getSystemIntegration.bind(null, bag),
-            postSystemIntegration.bind(null, bag)
-          ],
-          function (err) {
-            $scope.vm.installForm.scm[masterName].disableToggle = false;
-            if (err)
-              return popup_horn.error(err);
-            if (bag.systemIntegrationId) {
-              var providerAuthName = mappingForCallbackUrl[bag.masterName];
-              if (!_.isEmpty(providerAuthName))
-                $scope.vm.installForm[bag.name][bag.masterName].callbackUrl =
-                  bag.data.wwwUrl + '/auth/' + providerAuthName +
-                  '/' + bag.systemIntegrationId + '/identify';
-            }
-          }
-        );
-      } else {
-        if (systemInt.data.clientId !== '' ||
-          systemInt.data.clientSecret !== '')
-          return;
-
-        async.series([
-            getSystemIntegration.bind(null, bag),
-            deleteSystemIntegration.bind(null, bag)
-          ],
-          function (err) {
-            $scope.vm.installForm.scm[masterName].disableToggle = false;
-            if (err)
-              return popup_horn.error(err);
-          }
-        );
-      }
     }
 
     function updateAutoSync() {
