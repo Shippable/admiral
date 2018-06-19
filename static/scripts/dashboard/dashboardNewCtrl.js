@@ -701,6 +701,10 @@
           displayName: '',
           isEnabled: false
         },
+        sshKey: {
+          displayName: '',
+          isEnabled: true
+        },
         pemKey: {
           displayName: '',
           isEnabled: true
@@ -1350,13 +1354,8 @@
           //map the used masterName with sshKeys systemIntegration
           $scope.vm.installForm.sshKeys[sshKeyMasterName] = sshKeysForm;
           systemIntDataDefaults.sshKeys[sshKeyMasterName] = sshKeysDefault;
-          if (sshKeyMasterName === 'ssh-key') {
-            $scope.vm.addonsForm.sshKey = {
-              displayName: '',
-              isEnabled: false
-            };
+          if (sshKeyMasterName === 'ssh-key')
             $scope.vm.showNewSshKeyInt = true;
-          }
 
           var apiIntegration =
             _.findWhere(systemIntegrations, {name: 'api'});
