@@ -16,11 +16,12 @@ do $$
       end if;
 
       -- aarch64 Ubuntu_16.04 Master
+      update "runtimeTemplates" set "reqProcImage" = 'aarch64_u16reqproc' where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'Master';
       update "runtimeTemplates" set "defaultTaskImage" = 'aarch64_u16all' where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'Master';
       update "runtimeTemplates" set "drydockOrg" = 'drydock' where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'Master';
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8001 and "osTypeCode" = 9001 and "version" = 'Master') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8001, 9001, 'Master', 'drydock', 'u16', 'master', 'aarch64_u16all', 'reqproc', false, '2018-01-16', '2018-01-16');
+        values (8001, 9001, 'Master', 'drydock', 'u16', 'master', 'aarch64_u16all', 'aarch64_u16reqproc', false, '2018-01-16', '2018-01-16');
       end if;
 
       -- x86_64 WindowsServer_2016 Master
@@ -52,12 +53,14 @@ do $$
         values (8000, 9005, 'Master', 'drydock', 'c7', 'master', 'c7all', 'reqproc', false, '2018-03-13', '2018-03-13');
       end if;
 
-      -- aarch64 Ubuntu_16.04 Master
+      -- aarch32 Ubuntu_16.04 Master
       update "runtimeTemplates" set "defaultTaskImage" = 'aarch32_u16' where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'Master';
+      update "runtimeTemplates" set "reqProcImage" = 'aarch32_u16reqproc' where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'Master';
+      update "runtimeTemplates" set "drydockFamily" = 'aarch32_u16' where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'Master';
       update "runtimeTemplates" set "drydockOrg" = 'drydock' where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'Master';
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'Master') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
-        values (8002, 9001, 'Master', 'drydock', 'u16', 'master', 'aarch32_u16', 'reqproc', false, '2018-04-11', '2018-04-11');
+        values (8002, 9001, 'Master', 'drydock', 'aarch32_u16', 'master', 'aarch32_u16', 'aarch32_u16reqproc', false, '2018-04-11', '2018-04-11');
       end if;
 
     end if;
