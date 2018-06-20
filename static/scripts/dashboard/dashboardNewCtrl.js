@@ -2388,6 +2388,7 @@
         isShippableManaged: true
       };
       var stateUpdate = {
+        type: 'gitlabCreds',
         address: $scope.vm.admiralEnv.ADMIRAL_IP,
         rootPassword: $scope.vm.initializeForm.state.rootPassword,
         sshPort: 2222,
