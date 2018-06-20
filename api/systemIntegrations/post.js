@@ -14,6 +14,7 @@ var VaultAdapter = require('../../common/VaultAdapter.js');
 function post(req, res) {
   var bag = {
     reqBody: req.body,
+    reqQuery: req.query,
     resBody: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     vaultUrlEnv: 'VAULT_URL',
@@ -159,7 +160,12 @@ function _enableMasterIntegration(bag, next) {
     isEnabled: true
   };
 
+  var query = '';
+  if (bag.reqQuery.skipServices)
+    query = 'skipServices=true';
+
   bag.apiAdapter.putMasterIntegrationById(bag.masterIntegration.id, update,
+    query,
     function (err) {
       if (err)
         return next(

@@ -140,7 +140,9 @@ function _putSystemIntegration(bag, next) {
     data: _generateSystemIntegrationData(bag)
   };
 
+
   bag.apiAdapter.putSystemIntegration(bag.systemIntegration.id, putObject,
+    'skipServices=true',
     function (err, systemIntegration) {
       if (err)
         return next(
@@ -167,6 +169,7 @@ function _postSystemIntegration(bag, next) {
   };
 
   bag.apiAdapter.postSystemIntegration(postObject,
+    'skipServices=true',
     function (err) {
       if (err)
         return next(
