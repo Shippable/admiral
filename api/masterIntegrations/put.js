@@ -13,6 +13,7 @@ var APIAdapter = require('../../common/APIAdapter.js');
 function put(req, res) {
   var bag = {
     inputParams: req.params,
+    reqQuery: req.query,
     reqBody: req.body,
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     resBody: {},
@@ -123,6 +124,7 @@ function _getMasterIntegration(bag, next) {
 }
 
 function _getServicesList(bag, next) {
+  if (bag.reqQuery.skipServices) return next();
   var who = bag.who + '|' + _getServicesList.name;
   logger.verbose(who, 'Inside');
 
@@ -148,6 +150,7 @@ function _getServicesList(bag, next) {
 }
 
 function _getIntegrationServicesMap(bag, next) {
+  if (bag.reqQuery.skipServices) return next();
   var who = bag.who + '|' + _getIntegrationServicesMap.name;
   logger.verbose(who, 'Inside');
 
@@ -201,6 +204,7 @@ function _getEnabledIntegrations(bag, next) {
 }
 
 function _filterEnabledIntegrationServices(bag, next) {
+  if (bag.reqQuery.skipServices) return next();
   var who = bag.who + '|' + _filterEnabledIntegrationServices.name;
   logger.verbose(who, 'Inside');
 
@@ -226,6 +230,7 @@ function _filterEnabledIntegrationServices(bag, next) {
 }
 
 function _getIntegrationServices(bag, next) {
+  if (bag.reqQuery.skipServices) return next();
   var who = bag.who + '|' + _getIntegrationServices.name;
   logger.verbose(who, 'Inside');
 
@@ -247,6 +252,7 @@ function _getIntegrationServices(bag, next) {
 }
 
 function _startIntegrationServices(bag, next) {
+  if (bag.reqQuery.skipServices) return next();
   if (!bag.reqBody.isEnabled) return next();
 
   var who = bag.who + '|' + _startIntegrationServices.name;
@@ -292,6 +298,7 @@ function _startIntegrationServices(bag, next) {
 }
 
 function _stopIntegrationServices(bag, next) {
+  if (bag.reqQuery.skipServices) return next();
   if (bag.reqBody.isEnabled) return next();
 
   var who = bag.who + '|' + _stopIntegrationServices.name;

@@ -14,6 +14,7 @@ function put(req, res) {
   var bag = {
     inputParams: req.params,
     reqBody: req.body,
+    reqQuery: req.query,
     resBody: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     vaultUrlEnv: 'VAULT_URL',
@@ -421,8 +422,12 @@ function _putMasterIntegration(bag, next) {
     isEnabled: true
   };
 
+  var query = '';
+  if (bag.reqQuery.skipServices)
+    query = 'skipServices=true';
+
   bag.apiAdapter.putMasterIntegrationById(
-    bag.systemIntegration.masterIntegrationId, update,
+    bag.systemIntegration.masterIntegrationId, update, query,
     function (err) {
       if (err)
         return next(

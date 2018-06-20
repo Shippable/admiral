@@ -45,8 +45,9 @@ APIAdapter.prototype.getMasterIntegrationFields =
 
 // masterIntegrations
 APIAdapter.prototype.putMasterIntegrationById =
-  function (masterIntegrationId, json, callback) {
-    var url = util.format('/api/masterIntegrations/%s', masterIntegrationId);
+  function (masterIntegrationId, json, query, callback) {
+    var url = util.format('/api/masterIntegrations/%s?%s',
+      masterIntegrationId, query);
     this.put(url, json, callback);
   };
 
@@ -178,14 +179,14 @@ APIAdapter.prototype.getSystemIntegrations =
   };
 
 APIAdapter.prototype.putSystemIntegration =
-  function (systemIntegrationId, body, callback) {
-    var url = '/api/systemIntegrations/' + systemIntegrationId;
+  function (systemIntegrationId, body, query, callback) {
+    var url = '/api/systemIntegrations/' + systemIntegrationId + '?' + query;
     this.put(url, body, callback);
   };
 
 APIAdapter.prototype.postSystemIntegration =
-  function (body, callback) {
-    var url = '/api/systemIntegrations';
+  function (body, query, callback) {
+    var url = '/api/systemIntegrations?' + query;
     this.post(url, body, callback);
   };
 
@@ -193,6 +194,12 @@ APIAdapter.prototype.validateUrl =
   function (systemIntegrationId, body, callback) {
     var url = '/api/systemIntegrations' + systemIntegrationId + '/validate';
     this.post(url, body, callback);
+  };
+
+APIAdapter.prototype.deleteSystemIntegration =
+  function (systemIntegrationId, query, callback) {
+    var url = '/api/systemIntegrations/' + systemIntegrationId + '?' + query;
+    this.delete(url, callback);
   };
 
 // systemMachineImages

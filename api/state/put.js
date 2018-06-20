@@ -65,12 +65,16 @@ function _get(bag, next) {
         );
 
       bag.config = state;
+
+      if (!bag.config.type)
+        bag.config.type = 'gitlabCreds';
       return next();
     }
   );
 }
 
 function _put(bag, next) {
+  /* jshint maxcomplexity:15 */
   var who = bag.who + '|' + _put.name;
   logger.verbose(who, 'Inside');
 
@@ -88,6 +92,12 @@ function _put(bag, next) {
 
   if (_.has(bag.reqBody, 'isShippableManaged'))
     bag.config.isShippableManaged = bag.reqBody.isShippableManaged;
+
+  if (_.has(bag.reqBody, 'type') && bag.config.type !== bag.reqBody.type)
+    return next(
+      new ActErr(who, ActErr.InvalidParam,
+        'Cannnot change type of initialized state')
+    );
 
   if (_.has(bag.reqBody, 'isProcessing'))
     bag.config.isProcessing = bag.reqBody.isProcessing;

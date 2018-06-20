@@ -12,6 +12,7 @@ var VaultAdapter = require('../../common/VaultAdapter.js');
 function deleteById(req, res) {
   var bag = {
     inputParams: req.params,
+    reqQuery: req.query,
     resBody: {},
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
     vaultUrlEnv: 'VAULT_URL',
@@ -212,8 +213,12 @@ function _disableMasterIntegration(bag, next) {
     isEnabled: false
   };
 
+  var query = '';
+  if (bag.reqQuery.skipServices)
+    query = 'skipServices=true';
+
   bag.apiAdapter.putMasterIntegrationById(
-    bag.deletedSystemIntegration.masterIntegrationId, update,
+    bag.deletedSystemIntegration.masterIntegrationId, update, query,
     function (err) {
       if (err)
         return next(
