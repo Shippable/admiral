@@ -5,31 +5,23 @@ module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
-var fs = require('fs-extra');
-var path = require('path');
-var spawn = require('child_process').spawn;
-var url = require('url');
 
-var GitLabAdapter = require('../../common/GitLabAdapter.js');
 var APIAdapter = require('../../common/APIAdapter.js');
-var envHandler = require('../../common/envHandler.js');
+var configHandler = require('../../common/configHandler.js');
+
+var checkStatus = {
+  amazonKeys: require('./s3/getStatus.js'),
+  gitlabCreds: require('./gitlab/getStatus.js')
+};
 
 function getStatus(req, res) {
   var bag = {
-    reqBody: req.body,
     resBody: {
       isReachable: false,
       error: null
     },
     apiAdapter: new APIAdapter(req.headers.authorization.split(' ')[1]),
-    tmpScriptFilename: '/tmp/checkGitLabSSHPort.sh',
-    tmpScriptWritten: false,
-    component: 'state',
-    gitlabUrl: null,
-    gitlabSSHPort: null,
-    gitlabUsername: null,
-    gitlabPassword: null,
-    gitlabAdapter: null
+    component: 'state'
   };
 
   bag.who = util.format('state|%s', self.name);
@@ -37,19 +29,13 @@ function getStatus(req, res) {
 
   async.series([
       _checkInputParams.bind(null, bag),
+      _getConfig.bind(null, bag),
       _getSystemIntegration.bind(null, bag),
-      _initializeGitLabAdapter.bind(null, bag),
-      _getGitLabUser.bind(null, bag),
-      _getOperatingSystem.bind(null, bag),
-      _getArchitecture.bind(null, bag),
-      _generatePortCheckScript.bind(null, bag),
-      _writePortCheckScriptToFile.bind(null, bag),
-      _checkSSHPort.bind(null, bag),
-      _getStatus.bind(null, bag)
+      _getRootBucket.bind(null, bag),
+      _checkStatus.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
-      _removePortCheckScript(bag);
 
       if (err)
         return respondWithError(res, err);
@@ -66,11 +52,42 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
+
+function _getConfig(bag, next) {
+  var who = bag.who + '|' + _getConfig.name;
+  logger.verbose(who, 'Inside');
+
+  configHandler.get(bag.component,
+    function (err, state) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'Failed to get ' + bag.component, err)
+        );
+
+      if (_.isEmpty(state))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'No configuration in database for ' + bag.component)
+        );
+
+      bag.config = state;
+
+      if (!bag.config.type)
+        bag.config.type = 'gitlabCreds';
+
+      return next();
+    }
+  );
+}
+
 function _getSystemIntegration(bag, next) {
+  if (bag.config.type === 'none') return next();
   var who = bag.who + '|' + _getSystemIntegration.name;
   logger.verbose(who, 'Inside');
 
-  bag.apiAdapter.getSystemIntegrations('name=state&masterName=gitlabCreds',
+  bag.apiAdapter.getSystemIntegrations(
+    'name=state&masterName=' + bag.config.type,
     function (err, systemIntegrations) {
       if (err)
         return next(
@@ -84,227 +101,62 @@ function _getSystemIntegration(bag, next) {
             'No state system integration found')
         );
 
-      var systemIntegration = systemIntegrations[0];
-
-      bag.gitlabUrl = systemIntegration.data.url;
-      bag.gitlabSSHPort = systemIntegration.data.sshPort;
-      bag.gitlabUsername = systemIntegration.data.username;
-      bag.gitlabPassword = systemIntegration.data.password;
-
+      bag.systemIntegration = systemIntegrations[0];
       return next();
     }
   );
 }
 
-function _initializeGitLabAdapter(bag, next) {
-  var who = bag.who + '|' + _initializeGitLabAdapter.name;
+
+function _getRootBucket(bag, next) {
+  var who = bag.who + '|' + _getRootBucket.name;
   logger.verbose(who, 'Inside');
 
-  bag.gitlabAdapter = new GitLabAdapter(null, bag.gitlabUrl,
-    bag.gitlabUsername, bag.gitlabPassword);
-
-  bag.gitlabAdapter.initialize(
-    function (err) {
-      if (err)
-        bag.resBody.error = 'Failed to intialize GitLab adapter with error ' +
-          util.inspect(err);
-
-      return next();
-    }
-  );
-}
-
-function _getGitLabUser(bag, next) {
-  if (bag.resBody.error) return next();
-
-  var who = bag.who + '|' + _getGitLabUser.name;
-  logger.verbose(who, 'Inside');
-
-
-  bag.gitlabAdapter.getCurrentUser(
-    function (err, user) {
-      if (err) {
-        bag.resBody.error = util.format(
-          'Failed to get GitLab user %s', bag.gitlabUsername);
-        return next();
-      }
-
-      /* jshint camelcase:false */
-      if (!user.is_admin) {
-      /* jshint camelcase:true */
-        bag.resBody.error = util.format(
-          'GitLab user %s is not an admin', bag.gitlabUsername);
-        return next();
-      }
-
-      return next();
-    }
-  );
-}
-
-function _getOperatingSystem(bag, next) {
-  var who = bag.who + '|' + _getOperatingSystem.name;
-  logger.verbose(who, 'Inside');
-
-  envHandler.get('OPERATING_SYSTEM',
-    function (err, operatingSystem) {
+  var query = '';
+  bag.apiAdapter.getSystemSettings(query,
+    function (err, systemSettings) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Cannot get env: OPERATING_SYSTEM')
+            'Failed to get system settings : ' + util.inspect(err))
         );
 
-      bag.operatingSystem = operatingSystem;
-      logger.debug('Found Operating System');
+      bag.rootS3Bucket = systemSettings.rootS3Bucket;
 
       return next();
     }
   );
 }
 
-function _getArchitecture(bag, next) {
-  var who = bag.who + '|' + _getArchitecture.name;
+function _checkStatus(bag, next) {
+  var who = bag.who + '|' + _checkStatus.name;
   logger.verbose(who, 'Inside');
 
-  envHandler.get('ARCHITECTURE',
-    function (err, architecture) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Cannot get env: ARCHITECTURE')
-        );
+  if (bag.config.type === 'none') {
+    bag.resBody.isReachable = true;
+    return next();
+  }
 
-      bag.architecture = architecture;
-      logger.debug('Found Architecture');
+  var checkStatusForType = checkStatus[bag.systemIntegration.masterName];
 
-      return next();
-    }
-  );
-}
+  if (!checkStatusForType)
+    return next(
+      new ActErr(who, ActErr.OperationFailed,
+        'Invalid state config type: ' + bag.config.type)
+    );
 
-function _generatePortCheckScript(bag, next) {
-  if (bag.resBody.error) return next();
-
-  var who = bag.who + '|' + _generatePortCheckScript.name;
-  logger.verbose(who, 'Inside');
-
-  //attach header
-  var headerScript = '';
-  var filePath = path.join(global.config.scriptsDir, '/lib/_logger.sh');
-  headerScript = headerScript.concat(__applyTemplate(filePath, {}));
-
-  filePath = path.join(global.config.scriptsDir, bag.architecture,
-    bag.operatingSystem, 'check_port.sh');
-  bag.script = headerScript.concat(__applyTemplate(filePath, {}));
-
-  return next();
-}
-
-function _writePortCheckScriptToFile(bag, next) {
-  if (bag.resBody.error) return next();
-
-  var who = bag.who + '|' + _writePortCheckScriptToFile.name;
-  logger.debug(who, 'Inside');
-
-  fs.writeFile(bag.tmpScriptFilename, bag.script,
-    function (err) {
-      if (err) {
-        var msg = util.format('%s, Failed with err:%s', who, err);
-        return next(
-          new ActErr(who, ActErr.OperationFailed, msg)
-        );
-      }
-      bag.tmpScriptWritten = true;
-      fs.chmodSync(bag.tmpScriptFilename, '755');
-      return next();
-    }
-  );
-}
-
-function _checkSSHPort(bag, next) {
-  if (bag.resBody.error) return next();
-
-  var who = bag.who + '|' + _checkSSHPort.name;
-  logger.verbose(who, 'Inside');
-
-  var address = url.parse(bag.gitlabUrl).hostname;
-  var env = {
-    'IP': address,
-    'PORT': bag.gitlabSSHPort,
+  var params = {
+    systemIntegration: bag.systemIntegration,
+    rootS3Bucket: bag.rootS3Bucket
   };
 
-  /* jshint camelcase:false */
-  if (process.env.http_proxy)
-    env.http_proxy = process.env.http_proxy;
+  checkStatusForType(params,
+    function (err, resBody) {
+      if (err)
+        return next(err);
 
-  if (process.env.https_proxy)
-    env.https_proxy = process.env.https_proxy;
-
-  if (process.env.no_proxy)
-    env.no_proxy = process.env.no_proxy;
-  /* jshint camelcase:true */
-
-  var exec = spawn('/bin/bash',
-    ['-c', bag.tmpScriptFilename],
-    {
-      env: env
-    }
-  );
-
-  exec.stdout.on('data',
-    function (data)  {
-      logger.debug(who, data.toString());
-    }
-  );
-
-  exec.stderr.on('data',
-    function (data)  {
-      logger.error(who, data.toString());
-    }
-  );
-
-  exec.on('close',
-    function (exitCode)  {
-      if (exitCode > 0)
-        bag.resBody.error = 'Unable to access SSH port ' + bag.gitlabSSHPort;
-
+      bag.resBody = resBody;
       return next();
     }
   );
-}
-
-function _getStatus(bag, next) {
-  if (bag.resBody.error) return next();
-
-  var who = bag.who + '|' + _getStatus.name;
-  logger.verbose(who, 'Inside');
-
-  bag.resBody.isReachable = true;
-
-  return next();
-}
-
-function _removePortCheckScript(bag) {
-  if (!bag.tmpScriptWritten) return;
-
-  var who = bag.who + '|' + _getStatus.name;
-  logger.verbose(who, 'Inside');
-
-  fs.remove(bag.tmpScriptFilename,
-    function (error) {
-      if (error)
-        logger.warn(
-          util.format(
-            '%s, Failed to remove %s %s', who, bag.tmpScriptFilename, error)
-        );
-    }
-  );
-}
-
-//local function to apply vars to template
-function __applyTemplate(filePath, dataObj) {
-  var fileContent = fs.readFileSync(filePath).toString();
-  var template = _.template(fileContent);
-
-  return template({obj: dataObj});
 }

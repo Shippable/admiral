@@ -7,6 +7,7 @@ var AWS = require('aws-sdk');
 var proxy = require('proxy-agent');
 var _ = require('underscore');
 var EC2 = {};
+var S3 = {};
 
 function Adapter(accessKeyId, secretKey, region, sessionToken) {
   this.config = {};
@@ -52,10 +53,27 @@ Adapter.prototype.initialize = function (callback) {
     },
     maxRetries: 2
   };
+
+  self.s3Config = {
+    accessKeyId: self.aws_access_key_id,
+    secretAccessKey: self.aws_secret_access_key,
+    region: self.region,
+    sessionToken: self.sessionToken,
+    apiVersions: self.apiVersions,
+    httpOptions: {
+      timeout: 5000
+    },
+    signatureVersion: 'v4'
+  };
+
   /* jshint camelcase: true */
 
   self.ec2 = new AWS.EC2(self.ec2Config);
   self.EC2 = bindSubAdapter(self, EC2);
+
+  self.s3 = new AWS.S3(self.s3Config);
+  self.S3 = bindSubAdapter(self, S3);
+
   self.initialized = true;
 
   return callback();
@@ -91,6 +109,39 @@ EC2.getImages =
         if (data.Images)
           images = data.Images;
         callback(null, images);
+      }
+    );
+  };
+
+// AWS S3 API Docs
+// http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html
+
+S3.checkBucket =
+  function (bucket, callback) {
+    var options = {
+      Bucket: bucket
+    };
+
+    this.s3.headBucket(options,
+      function (err, data) {
+        if (err)
+          return callback(err);
+        return callback(null, data);
+      }
+    );
+  };
+
+S3.createBucket =
+  function (bucket, callback) {
+    var options = {
+      Bucket: bucket
+    };
+    this.s3.createBucket(options,
+      function (err, data) {
+        if (err)
+          return callback(err);
+
+        return callback(null, data);
       }
     );
   };
