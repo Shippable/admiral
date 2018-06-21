@@ -804,6 +804,11 @@ do $$
       create index "jobVersionIdI" on "jobs" using btree("versionId");
     end if;
 
+    -- Add branch column to resources
+    if not exists (select 1 from information_schema.columns where table_name = 'resources' and column_name = 'branch') then
+      alter table "resources" add column "branch" varchar(255);
+    end if;
+
     -- remove outdated routeRoles
     if exists (select 1 from information_schema.columns where table_name = 'routeRoles') then
       delete from "routeRoles" where "routePattern"='/accounts/:id' and "httpVerb"='GET';
