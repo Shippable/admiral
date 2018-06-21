@@ -810,12 +810,12 @@ do $$
     end if;
 
     -- Reindex resourceSubscriptionIdNameU to resourceSubscriptionIdNameBranchU in resources table
-    if exists (select 1 from pg_indexes where tablename = 'resources' and indexname = 'resourceSubscriptionIdNameU') then
-      drop index "resourceSubscriptionIdNameU";
-    end if;
-
     if not exists (select 1 from pg_indexes where tablename = 'resources' and indexname = 'resourceSubscriptionIdNameBranchU') then
       create unique index "resourceSubscriptionIdNameBranchU" on "resources" using btree("subscriptionId", "name", "branch");
+    end if;
+
+    if exists (select 1 from pg_indexes where tablename = 'resources' and indexname = 'resourceSubscriptionIdNameU') then
+      drop index "resourceSubscriptionIdNameU";
     end if;
 
     -- remove outdated routeRoles
