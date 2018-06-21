@@ -809,6 +809,15 @@ do $$
       alter table "resources" add column "branch" varchar(255);
     end if;
 
+    -- Reindex resourceSubscriptionIdNameU to resourceSubscriptionIdNameBranchU in resources table
+    if exists (select 1 from pg_indexes where tablename = 'resources' and indexname = 'resourceSubscriptionIdNameU') then
+      drop index "resourceSubscriptionIdNameU";
+    end if;
+
+    if not exists (select 1 from pg_indexes where tablename = 'resources' and indexname = 'resourceSubscriptionIdNameBranchU') then
+      create unique index "resourceSubscriptionIdNameBranchU" on "resources" using btree("subscriptionId", "name", "branch");
+    end if;
+
     -- remove outdated routeRoles
     if exists (select 1 from information_schema.columns where table_name = 'routeRoles') then
       delete from "routeRoles" where "routePattern"='/accounts/:id' and "httpVerb"='GET';
