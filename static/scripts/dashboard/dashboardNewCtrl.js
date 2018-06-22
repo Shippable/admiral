@@ -90,7 +90,10 @@
           confirmCommand: false
         },
         state: {
+          type: 'amazonKeys',
           initType: 'admiral',
+          accessKey: '',
+          secretKey: '',
           rootPassword: '',
           address: '',
           sshPort: 0,
@@ -187,7 +190,7 @@
             protocol = 'http';
           $scope.vm.installForm.state.gitlabCreds.data.url =
             protocol + '://' + updatedAddress;
-          $scope.vm.installForm.consoleAPI.url.fqdn = updatedAddress;
+          $scope.vm.installForm.state.gitlabCreds.fqdn = updatedAddress;
           popup_horn.success('Updated FQDN');
         }, 0);
       },
@@ -440,7 +443,6 @@
             fqdn: '',
             isSecure: '',
             localAddress: '',
-            fqdn: '',
             data: {
               url: ''
             }
@@ -536,6 +538,14 @@
           }
         },
         state: {
+          amazonKeys: {
+            isEnabled: true,
+            masterName: 'amazonKeys',
+            data: {
+              accessKey: '',
+              secretKey: ''
+            }
+          },
           gitlabCreds: {
             isEnabled: true,
             isSecure: '',
@@ -873,6 +883,7 @@
       resetInstallLocationModal: resetInstallLocationModal,
       showInstallLocationModal: showInstallLocationModal,
       saveInstallLocationModal: saveInstallLocationModal,
+      changeStateType: changeStateType,
       secretsModalErrorMsg: null,
       msgModalErrorMsg: null,
       redisModalErrorMsg: null,
@@ -1248,6 +1259,10 @@
         },
         sshKeys: {},
         state: {
+          amazonKeys: {
+            accessKey: '',
+            secretKey: ''
+          },
           gitlabCreds: {
             password: '',
             url: '',
@@ -1469,10 +1484,13 @@
                       $scope.vm.systemSettings.redis.port;
                   }
                   if (sysIntName === 'state') {
-                    var path =
-                      $scope.vm.installForm[sysIntName][masterName].data.url.split('/api')[1];
-                    $scope.vm.installForm[sysIntName][masterName].localAddress =
-                      protocol + '://' + $scope.vm.systemSettings.state.address + '/api' + path;
+                    if (masterName === 'gitlabCreds') {
+                      var path = $scope.vm.installForm[sysIntName][masterName].
+                        data.url.split('/api')[1];
+                      $scope.vm.installForm[sysIntName][masterName].
+                        localAddress = protocol + '://' +
+                        $scope.vm.systemSettings.state.address + '/api' + path;
+                    }
                   }
                 }
                 if (sysIntName === 'msg') {
@@ -1625,16 +1643,26 @@
                     $scope.vm.admiralEnv.DB_PASSWORD;
               }
             } else if (service === 'state') {
-              var stateSystemIntegration =
+              var gitlabSystemIntegration =
                 _.findWhere($scope.vm.systemIntegrations,
                   {name: 'state', masterName: 'gitlabCreds'});
-              if (stateSystemIntegration) {
+              if (gitlabSystemIntegration) {
                 $scope.vm.initializeForm[service].rootPassword =
-                  stateSystemIntegration.data.password;
-              } else {
+                  gitlabSystemIntegration.data.password;
+              } else if ($scope.vm.initializeForm[service].type ===
+                'gitlabCreds') {
                 if (_.isEmpty($scope.vm.initializeForm[service].rootPassword))
                   $scope.vm.initializeForm[service].rootPassword =
                     $scope.vm.admiralEnv.DB_PASSWORD;
+              }
+              var amazonKeysSystemIntegration =
+                _.findWhere($scope.vm.systemIntegrations,
+                  {name: 'state', masterName: 'amazonKeys'});
+              if (amazonKeysSystemIntegration) {
+                $scope.vm.initializeForm[service].accessKey =
+                  amazonKeysSystemIntegration.data.accessKey;
+                $scope.vm.initializeForm[service].secretKey =
+                  amazonKeysSystemIntegration.data.secretKey;
               }
             }
           }
@@ -1855,6 +1883,15 @@
         } else {
           $('#redis-location-modal').modal('show');
         }
+      }
+    }
+
+    function changeStateType() {
+      $scope.vm.systemSettings.state.isInitialized = false;
+      if ($scope.vm.initializeForm.state.type === 'gitlabCreds') {
+        if (_.isEmpty($scope.vm.initializeForm.state.rootPassword))
+          $scope.vm.initializeForm.state.rootPassword =
+            $scope.vm.admiralEnv.DB_PASSWORD;
       }
     }
 
@@ -2240,9 +2277,21 @@
         validationErrors.push(
           'Messaging requires a password of 8 or more characters'
         );
-      if ($scope.vm.initializeForm.state.rootPassword.length < 8)
+      if ($scope.vm.initializeForm.state.type === 'gitlabCreds' &&
+        $scope.vm.initializeForm.state.rootPassword.length < 8)
         validationErrors.push(
           'State requires a password of 8 or more characters'
+        );
+      if ($scope.vm.initializeForm.state.type === 'amazonKeys' &&
+        !$scope.vm.initializeForm.state.accessKey)
+        validationErrors.push(
+          'State requires an AWS Access Key for S3'
+        );
+
+      if ($scope.vm.initializeForm.state.type === 'amazonKeys' &&
+        !$scope.vm.initializeForm.state.secretKey)
+        validationErrors.push(
+          'State requires an AWS Secret Key for S3'
         );
 
       if (!_.isEmpty(validationErrors))
@@ -2265,7 +2314,11 @@
     }
 
     function postDBInitialize(next) {
-      admiralApiAdapter.postDB({},
+      var body = {};
+      if ($scope.vm.installForm.systemSettings.rootS3Bucket)
+        body.rootS3Bucket = $scope.vm.installForm.systemSettings.rootS3Bucket;
+
+      admiralApiAdapter.postDB(body,
         function (err) {
           if (err)
             return next(err);
@@ -2388,10 +2441,7 @@
         isShippableManaged: true
       };
       var stateUpdate = {
-        type: 'gitlabCreds',
-        address: $scope.vm.admiralEnv.ADMIRAL_IP,
-        rootPassword: $scope.vm.initializeForm.state.rootPassword,
-        sshPort: 2222,
+        type: $scope.vm.initializeForm.state.type,
         isShippableManaged: true
       };
       var redisUpdate = {
@@ -2404,13 +2454,31 @@
       var workersList = $scope.vm.initializeForm.workers.workers;
       var deletedWorkers = $scope.vm.initializeForm.workers.deletedWorkers;
 
+      if (stateUpdate.type === 'gitlabCreds') {
+        stateUpdate.address = $scope.vm.admiralEnv.ADMIRAL_IP;
+        stateUpdate.rootPassword = $scope.vm.initializeForm.state.rootPassword;
+
+        if ($scope.vm.initializeForm.state.initType === 'new')
+          stateUpdate.address = $scope.vm.initializeForm.state.address;
+
+        if ($scope.vm.initializeForm.state.initType === 'existing') {
+          stateUpdate.address = $scope.vm.initializeForm.state.address;
+          stateUpdate.isShippableManaged = false;
+        }
+
+        // Set the correct port if GitLab has already been initialized,
+        // even if it's Shippable managed:
+        stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
+          ($scope.vm.admiralEnv.DEV_MODE ? 2222 : 22);
+      } else if (stateUpdate.type === 'amazonKeys') {
+        stateUpdate.accessKey =
+          $scope.vm.initializeForm.state.accessKey;
+        stateUpdate.secretKey =
+          $scope.vm.initializeForm.state.secretKey;
+      }
+
       if ($scope.vm.initializeForm.msg.initType === 'new')
         msgUpdate.address = $scope.vm.initializeForm.msg.address;
-
-      if ($scope.vm.initializeForm.state.initType === 'new') {
-        stateUpdate.address = $scope.vm.initializeForm.state.address;
-        stateUpdate.sshPort = 22;
-      }
 
       if ($scope.vm.initializeForm.redis.initType === 'new')
         redisUpdate.address = $scope.vm.initializeForm.redis.address;
@@ -2420,12 +2488,6 @@
         msgUpdate.username = $scope.vm.initializeForm.msg.username;
         msgUpdate.isSecure = $scope.vm.initializeForm.msg.isSecure;
         msgUpdate.isShippableManaged = false;
-      }
-
-      if ($scope.vm.initializeForm.state.initType === 'existing') {
-        stateUpdate.address = $scope.vm.initializeForm.state.address;
-        stateUpdate.sshPort = 22;
-        stateUpdate.isShippableManaged = false;
       }
 
       if ($scope.vm.initializeForm.redis.initType === 'existing') {
@@ -2441,17 +2503,13 @@
         msgUpdate.isSecure = $scope.vm.initializeForm.msg.isSecure || false;
       }
 
-      // Set the correct port if GitLab has already been initialized,
-      // even if it's Shippable managed:
-      stateUpdate.sshPort = $scope.vm.initializeForm.state.sshPort ||
-        ($scope.vm.admiralEnv.DEV_MODE ? 2222 : 22);
-
       var updateInitializeFormBag = {
         inPostServices: true
       };
       async.series([
           postMsg.bind(null, msgUpdate),
           postState.bind(null, stateUpdate),
+          getStateSystemIntegration.bind(null, {}),
           postRedis.bind(null, redisUpdate),
           postMaster.bind(null, masterUpdate),
           postWorkers.bind(null, workersList),
@@ -2488,6 +2546,53 @@
         function (err) {
           if (err)
             return next(err);
+          return next();
+        }
+      );
+    }
+
+    function getStateSystemIntegration(bag, next) {
+      admiralApiAdapter.getSystemIntegrations('name=state',
+        function (err, stateIntegrations) {
+          if (err) {
+            /* jshint camelcase:false */
+            popup_horn.error(err);
+            /* jshint camelcase:true */
+            return next();
+          }
+
+          // override defaults with actual systemInt values
+          _.each(stateIntegrations,
+            function (stateIntegration) {
+              var masterName = stateIntegration.masterName;
+
+              var index = _.findIndex($scope.vm.systemIntegrations,
+                function (integration) {
+                  return integration.masterName === masterName &&
+                    integration.name === 'state';
+                }
+              );
+
+              if (index !== -1)
+                $scope.vm.systemIntegrations[index] = stateIntegration;
+              else
+                $scope.vm.systemIntegrations.push(stateIntegration);
+
+              if ($scope.vm.installForm.state[masterName]) {
+                $scope.vm.installForm.state[masterName].isEnabled = true;
+
+                // Don't change url here if there already is one.
+                var url = $scope.vm.installForm.state[masterName].data.url;
+
+                _.extend($scope.vm.installForm.state[masterName].data,
+                  stateIntegration.data);
+
+                if (url)
+                  $scope.vm.installForm.state[masterName].data.url = url;
+              }
+            }
+          );
+
           return next();
         }
       );
@@ -3020,7 +3125,11 @@
     }
 
     function postDB(bag, next) {
-      admiralApiAdapter.postDB({},
+      var body = {};
+      if ($scope.vm.installForm.systemSettings.rootS3Bucket)
+        body.rootS3Bucket = $scope.vm.installForm.systemSettings.rootS3Bucket;
+
+      admiralApiAdapter.postDB(body,
         function (err) {
           if (err)
             return next(err);
@@ -3713,11 +3822,13 @@
     }
 
     function updateStateSystemIntegration(next) {
+      var type = $scope.vm.initializeForm.state.type;
+      if (type === 'none') return next();
       var bag = {
         name: 'state',
-        masterName: $scope.vm.installForm.state.gitlabCreds.masterName,
-        data: $scope.vm.installForm.state.gitlabCreds.data,
-        isEnabled: $scope.vm.installForm.state.gitlabCreds.isEnabled
+        masterName: $scope.vm.installForm.state[type].masterName,
+        data: $scope.vm.installForm.state[type].data,
+        isEnabled: $scope.vm.installForm.state[type].isEnabled
       };
 
       updateSystemIntegration(bag,
