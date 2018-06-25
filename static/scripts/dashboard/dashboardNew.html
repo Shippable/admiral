@@ -1709,7 +1709,55 @@
               <div id="state" class="panel-collapse {{vm.initialized ? 'collapse' : 'collapse in'}}">
                 <div class="portlet-body">
 
+
                   <div class="row">
+                    <div class="col-md-4">
+                      <h5>Store State in:</h5>
+                      <select class="form-control"
+                        ng-disabled="(vm.systemSettings.state.isInitialized && vm.initializeForm.state.type !== 'none') || vm.initializing"
+                        ng-change="vm.changeStateType()"
+                        ng-model="vm.initializeForm.state.type">
+                        <option value="amazonKeys">AWS S3 (requires AWS keys)</option>
+                        <option value="gitlabCreds">GitLab</option>
+                        <option value="none">No state (some Assembly Lines job types will fail)</option>
+                      </select>
+                    </div>
+                  </div><!-- END row -->
+
+                  <div class="row" ng-if="vm.initializeForm.state.type === 'amazonKeys'">
+                    <div class="col-md-4" ng-if="!vm.systemSettings.state.isInitialized">
+                      <div ng-class="vm.validatePassword(vm.initializeForm.state.accessKey)" class="m-b-10">
+                        <label><h5>Access Key:</h5></label>
+                        <input type="text" class="form-control input-sm" name="stateS3AccessKey"
+                          ng-model="vm.initializeForm.state.accessKey" ng-disabled="vm.installing || vm.saving"/>
+                      </div>
+                      <div ng-class="vm.validatePassword(vm.initializeForm.state.secretKey)" class="m-b-10">
+                        <label><h5>Secret Key:</h5></label>
+                        <input type="text" class="form-control input-sm" name="stateS3SecretKey"
+                          ng-model="vm.initializeForm.state.secretKey" ng-disabled="vm.installing || vm.saving"/>
+                      </div>
+                      <div class="m-b-10">
+                        <label><h5>Root S3 Bucket:</h5></label>
+                        <input type="text" class="form-control input-sm" name="rootS3Bucket"
+                          ng-model="vm.installForm.systemSettings.rootS3Bucket" placeholder="a name will be generated if blank" ng-disabled="vm.installing || vm.saving"/>
+                      </div>
+                    </div>
+                    <div class="col-md-9" ng-if="vm.systemSettings.state.isInitialized">
+                      <div class="col-md-12" ng-if="vm.installForm.state.amazonKeys.data.accessKey">
+                        <label class="control-label textAlignNone col-md-2">Access Key: </label>
+                        <span style="word-wrap: break-word;" class="col-md-4">
+                          {{vm.installForm.state.amazonKeys.data.accessKey}}</span>
+                      </div>
+                      <div class="col-md-12" ng-if="vm.installForm.systemSettings.rootS3Bucket">
+                        <label class="control-label textAlignNone col-md-2">Root S3 Bucket: </label>
+                        <span style="word-wrap: break-word;" class="col-md-4">
+                          {{vm.installForm.systemSettings.rootS3Bucket}}</span>
+                      </div>
+                    </div>
+                  </div><!-- END row -->
+
+
+                  <div class="row" ng-if="vm.initializeForm.state.type === 'gitlabCreds'">
                     <div class="col-md-4" ng-if="!vm.systemSettings.state.isInitialized">
                       <h5>Install State on:</h5>
                       <select class="form-control"

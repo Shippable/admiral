@@ -17,6 +17,7 @@ var APIAdapter = require('../../common/APIAdapter.js');
 function post(req, res) {
   var bag = {
     reqQuery: req.query,
+    reqBody: req.body,
     resBody: {},
     res: res,
     skipStatusChange: false,
@@ -730,8 +731,8 @@ function _setRootBucket(bag, next) {
   var who = bag.who + '|' + _setRootBucket.name;
   logger.verbose(who, 'Inside');
 
-  var rootS3Bucket = util.format('shippable-%s-%s',
-    global.config.runMode, uuid.v4());
+  var rootS3Bucket = bag.reqBody.rootS3Bucket ||
+    util.format('shippable-%s-%s', global.config.runMode, uuid.v4());
 
   var query = util.format(
     'UPDATE "systemSettings" set "rootS3Bucket"=\'%s\';', rootS3Bucket);

@@ -106,9 +106,13 @@ function _post(bag, next) {
     bag.config.isShippableManaged = bag.reqBody.isShippableManaged;
 
   if (_.has(bag.reqBody, 'type')) {
-    if (bag.config.type === bag.reqBody.type || bag.config.type === 'none')
+    if (bag.config.type === bag.reqBody.type)
       bag.config.type = bag.reqBody.type;
-    else if (bag.config.isInstalled || bag.config.isInitialized)
+    else if (bag.config.type === 'none') {
+      bag.config.type = bag.reqBody.type;
+      bag.config.isInstalled = false;
+      bag.config.isInitialized = false;
+    } else if (bag.config.isInstalled || bag.config.isInitialized)
       return next(
         new ActErr(who, ActErr.InvalidParam,
           'Cannnot change type of initialized state')
