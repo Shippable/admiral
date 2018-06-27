@@ -603,6 +603,11 @@ do $$
       values (10019, 'custom__aarch32__Ubuntu_16.04', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-04-11', '2018-04-11');
     end if;
 
+    if not exists (select 1 from "systemCodes" where code = 10020) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (10020, 'restricted__aarch64__Ubuntu_16.04', 'clusterType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-06-27', '2018-06-27');
+    end if;
+
     -- Add systemCodes for jobStatesMap
     if not exists (select 1 from "systemCodes" where code = 201) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
