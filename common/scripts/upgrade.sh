@@ -104,11 +104,12 @@ __run_migrations() {
     __process_error "====================================================="
     exit 1
   else
-    __process_msg "Successfully ran migrations for release: $RELEASE"
+    __process_msg "Successfully started migrations for release: $RELEASE"
   fi
 
   __process_msg "Checking db processing state"
   local is_processing=true
+  local is_failed=false
   while true; do
     sleep 5
     _shippable_get_db
@@ -121,6 +122,13 @@ __run_migrations() {
     fi
 
     if [ $is_processing == false ]; then
+      is_failed=$(echo $response | jq -r '.isFailed')
+      if [ $is_failed == true ]; then
+        __process_error "Migration failed"
+        local logs_file="$LOGS_DIR/db.log"
+        tail -$MAX_ERROR_LOG_COUNT $logs_file
+        exit 1
+      fi
       __process_msg "Migrations processing complete. "
       break
     else
