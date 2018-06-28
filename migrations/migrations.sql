@@ -4847,6 +4847,12 @@ do $$
 
     if exists (select 1 from information_schema.columns where table_name = 'runtimeTemplates') then
 
+      -- Add isAvailable column to runtimeTemplates
+
+      if not exists (select 1 from information_schema.columns where table_name = 'runtimeTemplates' and column_name = 'isAvailable') then
+        alter table "runtimeTemplates" add column "isAvailable" BOOLEAN NOT NULL DEFAULT true;
+      end if;
+
       -- x86_64 Ubuntu_14.04 v5.6.1
       if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8000 and "osTypeCode" = 9000 and "version" = 'v5.6.1') then
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "createdAt", "updatedAt")
@@ -5146,11 +5152,6 @@ do $$
       update "runtimeTemplates" set "isDefault" = false where "version" != 'v6.5.4' and "isDefault" = true;
       update "runtimeTemplates" set "isDefault" = true where "version" = 'v6.5.4' and "isDefault" = false;
 
-      -- Add isAvailable column to runtimeTemplates
-
-      if not exists (select 1 from information_schema.columns where table_name = 'runtimeTemplates' and column_name = 'isAvailable') then
-        alter table "runtimeTemplates" add column "isAvailable" BOOLEAN NOT NULL DEFAULT true;
-      end if;
 
       -- Marking deprecated runtimeTemplates as unavailable
 
