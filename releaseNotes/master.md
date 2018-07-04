@@ -4,11 +4,7 @@
 ${REL_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Centralized yml templates**: Now user can define a central shippable.templates.yml file and keep all their templates globally. User can also  import external template files defined in some other public repo using its raw file path, and then use templates defined in this file in your jobs by mentioning these external urls in shippable.templates.yml. [See the docs](http://docs.shippable.com/platform/workflow/job/runsh/#yml-templates) for more details.
 
 ## Fixes
   - **simple title**: brief description
