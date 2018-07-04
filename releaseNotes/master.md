@@ -32,17 +32,14 @@ ${REL_VER_DATE}
       - Fixed error trying to dismiss NPS notification
       - Added download button for logs of a processing job
       - Fixed the click behaviour on the edge of the Cache checkbox on billing page
-## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
 
 ## Shippable Server
 
   - Features
       - **Multiple authencation methods for enterprise SCMs**: Now Shippable server users can configure multiple authencations for different Gitlab, Bitbucket Server and GitHub Enterprise setups.
-  - Fixes
-      - **simple title**: brief description
+      - **Restricted shared node pools**: Shippable admin can now create restricted shared node pool. On a restricted shared node pool, only container builds of public projects can run with no docker capabilities.
+      - **Ability to run on shared node pools and subscription node pools simultaneously**: Users can now run builds on shared nodepools & subscription nodepools simultaneously if they have the appropriate licenses.
+      - **Aarch32 builds**:  Users can now run CI and runSh builds natively on aarch32, Ubuntu 16.04 platform.
 
 ## History
 
