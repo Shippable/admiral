@@ -26,8 +26,8 @@ ${REL_VER_DATE}
       - Updated titles/vocabulary to be consistent across the system
       - Updated breadcrumbs to be consistent across the system
       - Fixed wrong job duration issue for runCI
-      - Restricted Credit Card Month picker from selecting past Month.
-      - Restricted calendar in history page to select future date and past dates from 'from' date.
+      - Restricted Credit Card Month picker from selecting past Month
+      - Restricted calendar in history page to select future date and past dates from 'from' date
       - Admin should not be allowed to remove all the licenses for any subscription while editing
       - Fixed error trying to dismiss NPS notification
       - Added download button for logs of a processing job
