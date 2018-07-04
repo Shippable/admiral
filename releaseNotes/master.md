@@ -11,7 +11,7 @@ ${REL_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **Update private job count correctly**: Private job count gets set to 0 once one month build cycle is completed for private projects with free subscriptions.
+  - **Update private job count correctly**: Private job count gets reset to 0 every month for private projects with free subscriptions.
 
 ## Custom Nodes
   - **simple title**: brief description
