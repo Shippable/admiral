@@ -5200,6 +5200,12 @@ do $$
         values (8000, 9005, 'v6.6.4', 'drydock', 'c7', 'v6.6.4', 'c7all', 'u16reqproc', false, true, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
       end if;
 
+      -- aarch32 Ubuntu_16.04
+      if not exists (select 1 from "runtimeTemplates" where "archTypeCode" = 8002 and "osTypeCode" = 9001 and "version" = 'v6.6.4') then
+        insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "isAvailable", "createdAt", "updatedAt")
+        values (8002, 9001, 'v6.6.4', 'drydock', 'aarch32_u16', 'v6.6.4', 'aarch32_u16', 'aarch32_u16reqproc', false, true, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
+      end if;
+
       -- insert additional runtimeTemplates down here
 
       --------------------------------------------------------
@@ -5207,7 +5213,6 @@ do $$
       --------------------------------------------------------
       update "runtimeTemplates" set "isDefault" = false where "version" != 'v6.6.4' and "isDefault" = true;
       update "runtimeTemplates" set "isDefault" = true where "version" = 'v6.6.4' and "isDefault" = false;
-
 
       -- Marking deprecated runtimeTemplates as unavailable
 
