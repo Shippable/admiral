@@ -18,6 +18,20 @@ ${REL_VER_DATE}
   - **shipctl get_integration_resource_field**: Fixed a bug in [get_integration_resource_field command](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/#get_integration_resource_field) which was not working for [Key-Value Pair Integration](http://docs.shippable.com/platform/integration/key-value/#key-value-pair-integration)
   - **Update private job count correctly**: Private job count gets reset to 0 every month for private projects with free subscriptions.
   - **Binary files in state**: Binary files can be saved in state for resources and jobs.
+  - **UI Bug fixes**:
+      - Fixed the issue where blank IDs section from the botom of the page shows at the top during initial load
+      - Fixed alignment issues in various places
+      - Added spinners and fixed spinner placement in various places
+      - Fixed tooltip position in various places
+      - Updated titles/vocabulary to be consistent across the system
+      - Updated breadcrumbs to be consistent across the system
+      - Fixed wrong job duration issue for runCI
+      - Restricted Credit Card Month picker from selecting past Month
+      - Restricted calendar in history page to select future date and past dates from 'from' date
+      - Admin should not be allowed to remove all the licenses for any subscription while editing
+      - Fixed error trying to dismiss NPS notification
+      - Added download button for logs of a processing job
+      - Fixed the click behaviour on the edge of the Cache checkbox on billing page
 ## Custom Nodes
   - **simple title**: brief description
       - additional details or
