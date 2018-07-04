@@ -11,9 +11,7 @@ ${REL_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **private job count **: private job count gets set correctly to 0 at once one month build cycle completes for private projects with free subscriptions.
 
 ## Custom Nodes
   - **simple title**: brief description
