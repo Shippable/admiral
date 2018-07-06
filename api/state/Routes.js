@@ -11,4 +11,5 @@ function stateRoutes(app) {
   app.put('/api/state', validateAccount, require('./put.js'));
   app.post('/api/state/initialize', validateAccount,
     require('./initialize.js'));
+  app.post('/api/state/migrate', validateAccount, require('./migrate.js'));
 }
