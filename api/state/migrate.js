@@ -9,6 +9,11 @@ var _ = require('underscore');
 
 var APIAdapter = require('../../common/APIAdapter.js');
 var configHandler = require('../../common/configHandler.js');
+var migrationScripts = {
+  gitlabCreds: {
+    amazonKeys: require('./migrateGitLabToS3.js')
+  }
+};
 
 function migrate(req, res) {
   var bag = {
@@ -205,10 +210,14 @@ function _migrateResources(bag, next) {
         nextResourceId: nextResourceId + 1,
         throughResourceId: _.min([nextResourceId + 50, bag.lastResourceId]),
         logStream: logStream,
+        apiAdapter: bag.apiAdapter,
+        previousSystemIntegration: bag.previousSystemIntegration,
+        currentSystemIntegration: bag.currentSystemIntegration,
         resources: []
       };
       async.series([
-          _listResources.bind(null, seriesBag)
+          _listResources.bind(null, seriesBag),
+          _migrateResource.bind(null, seriesBag)
         ],
         function (err) {
           nextResourceId = nextResourceId + 50;
@@ -228,8 +237,8 @@ function _listResources(seriesBag, next) {
   seriesBag.logStream.write(util.format('Processing resources %s to %s\n',
     seriesBag.nextResourceId, seriesBag.throughResourceId));
 
-  var query = util.format(
-    'SELECT id,name FROM resources WHERE id BETWEEN %s AND %s;',
+  var query = util.format('SELECT id,name,"subscriptionId" FROM resources ' +
+    'WHERE id BETWEEN %s AND %s;',
     seriesBag.nextResourceId, seriesBag.throughResourceId);
   global.config.client.query(query,
     function (err, res) {
@@ -241,6 +250,73 @@ function _listResources(seriesBag, next) {
 
       seriesBag.resources = res.rows;
       return next();
+    }
+  );
+}
+
+function _migrateResource(seriesBag, next) {
+  async.eachSeries(seriesBag.resources,
+    function (resource, done) {
+      var subSeriesBag = {
+        resourceId: resource.id,
+        logStream: seriesBag.logStream,
+        resource: resource,
+        previousSystemIntegration: seriesBag.previousSystemIntegration,
+        currentSystemIntegration: seriesBag.currentSystemIntegration,
+        apiAdapter: seriesBag.apiAdapter,
+        versions: []
+      };
+      async.series([
+          _listVersions.bind(null, subSeriesBag),
+          _migrateVersions.bind(null, subSeriesBag)
+        ],
+        function (err) {
+          return done(err);
+        }
+      );
+
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+function _listVersions(seriesBag, next) {
+  var query = util.format(
+    'SELECT id,"propertyBag","createdAt" FROM versions WHERE "resourceId"=%s;',
+    seriesBag.resourceId);
+  global.config.client.query(query,
+    function (err, res) {
+      if (err)
+        return next(
+          new ActErr('_listVersions', ActErr.OperationFailed,
+            'Failed to find versions for resourceId: ' + seriesBag.resourceId +
+            ' with error: ' + util.inspect(err))
+        );
+
+      seriesBag.versions = res.rows;
+      return next();
+    }
+  );
+}
+
+function _migrateVersions(seriesBag, next) {
+  if (!migrationScripts[seriesBag.previousSystemIntegration.masterName])
+    return next();
+
+  var migration = migrationScripts
+    [seriesBag.previousSystemIntegration.masterName]
+    [seriesBag.currentSystemIntegration.masterName];
+
+  if (!migration)
+    return next();
+
+  migration(seriesBag.previousSystemIntegration,
+    seriesBag.currentSystemIntegration, seriesBag.resource, seriesBag.versions,
+    seriesBag.apiAdapter,
+    function (err) {
+      return next(err);
     }
   );
 }
