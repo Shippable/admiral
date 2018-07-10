@@ -145,3 +145,24 @@ S3.createBucket =
       }
     );
   };
+
+S3.generatePUTUrl =
+  function (bucket, key, expiration, additionalParams, callback) {
+    var params = {
+      Bucket: bucket,
+      Key: key,
+      Expires: expiration
+    };
+
+    if (additionalParams)
+      params = _.extend(params, additionalParams);
+
+    this.s3.getSignedUrl('putObject', params,
+      function (err, data) {
+        if (err)
+          return callback(err);
+
+        return callback(null, data);
+      }
+    );
+  };
