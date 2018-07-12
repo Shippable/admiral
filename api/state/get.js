@@ -68,6 +68,10 @@ function _get(bag, next) {
         return next();
       }
 
+      // If there is a state config with no type, assume it's GitLab.
+      if (!state.type)
+        state.type = 'gitlabCreds';
+
       bag.resBody = state;
       return next();
     }
