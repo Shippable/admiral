@@ -12,6 +12,7 @@ ${REL_VER_DATE}
 
 ## Fixes
   - **Error in rSync for jobs with incorrectly formatted steps**: improved error handing for some jobs defined with incorrectly formatted steps.
+  - **Template support in dryrun and proper error handling**: fixes issue with parsing shippable.templates.yml in dryRun and corrects error handling while parsing incorrect templates.
 
 ## Custom Nodes
   - **simple title**: brief description
