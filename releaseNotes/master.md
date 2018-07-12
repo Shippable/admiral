@@ -11,9 +11,7 @@ ${REL_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Error in rSync for jobs with incorrectly formatted steps**: improved error handing for some jobs defined with incorrectly formatted steps.
 
 ## Custom Nodes
   - **simple title**: brief description
