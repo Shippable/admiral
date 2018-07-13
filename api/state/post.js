@@ -26,9 +26,7 @@ function post(req, res) {
       _post.bind(null, bag),
       _getSystemIntegration.bind(null, bag),
       _putSystemIntegration.bind(null, bag),
-      _postSystemIntegration.bind(null, bag),
-      _getPreviousSystemIntegration.bind(null, bag),
-      _deleteSystemIntegration.bind(null, bag)
+      _postSystemIntegration.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -108,7 +106,8 @@ function _post(bag, next) {
   if (_.has(bag.reqBody, 'type')) {
     if (bag.config.type === bag.reqBody.type)
       bag.config.type = bag.reqBody.type;
-    else if (bag.config.type === 'none') {
+    else if (bag.config.type === 'none' || (bag.config.type === 'gitlabCreds' &&
+      bag.reqBody.type === 'amazonKeys')) {
       bag.config.type = bag.reqBody.type;
       bag.config.isInstalled = false;
       bag.config.isInitialized = false;
@@ -226,49 +225,6 @@ function _postSystemIntegration(bag, next) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
             'Failed to create system integration: ' + util.inspect(err))
-        );
-
-      return next();
-    }
-  );
-}
-
-function _getPreviousSystemIntegration(bag, next) {
-  if (bag.previousType === 'none') return next();
-  var who = bag.who + '|' + _getPreviousSystemIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  bag.apiAdapter.getSystemIntegrations(
-    'name=state&masterName=' + bag.previousType,
-    function (err, systemIntegrations) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to get system integration: ' + util.inspect(err))
-        );
-
-      if (_.isEmpty(systemIntegrations))
-        return next();
-
-      bag.previousSystemIntegration = systemIntegrations[0];
-      return next();
-    }
-  );
-}
-
-function _deleteSystemIntegration(bag, next) {
-  if (!bag.previousSystemIntegration) return next();
-
-  var who = bag.who + '|' + _deleteSystemIntegration.name;
-  logger.verbose(who, 'Inside');
-
-  bag.apiAdapter.deleteSystemIntegration(bag.previousSystemIntegration.id,
-    'skipServices=true',
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to create delete integration: ' + util.inspect(err))
         );
 
       return next();
