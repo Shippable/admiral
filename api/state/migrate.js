@@ -37,7 +37,9 @@ function migrate(req, res) {
       _setProcessingFlag.bind(null, bag),
       _sendResponse.bind(null, bag),
       _getLastResourceId.bind(null, bag),
-      _migrateResources.bind(null, bag)
+      _migrateResources.bind(null, bag),
+      _printUninstallCommands.bind(null, bag),
+      _removePreviousSystemIntegration.bind(null, bag)
     ],
     function (err) {
       logger.info(bag.who, 'Completed');
@@ -317,6 +319,58 @@ function _migrateVersions(seriesBag, next) {
     seriesBag.apiAdapter,
     function (err) {
       return next(err);
+    }
+  );
+}
+
+function _printUninstallCommands(bag, next) {
+  if (!bag.currentSystemIntegration || !bag.previousSystemIntegration)
+    return next();
+  if (bag.previousSystemIntegration.masterName !== 'gitlabCreds')
+    return next();
+  var who = bag.who + '|' + _printUninstallCommands.name;
+  logger.verbose(who, 'Inside');
+
+  var logStream = fs.createWriteStream(
+    global.config.runtimeDir + '/logs/state.log', {flags:'a'});
+
+  logStream.write(
+    'Migration complete. After confirming that all resources were migrated, ' +
+    'you may run the following to uninstall GitLab:\n\n');
+
+  logStream.write('Ubuntu:\n');
+  logStream.write(' > sudo gitlab-ctl stop && sudo gitlab-ctl uninstall && '+
+    'sudo apt-get -y remove gitlab-ce\n\n');
+  logStream.write('CentOS/Red Hat Enterprise Linux:\n');
+  logStream.write(' > sudo gitlab-ctl stop && sudo gitlab-ctl uninstall && '+
+    'sudo yum remove -y gitlab-ce\n');
+  logStream.write('Docker:\n');
+  logStream.write(util.format(' > sudo docker stop state && ' +
+    'sudo docker rm state && rm -rf %s/state && rm -rf %s/state/data && ' +
+    'rm -rf %s/state/logs\n', global.config.configDir, global.config.runtimeDir,
+    global.config.runtimeDir));
+
+  logStream.end();
+
+  return next();
+}
+
+function _removePreviousSystemIntegration(bag, next) {
+  if (!bag.currentSystemIntegration || !bag.previousSystemIntegration)
+    return next();
+  var who = bag.who + '|' + _removePreviousSystemIntegration.name;
+  logger.verbose(who, 'Inside');
+
+  bag.apiAdapter.deleteSystemIntegration(bag.previousSystemIntegration.id,
+    'skipServices=true',
+    function (err) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to delete integration: ' + util.inspect(err))
+        );
+
+      return next();
     }
   );
 }

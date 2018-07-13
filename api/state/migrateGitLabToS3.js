@@ -338,7 +338,10 @@ function _migrateVersions(bag, next) {
           _uploadCompressedFiles.bind(null, seriesBag),
           _updateVersion.bind(null, seriesBag)
         ],
-        function () {
+        function (err) {
+          if (err)
+            logger.error(err);
+
           return done();
         }
       );
