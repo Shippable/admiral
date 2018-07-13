@@ -14,6 +14,7 @@ ${REL_VER_DATE}
   - **Error in rSync for jobs with incorrectly formatted steps**: improved error handing for some jobs defined with incorrectly formatted steps.
   - **Template support in dryrun and proper error handling**: fixes issue with parsing shippable.templates.yml in dryRun and corrects error handling while parsing incorrect templates.
   - **Error parsing completely commented shippable.yml file**: YML files containing only comments no longer fail to be parsed in rSync.
+  - **Triggering of OUT resources from matrix CI**: matrix CI jobs will now only trigger downstream resources once per unique OUT resource.
 
 ## Custom Nodes
   - **simple title**: brief description
