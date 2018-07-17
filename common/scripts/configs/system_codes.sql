@@ -775,9 +775,9 @@ do $$
       values (504, 'account', 'viewType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
-    if not exists (select 1 from "systemCodes" where code = 505) then
+    if not exists (select 1 from "systemCodes" where code = 506) then
       insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (505, 'showNotBuilt', 'viewObjectType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-06-25', '2018-06-25');
+      values (506, 'hideNotBuilt', 'viewObjectType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-07-17', '2018-07-17');
     end if;
 
     -- Remove unused systemCodes
@@ -822,6 +822,8 @@ do $$
     delete from "systemCodes" where "code" = 3009 and "name" = 'rSyncSteps' and "group" = 'resource';
 
     delete from "systemCodes" where "code" = 3010 and "name" = 'deploySteps' and "group" = 'resource';
+
+    delete from "systemCodes" where "code" = 505 and "name" = 'showNotBuilt' and "group" = 'viewObjectType';
 
   end
 $$;
