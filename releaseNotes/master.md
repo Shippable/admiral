@@ -15,6 +15,7 @@ ${REL_VER_DATE}
   - **Template support in dryrun and proper error handling**: fixes issue with parsing shippable.templates.yml in dryRun and corrects error handling while parsing incorrect templates.
   - **Error parsing completely commented shippable.yml file**: YML files containing only comments no longer fail to be parsed in rSync.
   - **Triggering of OUT resources from matrix CI**: matrix CI jobs will now only trigger downstream resources once per unique OUT resource.
+  - **Misleading error for unsupported integrations used in CI**: improved error descriptions for unsupported integrations used in CI jobs.
 
 ## Custom Nodes
   - **simple title**: brief description
