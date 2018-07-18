@@ -5,7 +5,6 @@ ${REL_VER_DATE}
 
 ## Features
   - **Provided an option to hide Not-Built branches in Project dashboard**: We now provided an option to filter out not-built branches in latest status of project dashboard
-      - [zendesk#274](https://shippable.zendesk.com/agent/tickets/274)
 
 ## Fixes
   - **Error in rSync for jobs with incorrectly formatted steps**: improved error handing for some jobs defined with incorrectly formatted steps.
@@ -14,7 +13,7 @@ ${REL_VER_DATE}
   - **Triggering of OUT resources from matrix CI**: matrix CI jobs will now only trigger downstream resources once per unique OUT resource.
   - **UI Bug Fixes**:
       - Fixed collaborator permission, only to view summary of admin's billing page [support#4431](https://github.com/Shippable/support/issues/4431)
-      - Fixed Template support in dryrun. [zendesk#397](https://shippable.zendesk.com/agent/tickets/397), [zendesk#398](https://shippable.zendesk.com/agent/tickets/398)
+      - Fixed Template support in dryrun
       - Added pagination for latest status section in home dashbord
 
 ## Custom Nodes
