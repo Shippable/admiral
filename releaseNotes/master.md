@@ -4,11 +4,7 @@
 ${REL_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Provided an option to hide Not-Built branches in Project dashboard**: We now provided an option to filter out not-built branches in latest status of project dashboard
 
 ## Fixes
   - **Error in rSync for jobs with incorrectly formatted steps**: improved error handing for some jobs defined with incorrectly formatted steps.
@@ -16,6 +12,10 @@ ${REL_VER_DATE}
   - **Error parsing completely commented shippable.yml file**: YML files containing only comments no longer fail to be parsed in rSync.
   - **Triggering of OUT resources from matrix CI**: matrix CI jobs will now only trigger downstream resources once per unique OUT resource.
   - **Misleading error for unsupported integrations used in CI**: improved error descriptions for unsupported integrations used in CI jobs.
+  - **UI Bug Fixes**:
+      - Fixed collaborator permission, only to view summary of admin's billing page [support#4431](https://github.com/Shippable/support/issues/4431)
+      - Fixed Template support in dryrun
+      - Added pagination for latest status section in home dashbord
 
 ## Custom Nodes
   - **simple title**: brief description
