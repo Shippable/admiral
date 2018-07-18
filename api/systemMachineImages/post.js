@@ -120,21 +120,22 @@ function _post(bag, next) {
   var insertStatement = util.format('INSERT INTO "systemMachineImages" ' +
     '("id", "name", "description", "externalId", "provider", "isAvailable", ' +
     '"isDefault", "region", "keyName", "runShImage", "securityGroup", ' +
-    '"subnetId", "drydockTag", "drydockFamily", "archTypeCode", ' +
-    '"runtimeTemplateId", "createdBy", "updatedBy", "createdAt", "updatedAt") ' +
-    'values (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', %s,' +
-    '%s, \'%s\', \'%s\', \'%s\', \'%s\', %s, \'%s\', \'%s\', %s, %s,' +
-    ' \'54188262bc4d591ba438d62a\', \'54188262bc4d591ba438d62a\',' +
-    ' CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
+    '"subnetId", "drydockTag", "drydockFamily", "sshUser", "sshPort", '+
+    '"archTypeCode", "runtimeTemplateId", "createdBy", "updatedBy", ' +
+    '"createdAt", "updatedAt") values (\'%s\', \'%s\', \'%s\', \'%s\', ' +
+    '\'%s\', %s, %s, \'%s\', \'%s\', \'%s\', \'%s\', %s, \'%s\', \'%s\', ' +
+    '\'%s\', %s, %s, %s, \'54188262bc4d591ba438d62a\', '+
+    '\'54188262bc4d591ba438d62a\', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
     bag.systemMachineImageId, bag.reqBody.name, bag.reqBody.description,
     bag.reqBody.externalId, bag.reqBody.provider, bag.reqBody.isAvailable,
     bag.reqBody.isDefault, bag.reqBody.region, bag.reqBody.keyName,
     bag.reqBody.runShImage, bag.reqBody.securityGroup,
     (!_.has(bag.reqBody, 'subnetId') || bag.reqBody.subnetId === null) ?
       'NULL' : util.format('\'%s\'', bag.reqBody.subnetId),
-    bag.reqBody.drydockTag, bag.reqBody.drydockFamily,
-    bag.reqBody.archTypeCode, _.has(bag.reqBody, 'runtimeTemplateId') ?
-    bag.reqBody.runtimeTemplateId : null);
+    bag.reqBody.drydockTag, bag.reqBody.drydockFamily, bag.reqBody.sshUser,
+    bag.reqBody.sshPort, bag.reqBody.archTypeCode,
+    _.has(bag.reqBody, 'runtimeTemplateId') ? bag.reqBody.runtimeTemplateId :
+    null);
 
   global.config.client.query(insertStatement,
     function (err) {
