@@ -16,6 +16,8 @@ ${REL_VER_DATE}
       - Fixed collaborator permission, only to view summary of admin's billing page [support#4431](https://github.com/Shippable/support/issues/4431)
       - Fixed Template support in dryrun
       - Added pagination for latest status section in home dashbord
+  - **Logup Enhancements**
+      - jobConsoles upload to S3 for large console logs is fixed.
 
 ## Custom Nodes
   - **simple title**: brief description
