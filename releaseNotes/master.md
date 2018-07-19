@@ -17,17 +17,10 @@ ${REL_VER_DATE}
       - Fixed Template support in dryrun
       - Added pagination for latest status section in home dashbord
 
-## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
-
 ## Shippable Server
 
-  - Features
-      - **simple title**: brief description
   - Fixes
-      - **simple title**: brief description
+      - **Admiral doesn't insert sshUser value while inserting a System Machine Image**: fixes issue with admiral not inserting user provided values for sshUser and sshPort in the database while adding the System Machine Images.
 
 ## History
 
