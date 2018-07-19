@@ -17,7 +17,7 @@ ${REL_VER_DATE}
       - Fixed Template support in dryrun
       - Added pagination for latest status section in home dashbord
   - **Logup Enhancements**
-      - jobConsoles upload to S3 for large JSON objects is fixed.
+      - jobConsoles upload to S3 for large console logs is fixed.
 
 ## Custom Nodes
   - **simple title**: brief description
