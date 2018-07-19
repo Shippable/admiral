@@ -12,6 +12,7 @@ ${REL_VER_DATE}
   - **Error parsing completely commented shippable.yml file**: YML files containing only comments no longer fail to be parsed in rSync.
   - **Triggering of OUT resources from matrix CI**: matrix CI jobs will now only trigger downstream resources once per unique OUT resource.
   - **Misleading error for unsupported integrations used in CI**: improved error descriptions for unsupported integrations used in CI jobs.
+  - **Error while deleting account**: Accounts having enabled projects, which have not synced in last 4 hours, can be deleted without any errors.
   - **UI Bug Fixes**:
       - Fixed collaborator permission, only to view summary of admin's billing page [support#4431](https://github.com/Shippable/support/issues/4431)
       - Fixed Template support in dryrun
