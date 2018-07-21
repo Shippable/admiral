@@ -1714,7 +1714,7 @@
                     <div class="col-md-4">
                       <h5>Store State in:</h5>
                       <select class="form-control"
-                        ng-disabled="(vm.systemSettings.state.isInitialized && vm.initializeForm.state.type !== 'none') || vm.initializing"
+                        ng-disabled="vm.initializing"
                         ng-change="vm.changeStateType()"
                         ng-model="vm.initializeForm.state.type">
                         <option value="amazonKeys">AWS S3 (requires AWS keys)</option>
@@ -1883,6 +1883,24 @@
                     </div>
                   </div><!-- END row -->
 
+                  <div class="row" ng-if="vm.initializeForm.state.migrationRequired">
+                    <div class="col-md-9">
+                      <div class="card-box col-md-12">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="toggle-bar">
+                              <input id="checkbox_for_state_migration" type="checkbox"
+                                ng-model="vm.initializeForm.state.migrationConfirmed"  ng-disabled="vm.initializing || vm.installing || vm.saving || vm.restartingServices"
+                                class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                              <label for="checkbox_for_state_migration">
+                                <b> Migration is required to switch state.  Click to confirm that you intend to change state storage. </b>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div class="row" ng-if="vm.initializeForm.state.initType !== 'admiral' && !vm.systemSettings.state.isInitialized">
                     <div class="col-md-3" ng-if="!vm.systemSettings.state.isInitialized && !vm.initializing">
                       <button class="btn btn-default waves-effect waves-light m-t-10"
