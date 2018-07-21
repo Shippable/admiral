@@ -103,21 +103,11 @@ function _post(bag, next) {
   if (_.has(bag.reqBody, 'isShippableManaged'))
     bag.config.isShippableManaged = bag.reqBody.isShippableManaged;
 
-  if (_.has(bag.reqBody, 'type')) {
-    if (bag.config.type === bag.reqBody.type)
-      bag.config.type = bag.reqBody.type;
-    else if (bag.config.type === 'none' || (bag.config.type === 'gitlabCreds' &&
-      bag.reqBody.type === 'amazonKeys')) {
-      bag.config.type = bag.reqBody.type;
-      bag.config.isInstalled = false;
-      bag.config.isInitialized = false;
-    } else if (bag.config.isInstalled || bag.config.isInitialized)
-      return next(
-        new ActErr(who, ActErr.InvalidParam,
-          'Cannnot change type of initialized state')
-      );
-    else
-      bag.config.type = bag.reqBody.type;
+  if (_.has(bag.reqBody, 'type') &&
+    bag.config.type !== bag.reqBody.type) {
+    bag.config.type = bag.reqBody.type;
+    bag.config.isInstalled = false;
+    bag.config.isInitialized = false;
   }
 
   configHandler.put(bag.component, bag.config,

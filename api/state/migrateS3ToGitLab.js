@@ -1,9 +1,9 @@
 'use strict';
 
-var self = migrateGitLabToS3;
+var self = migrateS3ToGitLab;
 module.exports = self;
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var async = require('async');
 var _ = require('underscore');
 var uuid = require('node-uuid');
@@ -12,11 +12,11 @@ var path = require('path');
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var request = require('request');
-var zlib = require('zlib');
 
 var AWSAdapter = require('../../common/awsAdapter.js');
+var GitLabAdapter = require('../../common/GitLabAdapter.js');
 
-function migrateGitLabToS3(gitlabIntegration, amazonKeysIntegration, resource,
+function migrateS3ToGitLab(amazonKeysIntegration, gitlabIntegration, resource,
   isStateResource, versions, apiAdapter, callback) {
   var bag = {
     resourceId: resource.id,
@@ -29,7 +29,7 @@ function migrateGitLabToS3(gitlabIntegration, amazonKeysIntegration, resource,
     apiAdapter: apiAdapter,
     sshKeys: {},
     cloneTemplatePath: path.resolve(__dirname, './gitlab/cloneRepo.sh'),
-    checkoutTemplatePath: path.resolve(__dirname, './gitlab/checkoutSHA.sh')
+    pushTemplatePath: path.resolve(__dirname, './gitlab/pushRepo.sh')
   };
 
   bag.who = util.format('state|%s|id:%s', self.name, bag.resourceId);
@@ -38,11 +38,14 @@ function migrateGitLabToS3(gitlabIntegration, amazonKeysIntegration, resource,
   async.series([
       _checkInputParams.bind(null, bag),
       _getSubscriptionById.bind(null, bag),
+      _createGitLabAdapter.bind(null, bag),
+      _getNamespaceId.bind(null, bag),
+      _createProject.bind(null, bag),
       _generateCloneScript.bind(null, bag),
       _saveCloneScript.bind(null, bag),
       _executeCloneScript.bind(null, bag),
       _getRootBucket.bind(null, bag),
-      _createAdapter.bind(null, bag),
+      _createAWSAdapter.bind(null, bag),
       _migrateVersions.bind(null, bag),
       _cleanupFiles.bind(null, bag)
     ],
@@ -51,11 +54,10 @@ function migrateGitLabToS3(gitlabIntegration, amazonKeysIntegration, resource,
       if (err)
         logger.error(err);
 
-      return callback();
+      return callback(err);
     }
   );
 }
-
 
 function _checkInputParams(bag, next) {
   var who = bag.who + '|' + _checkInputParams.name;
@@ -84,6 +86,7 @@ function _checkInputParams(bag, next) {
   bag.scriptLocation = util.format('/tmp/%s.sh', uniqueIdentifier);
   bag.cloneLocation = util.format('/tmp/%s', uniqueIdentifier);
   bag.pemFileLocation =  util.format('/tmp/%s.pem', uniqueIdentifier);
+  bag.shaFilePath = util.format('/tmp/%s.sha', uniqueIdentifier);
 
   return next();
 }
@@ -114,6 +117,80 @@ function _getSubscriptionById(bag, next) {
 
       bag.sshKeys.private = propertyBag.sshPrivateKey;
       bag.sshKeys.public = propertyBag.sshPublicKey;
+      bag.username = propertyBag.nodeUserName;
+      bag.password = propertyBag.nodePassword;
+      return next();
+    }
+  );
+}
+
+function _createGitLabAdapter(bag, next) {
+  var who = bag.who + '|' + _createGitLabAdapter.name;
+  logger.debug(who, 'Inside');
+
+  bag.gitlabAdapter = new GitLabAdapter(null,
+    bag.gitlabIntegration.data.url, bag.username, bag.password);
+  bag.gitlabAdapter.initialize(
+    function (err, body) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'initialize returned error ' + err + ' with body ' + body)
+        );
+
+      return next();
+    }
+  );
+}
+
+function _getNamespaceId(bag, next) {
+  var who = bag.who + '|' + _getNamespaceId.name;
+  logger.debug(who, 'Inside');
+
+  bag.gitlabAdapter.getNamespaces(
+    function (err, namespaces) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'getNamespaces returned error', err)
+        );
+
+      if (_.isEmpty(namespaces))
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'getNamespaces returned no namespaces')
+        );
+
+      var namespace = _.findWhere(namespaces, {kind: 'group'});
+
+      if (!namespace)
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            'getNamespaces returned no namespace of kind group for ' +
+              'subscriptionId: ' + bag.subscriptionId)
+        );
+
+      bag.projectNamespaceId = namespace.id;
+      return next();
+    }
+  );
+}
+
+function _createProject(bag, next) {
+  var who = bag.who + '|' + _createProject.name;
+  logger.debug(who, 'Inside');
+
+  var path = bag.resourceName.toLowerCase();
+  bag.gitlabAdapter.postProject(bag.resourceName, path,
+    bag.gitlabAdapter.visibilityLevels.PRIVATE, bag.projectNamespaceId,
+    function (err, body) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'postProject returned error with status code ' + err +
+            'with body ' + util.inspect(body))
+        );
+
       return next();
     }
   );
@@ -231,8 +308,8 @@ function _getRootBucket(bag, next) {
   );
 }
 
-function _createAdapter(bag, next) {
-  var who = bag.who + '|' + _createAdapter.name;
+function _createAWSAdapter(bag, next) {
+  var who = bag.who + '|' + _createAWSAdapter.name;
   logger.debug(who, 'Inside');
 
   var accessKey = bag.amazonKeysIntegration.data.accessKey;
@@ -284,38 +361,6 @@ function _migrateVersions(bag, next) {
       if (!sha || sha === 'HEAD')
         return done();
 
-      var createdDate = new Date(version.createdAt);
-      var year = createdDate.getUTCFullYear();
-      var month = createdDate.getUTCMonth() + 1;
-      var day = createdDate.getUTCDate();
-      var hours = createdDate.getUTCHours();
-      var minutes = createdDate.getUTCMinutes();
-      var seconds = createdDate.getSeconds();
-      var milliseconds = createdDate.getMilliseconds();
-
-      if (month < 10)
-        month = '0' + month;
-
-      if (day < 10)
-        day = '0' + day;
-
-      if (hours < 10)
-        hours = '0' + hours;
-
-      if (minutes < 10)
-        minutes = '0' + minutes;
-
-      if (seconds < 10)
-        seconds = '0' + seconds;
-
-      if (milliseconds < 10)
-        milliseconds = '00' + milliseconds;
-      else if (milliseconds < 100)
-        milliseconds = '0' + milliseconds;
-
-      var newSHA = util.format('%s%s%s-%s%s%s%s',
-        year, month, day, hours, minutes, seconds, milliseconds);
-
       var seriesBag = {
         who: who,
         resourceId: bag.resourceId,
@@ -323,27 +368,27 @@ function _migrateVersions(bag, next) {
         subscriptionId: bag.subscriptionId,
         cloneLocation: bag.cloneLocation,
         scriptLocation: bag.scriptLocation,
-        checkoutTemplatePath: bag.checkoutTemplatePath,
+        pushTemplatePath: bag.pushTemplatePath,
         awsAdapter: bag.awsAdapter,
         rootS3Bucket: bag.rootS3Bucket,
+        pemFileLocation: bag.pemFileLocation,
+        privateKey: bag.sshKeys.private,
+        shaFilePath: bag.shaFilePath,
         versionId: version.id,
         previousSHA: sha,
-        newSHA: newSHA,
+        newSHA: null,
         propertyBag: version.propertyBag,
-        allFilesPermissions: {},
         files: []
       };
       async.series([
-          _generateCheckoutScript.bind(null, seriesBag),
-          _saveCheckoutScript.bind(null, seriesBag),
-          _executeCheckoutScript.bind(null, seriesBag),
-          _getFilePaths.bind(null, seriesBag),
-          _readFilePermissions.bind(null, seriesBag),
-          _constructJson.bind(null, seriesBag),
-          _generatePath.bind(null, seriesBag),
-          _compressFiles.bind(null, seriesBag),
-          _generateArtifactPutUrl.bind(null, seriesBag),
-          _uploadCompressedFiles.bind(null, seriesBag),
+          _generateArtifactGetUrl.bind(null, seriesBag),
+          _downloadGzipState.bind(null, seriesBag),
+          _writeFiles.bind(null, seriesBag),
+          _generatePushScript.bind(null, seriesBag),
+          _savePushScript.bind(null, seriesBag),
+          _pushFiles.bind(null, seriesBag),
+          _getLatestSha.bind(null, seriesBag),
+          _removeShaFile.bind(null, seriesBag),
           _updateVersion.bind(null, seriesBag)
         ],
         function (err) {
@@ -360,27 +405,147 @@ function _migrateVersions(bag, next) {
   );
 }
 
-function _generateCheckoutScript(seriesBag, next) {
-  var who = seriesBag.who + '|' + _generateCheckoutScript.name;
+function _generateArtifactGetUrl(seriesBag, next) {
+  var who = seriesBag.who + '|' + _generateArtifactGetUrl.name;
   logger.debug(who, 'Inside');
 
-  var templateObj = {
+  seriesBag.artifactPath = util.format('subscriptions/%s/resources/%s/%s-%s',
+    seriesBag.subscriptionId, seriesBag.resourceId,
+    seriesBag.previousSHA.replace('-', '/'), 'state.gz');
+
+  var rootBucket = seriesBag.rootS3Bucket;
+  var key = seriesBag.artifactPath;
+  var expirationTimeSecs = 10 * 60;
+
+  seriesBag.awsAdapter.S3.generateGETUrl(
+    rootBucket, key, expirationTimeSecs,
+    function (err, data) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Generating GET URL returned error: ' + util.inspect(err))
+        );
+
+      seriesBag.getURL = data;
+      return next();
+    }
+  );
+}
+
+function _downloadGzipState(seriesBag, next) {
+  var who = seriesBag.who + '|' + _downloadGzipState.name;
+  logger.debug(who, 'Inside');
+
+  var options = {
+    url: seriesBag.getURL,
+    gzip: true,
+    json: true
+  };
+
+  request.get(options,
+    function (err, res, data) {
+      if (err || res.statusCode !== 200) {
+        logger.warn(
+          util.format('Failed to get state for path %s',
+          seriesBag.artifactPath)
+        );
+
+        return next(
+          new ActErr(who, ActErr.DataNotFound,
+            util.format('Failed to get state for path %s',
+            seriesBag.artifactPath)
+          )
+        );
+      }
+
+      seriesBag.files = data;
+      return next();
+    }
+  );
+}
+
+
+function _writeFiles(seriesBag, next) {
+  var who = seriesBag.who + '|' + _writeFiles.name;
+  logger.debug(who, 'Inside');
+
+  async.retry({ times: 5,
+    interval: function(retryCount) {
+        return 1000 * Math.pow(2, retryCount);
+      }
+    },
+    function (callback) {
+      async.eachLimit(seriesBag.files, 10,
+        function (file, nextFile) {
+          // Ignore all .git, .git/* files
+          if (file.path === '.git' || file.path.substr(0, 5) === '.git/')
+            return nextFile();
+
+          var filePath = util.format('%s/%s',
+            seriesBag.cloneLocation, file.path);
+          fs.outputFile(filePath, file.contents,
+            function (err) {
+              if (err) {
+                new ActErr(who, ActErr.OperationFailed,
+                  'Failed to create file for resource: ' + seriesBag.resourceId,
+                  err);
+                return nextFile(err);
+              }
+
+              if (file.permissions) {
+                fs.chmod(filePath, file.permissions,
+                  function (err) {
+                    if (err)
+                      return nextFile(
+                        new ActErr(who, ActErr.OperationFailed,
+                          'Failed to set permission of file for id: ' +
+                          seriesBag.resourceId, err)
+                      );
+
+                    return nextFile();
+                  }
+                );
+              } else {
+                return nextFile();
+              }
+            }
+          );
+        },
+        function (err) {
+          return callback(err);
+        }
+      );
+    },
+    function (shouldRetry, err) {
+      return next(err);
+    }
+  );
+}
+
+function _generatePushScript(seriesBag, next) {
+  var who = seriesBag.who + '|' + _generatePushScript.name;
+  logger.debug(who, 'Inside');
+
+  var pushTemplatePayload = {
+    privateKey: seriesBag.privateKey,
     cloneLocation: seriesBag.cloneLocation,
-    sha: seriesBag.previousSHA
+    pemFilePath: seriesBag.pemFileLocation,
+    shaFilePath: seriesBag.shaFilePath,
+    subscriptionEmail: seriesBag.subscriptionId + '@test.com',
+    subscriptionName: seriesBag.subscriptionId,
+    commitMessage: seriesBag.resourceId
   };
 
   var scriptContent =
-    fs.readFileSync(seriesBag.checkoutTemplatePath).toString();
+    fs.readFileSync(seriesBag.pushTemplatePath).toString();
   var template = _.template(scriptContent);
-  seriesBag.script = template(templateObj);
-  logger.debug(util.format('Generated checkout SHA script: %s',
-    seriesBag.script));
+  seriesBag.script = template(pushTemplatePayload);
 
   return next();
 }
 
-function _saveCheckoutScript(seriesBag, next) {
-  var who = seriesBag.who + '|' + _saveCheckoutScript.name;
+function _savePushScript(seriesBag, next) {
+  var who = seriesBag.who + '|' + _savePushScript.name;
   logger.debug(who, 'Inside');
 
   fs.writeFile(seriesBag.scriptLocation, seriesBag.script,
@@ -392,204 +557,81 @@ function _saveCheckoutScript(seriesBag, next) {
         );
 
       fs.chmodSync(seriesBag.scriptLocation, '755');
-      logger.debug(
-        util.format('Successfully saved checkout SHA script for resource:',
-          seriesBag.resourceId)
-      );
       return next();
     }
   );
 }
 
-function _executeCheckoutScript(seriesBag, next) {
-  var who = seriesBag.who + '|' + _executeCheckoutScript.name;
+function _pushFiles(seriesBag, next) {
+  var who = seriesBag.who + '|' + _pushFiles.name;
   logger.debug(who, 'Inside');
 
-  var exec = spawn(seriesBag.scriptLocation, [], {});
-  var errorMessages = [];
-
-  exec.stderr.on('data',
-    function (data)  {
-      errorMessages.push(data.toString());
-    }
-  );
-
-  exec.on('close',
-    function (code) {
-      if (code) {
-        logger.warn(
-          util.format('Failed to execute checkout SHA script for ' +
-            'resource with id %s and version %s with err %s',
-              seriesBag.resourceId, seriesBag.versionId, errorMessages
-          )
-        );
-
-        return next(
-          new ActErr(who, ActErr.DataNotFound,
-            util.format('Failed to execute checkout SHA script for ' +
-              'resource with id %s and name %s with err %s',
-                seriesBag.resourceId, seriesBag.versionId, errorMessages
-            )
-          )
-        );
+  async.retry({ times: 5,
+    interval: function(retryCount) {
+        return 1000 * Math.pow(2, retryCount);
       }
-      return next();
-    }
-  );
-}
+    },
+    function (callback) {
+      var exec = spawn(seriesBag.scriptLocation, [], {});
+      var errorMessages = [];
 
-function _getFilePaths(seriesBag, next) {
-  var who = seriesBag.who + '|' + _getFilePaths.name;
-  logger.debug(who, 'Inside');
+      exec.stderr.on('data',
+        function (data) {
+          errorMessages.push(data.toString());
+        }
+      );
 
-  seriesBag.allFilesLocation = getFileListRecursively(seriesBag.cloneLocation);
-  return next();
-}
-
-function _readFilePermissions(seriesBag, next) {
-  var who = seriesBag.who + '|' + _readFilePermissions.name;
-  logger.debug(who, 'Inside');
-
-  async.eachLimit(seriesBag.allFilesLocation, 10,
-    function (fileLocation, nextFileLocation) {
-      fs.stat(fileLocation,
-        function (err, stats) {
-          if (err)
-            return nextFileLocation(
+      exec.on('close',
+        function (code)  {
+          if (code) {
+            return callback(
               new ActErr(who, ActErr.OperationFailed,
-                'Failed to read file perms at location' + fileLocation, err)
+                'Executing push script failed for id: ' +
+                seriesBag.resourceId, errorMessages
+              )
             );
-          var permission = parseInt(stats.mode);
-          seriesBag.allFilesPermissions[fileLocation] = permission;
-          return nextFileLocation();
+          }
+
+          return callback();
         }
       );
     },
-    function (err) {
+    function (shouldRetry, err) {
       return next(err);
     }
   );
 }
 
-function _constructJson(seriesBag, next) {
-  var who = seriesBag.who + '|' + _constructJson.name;
+function _getLatestSha(bag, next) {
+  var who = bag.who + '|' + _getLatestSha.name;
   logger.debug(who, 'Inside');
 
-  async.eachLimit(seriesBag.allFilesLocation, 10,
-    function (fileLocation, nextFileLocation) {
-      fs.readFile(fileLocation,
-        function (err, data) {
-          if (err)
-            return nextFileLocation(
-              new ActErr(who, ActErr.OperationFailed,
-                'Failed to read files at location' + fileLocation, err)
-            );
-          var obj = {
-            permissions: seriesBag.allFilesPermissions[fileLocation],
-            path: fileLocation.substring(seriesBag.cloneLocation.length,
-              fileLocation.length),
-            contents: data.toString()
-          };
+  fs.readFile(bag.shaFilePath,
+    function (err, sha) {
+      if (err)
+        bag.newSHA = '';
+      else
+        bag.newSHA = _.first(sha.toString().split('\n'));
 
-          seriesBag.files.push(obj);
-          return nextFileLocation();
-        }
-      );
-    },
-    function (err) {
-      return next(err);
-    }
-  );
-}
-
-function _generatePath(seriesBag, next) {
-  var who = seriesBag.who + '|' + _generatePath.name;
-  logger.debug(who, 'Inside');
-
-  seriesBag.artifactPath =
-    util.format('subscriptions/%s/resources/%s/%s-%s',
-      seriesBag.subscriptionId, seriesBag.resourceId,
-      seriesBag.newSHA.replace('-', '/'), 'state.gz');
-
-  logger.debug('Generated artifacts path ' + seriesBag.artifactPath);
-
-  return next();
-}
-
-function _compressFiles(seriesBag, next) {
-  var who = seriesBag.who + '|' + _compressFiles.name;
-  logger.debug(who, 'Inside');
-
-  zlib.gzip(JSON.stringify(seriesBag.files),
-    function (err, compressedFiles) {
-      if (err) {
-        logger.warn(who,
-          util.format('Failed to compress files for versionId: %s',
-            seriesBag.versionId), err
-        );
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            util.format('Failed to compress files for versionId: %s',
-              seriesBag.versionId))
-        );
-      }
-
-      seriesBag.compressedFiles = compressedFiles;
       return next();
     }
   );
 }
 
-function _generateArtifactPutUrl(seriesBag, next) {
-  var who = seriesBag.who + '|' + _generateArtifactPutUrl.name;
+function _removeShaFile(bag, next) {
+  var who = bag.who + '|' + _removeShaFile.name;
   logger.debug(who, 'Inside');
 
-  var rootBucket = seriesBag.rootS3Bucket;
-  var key = seriesBag.artifactPath;
-  var expirationTimeSecs = 10 * 60;
-  var additionalParams = {
-    ContentType: 'application/javascript'
-  };
+  var command = util.format('rm -rf %s', bag.shaFilePath);
 
-  seriesBag.awsAdapter.S3.generatePUTUrl(
-    rootBucket, key, expirationTimeSecs, additionalParams,
-    function (err, data) {
+  exec(command,
+    function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            'Generating PUT URL returned error: ' + util.inspect(err))
+            'Failed to clean up files', err)
         );
-
-      seriesBag.putURL = data;
       return next();
-    }
-  );
-}
-
-function _uploadCompressedFiles(seriesBag, next) {
-  var who = seriesBag.who + '|' + _uploadCompressedFiles.name;
-  logger.debug(who, 'Inside');
-
-  var options = {
-    method: 'PUT',
-    url: seriesBag.putURL,
-    body: seriesBag.compressedFiles,
-    headers: {
-      'Content-Type': 'application/javascript',
-      'Content-Encoding': 'gzip'
-    }
-  };
-
-  request(options,
-    function (err, res, body) {
-      var error = err || (res && res.statusCode > 299);
-      if (error)
-        logger.warn(who,
-          util.format('Failed PUT %s for resourceId: %s with error: %s',
-            seriesBag.putURL, seriesBag.resourceId, err || res.statusCode), body
-        );
-
-      return next(error);
     }
   );
 }
@@ -641,21 +683,4 @@ function _cleanupFiles(bag, next) {
       return next();
     }
   );
-}
-
-function getFileListRecursively(dir, filelist) {
-  var files = fs.readdirSync(dir);
-  filelist = filelist || [];
-
-  _.each(files,
-    function (file) {
-      if (file === '.git' || file.substr(0, 5) === '.git/')
-        return;
-      if (fs.statSync(dir + '/' + file).isDirectory())
-        filelist = getFileListRecursively(dir + '/' + file, filelist);
-      else
-        filelist.push(dir + '/' + file);
-    }
-  );
-  return filelist;
 }
