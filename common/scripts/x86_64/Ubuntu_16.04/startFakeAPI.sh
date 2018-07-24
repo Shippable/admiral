@@ -103,7 +103,7 @@ __check_api() {
       grep $FAKE_API_CONTAINER_NAME | awk '{print $1}')
 
     if [ "$running_api_container" != "" ]; then
-      __process_msg "Waiting thrity seconds before stopping API container"
+      __process_msg "Waiting thirty seconds before stopping API container"
       is_booted=true
       sleep 30
 

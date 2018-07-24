@@ -146,6 +146,24 @@ S3.createBucket =
     );
   };
 
+S3.generateGETUrl =
+  function (bucket, key, expiration, callback) {
+    var params = {
+      Bucket: bucket,
+      Key: key,
+      Expires: expiration
+    };
+
+    this.s3.getSignedUrl('getObject', params,
+      function (err, data) {
+        if (err)
+          return callback(err);
+
+        return callback(null, data);
+      }
+    );
+  };
+
 S3.generatePUTUrl =
   function (bucket, key, expiration, additionalParams, callback) {
     var params = {

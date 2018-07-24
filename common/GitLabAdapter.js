@@ -5,6 +5,8 @@ module.exports = self;
 var async = require('async');
 var request = require('request');
 
+var querystring = require('querystring');
+
 function GitLabAdapter(token, baseUrl, username, password) {
   this.username = username;
   this.password = password;
@@ -15,6 +17,20 @@ function GitLabAdapter(token, baseUrl, username, password) {
     util.format('Inside common|GitLabAdapter: Using url %s', this.baseUrl)
   );
 }
+
+GitLabAdapter.prototype.visibilityLevels = {
+  PRIVATE: 0,
+  INTERNAL: 10,
+  PUBLIC: 20
+};
+
+GitLabAdapter.prototype.groupAccessLevels = {
+  GUEST: 10,
+  REPORTER: 20,
+  DEVELOPER: 30,
+  MASTER: 40,
+  OWNER: 50
+};
 
 //initialize the adapter to get a token
 GitLabAdapter.prototype.initialize = function (callback) {
@@ -45,8 +61,87 @@ GitLabAdapter.prototype.postSession = function (callback) {
 };
 
 // Users
+GitLabAdapter.prototype.getUserByUsername = function (query, callback) {
+  var url = util.format('/users?%s', query);
+  this.get(url, callback);
+};
+
 GitLabAdapter.prototype.getCurrentUser = function (callback) {
   var url = '/user';
+  this.get(url, callback);
+};
+
+GitLabAdapter.prototype.getKeysByUserId = function (uid, callback) {
+  var url = util.format('/users/%s/keys', uid);
+  this.get(url, callback);
+};
+
+GitLabAdapter.prototype.postUser =
+  function (name, username, password, projectsLimit, callback) {
+    var url = '/users';
+
+    /* jshint camelcase: false */
+    var body = {
+      email: name + '@test.com',
+      password: password,
+      username: username,
+      name: name,
+      projects_limit: projectsLimit,
+      extern_uid: name,
+      provider: 'shippable'
+    };
+    /* jshint camelcase: true */
+
+    this.post(url, body, callback);
+  };
+
+GitLabAdapter.prototype.postUserKey = function (userId, key, callback) {
+  var url = '/users/' + userId + '/keys';
+
+  var body = {
+    'key': key,
+    'title': 'Shippable SSH key',
+    'id': userId
+  };
+  this.post(url, body, callback);
+};
+
+GitLabAdapter.prototype.postAddMember = function (groupId, params, callback) {
+  var url = util.format('/groups/%s/members', groupId);
+  this.post(url, params, callback);
+};
+
+// Groups
+GitLabAdapter.prototype.getGroupByName = function (query, callback) {
+  var url = util.format('/groups?%s', query);
+  this.get(url, callback);
+};
+
+GitLabAdapter.prototype.postGroup = function (params, callback) {
+  var url = '/groups';
+  this.post(url, params, callback);
+};
+
+// Projects
+/* jshint camelcase: false */
+GitLabAdapter.prototype.postProject = function (name, path, visibility_level,
+  namespace_id, callback) {
+  var url = '/projects';
+
+  var body = {
+    name: name,
+    path: path,
+    visibility_level: visibility_level,
+    namespace_id: namespace_id
+  };
+
+  this.post(url, body, callback);
+};
+/* jshint camelcase: true */
+
+// Namespaces
+GitLabAdapter.prototype.getNamespaces = function (callback) {
+  var url = '/namespaces';
   this.get(url, callback);
 };
 
@@ -125,21 +220,35 @@ function _performCall(bag, next) {
   logger.debug('Inside', who);
 
   bag.startedAt = Date.now();
-  request(bag.opts,
-    function (err, res, body) {
-      var interval = Date.now() - bag.startedAt;
-      logger.debug('GitLab request ' + bag.opts.method + ' ' +
-        bag.opts.url + ' took ' + interval +
-        ' ms and returned HTTP status ' + (res && res.statusCode));
+  var retryOpts = {
+    times: bag.retry ? 5 : 1,
+    interval: function (retryCount) {
+      return Math.pow(2, retryCount) * 1000;
+    }
+  };
 
-      bag.res = res;
-      bag.body = body;
-      if (res && res.statusCode > 299)
-        err = err || res.statusCode;
-      if (err) {
-        logger.debug('GitLab returned status', err, 'for request', bag.who);
-        bag.err = err;
-      }
+  async.retry(retryOpts,
+    function (callback) {
+      request(bag.opts,
+        function (err, res, body) {
+          var interval = Date.now() - bag.startedAt;
+          logger.debug(who, 'GitLab request ' + bag.opts.method + ' ' +
+            bag.opts.url + ' took ' + interval +
+            ' ms and returned HTTP status ' + (res && res.statusCode));
+
+          if (res && res.statusCode > 299)
+            err = err || res.statusCode;
+          if (err)
+            logger.debug(who, 'Gitlab returned an error', err);
+
+          bag.err = err;
+          bag.res = res;
+          bag.body = body;
+          return callback(err);
+        }
+      );
+    },
+    function () {
       return next();
     }
   );

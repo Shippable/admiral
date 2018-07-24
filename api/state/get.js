@@ -7,6 +7,7 @@ var async = require('async');
 var _ = require('underscore');
 
 var configHandler = require('../../common/configHandler.js');
+var envHandler = require('../../common/envHandler.js');
 
 function get(req, res) {
   var bag = {
@@ -17,7 +18,7 @@ function get(req, res) {
     defaultConfig: {
       address: global.config.admiralIP,
       port: 80,
-      sshPort: 2222,
+      sshPort: 22,
       securePort: 443,
       isShippableManaged: true,
       isInstalled: false,
@@ -31,6 +32,7 @@ function get(req, res) {
   async.series([
     _checkInputParams.bind(null, bag),
     _get.bind(null, bag),
+    _checkDevMode.bind(null, bag),
     _setDefault.bind(null, bag)
   ],
     function (err) {
@@ -78,11 +80,35 @@ function _get(bag, next) {
   );
 }
 
+function _checkDevMode(bag, next) {
+  if (!bag.initializeDefault) return next();
+
+  var who = bag.who + '|' + _checkDevMode.name;
+  logger.verbose(who, 'Inside');
+
+  envHandler.get('DEV_MODE',
+    function (err, devMode) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Cannot get env: DEV_MODE')
+        );
+
+      bag.devMode = devMode;
+      return next();
+    }
+  );
+}
+
+
 function _setDefault(bag, next) {
   if (!bag.initializeDefault) return next();
 
   var who = bag.who + '|' + _setDefault.name;
   logger.verbose(who, 'Inside');
+
+  if (bag.devMode)
+    bag.defaultConfig.sshPort = 2222;
 
   configHandler.put(bag.component, bag.defaultConfig,
     function (err) {
