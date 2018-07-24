@@ -11,9 +11,7 @@ ${REL_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Improve TASK validation for rSync**: improved task validation for rSync jobs, enabling it to handle some missing cases.
 
 ## Custom Nodes
   - **simple title**: brief description
