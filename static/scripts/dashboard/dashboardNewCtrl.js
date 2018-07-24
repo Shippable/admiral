@@ -1409,6 +1409,10 @@
               concatWorkerAddress(protocol, '50000');
           }
 
+          var stateIntegrations = _.where(systemIntegrations, {name: 'state'});
+          if (stateIntegrations.length > 1)
+            $scope.vm.initializeForm.state.migrationRequired = true;
+
           $scope.vm.systemIntegrations = systemIntegrations;
 
           // override defaults with actual systemInt values
@@ -1664,6 +1668,8 @@
                 $scope.vm.initializeForm[service].secretKey =
                   amazonKeysSystemIntegration.data.secretKey;
               }
+
+              $scope.vm.initializeForm[service].migrationConfirmed = false;
             }
           }
 
@@ -1892,7 +1898,20 @@
         if (_.isEmpty($scope.vm.initializeForm.state.rootPassword))
           $scope.vm.initializeForm.state.rootPassword =
             $scope.vm.admiralEnv.DB_PASSWORD;
+        // If the port is non-zero, reset to the default:
+        if ($scope.vm.initializeForm.state.sshPort)
+          $scope.vm.initializeForm.state.sshPort =
+            $scope.vm.admiralEnv.DEV_MODE ? 2222 : 22;
       }
+
+      var stateIntegration = _.findWhere($scope.vm.systemIntegrations,
+        {name: 'state'});
+
+      $scope.vm.initializeForm.state.migrationRequired = (stateIntegration &&
+        stateIntegration.masterName !== $scope.vm.initializeForm.state.type) ||
+        (!stateIntegration && $scope.vm.initializeForm.state.type !== 'none' &&
+        $scope.vm.initialized);
+      $scope.vm.initializeForm.state.migrationConfirmed = false;
     }
 
     function updateInstallForm(workers, next) {
@@ -2255,6 +2274,7 @@
           postServices,
           initMsg,
           initState,
+          migrateState,
           initRedis,
           initMaster,
           initWorkers
@@ -2271,7 +2291,16 @@
     }
 
     function validateUserInput (next) {
-      if ($scope.vm.isInitialized) return next();
+      if ($scope.vm.isInitialized) {
+        if ($scope.vm.initializeForm.state.migrationRequired &&
+          !$scope.vm.initializeForm.state.migrationConfirmed)
+          return next(
+            'Changing state will migrate state to the new location. ' +
+            'Please confirm this in the state section.'
+          );
+        return next();
+      }
+
       var validationErrors = [];
       if ($scope.vm.initializeForm.msg.password.length < 8)
         validationErrors.push(
@@ -2292,6 +2321,13 @@
         !$scope.vm.initializeForm.state.secretKey)
         validationErrors.push(
           'State requires an AWS Secret Key for S3'
+        );
+
+      if ($scope.vm.initializeForm.state.migrationRequired &&
+        !$scope.vm.initializeForm.state.migrationConfirmed)
+        validationErrors.push(
+          'Changing state will migrate state to the new location. ' +
+          'Please confirm this in the state section.'
         );
 
       if (!_.isEmpty(validationErrors))
@@ -2561,6 +2597,9 @@
             return next();
           }
 
+          if (stateIntegrations.length > 1)
+            $scope.vm.initializeForm.state.migrationRequired = true;
+
           // override defaults with actual systemInt values
           _.each(stateIntegrations,
             function (stateIntegration) {
@@ -2683,6 +2722,29 @@
             return next(err);
           }
           pollService('state', next);
+        }
+      );
+    }
+
+    function migrateState(next) {
+      if (!$scope.vm.initializeForm.state.migrationConfirmed) return next();
+
+      $scope.vm.systemSettings.state.isProcessing = true;
+
+      admiralApiAdapter.migrateState({},
+        function (err) {
+          if (err) {
+            $scope.vm.systemSettings.state.isProcessing = false;
+            $scope.vm.initializing = false;
+            return next(err);
+          }
+          pollService('state',
+            function () {
+              if (!$scope.vm.systemSettings.state.isFailed)
+                $scope.vm.initializeForm.state.migrationRequired = false;
+              return next();
+            }
+          );
         }
       );
     }

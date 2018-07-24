@@ -157,6 +157,9 @@
       initState: function (body, callback) {
         return API.post('/api/state/initialize', body, callback);
       },
+      migrateState: function (body, callback) {
+        return API.post('/api/state/migrate', body, callback);
+      },
       postRedis: function (body, callback) {
         return API.post('/api/redis', body, callback);
       },
