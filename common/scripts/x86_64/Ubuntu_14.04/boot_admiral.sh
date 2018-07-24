@@ -61,6 +61,7 @@ __boot_admiral() {
     --net=host \
     --privileged=true \
     --name=admiral \
+    --restart=unless-stopped \
     $admiral_image"
 
   eval "$boot_cmd"
