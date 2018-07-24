@@ -9,7 +9,7 @@ var _ = require('underscore');
 var GitLabAdapter = require('../../common/GitLabAdapter.js');
 
 function migrateNoneToGitLab(previousIntegration, gitlabIntegration, resource,
-  isStateResource, versions, apiAdapter, callback) {
+  isStateResource, apiAdapter, callback) {
   var bag = {
     resourceId: resource.id,
     resourceName: resource.name,

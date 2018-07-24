@@ -308,68 +308,28 @@ function _listResources(seriesBag, next) {
 function _migrateResource(seriesBag, next) {
   async.eachSeries(seriesBag.resources,
     function (resource, done) {
-      var subSeriesBag = {
-        resourceId: resource.id,
-        logStream: seriesBag.logStream,
-        resource: resource,
-        previousSystemIntegration: seriesBag.previousSystemIntegration,
-        currentSystemIntegration: seriesBag.currentSystemIntegration,
-        isStateResource: resource.typeCode === seriesBag.stateSystemCode,
-        apiAdapter: seriesBag.apiAdapter,
-        versions: []
-      };
-      async.series([
-          _listVersions.bind(null, subSeriesBag),
-          _migrateVersions.bind(null, subSeriesBag)
-        ],
+      var isStateResource = resource.typeCode === seriesBag.stateSystemCode;
+
+      var previousType = (seriesBag.previousSystemIntegration &&
+        seriesBag.previousSystemIntegration.masterName) || 'none';
+
+      if (!migrationScripts[previousType])
+        return done();
+
+      var migration = migrationScripts[previousType]
+        [seriesBag.currentSystemIntegration.masterName];
+
+      if (!migration)
+        return done();
+
+      migration(seriesBag.previousSystemIntegration,
+        seriesBag.currentSystemIntegration, resource,
+        isStateResource, seriesBag.apiAdapter,
         function (err) {
           return done(err);
         }
       );
-
     },
-    function (err) {
-      return next(err);
-    }
-  );
-}
-
-function _listVersions(seriesBag, next) {
-  if (!seriesBag.previousSystemIntegration) return next();
-  var query = util.format(
-    'SELECT id,"propertyBag","createdAt" FROM versions ' +
-    'WHERE "resourceId"=%s ORDER BY id ASC;', seriesBag.resourceId);
-  global.config.client.query(query,
-    function (err, res) {
-      if (err)
-        return next(
-          new ActErr('_listVersions', ActErr.OperationFailed,
-            'Failed to find versions for resourceId: ' + seriesBag.resourceId +
-            ' with error: ' + util.inspect(err))
-        );
-
-      seriesBag.versions = res.rows;
-      return next();
-    }
-  );
-}
-
-function _migrateVersions(seriesBag, next) {
-  var previousType = (seriesBag.previousSystemIntegration &&
-    seriesBag.previousSystemIntegration.masterName) || 'none';
-
-  if (!migrationScripts[previousType])
-    return next();
-
-  var migration = migrationScripts[previousType]
-    [seriesBag.currentSystemIntegration.masterName];
-
-  if (!migration)
-    return next();
-
-  migration(seriesBag.previousSystemIntegration,
-    seriesBag.currentSystemIntegration, seriesBag.resource,
-    seriesBag.isStateResource, seriesBag.versions, seriesBag.apiAdapter,
     function (err) {
       return next(err);
     }
