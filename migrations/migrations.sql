@@ -5438,5 +5438,15 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'clusterNodes' and column_name = 'setAsStopped') then
       alter table "clusterNodes" add column "setAsStopped" BOOLEAN;
     end if;
+
+    -- Remove foreign key constraint on jobConsoles.jobId
+    if exists (select 1 from pg_constraint where conname = 'jobConsoles_jobId_fkey') then
+      alter table "jobConsoles" drop constraint "jobConsoles_jobId_fkey";
+    end if;
+
+    -- Remove foreign key constraint on buildJobConsoles.buildJobId
+    if exists (select 1 from pg_constraint where conname = 'buildJobConsoles_buildJobId_fkey') then
+      alter table "buildJobConsoles" drop constraint "buildJobConsoles_buildJobId_fkey";
+    end if;
   end
 $$;
