@@ -79,6 +79,9 @@ __copy_configs() {
 
   local vault_config_path="$VAULT_CONFIG_DIR/config.hcl"
   __copy_script_remote "$VAULT_HOST" "$vault_config_path" "/etc/vault.d"
+
+  local vault_bootstrap_script_path="$VAULT_CONFIG_DIR/bootstrap_vault.sh"
+  __copy_script_remote "$VAULT_HOST" $vault_bootstrap_script_path "/etc/vault.d"
 }
 
 main() {

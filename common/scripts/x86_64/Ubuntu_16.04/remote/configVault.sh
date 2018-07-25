@@ -10,13 +10,4 @@ __copy_vault_config() {
   __copy_script_remote "$VAULT_HOST" "$vault_config_path" "$VAULT_SYSTEMD_PATH"
 }
 
-__copy_vault_bootstrap() {
-  __process_msg "Copying vault bootstrap file"
-  local vault_bootstrap_path="$VAULT_CONFIG_DIR/scripts/bootstrap_vault.sh"
-  __copy_script_remote "$VAULT_HOST" "$vault_bootstrap_path" "$VAULT_CONFIG_PATH"
-
-}
-
 __copy_vault_config
-__copy_vault_bootstrap
-
