@@ -11,9 +11,7 @@ ${REL_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Improve TASK validation for rSync**: rSync now catches indentation and data type errors for script, nodePool, env and timeoutMinutes in the TASK section of a runSh's YML.
 
 ## Custom Nodes
   - **simple title**: brief description
