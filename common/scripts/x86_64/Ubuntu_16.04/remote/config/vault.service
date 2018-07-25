@@ -1,12 +1,12 @@
 [Unit]
 Description=vault server
 Requires=network-online.target
-After=network-online.target consul.service
+After=network-online.target postgresql.service
 
 [Service]
-EnvironmentFile=-/etc/sysconfig/vault
-Restart=on-failure
-ExecStart=/usr/local/bin/vault server $OPTIONS -config=/etc/vault.d
+EnvironmentFile=-/etc/vault.d/vault.env
+ExecStart=/usr/local/bin/vault server $OPTIONS -config=/etc/vault.d/config.hcl
+ExecStartPost=/etc/vault.d/unseal_vault.sh
 
 [Install]
 WantedBy=multi-user.target

@@ -53,6 +53,7 @@ __update_vault_config() {
   cp -vr $SCRIPTS_DIR/configs/vault_config.hcl.template $VAULT_CONFIG_DIR/config.hcl
   cp -vr $SCRIPTS_DIR/configs/policy.hcl $VAULT_CONFIG_DIR/scripts/policy.hcl
   cp -vr $SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/config/* $VAULT_CONFIG_DIR/scripts/
+  cp -vr $SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/unseal_vault.sh $VAULT_CONFIG_DIR/scripts/
 }
 
 __update_vault_creds() {
@@ -79,6 +80,9 @@ __copy_configs() {
 
   local vault_config_path="$VAULT_CONFIG_DIR/config.hcl"
   __copy_script_remote "$VAULT_HOST" "$vault_config_path" "/etc/vault.d"
+
+  local vault_unseal_script_path="$VAULT_CONFIG_DIR/scripts/unseal_vault.sh"
+  __copy_script_remote "$VAULT_HOST" $vault_unseal_script_path "/etc/vault.d"
 }
 
 main() {

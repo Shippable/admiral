@@ -13,7 +13,7 @@ download_vault() {
 
 install_vault() {
   echo "Installing Vault..."
-  unzip vault.zip -d /usr/local/bin
+  unzip -o vault.zip -d /usr/local/bin
   chmod 0755 /usr/local/bin/vault
   chown root:root /usr/local/bin/vault
 }
@@ -25,7 +25,7 @@ create_config_dirs() {
 }
 
 start_vault() {
-  service vault start
+  systemctl start vault.service
 }
 
 # accepts arguments $host $port $serviceName $timeout
@@ -57,7 +57,13 @@ __check_service_connection() {
 
 check_vault() {
   echo "Checking vault status on $VAULT_HOST:$VAULT_PORT"
+  systemctl status vault.service
   __check_service_connection "$VAULT_HOST" "$VAULT_PORT" "vault" "$TIMEOUT"
+}
+
+activate_vault() {
+  echo "Activating vault service so that it starts on machine reboots"
+  systemctl enable vault.service
 }
 
 main() {
@@ -78,6 +84,7 @@ main() {
   create_config_dirs
   start_vault
   check_vault
+  activate_vault
   popd
 }
 
