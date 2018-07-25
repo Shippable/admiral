@@ -82,7 +82,7 @@ __copy_configs() {
   __copy_script_remote "$VAULT_HOST" "$vault_config_path" "/etc/vault.d"
 
   local vault_unseal_script_path="$VAULT_CONFIG_DIR/scripts/unseal_vault.sh"
-  __copy_script_remote "$VAULT_HOST" $vault_unseal_script_path"/etc/vault.d"
+  __copy_script_remote "$VAULT_HOST" $vault_unseal_script_path "/etc/vault.d"
 }
 
 main() {
