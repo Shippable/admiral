@@ -1,6 +1,5 @@
 #!/bin/bash -e
 
-export VAULT_CONFIG_PATH="/etc/shippable/secrets/scripts"
 export VAULT_SYSTEMD_PATH="/etc/systemd/system/"
 
 __copy_vault_config() {
