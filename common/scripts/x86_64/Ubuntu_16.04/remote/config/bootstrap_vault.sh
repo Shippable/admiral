@@ -2,9 +2,12 @@
 set -e
 
 export ADMIRAL_ENV="/etc/shippable/admiral.env"
+export BOOT_WAIT=10
 
 __bootstrap_vault() {
 	echo "Bootstraping vault server"
+	echo "Waiting $BOOT_WAIT seconds for vault server to start"
+	sleep $BOOT_WAIT
 
 	source $ADMIRAL_ENV
 

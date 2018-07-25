@@ -25,7 +25,7 @@ create_config_dirs() {
 }
 
 start_vault() {
-  service vault start
+  systemctl status vault.service
 }
 
 # accepts arguments $host $port $serviceName $timeout
@@ -60,6 +60,11 @@ check_vault() {
   __check_service_connection "$VAULT_HOST" "$VAULT_PORT" "vault" "$TIMEOUT"
 }
 
+activate_vault() {
+  echo "Activating vault service so that it starts on machine reboots"
+  systemctl enable vault.service
+}
+
 main() {
   check_vault=""
   {
@@ -78,6 +83,7 @@ main() {
   create_config_dirs
   start_vault
   check_vault
+  activate_vault
   popd
 }
 
