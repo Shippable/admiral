@@ -2699,6 +2699,42 @@ do $$
     );
 
     perform set_route_role(
+      routePattern := '/projects/:projectId/scm',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/projects/:projectId/scm',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/projects/:projectId/scm',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/projects/:projectId/scm',
+      httpVerb := 'DELETE',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/projects/:projectId/scm',
+      httpVerb := 'DELETE',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/projects/:projectId/scm',
+      httpVerb := 'DELETE',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
       routePattern := '/projects/:projectId',
       httpVerb := 'PUT',
       roleCode := 6010
