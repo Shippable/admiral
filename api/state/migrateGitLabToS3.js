@@ -17,7 +17,7 @@ var zlib = require('zlib');
 var AWSAdapter = require('../../common/awsAdapter.js');
 
 function migrateGitLabToS3(gitlabIntegration, amazonKeysIntegration, resource,
-  isStateResource, versions, apiAdapter, callback) {
+  isStateResource, apiAdapter, callback) {
   var bag = {
     resourceId: resource.id,
     resourceName: resource.name,
@@ -25,7 +25,6 @@ function migrateGitLabToS3(gitlabIntegration, amazonKeysIntegration, resource,
     isStateResource: isStateResource,
     gitlabIntegration: gitlabIntegration,
     amazonKeysIntegration: amazonKeysIntegration,
-    versions: versions,
     apiAdapter: apiAdapter,
     sshKeys: {},
     cloneTemplatePath: path.resolve(__dirname, './gitlab/cloneRepo.sh'),
@@ -43,7 +42,8 @@ function migrateGitLabToS3(gitlabIntegration, amazonKeysIntegration, resource,
       _executeCloneScript.bind(null, bag),
       _getRootBucket.bind(null, bag),
       _createAdapter.bind(null, bag),
-      _migrateVersions.bind(null, bag),
+      _getVersionCount.bind(null, bag),
+      _migrate.bind(null, bag),
       _cleanupFiles.bind(null, bag)
     ],
     function (err) {
@@ -266,18 +266,106 @@ function _createAdapter(bag, next) {
   );
 }
 
-function _migrateVersions(bag, next) {
-  var who = bag.who + '|' + _migrateVersions.name;
+function _getVersionCount(bag, next) {
+  var who = bag.who + '|' + _getVersionCount.name;
+  logger.verbose(who, 'Inside');
+
+  var query = util.format(
+    'SELECT COUNT(1) FROM versions WHERE "resourceId"=%s;', bag.resourceId);
+  global.config.client.query(query,
+    function (err, res) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to count versions for resourceId: ' + bag.resourceId +
+            ' with error: ' + util.inspect(err))
+        );
+
+      if (!_.isEmpty(res.rows))
+        bag.versionCount = res.rows[0].count;
+
+      return next();
+    }
+  );
+}
+
+function _migrate(bag, next) {
+  var who = bag.who + '|' + _migrate.name;
+  logger.verbose(who, 'Inside');
+
+  var versionIdOffset = 0;
+
+  async.whilst(
+    function () {
+      return versionIdOffset < bag.versionCount;
+    },
+    function (done) {
+      var seriesBag = {
+        who: who,
+        resourceId: bag.resourceId,
+        isStateResource: bag.isStateResource,
+        subscriptionId: bag.subscriptionId,
+        cloneLocation: bag.cloneLocation,
+        scriptLocation: bag.scriptLocation,
+        checkoutTemplatePath: bag.checkoutTemplatePath,
+        awsAdapter: bag.awsAdapter,
+        rootS3Bucket: bag.rootS3Bucket,
+        versionIdOffset: versionIdOffset,
+        pageLimit: 100,
+        apiAdapter: bag.apiAdapter,
+        versions: []
+      };
+      async.series([
+          _listVersions.bind(null, seriesBag),
+          _migrateVersions.bind(null, seriesBag)
+        ],
+        function (err) {
+          versionIdOffset = versionIdOffset + 100;
+          return done(err);
+        }
+      );
+
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+function _listVersions(seriesBag, next) {
+  var who = seriesBag.who + '|' + _migrateVersions.name;
   logger.debug(who, 'Inside');
 
-  async.eachSeries(bag.versions,
+  var query = util.format('SELECT id,"propertyBag","createdAt" FROM versions ' +
+    'WHERE "resourceId"=%s ORDER BY id ASC LIMIT %s OFFSET %s;',
+    seriesBag.resourceId, seriesBag.pageLimit, seriesBag.versionIdOffset);
+  global.config.client.query(query,
+    function (err, res) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to find versions for resourceId: ' + seriesBag.resourceId +
+            ' with error: ' + util.inspect(err))
+        );
+
+      seriesBag.versions = res.rows;
+      return next();
+    }
+  );
+}
+
+function _migrateVersions(seriesBag, next) {
+  var who = seriesBag.who + '|' + _migrateVersions.name;
+  logger.debug(who, 'Inside');
+
+  async.eachSeries(seriesBag.versions,
     function (version, done) {
       /* jshint maxcomplexity:15 */
       if (!version.propertyBag) return done();
       version.propertyBag = JSON.parse(version.propertyBag);
 
       var sha;
-      if (bag.isStateResource)
+      if (seriesBag.isStateResource)
         sha = version.propertyBag.shaData;
       else
         sha = version.propertyBag.sha;
@@ -316,16 +404,16 @@ function _migrateVersions(bag, next) {
       var newSHA = util.format('%s%s%s-%s%s%s%s',
         year, month, day, hours, minutes, seconds, milliseconds);
 
-      var seriesBag = {
+      var subSeriesBag = {
         who: who,
-        resourceId: bag.resourceId,
-        isStateResource: bag.isStateResource,
-        subscriptionId: bag.subscriptionId,
-        cloneLocation: bag.cloneLocation,
-        scriptLocation: bag.scriptLocation,
-        checkoutTemplatePath: bag.checkoutTemplatePath,
-        awsAdapter: bag.awsAdapter,
-        rootS3Bucket: bag.rootS3Bucket,
+        resourceId: seriesBag.resourceId,
+        isStateResource: seriesBag.isStateResource,
+        subscriptionId: seriesBag.subscriptionId,
+        cloneLocation: seriesBag.cloneLocation,
+        scriptLocation: seriesBag.scriptLocation,
+        checkoutTemplatePath: seriesBag.checkoutTemplatePath,
+        awsAdapter: seriesBag.awsAdapter,
+        rootS3Bucket: seriesBag.rootS3Bucket,
         versionId: version.id,
         previousSHA: sha,
         newSHA: newSHA,
@@ -334,17 +422,17 @@ function _migrateVersions(bag, next) {
         files: []
       };
       async.series([
-          _generateCheckoutScript.bind(null, seriesBag),
-          _saveCheckoutScript.bind(null, seriesBag),
-          _executeCheckoutScript.bind(null, seriesBag),
-          _getFilePaths.bind(null, seriesBag),
-          _readFilePermissions.bind(null, seriesBag),
-          _constructJson.bind(null, seriesBag),
-          _generatePath.bind(null, seriesBag),
-          _compressFiles.bind(null, seriesBag),
-          _generateArtifactPutUrl.bind(null, seriesBag),
-          _uploadCompressedFiles.bind(null, seriesBag),
-          _updateVersion.bind(null, seriesBag)
+          _generateCheckoutScript.bind(null, subSeriesBag),
+          _saveCheckoutScript.bind(null, subSeriesBag),
+          _executeCheckoutScript.bind(null, subSeriesBag),
+          _getFilePaths.bind(null, subSeriesBag),
+          _readFilePermissions.bind(null, subSeriesBag),
+          _constructJson.bind(null, subSeriesBag),
+          _generatePath.bind(null, subSeriesBag),
+          _compressFiles.bind(null, subSeriesBag),
+          _generateArtifactPutUrl.bind(null, subSeriesBag),
+          _uploadCompressedFiles.bind(null, subSeriesBag),
+          _updateVersion.bind(null, subSeriesBag)
         ],
         function (err) {
           if (err)

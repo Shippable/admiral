@@ -17,7 +17,7 @@ var AWSAdapter = require('../../common/awsAdapter.js');
 var GitLabAdapter = require('../../common/GitLabAdapter.js');
 
 function migrateS3ToGitLab(amazonKeysIntegration, gitlabIntegration, resource,
-  isStateResource, versions, apiAdapter, callback) {
+  isStateResource, apiAdapter, callback) {
   var bag = {
     resourceId: resource.id,
     resourceName: resource.name,
@@ -25,7 +25,6 @@ function migrateS3ToGitLab(amazonKeysIntegration, gitlabIntegration, resource,
     isStateResource: isStateResource,
     gitlabIntegration: gitlabIntegration,
     amazonKeysIntegration: amazonKeysIntegration,
-    versions: versions,
     apiAdapter: apiAdapter,
     sshKeys: {},
     cloneTemplatePath: path.resolve(__dirname, './gitlab/cloneRepo.sh'),
@@ -46,7 +45,8 @@ function migrateS3ToGitLab(amazonKeysIntegration, gitlabIntegration, resource,
       _executeCloneScript.bind(null, bag),
       _getRootBucket.bind(null, bag),
       _createAWSAdapter.bind(null, bag),
-      _migrateVersions.bind(null, bag),
+      _getVersionCount.bind(null, bag),
+      _migrate.bind(null, bag),
       _cleanupFiles.bind(null, bag)
     ],
     function (err) {
@@ -343,24 +343,40 @@ function _createAWSAdapter(bag, next) {
   );
 }
 
-function _migrateVersions(bag, next) {
-  var who = bag.who + '|' + _migrateVersions.name;
-  logger.debug(who, 'Inside');
+function _getVersionCount(bag, next) {
+  var who = bag.who + '|' + _getVersionCount.name;
+  logger.verbose(who, 'Inside');
 
-  async.eachSeries(bag.versions,
-    function (version, done) {
-      /* jshint maxcomplexity:15 */
-      if (!version.propertyBag) return done();
-      version.propertyBag = JSON.parse(version.propertyBag);
+  var query = util.format(
+    'SELECT COUNT(1) FROM versions WHERE "resourceId"=%s;', bag.resourceId);
+  global.config.client.query(query,
+    function (err, res) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to count versions for resourceId: ' + bag.resourceId +
+            ' with error: ' + util.inspect(err))
+        );
 
-      var sha;
-      if (bag.isStateResource)
-        sha = version.propertyBag.shaData;
-      else
-        sha = version.propertyBag.sha;
-      if (!sha || sha === 'HEAD')
-        return done();
+      if (!_.isEmpty(res.rows))
+        bag.versionCount = res.rows[0].count;
 
+      return next();
+    }
+  );
+}
+
+function _migrate(bag, next) {
+  var who = bag.who + '|' + _migrate.name;
+  logger.verbose(who, 'Inside');
+
+  var versionIdOffset = 0;
+
+  async.whilst(
+    function () {
+      return versionIdOffset < bag.versionCount;
+    },
+    function (done) {
       var seriesBag = {
         who: who,
         resourceId: bag.resourceId,
@@ -374,6 +390,81 @@ function _migrateVersions(bag, next) {
         pemFileLocation: bag.pemFileLocation,
         privateKey: bag.sshKeys.private,
         shaFilePath: bag.shaFilePath,
+        versionIdOffset: versionIdOffset,
+        pageLimit: 100,
+        apiAdapter: bag.apiAdapter,
+        versions: []
+      };
+      async.series([
+          _listVersions.bind(null, seriesBag),
+          _migrateVersions.bind(null, seriesBag)
+        ],
+        function (err) {
+          versionIdOffset = versionIdOffset + 100;
+          return done(err);
+        }
+      );
+
+    },
+    function (err) {
+      return next(err);
+    }
+  );
+}
+
+function _listVersions(seriesBag, next) {
+  var who = seriesBag.who + '|' + _migrateVersions.name;
+  logger.debug(who, 'Inside');
+
+  var query = util.format('SELECT id,"propertyBag","createdAt" FROM versions ' +
+    'WHERE "resourceId"=%s ORDER BY id ASC LIMIT %s OFFSET %s;',
+    seriesBag.resourceId, seriesBag.pageLimit, seriesBag.versionIdOffset);
+  global.config.client.query(query,
+    function (err, res) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to find versions for resourceId: ' + seriesBag.resourceId +
+            ' with error: ' + util.inspect(err))
+        );
+
+      seriesBag.versions = res.rows;
+      return next();
+    }
+  );
+}
+
+function _migrateVersions(seriesBag, next) {
+  var who = seriesBag.who + '|' + _migrateVersions.name;
+  logger.debug(who, 'Inside');
+
+  async.eachSeries(seriesBag.versions,
+    function (version, done) {
+      /* jshint maxcomplexity:15 */
+      if (!version.propertyBag) return done();
+      version.propertyBag = JSON.parse(version.propertyBag);
+
+      var sha;
+      if (seriesBag.isStateResource)
+        sha = version.propertyBag.shaData;
+      else
+        sha = version.propertyBag.sha;
+      if (!sha || sha === 'HEAD')
+        return done();
+
+      var subSeriesBag = {
+        who: who,
+        resourceId: seriesBag.resourceId,
+        isStateResource: seriesBag.isStateResource,
+        subscriptionId: seriesBag.subscriptionId,
+        cloneLocation: seriesBag.cloneLocation,
+        scriptLocation: seriesBag.scriptLocation,
+        pushTemplatePath: seriesBag.pushTemplatePath,
+        awsAdapter: seriesBag.awsAdapter,
+        rootS3Bucket: seriesBag.rootS3Bucket,
+        pemFileLocation: seriesBag.pemFileLocation,
+        privateKey: seriesBag.privateKey,
+        shaFilePath: seriesBag.shaFilePath,
         versionId: version.id,
         previousSHA: sha,
         newSHA: null,
@@ -381,15 +472,15 @@ function _migrateVersions(bag, next) {
         files: []
       };
       async.series([
-          _generateArtifactGetUrl.bind(null, seriesBag),
-          _downloadGzipState.bind(null, seriesBag),
-          _writeFiles.bind(null, seriesBag),
-          _generatePushScript.bind(null, seriesBag),
-          _savePushScript.bind(null, seriesBag),
-          _pushFiles.bind(null, seriesBag),
-          _getLatestSha.bind(null, seriesBag),
-          _removeShaFile.bind(null, seriesBag),
-          _updateVersion.bind(null, seriesBag)
+          _generateArtifactGetUrl.bind(null, subSeriesBag),
+          _downloadGzipState.bind(null, subSeriesBag),
+          _writeFiles.bind(null, subSeriesBag),
+          _generatePushScript.bind(null, subSeriesBag),
+          _savePushScript.bind(null, subSeriesBag),
+          _pushFiles.bind(null, subSeriesBag),
+          _getLatestSha.bind(null, subSeriesBag),
+          _removeShaFile.bind(null, subSeriesBag),
+          _updateVersion.bind(null, subSeriesBag)
         ],
         function (err) {
           if (err)
