@@ -1901,7 +1901,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row" ng-if="vm.initializeForm.state.initType !== 'admiral' && !vm.systemSettings.state.isInitialized">
+                  <div class="row" ng-if="vm.initializeForm.state.type === 'gitlabCreds' && vm.initializeForm.state.initType !== 'admiral' && !vm.systemSettings.state.isInitialized">
                     <div class="col-md-3" ng-if="!vm.systemSettings.state.isInitialized && !vm.initializing">
                       <button class="btn btn-default waves-effect waves-light m-t-10"
                         ng-disabled="vm.systemSettings.state.isInitialized || vm.initializing || vm.installing || vm.saving"
