@@ -4590,7 +4590,7 @@ do $$
 
     -- Add isIntegration to subscriptionIntegrations
     if not exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'isIntegration') then
-      alter table "subscriptionIntegrations" add column "isIntegration" BOOLEAN;
+      alter table "subscriptionIntegrations" add column "isIntegration" BOOLEAN DEFAULT false;
     end if;
 
     -- Add editRoleCode to subscriptionIntegrations
