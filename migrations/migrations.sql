@@ -4583,6 +4583,31 @@ do $$
       alter table "subscriptionIntegrations" alter column "masterIntegrationId" SET NOT NULL;
     end if;
 
+    -- Add masterIntegrationName to subscriptionIntegrations
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'masterIntegrationName') then
+      alter table "subscriptionIntegrations" add column "masterIntegrationName" varchar(80);
+    end if;
+
+    -- Add isIntegration to subscriptionIntegrations
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'isIntegration') then
+      alter table "subscriptionIntegrations" add column "isIntegration" BOOLEAN;
+    end if;
+
+    -- Add editRoleCode to subscriptionIntegrations
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'editRoleCode') then
+      alter table "subscriptionIntegrations" add column "editRoleCode" integer;
+    end if;
+
+    -- Add providerId to subscriptionIntegrations
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'providerId') then
+      alter table "subscriptionIntegrations" add column "providerId" varchar(24);
+    end if;
+
+    -- Add isBasic to subscriptionIntegrations
+    if not exists (select 1 from information_schema.columns where table_name = 'subscriptionIntegrations' and column_name = 'isBasic') then
+      alter table "subscriptionIntegrations" add column "isBasic" BOOLEAN;
+    end if;
+
     -- Add contextDetail to jobStatesMap
     if not exists (select 1 from information_schema.columns where table_name = 'jobStatesMap' and column_name = 'contextDetail') then
       alter table "jobStatesMap" add column "contextDetail" varchar(255);
