@@ -113,6 +113,10 @@ do $$
       alter table "systemSettings" add column "autoSync" BOOLEAN DEFAULT true NOT NULL;
     end if;
 
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'supportEmailAddress') then
+      alter table "systemSettings" add column "supportEmailAddress" TEXT;
+    end if;
+
     if exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'truck') then
       alter table "systemSettings" drop column "truck";
     end if;
@@ -132,6 +136,7 @@ do $$
             "allowedSystemImageFamily",
             "releaseVersion",
             "defaultMinionInstanceSize",
+            "supportEmailAddress",
             "createdAt",
             "updatedAt"
           )
@@ -144,6 +149,7 @@ do $$
             'shippable/minv2|drydock/',
             '<%= obj.defaultReleaseVersion %>',
             'c4.large',
+            'support@shippable.com',
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
           );

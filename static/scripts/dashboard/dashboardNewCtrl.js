@@ -2079,7 +2079,8 @@
             'nodeCacheIntervalMS',
             'nodeStopDayOfWeek',
             'nodeStopIntervalDays',
-            'autoSync'
+            'autoSync',
+            'supportEmailAddress'
           ];
 
           _.each(installPanelSystemSettings,

@@ -272,6 +272,9 @@ function _getValuesForSystemSettings(bag, next) {
       __getValueForSystemSettings(bag, 'enforcePrivateJobQuota', false),
     technicalSupportAvailable:
       __getValueForSystemSettings(bag, 'technicalSupportAvailable', false),
+    supportEmailAddress:
+      __getValueForSystemSettings(bag, 'supportEmailAddress',
+        'support@shippable.com'),
     customNodesAdminOnly:
       __getValueForSystemSettings(bag, 'customNodesAdminOnly', false),
     allowedSystemImageFamily:
