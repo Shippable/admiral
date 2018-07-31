@@ -2327,13 +2327,6 @@ do $$
       roleCode := 6060
     );
 
-    -- Allow admins of subscriptions to access the route.
-    perform set_route_role(
-      routePattern := '/passthrough/contactSupport',
-      httpVerb := 'POST',
-      roleCode := 6020
-    );
-
     -- Allow justUser to access the route.
     perform set_route_role(
       routePattern := '/passthrough/contactSupport',
