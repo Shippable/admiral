@@ -138,9 +138,9 @@ __unseal_vault() {
     else
       echo "Vault not initialized. Initialize vault before trying to unseal it"
     fi
-	else
-		echo "Vault not initialized, skipping unseal steps"
-	fi
+  else
+    echo "Vault not initialized, skipping unseal steps"
+  fi
 }
 
 __initialize
