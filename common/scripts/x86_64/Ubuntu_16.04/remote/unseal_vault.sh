@@ -35,6 +35,8 @@ __vault_get() {
   }
 
   if [ $CURL_EXIT_CODE -gt 0 ]; then
+    echo "GET $url failed with error code $CURL_EXIT_CODE"
+    echo "Please check $VAULT_API_RESPONSE_FILE for more details"
     # we are assuming that if curl cmd failed, vault API is unavailable
     response="curl failed with error code $CURL_EXIT_CODE. vault might be down."
     response_status_code=503
@@ -64,6 +66,8 @@ __vault_put() {
   }
 
   if [ $CURL_EXIT_CODE -gt 0 ]; then
+    echo "PUT $url failed with error code $CURL_EXIT_CODE"
+    echo "Please check $VAULT_API_RESPONSE_FILE for more details"
     # we are assuming that if curl cmd failed, vault API is unavailable
     response="curl failed with error code $CURL_EXIT_CODE. vault might be down."
     response_status_code=503
