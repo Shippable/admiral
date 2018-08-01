@@ -103,8 +103,6 @@ __unseal_vault() {
     | jq -r '.initialized')
   local sealed_status=$(echo $response \
     | jq -r '.sealed')
-  echo $initialized_status
-  echo $sealed_status
 
   if [ "$initialized_status" == "true" ]; then
     echo "Vault has already been initialized, proceeding to unseal it"
