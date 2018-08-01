@@ -16,6 +16,7 @@ __initialize() {
   ## VAULT_URL is imported from this config
   source $ADMIRAL_ENV
 
+  rm -f $VAULT_API_RESPONSE_FILE || true
   touch $VAULT_API_RESPONSE_FILE
 }
 
@@ -30,19 +31,19 @@ __vault_get() {
       --silent --write-out "%{http_code}\n" \
       --output $VAULT_API_RESPONSE_FILE)
   } || {
-  CURL_EXIT_CODE=$(echo $?)
-}
+    CURL_EXIT_CODE=$(echo $?)
+  }
 
-if [ $CURL_EXIT_CODE -gt 0 ]; then
-  # we are assuming that if curl cmd failed, vault API is unavailable
-  response="curl failed with error code $CURL_EXIT_CODE. vault might be down."
-  response_status_code=503
-else
-  response_status_code="$RESPONSE_CODE"
-  response=$(cat $VAULT_API_RESPONSE_FILE)
-fi
+  if [ $CURL_EXIT_CODE -gt 0 ]; then
+    # we are assuming that if curl cmd failed, vault API is unavailable
+    response="curl failed with error code $CURL_EXIT_CODE. vault might be down."
+    response_status_code=503
+  else
+    response_status_code="$RESPONSE_CODE"
+    response=$(cat $VAULT_API_RESPONSE_FILE)
+  fi
 
-rm -f $VAULT_API_RESPONSE_FILE
+  rm -f $VAULT_API_RESPONSE_FILE
 }
 
 __vault_put() {
@@ -59,19 +60,19 @@ __vault_put() {
       --silent \
       --output $VAULT_API_RESPONSE_FILE)
   } || {
-  CURL_EXIT_CODE=$(echo $?)
-}
+    CURL_EXIT_CODE=$(echo $?)
+  }
 
-if [ $CURL_EXIT_CODE -gt 0 ]; then
-  # we are assuming that if curl cmd failed, vault API is unavailable
-  response="curl failed with error code $CURL_EXIT_CODE. vault might be down."
-  response_status_code=503
-else
-  response_status_code="$RESPONSE_CODE"
-  response=$(cat $VAULT_API_RESPONSE_FILE)
-fi
+  if [ $CURL_EXIT_CODE -gt 0 ]; then
+    # we are assuming that if curl cmd failed, vault API is unavailable
+    response="curl failed with error code $CURL_EXIT_CODE. vault might be down."
+    response_status_code=503
+  else
+    response_status_code="$RESPONSE_CODE"
+    response=$(cat $VAULT_API_RESPONSE_FILE)
+  fi
 
-rm -f $VAULT_API_RESPONSE_FILE
+  rm -f $VAULT_API_RESPONSE_FILE
 }
 
 ## Methods
