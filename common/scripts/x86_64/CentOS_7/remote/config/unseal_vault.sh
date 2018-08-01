@@ -98,11 +98,11 @@ __generate_unseal_payload() {
 }
 
 __initialize() {
-	source $ADMIRAL_ENV
+  source $ADMIRAL_ENV
 
-	if [ ! -z "$VAULT_URL" ] && [ ! -z "$VAULT_TOKEN" ]; then
-		VAULT_INITIALIZED=true
-	fi
+  if [ ! -z "$VAULT_URL" ] && [ ! -z "$VAULT_TOKEN" ]; then
+    VAULT_INITIALIZED=true
+  fi
 }
 
 __unseal_vault() {
