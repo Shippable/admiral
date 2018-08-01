@@ -4,24 +4,23 @@ set -e
 readonly VAULT_API_RESPONSE_FILE="/tmp/.vault_response"
 readonly ADMIRAL_ENV="/etc/shippable/admiral.env"
 readonly BOOT_WAIT=10
-
+export VAULT_INITIALIZED=false
 ##################### Begin Vault adapter ######################################
 
-__initialize() {
+__initialize_adapter() {
   echo "Initializing vault api adapter"
   RESPONSE_CODE=404
   RESPONSE_DATA=""
   CURL_EXIT_CODE=0
 
   ## VAULT_URL is imported from this config
-  source $ADMIRAL_ENV
 
   rm -f $VAULT_API_RESPONSE_FILE || true
   touch $VAULT_API_RESPONSE_FILE
 }
 
 __vault_get() {
-  __initialize
+  __initialize_adapter
 
   local url="$VAULT_URL/v1/$1"
   {
@@ -49,7 +48,7 @@ __vault_get() {
 }
 
 __vault_put() {
-  __initialize
+  __initialize_adapter
 
   local url="$VAULT_URL/v1/$1"
   local update="$2"
@@ -98,40 +97,51 @@ __generate_unseal_payload() {
   payload='{"key": "'$unseal_key'"}'
 }
 
-__unseal_vault() {
-  echo "Unsealing vault server"
-  echo "Waiting $BOOT_WAIT seconds for vault server to start"
-  sleep $BOOT_WAIT
+__initialize() {
+	source $ADMIRAL_ENV
 
-  _vault_get_status
-  local initialized_status=$(echo $response \
-    | jq -r '.initialized')
-  local sealed_status=$(echo $response \
-    | jq -r '.sealed')
-
-  if [ "$initialized_status" == "true" ]; then
-    echo "Vault has already been initialized, proceeding to unseal it"
-    if [ "$sealed_status" == "true" ]; then
-      __generate_unseal_payload "$VAULT_UNSEAL_KEY1"
-      _vault_unseal "$payload"
-      echo "Unseal response: $response"
-
-      __generate_unseal_payload "$VAULT_UNSEAL_KEY2"
-      _vault_unseal "$payload"
-      echo "Unseal response: $response"
-
-      __generate_unseal_payload "$VAULT_UNSEAL_KEY3"
-      _vault_unseal "$payload"
-      echo "Unseal response: $response"
-
-    else
-      echo "Vault already unsealed, skipping unseal steps"
-      exit 0
-    fi
-  else
-    echo "Vault not initialized. Initialize vault before trying to unseal it"
-    exit 1
-  fi
+	if [ ! -z "$VAULT_URL" ] && [ ! -z "$VAULT_TOKEN" ]; then
+		VAULT_INITIALIZED=true
+	fi
 }
 
+__unseal_vault() {
+  echo "Unsealing vault server"
+  if [ "$VAULT_INITIALIZED" == "true" ]; then
+    echo "Waiting $BOOT_WAIT seconds for vault server to start"
+    sleep $BOOT_WAIT
+
+    _vault_get_status
+    local initialized_status=$(echo $response \
+      | jq -r '.initialized')
+    local sealed_status=$(echo $response \
+      | jq -r '.sealed')
+
+    if [ "$initialized_status" == "true" ]; then
+      echo "Vault has already been initialized, proceeding to unseal it"
+      if [ "$sealed_status" == "true" ]; then
+        __generate_unseal_payload "$VAULT_UNSEAL_KEY1"
+        _vault_unseal "$payload"
+        echo "Unseal response: $response"
+
+        __generate_unseal_payload "$VAULT_UNSEAL_KEY2"
+        _vault_unseal "$payload"
+        echo "Unseal response: $response"
+
+        __generate_unseal_payload "$VAULT_UNSEAL_KEY3"
+        _vault_unseal "$payload"
+        echo "Unseal response: $response"
+
+      else
+        echo "Vault already unsealed, skipping unseal steps"
+      fi
+    else
+      echo "Vault not initialized. Initialize vault before trying to unseal it"
+    fi
+	else
+		echo "Vault not initialized, skipping unseal steps"
+	fi
+}
+
+__initialize
 __unseal_vault
