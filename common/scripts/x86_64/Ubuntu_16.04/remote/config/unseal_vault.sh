@@ -98,50 +98,59 @@ __generate_unseal_payload() {
 }
 
 __initialize() {
-  source $ADMIRAL_ENV
+  if [ ! -f "$ADMIRAL_ENV" ]; then
+    ## better formatting in systemd logs
+    echo ""
+    echo "Vault is installed on a different host from admiral"
+    echo "It can only be unsealed from admiral host or an authenticated call to admiral API"
+    echo "run 'sudo ./admiral.sh restart' on the admiral host to unseal vault"
 
-  if [ ! -z "$VAULT_URL" ] && [ ! -z "$VAULT_TOKEN" ]; then
-    VAULT_INITIALIZED=true
+  else
+    source $ADMIRAL_ENV
+
+    if [ ! -z "$VAULT_URL" ] && [ ! -z "$VAULT_TOKEN" ]; then
+      VAULT_INITIALIZED=true
+    fi
   fi
 }
 
 __unseal_vault() {
   echo "Unsealing vault server"
-  if [ "$VAULT_INITIALIZED" == "true" ]; then
-    echo "Waiting $BOOT_WAIT seconds for vault server to start"
-    sleep $BOOT_WAIT
+  echo "Waiting $BOOT_WAIT seconds for vault server to start"
+  sleep $BOOT_WAIT
 
-    _vault_get_status
-    local initialized_status=$(echo $response \
-      | jq -r '.initialized')
-    local sealed_status=$(echo $response \
-      | jq -r '.sealed')
+  _vault_get_status
+  local initialized_status=$(echo $response \
+    | jq -r '.initialized')
+  local sealed_status=$(echo $response \
+    | jq -r '.sealed')
 
-    if [ "$initialized_status" == "true" ]; then
-      echo "Vault has already been initialized, proceeding to unseal it"
-      if [ "$sealed_status" == "true" ]; then
-        __generate_unseal_payload "$VAULT_UNSEAL_KEY1"
-        _vault_unseal "$payload"
-        echo "Unseal response: $response"
+  if [ "$initialized_status" == "true" ]; then
+    echo "Vault has already been initialized, proceeding to unseal it"
+    if [ "$sealed_status" == "true" ]; then
+      __generate_unseal_payload "$VAULT_UNSEAL_KEY1"
+      _vault_unseal "$payload"
+      echo "Unseal response: $response"
 
-        __generate_unseal_payload "$VAULT_UNSEAL_KEY2"
-        _vault_unseal "$payload"
-        echo "Unseal response: $response"
+      __generate_unseal_payload "$VAULT_UNSEAL_KEY2"
+      _vault_unseal "$payload"
+      echo "Unseal response: $response"
 
-        __generate_unseal_payload "$VAULT_UNSEAL_KEY3"
-        _vault_unseal "$payload"
-        echo "Unseal response: $response"
+      __generate_unseal_payload "$VAULT_UNSEAL_KEY3"
+      _vault_unseal "$payload"
+      echo "Unseal response: $response"
 
-      else
-        echo "Vault already unsealed, skipping unseal steps"
-      fi
     else
-      echo "Vault not initialized. Initialize vault before trying to unseal it"
+      echo "Vault already unsealed, skipping unseal steps"
     fi
   else
-    echo "Vault not initialized, skipping unseal steps"
+    echo "Vault not initialized. Initialize vault before trying to unseal it"
   fi
 }
 
 __initialize
-__unseal_vault
+if [ "$VAULT_INITIALIZED" == "true" ]; then
+  __unseal_vault
+else
+  echo "Vault not initialized or missing config, skipping unseal"
+fi
