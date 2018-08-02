@@ -1,7 +1,7 @@
 [Unit]
 Description=vault server
 Requires=network-online.target
-After=network-online.target postgresql.service
+After=network-online.target postgresql-9.5.service
 
 [Service]
 EnvironmentFile=-/etc/vault.d/vault.env
