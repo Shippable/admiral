@@ -3668,6 +3668,30 @@ do $$
       roleCode := 6060
     );
 
+    perform set_route_role(
+      routePattern := '/subscriptionIntegrations/:subscriptionIntegrationId/validateProjectOwnerToken',
+      httpVerb := 'GET',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/subscriptionIntegrations/:subscriptionIntegrationId/validateProjectOwnerToken',
+      httpVerb := 'GET',
+      roleCode := 6000
+    );
+
+    perform set_route_role(
+      routePattern := '/subscriptionIntegrations/:subscriptionIntegrationId/validateProjectOwnerToken',
+      httpVerb := 'GET',
+      roleCode := 6010
+    );
+
+    perform set_route_role(
+      routePattern := '/subscriptionIntegrations/:subscriptionIntegrationId/validateProjectOwnerToken',
+      httpVerb := 'GET',
+      roleCode := 6020
+    );
+
     -- set subscriptionintegrationpermissions routeRoles
 
     perform set_route_role(
