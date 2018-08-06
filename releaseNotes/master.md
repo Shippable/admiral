@@ -6,7 +6,7 @@ ${REL_VER_DATE}
 ## Features
   - **SPOG subscription level object limit**: Subscription administrators can now set a limit to the number of objects that can be displayed in the SPOG view for that subscription, this can be used to prevent users from accidentally loading the full SPOG which will be helpful for subscriptions with a very large number of resources/jobs in them which will possibly create browser performance issues.
   this setting can be found in the subscription settings page with the title `SPOG Object Limit`.
-
+  - **Ability to create subscription owned integrations**: You now have the ability to create shared subscription integrations, which allows you to restrict the usage of integration to members, collaborators and admin based on your requirement. ([support#4128](https://github.com/Shippable/support/issues/4128))
 ## Fixes
   - **Improve TASK validation for rSync**: rSync now catches indentation and data type errors for script, nodePool, env and timeoutMinutes in the TASK section of a runSh's YML.
   - **shipctl get_integration_resource_field**: Avoids unexpected error in `get_integration_resource_field` command, when the resource name is invalid ([support#4472](https://github.com/Shippable/support/issues/4472))
