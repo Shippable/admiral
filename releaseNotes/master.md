@@ -14,6 +14,7 @@ ${REL_VER_DATE}
   - **Switching between SKU's flow is not correctly handled**: Refines the proration logic correctly to avoid charging additional amount while switching SKUs. ([support#4448](https://github.com/Shippable/support/issues/4448))
   - **Subscription licenses not updated if node pool deletion fails**: Now subscription licenses get updated on a successful transaction even if any node pool(s) didn't get deleted or updated due to some reason. ([support#4475](https://github.com/Shippable/support/issues/4475))
   - **Modern SPOG disabled links**: disabled links (dotted lines) in modern SPOG will be displayed correctly wherever necessary.
+  - **Ruby builds fail when all steps succeed**: added fix to make sure ruby build scripts exit with proper exit code. ([support#4297](https://github.com/Shippable/support/issues/4297))
 
 ## Custom Nodes
   - **simple title**: brief description
@@ -23,7 +24,8 @@ ${REL_VER_DATE}
 ## Shippable Server
 
   - Features
-      - **simple title**: brief description
+      - **Onebox auto-recovery on reboots**: Shippable [Onebox installations](http://docs.shippable.com/platform/server/install-onebox/) will auto recover all services when the Control
+        Plane server reboots. Users can now shutdown the hosts when not in use to cut down costs for their pilot installations.
   - Fixes
       - **simple title**: brief description
 
