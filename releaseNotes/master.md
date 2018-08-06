@@ -14,6 +14,14 @@ ${REL_VER_DATE}
   - **Switching between SKU's flow is not correctly handled**: Refines the proration logic correctly to avoid charging additional amount while switching SKUs. ([support#4448](https://github.com/Shippable/support/issues/4448))
   - **Subscription licenses not updated if node pool deletion fails**: Now subscription licenses get updated on a successful transaction even if any node pool(s) didn't get deleted or updated due to some reason. ([support#4475](https://github.com/Shippable/support/issues/4475))
   - **Modern SPOG disabled links**: disabled links (dotted lines) in modern SPOG will be displayed correctly wherever necessary.
+  - **UI NPM Package updates**:
+      - Updated `grunt` version to `1.0.3`
+      - Updated `grunt-contrib-watch` version to `1.1.0`
+      - Updated `moment` version to `2.22.2`
+      - Updated `method-override` version to `3.0.0`
+      - Updated `serve-favicon` version to `2.5.0`
+      - Updated `request` version to `2.87.0`
+      - Updated `express` version to `4.16.3`
 
 ## Custom Nodes
   - **simple title**: brief description
