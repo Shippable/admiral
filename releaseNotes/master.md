@@ -18,11 +18,6 @@ ${REL_VER_DATE}
   - **Modern SPOG disabled links**: disabled links (dotted lines) in modern SPOG will be displayed correctly wherever necessary.
   - **Ruby builds fail when all steps succeed**: added fix to make sure ruby build scripts exit with proper exit code on [runtime](http://docs.shippable.com/platform/runtime/machine-image/ami-overview/) versions v6.6.1 and above. ([support#4297](https://github.com/Shippable/support/issues/4297))
 
-## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
-
 ## Shippable Server
 
   - Features
