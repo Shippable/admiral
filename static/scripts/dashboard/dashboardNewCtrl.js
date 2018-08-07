@@ -19,6 +19,7 @@
       bitbucketKeys: 'bitbucket',
       bitbucketServerKeys: 'bitbucketServer',
       bitbucketServerBasicAuth: 'bitbucketServerBasic',
+      gerritBasicAuth: 'gerritBasic',
       githubKeys: 'github',
       githubEnterpriseKeys: 'ghe',
       gitlabKeys: 'gitlab'
@@ -27,6 +28,7 @@
       bitbucketKeys: 'bitbucket',
       bitbucketServerKeys: 'bitbucketServer',
       bitbucketServerBasicAuth: 'bitbucketServerBasic',
+      gerritBasicAuth: 'gerritBasic',
       githubKeys: 'github',
       githubEnterpriseKeys: 'githubEnterprise',
       gitlabKeys: 'gitlab'
@@ -351,6 +353,22 @@
               isValidUrl: true
             }
           },
+          gerritBasicAuth: {
+            masterName: 'gerritBasicAuth',
+            isAddingAuth: false,
+            isDeletingAuth: false,
+            authorizations: [],
+            data: { // authorizations has these objects
+              sysInt: {
+                customName: '',
+                wwwUrl: '',
+                url: ''
+              },
+              callbackUrl: '',
+              systemIntegrationId: '',
+              isValidUrl: true
+            }
+          },
           githubKeys: {
             masterName: 'githubKeys',
             isAddingAuth: false,
@@ -414,6 +432,9 @@
             isEnabled: false
           },
           bitbucketServer: {
+            isEnabled: false
+          },
+          gerritBasic: {
             isEnabled: false
           },
           github: {
@@ -670,6 +691,10 @@
         gcloudKey: {
           displayName: '',
           isEnabled: true
+        },
+        gerritBasic: {
+          displayName: '',
+          isEnabled: false
         },
         github: {
           displayName: '',

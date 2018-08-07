@@ -14,6 +14,8 @@ var validateBaseUrl = {
     '../../common/bitbucketServer/validateBaseUrl.js'),
   bitbucketServerBasicAuth: require(
     '../../common/bitbucketServer/validateBaseUrl.js'),
+  gerritBasicAuth: require(
+    '../../common/gerrit/validateBaseUrl.js'),
   githubEnterpriseKeys: require('../../common/ghe/validateBaseUrl.js')
 };
 
