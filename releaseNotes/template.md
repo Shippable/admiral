@@ -1,4 +1,5 @@
-# ${REL_VER} Release Notes
+# Release Version
+${REL_VER}
 
 ## Release Date
 ${REL_VER_DATE}
