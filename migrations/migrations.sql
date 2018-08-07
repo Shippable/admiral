@@ -489,11 +489,6 @@ do $$
       alter table "buildJobs" add constraint "buildJobs_projectId_fkey" foreign key ("projectId") references "projects"(id) on update restrict on delete restrict;
     end if;
 
-  -- Adds foreign key relationships for buildJobConsoles
-    if not exists (select 1 from pg_constraint where conname = 'buildJobConsoles_buildJobId_fkey') then
-      alter table "buildJobConsoles" add constraint "buildJobConsoles_buildJobId_fkey" foreign key ("buildJobId") references "buildJobs"(id) on update restrict on delete restrict;
-    end if;
-
   -- Adds foreign key relationships for accountIntegrations
     if not exists (select 1 from pg_constraint where conname = 'accountIntegrations_accountId_fkey') then
       alter table "accountIntegrations" add constraint "accountIntegrations_accountId_fkey" foreign key ("accountId") references "accounts"(id) on update restrict on delete restrict;
@@ -570,11 +565,6 @@ do $$
   -- Adds foreign key relationships for clusterNodeConsoles
     if not exists (select 1 from pg_constraint where conname = 'clusterNodeConsoles_clusterNodeId_fkey') then
       alter table "clusterNodeConsoles" add constraint "clusterNodeConsoles_clusterNodeId_fkey" foreign key ("clusterNodeId") references "clusterNodes"(id) on update restrict on delete restrict;
-    end if;
-
-  -- Adds foreign key relationships for jobConsoles
-    if not exists (select 1 from pg_constraint where conname = 'jobConsoles_jobId_fkey') then
-      alter table "jobConsoles" add constraint "jobConsoles_jobId_fkey" foreign key ("jobId") references "jobs"(id) on update restrict on delete restrict;
     end if;
 
   -- Adds foreign key relationships for clusterNodes
