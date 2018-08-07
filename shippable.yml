@@ -143,7 +143,7 @@ jobs:
                 - RES_REPO: "admiral_sh_repo"
                 - GIT_PATH: "git@github.com:Shippable/admiral.git"
           script:
-            - REL_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
+            - export REL_VER=$(shipctl get_resource_version_key "$RES_VER" "versionName")
             - |
                pushd $(shipctl get_resource_meta "shipit_gh_ssh")
                  shipctl get_json_value integration.json 'privateKey' > gh_ssh.key
