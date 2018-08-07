@@ -910,6 +910,86 @@
                       </div>
                     </div>
                   </div>
+                  <!-- Gerrit -->
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="card-box">
+                        <h4 class="m-t-0 header-title"><b>Gerrit</b></h4>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="card-box">
+                              <div class="toggle-bar">
+                                <label>
+                                  <b>Basic Auth</b>
+                                </label>
+                                <input id="checkbox_for_scm_gerritBasic" type="checkbox"
+                                  ng-model="vm.installForm.scm.gerritBasic.isEnabled"
+                                  ng-change="vm.toggleSCMMasterIntegration('gerritBasic')"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving"
+                                  class="js-switch-small" ui-switch="{color: '#00b19d'}"/>
+                                <label for="checkbox_for_scm_gerritBasic">
+                                  <b>SCM </b>
+                                </label>
+                              </div>
+                              </br>
+                              <div class="row" ng-repeat="gerritBasicAuth in vm.installForm.auth.gerritBasicAuth.authorizations">
+                                <div class="col-md-12">
+                                  <form name="vm.gerritBasicInstallForm" class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">Name (Optional)</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="Gerrit Server" name="gerritBasicCustomName"
+                                        ng-model="gerritBasicAuth.sysInt.customName" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">URL</label>
+                                      <div class="col-md-6">
+                                        <input type="url" class="form-control" name="gerritBasicUrl" placeholder="http://gerritserver:5238"
+                                          ng-blur="vm.formValuesChanged(gerritBasicAuth.systemIntegrationId, gerritBasicAuth.sysInt.url, 'gerritBasicAuth')"
+                                          ng-model="gerritBasicAuth.sysInt.url" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                        <dd class="text-danger" ng-if="!gerritBasicAuth.isValidUrl">
+                                          <span>Please give a valid Gerrit Server endpoint url</span>
+                                        </dd>
+                                        <dd class="text-danger" ng-if="gerritBasicAuth.isDuplicateUrl">
+                                          <span>Duplicate URLs found. Multiple authorizations to a provider with same URLs is not allowed.</span>
+                                        </dd>
+                                      </div>
+                                      <button class="btn btn-danger"
+                                        ng-click="vm.deleteAuthencation('gerritBasicAuth', gerritBasicAuth.systemIntegrationId)"
+                                        ng-disabled="vm.installForm.auth.gerritBasicAuth.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
+                                        Delete
+                                      </button>
+                                    </div>
+                                    <div class="form-group" ng-if="!gerritBasicAuth.sysInt.url">
+                                      <div class="col-md-offset-2 col-md-6">
+                                        <dd class="text-danger">
+                                          <span>All these are required fields. Please fill them all before continuing further.</span>
+                                        </dd>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                                &nbsp;
+                              </div>
+                              </br>
+                              <div ng-if="vm.installForm.auth.gerritBasicAuth.isAddingAuth">
+                                Adding..
+                              </div>
+                              <div class="row">
+                                <button class="btn btn-default pull-left"
+                                  ng-click="vm.addAuthentication('gerritBasicAuth')"
+                                  ng-if="!vm.installForm.auth.gerritBasicAuth.isAddingAuth"
+                                  ng-disabled="vm.initializing || vm.installing || vm.saving">
+                                  Add
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <!-- Github -->
                   <div class="row">
                     <div class="col-sm-12">
