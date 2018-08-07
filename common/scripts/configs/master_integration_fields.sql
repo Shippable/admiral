@@ -368,6 +368,43 @@ do $$
       values (294, '577de63321333398d11a1120', 'wwwUrl', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
     end if;
 
+    -- masterIntegrationFields for gerritBasicAuth
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 295) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (295, '577de63321333398d11a1121', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-06-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 296) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (296, '577de63321333398d11a1121', 'customName', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 297) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (297, '577de63321333398d11a1121', 'providerId', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 298) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (298, '577de63321333398d11a1121', 'wwwUrl', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    -- masterIntegrationFields for gerritBasic
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 299) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (299, '577de63321333398d11a1122', 'username', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 300) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (300, '577de63321333398d11a1122', 'password', 'string', true, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 301) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (301, '577de63321333398d11a1122', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
     -- masterIntegrationFields for githubEnterpriseKeys
     if not exists (select 1 from "masterIntegrationFields" where "id" = 187) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
