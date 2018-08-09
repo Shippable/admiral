@@ -11,9 +11,7 @@ ${REL_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **Cleanup credentials before and after the CI build**: Credentials used in the CI builds will get cleaned up from the build agent before and after the CI build is run.
 
 ## Custom Nodes
   - **simple title**: brief description
