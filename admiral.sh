@@ -4,7 +4,10 @@
 #
 # Shippable Enterprise Installer
 #
-# Supported OS: Ubuntu 14.04
+# Supported OS:
+#   - Ubuntu 14.04
+#   - Ubuntu 16.04
+#   - CentOS 7
 # Supported bash: 4.3.11
 ###########################################################
 
