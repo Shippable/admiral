@@ -85,6 +85,7 @@ function _getStatus(bag, next) {
 
   bag.resBody.ip = global.config.admiralIP;
   bag.resBody.port = global.config.admiralPort;
+  // if we've reached this far, admiral container is reachable
   bag.resBody.isReachable = true;
 
   return next();
