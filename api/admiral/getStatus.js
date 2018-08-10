@@ -80,8 +80,6 @@ function _getAdmiralUptime(bag, next) {
 }
 
 function _getStatus(bag, next) {
-  if (!bag.resBody.isReachable) return next();
-
   var who = bag.who + '|' + _getStatus.name;
   logger.verbose(who, 'Inside');
 
