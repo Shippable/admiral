@@ -17,8 +17,6 @@ __bootstrap_admiral_env() {
     mkdir -p $CONFIG_DIR
     cp -vr $SCRIPTS_DIR/configs/admiral.env.template $ADMIRAL_ENV
     __process_msg "Successfully created admiral env "
-  else
-    __process_msg "Loading ADMIRAL_ENV from $ADMIRAL_ENV"
   fi
   source "$ADMIRAL_ENV"
 }
@@ -69,7 +67,6 @@ __set_installed_docker_version() {
     # split and extract major.minor version eg. to extract 17.06 from 17.06.0-ce
     local docker_version="${version%.*}"
 
-    echo "setting INSTALLED_DOCKER_VERSION=$docker_version"
     echo "INSTALLED_DOCKER_VERSION=\"$docker_version\"" >> "$ADMIRAL_ENV"
   fi
   source "$ADMIRAL_ENV"

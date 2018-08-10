@@ -570,6 +570,7 @@ __print_list() {
 
 __show_status() {
   __process_msg "All good !!!"
+  exit 0
 }
 
 __print_info() {
