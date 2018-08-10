@@ -4,7 +4,10 @@
 #
 # Shippable Enterprise Installer
 #
-# Supported OS: Ubuntu 14.04
+# Supported OS:
+#   - Ubuntu 14.04
+#   - Ubuntu 16.04
+#   - CentOS 7
 # Supported bash: 4.3.11
 ###########################################################
 
@@ -35,6 +38,7 @@ export LC_ALL=C
 ###########################################################
 export IS_UPGRADE=false
 export IS_RESTART=false
+export IS_FORCED=false
 export NO_PROMPT=false
 export WITH_PROXY_CONFIG=false
 export KEYS_GENERATED=false
