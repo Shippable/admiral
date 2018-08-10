@@ -569,8 +569,8 @@ __print_list() {
 
 
 __show_status() {
-  __process_msg "All good !!!"
-  exit 0
+  export IS_STATUS=true
+  __process_marker "Fetching status for all services"
 }
 
 __print_info() {

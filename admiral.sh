@@ -38,6 +38,7 @@ export LC_ALL=C
 ###########################################################
 export IS_UPGRADE=false
 export IS_RESTART=false
+export IS_STATUS=false
 export NO_PROMPT=false
 export WITH_PROXY_CONFIG=false
 export KEYS_GENERATED=false
@@ -60,22 +61,26 @@ source "$SCRIPTS_DIR/update_bbs_accountIntegrations.sh"
 main() {
   __check_logsdir
   __parse_args "$@"
-  __validate_runtime
-  __configure_proxy
-  __check_dependencies
-  __pull_admiral_image
-  if [ "$DEV_MODE" == "true" ]; then
-    __pull_stateful_service_images
+  if [ "$IS_STATUS" == "true" ]; then
+      source "$SCRIPTS_DIR/status.sh"
+  else
+    __validate_runtime
+    __configure_proxy
+    __check_dependencies
+    __pull_admiral_image
+    if [ "$DEV_MODE" == "true" ]; then
+      __pull_stateful_service_images
+    fi
+    __check_ssh_key_present
+    {
+      __print_runtime
+      source "$SCRIPTS_DIR/installDb.sh"
+      source "$SCRIPTS_DIR/create_vault_table.sh"
+      source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/boot_admiral.sh"
+      source "$SCRIPTS_DIR/upgrade.sh"
+      source "$SCRIPTS_DIR/restart.sh"
+    } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )
   fi
-  __check_ssh_key_present
-  {
-    __print_runtime
-    source "$SCRIPTS_DIR/installDb.sh"
-    source "$SCRIPTS_DIR/create_vault_table.sh"
-    source "$SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/boot_admiral.sh"
-    source "$SCRIPTS_DIR/upgrade.sh"
-    source "$SCRIPTS_DIR/restart.sh"
-  } 2>&1 | tee $LOG_FILE ; ( exit ${PIPESTATUS[0]} )
 
   __process_msg "Command successfully completed!"
 }

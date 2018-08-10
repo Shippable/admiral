@@ -51,7 +51,9 @@ function _getAdmiralUptime(bag, next) {
     ' --filter name=%s ' +
     ' --format "{{.Status}}"', bag.containerName);
 
-  var exec = spawn(admiralStatusCmd);
+  var exec = spawn('/bin/bash',
+    ['-c', admiralStatusCmd]
+  );
 
   exec.stdout.on('data',
     function (data)  {
