@@ -4278,6 +4278,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'clusterNodeStats' and column_name = 'totalContainersCount') then
       alter table "clusterNodeStats" add column "totalContainersCount" integer;
     end if;
+    -- Add imageCount field in clusterNodeStats
+    if not exists (select 1 from information_schema.columns where table_name = 'clusterNodeStats' and column_name = 'imageCount') then
+      alter table "clusterNodeStats" add column "imageCount" integer;
+    end if;
 
     -- Add memoryUsageInPercentage field in systemNodeStats
     if not exists (select 1 from information_schema.columns where table_name = 'systemNodeStats' and column_name = 'memoryUsageInPercentage') then
@@ -4295,7 +4299,10 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'systemNodeStats' and column_name = 'totalContainersCount') then
       alter table "systemNodeStats" add column "totalContainersCount" integer;
     end if;
-
+    -- Add imageCount field in systemNodeStats
+    if not exists (select 1 from information_schema.columns where table_name = 'systemNodeStats' and column_name = 'imageCount') then
+      alter table "systemNodeStats" add column "imageCount" integer;
+    end if;
 
     -- Adds foreign key constraint on subscriptionId for clusterNodeConsoles
     if not exists (select 1 from pg_constraint where conname = 'clusterNodeConsoles_subscriptionId_fkey') then
