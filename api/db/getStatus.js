@@ -5,6 +5,7 @@ module.exports = self;
 
 var async = require('async');
 var pg = require('pg');
+var spawn = require('child_process').spawn;
 var _ = require('underscore');
 var configHandler = require('../../common/configHandler.js');
 
@@ -107,23 +108,41 @@ function _createClient(bag, next) {
 function _checkUptime(bag, next) {
   var who = bag.who + '|' + _checkUptime.name;
   logger.verbose(who, 'Inside');
+  var pgEnvs = {
+    'PGHOST': global.config.dbHost,
+    'PGPORT': global.config.dbPort,
+    'PGDATABASE': global.config.dbName,
+    'PGUSER': global.config.dbUsername,
+    'PGPASSWORD': global.config.dbPassword
+  };
 
-  var query = util.format('SELECT now() - pg_postmaster_start_time();');
-  bag.testClient.query(query,
-    function (err, uptime) {
-      if (err) {
+  var exec = spawn('/usr/bin/psql',
+    ['-t', '-c', 'SELECT now() - pg_postmaster_start_time();'],
+    {
+      env: pgEnvs
+    }
+  );
+
+  exec.stdout.on('data',
+    function (data)  {
+      bag.resBody.uptime = data.toString();
+    }
+  );
+
+  exec.stderr.on('data',
+    function (data)  {
+      bag.resBody.error = data.toString();
+    }
+  );
+
+  exec.on('close',
+    function (exitCode)  {
+      if (exitCode > 0)
         return next(
-          new ActErr(self, ActErr.DBOperationFailed,
-            'Failed to get ' + bag.component + ' with error ' + util.format(err)
-          )
+          new ActErr(who, ActErr.OperationFailed,
+            'Script returned code: ' + exitCode)
         );
-      }
-
-      if (!_.isEmpty(uptime.rows)){
-        bag.resBody.uptime = JSON.parse(uptime.rows[0]);
-      }
-
-      return next(null);
+      return next();
     }
   );
 }
