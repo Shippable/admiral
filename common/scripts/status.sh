@@ -45,7 +45,7 @@ __get_admiral_status() {
 }
 
 __get_db_status() {
-  __process_marker "Checking admiral status"
+  __process_marker "Checking database status"
   _shippable_get_db_status
   __parse_response "$response" "$response_status_code"
   __print_status "db" "$response"
