@@ -61,10 +61,10 @@ source "$SCRIPTS_DIR/update_bbs_accountIntegrations.sh"
 main() {
   __check_logsdir
   __parse_args "$@"
+  __validate_runtime
   if [ "$IS_STATUS" == "true" ]; then
       source "$SCRIPTS_DIR/status.sh"
   else
-    __validate_runtime
     __configure_proxy
     __check_dependencies
     __pull_admiral_image
