@@ -189,6 +189,11 @@ _shippable_get_db() {
   __shippable_get $db_get_endpoint
 }
 
+_shippable_get_db_status() {
+  local db_status_get_endpoint="db/status"
+  __shippable_get $db_status_get_endpoint
+}
+
 _shippable_get_secrets_status() {
   local secrets_status_get_endpoint="secrets/status"
   __shippable_get $secrets_status_get_endpoint
