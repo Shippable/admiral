@@ -131,6 +131,7 @@ function _checkUptime(bag, next) {
 
   exec.stderr.on('data',
     function (data)  {
+      logger.error('Error while checking db uptime: %s', data.toString());
       bag.resBody.error = data.toString();
     }
   );
