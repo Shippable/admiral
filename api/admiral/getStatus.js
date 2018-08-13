@@ -15,6 +15,7 @@ function getStatus(req, res) {
       port: '',
       uptime: '',
       isReachable: false,
+      isShippableManaged: true,
       error: null
     }
   };

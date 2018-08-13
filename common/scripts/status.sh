@@ -30,7 +30,7 @@ __print_status() {
   local component_uptime=$(echo $status_data | jq -r '.uptime')
   local component_rechable=$(echo $status_data | jq -r '.isReachable')
 
-  printf "%2s COMPONENT %5s IP %9s PORT %10s UPTIME %8s REACHABLE \n"
+  printf "%2s COMPONENT %5s IP %9s PORT %10s UPTIME %8s REACHABLE %5s Errors\n"
   printf "%10s %15s %10s %20s %10s \n" "$status_component" "$component_ip" \
     "$component_port" "$component_uptime" "$component_rechable"
 
