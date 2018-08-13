@@ -2,11 +2,20 @@
 set -e
 
 __parse_response() {
-  local api_response="$@"
+  local api_response="$1"
+  local api_response_status_code="$2"
+
+  if [ $api_response_status_code -gt 299 ]; then
+    __process_error "Response status code: $api_response_status_code"
+    __process_error "Response: $api_response"
+    exit 1
+  fi
+
   if [ -z "$api_response" ]; then
     __process_error "No response received from api, exiting"
     exit 1
   fi
+
   local response=$(echo $api_response | jq '.' 2>&1)
   if [[ $response = *"parse error"* ]]; then
     __process_error "Invalid response from api: $api_response"
@@ -31,7 +40,7 @@ __print_status() {
 __get_admiral_status() {
   __process_marker "Checking admiral status"
   _shippable_get_admiral_status
-  __parse_response "$response"
+  __parse_response "$response" "$response_status_code"
   __print_status "admiral" "$response"
 }
 
