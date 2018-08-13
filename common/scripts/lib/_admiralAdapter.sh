@@ -244,6 +244,11 @@ _shippable_get_runtimeTemplates() {
   __shippable_get $runtimeTemplates_get_endpoint
 }
 
+_shippable_get_admiral_status() {
+  local admiral_status_get_endpoint="admiral/status"
+  __shippable_get $admiral_status_get_endpoint
+}
+
 ### POST
 _shippable_post_db() {
   local body="{}"
