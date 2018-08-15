@@ -4,11 +4,7 @@
 ${REL_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **More node statistics**: Node statistics are collected more frequently and the number of Docker containers and images on a node is now displayed on the node page.  Existing nodes will need to be reinitialized in order to show the image count, but reinitialization is not required to continue to use older nodes.
 
 ## Fixes
   - **Cleanup credentials before and after the CI build**: Credentials used in the CI builds will get cleaned up from the build agent before and after the CI build is run.
