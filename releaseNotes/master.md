@@ -8,6 +8,7 @@ ${REL_VER_DATE}
 
 ## Fixes
   - **Cleanup credentials before and after the CI build**: Credentials used in the CI builds will get cleaned up from the build agent before and after the CI build is run.
+  - **Default notification settings with slackKey**: The correct default settings are used when `type: slackKey` is specified in a CI `shippable.yml`.
 
 ## Custom Nodes
   - **simple title**: brief description
@@ -19,7 +20,7 @@ ${REL_VER_DATE}
   - Features
       - **simple title**: brief description
   - Fixes
-      - **simple title**: brief description
+      - **Slack notifications with `type: slack`**: Specifying `type: slack` was not working with newer Slack integrations in some installations. Both `slack` and `slackKeys` will now work as intended.
 
 ## History
 
