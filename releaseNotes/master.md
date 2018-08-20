@@ -9,6 +9,7 @@ ${REL_VER_DATE}
 ## Fixes
   - **Cleanup credentials before and after the CI build**: Credentials used in the CI builds will get cleaned up from the build agent before and after the CI build is run.
   - **Default notification settings with slackKey**: The correct default settings are used when `type: slackKey` is specified in a CI `shippable.yml`.
+  - **Reduce overhead of artifact copies in rerun failed only jobs**: Instead of duplicating consoles, tests, and coverage, we will now reference the original data when loading a rerun failed only matrix item that was previously successful.
 
 ## Custom Nodes
   - **simple title**: brief description
