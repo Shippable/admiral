@@ -405,6 +405,16 @@ do $$
       values (301, '577de63321333398d11a1122', 'url', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
     end if;
 
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 302) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (302, '577de63321333398d11a1122', 'publicKey', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 303) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (303, '577de63321333398d11a1122', 'privateKey', 'string', false, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
     -- masterIntegrationFields for githubEnterpriseKeys
     if not exists (select 1 from "masterIntegrationFields" where "id" = 187) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
