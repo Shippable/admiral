@@ -114,7 +114,7 @@ __check_dependencies() {
 
     cat $node_scripts_location/lib/logger.sh >> installDockerScript.sh
     cat $node_scripts_location/lib/headers.sh >> installDockerScript.sh
-    cat $node_scripts_location/initScripts/$ARCHITECTURE/$OPERATING_SYSTEM/Docker_$INSTALLED_DOCKER_VERSION.sh >> installDockerScript.sh
+    cat $node_scripts_location/initScripts/$ARCHITECTURE/$OPERATING_SYSTEM/Docker_$DOCKER_VERSION.sh >> installDockerScript.sh
 
     rm -rf $node_scripts_location
     # Install Docker
