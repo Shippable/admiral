@@ -21,7 +21,7 @@ __create_exec_file() {
 
   cat $node_scripts_location/lib/logger.sh >> installDockerScript.sh
   cat $node_scripts_location/lib/headers.sh >> installDockerScript.sh
-  cat $node_scripts_location/initScripts/x86_64/Ubuntu_16.04/Docker_17.06.sh >> installDockerScript.sh
+  cat $node_scripts_location/initScripts/$ARCHITECTURE/$OPERATING_SYSTEM/Docker_$INSTALLED_DOCKER_VERSION.sh >> installDockerScript.sh
 
   rm -rf $node_scripts_location
 }
