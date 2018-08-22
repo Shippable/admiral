@@ -4,6 +4,13 @@ readonly MAX_ERROR_LOG_COUNT=100
 export IS_SERVER=false
 export system_cluster=null
 
+__update_docker() {
+  __process_msg "Updating docker"
+  ##if [ "$INSTALLED_DOCKER_VERSION" != "$DOCKER_VERSION" ]; then
+  source $SCRIPTS_DIR/upgrade_docker.sh
+  __process_msg "DONE"
+}
+
 __check_admiral() {
   __process_msg "Checking if admiral container is running"
   local wait_time=3
@@ -456,9 +463,7 @@ main() {
     __process_marker "Upgrading Shippable installation"
     __pull_images_master
     __pull_images_workers
-    if [ "$INSTALLED_DOCKER_VERSION" != "$DOCKER_VERSION" ]; then
-      source $SCRIPTS_DIR/upgrade_docker.sh
-    fi
+    __update_docker
     __check_admiral
     __check_release
     __update_release
