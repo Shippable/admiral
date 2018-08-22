@@ -42,8 +42,10 @@ __remove_services() {
   fi
 }
 
-__upgrade_docker_version_on_swarm_workers() {
+__update_docker_on_swarm_workers() {
   __process_msg "Upgrading docker version on swarm workers"
+  ## Note: this always needs to execute since it'll update proxy settings on
+  ## swarm worker nodes
 
   local system_settings="PGPASSWORD=$DB_PASSWORD \
     psql \
@@ -112,7 +114,10 @@ __upgrade_docker_version_on_swarm_workers() {
   done
 }
 
-__upgrade_docker_version() {
+__update_docker() {
+  ## Note: this always needs to execute since it'll update proxy settings on
+  ## swarm master
+
   __process_msg "Upgrading docker to $DOCKER_VERSION"
   __create_install_docker_script
   ./$INSTALL_DOCKER_SCRIPT
@@ -153,8 +158,8 @@ main() {
   __process_marker "Upgrading docker"
 
   __remove_services
-  __upgrade_docker_version
-  __upgrade_docker_version_on_swarm_workers
+  __update_docker
+  __update_docker_on_swarm_workers
   __upgrade_awscli_version
   __set_installed_docker_version
   __restart_db_container
