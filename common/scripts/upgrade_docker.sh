@@ -156,7 +156,6 @@ __restart() {
 
 main() {
   __process_marker "Upgrading docker"
-
   __remove_services
   __update_docker
   __update_docker_on_swarm_workers

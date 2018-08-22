@@ -20,6 +20,7 @@ ${REL_VER_DATE}
 
   - Features
       - **Updated default docker version for installation on Ubuntu 14.04**: Server installations of both [onebox](http://docs.shippable.com/platform/server/install-onebox/) and [multi node](http://docs.shippable.com/platform/server/install-two-server/) types on Ubuntu 14.04 now use [docker 18.03.01-ce](https://docs.docker.com/release-notes/docker-ce/#18031-ce-2018-04-26)
+      - **Updated default docker version for installation on Ubuntu 16.04**: Server installations of both [onebox](http://docs.shippable.com/platform/server/install-onebox/) and [multi node](http://docs.shippable.com/platform/server/install-two-server/) types on Ubuntu 16.04 now use [docker 18.03.01-ce](https://docs.docker.com/release-notes/docker-ce/#18031-ce-2018-04-26)
   - Fixes
       - **Slack notifications with `type: slack`**: Specifying `type: slack` was not working with newer Slack integrations in some installations. Both `slack` and `slackKeys` will now work as intended.
 
