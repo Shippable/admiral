@@ -78,22 +78,28 @@ __check_dependencies() {
   sudo chown -R shippable:shippable /home/shippable/
 
   ################## Install Docker  #####################################
-  install_docker=true
+  {
+    check_docker=$(sudo service --status-all 2>&1 | grep docker)
+  } || {
+    true
+  }
 
-  if type docker &> /dev/null && true; then
+  if [ ! -z "$check_docker" ]; then
+    __process_msg "Docker already installed"
     __set_installed_docker_version
     # An upgrade flow later will handle this case.
     if [[ "$INSTALLED_DOCKER_VERSION" == *"1.13"* ]]; then
-      install_docker=false
-
+      ## if version 1.13 is already installed before we start installation,
+      ## show error and exit
+      ## dont do anything if its upgrade workflow
       if [[ "$IS_UPGRADE" == "false" ]]; then
         __process_error "Shippable requires docker version $DOCKER_VERSION to use orchestration and other features are only available in docker $DOCKER_VERSION and higher. Please upgrade to version $DOCKER_VERSION or higher to proceed with the installation"
         exit 1
       fi
+    else
+      __process_msg "Successfully set docker version to: $DOCKER_VERSION"
     fi
-  fi
-
-  if [[ $install_docker == true ]]; then
+  else
     __process_msg "Installing Docker $DOCKER_VERSION"
     rm -f installDockerScript.sh
     touch installDockerScript.sh
