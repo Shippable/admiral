@@ -91,6 +91,7 @@ __check_dependencies() {
     if [[ "$INSTALLED_DOCKER_VERSION" == *"1.13"* ]]; then
       ## if version 1.13 is already installed before we start installation,
       ## show error and exit
+      ## dont do anything if its upgrade workflow
       if [[ "$IS_UPGRADE" == "false" ]]; then
         __process_error "Shippable requires docker version $DOCKER_VERSION to use orchestration and other features are only available in docker $DOCKER_VERSION and higher. Please upgrade to version $DOCKER_VERSION or higher to proceed with the installation"
         exit 1
