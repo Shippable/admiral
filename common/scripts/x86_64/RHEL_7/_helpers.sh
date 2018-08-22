@@ -80,36 +80,46 @@ __check_dependencies() {
   sudo chown -R shippable:shippable /home/shippable/
 
   ################## Install Docker  #####################################
-  __process_msg "Installing Docker $DOCKER_VERSION"
-  rm -f installDockerScript.sh
-  touch installDockerScript.sh
-  echo '#!/bin/bash' >> installDockerScript.sh
-  echo 'install_docker_only="true"' >> installDockerScript.sh
-  echo "SHIPPABLE_HTTP_PROXY=\"$SHIPPABLE_HTTP_PROXY\"" >> installDockerScript.sh
-  echo "SHIPPABLE_HTTPS_PROXY=\"$SHIPPABLE_HTTPS_PROXY\"" >> installDockerScript.sh
-  echo "SHIPPABLE_NO_PROXY=\"$SHIPPABLE_NO_PROXY\"" >> installDockerScript.sh
+  {
+    check_docker=$(systemctl 2>&1 | grep docker)
+  } || {
+    true
+  }
 
-  local node_scripts_location=/tmp/node
-  local node_s3_location="https://s3.amazonaws.com/shippable-artifacts/node/$RELEASE/node-$RELEASE.tar.gz"
+  if [ ! -z "$check_docker" ]; then
+    __process_msg "'docker' already installed, skipping"
+  else
+    __process_msg "Installing Docker $DOCKER_VERSION"
+    rm -f installDockerScript.sh
+    touch installDockerScript.sh
+    echo '#!/bin/bash' >> installDockerScript.sh
+    echo 'install_docker_only="true"' >> installDockerScript.sh
+    echo "SHIPPABLE_HTTP_PROXY=\"$SHIPPABLE_HTTP_PROXY\"" >> installDockerScript.sh
+    echo "SHIPPABLE_HTTPS_PROXY=\"$SHIPPABLE_HTTPS_PROXY\"" >> installDockerScript.sh
+    echo "SHIPPABLE_NO_PROXY=\"$SHIPPABLE_NO_PROXY\"" >> installDockerScript.sh
 
-  pushd /tmp
-    mkdir -p $node_scripts_location
-    curl -O $node_s3_location
-    tar -xzf node-$RELEASE.tar.gz -C $node_scripts_location --strip-components=1
-    rm -rf node-$RELEASE.tar.gz
-  popd
+    local node_scripts_location=/tmp/node
+    local node_s3_location="https://s3.amazonaws.com/shippable-artifacts/node/$RELEASE/node-$RELEASE.tar.gz"
 
-  cat $node_scripts_location/lib/logger.sh >> installDockerScript.sh
-  cat $node_scripts_location/lib/headers.sh >> installDockerScript.sh
-  cat $node_scripts_location/initScripts/$ARCHITECTURE/$OPERATING_SYSTEM/Docker_$DOCKER_VERSION.sh >> installDockerScript.sh
+    pushd /tmp
+      mkdir -p $node_scripts_location
+      curl -O $node_s3_location
+      tar -xzf node-$RELEASE.tar.gz -C $node_scripts_location --strip-components=1
+      rm -rf node-$RELEASE.tar.gz
+    popd
 
-  rm -rf $node_scripts_location
-  # Install Docker
-  chmod +x installDockerScript.sh
-  ./installDockerScript.sh
-  # sets env INSTALLED_DOCKER_VERSION
-  __set_installed_docker_version
-  rm installDockerScript.sh
+    cat $node_scripts_location/lib/logger.sh >> installDockerScript.sh
+    cat $node_scripts_location/lib/headers.sh >> installDockerScript.sh
+    cat $node_scripts_location/initScripts/$ARCHITECTURE/$OPERATING_SYSTEM/Docker_$DOCKER_VERSION.sh >> installDockerScript.sh
+
+    rm -rf $node_scripts_location
+    # Install Docker
+    chmod +x installDockerScript.sh
+    ./installDockerScript.sh
+    # sets env INSTALLED_DOCKER_VERSION
+    __set_installed_docker_version
+    rm installDockerScript.sh
+  fi
 
   ################## Install awscli  #####################################
   if type aws &> /dev/null && true; then
