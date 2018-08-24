@@ -7,6 +7,7 @@ ${REL_VER_DATE}
   - **More node statistics**: Node statistics are collected more frequently and the number of Docker containers and images on a node is now displayed on the node page.  Existing nodes will need to be reinitialized in order to show the image count, but reinitialization is not required to continue to use older nodes.
   - **Ability to re-initialize the node in nodepool list page**: Nodes can now be re-initialized from the node pool page instead of having to go to the node's detail page.
   - **shipctl notify**: Custom notifications can be sent to Slack or webhooks using `shipctl`. Custom nodes will need to be reinitialized to use this feature and Windows is not yet supported. More information is available in the [shipctl documentation](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/).
+  - **Added support for latest docker**: [BYON nodes](http://docs.shippable.com/platform/runtime/nodes/#byon-nodes) on Ubuntu 14.04, Ubuntu 16.04(x86_64), CentOS 7 and RHEL 7 can be initialized with [docker 18.03.01-ce](https://docs.docker.com/release-notes/docker-ce/#18031-ce-2018-04-26)
 
 ## Fixes
   - **Cleanup credentials before and after the CI build**: Credentials used in the CI builds will get cleaned up from the build agent before and after the CI build is run.
@@ -23,6 +24,7 @@ ${REL_VER_DATE}
   - Features
       - **Updated default docker version for installation on Ubuntu 14.04**: Server installations of both [onebox](http://docs.shippable.com/platform/server/install-onebox/) and [multi node](http://docs.shippable.com/platform/server/install-two-server/) types on Ubuntu 14.04 now use [docker 18.03.01-ce](https://docs.docker.com/release-notes/docker-ce/#18031-ce-2018-04-26)
       - **Updated default docker version for installation on Ubuntu 16.04**: Server installations of both [onebox](http://docs.shippable.com/platform/server/install-onebox/) and [multi node](http://docs.shippable.com/platform/server/install-two-server/) types on Ubuntu 16.04 now use [docker 18.03.01-ce](https://docs.docker.com/release-notes/docker-ce/#18031-ce-2018-04-26)
+      - **Updated default docker version for installation on CentOS 7**: Server installations of both [onebox](http://docs.shippable.com/platform/server/install-onebox/) and [multi node](http://docs.shippable.com/platform/server/install-two-server/) types on CentOS 7 now use [docker 18.03.01-ce](https://docs.docker.com/release-notes/docker-ce/#18031-ce-2018-04-26)
   - Fixes
       - **Slack notifications with `type: slack`**: Specifying `type: slack` was not working with newer Slack integrations in some installations. Both `slack` and `slackKeys` will now work as intended.
 
