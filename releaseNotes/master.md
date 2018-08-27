@@ -21,7 +21,7 @@ ${REL_VER_DATE}
   - Features
       - **simple title**: brief description
   - Fixes
-      - **simple title**: brief description
+      - **Public Bitbucket projects inaccessible**: Users were not able to view public projects on Bitbucket Cloud without logging in. This has been fixed so that users must be logged in to view private projects or projects on private git servers but not public projects on the cloud versions of Bitbucket, GitHub, or GitLab.
 
 ## History
 
