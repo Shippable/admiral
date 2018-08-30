@@ -7,9 +7,7 @@ ${REL_VER_DATE}
   - **Excluded branches can be run manually**: CI branches that do not run for webhooks because of a `branches` setting in `shippable.yml` can now be run manually. To do so, click the play button on the project dashboard and select the branch.
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+  - **timeTriggers for runCI**: timeTrigger resources will now properly trigger runCI jobs.
 
 ## Custom Nodes
   - **simple title**: brief description
