@@ -5,6 +5,10 @@ ${REL_VER_DATE}
 
 ## Features
   - **Excluded branches can be run manually**: CI branches that do not run for webhooks because of a `branches` setting in `shippable.yml` can now be run manually. To do so, click the play button on the project dashboard and select the branch.
+  - **Drydock update**: Updating all Shippable official images with latest
+  stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
+  for [v6.8.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v684/) for details.
+
 
 ## Fixes
   - **timeTriggers for runCI**: timeTrigger resources will now properly trigger runCI jobs.
