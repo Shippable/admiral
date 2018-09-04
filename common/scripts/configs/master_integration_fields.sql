@@ -834,26 +834,6 @@ do $$
       values (276, '59e71aa80552d20500e76bb2', 'token', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-21', '2018-03-21');
     end if;
 
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 304) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (304, '577de63321333398d11a1121', 'username', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
-    end if;
-
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 305) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (305, '577de63321333398d11a1121', 'publicKey', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
-    end if;
-
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 306) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (306, '577de63321333398d11a1121', 'privateKey', 'string', false, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
-    end if;
-
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 307) then
-      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (307, '577de63321333398d11a1121', 'sshPort', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
-    end if;
-
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
@@ -971,6 +951,26 @@ do $$
 
     -- "port" is not a required field for bitbucket auth master integration
     update "masterIntegrationFields" set "isRequired" = false where "id" = 83;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 304) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (304, '577de63321333398d11a1121', 'username', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 305) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (305, '577de63321333398d11a1121', 'publicKey', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 306) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (306, '577de63321333398d11a1121', 'privateKey', 'string', false, true,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 307) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (307, '577de63321333398d11a1121', 'sshPort', 'string', false, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+    end if;
 
   end
 $$;
