@@ -6,6 +6,8 @@ module.exports = self;
 var async = require('async');
 var mongoose = require('mongoose');
 var _ = require('underscore');
+var tmp = require('tmp');
+var sshKeyGen = require('ssh-keygen');
 
 var APIAdapter = require('../../common/APIAdapter.js');
 var envHandler = require('../../common/envHandler.js');
@@ -33,6 +35,7 @@ function post(req, res) {
       _getMasterIntegrationFields.bind(null, bag),
       _validateMasterIntegrationFields.bind(null, bag),
       _postProvider.bind(null, bag),
+      _genSshKeys.bind(null, bag),
       _createSystemIntegration.bind(null, bag),
       _getSystemIntegration.bind(null, bag),
       _postSystemIntegrationFieldsToVault.bind(null, bag)
@@ -256,12 +259,6 @@ function _postProvider(bag, next) {
   var who = bag.who + '|' + _postProvider.name;
   logger.verbose(who, 'Inside');
 
-  if (!bag.reqBody.data.url) {
-    logger.debug(
-      'No provider available for system integration: ' + bag.reqBody.name);
-    return next();
-  }
-
   // Strip 'Keys' and 'BasicAuth' from the end of the name
   // This is to deal with the fact that providers will be dynamically created
   // for auth providers when the system integration is created. The system
@@ -274,6 +271,14 @@ function _postProvider(bag, next) {
     name = name.replace('Keys', '');
   else if (name.endsWith('BasicAuth'))
     name = name.replace('BasicAuth', '');
+  bag.providerName = name;
+
+  if (!bag.reqBody.data.url) {
+    logger.debug(
+      'No provider available for system integration: ' + bag.reqBody.name);
+    return next();
+  }
+
   var provider = {
     url: bag.reqBody.data.url,
     name: name
@@ -289,6 +294,34 @@ function _postProvider(bag, next) {
         );
       bag.provider = newProvider;
       return next();
+    }
+  );
+}
+
+function _genSshKeys(bag, next) {
+  if (bag.providerName !== 'gerrit') return next();
+
+  var who = bag.who + '|' + _genSshKeys.name;
+  logger.verbose(who, 'Inside');
+
+  tmp.file(
+    function (err, path) {
+      sshKeyGen({
+        location: path,
+        comment: 'Shippable',
+        read: true
+      },
+        function (err, out) {
+          if (err)
+            return next(
+              new ActErr(who, ActErr.OperationFailed, 'SSH KeyGen Failed', err)
+            );
+
+          bag.reqBody.data.privateKey = out.key;
+          bag.reqBody.data.publicKey = out.pubKey;
+          return next();
+        }
+      );
     }
   );
 }

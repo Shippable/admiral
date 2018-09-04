@@ -362,7 +362,11 @@
               sysInt: {
                 customName: '',
                 wwwUrl: '',
-                url: ''
+                url: '',
+                username: 'shippable',
+                sshPort: '29418',
+                privateKey: '',
+                publicKey: ''
               },
               callbackUrl: '',
               systemIntegrationId: '',
@@ -1454,6 +1458,7 @@
                     systemIntegration.data
                   );
                 } else {
+                  console.log('systemIntegration: ', systemIntegration);
                   var auth = {
                     sysInt: systemIntegration.data,
                     systemIntegrationId: systemIntegration.id,
@@ -1556,7 +1561,7 @@
               }
             }
           );
-
+          console.log('auth: ', $scope.vm.installForm.auth);
           return next();
         }
       );
