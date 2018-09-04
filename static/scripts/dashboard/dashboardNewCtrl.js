@@ -4052,6 +4052,7 @@
           if (err)
             return next(err);
           bag.systemIntegrationId = sysInt.id;
+          bag.newSystemIntegration = sysInt;
 
           return next();
         }
@@ -4945,6 +4946,12 @@
             var data = {
               sysInt: sysInt
             };
+            if (bag.masterName === 'gerritBasicAuth' &&
+              bag.newSystemIntegration) {
+              data.sysInt.privateKey = bag.newSystemIntegration.data.privateKey;
+              data.sysInt.publicKey = bag.newSystemIntegration.data.publicKey;
+            }
+
             data.systemIntegrationId = bag.systemIntegrationId;
             data.isValidUrl = true;
             data.callbackUrl = bag.data.wwwUrl + '/auth/' +
