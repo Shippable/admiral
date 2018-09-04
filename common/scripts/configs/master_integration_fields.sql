@@ -969,7 +969,7 @@ do $$
 
     if not exists (select 1 from "masterIntegrationFields" where "id" = 307) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure","createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (307, '577de63321333398d11a1121', 'sshPort', 'string', fatruelse, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
+      values (307, '577de63321333398d11a1121', 'sshPort', 'string', true, false,'54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-08-06', '2018-08-06');
     end if;
 
   end
