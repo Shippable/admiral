@@ -955,6 +955,34 @@
                                           <span>Duplicate URLs found. Multiple authorizations to a provider with same URLs are not allowed.</span>
                                         </dd>
                                       </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label"></label>
+                                      <div class="col-md-6">
+                                        Allow Shippable to access event-streams
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">Username</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="shippable" name="gerritBasicUserName"
+                                        ng-model="gerritBasicAuth.sysInt.username" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">SSH Port</label>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="29418" name="gerritBasicSshPort"
+                                        ng-model="gerritBasicAuth.sysInt.sshPort" ng-disabled="vm.initializing || vm.installing || vm.saving"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-2 control-label">Public Key</label>
+                                      <div class="col-sm-6">
+                                        <textarea rows="6" style="resize: both" class="form-control" placeholder="" name="gerritBasicPublicKey"
+                                          ng-model="gerritBasicAuth.sysInt.publicKey" ng-disabled="vm.initializing || vm.installing || vm.saving" readonly />
+                                        </textarea>
+                                      </div>
                                       <button class="btn btn-danger"
                                         ng-click="vm.deleteAuthencation('gerritBasicAuth', gerritBasicAuth.systemIntegrationId)"
                                         ng-disabled="vm.installForm.auth.gerritBasicAuth.isDeletingAuth || vm.initializing || vm.installing || vm.saving">

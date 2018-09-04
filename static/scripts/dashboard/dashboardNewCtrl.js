@@ -362,7 +362,11 @@
               sysInt: {
                 customName: '',
                 wwwUrl: '',
-                url: ''
+                url: '',
+                username: 'shippable',
+                sshPort: '29418',
+                privateKey: '',
+                publicKey: ''
               },
               callbackUrl: '',
               systemIntegrationId: '',
@@ -1556,7 +1560,6 @@
               }
             }
           );
-
           return next();
         }
       );

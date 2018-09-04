@@ -38,6 +38,7 @@
     "remove-markdown": "0.1.0",
     "request": "2.73.0",
     "serve-favicon": "^2.4.1",
+    "ssh-keygen": "0.2.1",
     "tmp": "0.0.28",
     "underscore": "1.8.3",
     "ursa": "0.9.4",
