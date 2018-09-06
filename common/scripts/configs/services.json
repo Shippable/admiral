@@ -362,6 +362,11 @@
       "apiUrlIntegration": "internalAPI"
     },
     {
+      "name": "gerritEventHandler",
+      "repository": "micro",
+      "apiUrlIntegration": "internalAPI"
+    },
+    {
       "name": "irc",
       "repository": "micro",
       "apiUrlIntegration": "internalAPI"
