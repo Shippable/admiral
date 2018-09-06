@@ -4892,10 +4892,11 @@
     }
 
     function startOrStopGerritEventHandler(next) {
-      var intercomProcService = _.findWhere($scope.vm.allServices,
+      var gerritEventService = _.findWhere($scope.vm.allServices,
         {serviceName: 'gerritEventHandler'});
       if (!_.isEmpty(
-        $scope.vm.installForm.auth.gerritBasicAuth.authorizations)) {
+        $scope.vm.installForm.auth.gerritBasicAuth.authorizations) &&
+        !gerritEventService.isEnabled) {
         startService('gerritEventHandler',
           function (err) {
             if (err)
@@ -4905,7 +4906,8 @@
           }
         );
       } else if (_.isEmpty(
-        $scope.vm.installForm.auth.gerritBasicAuth.authorizations)) {
+        $scope.vm.installForm.auth.gerritBasicAuth.authorizations) &&
+        gerritEventService.isEnabled) {
         admiralApiAdapter.deleteService('gerritEventHandler', {},
           function (err) {
             if (err)
