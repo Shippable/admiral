@@ -10,6 +10,7 @@ ${REL_VER_DATE}
   for [v6.8.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v684/) for details.
   - **Updated AWS SDK in deploy jobs**: Deploy jobs in Shippable Assembly Lines now use a more recent version of the AWS SDK, with support for `healthCheck` in task definitions.
   - **shipctl notify support for IRC and Windows**: `shipctl notify` can now be used with IRC notification resources, and is also fully supported on Windows nodes. See [shipctl documentation](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/#notify) for more details.
+  - **Enhanced console log handling**: The enhanced, non-blocking approach towards handling console logs will now be the default handler instead of being opt-in. You can expect an improvement in the stability and speed of your builds, especially if it produces a significant amount of console logs.
 
 ## Fixes
   - **timeTriggers for runCI**: timeTrigger resources will now properly trigger runCI jobs.
@@ -25,6 +26,7 @@ ${REL_VER_DATE}
       - **simple title**: brief description
   - Fixes
       - **Public Bitbucket projects inaccessible**: Users were not able to view public projects on Bitbucket Cloud without logging in. This has been fixed so that users must be logged in to view private projects or projects on private git servers but not public projects on the cloud versions of Bitbucket, GitHub, or GitLab.
+      - **UTF-8 handling in BitBucket Server add-on**: The `shippable-integration-bbs` add-on has been updated to send UTF-8 payloads. This fixes problems with character encoding for non-ASCII data.
 
 ## History
 
