@@ -13,7 +13,7 @@ ${REL_VER_DATE}
 
 ## Fixes
   - **timeTriggers for runCI**: timeTrigger resources will now properly trigger runCI jobs.
-  - **Fixes issue of several node pool's node limit getting reset to 0**: node limit field of node pools having admin addos will no longer incorrectly reset to 0 on any change in subscription's licenses.
+  - **Fixes issue of several node pool's node limit getting reset to 0**: node limit field of node pools having admin addons will no longer incorrectly reset to 0 on any change in subscription's licenses.
 
 ## Custom Nodes
   - **simple title**: brief description
