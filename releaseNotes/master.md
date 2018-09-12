@@ -11,10 +11,13 @@ ${REL_VER_DATE}
   - **Updated AWS SDK in deploy jobs**: Deploy jobs in Shippable Assembly Lines now use a more recent version of the AWS SDK, with support for `healthCheck` in task definitions.
   - **shipctl notify support for IRC and Windows**: `shipctl notify` can now be used with IRC notification resources, and is also fully supported on Windows nodes. See [shipctl documentation](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/#notify) for more details.
   - **Enhanced console log handling**: The enhanced, non-blocking approach towards handling console logs will now be the default handler instead of being opt-in. You can expect an improvement in the stability and speed of your builds, especially if it produces a significant amount of console logs.
+  - **Enhanced Release notes**: Now the latest 10 release notes are available at https://app.shippable.com/changelog.
+  - **Environment variables in grid view**: Now you can view environment variables in grid view of subscription, custom, project and job dashboard. For that, you need to enter ENV vars matching keys in `show ENVs in grid view` field.
 
 ## Fixes
   - **timeTriggers for runCI**: timeTrigger resources will now properly trigger runCI jobs.
   - **Fixes issue of several node pool's node limit getting reset to 0**: node limit field of node pools having admin addons will no longer incorrectly reset to 0 on any change in subscription's licenses.
+  - Fixed notification type resource in yml builder, `method` field is not required for slack and hipchat
 
 ## Custom Nodes
   - **simple title**: brief description
