@@ -13,6 +13,7 @@ ${REL_VER_DATE}
   - **Enhanced console log handling**: The enhanced, non-blocking approach towards handling console logs will now be the default handler instead of being opt-in. You can expect an improvement in the stability and speed of your builds, especially if it produces a significant amount of console logs.
   - **Enhanced Release notes**: Now the latest 10 release notes are available at https://app.shippable.com/changelog, this can be accessed by clicking the newspaper icon on the top right of the app
   - **Environment variables in grid view**: Now you can view environment variables in grid view of subscription, custom, project and job dashboard. For that, you need to enter ENV vars matching keys in `show ENVs in grid view` field, the project settings and job config pages have this option.
+  - **New tab layout for navigation in dashboards**: Now all the views in subscriptions, custom, project and jobs dashboards can easily be accessed through tabs
 
 ## Fixes
   - **timeTriggers for runCI**: timeTrigger resources will now properly trigger runCI jobs.
