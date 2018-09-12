@@ -14,6 +14,7 @@ ${REL_VER_DATE}
   - **Enhanced Release notes**: Now the latest 10 release notes are available at https://app.shippable.com/changelog, this can be accessed by clicking the newspaper icon on the top right of the app
   - **Environment variables in grid view**: Now you can view environment variables in grid view of subscription, custom, project and job dashboard. For that, you need to enter ENV vars matching keys in `show ENVs in grid view` field, the project settings and job config pages have this option.
   - **New tab layout for navigation in dashboards**: Now all the views in subscriptions, custom, project and jobs dashboards can easily be accessed through tabs
+  - **Added support for latest docker**: [BYON nodes](http://docs.shippable.com/platform/runtime/nodes/#byon-nodes) on [WindowsServer 2016](http://docs.shippable.com/platform/tutorial/workflow/jobs-windows/) can be initialized with [docker 18.03.1-ee-3](https://docs.docker.com/ee/engine/release-notes/#18031-ee-3-2018-08-30)
 
 ## Fixes
   - **timeTriggers for runCI**: timeTrigger resources will now properly trigger runCI jobs.
