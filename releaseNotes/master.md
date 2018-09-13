@@ -21,7 +21,9 @@ ${REL_VER_DATE}
   - **Fixes issue of several node pool's node limit getting reset to 0**: node limit field of node pools having admin addons will no longer incorrectly reset to 0 on any change in subscription's licenses.
   - **Fixes issue of method required for notification type resource in yml builder** Fixed notification type resource in yml builder, `method` field is not required for slack and hipchat.
   - **Editing params from SPOG**: Editing a params resource directly from SPOG will now correctly save.
-
+  - **Fixes reinitialize on a manually initialized node does nothing**: On clicking reinitialize on view node pool page for manually initialized nodes will show download init script button.
+  - **Fixes gitRepo webhook not setup error in assembly lines**: When the webhook creation fails, rSync job logs will show the error cleanly.
+  - **Fixes email service crashing**: On upgrading shippable version from v6.4.2 or less, queued emails will get successfully processed.
 ## Shippable Server
 
   - Features
