@@ -23,7 +23,6 @@ ${REL_VER_DATE}
   - **Editing params from SPOG**: Editing a params resource directly from SPOG will now correctly save.
   - **Fixes reinitialize button for manually initialized nodes**: Clicking reinitialize on view node pool page for manually initialized nodes will now show a button to download the init script.
   - **Fixes gitRepo webhook not setup error in assembly lines**: When the webhook creation fails, rSync job logs will show the error cleanly.
-  - **Fixes email service crashing**: On upgrading shippable version from v6.4.2 or less, queued emails will get successfully processed.
 ## Shippable Server
 
   - Features
@@ -31,6 +30,7 @@ ${REL_VER_DATE}
   - Fixes
       - **Public Bitbucket projects inaccessible**: Users were not able to view public projects on Bitbucket Cloud without logging in. This has been fixed so that users must be logged in to view private projects or projects on private git servers but not public projects on the cloud versions of Bitbucket, GitHub, or GitLab.
       - **UTF-8 handling in BitBucket Server add-on**: The `shippable-integration-bbs` add-on has been updated to send UTF-8 payloads. This fixes problems with character encoding for non-ASCII data.
+      - **Fixes email service crashing**: On upgrading shippable version from v6.4.2 or less, queued emails will get successfully processed.
 
 ## History
 
