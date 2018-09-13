@@ -23,6 +23,9 @@ ${REL_VER_DATE}
   - **Editing params from SPOG**: Editing a params resource directly from SPOG will now correctly save.
   - **Fixes reinitialize button for manually initialized nodes**: Clicking reinitialize on view node pool page for manually initialized nodes will now show a button to download the init script.
   - **Fixes gitRepo webhook not setup error in assembly lines**: When the webhook creation fails, rSync job logs will show the error cleanly.
+  - **Fixes gitRepo branch names changing behind the scenes**: Fixed gitRepo branch names changing due to incorrect webhook checks. Now, gitRepo trigger subsequent jobs on recieving webhook.
+    ([support#4537](https://github.com/Shippable/support/issues/4537)) ([support#4553](https://github.com/Shippable/support/issues/4553))
+
 ## Shippable Server
 
   - Features
