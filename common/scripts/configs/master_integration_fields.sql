@@ -834,6 +834,22 @@ do $$
       values (276, '59e71aa80552d20500e76bb2', 'token', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-21', '2018-03-21');
     end if;
 
+    -- masterIntegrationFields for ircCreds
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 277) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (277, '577de63321333398d11a1123', 'server', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 278) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (278, '577de63321333398d11a1123', 'nick', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 279) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (279, '577de63321333398d11a1123', 'password', 'string', false, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
