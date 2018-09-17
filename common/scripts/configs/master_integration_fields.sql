@@ -835,19 +835,19 @@ do $$
     end if;
 
     -- masterIntegrationFields for ircCreds
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 277) then
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 308) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (277, '577de63321333398d11a1123', 'server', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
+      values (308, '577de63321333398d11a1123', 'server', 'string', false, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
     end if;
 
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 278) then
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 309) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (278, '577de63321333398d11a1123', 'nick', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
+      values (309, '577de63321333398d11a1123', 'nick', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
     end if;
 
-    if not exists (select 1 from "masterIntegrationFields" where "id" = 279) then
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 310) then
       insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values (279, '577de63321333398d11a1123', 'password', 'string', false, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
+      values (310, '577de63321333398d11a1123', 'password', 'string', false, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
     end if;
 
     -- END adding master integration fields
