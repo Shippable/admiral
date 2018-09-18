@@ -24,7 +24,7 @@ ${REL_VER_DATE}
   - Features
       - **simple title**: brief description
   - Fixes
-      - **simple title**: brief description
+      - **Fixes errors when trying to use Gerrit projects with slashes in name**: Gerrit projects with slashes in their names can be enabled for CI and used as gitRepo and syncRepo resources. Branch names with slashes are also supported.
 
 ## History
 
