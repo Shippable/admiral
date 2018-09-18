@@ -4,11 +4,7 @@
 ${REL_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+  - **Cancelling Managed Jobs**: [Managed jobs](http://docs.shippable.com/platform/workflow/job/overview/#supported-job-types) can now be cancelled.  Cancelling is not recommended for [deploy jobs](http://docs.shippable.com/platform/workflow/job/deploy/) due to their stateful nature.
 
 ## Fixes
   - **Fixes sorting by "Duration" in the grid view**: Clicking on the "Duration" column in the grid view of any dashboard (subscription, project, job) will now sort the items by duration.
