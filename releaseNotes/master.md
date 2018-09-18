@@ -12,6 +12,7 @@ ${REL_VER_DATE}
 
 ## Fixes
   - **Fixes sorting by "Duration" in the grid view**: Clicking on the "Duration" column in the grid view of any dashboard (subscription, project, job) will now sort the items by duration.
+  - **Fixes validation on project and branch name when adding a syncRepo via the API**: The API will no longer allow multiple syncRepos to be added for the same project and branch.
 
 ## Custom Nodes
   - **simple title**: brief description
