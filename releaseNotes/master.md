@@ -11,7 +11,7 @@ ${REL_VER_DATE}
       - if necessary
 
 ## Fixes
-  - **Fixes sorting by "Duration" in the grid view**: Clicking on the "Duration" column in grid view of any dashboard (subscription, project, job) will now sort the data with respect to duration.
+  - **Fixes sorting by "Duration" in the grid view**: Clicking on the "Duration" column in the grid view of any dashboard (subscription, project, job) will now sort the items by duration.
 
 ## Custom Nodes
   - **simple title**: brief description
