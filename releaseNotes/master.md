@@ -11,11 +11,7 @@ ${REL_VER_DATE}
   - **Fixes validation on project and branch name when adding a syncRepo via the API**: The API will no longer allow multiple syncRepos to be added for the same project and branch.
   - **Fixes "show envs in grid view" for runSh task envs**: When the "Show envs in grid view" option is configured for runSh jobs, envs defined at a TASK level were not being displayed in the grid. Matching envs from TASKs will now be displayed correctly.
   - **Fixes counterintuitive SPOG search next and previous buttons**: We have fixed the SPOG search UI's up/down arrows to move between previous/next objects respectively instead of next/previous objects. This behaviour is consistent with the Search functionality in all modern browsers and desktop apps.
-
-## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
+  - **Fixes Shippable documentation anchor links**: The title of a section will now be properly visible when using an anchor in the [Shippable documentation.](http://docs.shippable.com/)
 
 ## Shippable Server
 
