@@ -20,7 +20,7 @@ ${REL_VER_DATE}
 ## Shippable Server
 
   - Features
-      - **simple title**: brief description
+      - **Usability enhancements in Admiral control plane page**: Added a button to make it easier to copy `Callback URL` and `Public Key` of SCM auth providers in control plane.
   - Fixes
       - **Fixes errors when trying to use Gerrit projects with slashes in name**: Gerrit projects with slashes in their names can be enabled for CI and used as gitRepo and syncRepo resources. Branch names with slashes are also supported.
       - **Fixes gitRepo branch names changing**: When using a BitBucket Server version that doesn't support webhooks, Shippable gets the latest version of gitRepo and syncRepo resources when a job is run manually. This would overwrite any configured branch settings on these resources with the default branch of the repository. This has now been fixed. The branch configuration on gitRepo and syncRepo resources will no longer be lost when triggering jobs manually.
