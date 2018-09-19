@@ -7,13 +7,6 @@ TIMEOUT=60
 
 download_vault() {
   yum install -y zip unzip nc
-  if type unzip &> /dev/null && true; then
-    echo "unzip already installed"
-  else
-    curl -O http://mirror.centos.org/centos/7/os/x86_64/Packages/unzip-6.0-19.el7.x86_64.rpm
-    yum install -y unzip-6.0-19.el7.x86_64.rpm
-    rm unzip-6.0-19.el7.x86_64.rpm
-  fi
   echo "Fetching Vault..."
   curl -L $VAULTDOWNLOAD > vault.zip
 }

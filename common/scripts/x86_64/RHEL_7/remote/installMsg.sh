@@ -6,21 +6,6 @@ install_deps() {
   echo "installing dependencies"
   yum install -y nc
   yum install -y wget
-  if type socat &> /dev/null && true; then
-    echo "socat already installed"
-  else
-    socat_installed=true
-    {
-      yum install -y socat
-    } || {
-      socat_installed=false
-    }
-    if ! $socat_installed; then
-      curl -O https://forensics.cert.org/centos/cert/7/x86_64/socat-1.7.3.2-1.1.el7.x86_64.rpm
-      yum install -y socat-1.7.3.2-1.1.el7.x86_64.rpm
-      rm socat-1.7.3.2-1.1.el7.x86_64.rpm
-    fi
-  fi
 }
 
 install_log_rotate() {
