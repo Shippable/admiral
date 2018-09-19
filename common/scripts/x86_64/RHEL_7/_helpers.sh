@@ -23,6 +23,22 @@ __check_dependencies() {
     yum install -y openssh.x86_64
   fi
 
+  ################## Install unzip  #########################################
+  if type unzip &> /dev/null && true; then
+    __process_msg "'unzip' already installed"
+  else
+    __process_msg "Installing 'unzip'"
+    yum install -y unzip
+  fi
+
+  ################## Install socat  #########################################
+  if type socat &> /dev/null && true; then
+    __process_msg "'socat' already installed"
+  else
+    __process_msg "Installing 'socat'"
+    yum install -y socat
+  fi
+
   ################## Install jq  #########################################
   if type jq &> /dev/null && true; then
     __process_msg "'jq' already installed"
