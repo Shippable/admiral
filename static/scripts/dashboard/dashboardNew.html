@@ -698,8 +698,14 @@
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" ng-model="bbAuth.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="bbAuth.callbackUrl" id="bb-auth-callbackurl" readonly />
                                       </div>
+                                      <a href="" id="copy"
+                                        data-clipboard-target="#bb-auth-callbackurl"
+                                        ng-click="vm.copyToClip()">
+                                        <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                                      </a>
+                                      <!-- </button> -->
                                       <button class="btn btn-danger"
                                         ng-click="vm.deleteAuthencation('bitbucketKeys', bbAuth.systemIntegrationId)"
                                         ng-disabled="vm.installForm.auth.bitbucketKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
@@ -799,8 +805,13 @@
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" ng-model="bbsAuth.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="bbsAuth.callbackUrl" id="bbs-auth-callbackurl" readonly />
                                       </div>
+                                      <a href="" id="copy"
+                                        data-clipboard-target="#bbs-auth-callbackurl"
+                                        ng-click="vm.copyToClip()">
+                                        <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                                      </a>
                                       <button class="btn btn-danger"
                                         ng-click="vm.deleteAuthencation('bitbucketServerKeys', bbsAuth.systemIntegrationId)"
                                         ng-disabled="vm.installForm.auth.bitbucketServerKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
@@ -980,9 +991,14 @@
                                       <label class="col-md-2 control-label">Public Key</label>
                                       <div class="col-sm-6">
                                         <textarea rows="6" style="resize: both" class="form-control" placeholder="" name="gerritBasicPublicKey"
-                                          ng-model="gerritBasicAuth.sysInt.publicKey" ng-disabled="vm.initializing || vm.installing || vm.saving" readonly />
+                                          ng-model="gerritBasicAuth.sysInt.publicKey" ng-disabled="vm.initializing || vm.installing || vm.saving" id="gerrit-auth-publicKey" readonly />
                                         </textarea>
                                       </div>
+                                      <a href="" id="copy"
+                                        data-clipboard-target="#gerrit-auth-publicKey"
+                                        ng-click="vm.copyToClip()">
+                                        <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                                      </a>
                                       <button class="btn btn-danger"
                                         ng-click="vm.deleteAuthencation('gerritBasicAuth', gerritBasicAuth.systemIntegrationId)"
                                         ng-disabled="vm.installForm.auth.gerritBasicAuth.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
@@ -1071,8 +1087,13 @@
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" ng-model="githubAuth.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="githubAuth.callbackUrl" id="github-auth-callbackurl" readonly />
                                       </div>
+                                      <a href="" id="copy"
+                                        data-clipboard-target="#github-auth-callbackurl"
+                                        ng-click="vm.copyToClip()">
+                                        <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                                      </a>
                                       <button class="btn btn-danger"
                                         ng-click="vm.deleteAuthencation('githubKeys', githubAuth.systemIntegrationId)"
                                         ng-disabled="vm.installForm.auth.githubKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
@@ -1170,8 +1191,13 @@
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" ng-model="gheAuth.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="gheAuth.callbackUrl" id="ghe-auth-callbackurl" readonly />
                                       </div>
+                                      <a href="" id="copy"
+                                        data-clipboard-target="#ghe-auth-callbackurl"
+                                        ng-click="vm.copyToClip()">
+                                        <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                                      </a>
                                       <button class="btn btn-danger"
                                         ng-click="vm.deleteAuthencation('githubEnterpriseKeys', gheAuth.systemIntegrationId)"
                                         ng-disabled="vm.installForm.auth.githubEnterpriseKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">
@@ -1267,8 +1293,13 @@
                                     <div class="form-group">
                                       <label class="col-md-2 control-label">Callback URL</label>
                                       <div class="col-md-6">
-                                        <input type="text" class="form-control" ng-model="gitlabAuth.callbackUrl" readonly />
+                                        <input type="text" class="form-control" ng-model="gitlabAuth.callbackUrl" id="gitlab-auth-callbackurl" readonly />
                                       </div>
+                                      <a href="" id="copy"
+                                        data-clipboard-target="#gitlab-auth-callbackurl"
+                                        ng-click="vm.copyToClip()">
+                                        <i class="fa fa-copy text-primary m-r-5"></i>{{vm.copyText}}
+                                      </a>
                                       <button class="btn btn-danger"
                                         ng-click="vm.deleteAuthencation('gitlabKeys', gitlabAuth.systemIntegrationId)"
                                         ng-disabled="vm.installForm.auth.gitlabKeys.isDeletingAuth || vm.initializing || vm.installing || vm.saving">

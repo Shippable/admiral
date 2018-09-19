@@ -909,6 +909,7 @@
       changeSection: changeSection,
       copyText: 'Copy',
       copyToClipboard: copyToClipboard,
+      copyToClip: copyToClip,
       resetInstallLocationModal: resetInstallLocationModal,
       showInstallLocationModal: showInstallLocationModal,
       saveInstallLocationModal: saveInstallLocationModal,
@@ -1751,6 +1752,11 @@
     function copyToClipboard() {
       var clipboard = new Clipboard('#copy');
       $scope.vm.copyText = 'Copied';
+    }
+
+    function copyToClip() {
+      var clipboard = new Clipboard('#copy');
+      popup_horn.success('Copied');
     }
 
     function resetInstallLocationModal (fromCopy) {
