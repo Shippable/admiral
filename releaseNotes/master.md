@@ -26,6 +26,8 @@ ${REL_VER_DATE}
       - **Usability and consistency fixes in view shared node pools pages**: 
           - The nodes list in the shared node pool details page was missing the re-initialize action and workload column. These have been added. 
           - When adding a shared node, the view now returns to the details page for the current shared node pool instead of going to the list of all shared node pools.
+      - **Usability fixes in admiral installer Control plane page**: Added ability to copy `callback url` and `Public Key` of SCM auth providers in control plane.
+
 
 ## History
 
