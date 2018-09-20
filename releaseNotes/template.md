@@ -1,31 +1,38 @@
 # ${REL_VER} Release Notes
 
 ## Release Date
+
 ${REL_VER_DATE}
 
 ## Features
-  - **simple title**: brief description. [link to docs](#).
-      - itemized
-      - list
-      - for details
-      - if necessary
+
+- **simple title**: brief description. [link to docs](#).
+  - itemized
+  - list
+  - for details
+  - if necessary
 
 ## Fixes
-  - **simple title**: brief description
-      - actions required
-      - or additional details
+
+- **simple title**: brief description
+  - actions required
+  - or additional details
 
 ## Custom Nodes
-  - **simple title**: brief description
-      - additional details or
-      - actions required
+
+- **simple title**: brief description
+  - additional details or
+  - actions required
 
 ## Shippable Server
 
-  - Features
-      - **simple title**: brief description
-  - Fixes
-      - **simple title**: brief description
+### Features
+
+- **simple title**: brief description
+
+### Fixes
+
+- **simple title**: brief description
 
 ## History
 
