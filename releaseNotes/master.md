@@ -12,6 +12,7 @@ ${REL_VER_DATE}
   - **Fixes "show envs in grid view" for runSh task envs**: When the "Show envs in grid view" option is configured for runSh jobs, envs defined at a TASK level were not being displayed in the grid. Matching envs from TASKs will now be displayed correctly.
   - **Fixes counterintuitive SPOG search next and previous buttons**: We have fixed the SPOG search UI's up/down arrows to move between previous/next objects respectively instead of next/previous objects. This behaviour is consistent with the Search functionality in all modern browsers and desktop apps.
   - **Fixes Shippable documentation anchor links**: The title of a section will now be properly visible when using an anchor in the [Shippable documentation.](http://docs.shippable.com/)
+  - **Fixes all processing jobs of a subscription being displayed on job dashboard**: All the processing and queued jobs of a subscription were being displayed on a job's dashboard. This is now fixed.
 
 ## Shippable Server
 
