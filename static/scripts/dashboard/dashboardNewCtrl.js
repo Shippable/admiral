@@ -5,11 +5,15 @@
 
   admiral.controller('dashboardNewCtrl', ['$scope', '$stateParams', '$q',
     '$state', '$interval', '$timeout', '$location', 'admiralApiAdapter',
+    /* jshint camelcase:false */
     'popup_horn', dashboardNewCtrl
+    /* jshint camelcase:true */
   ]);
 
   function dashboardNewCtrl($scope, $stateParams, $q, $state,
+    /* jshint camelcase:false */
     $interval, $timeout, $location, admiralApiAdapter, popup_horn) {
+    /* jshint camelcase:true */
     /* jshint maxstatements:175 */
     var dashboardNewCtrlDefer = $q.defer();
 
@@ -77,7 +81,7 @@
       armArchCode: null,
       initializeForm: {
         secrets: {
-          // install type can be admiral (same node as admiral), new, or existing
+          // initType can be admiral (same node as admiral), new, or existing
           initType: 'admiral',
           address: '',
           rootToken: '',
@@ -193,7 +197,9 @@
           $scope.vm.installForm.state.gitlabCreds.data.url =
             protocol + '://' + updatedAddress;
           $scope.vm.installForm.state.gitlabCreds.fqdn = updatedAddress;
+          /* jshint camelcase:false */
           popup_horn.success('Updated FQDN');
+          /* jshint camelcase:true */
         }, 0);
       },
       updateRabbitMqUrl: function (isSecure, updatedAddress, updatedRootAdd,
@@ -222,14 +228,18 @@
           $scope.vm.installForm.msg.rabbitmqCreds.data.amqpUrlAdmin =
             adminProtocol + '://' + amqpUrlAdmin.split('://')[1].split('@')[0] +
             '@' + updatedAdminAdd;
+          /* jshint camelcase:false */
           popup_horn.success('Updated FQDN');
+          /* jshint camelcase:true */
         }, 0);
       },
       updateRedisUrl: function (updatedAddress) {
         $timeout(function () {
           $scope.vm.installForm.redis.url.data.url = updatedAddress;
           $scope.vm.installForm.redis.url.fqdn = updatedAddress;
+          /* jshint camelcase:false */
           popup_horn.success('Updated FQDN');
+          /* jshint camelcase:true */
         }, 0);
       },
       saveServiceUrl: function (isSecure, updatedAddress, service) {
@@ -242,7 +252,9 @@
           $scope.vm.installForm[service].url.data.url =
             protocol + '://' + updatedAddress;
           $scope.vm.installForm[service].url.fqdn = updatedAddress;
+          /* jshint camelcase:false */
           popup_horn.success('Updated FQDN');
+          /* jshint camelcase:true */
         }, 0);
       },
       checkEmailMethod: function (method) {
@@ -531,7 +543,9 @@
             }
           },
           irc: {
-            isEnabled: false
+            isEnabled: false,
+            masterName: 'ircCreds',
+            integrations: []
           }
         },
         provision: {
@@ -547,7 +561,9 @@
             isEnabled: false,
             masterName: 'gcloudKey',
             data: {
+              /* jshint camelcase:false */
               JSON_key: ''
+              /* jshint camelcase:true */
             }
           }
         },
@@ -940,8 +956,10 @@
       restartServices: restartServices,
       installAddons: installAddons,
       addAuthentication: addAuthentication,
-      deleteAuthencation: deleteAuthencation,
+      deleteAuthentication: deleteAuthentication,
       toggleSCMMasterIntegration: toggleSCMMasterIntegration,
+      addIRCIntegration: addIRCIntegration,
+      deleteIRCIntegration: deleteIRCIntegration,
       addSuperUser: addSuperUser,
       removeSuperUser: removeSuperUser,
       showAdmiralEnvModal: showAdmiralEnvModal,
@@ -1008,18 +1026,23 @@
               admiralApiAdapter.postLogout({},
                 function (logoutErr) {
                   if (logoutErr)
+                    /* jshint camelcase:false */
                     return popup_horn.error(logoutErr);
+                    /* jshint camelcase:true */
 
                   $state.go('login2', $state.params);
                 }
               );
             } else {
               dashboardNewCtrlDefer.reject(err);
+              /* jshint camelcase:false */
               return popup_horn.error(err);
+              /* jshint camelcase:true */
             }
           } else {
             if ($scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP])
-              $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP].push('admiral');
+              $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP].push(
+                'admiral');
             else
               $scope.vm.allNodes[$scope.vm.admiralEnv.ADMIRAL_IP] = ['admiral'];
             dashboardNewCtrlDefer.resolve();
@@ -1055,7 +1078,9 @@
               $scope.vm.shouldRedirect = true;
               return next(err);
             }
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -1158,41 +1183,58 @@
               }
             );
 
-          if ($scope.vm.systemSettings.db && $scope.vm.systemSettings.db.address) {
+          if ($scope.vm.systemSettings.db &&
+            $scope.vm.systemSettings.db.address) {
             if ($scope.vm.allNodes[$scope.vm.systemSettings.db.address])
-              $scope.vm.allNodes[$scope.vm.systemSettings.db.address].push('db');
+              $scope.vm.allNodes[$scope.vm.systemSettings.db.address].push(
+                'db');
             else
               $scope.vm.allNodes[$scope.vm.systemSettings.db.address] = ['db'];
           }
-          if ($scope.vm.systemSettings.msg && $scope.vm.systemSettings.msg.address) {
+          if ($scope.vm.systemSettings.msg &&
+            $scope.vm.systemSettings.msg.address) {
             if ($scope.vm.allNodes[$scope.vm.systemSettings.msg.address])
-              $scope.vm.allNodes[$scope.vm.systemSettings.msg.address].push('msg');
+              $scope.vm.allNodes[$scope.vm.systemSettings.msg.address].push(
+                'msg');
             else
-              $scope.vm.allNodes[$scope.vm.systemSettings.msg.address] = ['msg'];
+              $scope.vm.allNodes[$scope.vm.systemSettings.msg.address] =
+                ['msg'];
           }
-          if ($scope.vm.systemSettings.state && $scope.vm.systemSettings.state.address) {
+          if ($scope.vm.systemSettings.state &&
+            $scope.vm.systemSettings.state.address) {
             if ($scope.vm.allNodes[$scope.vm.systemSettings.state.address])
-              $scope.vm.allNodes[$scope.vm.systemSettings.state.address].push('state');
+              $scope.vm.allNodes[$scope.vm.systemSettings.state.address].push(
+                'state');
             else
-              $scope.vm.allNodes[$scope.vm.systemSettings.state.address] = ['state'];
+              $scope.vm.allNodes[$scope.vm.systemSettings.state.address] =
+                ['state'];
           }
-          if ($scope.vm.systemSettings.secrets && $scope.vm.systemSettings.secrets.address) {
+          if ($scope.vm.systemSettings.secrets &&
+            $scope.vm.systemSettings.secrets.address) {
             if ($scope.vm.allNodes[$scope.vm.systemSettings.secrets.address])
-              $scope.vm.allNodes[$scope.vm.systemSettings.secrets.address].push('secrets');
+              $scope.vm.allNodes[$scope.vm.systemSettings.secrets.address].push(
+                'secrets');
             else
-              $scope.vm.allNodes[$scope.vm.systemSettings.secrets.address] = ['secrets'];
+              $scope.vm.allNodes[$scope.vm.systemSettings.secrets.address] =
+                ['secrets'];
           }
-          if ($scope.vm.systemSettings.redis && $scope.vm.systemSettings.redis.address) {
+          if ($scope.vm.systemSettings.redis &&
+            $scope.vm.systemSettings.redis.address) {
             if ($scope.vm.allNodes[$scope.vm.systemSettings.redis.address])
-              $scope.vm.allNodes[$scope.vm.systemSettings.redis.address].push('redis');
+              $scope.vm.allNodes[$scope.vm.systemSettings.redis.address].push(
+                'redis');
             else
-              $scope.vm.allNodes[$scope.vm.systemSettings.redis.address] = ['redis'];
+              $scope.vm.allNodes[$scope.vm.systemSettings.redis.address] =
+                ['redis'];
           }
-          if ($scope.vm.systemSettings.master && $scope.vm.systemSettings.master.address) {
+          if ($scope.vm.systemSettings.master &&
+            $scope.vm.systemSettings.master.address) {
             if ($scope.vm.allNodes[$scope.vm.systemSettings.master.address])
-              $scope.vm.allNodes[$scope.vm.systemSettings.master.address].push('master');
+              $scope.vm.allNodes[$scope.vm.systemSettings.master.address].push(
+                'master');
             else
-              $scope.vm.allNodes[$scope.vm.systemSettings.master.address] = ['master'];
+              $scope.vm.allNodes[$scope.vm.systemSettings.master.address] =
+                ['master'];
           }
           _.each($scope.vm.systemSettings.workers,
             function(worker) {
@@ -1274,6 +1316,11 @@
             secure: '',
             hostname: '',
             proxy: ''
+          },
+          ircCreds: {
+            server: '',
+            nick: '',
+            password: ''
           }
         },
         provision:{
@@ -1350,6 +1397,17 @@
       return next();
     }
 
+    function addIRCIntegration() {
+      $scope.vm.installForm.notification.irc.integrations.push(
+        _.clone(systemIntDataDefaults.notification.ircCreds));
+    }
+
+    function deleteIRCIntegration(integration) {
+      $scope.vm.installForm.notification.irc.integrations =
+        _.without($scope.vm.installForm.notification.irc.integrations,
+        integration);
+    }
+
     function getSystemIntegrations(bag, next) {
       if (!$scope.vm.dbInitialized) return next();
       if (!$scope.vm.systemSettings.secrets.isInitialized) return next();
@@ -1363,7 +1421,11 @@
           if (!_.contains(installFormNonSystemInts, systemIntName)) {
             _.each(systemInts,
               function (value, masterName) {
-                if (masterName === 'irc') return;
+                if (masterName === 'irc') {
+                  $scope.vm.installForm.notification.irc.integrations = [];
+                  $scope.vm.addIRCIntegration();
+                  return;
+                }
                 resetSystemIntegration(systemIntName, masterName);
               }
             );
@@ -1374,7 +1436,9 @@
       admiralApiAdapter.getSystemIntegrations('',
         function (err, systemIntegrations) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -1451,6 +1515,21 @@
               var sysIntName = systemIntegration.name;
               var masterName = systemIntegration.masterName;
 
+              if (masterName === 'ircCreds') {
+                var ircIntegrations =
+                  $scope.vm.installForm.notification.irc.integrations;
+                if (ircIntegrations.length === 1 &&
+                  ircIntegrations[0].nick === '' &&
+                  ircIntegrations[0].server === '')
+                  _.extend(ircIntegrations[0], systemIntegration.data);
+                else
+                  ircIntegrations.push(_.extend(
+                    _.clone(systemIntDataDefaults.notification.ircCreds),
+                    systemIntegration.data
+                  ));
+                return;
+              }
+
               if ($scope.vm.installForm[sysIntName] &&
                 $scope.vm.installForm[sysIntName][masterName]) {
                 if (sysIntName !== 'auth') {
@@ -1471,9 +1550,10 @@
                     $scope.vm.installForm.auth[masterName].authorizations,
                     {systemIntegrationId: systemIntegration.id});
                   if (hasAuth)
-                    _.extend(hasAuth.data, systemIntegration.data)
+                    _.extend(hasAuth.data, systemIntegration.data);
                   else
-                    $scope.vm.installForm.auth[masterName].authorizations.push(auth);
+                    $scope.vm.installForm.auth[masterName].
+                      authorizations.push(auth);
 
                   $scope.vm.isAuthInitialized = true;
                 }
@@ -1486,7 +1566,8 @@
                 }
                 if (sysIntName !== 'auth' &&
                   $scope.vm.installForm[sysIntName][masterName].data.url) {
-                  var url = $scope.vm.installForm[sysIntName][masterName].data.url;
+                  var url =
+                    $scope.vm.installForm[sysIntName][masterName].data.url;
                   if (url.split('://').length === 1)
                     url = url.split('://')[0];
                   else
@@ -1494,8 +1575,8 @@
                   $scope.vm.installForm[sysIntName][masterName].fqdn = url;
                   $scope.vm.installForm[sysIntName][masterName].address =
                     url.split(':')[0].split('/')[0];
-                  var protocol =
-                    $scope.vm.installForm[sysIntName][masterName].data.url.split('://')[0];
+                  var protocol = $scope.vm.installForm[sysIntName][masterName].
+                    data.url.split('://')[0];
                   if (protocol)
                     $scope.vm.installForm[sysIntName][masterName].isSecure =
                       protocol === 'https' ? true : false;
@@ -1507,8 +1588,8 @@
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
                       concatWorkerAddress(protocol, '50002');
                   }
-                  if (sysIntName === 'api' || sysIntName === 'internalAPI'
-                    || sysIntName === 'consoleAPI') {
+                  if (sysIntName === 'api' || sysIntName === 'internalAPI' ||
+                    sysIntName === 'consoleAPI') {
                     $scope.vm.installForm[sysIntName][masterName].localAddress =
                       concatWorkerAddress(protocol, '50000');
                   }
@@ -1529,11 +1610,14 @@
                 }
                 if (sysIntName === 'msg') {
                   var defaultAddress = $scope.vm.systemSettings.msg.address;
-                  var amqpUrl = $scope.vm.installForm[sysIntName][masterName].data.amqpUrl;
-                  var amqpUrlRoot = $scope.vm.installForm[sysIntName][masterName].data.amqpUrlRoot;
-                  var amqpUrlAdmin = $scope.vm.installForm[sysIntName][masterName].data.amqpUrlAdmin;
-                  var auth =  $scope.vm.installForm[sysIntName][masterName].data.amqpUrlRoot.
-                    split('@')[0].split('//')[1];
+                  var amqpUrl =
+                    $scope.vm.installForm[sysIntName][masterName].data.amqpUrl;
+                  var amqpUrlRoot = $scope.vm.installForm
+                    [sysIntName][masterName].data.amqpUrlRoot;
+                  var amqpUrlAdmin = $scope.vm.installForm
+                    [sysIntName][masterName].data.amqpUrlAdmin;
+                  var auth = $scope.vm.installForm[sysIntName][masterName].data.
+                    amqpUrlRoot.split('@')[0].split('//')[1];
                   $scope.vm.installForm[sysIntName][masterName].fqdn =
                     amqpUrl.split('@')[1].split('/')[0];
                   $scope.vm.installForm[sysIntName][masterName].rootFqdn =
@@ -1548,12 +1632,14 @@
                     amqpUrl.split('@')[0] + '@' + defaultAddress + ':' +
                     $scope.vm.systemSettings.msg.amqpPort + '/' +
                     amqpUrl.split('@')[1].split('/')[1];
-                  $scope.vm.installForm[sysIntName][masterName].localRootAddress =
-                    amqpUrlRoot.split('@')[0] + '@' + defaultAddress + ':' +
+                  $scope.vm.installForm[sysIntName][masterName].
+                    localRootAddress = amqpUrlRoot.split('@')[0] + '@' +
+                    defaultAddress + ':' +
                     $scope.vm.systemSettings.msg.amqpPort + '/' +
                     amqpUrlRoot.split('@')[1].split('/')[1];
-                  $scope.vm.installForm[sysIntName][masterName].localAdminAddress =
-                    amqpUrlAdmin.split('@')[0] + '@' + defaultAddress + ':' +
+                  $scope.vm.installForm[sysIntName][masterName].
+                    localAdminAddress = amqpUrlAdmin.split('@')[0] + '@' +
+                    defaultAddress + ':' +
                     $scope.vm.systemSettings.msg.adminPort;
                   $scope.vm.installForm[sysIntName][masterName].isSecure =
                     amqpUrl.split('://')[0] === 'amqps' ? true : false;
@@ -1567,7 +1653,8 @@
     }
 
     function concatWorkerAddress(protocol, port) {
-      var masterAddress = protocol + '://' + $scope.vm.systemSettings.master.address + ':' + port;
+      var masterAddress = protocol + '://' +
+        $scope.vm.systemSettings.master.address + ':' + port;
       var workerAddress = '';
       _.each($scope.vm.systemSettings.workers,
         function (worker) {
@@ -1621,7 +1708,7 @@
          url: bag.url
        };
        admiralApiAdapter.validateUrl(bag.systemIntegrationId, validateBody,
-         function (err, res) {
+         function (err) {
            return next(err);
          }
        );
@@ -1653,10 +1740,10 @@
               }
             );
 
-          // don't update these input field's models if in postServices flow as these models
-          // can have new values modified by user which will be refreshed from systemIntegrations
-          // only in postInitFlow that happens after initialize is completed.
-          // so don't try to overwrite user modified values until initFlow is completed
+          // don't update these input fields' models if in postServices as they
+          // can have new values modified by user which will be refreshed from
+          // systemIntegration only in postInitFlow after initialize.
+          // so don't overwrite user modified values until initFlow is complete
           if (!bag.inPostServices) {
             if (service === 'secrets') {
               $scope.vm.initializeForm[service].rootToken =
@@ -1761,7 +1848,8 @@
 
     function resetInstallLocationModal (fromCopy) {
       var old =  fromCopy + '_old';
-      $scope.vm.initializeForm[fromCopy] =  angular.copy($scope.vm.initializeForm[old]);
+      $scope.vm.initializeForm[fromCopy] =
+        angular.copy($scope.vm.initializeForm[old]);
       $scope.vm.copyText = 'Copy';
     }
 
@@ -1884,8 +1972,10 @@
 
       if (sectionName === 'secrets') {
         $scope.vm.secretsModalErrorMsg = '';
-        $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.secrets);
-        if (clickType === 'dropdown' && $scope.vm.initializeForm.secrets.initType === 'admiral') {
+        $scope.vm.initializeForm[old] =
+          angular.copy($scope.vm.initializeForm.secrets);
+        if (clickType === 'dropdown' &&
+          $scope.vm.initializeForm.secrets.initType === 'admiral') {
           //do nothing
         } else {
           $('#secrets-location-modal').modal('show');
@@ -1894,8 +1984,10 @@
 
       if (sectionName === 'msg') {
         $scope.vm.msgModalErrorMsg = '';
-        $scope.vm.initializeForm[old] =  angular.copy($scope.vm.initializeForm.msg);
-        if (clickType === 'dropdown' && $scope.vm.initializeForm.msg.initType === 'admiral') {
+        $scope.vm.initializeForm[old] =
+          angular.copy($scope.vm.initializeForm.msg);
+        if (clickType === 'dropdown' &&
+          $scope.vm.initializeForm.msg.initType === 'admiral') {
           //do nothing
         } else {
           $('#msg-location-modal').modal('show');
@@ -1997,7 +2089,9 @@
       admiralApiAdapter.getMachineKeys(
         function (err, machineKeys) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -2016,7 +2110,9 @@
       admiralApiAdapter.getMasterIntegrations(
         function (err, masterIntegrations) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -2050,7 +2146,9 @@
       admiralApiAdapter.getSystemCodes('',
         function (err, systemCodes) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -2076,7 +2174,9 @@
       admiralApiAdapter.getSystemSettings(
         function (err, systemSettings) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -2138,7 +2238,9 @@
       admiralApiAdapter.getServices('',
         function (err, services) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -2178,7 +2280,9 @@
       admiralApiAdapter.getSystemMachineImages('',
         function (err, systemMachineImages) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -2202,7 +2306,9 @@
       admiralApiAdapter.getRuntimeTemplates(
         function (err, runtimeTemps) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -2218,7 +2324,9 @@
       admiralApiAdapter.getSystemSettings(
         function (err, systemSettings) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
             return next();
           }
 
@@ -2292,9 +2400,11 @@
           installAddons
         ],
         function (err) {
+          /* jshint camelcase:false */
           if (err)
             return popup_horn.error(err);
           popup_horn.success('Successfully applied changes');
+          /* jshint camelcase:true */
         }
       );
     }
@@ -2406,7 +2516,9 @@
             if (err) {
               $interval.cancel(promise);
               $scope.vm.initializing = false;
+              /* jshint camelcase:false */
               return popup_horn.error(err);
+              /* jshint camelcase:true */
             }
 
             var service = $scope.vm.systemSettings[serviceName];
@@ -2900,18 +3012,24 @@
     function addWorker(worker) {
       $timeout(function () {
         if (!worker.name.length) {
+          /* jshint camelcase:false */
           popup_horn.error('A swarm worker should have a valid name');
+          /* jshint camelcase:true */
           return;
         }
 
         if (validateIP(worker.address) === 'has-error') {
+          /* jshint camelcase:false */
           popup_horn.error('A swarm worker should have a valid IP address');
+          /* jshint camelcase:true */
           return;
         }
 
         if (worker.address === $scope.vm.admiralEnv.ADMIRAL_IP) {
+          /* jshint camelcase:false */
           popup_horn.error('The swarm worker cannot have the same IP as the ' +
             'swarm master');
+          /* jshint camelcase:true */
           return;
         }
 
@@ -2922,9 +3040,11 @@
         );
 
         if (nameInUse) {
+          /* jshint camelcase:false */
           popup_horn.error('A swarm worker already exists with that name. ' +
             'Worker names must be unique.'
           );
+          /* jshint camelcase:true */
           return;
         }
 
@@ -2935,9 +3055,11 @@
         );
 
         if (addressInUse) {
+          /* jshint camelcase:false */
           popup_horn.error('A swarm worker already exists with that address. ' +
             'Worker addresses must be unique.'
           );
+          /* jshint camelcase:true */
           return;
         }
 
@@ -3088,7 +3210,9 @@
         ],
         function (err) {
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           else {
             $scope.vm.installForm.systemMachineImages.push(newImage);
             systemMachineImagesById =
@@ -3105,10 +3229,13 @@
       admiralApiAdapter.deleteSystemMachineImage(deletedImage.id,
         function (err) {
           if (err) {
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           } else {
             $scope.vm.installForm.systemMachineImages =
-              _.without($scope.vm.installForm.systemMachineImages, deletedImage);
+              _.without($scope.vm.installForm.systemMachineImages,
+                deletedImage);
             systemMachineImagesById =
               _.groupBy($scope.vm.installForm.systemMachineImages, 'id');
           }
@@ -3136,7 +3263,9 @@
         ],
         function (err) {
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           else {
             _.extend(_.findWhere($scope.vm.installForm.systemMachineImages,
               { id: updatedImage.id }), updatedImage);
@@ -3405,6 +3534,7 @@
       async.series([
           postInitFlow,
           validateInstallForm,
+          validateIRCSystemIntegrations,
           updateSSHKeysSystemIntegration,
           updateAPISystemIntegration,
           updateInternalAPISystemIntegration,
@@ -3420,6 +3550,8 @@
           updateGmailSystemIntegration,
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
+          updateIRCSystemIntegrations,
+          removeIRCSystemIntegrations,
           updateInstallPanelSystemSettings,
           getMasterIntegrations.bind(null, {}),
           updateProvisionSystemIntegration,
@@ -3452,7 +3584,9 @@
           if (err) {
             if (next)
               return next(err);
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           }
 
           if (next)
@@ -3462,15 +3596,17 @@
     }
 
     function saveAndRestart() {
-      $('#save-restart-modal').modal('hide')
+      $('#save-restart-modal').modal('hide');
       async.series([
           save,
           restartServices
         ],
         function (err) {
+          /* jshint camelcase:false */
           if (err)
             return popup_horn.error(err);
           popup_horn.success('Successfully Restarted');
+          /* jshint camelcase:true */
         }
       );
     }
@@ -3512,7 +3648,9 @@
           if (err) {
             if (next)
               return next(err);
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           }
 
           if (next)
@@ -3546,7 +3684,9 @@
           if (err) {
             if (next)
               return next(err);
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           }
 
           // Check if we should show "Install" or "Save" and "Restart Services"
@@ -3577,7 +3717,9 @@
           admiralApiAdapter.putService(service.serviceName, service,
             function (err) {
               if (err)
+                /* jshint camelcase:false */
                 popup_horn.error(err);
+                /* jshint camelcase:true */
               return done();
             }
           );
@@ -3585,7 +3727,9 @@
         function (err) {
           $scope.vm.saving = false;
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           return next();
         }
       );
@@ -3621,7 +3765,9 @@
       admiralApiAdapter.putService('internalAPI', internalAPIService,
         function (err) {
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           return next();
         }
       );
@@ -3642,7 +3788,9 @@
       admiralApiAdapter.putService('consoleAPI', consoleAPIService,
         function (err) {
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           return next();
         }
       );
@@ -3662,7 +3810,9 @@
       admiralApiAdapter.putService('irc', ircService,
         function (err) {
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           return next();
         }
       );
@@ -3679,6 +3829,28 @@
         validationErrors.push(
           'Please provide a valid Shippable UI URL'
         );
+
+      if (!_.isEmpty(validationErrors))
+        return next(validationErrors.join(','));
+      return next();
+    }
+
+    function validateIRCSystemIntegrations(next) {
+      var validationErrors = [];
+
+      if (!_.isEmpty($scope.vm.installForm.notification.irc.integrations)) {
+        var servers = _.compact(_.pluck(
+          $scope.vm.installForm.notification.irc.integrations, 'server'));
+        if (servers.length !== _.uniq(servers).length)
+          validationErrors.push(
+            'Only one IRC nick/password may be specified per IRC server'
+          );
+        if (_.pluck($scope.vm.installForm.notification.irc.integrations,
+          'server').length - servers.length > 1)
+          validationErrors.push(
+            'Only one default IRC nick/password may be specified'
+          );
+      }
 
       if (!_.isEmpty(validationErrors))
         return next(validationErrors.join(','));
@@ -3843,7 +4015,7 @@
                 data: auth.sysInt,
                 systemIntegrationId: auth.systemIntegrationId,
                 masterName: provider.masterName
-              }
+              };
             }
           );
         }
@@ -3976,6 +4148,67 @@
       updateSystemIntegration(bag,
         function (err) {
           return next(err);
+        }
+      );
+    }
+
+    function updateIRCSystemIntegrations(next) {
+      async.eachLimit($scope.vm.installForm.notification.irc.integrations, 10,
+        function (integration, done) {
+          var bag = {
+            name: 'irc' +
+              (integration.server ? '-' + integration.server : ''),
+            masterName: 'ircCreds',
+            data: integration,
+            isEnabled: $scope.vm.installForm.notification.irc.isEnabled
+          };
+
+          updateSystemIntegration(bag,
+            function (err) {
+              return done(err);
+            }
+          );
+        },
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
+    function removeIRCSystemIntegrations(next) {
+      var query = 'masterName=ircCreds';
+      admiralApiAdapter.getSystemIntegrations(query,
+        function (err, systemIntegrations) {
+          if (err)
+            return next(err);
+
+          async.eachLimit(systemIntegrations, 10,
+            function (integration, done) {
+              var currentIntegration = _.findWhere(
+                $scope.vm.installForm.notification.irc.integrations,
+                {server: integration.data.server}
+              );
+
+              if (currentIntegration)
+                return done();
+
+              var bag = {
+                name: integration.name,
+                masterName: $scope.vm.installForm.notification.irc.masterName,
+                data: integration.data,
+                isEnabled: false
+              };
+
+              updateSystemIntegration(bag,
+                function (err) {
+                  return done(err);
+                }
+              );
+            },
+            function (err) {
+              return next(err);
+            }
+          );
         }
       );
     }
@@ -4248,8 +4481,10 @@
           var seriesBag = {
             id: updatedImage.id,
             body: body,
-            accessKey: $scope.vm.installForm.provision.amazonKeys.data.accessKey,
-            secretKey: $scope.vm.installForm.provision.amazonKeys.data.secretKey,
+            accessKey:
+              $scope.vm.installForm.provision.amazonKeys.data.accessKey,
+            secretKey:
+              $scope.vm.installForm.provision.amazonKeys.data.secretKey,
             region: body.region,
             amiId: body.externalId,
             systemMachineImageName: body.name
@@ -4287,8 +4522,10 @@
 
           var seriesBag = {
             body: body,
-            accessKey: $scope.vm.installForm.provision.amazonKeys.data.accessKey,
-            secretKey: $scope.vm.installForm.provision.amazonKeys.data.secretKey,
+            accessKey:
+              $scope.vm.installForm.provision.amazonKeys.data.accessKey,
+            secretKey:
+              $scope.vm.installForm.provision.amazonKeys.data.secretKey,
             region: body.region,
             amiId: body.externalId,
             systemMachineImageName: body.name
@@ -4604,7 +4841,9 @@
       admiralApiAdapter.getAdmiralEnv(
         function (err, admiralEnv) {
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
 
           $scope.vm.selectedService.configs = [];
 
@@ -4628,7 +4867,9 @@
       admiralApiAdapter.getCoreService(service,
         function (err, configs) {
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
 
           $scope.vm.selectedService.configs = [];
 
@@ -4658,7 +4899,9 @@
       admiralApiAdapter.getServiceLogs(service,
         function (err, logs) {
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
 
           $scope.vm.selectedService.logs = logs;
 
@@ -4676,7 +4919,9 @@
       admiralApiAdapter.getServiceLogs(service,
         function (err, logs) {
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
 
           $scope.vm.selectedService.logs = logs;
 
@@ -4729,7 +4974,9 @@
       admiralApiAdapter.getEULAText(
         function (err, eula) {
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
           $scope.vm.eulaText = eula.join('\n');
 
           $('#eulaModal').modal('show');
@@ -4742,7 +4989,9 @@
       admiralApiAdapter.getServiceLogs($scope.vm.selectedService.serviceName,
         function (err, logs) {
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
 
           $scope.vm.selectedService.logs = logs;
         }
@@ -4759,12 +5008,16 @@
       }
       var bag = {};
       async.series([
+          validateIRCSystemIntegrations,
           updateMasterIntegrations,
+          updateIrcCredsMasterIntegration,
           updateAddonsPanelSystemSettings,
           updateAddonsPanelSystemIntegrations,
           updateGmailSystemIntegration,
           updateMailgunSystemIntegration,
           updateSMTPSystemIntegration,
+          updateIRCSystemIntegrations,
+          removeIRCSystemIntegrations,
           updateIrcService,
           updateFilestoreSystemIntegration,
           getEnabledServices.bind(null, bag),
@@ -4778,7 +5031,9 @@
         function (err) {
           $scope.vm.installingAddons = false;
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
           getMasterIntegrations({}, function () {});
           if (next) return next();
         }
@@ -4828,6 +5083,28 @@
       );
     }
 
+    function updateIrcCredsMasterIntegration(next) {
+      var masterInt = _.find($scope.vm.masterIntegrations,
+        function (masterInt) {
+          return masterInt.name === 'ircCreds';
+        }
+      );
+
+      if (!masterInt || masterInt.isEnabled ===
+        $scope.vm.installForm.notification.irc.isEnabled)
+        return next();
+
+      var update = {
+        isEnabled: $scope.vm.installForm.notification.irc.isEnabled
+      };
+
+      admiralApiAdapter.putMasterIntegration(masterInt.id, update,
+        function (err) {
+          return next(err);
+        }
+      );
+    }
+
     function updateAddonsPanelSystemSettings(next) {
       if (!$scope.vm.systemSettingsId) return next();
 
@@ -4863,7 +5140,9 @@
         },
         function (err) {
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           return next();
         }
       );
@@ -4973,7 +5252,9 @@
         function (err) {
           $scope.vm.installForm.auth[masterName].isAddingAuth = false;
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
 
           if (bag.masterIntegration && bag.masterIntegration.isEnabled &&
             !$scope.vm.installForm.scm[SCMMasterInt.name].isEnabled)
@@ -5001,7 +5282,7 @@
       );
     }
 
-    function deleteAuthencation(masterName, systemIntegrationId) {
+    function deleteAuthentication(masterName, systemIntegrationId) {
       // while deleting an authentication method,
       // do not enable/disable SCM masterIntegration
       $scope.vm.installForm.auth[masterName].isDeletingAuth = true;
@@ -5018,7 +5299,9 @@
         function (err) {
           $scope.vm.installForm.auth[masterName].isDeletingAuth = false;
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
 
           if (bag.systemIntegration)
             $scope.vm.installForm.auth[masterName].authorizations =
@@ -5053,7 +5336,9 @@
         function (err) {
           $scope.vm.installForm.scm[scmMasterName].disableToggle = false;
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
         }
       );
     }
@@ -5071,11 +5356,13 @@
           if (err) {
             $scope.vm.installForm.systemSettings.autoSync =
               !$scope.vm.installForm.systemSettings.autoSync;
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
           }
         }
       );
-    };
+    }
 
     function addSuperUser() {
       $scope.vm.superUsers.addingSuperUser = true;
@@ -5088,7 +5375,9 @@
           $scope.vm.superUsers.addingSuperUser = false;
           $scope.vm.superUsers.newSuperUser = '';
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
         }
       );
     }
@@ -5107,7 +5396,9 @@
         function (err) {
           $scope.vm.superUsers.deletingSuperUser = false;
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
         }
       );
     }
@@ -5131,7 +5422,9 @@
       admiralApiAdapter.getSuperUsers(
         function (err, superUsers) {
           if (err)
+            /* jshint camelcase:false */
             popup_horn.error(err);
+            /* jshint camelcase:true */
           $scope.vm.superUsers.superUsers = superUsers;
           return next();
         }
@@ -5152,7 +5445,9 @@
       admiralApiAdapter.postLogout({},
         function (err) {
           if (err)
+            /* jshint camelcase:false */
             return popup_horn.error(err);
+            /* jshint camelcase:true */
 
           e.preventDefault();
           $state.go('login2', $state.params);
