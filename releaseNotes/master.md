@@ -29,7 +29,7 @@ ${REL_VER_DATE}
 
 ### Features
 
-- **simple title**: brief description
+- **Configurable IRC nick**: The IRC nick (and optional password) can be configured for individual servers in the Admiral UI on the add-ons tab. A default IRC nick may also be set in the same location by leaving the server field blank.
 
 ### Fixes
 
