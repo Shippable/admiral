@@ -32,7 +32,7 @@ ${REL_VER_DATE}
 
 ### Fixes
 
-- **simple title**: brief description
+- **Fixes issue of not loading jobs dashboard when project name has multiple slashes**: Job's dashboard was not loading for the job's whose project name has `/` in it. This is now fixed.
 
 ## History
 
