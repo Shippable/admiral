@@ -6,7 +6,7 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **Added `size` column for subscription node pools table**: In subscription node pools list page, for node pools table, we have added column `size` which tells what size the node pool is for. More information is available in the [subscription node pools documentation](http://docs.shippable.com/platform/management/subscription/node-pools/).
+- **Added `size` column for subscription node pools table**: The [Subscription Node Pools](http://docs.shippable.com/platform/management/subscription/node-pools/) panel in a subscription's "Node Pools" page now shows you a "Size" column if you have any On Demand node pools, making it easier to identify how your node pools have been configured.
 
 ## Fixes
 
