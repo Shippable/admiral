@@ -12,6 +12,7 @@ ${REL_VER_DATE}
 
 - **Fixes styling of `h3` elements in changelog**: `h3` headings are now formatted correctly in the changelog.
 - **Fixes meta tags in Shippable documentation**: The HTML meta tags for page description in the [Shippable documentation](http://docs.shippable.com/) were malformed. These tags have been fixed.
+- **Fixes webhook integrations can't be created as subscription owned integrations**: A user in shippable can create a webhook integration that is owned by a subscription and use it to trigger webhooks in CI workflow.
 
 ## Custom Nodes
 
