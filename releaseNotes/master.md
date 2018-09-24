@@ -14,9 +14,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **Fixes styling of `h3` elements in changelog**: `h3` headings are now formatted correctly in the changelog.
 
 ## Custom Nodes
 
