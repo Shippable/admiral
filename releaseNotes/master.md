@@ -15,6 +15,7 @@ ${REL_VER_DATE}
 ## Fixes
 
 - **Fixes styling of `h3` elements in changelog**: `h3` headings are now formatted correctly in the changelog.
+- **Fixes meta tags in Shippable documentation**: The HTML meta tags for page description in the [Shippable documentation](http://docs.shippable.com/) were malformed. These tags have been fixed.
 
 ## Custom Nodes
 
