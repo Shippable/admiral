@@ -16,7 +16,7 @@ ${REL_VER_DATE}
 - **Fixes styling of `h3` elements in changelog**: `h3` headings are now formatted correctly in the changelog.
 - **Fixes meta tags in Shippable documentation**: The HTML meta tags for page description in the [Shippable documentation](http://docs.shippable.com/) were malformed. These tags have been fixed.
 - **Fixes webhook integrations can't be created as org integrations**: It was not possible to create [Webhook integrations](http://docs.shippable.com/platform/integration/webhook/) as [org integrations](http://docs.shippable.com/platform/tutorial/integration/subscription-integrations/#creating-an-org-integration-recommended-for-teams). This has now been enabled.
-
+- **Fixes deleting a deployed service**: [Deleting a deployed service](http://docs.shippable.com/deploy/deleting-a-service/) on the orchestration platform like Azure, Kubernetes or Google Cloud using Shippable Assembly Lines was not working as expected. This has now been fixed.
 ## Custom Nodes
 
 - **simple title**: brief description
