@@ -10,6 +10,7 @@ ${REL_VER_DATE}
 - **Drydock update**: Updating all Shippable official images with latest
   stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
   for [v6.9.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v694/) for details.
+- **Registered Shippable IRC nicks**: Shippable is now registered on `chat.freenode.net` and `irc.freenode.net`. Open a [support issue](https://github.com/Shippable/support/issues/new) if you would like Shippable to use a registered nick to send IRC messages to another server.
 
 ## Fixes
 
@@ -29,7 +30,7 @@ ${REL_VER_DATE}
 
 ### Features
 
-- **simple title**: brief description
+- **Configurable IRC nick**: The IRC nick (and optional password) can be configured for individual servers in the Admiral UI on the add-ons tab. A default IRC nick may also be set in the same location by leaving the server field blank.
 
 ### Fixes
 
