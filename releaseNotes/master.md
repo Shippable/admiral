@@ -7,6 +7,9 @@ ${REL_VER_DATE}
 ## Features
 
 - **Added `size` column for subscription node pools table**: The [Subscription Node Pools](http://docs.shippable.com/platform/management/subscription/node-pools/) panel in a subscription's "Node Pools" page now shows you a "Size" column if you have any On Demand node pools, making it easier to identify how your node pools have been configured.
+- **Drydock update**: Updating all Shippable official images with latest
+  stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
+  for [v6.9.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v694/) for details.
 
 ## Fixes
 
