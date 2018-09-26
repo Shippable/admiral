@@ -17,6 +17,8 @@ ${REL_VER_DATE}
 - **Fixes meta tags in Shippable documentation**: The HTML meta tags for page description in the [Shippable documentation](http://docs.shippable.com/) were malformed. These tags have been fixed.
 - **Fixes webhook integrations can't be created as org integrations**: It was not possible to create [Webhook integrations](http://docs.shippable.com/platform/integration/webhook/) as [org integrations](http://docs.shippable.com/platform/tutorial/integration/subscription-integrations/#creating-an-org-integration-recommended-for-teams). This has now been enabled.
 - **Fixes deleting a deployed service**: [Deleting deployed services](http://docs.shippable.com/deploy/deleting-a-service/) on an orchestration platform using Shippable Assembly Lines would fail when using an integration in "master" mode. This has now been fixed.
+- **Fixes alignment of subscription SCM names in sidebar menu**: We have added ellipses to subscription SCM names in sidebar menu which was misaligned if the SCM name was long.
+
 ## Custom Nodes
 
 - **simple title**: brief description
