@@ -32,6 +32,7 @@ ${REL_VER_DATE}
 ### Features
 
 - **Configurable IRC nick**: The IRC nick (and optional password) can be configured for individual servers in the Admiral UI on the add-ons tab. A default IRC nick may also be set in the same location by leaving the server field blank.
+- **Templates support for runCI**: Now templates support is available for runCI jobs also. A user can define templates in their `shippable.yml` and use them in all of their CI sections in that YML. Also, the user can define a central shippable.templates.yml file and keep all their templates globally. Along with this user can also import external template files defined in some other public repo using its raw file path, and then use templates defined in this file in your jobs by mentioning these external URLs in shippable.templates.yml. [See the docs](http://docs.shippable.com/ci/yml-structure/) for more details.
 
 ### Fixes
 
