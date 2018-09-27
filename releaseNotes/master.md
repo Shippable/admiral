@@ -21,12 +21,6 @@ ${REL_VER_DATE}
 - **Fixes deleting a deployed service**: [Deleting deployed services](http://docs.shippable.com/deploy/deleting-a-service/) on an orchestration platform using Shippable Assembly Lines would fail when using an integration in "master" mode. This has now been fixed.
 - **Fixes overlap of names in sidebar menu**: Long SCM names would cause an overlap of text in the sidebar menu. This has been fixed with an ellipsis if the text is too long.
 
-## Custom Nodes
-
-- **simple title**: brief description
-  - additional details or
-  - actions required
-
 ## Shippable Server
 
 ### Features
@@ -34,11 +28,6 @@ ${REL_VER_DATE}
 - **Configurable IRC nick**: The IRC nick (and optional password) can be configured for individual servers in the Admiral UI on the add-ons tab. A default IRC nick may also be set in the same location by leaving the server field blank.
 
 - **Tag and Comment build support for Gerrit**: Gerrit projects and gitRepo resources can now be configured to trigger builds on tag and comment events. See [gitRepo](http://docs.shippable.com/platform/workflow/resource/gitrepo/#latestSyntax) and [Project Settings](http://docs.shippable.com/platform/management/project/settings/#webhookConfig) documentation for more details.
-
-
-### Fixes
-
-- **simple title**: brief description
 
 ## History
 
