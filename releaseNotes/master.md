@@ -33,6 +33,9 @@ ${REL_VER_DATE}
 
 - **Configurable IRC nick**: The IRC nick (and optional password) can be configured for individual servers in the Admiral UI on the add-ons tab. A default IRC nick may also be set in the same location by leaving the server field blank.
 
+- **Tag and Comment build support for Gerrit**: Gerrit projects and gitRepo resources can now be configured to trigger builds on tag and comment events. See [gitRepo](http://docs.shippable.com/platform/workflow/resource/gitrepo/#latestSyntax) and [Project Settings](http://docs.shippable.com/platform/management/project/settings/#webhookConfig) documentation for more details.
+
+
 ### Fixes
 
 - **simple title**: brief description
