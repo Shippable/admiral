@@ -14,9 +14,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **Fixes latest status update of newly added project**: Adding a syncRepo of a newly added project was not updating the latest status in subscription dashboard. This is now fixed.
 
 ## Custom Nodes
 
