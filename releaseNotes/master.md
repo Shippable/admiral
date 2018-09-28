@@ -14,10 +14,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
-
+- **Searching for grouped resources on the SPOG**: Resources that appear in a group on the modern SPOG will now be found.
 ## Custom Nodes
 
 - **simple title**: brief description
