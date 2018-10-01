@@ -16,6 +16,7 @@ ${REL_VER_DATE}
 
 - **Searching for grouped resources on the SPOG**: Resources that appear in a group on the modern SPOG will now be found.
 - **Fixes latest status update**: The latest status for jobs from newly synced repositories would not get dynamically updated in the UI until the page is refreshed. This is now fixed.
+- **Fixes subscription dashboard loading**: Subscription dashboard was not loading when a syncRepo is added immediately after syncing subscription in UI until the page is refreshed. This is now fixed.
 
 ## Custom Nodes
 
