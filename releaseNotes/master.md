@@ -14,6 +14,8 @@ ${REL_VER_DATE}
 
 ## Fixes
 
+- **Searching for grouped resources on the SPOG**: Resources that appear in a group on the modern SPOG will now be found.
+
 - **Fixes latest status update of newly added project**: Adding a syncRepo of a newly added project was not updating the latest status in subscription dashboard. This is now fixed.
 
 ## Custom Nodes
