@@ -35,6 +35,7 @@ do $$
         "master" TEXT,
         "workers" TEXT,
         "blockedEmails" TEXT,
+        "allowedEmails" TEXT,
         "minimumSCMAccountAgeInDays" INT,
         "lastIntercomProjectsScanAt" timestamp with time zone,
         "lastIntercomRSyncScanAt" timestamp with time zone,
@@ -75,6 +76,10 @@ do $$
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'blockedEmails') then
       alter table "systemSettings" add column "blockedEmails" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'allowedEmails') then
+      alter table "systemSettings" add column "allowedEmails" TEXT;
     end if;
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'minimumSCMAccountAgeInDays') then
