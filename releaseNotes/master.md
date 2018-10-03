@@ -17,6 +17,7 @@ ${REL_VER_DATE}
 - **Searching for grouped resources on the SPOG**: Resources that appear in a group on the modern SPOG will now be found.
 - **Fixes latest status update**: The latest status for jobs from newly synced repositories would not get dynamically updated in the UI until the page is refreshed. This is now fixed.
 - **Fixes subscription dashboard bugs related to syncing removed repositories**: The subscriptions dashboard page would fail to initialize correctly when an account sync completes after one or more repositories are removed from the SCM. This bug has been fixed.
+- **Fixes soft-deleted resources not being shown in the "Deleted" tab**: Resources that were soft-deleted by removing them from yml were not being displayed in the "Deleted" tab on the subscriptions dashboard. This is now fixed.
 
 ## Custom Nodes
 
