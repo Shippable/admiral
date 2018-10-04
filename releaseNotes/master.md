@@ -28,6 +28,7 @@ ${REL_VER_DATE}
 ## Shippable Server
 
 - **Using runSh inputs without state storage**: A `runSh` job can now be used as an input to another `runSh` or CI job in installations without state storage.
+- **Fixes Duration in Admin / Monitor / Jobs page**: The `Duration` column in jobs table of admin monitor jobs page was showing incorrect value. This is fixed now.
 
 ### Features
 
