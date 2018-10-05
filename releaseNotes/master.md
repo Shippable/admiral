@@ -6,7 +6,7 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **Added Subscripton State panel for subscription dashboard**: The parallel job count and private job limit status for subscripton can be seen in Subscripton State panel in subscription dashboard.
+- **Added Subscripton State panel on subscription dashboard**: The parallel job count and private job limit for a subscripton is now visible under the breadcrumb on the subscription dashboard.
 
 ## Fixes
 
