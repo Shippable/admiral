@@ -6,11 +6,7 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **simple title**: brief description. [link to docs](#).
-  - itemized
-  - list
-  - for details
-  - if necessary
+- **Added Subscripton State panel for subscription dashboard**: The parallel job count and private job limit status for subscripton can be seen in Subscripton State panel in subscription dashboard.
 
 ## Fixes
 
