@@ -8,6 +8,7 @@ ${REL_VER_DATE}
 
 - **Added Subscription State panel on subscription dashboard**: The parallel job count and private job limit for a subscription is now visible under the breadcrumb on the subscription dashboard.
 - **Amazon ECS Daemon Deployments**: Managed deploy jobs can now deploy daemon services to Amazon ECS by setting `schedulingStrategy` to `DAEMON` in a  `dockerOptions` input.
+- **Added app hibernation for accounts with more than 2000 resources**: For Accounts with more than 2000 resources, when the app is moved to the background in the browser, it will hibernate after 15 minutes to avoid browser slowness/freezes on return, consequently the app will refresh the view on returning.
 
 ## Fixes
 
