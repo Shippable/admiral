@@ -19,6 +19,7 @@ ${REL_VER_DATE}
 - **Better background tab handling for users with large assembly lines**: Users with active assembly lines containing a large number of resources would sometimes notice their browser freeze when the Shippable tab is moved to the background and reactivated after a long time. For these users, the Shippable app will now move to an inactive state after spending 15 minutes in the background. The view will be refreshed when the tab is reactivated.
 - **Better handling of circular dependencies in YML builder**: The YML builder would fail silently with a console error if the imported YML contained any circular dependencies. It now shows a proper error.
   - [Support#4584](https://github.com/Shippable/support/issues/4584)
+- **Improve validation on creating subscription integration**: The add subscription integration page previously did not show any error if you click on save without filling the required fields and failed with just a console error. This has been fixed by disabling save button when required fields are not filled.
 
 ## Custom Nodes
 
