@@ -20,7 +20,7 @@ ${REL_VER_DATE}
 - **Better handling of circular dependencies in YML builder**: The YML builder would fail silently with a console error if the imported YML contained any circular dependencies. It now shows a proper error.
   - [Support#4584](https://github.com/Shippable/support/issues/4584)
 - **Improve validation on creating subscription integration**: The add subscription integration page previously did not show any error if you click on save without filling the required fields and failed with just a console error. This has been fixed by disabling save button when required fields are not filled.
-- **Fixes custom dashboard bugs related filtering of jobs within job tab**: The custom dashboard page previously was showing all jobs in jobs tab for latest status and then filtering it and updating the veiw. This has been fixed, now user will see filtered jobs in job tab on-load.
+- **Fixes filtering of jobs in custom dashboard**: On refreshing custom dashboard page, the view was behaving abruptly showing all the jobs in the first go, however the jobs were filtered correctly after few seconds. This bug has been fixed.
 
 ## Custom Nodes
 
