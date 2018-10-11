@@ -40,6 +40,7 @@ ${REL_VER_DATE}
 
 - **Using runSh inputs without state storage**: A `runSh` job can now be used as an input to another `runSh` or CI job in installations without state storage.
 - **Fixes Duration in Admin / Monitor / Jobs page**: The `Duration` column in jobs table of admin monitor jobs page was showing incorrect value. This is fixed now.
+- **Gerrit specific ENVs and Verified label support**: Gerrit specific environment variables are available for Gerrit change events. Verified label is now supported for changes. See [gitRepo](http://docs.shippable.com/platform/workflow/resource/gitrepo/) and [CI ENVs](http://docs.shippable.com/ci/env-vars/) documentation for more details related to Gerrit specific ENVs.
 
 ## History
 
