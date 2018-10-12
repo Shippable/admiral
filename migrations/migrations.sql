@@ -5642,5 +5642,10 @@ do $$
     if exists (select 1 from pg_constraint where conname = 'buildJobConsoles_buildJobId_fkey') then
       alter table "buildJobConsoles" drop constraint "buildJobConsoles_buildJobId_fkey";
     end if;
+
+    -- Remove timeoutMS column from runs
+    if exists (select 1 from information_schema.columns where table_name = 'runs' and column_name = 'timeoutMS') then
+      alter table "runs" drop column "timeoutMS";
+    end if;
   end
 $$;
