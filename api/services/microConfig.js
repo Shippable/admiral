@@ -136,8 +136,12 @@ function _getAPISystemIntegration(bag, next) {
         systemIntegrations, {name: 'api'});
       var serviceAPIIntegration = _.findWhere(
         systemIntegrations, {name: bag.config.apiUrlIntegration});
+      var consoleAPIIntegration = _.findWhere(
+        systemIntegrations, {name: 'consoleAPI'});
 
       bag.apiSystemIntegration = serviceAPIIntegration || defaultAPIIntegration;
+      bag.consoleApiSystemIntegration = consoleAPIIntegration ||
+        defaultAPIIntegration;
 
       return next();
     }
@@ -214,6 +218,7 @@ function _generateImage(bag, next) {
 }
 
 function _generateEnvs(bag, next) {
+  /* jshint maxcomplexity: 11 */
   var who = bag.who + '|' + _generateEnvs.name;
   logger.verbose(who, 'Inside');
 
@@ -223,6 +228,14 @@ function _generateEnvs(bag, next) {
   if (!apiUrl)
     return next(
       new ActErr(who, ActErr.OperationFailed, 'No apiUrl found.')
+    );
+
+  var consoleApiUrl = bag.consoleApiSystemIntegration.data &&
+    bag.consoleApiSystemIntegration.data.url;
+
+  if (!consoleApiUrl)
+    return next(
+      new ActErr(who, ActErr.OperationFailed, 'No consoleApiUrl found.')
     );
 
   var amqpUrlRoot = bag.msgSystemIntegration.data &&
@@ -247,6 +260,8 @@ function _generateEnvs(bag, next) {
     envs, 'SHIPPABLE_API_TOKEN', bag.serviceUserToken);
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_API_URL', apiUrl);
+  envs = util.format('%s -e %s=%s',
+    envs, 'SHIPPABLE_CONSOLE_API_URL', consoleApiUrl);
   envs = util.format('%s -e %s=%s',
     envs, 'SHIPPABLE_ROOT_AMQP_URL', amqpUrlRoot);
   envs = util.format('%s -e %s=%s',
