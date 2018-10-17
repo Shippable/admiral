@@ -32,7 +32,7 @@ ${REL_VER_DATE}
 
 ### Fixes
 
-- **simple title**: brief description
+- **Core Shippable services use internal API**: Previously some of the core services were connected to the console API. This has been fixed to use the internal API.
 
 ## History
 
