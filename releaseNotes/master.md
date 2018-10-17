@@ -32,7 +32,7 @@ ${REL_VER_DATE}
 
 ### Fixes
 
-- **simple title**: brief description
+- **Core Shippable services use internal API**: In installations that had configured Public, Internal and Console APIs, some of the core services were incorrectly connecting to the Console API. This has been fixed and all core services now connect to the Internal API when available.
 
 ## History
 
