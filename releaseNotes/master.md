@@ -6,11 +6,7 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **simple title**: brief description. [link to docs](#).
-  - itemized
-  - list
-  - for details
-  - if necessary
+- **Adhere to stricter validation github api changes**: The GitHub API will apply [stricter validation rules from 1 Nov 2018](https://developer.github.com/changes/2018-09-25-stricter-validation-coming-soon-in-the-rest-api/). The payload of the "create webhook" API call that we make to GitHub when a CI project is enabled or gitRepo and syncRepo resources are added has been updated to comply with the new validation requirements. No changes were required on the other API calls that we make to GitHub.
 
 ## Fixes
 
