@@ -10,7 +10,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **CI Debug build fails if first Node Pool in the subscription Node Pools page is not an on-demand Node Pool**: Debug builds were failing for subscriptions which had BYON Node Pool as the first Node Pool in the Subscription -> Node Pools page. This has been fixed to run the debug builds on the correct Node Pool which the CI build is supposed to run on, irrespective of which Node Pool is first in the Subscription -> Node Pools page.
+- **CI debug build fails if the first node pool in the Subscription -> Node Pools page is not an on-demand node pool**: Debug builds were failing for subscriptions which had BYON Node Pool as the first Node Pool in the Subscription -> Node Pools page. This has been fixed. Debug builds will now pick the correct node pool.
 
 ## Custom Nodes
 
