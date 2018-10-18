@@ -11,6 +11,7 @@ ${REL_VER_DATE}
 ## Fixes
 
 - **CI debug build fails if the first node pool in the Subscription -> Node Pools page is not an on-demand node pool**: Debug builds were failing for subscriptions which had BYON Node Pool as the first Node Pool in the Subscription -> Node Pools page. This has been fixed. Debug builds will now pick the correct node pool.
+- **Fixes view switch in sidebar-menu**: Sidebar menu would sometimes update view incorrectly for the views section. This bug has been fixed.
 
 ## Custom Nodes
 
