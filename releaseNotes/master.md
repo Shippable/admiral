@@ -13,7 +13,7 @@ ${REL_VER_DATE}
 - **CI debug build fails if the first node pool in the Subscription -> Node Pools page is not an on-demand node pool**: Debug builds were failing for subscriptions which had BYON Node Pool as the first Node Pool in the Subscription -> Node Pools page. This has been fixed. Debug builds will now pick the correct node pool.
 - **Fixes "Views" list collapsing in the sidebar**: The "Views" list in the sidebar would sometimes collapse when navigating to a custom view. This bug has been fixed.
 - **Fixes CI to allow special characters in docker registry passwords**: CI jobs with [docker registry integration](http://docs.shippable.com/platform/integration/dockerRegistryLogin/) would fail if certain characters were present in the docker registry password, as reported by [support/4589](https://github.com/Shippable/support/issues/4589). This bug has been fixed.
-- **Fixes error message shown while switch tab in the Subscription dashboard and Custom dashboard**: Switching tab in Subscription dashboard and Custom dashboard would sometimes shows error message. This bug has been fixed.
+- **Fixes intermittent error while switching tabs in the Subscription and Custom dashboard**: An error message about missing view objects would sometimes be displayed when switching tabs in the subscription and custom dashboards. This bug has been fixed.
 
 ## Custom Nodes
 
