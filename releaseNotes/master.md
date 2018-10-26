@@ -8,6 +8,9 @@ ${REL_VER_DATE}
 
 - **Adhere to stricter validation requirements on GitHub api calls**: The GitHub API will apply [stricter validation rules from 1 Nov 2018](https://developer.github.com/changes/2018-09-25-stricter-validation-coming-soon-in-the-rest-api/). The payload of the "create webhook" API call that we make to GitHub when a CI project is enabled or gitRepo and syncRepo resources are added has been updated to comply with the new validation requirements. No changes were required on the other API calls that we make to GitHub.
 - **Bitbucket sync updates**: We've made some modifications to how we synchronize information from Bitbucket to prepare for the removal of version 1 of the Bitbucket Cloud REST API.  No noticeable changes are expected for Bitbucket users on Shippable.
+- **Drydock update**: Updating all Shippable official images with latest
+  stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
+  for [v6.10.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v6104/) for details.
 
 ## Fixes
 
