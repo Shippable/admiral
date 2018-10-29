@@ -21,12 +21,6 @@ ${REL_VER_DATE}
 - **Fixes intermittent error while switching tabs in the Subscription and Custom dashboard**: An error message about missing view objects would sometimes be displayed when switching tabs in the subscription and custom dashboards. This bug has been fixed.
 - **Node pools not present in runtime couldn't be used in the matrix section**: In CI builds, if the node pool was not present in the runtime section of the yml, it couldn't be used in the matrix include section to add jobs. This has been fixed. Matrix jobs can now be added to node pools which are not present in the runtime section.
 
-## Custom Nodes
-
-- **simple title**: brief description
-  - additional details or
-  - actions required
-
 ## Shippable Server
 
 ### Features
