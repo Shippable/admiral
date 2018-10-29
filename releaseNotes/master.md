@@ -19,7 +19,7 @@ ${REL_VER_DATE}
 - **Fixes "Views" list collapsing in the sidebar**: The "Views" list in the sidebar would sometimes collapse when navigating to a custom view. This bug has been fixed.
 - **Fixes CI to allow special characters in docker registry passwords**: CI jobs with [docker registry integration](http://docs.shippable.com/platform/integration/dockerRegistryLogin/) would fail if certain characters were present in the docker registry password, as reported by [support/4589](https://github.com/Shippable/support/issues/4589). This bug has been fixed.
 - **Fixes intermittent error while switching tabs in the Subscription and Custom dashboard**: An error message about missing view objects would sometimes be displayed when switching tabs in the subscription and custom dashboards. This bug has been fixed.
-- **Node pools not present in runtime coudln't be used in the matrix section**: In CI builds, if the node pool was not present in the runtime section of the yml, it couldn't be used in the matrix include section to add jobs. This has been fixed. Matrix jobs can now be added to node pools which are not present in the runtime section.
+- **Node pools not present in runtime couldn't be used in the matrix section**: In CI builds, if the node pool was not present in the runtime section of the yml, it couldn't be used in the matrix include section to add jobs. This has been fixed. Matrix jobs can now be added to node pools which are not present in the runtime section.
 
 ## Custom Nodes
 
