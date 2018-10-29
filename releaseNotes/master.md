@@ -31,7 +31,7 @@ ${REL_VER_DATE}
 
 ### Features
 
-- **simple title**: brief description
+- **Enhanced Gerrit voting configuration**: Default Gerrit voting can now be disabled. CI projects and runSh jobs can be configured to use custom labels and values via YML. See [runSh](http://docs.shippable.com/platform/workflow/job/runsh/) and [CI](http://docs.shippable.com/ci/yml-structure/) documentation for more details related to Gerrit voting configuration.
 
 ### Fixes
 
