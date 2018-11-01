@@ -6,11 +6,7 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **simple title**: brief description. [link to docs](#).
-  - itemized
-  - list
-  - for details
-  - if necessary
+- **Bitbucket OAuth 2.0**: We're switching to OAuth 2.0 for Bitbucket Cloud. When Bitbucket users next log into Shippable, they will be prompted to approve the same scopes already approved for OAuth 1.0. Webhooks will continue to work before and after an account next logs in.
 
 ## Fixes
 
@@ -28,7 +24,7 @@ ${REL_VER_DATE}
 
 ### Features
 
-- **simple title**: brief description
+- **Bitbucket Cloud OAuth 2.0**: Bitbucket Cloud as a login option will use now OAuth 2.0. Users will be prompted to re-approve the same scopes as before when they next log in to Shippable using Bitbucket Cloud. Please make sure your Bitbucket consumer has the correct callback URL (available in Admiral) before upgrading.
 
 ### Fixes
 
