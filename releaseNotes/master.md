@@ -10,9 +10,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **Multi-manifest deployment order**: Multiple manifests in a deploy job will now be deployed in the order the inputs are listed.
 
 ## Custom Nodes
 
