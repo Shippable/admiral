@@ -12,6 +12,7 @@ ${REL_VER_DATE}
 
 - **Multi-manifest deployment order**: Multiple manifests in a deploy job will now be deployed in the order the inputs are listed.
 - **Job state files on failure**: In certain cases, new files were saved as part of the state when the job failed. The state saved for a job will now correctly match the previous successful job's state.
+- **Rerun failed only versions**: Matrix CI jobs that are rerun with the "failed only" option will no longer create new version objects for the successful jobs that are copied forward.
 
 ## Custom Nodes
 
