@@ -28,7 +28,7 @@ ${REL_VER_DATE}
 
 ### Fixes
 
-- **simple title**: brief description
+- **Refreshing admin build analytics displayed additional dates**: The refresh button on the admin build analytics page functioned as both reset and load more. It will now only refresh.
 
 ## History
 
