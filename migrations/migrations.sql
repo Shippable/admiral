@@ -5698,5 +5698,15 @@ do $$
     if exists (select 1 from information_schema.columns where table_name = 'runs' and column_name = 'timeoutMS') then
       alter table "runs" drop column "timeoutMS";
     end if;
+
+    -- Add privateSubnetId column to systemMachineImages table
+    if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'privateSubnetId') then
+      alter table "systemMachineImages" add column "privateSubnetId" VARCHAR(80);
+    end if;
+
+    -- Add publicNatIp column to systemMachineImages table
+    if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'publicNatIp') then
+      alter table "systemMachineImages" add column "publicNatIp" VARCHAR(80);
+    end if;
   end
 $$;
