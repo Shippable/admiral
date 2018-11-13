@@ -2551,6 +2551,8 @@
                                     <th>Key pair name</th>
                                     <th>Security group</th>
                                     <th>Subnet ID</th>
+                                    <th>Private Subnet ID</th>
+                                    <th>Public NAT IP</th>
                                     <th>SSH User</th>
                                     <th>SSH Port</th>
                                     <th>Action</th>
@@ -2566,6 +2568,8 @@
                                     <td>{{smi.keyName}}</td>
                                     <td>{{smi.securityGroup}}</td>
                                     <td>{{smi.subnetId}}</td>
+                                    <td>{{smi.privateSubnetId}}</td>
+                                    <td>{{smi.publicNatIp}}</td>
                                     <td>{{smi.sshUser}}</td>
                                     <td>{{smi.sshPort}}</td>
                                     <td>
@@ -4663,6 +4667,20 @@
             <div class="col-md-9">
               <input type="text" class="form-control" name="SubnetId"
               ng-model="vm.selectedSMI.subnetId" ng-disabled="vm.installing || vm.saving"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">Private Subnet ID</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" name="PrivateSubnetId"
+              ng-model="vm.selectedSMI.privateSubnetId" ng-disabled="vm.installing || vm.saving"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">Public NAT IP</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" name="PublicNatIp"
+              ng-model="vm.selectedSMI.publicNatIp" ng-disabled="vm.installing || vm.saving"/>
             </div>
           </div>
           <div class="form-group">
