@@ -3104,6 +3104,8 @@
         runShImage: 'dummy/dummy:dummy',
         securityGroup: '',
         subnetId: '',
+        privateSubnetId: '',
+        publicNatIp: '',
         drydockTag: 'dummy',
         drydockFamily: 'dummy',
         sshUser: 'ubuntu',
@@ -3195,6 +3197,10 @@
       var body = _.clone(newImage);
       if (body.subnetId === '')
         body.subnetId = null;
+      if (body.privateSubnetId === '')
+        body.privateSubnetId = null;
+      if (body.publicNatIp === '')
+        body.publicNatIp = null;
 
       var bag = {
         body: body,
@@ -3247,6 +3253,10 @@
       var body = _.clone(updatedImage);
       if (body.subnetId === '')
         body.subnetId = null;
+      if (body.privateSubnetId === '')
+        body.privateSubnetId = null;
+      if (body.publicNatIp === '')
+        body.publicNatIp = null;
 
       var bag = {
         id: updatedImage.id,

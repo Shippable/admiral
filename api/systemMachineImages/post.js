@@ -121,11 +121,12 @@ function _post(bag, next) {
     '("id", "name", "description", "externalId", "provider", "isAvailable", ' +
     '"isDefault", "region", "keyName", "runShImage", "securityGroup", ' +
     '"subnetId", "drydockTag", "drydockFamily", "sshUser", "sshPort", '+
-    '"archTypeCode", "runtimeTemplateId", "createdBy", "updatedBy", ' +
-    '"createdAt", "updatedAt") values (\'%s\', \'%s\', \'%s\', \'%s\', ' +
-    '\'%s\', %s, %s, \'%s\', \'%s\', \'%s\', \'%s\', %s, \'%s\', \'%s\', ' +
-    '\'%s\', %s, %s, %s, \'54188262bc4d591ba438d62a\', '+
-    '\'54188262bc4d591ba438d62a\', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
+    '"archTypeCode", "runtimeTemplateId", "privateSubnetId", "publicNatIp", ' +
+    '"createdBy", "updatedBy", "createdAt", "updatedAt") values (\'%s\', ' +
+    '\'%s\', \'%s\', \'%s\', \'%s\', %s, %s, \'%s\', \'%s\', \'%s\', ' +
+    '\'%s\', %s, \'%s\', \'%s\', \'%s\', %s, %s, %s, %s, %s, ' +
+    '\'54188262bc4d591ba438d62a\', \'54188262bc4d591ba438d62a\', ' +
+    'CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
     bag.systemMachineImageId, bag.reqBody.name, bag.reqBody.description,
     bag.reqBody.externalId, bag.reqBody.provider, bag.reqBody.isAvailable,
     bag.reqBody.isDefault, bag.reqBody.region, bag.reqBody.keyName,
@@ -135,7 +136,11 @@ function _post(bag, next) {
     bag.reqBody.drydockTag, bag.reqBody.drydockFamily, bag.reqBody.sshUser,
     bag.reqBody.sshPort, bag.reqBody.archTypeCode,
     _.has(bag.reqBody, 'runtimeTemplateId') ? bag.reqBody.runtimeTemplateId :
-    null);
+    null,
+    (!_.has(bag.reqBody, 'privateSubnetId') || bag.reqBody.privateSubnetId === null) ?
+      'NULL' : util.format('\'%s\'', bag.reqBody.privateSubnetId),
+    (!_.has(bag.reqBody, 'publicNatIp') || bag.reqBody.publicNatIp === null) ?
+      'NULL' : util.format('\'%s\'', bag.reqBody.publicNatIp));
 
   global.config.client.query(insertStatement,
     function (err) {

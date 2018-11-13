@@ -147,6 +147,20 @@ function _put(bag, next) {
     updates.push(
       util.format('"drydockFamily"=\'%s\'', bag.reqBody.drydockFamily));
 
+  if (_.has(bag.reqBody, 'privateSubnetId')) {
+    if (bag.reqBody.privateSubnetId === null)
+      updates.push('"privateSubnetId"=NULL');
+    else
+      updates.push(util.format('"privateSubnetId"=\'%s\'', bag.reqBody.privateSubnetId));
+  }
+
+  if (_.has(bag.reqBody, 'publicNatIp')) {
+    if (bag.reqBody.publicNatIp === null)
+      updates.push('"publicNatIp"=NULL');
+    else
+      updates.push(util.format('"publicNatIp"=\'%s\'', bag.reqBody.publicNatIp));
+  }
+
   updates = updates.join(', ');
 
   var query = util.format('UPDATE "systemMachineImages" SET %s WHERE id=\'%s\'',
