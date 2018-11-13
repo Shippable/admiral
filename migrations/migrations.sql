@@ -5708,5 +5708,11 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'systemMachineImages' and column_name = 'publicNatIp') then
       alter table "systemMachineImages" add column "publicNatIp" VARCHAR(80);
     end if;
+
+    -- Add isNatEnabled column to clusters table
+    if not exists (select 1 from information_schema.columns where table_name = 'clusters' and column_name = 'isNatEnabled') then
+      alter table "clusters" add column "isNatEnabled" BOOLEAN;
+    end if;
+
   end
 $$;
