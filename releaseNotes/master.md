@@ -15,6 +15,7 @@ ${REL_VER_DATE}
 - **Rerun failed only versions**: Matrix CI jobs that are rerun with the "failed only" option will no longer create new version objects for the successful jobs that are copied forward.
 - **Fix docker version in Machine Images**: The docker version got incorrectly upgraded to 18.03 in all GCE [Machine Images](http://docs.shippable.com/platform/runtime/machine-image/ami-overview/). This has been fixed. Now, the Machine Images have the correct version of docker installed.
 - **Retry python setup_ve in runCI jobs**: Sometimes, the setup_ve section in python jobs fail due to network errors. We have added a shippable_retry for python's setup_ve section so that this section retries in case of errors.
+- **CI services stopped in `build_always`**: Stop commands were run for services in CI jobs in both `build_on_success` or `build_on_failure` and `build_always`. Those commands will now only run in `build_always`.
 
 ## Custom Nodes
 
