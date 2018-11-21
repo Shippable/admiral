@@ -17,6 +17,7 @@ ${REL_VER_DATE}
 - **Retry python setup_ve in runCI jobs**: Sometimes, the setup_ve section in python jobs fail due to network errors. We have added a shippable_retry for python's setup_ve section so that this section retries in case of errors.
 - **CI services stopped in `build_always`**: Stop commands were run for services in CI jobs in both `build_on_success` or `build_on_failure` and `build_always`. Those commands will now only run in `build_always`.
 - **gitRepo resources not updated by webhooks**: Some `gitRepo` resources with a `sourceName` that does not exactly match the repository name, for example a lowercase instead of capital letter, will now be updated for webhooks received from the source provider when the repository has been previously identified by `rSync`.
+- **apt-get not working in pre_ci**: Builds running `apt-get` commands in the `pre_ci` step would fail with errors related to the apt repository not being updated correctly. The problem was traced back to the `/tmp` having incorrect permissions. The permissions have been fixed. Now, `apt-get` commands can be run in the `pre_ci` section.
 
 ## Custom Nodes
 
