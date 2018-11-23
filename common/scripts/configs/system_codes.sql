@@ -825,5 +825,30 @@ do $$
 
     delete from "systemCodes" where "code" = 505 and "name" = 'showNotBuilt' and "group" = 'viewObjectType';
 
+    if not exists (select 1 from "systemCodes" where code = 410) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (410, 'statusViewXAxisTitle', 'viewObjectType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-08', '2018-03-08');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 411) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (411, 'statusViewYAxisTitle', 'viewObjectType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-08', '2018-03-08');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 412) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (412, 'statusViewFilter', 'viewObjectType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-08', '2018-03-08');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 413) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (413, 'lastStatusView', 'viewObjectType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-03-08', '2018-03-08');
+    end if;
+
+    if not exists (select 1 from "systemCodes" where code = 507) then
+      insert into "systemCodes" ("code", "name", "group", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (507, 'statusView', 'viewType', '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-06-01', '2016-06-01');
+    end if;
+
   end
 $$;
