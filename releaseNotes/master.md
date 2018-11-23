@@ -7,6 +7,7 @@ ${REL_VER_DATE}
 ## Features
 
 - **Bitbucket OAuth 2.0**: We're switching to OAuth 2.0 for Bitbucket Cloud. When Bitbucket users next log into Shippable, they will be prompted to approve the same scopes already approved for OAuth 1.0. Webhooks will continue to work before and after an account next logs in.
+- **Static IP to whitelist traffic from on-demand nodes**:  Knowing the IP addresses of the build machines Shippable uses can be helpful when you need them to whitelist specific IP ranges so that build nodes can freely talk to machines/tools within your VPC or network. You can use static IP in your subscription by creating a node pool with Static IP enabled or enabling Static IP in existing node pools. [Read More](http://docs.shippable.com/platform/management/subscription/node-pools/#using-static-ip-to-whitelist-traffic-from-on-demand-nodes).
 
 ## Fixes
 
