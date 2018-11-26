@@ -6,19 +6,17 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **Bitbucket OAuth 2.0**: We're switching to OAuth 2.0 for Bitbucket Cloud. When Bitbucket users next log into Shippable, they will be prompted to approve the same scopes already approved for OAuth 1.0. Webhooks will continue to work before and after an account next logs in.
-- **Static IP to whitelist traffic from on-demand nodes**:  Knowing the IP addresses of the build machines Shippable uses can be helpful when you need them to whitelist specific IP ranges so that build nodes can freely talk to machines/tools within your VPC or network. You can use static IP in your subscription by creating a node pool with Static IP enabled or enabling Static IP in existing node pools. [Read More](http://docs.shippable.com/platform/management/subscription/node-pools/#using-static-ip-to-whitelist-traffic-from-on-demand-nodes).
+- **simple title**: brief description. [link to docs](#).
+  - itemized
+  - list
+  - for details
+  - if necessary
 
 ## Fixes
 
-- **Multi-manifest deployment order**: Multiple manifests in a deploy job will now be deployed in the order the inputs are listed.
-- **Job state files on failure**: In certain cases, new files were saved as part of the state when the job failed. The state saved for a job will now correctly match the previous successful job's state.
-- **Rerun failed only versions**: Matrix CI jobs that are rerun with the "failed only" option will no longer create new version objects for the successful jobs that are copied forward.
-- **Fix docker version in Machine Images**: The docker version got incorrectly upgraded to 18.03 in all GCE [Machine Images](http://docs.shippable.com/platform/runtime/machine-image/ami-overview/). This has been fixed. Now, the Machine Images have the correct version of docker installed.
-- **Retry python setup_ve in runCI jobs**: Sometimes, the setup_ve section in python jobs fail due to network errors. We have added a shippable_retry for python's setup_ve section so that this section retries in case of errors.
-- **CI services stopped in `build_always`**: Stop commands were run for services in CI jobs in both `build_on_success` or `build_on_failure` and `build_always`. Those commands will now only run in `build_always`.
-- **gitRepo resources not updated by webhooks**: Some `gitRepo` resources with a `sourceName` that does not exactly match the repository name, for example a lowercase instead of capital letter, will now be updated for webhooks received from the source provider when the repository has been previously identified by `rSync`.
-- **apt-get not working in pre_ci**: Builds running `apt-get` commands in the `pre_ci` step would fail with errors related to the apt repository not being updated correctly. The problem was traced back to the `/tmp` having incorrect permissions. The permissions have been fixed. Now, `apt-get` commands can be run in the `pre_ci` section.
+- **simple title**: brief description
+  - actions required
+  - or additional details
 
 ## Custom Nodes
 
@@ -30,11 +28,11 @@ ${REL_VER_DATE}
 
 ### Features
 
-- **Bitbucket Cloud OAuth 2.0**: Bitbucket Cloud as a login option will use now OAuth 2.0. Users will be prompted to re-approve the same scopes as before when they next log in to Shippable using Bitbucket Cloud. Please make sure your Bitbucket consumer has the correct callback URL (available in Admiral) before upgrading.
+- **simple title**: brief description
 
 ### Fixes
 
-- **Refreshing admin build analytics displayed additional dates**: The refresh button on the admin build analytics page functioned as both reset and load more. It will now only refresh.
+- **simple title**: brief description
 
 ## History
 
