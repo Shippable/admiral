@@ -26,7 +26,6 @@
     "grunt-contrib-watch": "1.0.0",
     "js-yaml": "3.6.1",
     "method-override": "2.3.6",
-    "mimelib": "0.2.19",
     "moment": "2.14.1",
     "mongoose": "4.5.5",
     "node-uuid": "1.4.7",
