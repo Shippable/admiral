@@ -11,9 +11,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **Fixes shipctl jdk to setup java environment correctly**: Java builds using oraclejdk8 on CentOS 7 image were failing and is fixed by setting the correct JDK path for java in shipctl. ([support#4603](https://github.com/Shippable/support/issues/4603), [support#4613](https://github.com/Shippable/support/issues/4613))
 
 ## Custom Nodes
 
