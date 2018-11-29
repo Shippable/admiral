@@ -28,7 +28,7 @@ ${REL_VER_DATE}
 
 ### Fixes
 
-- **Fixes errors when super user is trying to visit Gerrit subscripton/projects with slashes in name**: Super user was hitting 404 when he is trying to visit Gerrit subscription/projects having slashes in their names using a link that works for another user. This issue has been fixed.
+- **Fixes errors when super user visits Gerrit subscriptions or projects with slashes in name**: Super users would see a 404 page when they try to visit Gerrit subscriptions or projects with slashes in the name. This issue has been fixed.
 
 ## History
 
