@@ -5761,5 +5761,14 @@ do $$
       alter table "clusters" add column "isNatEnabled" BOOLEAN;
     end if;
 
+    -- Removes jobId foreign key from jobCoverageReports
+    if exists (select 1 from pg_constraint where conname = 'jobCoverageReports_jobId_fkey') then
+      alter table "jobCoverageReports" drop constraint "jobCoverageReports_jobId_fkey";
+    end if;
+
+    -- Removes jobId foreign key from jobTestReports
+    if exists (select 1 from pg_constraint where conname = 'jobTestReports_jobId_fkey') then
+      alter table "jobTestReports" drop constraint "jobTestReports_jobId_fkey";
+    end if;
   end
 $$;
