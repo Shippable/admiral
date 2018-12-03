@@ -13,7 +13,7 @@ ${REL_VER_DATE}
 ## Fixes
 
 - **Fixes shipctl jdk to setup java environment correctly**: Java builds using oraclejdk8 on CentOS 7 image were failing and is fixed by setting the correct JDK path for java in shipctl. ([support#4603](https://github.com/Shippable/support/issues/4603), [support#4613](https://github.com/Shippable/support/issues/4613))
-- **Removing pause/resume actions from project dashboard action column**: Project dashboard was having pause and resume actions in action column for branches in grid-view, which can results in accidentally pause the entire project. This has been remove now.
+- **Removing pause/resume actions from project dashboard**: The project dashboard used to show "pause" and "resume" buttons against each branch. This button, however, would apply to the project as a whole and not for an individual branch. This has been removed. The ability to pause and resume a project is still available in the project settings page.
 
 ## Custom Nodes
 
