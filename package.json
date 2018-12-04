@@ -81,7 +81,10 @@
       "respondWithError",
       "config",
       "$",
-      "window"
+      "window",
+      "angular",
+      "async",
+      "document"
     ]
   }
 }
