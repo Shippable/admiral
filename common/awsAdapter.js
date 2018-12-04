@@ -11,8 +11,10 @@ var S3 = {};
 
 function Adapter(accessKeyId, secretKey, region, sessionToken) {
   this.config = {};
+  /* jshint camelcase: false */
   this.aws_access_key_id = accessKeyId;
   this.aws_secret_access_key = secretKey;
+  /* jshint camelcase: true */
   this.region = region || 'us-east-1';
   this.sessionToken = sessionToken;
   this.apiVersions = '2015-02-01';

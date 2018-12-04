@@ -209,11 +209,11 @@ function _generateSystemIntegrationData(bag) {
     amqpUrlAdmin: httpAddress,
     amqpDefaultExchange: 'shippableEx',
     rootQueueList: 'core.charon|versions.trigger|core.nf|nf.email|' +
-      'nf.hipchat|nf.irc|nf.slack|nf.webhook|nf.jira|core.braintree|core.certgen|' +
-      'core.hubspotSync|core.marshaller|marshaller.ec2|core.sync|' +
-      'job.request|job.trigger|cluster.init|steps.deploy|steps.manifest|' +
-      'steps.provision|steps.rSync|steps.release|core.logup|www.signals|' +
-      'core.segment|core.intercom|marshaller.gce'
+      'nf.hipchat|nf.irc|nf.slack|nf.webhook|nf.jira|core.braintree|' +
+      'core.certgen|core.hubspotSync|core.marshaller|marshaller.ec2|' +
+      'core.sync|job.request|job.trigger|cluster.init|steps.deploy|' +
+      'steps.manifest|steps.provision|steps.rSync|steps.release|core.logup|' +
+      'www.signals|core.segment|core.intercom|marshaller.gce'
   };
 
   return data;

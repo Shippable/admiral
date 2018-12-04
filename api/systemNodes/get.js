@@ -46,7 +46,8 @@ function _constructQuery(bag, next) {
   var queries = [];
 
   if (_.has(bag.reqQuery, 'systemClusterId'))
-    queries.push(util.format('"systemClusterId"=\'%s\'', bag.reqQuery.systemClusterId));
+    queries.push(util.format('"systemClusterId"=\'%s\'',
+      bag.reqQuery.systemClusterId));
 
   if (queries.length)
     query = query + ' WHERE ' + queries.join(' AND ');

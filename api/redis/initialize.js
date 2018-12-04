@@ -240,6 +240,7 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
+  /* jshint camelcase: false */
   bag.scriptEnvs = {
     'ADMIRAL_IP': global.config.admiralIP,
     'SSH_USER': global.config.sshUser,
@@ -260,6 +261,7 @@ function _generateInitializeEnvs(bag, next) {
     'OPERATING_SYSTEM': bag.operatingSystem,
     'DEV_MODE': bag.devMode
   };
+  /* jshint camelcase: true */
 
   return next();
 }

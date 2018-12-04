@@ -4,7 +4,6 @@ var self = get;
 module.exports = self;
 
 var async = require('async');
-var _ = require('underscore');
 
 function get(req, res) {
   var bag = {

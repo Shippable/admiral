@@ -4,7 +4,6 @@ var self = validateBaseUrl;
 module.exports = self;
 
 var async = require('async');
-var _ = require('underscore');
 var BBSAdapter = require('../publicAdapter.js');
 
 function validateBaseUrl(url, providerName, callback) {
@@ -57,7 +56,7 @@ function _getRepos(bag, next) {
   logger.debug(who, 'Inside');
 
   bag.bitbucketServerAdapter.getBBSRepos(
-    function (err, res) {
+    function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
