@@ -137,7 +137,8 @@ function _post(bag, next) {
     bag.reqBody.sshPort, bag.reqBody.archTypeCode,
     _.has(bag.reqBody, 'runtimeTemplateId') ? bag.reqBody.runtimeTemplateId :
     null,
-    (!_.has(bag.reqBody, 'privateSubnetId') || bag.reqBody.privateSubnetId === null) ?
+    (!_.has(bag.reqBody, 'privateSubnetId') ||
+      bag.reqBody.privateSubnetId === null) ?
       'NULL' : util.format('\'%s\'', bag.reqBody.privateSubnetId),
     (!_.has(bag.reqBody, 'publicNatIp') || bag.reqBody.publicNatIp === null) ?
       'NULL' : util.format('\'%s\'', bag.reqBody.publicNatIp));

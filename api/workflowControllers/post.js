@@ -5,7 +5,6 @@ module.exports = self;
 
 var async = require('async');
 var _ = require('underscore');
-var mongoose = require('mongoose');
 
 function post(req, res) {
   var bag = {

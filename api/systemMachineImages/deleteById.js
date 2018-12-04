@@ -4,7 +4,6 @@ var self = deleteById;
 module.exports = self;
 
 var async = require('async');
-var _ = require('underscore');
 
 function deleteById(req, res) {
   var bag = {
