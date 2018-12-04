@@ -79,7 +79,8 @@
         return API.post('/api/systemClusters', body, callback);
       },
       deleteSystemClusterById: function (systemClusterId, callback) {
-        return API.delete('/api/systemClusters/' + systemClusterId, {}, callback);
+        return API.delete('/api/systemClusters/' + systemClusterId, {},
+          callback);
       },
       // System Machine Image Routes
       getSystemMachineImages: function (query, callback) {
@@ -125,7 +126,8 @@
         return API.post('/api/systemIntegrations', body, callback);
       },
       validateUrl: function (systemIntegrationId, body, callback) {
-        return API.post('/api/systemIntegrations/' + systemIntegrationId + '/validate', body, callback);
+        return API.post('/api/systemIntegrations/' + systemIntegrationId +
+          '/validate', body, callback);
       },
       putSystemIntegration: function (systemIntegrationId, body, callback) {
         return API.put('/api/systemIntegrations/' +

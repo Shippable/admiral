@@ -84,7 +84,8 @@
       "window",
       "angular",
       "async",
-      "document"
+      "document",
+      "admiral"
     ]
   }
 }
