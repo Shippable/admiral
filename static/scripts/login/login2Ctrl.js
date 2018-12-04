@@ -18,9 +18,10 @@
     }
   ]);
 
-
+  /* jshint camelcase: false */
   function loginCtrl2($scope, $stateParams, $q, $state,
     admiralApiAdapter, popup_horn) {
+  /* jshint camelcase: true */
     var loginCtrl2Defer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -44,7 +45,9 @@
           $scope.vm.isLoaded = true;
           if (err) {
             loginCtrl2Defer.reject(err);
+            /* jshint camelcase: false */
             return popup_horn.error(err);
+            /* jshint camelcase: false */
           }
 
           loginCtrl2Defer.resolve();
@@ -71,8 +74,10 @@
           loginToken: loginToken
         },
         function (err) {
+          /* jshint camelcase: false */
           if (err)
             return popup_horn.error(err);
+          /* jshint camelcase: true */
 
           e.preventDefault();
           $scope._r.loginToken = loginToken;
