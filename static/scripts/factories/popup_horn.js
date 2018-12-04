@@ -1,9 +1,11 @@
 (function () {
   'use strict';
 
+  /* jshint camelcase: false */
   admiral.factory('popup_horn', ['notify', popup_horn]);
 
   function popup_horn(notify) {
+  /* jshint camelcase: true */
     notify.config({
       maximumOpen: 1,
       startTop: 75
