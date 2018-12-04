@@ -85,6 +85,7 @@ function _createExpressApp(bag, next) {
 }
 
 function _initializeConfig(bag, next) {
+  /* jshint maxcomplexity: 16 */
   var who = bag.who + '|' + _initializeConfig.name;
 
   var configErrors = [];

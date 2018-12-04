@@ -273,6 +273,7 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
+  /* jshint camelcase: false */
   bag.scriptEnvs = {
     'RUNTIME_DIR': global.config.runtimeDir,
     'CONFIG_DIR': global.config.configDir,
@@ -300,6 +301,7 @@ function _generateInitializeEnvs(bag, next) {
     'OPERATING_SYSTEM': bag.operatingSystem,
     'DEV_MODE': bag.devMode
   };
+  /* jshint camelcase: true */
 
   return next();
 }

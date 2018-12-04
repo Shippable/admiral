@@ -371,6 +371,7 @@ function _generateInitializeEnvs(bag, next) {
   var who = bag.who + '|' + _generateInitializeEnvs.name;
   logger.verbose(who, 'Inside');
 
+  /* jshint camelcase: false */
   bag.scriptEnvs = {
     'ADMIRAL_IP': global.config.admiralIP,
     'RUNTIME_DIR': global.config.runtimeDir,
@@ -398,6 +399,7 @@ function _generateInitializeEnvs(bag, next) {
     'OPERATING_SYSTEM': bag.operatingSystem,
     'INSTALLED_DOCKER_VERSION': bag.installedDockerVersion
   };
+  /* jshint camelcase: true */
 
   return next();
 }

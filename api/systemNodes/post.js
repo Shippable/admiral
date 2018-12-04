@@ -58,57 +58,6 @@ function _checkInputParams(bag, next) {
   return next();
 }
 
-function _getDefaultArchCode(bag, next) {
-  var who = bag.who + '|' + _getDefaultArchCode.name;
-  logger.verbose(who, 'Inside');
-
-  var query = '';
-  bag.apiAdapter.getSystemCodes(query,
-    function (err, systemCodes) {
-      if (err)
-        return next(who, ActErr.OperationFailed,
-          'Failed to get systemCodes for archTypes:' + util.inspect(err));
-
-      if (_.isEmpty(systemCodes))
-        return next(who, ActErr.DBEntityNotFound, 'No system codes found.');
-
-      var archCode = _.findWhere(systemCodes, {group: 'archType',
-        name: 'x86_64'});
-      if (_.isEmpty(archCode))
-        return next(who, ActErr.DBEntityNotFound, 'No arch code found for ' +
-        'group = archType and name = x86_64');
-
-      bag.x86ArchCode = archCode.code;
-      return next();
-    }
-  );
-}
-
-function _getDefaultSystemMachineImage(bag, next) {
-  var who = bag.who + '|' + _getDefaultSystemMachineImage.name;
-  logger.verbose(who, 'Inside');
-
-  var query = util.format('isDefault=true&archTypeCodes=%s', bag.x86ArchCode);
-  bag.apiAdapter.getSystemMachineImages(query,
-    function (err, systemMachineImages) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to get systemMachineImages : ' + util.inspect(err))
-        );
-
-      if (_.isEmpty(systemMachineImages))
-        return next(
-          new ActErr(who, ActErr.DBEntityNotFound, 'default ' +
-          'systemMachineImage not found')
-        );
-
-      bag.execImage = _.first(systemMachineImages).runShImage;
-      return next();
-    }
-  );
-}
-
 function _getSystemCluster(bag, next) {
   var who = bag.who + '|' + _getSystemCluster.name;
   logger.verbose(who, 'Inside');

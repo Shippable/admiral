@@ -56,7 +56,8 @@ module.exports = function (grunt) {
           'static/bower_components/angular-moment/angular-moment.min.js',
           'static/bower_components/angular-sanitize/angular-sanitize.min.js',
           'static/bower_components/angular-cookies/angular-cookies.min.js',
-          'static/bower_components/angular-ui-router/release/angular-ui-router.min.js',
+          'static/bower_components/angular-ui-router/release/' +
+            'angular-ui-router.min.js',
           // switchery
           'static/bower_components/switchery/dist/switchery.min.js',
           'static/bower_components/ng-switchery/src/ng-switchery.js',

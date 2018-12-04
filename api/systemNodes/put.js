@@ -4,7 +4,6 @@ var self = put;
 module.exports = self;
 
 var async = require('async');
-var mongoose = require('mongoose');
 var _ = require('underscore');
 
 function put(req, res) {

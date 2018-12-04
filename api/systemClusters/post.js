@@ -111,7 +111,7 @@ function _updateDefaultSystemCluster(bag, next) {
     'where id =\'%s\'', bag.defaultSystemCluster.id);
 
   global.config.client.query(query,
-    function (err, systemCluster) {
+    function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.DBOperationFailed,

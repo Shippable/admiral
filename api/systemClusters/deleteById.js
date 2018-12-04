@@ -122,7 +122,8 @@ function _getSystemNodes(bag, next) {
       if (processingSystemNode)
         return next(
           new ActErr(who, ActErr.ShippableAdapter400,
-            'System Cluster cannot be deleted as one or more nodes are processing.')
+            'System Cluster cannot be deleted as one or more nodes are ' +
+            'processing.')
         );
 
       return next();
@@ -168,8 +169,8 @@ function _deleteById(bag, next) {
       if (err)
         return next(
           new ActErr(who, ActErr.DBOperationFailed,
-            util.format('Failed to delete systemCluster with id: %s with error:' +
-            ' %s', bag.systemCluster.id, util.inspect(err)))
+            util.format('Failed to delete systemCluster with id: %s with ' +
+            'error: %s', bag.systemCluster.id, util.inspect(err)))
         );
 
       if (systemCluster.rowCount === 1)
