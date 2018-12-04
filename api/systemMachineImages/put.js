@@ -127,7 +127,8 @@ function _put(bag, next) {
     updates.push(util.format('"sshPort"=%s', bag.reqBody.sshPort));
 
   if (_.has(bag.reqBody, 'runtimeTemplateId'))
-    updates.push(util.format('"runtimeTemplateId"=%s', bag.reqBody.runtimeTemplateId));
+    updates.push(util.format('"runtimeTemplateId"=%s',
+      bag.reqBody.runtimeTemplateId));
 
   if (_.has(bag.reqBody, 'securityGroup'))
     updates.push(
@@ -151,14 +152,16 @@ function _put(bag, next) {
     if (bag.reqBody.privateSubnetId === null)
       updates.push('"privateSubnetId"=NULL');
     else
-      updates.push(util.format('"privateSubnetId"=\'%s\'', bag.reqBody.privateSubnetId));
+      updates.push(util.format('"privateSubnetId"=\'%s\'',
+        bag.reqBody.privateSubnetId));
   }
 
   if (_.has(bag.reqBody, 'publicNatIp')) {
     if (bag.reqBody.publicNatIp === null)
       updates.push('"publicNatIp"=NULL');
     else
-      updates.push(util.format('"publicNatIp"=\'%s\'', bag.reqBody.publicNatIp));
+      updates.push(util.format('"publicNatIp"=\'%s\'',
+        bag.reqBody.publicNatIp));
   }
 
   updates = updates.join(', ');

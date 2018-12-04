@@ -74,7 +74,6 @@ function _getById(bag, next) {
   var who = bag.who + '|' + _getById.name;
   logger.verbose(who, 'Inside');
 
-  var query = "systemIntegrationId=" + bag.systemIntegrationId;
   bag.apiAdapter.getSystemIntegrations('',
     function (err, systemIntegrations) {
       if (err)
@@ -84,7 +83,7 @@ function _getById(bag, next) {
             bag.systemIntegrationId)
         );
       var sysInt = _.findWhere(systemIntegrations,
-      {id: bag.systemIntegrationId})
+      {id: bag.systemIntegrationId});
       if (!sysInt)
         return next(
           new ActErr(who, ActErr.DataNotFound,

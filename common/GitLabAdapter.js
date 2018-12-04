@@ -5,8 +5,6 @@ module.exports = self;
 var async = require('async');
 var request = require('request');
 
-var querystring = require('querystring');
-
 function GitLabAdapter(token, baseUrl, username, password) {
   this.username = username;
   this.password = password;

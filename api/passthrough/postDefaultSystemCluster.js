@@ -396,7 +396,7 @@ function _moveSubscriptionsToGrisham(bag, next) {
         subscriptionId: subId
       };
       bag.shippableAPIAdapter.moveToGrisham(params,
-        function (err, subscription) {
+        function (err) {
           if (err)
             return nextSubId(
               new ActErr(who, err.id,

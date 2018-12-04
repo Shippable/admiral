@@ -58,7 +58,7 @@ function _performCall(bag, next) {
   async.retry(retryOpts,
     function (callback) {
       request(bag.opts,
-        function (err, res, body) {
+        function (err, res) {
           var interval = Date.now() - bag.startedAt;
           logger.debug(who, 'Shippable request ' + bag.opts.method + ' ' +
             bag.opts.url + ' took ' + interval +

@@ -182,8 +182,8 @@ function _validateMasterIntegrationFields(bag, next) {
       if (!_.findWhere(bag.masterIntegrationFields, {name: key})) {
         return next(
           new ActErr(who, ActErr.OperationFailed,
-            util.format('Can not save %s as there is no masterIntegrationField ' +
-              'named %s for masterIntegration id: %s.',
+            util.format('Can not save %s as there is no ' +
+              'masterIntegrationField named %s for masterIntegration id: %s.',
               key, key, bag.systemIntegration.masterIntegrationId))
         );
       }
@@ -257,7 +257,8 @@ function _postProvider(bag, next) {
         return next(
           new ActErr(who, err.id,
             'postProvider for masterIntegrationId: ' +
-            bag.systemIntegration.masterIntegrationId + ' returned an error: ', err)
+            bag.systemIntegration.masterIntegrationId + ' returned an error: ',
+            err)
         );
       bag.provider = newProvider;
       return next();

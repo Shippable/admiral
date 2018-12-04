@@ -4,7 +4,6 @@ var self = validateBaseUrl;
 module.exports = self;
 
 var async = require('async');
-var _ = require('underscore');
 var GithubAdapter = require('../publicAdapter.js');
 
 function validateBaseUrl(url, providerName, callback) {
@@ -63,7 +62,7 @@ function _verifyBaseUrl(bag, next) {
   logger.debug(who, 'Inside');
 
   bag.githubAdapter.verifyUrl(
-    function (err, res) {
+    function (err) {
       if (err)
         return next(
           new ActErr(who, ActErr.OperationFailed,
