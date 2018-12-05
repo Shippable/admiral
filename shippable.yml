@@ -1,3 +1,13 @@
+language: node_js
+
+node_js:
+  - 8.11.3
+
+build:
+  ci:
+    - npm install -g jshint
+    - jshint .
+
 resources:
   - name: admiral_sh_repo
     type: gitRepo
@@ -29,6 +39,8 @@ jobs:
       nodePool: u14_cache_x86
     steps:
       - IN: admiral_sh_repo
+        switch: off
+      - IN: admiral_runCI
       - IN: u14microbase_dd_img
       - IN: shipit_bits_access_cli
         switch: off
@@ -65,6 +77,8 @@ jobs:
     dependencyMode: strict
     steps:
       - IN: admiral_sh_repo
+        switch: off
+      - IN: admiral_runCI
       - IN: u16microbase_dd_img
       - IN: shipit_bits_access_cli
         switch: off
@@ -101,6 +115,8 @@ jobs:
     dependencyMode: strict
     steps:
       - IN: admiral_sh_repo
+        switch: off
+      - IN: admiral_runCI
       - IN: shipit_bits_access_cli
         switch: off
       - TASK:
