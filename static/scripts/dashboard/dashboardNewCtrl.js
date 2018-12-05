@@ -12,9 +12,11 @@
 
   function dashboardNewCtrl($scope, $stateParams, $q, $state,
     /* jshint camelcase:false */
+    /* jshint maxparams: 9 */
     $interval, $timeout, $location, admiralApiAdapter, popup_horn) {
     /* jshint camelcase:true */
-    /* jshint maxstatements:175 */
+    /* jshint maxparams: 8 */
+    /* jshint maxstatements: false */
     var dashboardNewCtrlDefer = $q.defer();
 
     $scope._r.showCrumb = false;
@@ -1123,6 +1125,7 @@
     function getSystemSettings(bag, next) {
       admiralApiAdapter.getSystemSettings(
         function (err, systemSettings) {
+          /* jshint maxcomplexity: 18 */
           if (err)
             return next(err);
 
@@ -1472,6 +1475,8 @@
           var internalAPIIntegration =
             _.findWhere(systemIntegrations, {name: 'internalAPI'});
 
+          var protocol;
+
           // If internalAPIIntegration is not present copy
           //over the values of the default api to it
           if (!internalAPIIntegration && apiIntegration) {
@@ -1479,7 +1484,7 @@
               apiIntegration.data.url;
             $scope.vm.installForm.internalAPI.url.fqdn =
               apiIntegration.data.url.split('://')[1];
-            var protocol = apiIntegration.data.url.split('://')[0];
+            protocol = apiIntegration.data.url.split('://')[0];
             $scope.vm.installForm.internalAPI.url.isSecure =
               protocol === 'https' ? true : false;
             $scope.vm.installForm.internalAPI.url.localAddress =
@@ -1496,7 +1501,7 @@
               apiIntegration.data.url;
             $scope.vm.installForm.consoleAPI.url.fqdn =
               apiIntegration.data.url.split('://')[1];
-            var protocol = apiIntegration.data.url.split('://')[0];
+            protocol = apiIntegration.data.url.split('://')[0];
             $scope.vm.installForm.consoleAPI.url.isSecure =
               protocol === 'https' ? true : false;
             $scope.vm.installForm.consoleAPI.url.localAddress =
@@ -1512,6 +1517,7 @@
           // override defaults with actual systemInt values
           _.each(systemIntegrations,
             function (systemIntegration) {
+              /* jshint maxcomplexity: 21 */
               var sysIntName = systemIntegration.name;
               var masterName = systemIntegration.masterName;
 
@@ -1616,8 +1622,8 @@
                     [sysIntName][masterName].data.amqpUrlRoot;
                   var amqpUrlAdmin = $scope.vm.installForm
                     [sysIntName][masterName].data.amqpUrlAdmin;
-                  var auth = $scope.vm.installForm[sysIntName][masterName].data.
-                    amqpUrlRoot.split('@')[0].split('//')[1];
+                  var amqpAuth = $scope.vm.installForm[sysIntName][masterName].
+                    data.amqpUrlRoot.split('@')[0].split('//')[1];
                   $scope.vm.installForm[sysIntName][masterName].fqdn =
                     amqpUrl.split('@')[1].split('/')[0];
                   $scope.vm.installForm[sysIntName][masterName].rootFqdn =
@@ -1625,9 +1631,9 @@
                   $scope.vm.installForm[sysIntName][masterName].adminFqdn =
                     amqpUrlAdmin.split('@')[1].split('/')[0];
                   $scope.vm.installForm[sysIntName][masterName].username =
-                    auth.split(':')[0];
+                    amqpAuth.split(':')[0];
                   $scope.vm.installForm[sysIntName][masterName].password =
-                    auth.split(':')[1];
+                    amqpAuth.split(':')[1];
                   $scope.vm.installForm[sysIntName][masterName].localAddress =
                     amqpUrl.split('@')[0] + '@' + defaultAddress + ':' +
                     $scope.vm.systemSettings.msg.amqpPort + '/' +
@@ -1724,7 +1730,7 @@
 
       _.each($scope.vm.initializeForm,
         function (obj, service) {
-          /* jshint maxcomplexity:20 */
+          /* jshint maxcomplexity: 23 */
           if (!_.isObject(obj)) return;
 
           if (service === 'workers')
@@ -1837,26 +1843,28 @@
 
     //ngclipboard has issues working with the modal. So using Clipboard instead.
     function copyToClipboard() {
-      var clipboard = new Clipboard('#copy');
+      new Clipboard('#copy');
       $scope.vm.copyText = 'Copied';
     }
 
     function copyToClip() {
-      var clipboard = new Clipboard('#copy');
+      new Clipboard('#copy');
+      /* jshint camelcase: false */
       popup_horn.success('Copied');
+      /* jshint camelcase: true */
     }
 
-    function resetInstallLocationModal (fromCopy) {
+    function resetInstallLocationModal(fromCopy) {
       var old =  fromCopy + '_old';
       $scope.vm.initializeForm[fromCopy] =
         angular.copy($scope.vm.initializeForm[old]);
       $scope.vm.copyText = 'Copy';
     }
 
-    function saveInstallLocationModal (secName) {
+    function saveInstallLocationModal(secName) {
+      /* jshint maxcomplexity: 33 */
+      var hasErr = '';
       if (secName === 'secrets') {
-        var hasErr = '';
-
         if ($scope.vm.initializeForm.secrets.initType === 'new') {
           hasErr = validateIP ($scope.vm.initializeForm.secrets.address);
           if (!$scope.vm.initializeForm.secrets.confirmCommand) {
@@ -1878,7 +1886,7 @@
         }
       }
       if (secName === 'msg') {
-        var hasErr = '';
+        hasErr = '';
 
         if ($scope.vm.initializeForm.msg.initType === 'new') {
           hasErr = validateIP ($scope.vm.initializeForm.msg.address);
@@ -1908,7 +1916,7 @@
       }
 
       if (secName === 'redis') {
-        var hasErr = '';
+        hasErr = '';
 
         if ($scope.vm.initializeForm.redis.initType === 'new') {
           hasErr = validateIP ($scope.vm.initializeForm.redis.address);
@@ -1929,7 +1937,7 @@
       }
 
       if (secName === 'state') {
-        var hasErr = '';
+        hasErr = '';
 
         if ($scope.vm.initializeForm.state.initType === 'new') {
           // if both the address and the rootPassword are empty then error
@@ -1974,10 +1982,8 @@
         $scope.vm.secretsModalErrorMsg = '';
         $scope.vm.initializeForm[old] =
           angular.copy($scope.vm.initializeForm.secrets);
-        if (clickType === 'dropdown' &&
-          $scope.vm.initializeForm.secrets.initType === 'admiral') {
-          //do nothing
-        } else {
+        if (!(clickType === 'dropdown' &&
+          $scope.vm.initializeForm.secrets.initType === 'admiral')) {
           $('#secrets-location-modal').modal('show');
         }
       }
@@ -1986,10 +1992,8 @@
         $scope.vm.msgModalErrorMsg = '';
         $scope.vm.initializeForm[old] =
           angular.copy($scope.vm.initializeForm.msg);
-        if (clickType === 'dropdown' &&
-          $scope.vm.initializeForm.msg.initType === 'admiral') {
-          //do nothing
-        } else {
+        if (!(clickType === 'dropdown' &&
+          $scope.vm.initializeForm.msg.initType === 'admiral')) {
           $('#msg-location-modal').modal('show');
         }
       }
@@ -1998,10 +2002,8 @@
         $scope.vm.stateModalErrorMsg = '';
         $scope.vm.initializeForm[old] = angular.copy(
           $scope.vm.initializeForm.state);
-        if (clickType === 'dropdown' &&
-          $scope.vm.initializeForm.state.initType === 'admiral') {
-          //do nothing
-        } else {
+        if (!(clickType === 'dropdown' &&
+          $scope.vm.initializeForm.state.initType === 'admiral')) {
           $('#state-location-modal').modal('show');
         }
       }
@@ -2009,10 +2011,8 @@
       if (sectionName === 'redis') {
         $scope.vm.initializeForm[old] = angular.copy(
           $scope.vm.initializeForm.redis);
-        if (clickType === 'dropdown' &&
-          $scope.vm.initializeForm.redis.initType === 'admiral') {
-          //do nothing
-        } else {
+        if (!(clickType === 'dropdown' &&
+          $scope.vm.initializeForm.redis.initType === 'admiral')) {
           $('#redis-location-modal').modal('show');
         }
       }
@@ -3288,23 +3288,6 @@
       );
     }
 
-    function updateReleaseVersion(bag, next) {
-      if (!$scope.vm.systemSettingsId) return next();
-
-      var update = {
-        releaseVersion: $scope.vm.admiralEnv.RELEASE
-      };
-
-      admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
-        function (err) {
-          if (err)
-            return next(err);
-
-          return next();
-        }
-      );
-    }
-
     function getEnabledServices(bag, next) {
       admiralApiAdapter.getServices('',
         function (err, services) {
@@ -3356,37 +3339,6 @@
           if (err)
             return next(err);
           return next();
-        }
-      );
-    }
-
-    function postDB(bag, next) {
-      var body = {};
-      if ($scope.vm.installForm.systemSettings.rootS3Bucket)
-        body.rootS3Bucket = $scope.vm.installForm.systemSettings.rootS3Bucket;
-
-      admiralApiAdapter.postDB(body,
-        function (err) {
-          if (err)
-            return next(err);
-
-          var promise = $interval(function () {
-            getSystemSettings({},
-              function (err) {
-                if (err) {
-                  $interval.cancel(promise);
-                  return next(err);
-                }
-
-                var db = $scope.vm.systemSettings.db;
-
-                if (!db.isProcessing && (db.isFailed || db.isInitialized)) {
-                  $interval.cancel(promise);
-                  return next();
-                }
-              }
-            );
-          }, 3000);
         }
       );
     }
@@ -3519,16 +3471,6 @@
         },
         function (err) {
           return next(err);
-        }
-      );
-    }
-
-    function runPostMigrationScripts(bag, next) {
-      admiralApiAdapter.postDBCleanup({},
-        function (err) {
-          if (err)
-            return next(err);
-          return next();
         }
       );
     }
@@ -4438,120 +4380,6 @@
 
           $scope.vm.runMode = update.runMode;
           return next();
-        }
-      );
-    }
-
-    function deleteSystemMachineImages(bag, next) {
-      var deletedSystemMachineImages = _.filter(bag.currentSystemMachineImages,
-        function (currentImage) {
-          var exists =
-            _.findWhere(bag.updatedSystemMachineImages, {id: currentImage.id});
-          return !exists;
-        }
-      );
-
-      async.eachSeries(deletedSystemMachineImages,
-        function (deletedImage, done) {
-          admiralApiAdapter.deleteSystemMachineImage(deletedImage.id,
-            function (err) {
-              if (err)
-                return done(err);
-
-              return done();
-            }
-          );
-        },
-        function (err) {
-          return next(err);
-        }
-      );
-    }
-
-    function putSystemMachineImages(bag, next) {
-      var updatedSystemMachineImages = _.filter(bag.updatedSystemMachineImages,
-        function (updatedImage) {
-          var exists =
-            _.findWhere(bag.currentSystemMachineImages, {id: updatedImage.id});
-          return exists;
-        }
-      );
-
-      updatedSystemMachineImages = _.sortBy(updatedSystemMachineImages,
-        function (smi) {
-          return smi.isDefault;
-        }
-      );
-      async.eachSeries(updatedSystemMachineImages,
-        function (updatedImage, done) {
-          var body = _.clone(updatedImage);
-          if (body.subnetId === '')
-            body.subnetId = null;
-
-          var seriesBag = {
-            id: updatedImage.id,
-            body: body,
-            accessKey:
-              $scope.vm.installForm.provision.amazonKeys.data.accessKey,
-            secretKey:
-              $scope.vm.installForm.provision.amazonKeys.data.secretKey,
-            region: body.region,
-            amiId: body.externalId,
-            systemMachineImageName: body.name
-          };
-          async.series([
-              __getImageByAmiId.bind(null, seriesBag),
-              __putSystemMachineImage.bind(null, seriesBag)
-            ],
-            function (err) {
-              return done(err);
-            }
-          );
-        },
-        function (err) {
-          return next(err);
-        }
-      );
-    }
-
-    function postSystemMachineImages(bag, next) {
-
-      var newSystemMachineImages = _.filter(bag.updatedSystemMachineImages,
-        function (image) {
-          var exists =
-            _.findWhere(bag.currentSystemMachineImages, {id: image.id});
-          return !exists;
-        }
-      );
-
-      async.eachSeries(newSystemMachineImages,
-        function (newImage, done) {
-          var body = _.clone(newImage);
-          if (body.subnetId === '')
-            body.subnetId = null;
-
-          var seriesBag = {
-            body: body,
-            accessKey:
-              $scope.vm.installForm.provision.amazonKeys.data.accessKey,
-            secretKey:
-              $scope.vm.installForm.provision.amazonKeys.data.secretKey,
-            region: body.region,
-            amiId: body.externalId,
-            systemMachineImageName: body.name
-          };
-          async.series([
-              __getImageByAmiId.bind(null, seriesBag),
-              __postSystemMachineImage.bind(null, seriesBag)
-            ],
-            function (err) {
-              return done(err);
-            }
-          );
-
-        },
-        function (err) {
-          return next(err);
         }
       );
     }

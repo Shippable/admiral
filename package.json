@@ -85,7 +85,8 @@
       "angular",
       "async",
       "document",
-      "admiral"
+      "admiral",
+      "Clipboard"
     ]
   }
 }
