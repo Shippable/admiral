@@ -7,7 +7,7 @@ ${REL_VER_DATE}
 ## Features
 
 - **Drydock update**: Updating all Shippable official images with latest stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
-  for [v6.11.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v6114/) for details.
+  for [v6.12.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v6124/) for details.
 - **Subscription Integrations API**: It is now possible to filter subscription integrations by master integration (name, type, or ID) through the Shippable API by including `masterIntegrationNames`, `masterIntegrationTypes`, or `masterIntegrationIds` query parameters.
 
 ## Fixes
