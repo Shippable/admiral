@@ -2408,6 +2408,25 @@ do $$
       roleCode := 6060
     );
 
+    -- subscription customReports route
+    perform set_route_role(
+      routePattern := '/passthrough/subscriptions/:subscriptionId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/subscriptions/:subscriptionId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/subscriptions/:subscriptionId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
     -- Allow justUser to access the route.
     perform set_route_role(
       routePattern := '/passthrough/subscriptions/:subscriptionId/grisham',
