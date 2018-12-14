@@ -213,7 +213,7 @@ function _generateSystemIntegrationData(bag) {
       'core.certgen|core.hubspotSync|core.marshaller|marshaller.ec2|' +
       'core.sync|job.request|job.trigger|cluster.init|steps.deploy|' +
       'steps.manifest|steps.provision|steps.rSync|steps.release|core.logup|' +
-      'www.signals|core.segment|core.intercom|marshaller.gce'
+      'www.signals|core.segment|core.intercom|marshaller.gce|core.regen'
   };
 
   return data;
