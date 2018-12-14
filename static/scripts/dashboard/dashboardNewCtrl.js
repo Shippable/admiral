@@ -3526,6 +3526,7 @@
           startRSync,
           startTimeTrigger,
           startVersionTrigger,
+          startRegen,
           startCron,
           startNexec,
           getServices.bind(null, {}),
@@ -4615,6 +4616,17 @@
 
     function startVersionTrigger(next) {
       startService('versionTrigger',
+        function (err) {
+          if (err)
+            return next(err);
+
+          return next();
+        }
+      );
+    }
+
+    function startRegen(next) {
+      startService('regen',
         function (err) {
           if (err)
             return next(err);

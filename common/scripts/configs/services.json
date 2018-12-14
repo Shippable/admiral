@@ -464,6 +464,12 @@
       "apiUrlIntegration": "internalAPI"
     },
     {
+      "name": "regen",
+      "repository": "micro",
+      "isCore": true,
+      "apiUrlIntegration": "internalAPI"
+    },
+    {
       "name": "webhook",
       "repository": "micro",
       "apiUrlIntegration": "internalAPI"
