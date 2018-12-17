@@ -2427,6 +2427,44 @@ do $$
       roleCode := 6010
     );
 
+    -- projects customReports route
+    perform set_route_role(
+      routePattern := '/passthrough/projects/:projectId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/projects/:projectId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/projects/:projectId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
+    -- jobs customReports route
+    perform set_route_role(
+      routePattern := '/passthrough/resources/:resourceId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6060
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/resources/:resourceId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6020
+    );
+
+    perform set_route_role(
+      routePattern := '/passthrough/resources/:resourceId/customReports',
+      httpVerb := 'POST',
+      roleCode := 6010
+    );
+
     -- Allow justUser to access the route.
     perform set_route_role(
       routePattern := '/passthrough/subscriptions/:subscriptionId/grisham',
