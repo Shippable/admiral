@@ -14,6 +14,8 @@ ${REL_VER_DATE}
 
 - **Fixes shipctl jdk to setup java environment correctly**: Java builds using oraclejdk8 on CentOS 7 image were failing and is fixed by setting the correct JDK path for java in shipctl. ([support#4603](https://github.com/Shippable/support/issues/4603), [support#4613](https://github.com/Shippable/support/issues/4613))
 - **Removing pause/resume actions from project dashboard**: The project dashboard used to show "pause" and "resume" buttons against each branch. This button, however, would apply to the project as a whole and not for an individual branch. This has been removed. The ability to pause and resume a project is still available in the project settings page.
+- **Fix CentOS 7 debug nodes prompting users for a password when using sudo**: The ssh user is now granted permission to use `sudo` in the debug nodes without being prompted for a password. This fix will work on CentOS 7 runtimes of v6.12.4 & above. [support#4677](https://github.com/Shippable/support/issues/4677)
+- **Fix CentOS 7 on-demand nodes with Docker 18.03 installed not picking up builds**: We noticed that the startup script sometimes runs before the docker daemon is up. Hence, the build runner is not starting to pick up the builds. We have added a fix which will wait for the docker daemon to be up until we try to start the build runner on CentOS 7 on-demand nodes with Docker 18.03 installed.
 
 ## Custom Nodes
 
