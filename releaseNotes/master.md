@@ -19,18 +19,9 @@ ${REL_VER_DATE}
 - **Fix CentOS 7 on-demand nodes with Docker 18.03 installed not picking up builds**: The startup script sometimes runs before the docker daemon is up. Hence, the build runner does not start and the node is unable to run any builds. The script will now wait for the docker daemon before attempting to start the build runner.
 - **Performance improvements on the subscription dashboard**: Load time, update time on the subscription dashboard should now be noticeably faster than before.
 - **Fixes project sync to clean up jobStatesMap with branches that got deleted**: When a branch is deleted in SCM, syncing project was not deleting its associated jobStatesMap. This is now fixed.
-
-## Custom Nodes
-
-- **simple title**: brief description
-  - additional details or
-  - actions required
+  **Fix lack of entropy on dynamic nodes**: The `rng-tools` package is now available on all u14, u16, and c7 AMIs to fix the low entropy issues that some users were seeing.
 
 ## Shippable Server
-
-### Features
-
-- **simple title**: brief description
 
 ### Fixes
 
