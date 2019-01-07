@@ -10,9 +10,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **Fixes disappearing provider name in breadcrumb on project sync**: On syncing a project in project settings page, provider name in breadcrumb was disappearing. This is now fixed.
 
 ## Custom Nodes
 
