@@ -12,6 +12,7 @@ ${REL_VER_DATE}
 
 - **Fixes disappearing provider name in breadcrumb on project sync**: On syncing a project in project settings page, provider name in breadcrumb was disappearing. This is now fixed.
 - **Fixes documentation link for "Waiting Jobs" in grid view**: Clicking on the documentation link for "Waiting Jobs" in grid view was throwing 403 error. This is now fixed.
+- **Fixes incorrect API docs info**: The POST projects/:id/newBuild route has been updated in the documentation to correctly describe the query string and POST body parameters.
 
 ## Custom Nodes
 
