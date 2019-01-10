@@ -7,6 +7,7 @@ ${REL_VER_DATE}
 ## Features
 
 - **Updated Bitbucket Deploy Key Creation**: We now use version 2 of the Bitbucket Cloud REST API to create and delete deploy keys for Bitbucket Cloud repositories.  No noticeable changes are expected.
+- **Enhanced Search Bar**: Now the Search Bar is Exapandable Search bar with more clean and intutive design.
 
 ## Fixes
 
