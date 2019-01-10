@@ -14,6 +14,7 @@ ${REL_VER_DATE}
 - **Fixes documentation link for "Waiting Jobs" in grid view**: Clicking on the documentation link for "Waiting Jobs" in grid view was throwing 403 error. This is now fixed.
 - **Fixes incorrect API docs info**: The POST projects/:id/newBuild route has been updated in the documentation to correctly describe the query string and POST body parameters.
 - **Fixes displaying same job multiple times under processing jobs section**: When a matrix run is triggered, the job was showing up multiple times under processing jobs section in grid view. This is now fixed.
+- **Fixes sorting of completed jobs in admin job status page**: In admin job status page, completed jobs were not sorted. This is now fixed, completed jobs are sorted in descending order based on `Started At`. 
 
 ## Custom Nodes
 
