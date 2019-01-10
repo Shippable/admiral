@@ -29,7 +29,7 @@ ${REL_VER_DATE}
 
 ### Fixes
 
-- **simple title**: brief description
+- **Fixes sorting of completed jobs in admin job status page**: In admin job status page, completed jobs were not sorted. This is now fixed, completed jobs are sorted in descending order based on `Started At`.
 
 ## History
 
