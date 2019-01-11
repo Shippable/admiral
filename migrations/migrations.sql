@@ -580,16 +580,6 @@ do $$
       alter table "clusterNodes" add constraint "clusterNodes_systemMachineImageId_fkey" foreign key ("systemMachineImageId") references "systemMachineImages"(id) on update restrict on delete restrict;
     end if;
 
-  -- Adds foreign key relationships for jobTestReports
-    if not exists (select 1 from pg_constraint where conname = 'jobTestReports_jobId_fkey') then
-      alter table "jobTestReports" add constraint "jobTestReports_jobId_fkey" foreign key ("jobId") references "jobs"(id) on update restrict on delete restrict;
-    end if;
-
-  -- Adds foreign key relationships for jobCoverageReports
-    if not exists (select 1 from pg_constraint where conname = 'jobCoverageReports_jobId_fkey') then
-      alter table "jobCoverageReports" add constraint "jobCoverageReports_jobId_fkey" foreign key ("jobId") references "jobs"(id) on update restrict on delete restrict;
-    end if;
-
   -- Adds foreign key relationships for jobs
     if not exists (select 1 from pg_constraint where conname = 'jobs_statusCode_fkey') then
       alter table "jobs" add constraint "jobs_statusCode_fkey" foreign key ("statusCode") references "systemCodes"(code) on update restrict on delete restrict;
