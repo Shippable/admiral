@@ -28,12 +28,13 @@ __check_admiral() {
 __check_release() {
   __process_msg "Validating release version"
   _shippable_get_systemSettings
-  local current_release=$(echo $response \
+  export SYSTEM_SETTINGS=$(echo $response)
+  export CURRENT_RELEASE=$(echo $response \
     | jq -r '.releaseVersion')
 
-  __process_msg "Current release: $current_release"
+  __process_msg "Current release: $CURRENT_RELEASE"
   __process_msg "New release: $RELEASE"
-  __update_bbs_accountIntegrations $current_release
+  __update_bbs_accountIntegrations $CURRENT_RELEASE
 }
 
 __update_release() {
@@ -98,6 +99,59 @@ __stop_stateless_services() {
   fi
 }
 
+___run_file_store_migrations() {
+  local legacy_file_store_provider=$(echo $SYSTEM_SETTINGS | jq .legacyFileStoreProvider)
+  local node_type_file_store_map=$(echo $SYSTEM_SETTINGS | jq .nodeTypeFileStoreMap)
+  local allow_dynamic_nodes=$(echo $SYSTEM_SETTINGS | jq -r .allowDynamicNodes)
+  local allow_custom_nodes=$(echo $SYSTEM_SETTINGS | jq -r .allowCustomNodes)
+  local allow_system_nodes=$(echo $SYSTEM_SETTINGS | jq -r .allowSystemNodes)
+
+  if [ -z "$node_type_file_store_map" ] || [ "$node_type_file_store_map" == "null" ]; then
+    __process_marker "Running file store migrations"
+
+    _shippable_get_systemIntegrations "name=filestore"
+    local file_system_integrations=$(echo "$response")
+    local file_system_integrations_count=$(echo $file_system_integrations | jq '. | length')
+    local file_system_integration_master_name=''
+    local node_type_file_store_map_update='{}'
+
+    if [ $file_system_integrations_count -ne 0 ]; then
+      file_system_integration_master_name=$(echo $file_system_integrations | jq -r '.[0].masterName')
+      if $allow_dynamic_nodes; then
+        _shippable_get_systemIntegrations "name=provision"
+        local provision_system_integrations=$(echo "$response")
+        local provision_system_integrations_count=$(echo "$provision_system_integrations" | jq '. | length')
+        if [ $provision_system_integrations_count -ne 0 ]; then
+          for i in $(seq 1 $provision_system_integrations_count); do
+            local provision_system_integration=$(echo $provision_system_integrations | jq '.['"$i-1"']')
+            local provision_system_integration_master_name=$(echo $provision_system_integration | jq -r .masterName)
+            node_type_file_store_map_update=$(echo $node_type_file_store_map_update | jq --arg key $provision_system_integration_master_name --arg val $file_system_integration_master_name '."on-demand"[$key] = $val')
+          done
+        fi
+      fi
+
+      if $allow_custom_nodes; then
+        node_type_file_store_map_update=$(echo $node_type_file_store_map_update | jq --arg val $file_system_integration_master_name '. + {BYON: $val }')
+      fi
+
+      if $allow_system_nodes; then
+        node_type_file_store_map_update=$(echo $node_type_file_store_map_update | jq --arg val $file_system_integration_master_name '. + {shared: $val }')
+      fi
+    fi
+
+    node_type_file_store_map_update=$(echo $node_type_file_store_map_update | jq '. | tojson')
+    local system_settings_update='{"legacyFileStoreProvider": "'$file_system_integration_master_name'", "nodeTypeFileStoreMap": '$node_type_file_store_map_update'}'
+    _shippable_put_system_settings "$system_settings_update"
+    if [ $response_status_code -gt 299 ]; then
+      __process_error "Error updating file store: $response"
+      __process_error "Status code: $response_status_code"
+      exit 1
+    else
+      __process_msg "Successfully migrated file store settings"
+    fi
+  fi
+}
+
 __run_migrations() {
   __process_marker "Running migrations"
 
@@ -144,6 +198,8 @@ __run_migrations() {
       tail -$MAX_ERROR_LOG_COUNT $logs_file
     fi
   done
+
+  ___run_file_store_migrations
 }
 
 __remove_stateful_services() {
