@@ -982,7 +982,97 @@
       updateAutoSync: updateAutoSync,
       eulaText: '',
       runMode: 'production',
-      allNodes: {}
+      allNodes: {},
+      filestoreFriendlyNameMap: {
+        'amazonKeys': 'Amazon S3',
+        'gcloudKey': 'Google Cloud Storage'
+      },
+      filestoreSysIntMasterNames: [],
+      nodeTypeFileStoreMap: {},
+      onDemandNodeTypeProviderToggled: function (provider) {
+        if (_.isEmpty($scope.vm.filestoreSysIntMasterNames)) return;
+
+        if ($scope.vm.installForm.provision[provider].isEnabled) {
+          if (_.isEmpty($scope.vm.nodeTypeFileStoreMap['on-demand']))
+            $scope.vm.nodeTypeFileStoreMap['on-demand'] = {};
+          $scope.vm.nodeTypeFileStoreMap['on-demand'][provider] =
+            _.first($scope.vm.filestoreSysIntMasterNames);
+        } else {
+          if ($scope.vm.nodeTypeFileStoreMap['on-demand'] &&
+            $scope.vm.nodeTypeFileStoreMap['on-demand'][provider])
+              delete $scope.vm.nodeTypeFileStoreMap['on-demand'][provider];
+          if (_.isEmpty($scope.vm.nodeTypeFileStoreMap['on-demand']))
+            delete $scope.vm.nodeTypeFileStoreMap['on-demand'];
+        }
+      },
+      byonNodeTypeToggled: function () {
+        if (_.isEmpty($scope.vm.filestoreSysIntMasterNames)) return;
+
+        if ($scope.vm.installForm.systemSettings.allowCustomNodes) {
+          if (!$scope.vm.nodeTypeFileStoreMap.BYON)
+            /*jshint -W069 */
+            $scope.vm.nodeTypeFileStoreMap['BYON'] =
+            /*jshint +W069 */
+              _.first($scope.vm.filestoreSysIntMasterNames);
+        } else {
+          if ($scope.vm.nodeTypeFileStoreMap.BYON)
+            delete $scope.vm.nodeTypeFileStoreMap.BYON;
+        }
+      },
+      sharedNodeTypeToggled: function () {
+        if (_.isEmpty($scope.vm.filestoreSysIntMasterNames)) return;
+
+        if ($scope.vm.installForm.systemSettings.allowSystemNodes) {
+          if (!$scope.vm.nodeTypeFileStoreMap.shared)
+            /*jshint -W069 */
+            $scope.vm.nodeTypeFileStoreMap['shared'] =
+            /*jshint +W069 */
+              _.first($scope.vm.filestoreSysIntMasterNames);
+        } else {
+          if ($scope.vm.nodeTypeFileStoreMap.shared)
+            delete $scope.vm.nodeTypeFileStoreMap.shared;
+        }
+      },
+      fileStoreSysIntToggled: function (fileStoreMasterIntName) {
+        if (!_.contains($scope.vm.filestoreSysIntMasterNames,
+          fileStoreMasterIntName))
+          $scope.vm.filestoreSysIntMasterNames.push(fileStoreMasterIntName);
+        else {
+          $scope.vm.filestoreSysIntMasterNames = _.reject(
+            $scope.vm.filestoreSysIntMasterNames,
+            function (sysIntMasterName) {
+              return sysIntMasterName === fileStoreMasterIntName;
+            }
+          );
+        }
+
+        if (_.isEmpty($scope.vm.filestoreSysIntMasterNames))
+          $scope.vm.nodeTypeFileStoreMap = {};
+
+        if (_.isEmpty($scope.vm.nodeTypeFileStoreMap) &&
+          $scope.vm.filestoreSysIntMasterNames.length === 1) {
+          var nodeTypeFileStoreMap = {};
+          if ($scope.vm.installForm.systemSettings.allowDynamicNodes) {
+            var onDemandFileStoreMap = {};
+            if ($scope.vm.installForm.provision.amazonKeys.isEnabled)
+              /*jshint -W069 */
+              onDemandFileStoreMap['amazonKeys'] =
+                _.first($scope.vm.filestoreSysIntMasterNames);
+            else if ($scope.vm.installForm.provision.gcloudKey.isEnabled)
+              onDemandFileStoreMap['gcloudKey'] =
+                _.first($scope.vm.filestoreSysIntMasterNames);
+            nodeTypeFileStoreMap['on-demand'] = onDemandFileStoreMap;
+          }
+          if ($scope.vm.installForm.systemSettings.allowCustomNodes)
+            nodeTypeFileStoreMap['BYON'] =
+              _.first($scope.vm.filestoreSysIntMasterNames);
+          if ($scope.vm.installForm.systemSettings.allowSystemNodes)
+            nodeTypeFileStoreMap['shared'] =
+            /*jshint +W069 */
+              _.first($scope.vm.filestoreSysIntMasterNames);
+          $scope.vm.nodeTypeFileStoreMap = nodeTypeFileStoreMap;
+        }
+      }
     };
 
     var locationHashSectionNameMap = {
@@ -1517,9 +1607,12 @@
           // override defaults with actual systemInt values
           _.each(systemIntegrations,
             function (systemIntegration) {
-              /* jshint maxcomplexity: 21 */
+              /* jshint maxcomplexity: 22 */
               var sysIntName = systemIntegration.name;
               var masterName = systemIntegration.masterName;
+
+              if (sysIntName === 'filestore')
+                $scope.vm.filestoreSysIntMasterNames.push(masterName);
 
               if (masterName === 'ircCreds') {
                 var ircIntegrations =
@@ -2226,6 +2319,8 @@
             }
           );
           $scope.vm.runMode = systemSettings.runMode;
+          $scope.vm.nodeTypeFileStoreMap =
+            JSON.parse(systemSettings.nodeTypeFileStoreMap);
 
           return next();
         }
@@ -2349,6 +2444,8 @@
                 systemSettings[key];
             }
           );
+          $scope.vm.nodeTypeFileStoreMap =
+            JSON.parse(systemSettings.nodeTypeFileStoreMap);
 
           return next();
         }
@@ -3517,6 +3614,7 @@
           startJobRequest,
           startJobTrigger,
           updateFilestoreSystemIntegration,
+          updateNodeTypeFileStoreMap,
           startNf,
           startOrStopIrc,
           startCharon,
@@ -3590,6 +3688,7 @@
           updateProvisionSystemIntegration,
           getSystemMachineImages,
           updateFilestoreSystemIntegration,
+          updateNodeTypeFileStoreMap,
           updateInternalAPIService,
           updateConsoleAPIService,
           saveServices,
@@ -3699,6 +3798,23 @@
       updateSystemIntegration(bag,
         function (err) {
           return next(err);
+        }
+      );
+    }
+
+    function updateNodeTypeFileStoreMap(next) {
+      var update = {
+        nodeTypeFileStoreMap: JSON.stringify($scope.vm.nodeTypeFileStoreMap)
+      };
+
+      admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
+        function (err) {
+          if (err)
+            return next(err);
+
+          $scope.vm.nodeTypeFileStoreMap =
+            JSON.parse(update.nodeTypeFileStoreMap);
+          return next();
         }
       );
     }
@@ -4870,6 +4986,7 @@
           removeIRCSystemIntegrations,
           updateIrcService,
           updateFilestoreSystemIntegration,
+          updateNodeTypeFileStoreMap,
           getEnabledServices.bind(null, bag),
           deleteAddonServices.bind(null, bag),
           deleteIrcService.bind(null, bag),
