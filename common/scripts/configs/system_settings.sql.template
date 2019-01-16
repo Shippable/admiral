@@ -126,6 +126,13 @@ do $$
       alter table "systemSettings" drop column "truck";
     end if;
 
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'legacyFileStoreProvider') then
+      alter table "systemSettings" add column "legacyFileStoreProvider" TEXT;
+    end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'nodeTypeFileStoreMap') then
+      alter table "systemSettings" add column "nodeTypeFileStoreMap" TEXT DEFAULT '{}';
+    end if;
   end
 $$;
 
