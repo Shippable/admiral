@@ -16,6 +16,7 @@ ${REL_VER_DATE}
 - **Fixes incorrect API docs info**: The POST projects/:id/newBuild route has been updated in the documentation to correctly describe the query string and POST body parameters.
 - **Fixes displaying same job multiple times under processing jobs section**: When a matrix run is triggered, the job was showing up multiple times under processing jobs section in grid view. This is now fixed.
 - **Fixes `shipctl` commands with multiple keyValuePair integrations containing the same keys**: When there were multiple keyValuePair integrations containing the same keys, `shipctl` commands would sometimes return the value from the wrong resource. The correct values will now be returned. Custom nodes will need to be reinitialized for this to take effect on those nodes.
+- **Fixes Credit card expiry year**: While adding new Credit card, expiry year drop-down was listing older years. This is now fixed.
 
 ## Custom Nodes
 
