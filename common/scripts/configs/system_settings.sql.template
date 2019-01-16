@@ -131,7 +131,7 @@ do $$
     end if;
 
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'nodeTypeFileStoreMap') then
-      alter table "systemSettings" add column "nodeTypeFileStoreMap" TEXT;
+      alter table "systemSettings" add column "nodeTypeFileStoreMap" TEXT DEFAULT '{}';
     end if;
   end
 $$;

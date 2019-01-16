@@ -106,7 +106,7 @@ ___run_file_store_migrations() {
   local allow_custom_nodes=$(echo $SYSTEM_SETTINGS | jq -r .allowCustomNodes)
   local allow_system_nodes=$(echo $SYSTEM_SETTINGS | jq -r .allowSystemNodes)
 
-  if [ -z "$node_type_file_store_map" ] || [ "$node_type_file_store_map" == "null" ]; then
+  if [ "$node_type_file_store_map" == "null" ]; then
     __process_marker "Running file store migrations"
 
     _shippable_get_systemIntegrations "name=filestore"
