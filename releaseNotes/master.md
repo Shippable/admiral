@@ -17,19 +17,11 @@ ${REL_VER_DATE}
 - **Fixes displaying same job multiple times under processing jobs section**: When a matrix run is triggered, the job was showing up multiple times under processing jobs section in grid view. This is now fixed.
 - **Fixes `shipctl` commands with multiple keyValuePair integrations containing the same keys**: When there were multiple keyValuePair integrations containing the same keys, `shipctl` commands would sometimes return the value from the wrong resource. The correct values will now be returned. Custom nodes will need to be reinitialized for this to take effect on those nodes.
 - **Fixes credit card expiry year**: While adding new credit card, expiry year drop-down was listing older years. This is now fixed.
-- **Fixes macOS node initialization failures**: Fixes macOS node initialization failures which were caused due to a bug in the shipctl install script.
+- **Fixes macOS node initialization failures**: Fixes macOS node initialization failures that were caused by a bug in the shipctl install script.
 
-## Custom Nodes
-
-- **simple title**: brief description
-  - additional details or
-  - actions required
 
 ## Shippable Server
 
-### Features
-
-- **simple title**: brief description
 
 ### Fixes
 
@@ -37,4 +29,4 @@ ${REL_VER_DATE}
 
 ## History
 
-To view Shippable's release history, check out our [releases page on github](https://github.com/Shippable/admiral/releases).
+To view Shippable's release history, check out our [releases page on GitHub](https://github.com/Shippable/admiral/releases).
