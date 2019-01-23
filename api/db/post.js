@@ -63,7 +63,8 @@ function post(req, res) {
       _getPublicRegistry.bind(null, bag),
       _insertMasterRuntimeTemplates.bind(null, bag),
       _getRootBucket.bind(null, bag),
-      _setRootBucket.bind(null, bag),
+      _setRootS3Bucket.bind(null, bag),
+      _setRootGCSBucket.bind(null, bag),
       _setDbFlags.bind(null, bag)
     ],
     function (err) {
@@ -707,7 +708,7 @@ function _getRootBucket(bag, next) {
   var who = bag.who + '|' + _getRootBucket.name;
   logger.verbose(who, 'Inside');
 
-  var query = 'SELECT "rootS3Bucket" from "systemSettings";';
+  var query = 'SELECT "rootS3Bucket", "rootGCSBucket" from "systemSettings";';
   global.config.client.query(query,
     function (err, res) {
       if (err)
@@ -720,15 +721,18 @@ function _getRootBucket(bag, next) {
       if (!_.isEmpty(res.rows) && !_.isEmpty(res.rows[0].rootS3Bucket))
         bag.rootS3Bucket = res.rows[0].rootS3Bucket;
 
+      if (!_.isEmpty(res.rows) && !_.isEmpty(res.rows[0].rootGCSBucket))
+        bag.rootGCSBucket = res.rows[0].rootGCSBucket;
+
       return next();
     }
   );
 }
 
-function _setRootBucket(bag, next) {
+function _setRootS3Bucket(bag, next) {
   if (!_.isEmpty(bag.rootS3Bucket)) return next();
 
-  var who = bag.who + '|' + _setRootBucket.name;
+  var who = bag.who + '|' + _setRootS3Bucket.name;
   logger.verbose(who, 'Inside');
 
   var rootS3Bucket = bag.reqBody.rootS3Bucket ||
@@ -745,6 +749,31 @@ function _setRootBucket(bag, next) {
             util.inspect(err))
         );
       bag.rootS3Bucket = rootS3Bucket;
+      return next();
+    }
+  );
+}
+
+function _setRootGCSBucket(bag, next) {
+  if (!_.isEmpty(bag.rootGCSBucket)) return next();
+
+  var who = bag.who + '|' + _setRootGCSBucket.name;
+  logger.verbose(who, 'Inside');
+
+  var rootGCSBucket = bag.reqBody.rootGCSBucket ||
+    util.format('shippable-%s-%s', global.config.runMode, uuid.v4());
+
+  var query = util.format(
+    'UPDATE "systemSettings" set "rootGCSBucket"=\'%s\';', rootGCSBucket);
+  global.config.client.query(query,
+    function (err, rootGCSBucket) {
+      if (err)
+        return next(
+          new ActErr(who, ActErr.OperationFailed,
+            'Failed to update rootGCSBucket setting with error: ' +
+            util.inspect(err))
+        );
+      bag.rootGCSBucket = rootGCSBucket;
       return next();
     }
   );
