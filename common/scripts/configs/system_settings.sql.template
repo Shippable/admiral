@@ -20,6 +20,7 @@ do $$
         "apiRetryIntervalMS" INTEGER DEFAULT 3000 NOT NULL,
         "maxDiskUsagePercentage" INTEGER DEFAULT 90 NOT NULL,
         "rootS3Bucket" VARCHAR(64) NOT NULL,
+        "rootGCSBucket" VARCHAR(64) NOT NULL,
         "nodeScriptsLocation" VARCHAR(255) NOT NULL,
         "enforcePrivateJobQuota" BOOLEAN DEFAULT false NOT NULL,
         "technicalSupportAvailable" BOOLEAN DEFAULT false NOT NULL,
@@ -133,6 +134,12 @@ do $$
     if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'nodeTypeFileStoreMap') then
       alter table "systemSettings" add column "nodeTypeFileStoreMap" TEXT DEFAULT '{}';
     end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'rootGCSBucket') then
+      alter table "systemSettings" add column "rootGCSBucket" VARCHAR(64);
+      update "systemSettings" set "rootGCSBucket" = (select "rootS3Bucket" from "systemSettings" limit 1);
+      alter table "systemSettings" alter column "rootGCSBucket" set not null;
+    end if;
   end
 $$;
 
@@ -144,6 +151,7 @@ do $$
             "id",
             "serviceUserToken",
             "rootS3Bucket",
+            "rootGCSBucket",
             "nodeScriptsLocation",
             "allowedSystemImageFamily",
             "releaseVersion",
@@ -155,6 +163,7 @@ do $$
         values
           (
             1,
+            '',
             '',
             '',
             '/home/shippable/scripts/node',
