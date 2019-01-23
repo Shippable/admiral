@@ -14,9 +14,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **Fixes issue with `Last Check In` for nodes in node pool details page**: In node pool details page `Last Check In` for nodes are updating incorrectly. This has been fixed.
 
 ## Custom Nodes
 
