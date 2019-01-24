@@ -5824,5 +5824,20 @@ do $$
     if exists (select 1 from pg_constraint where conname = 'jobTestReports_jobId_fkey') then
       alter table "jobTestReports" drop constraint "jobTestReports_jobId_fkey";
     end if;
+
+    -- Add filestoreProvider column to jobs table
+    if not exists (select 1 from information_schema.columns where table_name = 'jobs' and column_name = 'filestoreProvider') then
+      alter table "jobs" add column "filestoreProvider" VARCHAR(64);
+    end if;
+
+    -- Add filestoreProvider column to buildJobs table
+    if not exists (select 1 from information_schema.columns where table_name = 'buildJobs' and column_name = 'filestoreProvider') then
+      alter table "buildJobs" add column "filestoreProvider" VARCHAR(64);
+    end if;
+
+    -- Add filestoreProvider column to archivedJobs table
+    if not exists (select 1 from information_schema.columns where table_name = 'archivedJobs' and column_name = 'filestoreProvider') then
+      alter table "archivedJobs" add column "filestoreProvider" VARCHAR(64);
+    end if;
   end
 $$;
