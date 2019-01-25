@@ -15,6 +15,7 @@ ${REL_VER_DATE}
 ## Fixes
 
 - **Fixes issue with `Last Check In` for nodes in node pool details page**: In the node pool details page the `Last Check In` column would sometimes be shown empty. This has been fixed.
+- **Project enable failing with foreign key constraint**: Projects that are recreated(deleted and created with same name on SCM) can now be enabled without any errors.
 
 ## Custom Nodes
 
