@@ -7,4 +7,3 @@ listener "tcp" {
   tls_disable = 1
 }
 
-max_lease_ttl = "720h"
