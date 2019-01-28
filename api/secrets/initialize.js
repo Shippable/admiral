@@ -57,7 +57,6 @@ function initialize(req, res) {
       _unsealVaultStep2.bind(null, bag),
       _unsealVaultStep3.bind(null, bag),
       _createSecretsMount.bind(null, bag),
-      _updatePolicy.bind(null, bag),
       _checkCredentials.bind(null, bag),
       _post.bind(null, bag),
       _updateVaultUrl.bind(null, bag)
@@ -684,32 +683,6 @@ function _createSecretsMount(bag, next) {
           new ActErr(who, ActErr.OperationFailed,
             'Failed to create mount: ' + util.inspect(err))
         );
-      return next();
-    }
-  );
-}
-
-function _updatePolicy(bag, next) {
-  var who = bag.who + '|' + _updatePolicy.name;
-  logger.verbose(who, 'Inside');
-
-  var client = new VaultAdapter(bag.vaultUrl, bag.rootToken);
-
-  var policyFilePath =
-    path.join(global.config.scriptsDir, 'configs/policy.hcl');
-
-  var params = {
-    policy: new Buffer(policyFilePath).toString('base64')
-  };
-
-  client.putPolicy('shippable', params,
-    function (err) {
-      if (err)
-        return next(
-          new ActErr(who, ActErr.OperationFailed,
-            'Failed to create policy: ' + util.inspect(err))
-        );
-
       return next();
     }
   );
