@@ -51,7 +51,6 @@ __validate_vault_mounts() {
 __update_vault_config() {
   __process_msg "Generating vault config"
   cp -vr $SCRIPTS_DIR/configs/vault_config.hcl.template $VAULT_CONFIG_DIR/config.hcl
-  cp -vr $SCRIPTS_DIR/configs/policy.hcl $VAULT_CONFIG_DIR/scripts/policy.hcl
   cp -vr $SCRIPTS_DIR/$ARCHITECTURE/$OPERATING_SYSTEM/remote/config/* $VAULT_CONFIG_DIR/scripts/
 }
 
