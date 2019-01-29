@@ -17,10 +17,10 @@ install_rabbitmq() {
   yum install -y "erlang-19.3.6.4-1.el7.centos.x86_64.rpm"
   rm -f "erlang-19.3.6.4-1.el7.centos.x86_64.rpm"
 
-  local rabbitmq_version="3.7.10"
-  wget "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/$rabbitmq_version/rabbitmq-server-$rabbitmq_version-1.el7.noarch.rpm"
-  yum install -y "rabbitmq-server-$rabbitmq_version-1.el7.noarch.rpm"
-  rm -f "rabbitmq-server-$rabbitmq_version-1.el7.noarch.rpm"
+  local rabbitmq_version="3.6.5"
+  wget "https://bintray.com/rabbitmq/rabbitmq-server-rpm/download_file?file_path=rabbitmq-server-$rabbitmq_version-1.noarch.rpm" -O rabbitmq-server-$rabbitmq_version.rpm
+  yum install -y "rabbitmq-server-$rabbitmq_version.rpm"
+  rm -f "rabbitmq-server-$rabbitmq_version.rpm"
 }
 
 start_rabbitmq() {
