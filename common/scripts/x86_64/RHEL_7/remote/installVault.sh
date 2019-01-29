@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-VAULTVERSION=0.6.0
+VAULTVERSION=1.0.2
 VAULTDOWNLOAD=https://releases.hashicorp.com/vault/${VAULTVERSION}/vault_${VAULTVERSION}_linux_amd64.zip
 VAULTCONFIGDIR=/etc/vault.d
 TIMEOUT=60
