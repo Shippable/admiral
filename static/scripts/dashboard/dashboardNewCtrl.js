@@ -473,6 +473,13 @@
               accessKey: '',
               secretKey: ''
             }
+          },
+          gcloudKey: {
+            isEnabled: false,
+            masterName: 'gcloudKey',
+            data: {
+              JSON_key: ''
+            }
           }
         },
         mktg: {
@@ -984,7 +991,7 @@
       runMode: 'production',
       allNodes: {},
       filestoreFriendlyNameMap: {
-        'amazonKeys': 'Amazon S3',
+        'amazonKeys': 'AWS S3',
         'gcloudKey': 'Google Cloud Storage'
       },
       filestoreSysIntMasterNames: [],
@@ -1034,44 +1041,64 @@
         }
       },
       fileStoreSysIntToggled: function (fileStoreMasterIntName) {
+        /* jshint maxcomplexity: 13 */
         if (!_.contains($scope.vm.filestoreSysIntMasterNames,
-          fileStoreMasterIntName))
+          fileStoreMasterIntName)) {
           $scope.vm.filestoreSysIntMasterNames.push(fileStoreMasterIntName);
-        else {
+
+          /*jshint -W069 */
+          if ($scope.vm.systemSettings.nodeTypeFileStoreMap['BYON'] ===
+            fileStoreMasterIntName)
+            $scope.vm.nodeTypeFileStoreMap['BYON'] = fileStoreMasterIntName;
+          if ($scope.vm.systemSettings.nodeTypeFileStoreMap['shared'] ===
+            fileStoreMasterIntName)
+            $scope.vm.nodeTypeFileStoreMap['shared'] = fileStoreMasterIntName;
+          if (!_.isEmpty($scope.vm.systemSettings.nodeTypeFileStoreMap[
+            'on-demand'])) {
+            if ($scope.vm.systemSettings.nodeTypeFileStoreMap[
+              'on-demand']['amazonKeys'] === fileStoreMasterIntName)
+              $scope.vm.nodeTypeFileStoreMap['on-demand']['amazonKeys'] =
+                fileStoreMasterIntName;
+            if ($scope.vm.systemSettings.nodeTypeFileStoreMap['on-demand'][
+              'gcloudKey'] === fileStoreMasterIntName)
+              $scope.vm.nodeTypeFileStoreMap['on-demand']['gcloudKey'] =
+                fileStoreMasterIntName;
+          }
+          /*jshint +W069 */
+
+        } else {
           $scope.vm.filestoreSysIntMasterNames = _.reject(
             $scope.vm.filestoreSysIntMasterNames,
             function (sysIntMasterName) {
               return sysIntMasterName === fileStoreMasterIntName;
             }
           );
+          /*jshint -W069 */
+          if ($scope.vm.nodeTypeFileStoreMap['BYON'] ===
+            fileStoreMasterIntName) {
+            delete $scope.vm.nodeTypeFileStoreMap['BYON'];
+          }
+          if ($scope.vm.nodeTypeFileStoreMap['shared'] ===
+            fileStoreMasterIntName){
+            delete $scope.vm.nodeTypeFileStoreMap['shared'];
+          }
+          if (!_.isEmpty($scope.vm.nodeTypeFileStoreMap['on-demand'])) {
+            if ($scope.vm.nodeTypeFileStoreMap['on-demand']['amazonKeys'] ===
+              fileStoreMasterIntName)
+              delete $scope.vm.nodeTypeFileStoreMap['on-demand']['amazonKeys'];
+            if ($scope.vm.nodeTypeFileStoreMap['on-demand'][
+              'gcloudKey'] === fileStoreMasterIntName)
+              delete $scope.vm.nodeTypeFileStoreMap['on-demand']['gcloudKey'];
+          }
+          /*jshint +W069 */
         }
 
         if (_.isEmpty($scope.vm.filestoreSysIntMasterNames))
           $scope.vm.nodeTypeFileStoreMap = {};
-
-        if (_.isEmpty($scope.vm.nodeTypeFileStoreMap) &&
-          $scope.vm.filestoreSysIntMasterNames.length === 1) {
-          var nodeTypeFileStoreMap = {};
-          if ($scope.vm.installForm.systemSettings.allowDynamicNodes) {
-            var onDemandFileStoreMap = {};
-            if ($scope.vm.installForm.provision.amazonKeys.isEnabled)
-              /*jshint -W069 */
-              onDemandFileStoreMap['amazonKeys'] =
-                _.first($scope.vm.filestoreSysIntMasterNames);
-            else if ($scope.vm.installForm.provision.gcloudKey.isEnabled)
-              onDemandFileStoreMap['gcloudKey'] =
-                _.first($scope.vm.filestoreSysIntMasterNames);
-            nodeTypeFileStoreMap['on-demand'] = onDemandFileStoreMap;
-          }
-          if ($scope.vm.installForm.systemSettings.allowCustomNodes)
-            nodeTypeFileStoreMap['BYON'] =
-              _.first($scope.vm.filestoreSysIntMasterNames);
-          if ($scope.vm.installForm.systemSettings.allowSystemNodes)
-            nodeTypeFileStoreMap['shared'] =
-            /*jshint +W069 */
-              _.first($scope.vm.filestoreSysIntMasterNames);
-          $scope.vm.nodeTypeFileStoreMap = nodeTypeFileStoreMap;
-        }
+      },
+      changeFileStore: function (nodeType) {
+        if ($scope.vm.nodeTypeFileStoreMap[nodeType] === '')
+          delete $scope.vm.nodeTypeFileStoreMap[nodeType];
       }
     };
 
@@ -2296,6 +2323,7 @@
             'accountSyncFrequencyHr',
             'maxNodeCheckInDelayInMinutes',
             'rootS3Bucket',
+            'rootGCSBucket',
             'nodeScriptsLocation',
             'enforcePrivateJobQuota',
             'technicalSupportAvailable',
@@ -2320,6 +2348,8 @@
           );
           $scope.vm.runMode = systemSettings.runMode;
           $scope.vm.nodeTypeFileStoreMap =
+            JSON.parse(systemSettings.nodeTypeFileStoreMap);
+          $scope.vm.systemSettings.nodeTypeFileStoreMap =
             JSON.parse(systemSettings.nodeTypeFileStoreMap);
 
           return next();
@@ -2445,6 +2475,8 @@
             }
           );
           $scope.vm.nodeTypeFileStoreMap =
+            JSON.parse(systemSettings.nodeTypeFileStoreMap);
+          $scope.vm.systemSettings.nodeTypeFileStoreMap =
             JSON.parse(systemSettings.nodeTypeFileStoreMap);
 
           return next();
@@ -2595,6 +2627,8 @@
       var body = {};
       if ($scope.vm.installForm.systemSettings.rootS3Bucket)
         body.rootS3Bucket = $scope.vm.installForm.systemSettings.rootS3Bucket;
+      if ($scope.vm.installForm.systemSettings.rootGCSBucket)
+        body.rootGCSBucket = $scope.vm.installForm.systemSettings.rootGCSBucket;
 
       admiralApiAdapter.postDB(body,
         function (err) {
@@ -3788,14 +3822,21 @@
     }
 
     function updateFilestoreSystemIntegration(next) {
-      var bag = {
-        name: 'filestore',
-        masterName: $scope.vm.installForm.filestore.amazonKeys.masterName,
-        data: $scope.vm.installForm.filestore.amazonKeys.data,
-        isEnabled: $scope.vm.installForm.filestore.amazonKeys.isEnabled
-      };
+      async.eachSeries($scope.vm.installForm.filestore,
+        function (filestoreIntegration, nextIntegration) {
+          var bag = {
+            name: 'filestore',
+            masterName: filestoreIntegration.masterName,
+            data: filestoreIntegration.data,
+            isEnabled: filestoreIntegration.isEnabled
+          };
 
-      updateSystemIntegration(bag,
+          updateSystemIntegration(bag,
+            function (err) {
+              return nextIntegration(err);
+            }
+          );
+        },
         function (err) {
           return next(err);
         }
