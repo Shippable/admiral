@@ -127,7 +127,8 @@
       "services": [
         "provision",
         "gce",
-        "marshaller"
+        "marshaller",
+        "logup"
       ]
     },
     {
