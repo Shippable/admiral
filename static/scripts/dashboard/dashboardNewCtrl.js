@@ -478,7 +478,9 @@
             isEnabled: false,
             masterName: 'gcloudKey',
             data: {
+              /* jshint camelcase: false */
               JSON_key: ''
+              /* jshint camelcase: true */
             }
           }
         },
@@ -3855,6 +3857,8 @@
 
           $scope.vm.nodeTypeFileStoreMap =
             JSON.parse(update.nodeTypeFileStoreMap);
+          $scope.vm.systemSettings.nodeTypeFileStoreMap =
+            JSON.parse(update.nodeTypeFileStoreMap);
           return next();
         }
       );
@@ -5013,8 +5017,16 @@
         $scope.vm.installForm.notification.mailgunCreds.isEnabled = false;
         $scope.vm.installForm.notification.smtpCreds.isEnabled = false;
       }
-      var bag = {};
+
+      var bag = {
+        systemSettingsChanged: !_.isEqual(
+          $scope.vm.systemSettings.nodeTypeFileStoreMap,
+          $scope.vm.nodeTypeFileStoreMap)
+      };
       async.series([
+          updateFilestoreSystemIntegration,
+          updateNodeTypeFileStoreMap,
+          restartAllServices.bind(null, bag),
           validateIRCSystemIntegrations,
           updateMasterIntegrations,
           updateIrcCredsMasterIntegration,
@@ -5026,15 +5038,13 @@
           updateIRCSystemIntegrations,
           removeIRCSystemIntegrations,
           updateIrcService,
-          updateFilestoreSystemIntegration,
-          updateNodeTypeFileStoreMap,
           getEnabledServices.bind(null, bag),
           deleteAddonServices.bind(null, bag),
           deleteIrcService.bind(null, bag),
           startAddonServices.bind(null, bag),
           startOrStopIntercomProc,
           startOrStopGerritEventHandler,
-          getServices.bind(null, {}),
+          getServices.bind(null, {})
         ],
         function (err) {
           $scope.vm.installingAddons = false;
@@ -5044,6 +5054,22 @@
             /* jshint camelcase:true */
           getMasterIntegrations({}, function () {});
           if (next) return next();
+        }
+      );
+    }
+
+    function restartAllServices(bag, next) {
+      if (!bag.systemSettingsChanged) return next();
+
+      async.series([
+          restartServices
+        ],
+        function (err) {
+          if (err)
+            /* jshint camelcase:false */
+            return popup_horn.error(err);
+            /* jshint camelcase:true */
+          return next();
         }
       );
     }
