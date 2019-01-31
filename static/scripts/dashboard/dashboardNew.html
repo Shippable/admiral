@@ -2431,7 +2431,7 @@
                             </label>
                             <p class="text-muted font-13 help-block">Enabling this will disallow non super users from adding BYON nodes to their subscription.</p>
                           </div>
-                          <hr>
+                          <hr ng-if="vm.installForm.systemSettings.allowCustomNodes">
                           <div ng-show="vm.filestoreSysIntMasterNames.length > 0">
                             <label class="col-md-4 control-label">File Storage</label>
                             <div class="col-md-8">
@@ -2444,7 +2444,7 @@
                               </select>
                             </div>
                           </div>
-                          <hr>
+                          <hr ng-if="vm.filestoreSysIntMasterNames.length > 0">
                         </div>
                       </div>
                     </div>
@@ -2505,12 +2505,20 @@
                               </div>
                             </form>
                           </div>
-                          <hr>
-                          <div ng-show="vm.nodeTypeFileStoreMap['on-demand'] && vm.nodeTypeFileStoreMap['on-demand'].amazonKeys && vm.nodeTypeFileStoreMap['on-demand'].amazonKeys.length > 0">
+                          <hr ng-if="vm.installForm.provision.amazonKeys.isEnabled">
+                          <div ng-show="vm.filestoreSysIntMasterNames.length > 0 && vm.installForm.provision.amazonKeys.isEnabled">
                             <label class="col-md-4 control-label">File Storage</label>
-                            <label class="col-md-4 control-label">{{vm.filestoreFriendlyNameMap[vm.nodeTypeFileStoreMap['on-demand'].amazonKeys]}}</label>
+                            <div class="col-md-8">
+                              <select class="form-control" ng-change="vm.changeFileStoreForOnDemandNodeType('amazonKeys')"
+                                ng-disabled="vm.installing || vm.saving"
+                                ng-model="vm.onDemandNodeTypeFileStoreMap['amazonKeys']">
+                                <option value=""></option>
+                                <option ng-if="vm.installForm.filestore.amazonKeys.isEnabled" value="amazonKeys">AWS S3</option>
+                                <option ng-if="vm.installForm.filestore.gcloudKey.isEnabled" value="gcloudKey">Google Cloud Storage</option>
+                              </select>
+                            </div>
                           </div>
-                          <div ng-show="vm.nodeTypeFileStoreMap['on-demand'] && vm.nodeTypeFileStoreMap['on-demand'].amazonKeys && vm.nodeTypeFileStoreMap['on-demand'].amazonKeys.length > 0">&nbsp</div>
+                          <hr ng-if="vm.filestoreSysIntMasterNames.length > 0">
                         </div>
                       </div>
                     </div>
@@ -2542,12 +2550,20 @@
                               </div>
                             </form>
                           </div>
-                          <hr>
-                          <div ng-show="vm.nodeTypeFileStoreMap['on-demand'] && vm.nodeTypeFileStoreMap['on-demand'].gcloudKey && vm.nodeTypeFileStoreMap['on-demand'].gcloudKey.length > 0">
+                          <hr ng-if="vm.installForm.provision.gcloudKey.isEnabled">
+                          <div ng-show="vm.filestoreSysIntMasterNames.length > 0 && vm.installForm.provision.gcloudKey.isEnabled">
                             <label class="col-md-4 control-label">File Storage</label>
-                            <label class="col-md-4 control-label">{{vm.filestoreFriendlyNameMap[vm.nodeTypeFileStoreMap['on-demand'].gcloudKey]}}</label>
+                            <div class="col-md-8">
+                              <select class="form-control" ng-change="vm.changeFileStoreForOnDemandNodeType('gcloudKey')"
+                                ng-disabled="vm.installing || vm.saving"
+                                ng-model="vm.onDemandNodeTypeFileStoreMap['gcloudKey']">
+                                <option value=""></option>
+                                <option ng-if="vm.installForm.filestore.amazonKeys.isEnabled" value="amazonKeys">AWS S3</option>
+                                <option ng-if="vm.installForm.filestore.gcloudKey.isEnabled" value="gcloudKey">Google Cloud Storage</option>
+                              </select>
+                            </div>
                           </div>
-                          <div ng-show="vm.nodeTypeFileStoreMap['on-demand'] && vm.nodeTypeFileStoreMap['on-demand'].gcloudKey && vm.nodeTypeFileStoreMap['on-demand'].gcloudKey.length > 0">&nbsp</div>
+                          <hr ng-if="vm.filestoreSysIntMasterNames.length > 0">
                         </div>
                       </div>
                     </div>
