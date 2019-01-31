@@ -12,6 +12,9 @@ ${REL_VER_DATE}
   - for details
   - if necessary
 
+  - **Drydock update**: Updating all Shippable official images with latest stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
+    for [v7.1.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v714/) for details.
+
 ## Fixes
 
 - **Fixes issue with `Last Check In` for nodes in node pool details page**: In the node pool details page the `Last Check In` column would sometimes be shown empty. This has been fixed.
