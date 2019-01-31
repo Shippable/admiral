@@ -998,6 +998,7 @@
       },
       filestoreSysIntMasterNames: [],
       nodeTypeFileStoreMap: {},
+      onDemandNodeTypeFileStoreMap: {},
       onDemandNodeTypeProviderToggled: function (provider) {
         if (_.isEmpty($scope.vm.filestoreSysIntMasterNames)) return;
 
@@ -1043,7 +1044,7 @@
         }
       },
       fileStoreSysIntToggled: function (fileStoreMasterIntName) {
-        /* jshint maxcomplexity: 13 */
+        /* jshint maxcomplexity: 15 */
         if (!_.contains($scope.vm.filestoreSysIntMasterNames,
           fileStoreMasterIntName)) {
           $scope.vm.filestoreSysIntMasterNames.push(fileStoreMasterIntName);
@@ -1058,16 +1059,21 @@
           if (!_.isEmpty($scope.vm.systemSettings.nodeTypeFileStoreMap[
             'on-demand'])) {
             if ($scope.vm.systemSettings.nodeTypeFileStoreMap[
-              'on-demand']['amazonKeys'] === fileStoreMasterIntName)
+              'on-demand']['amazonKeys'] === fileStoreMasterIntName) {
               $scope.vm.nodeTypeFileStoreMap['on-demand']['amazonKeys'] =
                 fileStoreMasterIntName;
+              $scope.vm.onDemandNodeTypeFileStoreMap['amazonKeys'] =
+                fileStoreMasterIntName;
+            }
             if ($scope.vm.systemSettings.nodeTypeFileStoreMap['on-demand'][
-              'gcloudKey'] === fileStoreMasterIntName)
+              'gcloudKey'] === fileStoreMasterIntName) {
               $scope.vm.nodeTypeFileStoreMap['on-demand']['gcloudKey'] =
                 fileStoreMasterIntName;
+              $scope.vm.onDemandNodeTypeFileStoreMap['gcloudKey'] =
+                fileStoreMasterIntName;
+            }
           }
           /*jshint +W069 */
-
         } else {
           $scope.vm.filestoreSysIntMasterNames = _.reject(
             $scope.vm.filestoreSysIntMasterNames,
@@ -1086,11 +1092,17 @@
           }
           if (!_.isEmpty($scope.vm.nodeTypeFileStoreMap['on-demand'])) {
             if ($scope.vm.nodeTypeFileStoreMap['on-demand']['amazonKeys'] ===
-              fileStoreMasterIntName)
+              fileStoreMasterIntName) {
               delete $scope.vm.nodeTypeFileStoreMap['on-demand']['amazonKeys'];
+              if ($scope.vm.onDemandNodeTypeFileStoreMap['amazonKeys'])
+                delete $scope.vm.onDemandNodeTypeFileStoreMap['amazonKeys'];
+            }
             if ($scope.vm.nodeTypeFileStoreMap['on-demand'][
-              'gcloudKey'] === fileStoreMasterIntName)
+              'gcloudKey'] === fileStoreMasterIntName) {
               delete $scope.vm.nodeTypeFileStoreMap['on-demand']['gcloudKey'];
+              if ($scope.vm.onDemandNodeTypeFileStoreMap['gcloudKey'])
+                delete $scope.vm.onDemandNodeTypeFileStoreMap['gcloudKey'];
+            }
           }
           /*jshint +W069 */
         }
@@ -1101,6 +1113,21 @@
       changeFileStore: function (nodeType) {
         if ($scope.vm.nodeTypeFileStoreMap[nodeType] === '')
           delete $scope.vm.nodeTypeFileStoreMap[nodeType];
+      },
+      changeFileStoreForOnDemandNodeType: function (provider) {
+        if ($scope.vm.onDemandNodeTypeFileStoreMap[provider] === '') {
+          delete $scope.vm.onDemandNodeTypeFileStoreMap[provider];
+          if ($scope.vm.nodeTypeFileStoreMap['on-demand'] &&
+            $scope.vm.nodeTypeFileStoreMap['on-demand'][provider])
+            delete $scope.vm.nodeTypeFileStoreMap['on-demand'][provider];
+        } else {
+          if (!$scope.vm.nodeTypeFileStoreMap['on-demand'])
+            $scope.vm.nodeTypeFileStoreMap['on-demand'] = {};
+          $scope.vm.nodeTypeFileStoreMap['on-demand'][provider] =
+            $scope.vm.onDemandNodeTypeFileStoreMap[provider];
+        }
+        if (_.isEmpty($scope.vm.nodeTypeFileStoreMap['on-demand']))
+          delete $scope.vm.nodeTypeFileStoreMap['on-demand'];
       }
     };
 
@@ -2353,6 +2380,9 @@
             JSON.parse(systemSettings.nodeTypeFileStoreMap);
           $scope.vm.systemSettings.nodeTypeFileStoreMap =
             JSON.parse(systemSettings.nodeTypeFileStoreMap);
+          $scope.vm.onDemandNodeTypeFileStoreMap =
+            ($scope.vm.nodeTypeFileStoreMap &&
+            _.clone($scope.vm.nodeTypeFileStoreMap['on-demand'])) || {};
 
           return next();
         }
@@ -2480,6 +2510,9 @@
             JSON.parse(systemSettings.nodeTypeFileStoreMap);
           $scope.vm.systemSettings.nodeTypeFileStoreMap =
             JSON.parse(systemSettings.nodeTypeFileStoreMap);
+          $scope.vm.onDemandNodeTypeFileStoreMap =
+            ($scope.vm.nodeTypeFileStoreMap &&
+            _.clone($scope.vm.nodeTypeFileStoreMap['on-demand'])) || {};
 
           return next();
         }
