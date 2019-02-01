@@ -2379,11 +2379,20 @@
                             <p class="text-muted font-13 help-block">Enabling this will allow super users to add always-on shared node pools and shared nodes which are available to every subscription.</p>
                           </div>
                           <hr>
-                          <div ng-show="vm.nodeTypeFileStoreMap.shared && vm.nodeTypeFileStoreMap.shared.length > 0">
+                          <hr ng-if="vm.installForm.systemSettings.allowSystemNodes">
+                          <div ng-show="vm.filestoreSysIntMasterNames.length > 0">
                             <label class="col-md-4 control-label">File Storage</label>
-                            <label class="col-md-4 control-label">{{vm.filestoreFriendlyNameMap[vm.nodeTypeFileStoreMap.shared]}}</label>
+                            <div class="col-md-8">
+                              <select class="form-control" ng-change="vm.changeFileStore('shared')"
+                                ng-disabled="vm.installing || vm.saving"
+                                ng-model="vm.nodeTypeFileStoreMap.shared">
+                                <option value=""></option>
+                                <option ng-if="vm.installForm.filestore.amazonKeys.isEnabled" value="amazonKeys">AWS S3</option>
+                                <option ng-if="vm.installForm.filestore.gcloudKey.isEnabled" value="gcloudKey">Google Cloud Storage</option>
+                              </select>
+                            </div>
                           </div>
-                          <div ng-show="vm.nodeTypeFileStoreMap.shared && vm.nodeTypeFileStoreMap.shared.length > 0">&nbsp</div>
+                          <hr ng-if="vm.filestoreSysIntMasterNames.length > 0">
                         </div>
                       </div>
                     </div>
