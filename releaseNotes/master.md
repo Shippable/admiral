@@ -23,6 +23,7 @@ ${REL_VER_DATE}
 - **Fixes an error occurring when rerunning some failed builds**: An error that occurred when rerunning failed jobs in some CI runs where the first job had succeeded has been fixed.
 - **Improved rSync error messages for invalid steps**: The error shown when a job has an improperly formatted step now includes the name of the job. The error will also not be displayed when other rSync jobs in the same subscription run.
 - **Corrected indentation of example YML in YML Builder**: The example YML for the option to import a YML in YML Builder was incorrectly indented. That has been fixed.
+- **Fixes CI to allow spaces in docker registry passwords**: CI jobs with [docker registry integration](http://docs.shippable.com/platform/integration/dockerRegistryLogin/) would fail if spaces were present in the docker registry password, as reported by [support/4655](https://github.com/Shippable/support/issues/4655). This bug has been fixed.
 
 ## Custom Nodes
 
