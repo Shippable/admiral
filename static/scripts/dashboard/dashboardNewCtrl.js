@@ -41,6 +41,7 @@
     };
     var systemMachineImagesById;
     var runtimeTemplates;
+    var managedJobsFileStoreProvider = '';
     $scope.vm = {
       supportedOsTypes: [],
       isLoaded: false,
@@ -1044,7 +1045,7 @@
         }
       },
       fileStoreSysIntToggled: function (fileStoreMasterIntName) {
-        /* jshint maxcomplexity: 15 */
+        /* jshint maxcomplexity: 17 */
         if (!_.contains($scope.vm.filestoreSysIntMasterNames,
           fileStoreMasterIntName)) {
           $scope.vm.filestoreSysIntMasterNames.push(fileStoreMasterIntName);
@@ -1072,6 +1073,9 @@
               $scope.vm.onDemandNodeTypeFileStoreMap['gcloudKey'] =
                 fileStoreMasterIntName;
             }
+            if (fileStoreMasterIntName === managedJobsFileStoreProvider)
+              $scope.vm.installForm.systemSettings.
+                managedJobsFileStoreProvider = fileStoreMasterIntName;
           }
           /*jshint +W069 */
         } else {
@@ -1105,6 +1109,10 @@
             }
           }
           /*jshint +W069 */
+          if ($scope.vm.installForm.systemSettings.
+            managedJobsFileStoreProvider === fileStoreMasterIntName)
+            $scope.vm.installForm.systemSettings.managedJobsFileStoreProvider =
+              '';
         }
 
         if (_.isEmpty($scope.vm.filestoreSysIntMasterNames))
@@ -1427,6 +1435,11 @@
           amazonKeys: {
             accessKey: '',
             secretKey: ''
+          },
+          gcloudKey: {
+            /* jshint camelcase: false */
+            JSON_key: ''
+            /* jshint camelcase: true */
           }
         },
         mktg: {
@@ -2384,6 +2397,8 @@
           $scope.vm.onDemandNodeTypeFileStoreMap =
             ($scope.vm.nodeTypeFileStoreMap &&
             _.clone($scope.vm.nodeTypeFileStoreMap['on-demand'])) || {};
+          managedJobsFileStoreProvider =
+            systemSettings.managedJobsFileStoreProvider;
 
           return next();
         }
@@ -2514,6 +2529,8 @@
           $scope.vm.onDemandNodeTypeFileStoreMap =
             ($scope.vm.nodeTypeFileStoreMap &&
             _.clone($scope.vm.nodeTypeFileStoreMap['on-demand'])) || {};
+          managedJobsFileStoreProvider =
+            systemSettings.managedJobsFileStoreProvider;
 
           return next();
         }
@@ -3676,7 +3693,7 @@
           updateProvisionSystemIntegration,
           getSystemMachineImages,
           updateFilestoreSystemIntegration,
-          updateNodeTypeFileStoreMap,
+          updateFileStoreProvider,
           startAPI,
           startInternalAPI,
           startConsoleAPI,
@@ -3758,7 +3775,7 @@
           updateProvisionSystemIntegration,
           getSystemMachineImages,
           updateFilestoreSystemIntegration,
-          updateNodeTypeFileStoreMap,
+          updateFileStoreProvider,
           updateInternalAPIService,
           updateConsoleAPIService,
           saveServices,
@@ -3879,9 +3896,11 @@
       );
     }
 
-    function updateNodeTypeFileStoreMap(next) {
+    function updateFileStoreProvider(next) {
       var update = {
-        nodeTypeFileStoreMap: JSON.stringify($scope.vm.nodeTypeFileStoreMap)
+        nodeTypeFileStoreMap: JSON.stringify($scope.vm.nodeTypeFileStoreMap),
+        managedJobsFileStoreProvider:
+          $scope.vm.installForm.systemSettings.managedJobsFileStoreProvider
       };
 
       admiralApiAdapter.putSystemSettings($scope.vm.systemSettingsId, update,
@@ -3893,6 +3912,7 @@
             JSON.parse(update.nodeTypeFileStoreMap);
           $scope.vm.systemSettings.nodeTypeFileStoreMap =
             JSON.parse(update.nodeTypeFileStoreMap);
+          managedJobsFileStoreProvider = update.managedJobsFileStoreProvider;
           return next();
         }
       );
@@ -5055,11 +5075,13 @@
       var bag = {
         systemSettingsChanged: !_.isEqual(
           $scope.vm.systemSettings.nodeTypeFileStoreMap,
-          $scope.vm.nodeTypeFileStoreMap)
+          $scope.vm.nodeTypeFileStoreMap) ||
+          ($scope.vm.installForm.systemSettings.managedJobsFileStoreProvider !==
+          managedJobsFileStoreProvider)
       };
       async.series([
           updateFilestoreSystemIntegration,
-          updateNodeTypeFileStoreMap,
+          updateFileStoreProvider,
           restartAllServices.bind(null, bag),
           validateIRCSystemIntegrations,
           updateMasterIntegrations,
