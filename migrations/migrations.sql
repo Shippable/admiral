@@ -5664,6 +5664,7 @@ do $$
         insert into "runtimeTemplates" ("archTypeCode", "osTypeCode", "version", "drydockOrg", "drydockFamily", "drydockTag", "defaultTaskImage", "reqProcImage", "isDefault", "isAvailable", "createdAt", "updatedAt")
         values (8002, 9001, 'v7.1.4', 'drydock', 'aarch32_u16', 'v7.1.4', 'aarch32_u16', 'aarch32_u16reqproc', false, true, '2018-03-28 00:00:00+00', '2018-03-28 00:00:00+00');
       end if;
+      
 
       -- insert additional runtimeTemplates down here
 
