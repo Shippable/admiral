@@ -46,6 +46,7 @@ do $$
         "defaultClusterType" VARCHAR(255) NOT NULL DEFAULT 'custom__x86_64__Ubuntu_16.04',
         "maxNodeCheckInDelayInMinutes" INT NOT NULL DEFAULT 15,
         "autoSync" BOOLEAN DEFAULT true NOT NULL,
+        "managedJobsFileStoreProvider" VARCHAR(64),
         "createdAt" timestamp with time zone NOT NULL,
         "updatedAt" timestamp with time zone NOT NULL
       );
@@ -140,6 +141,10 @@ do $$
       update "systemSettings" set "rootGCSBucket" = (select "rootS3Bucket" from "systemSettings" limit 1);
       alter table "systemSettings" alter column "rootGCSBucket" set not null;
     end if;
+
+    if not exists (select 1 from information_schema.columns where table_name = 'systemSettings' and column_name = 'managedJobsFileStoreProvider') then
+      alter table "systemSettings" add column "managedJobsFileStoreProvider" VARCHAR(64);
+    end if;
   end
 $$;
 
@@ -157,6 +162,7 @@ do $$
             "releaseVersion",
             "defaultMinionInstanceSize",
             "supportEmailAddress",
+            "managedJobsFileStoreProvider",
             "createdAt",
             "updatedAt"
           )
@@ -171,6 +177,7 @@ do $$
             '<%= obj.defaultReleaseVersion %>',
             'c4.large',
             'support@shippable.com',
+            '',
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
           );
