@@ -2790,6 +2790,25 @@
                           <div class="row">
                             <div class="col-sm-12">
                               <div class="card-box">
+                                <div class="row" ng-show="vm.filestoreSysIntMasterNames.length > 0">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                      <div class="form-group">
+                                        <label class="col-md-2 control-label">Managed Jobs File Storage</label>
+                                        <div class="col-md-6">
+                                          <select class="form-control"
+                                            ng-disabled="vm.installing || vm.saving"
+                                            ng-model="vm.installForm.systemSettings.managedJobsFileStoreProvider">
+                                            <option value=""></option>
+                                            <option ng-if="vm.installForm.filestore.amazonKeys.isEnabled" value="amazonKeys">AWS S3</option>
+                                            <option ng-if="vm.installForm.filestore.gcloudKey.isEnabled" value="gcloudKey">Google Cloud Storage</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <hr/>
+                                  </div>
+                                </div>
                                 <div class="row">
                                   <div class="col-md-12">
                                     <form class="form-horizontal" role="form">

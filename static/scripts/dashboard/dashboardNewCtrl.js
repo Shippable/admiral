@@ -2364,7 +2364,8 @@
             'nodeStopDayOfWeek',
             'nodeStopIntervalDays',
             'autoSync',
-            'supportEmailAddress'
+            'supportEmailAddress',
+            'managedJobsFileStoreProvider'
           ];
 
           _.each(installPanelSystemSettings,

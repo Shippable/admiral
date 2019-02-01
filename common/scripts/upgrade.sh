@@ -105,6 +105,7 @@ ___run_file_store_migrations() {
   local allow_dynamic_nodes=$(echo $SYSTEM_SETTINGS | jq -r .allowDynamicNodes)
   local allow_custom_nodes=$(echo $SYSTEM_SETTINGS | jq -r .allowCustomNodes)
   local allow_system_nodes=$(echo $SYSTEM_SETTINGS | jq -r .allowSystemNodes)
+  local managed_jobs_file_store_provider=$(echo $SYSTEM_SETTINGS | jq -r .managedJobsFileStoreProvider)
 
   if [ "$node_type_file_store_map" == "null" ]; then
     __process_marker "Running file store migrations"
@@ -148,6 +149,28 @@ ___run_file_store_migrations() {
       exit 1
     else
       __process_msg "Successfully migrated file store settings"
+    fi
+  fi
+
+  if [ "$managed_jobs_file_store_provider" == "null" ]; then
+    __process_marker "Populating managed jobs file storage"
+
+    _shippable_get_systemIntegrations "name=filestore"
+    local file_system_integrations=$(echo "$response")
+    local file_system_integrations_count=$(echo $file_system_integrations | jq '. | length')
+    local file_system_integration_master_name=''
+    local node_type_file_store_map_update='{}'
+    if [ $file_system_integrations_count -ne 0 ]; then
+      file_system_integration_master_name=$(echo $file_system_integrations | jq -r '.[0].masterName')
+    fi
+    local system_settings_update='{"managedJobsFileStoreProvider": "'$file_system_integration_master_name'"}'
+    _shippable_put_system_settings "$system_settings_update"
+    if [ $response_status_code -gt 299 ]; then
+      __process_error "Error updating file store: $response"
+      __process_error "Status code: $response_status_code"
+      exit 1
+    else
+      __process_msg "Successfully update managedJobsFileStoreProvider setting"
     fi
   fi
 }
