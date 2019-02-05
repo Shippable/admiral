@@ -14,7 +14,6 @@ ${REL_VER_DATE}
 
   - **Drydock update**: Updating all Shippable official images with latest stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
     for [v7.1.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v714/) for details.
-  - **Build cache improvement on on-demand nodes**: On-demand nodes will now use file store providers based on the cloud provider they are brought up.
 
 ## Fixes
 
