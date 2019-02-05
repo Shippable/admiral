@@ -6,12 +6,6 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **simple title**: brief description. [link to docs](#).
-  - itemized
-  - list
-  - for details
-  - if necessary
-
   - **Drydock update**: Updating all Shippable official images with latest stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
     for [v7.1.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v714/) for details.
 
@@ -27,21 +21,12 @@ ${REL_VER_DATE}
 - **Fixes issue with status not showing for some jobs**: Status for some jobs in subscription and project dashboard was not showing. This has now been fixed.
 - **Fixes issue with language versions specified as numbers are not working**: Specifying language versions as numbers resulted in CI builds running on default version instead of specified version. This is fixed now. Builds will now run on specified versions.
 
-## Custom Nodes
-
-- **simple title**: brief description
-  - additional details or
-  - actions required
-
 ## Shippable Server
 
 ### Features
 
-- Build artifacts can be stored in Google Cloud Storage: Shippable admin can now enable build artifacts like build consoles, coverage reports, test reports to be stored on Google Cloud Storage file store. If multiple file stores(AWS S3 & Google Cloud Storage) are configured, admin can also map a file store provider to each node type(BYON, shared, on-demand).
+- **Build artifacts can be stored in Google Cloud Storage**: Shippable admin can now enable build artifacts like build consoles, coverage reports, and test reports to be stored on Google Cloud Storage file store. If both file stores (AWS S3 and Google Cloud Storage) are configured, admin can also map a file store provider to each node type (BYON, shared, on-demand).
 
-### Fixes
-
-- **simple title**: brief description
 
 ## History
 
