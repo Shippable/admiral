@@ -14,6 +14,7 @@ ${REL_VER_DATE}
 
   - **Drydock update**: Updating all Shippable official images with latest stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
     for [v7.1.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v714/) for details.
+  - **Build cache improvement on on-demand nodes**: On-demand nodes will now use file store providers based on the cloud provider they are brought up.
 
 ## Fixes
 
@@ -36,7 +37,7 @@ ${REL_VER_DATE}
 
 ### Features
 
-- **simple title**: brief description
+- Build artifacts can be stored in Google Cloud Storage: Shippable admin can now enable build artifacts like build consoles, coverage reports, test reports to be stored on Google Cloud Storage file store. If multiple file stores(AWS S3 & Google Cloud Storage) are configured, admin can also map a file store provider to each node type(BYON, shared, on-demand).
 
 ### Fixes
 
