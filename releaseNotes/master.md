@@ -37,7 +37,7 @@ ${REL_VER_DATE}
 
 ### Features
 
-- **simple title**: brief description
+- Build artifacts can be stored in Google Cloud Storage: Shippable admin can now enable build artifacts like build consoles, coverage reports, test reports to be stored on Google Cloud Storage file store. If multiple file stores(AWS S3 & Google Cloud Storage) are configured, admin can also map a file store provider to each node type(BYON, shared, on-demand).
 
 ### Fixes
 
