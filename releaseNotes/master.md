@@ -14,9 +14,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **Improve Empty Script tab display**: Script tab was shown empty when script are not available on that job. Now it will show a predefined message when no script is available.
 
 ## Custom Nodes
 
