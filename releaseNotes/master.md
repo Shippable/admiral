@@ -14,7 +14,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **Improve Empty Script tab display**: Script tab was shown empty when script are not available on that job. Now it will show a predefined message when no script is available.
+- **Improved empty scripts tab experience**: The "scripts" tab on CI jobs would show an empty block when scripts are not available. It will now show a descriptive message.
 
 ## Custom Nodes
 
