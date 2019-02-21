@@ -11,7 +11,7 @@ ${REL_VER_DATE}
 ## Fixes
 
 - **Improved empty scripts tab experience**: The "scripts" tab on CI jobs would show an empty block when scripts are not available. It will now show a descriptive message.
-- **Fixes CI and runSh jobs to allow special characters and spaces in jfrog artifactory passwords**: CI and runSh jobs with [jfrog artifactory integration](http://docs.shippable.com/platform/integration/jfrog-artifactoryKey/) would fail if spaces or special characters were present in the jfrog artifactory password. This bug has been fixed.
+- **Fixes CI and runSh jobs to allow special characters and spaces in JFrog Artifactory passwords**: CI and runSh jobs with [JFrog Artifactory integration](http://docs.shippable.com/platform/integration/jfrog-artifactoryKey/) would fail if spaces or certain special characters were present in the password. This bug has been fixed.
 
 ## Custom Nodes
 
