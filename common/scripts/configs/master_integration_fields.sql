@@ -850,6 +850,17 @@ do $$
       values (310, '577de63321333398d11a1123', 'password', 'string', false, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
     end if;
 
+    -- masterIntegrationFields for airBrakeKey
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 311) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (311, '577de63321333398d11a1124', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 312) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (312, '577de63321333398d11a1124', 'token', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
