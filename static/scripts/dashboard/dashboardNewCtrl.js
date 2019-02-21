@@ -756,6 +756,10 @@
           displayName: '',
           isEnabled: false
         },
+        airBrakeKey: {
+          displayName: '',
+          isEnabled: true
+        },
         KUBERNETES: {
           displayName: '',
           isEnabled: false
