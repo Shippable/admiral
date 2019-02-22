@@ -27,7 +27,7 @@ ${REL_VER_DATE}
 
 ### Fixes
 
-- **Performance improvements on the admin job status page**: Load time on the admin job status page should now be noticeably faster than before.
+- **Performance improvements on the Admin/Monitor/Job Status page**: Load time on the Admin/Monitor/Job Status page should now be noticeably faster on servers with a large number of jobs.
 
 ## History
 
