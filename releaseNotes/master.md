@@ -27,7 +27,7 @@ ${REL_VER_DATE}
 
 ### Fixes
 
-- **simple title**: brief description
+- **Performance improvements on the admin job status page**: Load time on the admin job status page should now be noticeably faster than before.
 
 ## History
 
