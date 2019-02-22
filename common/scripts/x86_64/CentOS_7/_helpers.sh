@@ -26,6 +26,14 @@ __check_dependencies() {
   ################## Install jq  #########################################
   if type jq &> /dev/null && true; then
     __process_msg "'jq' already installed"
+    local expected_jq_version="1.4"
+    local installed_jq_version=$(rpm -qi jq | grep -i Version | xargs | cut -d ':' -f 2 | xargs)
+    if [ $(echo -e "$installed_jq_version\n$expected_jq_version" | sort -V | head -n1) != "$expected_jq_version" ]; then
+      __process_msg "'jq' version $installed_jq_version installed, updating"
+      yum check-update || true
+      # this will upgrade jq to the latest version
+      yum install -y jq-*
+    fi
   else
     __process_msg "Installing 'jq'"
     yum install -y epel-release
