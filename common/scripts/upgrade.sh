@@ -117,6 +117,9 @@ ___run_file_store_migrations() {
     local node_type_file_store_map_update='{}'
 
     if [ $file_system_integrations_count -ne 0 ]; then
+      apt-get update
+      apt-get install -y jq=1*
+
       file_system_integration_master_name=$(echo $file_system_integrations | jq -r '.[0].masterName')
       if $allow_dynamic_nodes; then
         _shippable_get_systemIntegrations "name=provision"
