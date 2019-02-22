@@ -3616,6 +3616,16 @@
                                         />
                                       </td>
                                     </tr>
+                                    <tr ng-if="vm.addonsForm.airBrakeKey.displayName">
+                                      <td>{{vm.addonsForm.airBrakeKey.displayName}}</td>
+                                      <td class="text-right">
+                                        <input type="checkbox" class="js-switch"
+                                          ng-disabled="vm.installingAddons"
+                                          ng-model="vm.addonsForm.airBrakeKey.isEnabled"
+                                          ui-switch="{color: '#00b19d'}"
+                                        />
+                                      </td>
+                                    </tr>
                                   </tbody>
                                 </table>
                               </div>
