@@ -3626,6 +3626,16 @@
                                         />
                                       </td>
                                     </tr>
+                                  <tr ng-if="vm.addonsForm.newRelicKey.displayName">
+                                      <td>{{vm.addonsForm.newRelicKey.displayName}}</td>
+                                      <td class="text-right">
+                                        <input type="checkbox" class="js-switch"
+                                          ng-disabled="vm.installingAddons"
+                                          ng-model="vm.addonsForm.newRelicKey.isEnabled"
+                                          ui-switch="{color: '#00b19d'}"
+                                        />
+                                      </td>
+                                    </tr>
                                   </tbody>
                                 </table>
                               </div>
