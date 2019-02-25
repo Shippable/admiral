@@ -760,6 +760,10 @@
           displayName: '',
           isEnabled: true
         },
+        newRelicKey: {
+          displayName: '',
+          isEnabled: true
+        },
         KUBERNETES: {
           displayName: '',
           isEnabled: false
