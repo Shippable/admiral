@@ -861,6 +861,17 @@ do $$
       values (312, '577de63321333398d11a1124', 'token', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2016-09-11', '2016-09-11');
     end if;
 
+    -- masterIntegrationFields for newRelicKey
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 313) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (313, '577de63321333398d11a1125', 'url', 'string', true, false, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-09-11', '2018-09-11');
+    end if;
+
+    if not exists (select 1 from "masterIntegrationFields" where "id" = 314) then
+      insert into "masterIntegrationFields" ("id", "masterIntegrationId", "name", "dataType", "isRequired", "isSecure", "createdBy", "updatedBy", "createdAt", "updatedAt")
+      values (314, '577de63321333398d11a1125', 'token', 'string', true, true, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-09-11', '2018-09-11');
+    end if;
+
     -- END adding master integration fields
 
     -- Remove masterIntegrationFields
