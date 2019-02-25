@@ -5889,8 +5889,10 @@ do $$
     end if;
 
     -- Add fileStoreProvider column to archivedJobs table
-    if not exists (select 1 from information_schema.columns where table_name = 'archivedJobs' and column_name = 'fileStoreProvider') then
-      alter table "archivedJobs" add column "fileStoreProvider" VARCHAR(64);
+    if exists (select 1 from information_schema.columns where table_name = 'archivedJobs') then
+      if not exists (select 1 from information_schema.columns where table_name = 'archivedJobs' and column_name = 'fileStoreProvider') then
+        alter table "archivedJobs" add column "fileStoreProvider" VARCHAR(64);
+      end if;
     end if;
   end
 $$;
