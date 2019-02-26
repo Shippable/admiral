@@ -7,6 +7,7 @@ ${REL_VER_DATE}
 ## Features
 
 - **Added SASL support for Freenode IRC**: Adding SASL support enables Freenode IRC servers to receive messages from a Shippable installation running on AWS infrastructure without any authentication failure.
+- **Updated AWS SDK**: We've updated the version of the AWS SDK used in managed deploy jobs to make newer AWS features available as "passthrough" `dockerOptions`.
 
 ## Fixes
 
