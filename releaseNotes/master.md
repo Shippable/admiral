@@ -28,7 +28,7 @@ ${REL_VER_DATE}
 ### Fixes
 
 - **Performance improvements on the Admin/Monitor/Job Status page**: Load time on the Admin/Monitor/Job Status page should now be noticeably faster on servers with a large number of jobs.
-- **Bug during server upgrade which prevents direct upgrade from version < 6.12.4 to v7.1.4**: A database migration query has been fixed which now allows direct server to ${REL_VER} from any version.
+- **Bug during server upgrade which prevents direct upgrade from version < 6.12.4 to v7.1.4**: A database migration introduced in v7.1.4 would cause an error during upgrades from Shippable Server versions prior to v6.12.4. This has been fixed in ${REL_VER}.
 
 ## History
 
