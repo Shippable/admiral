@@ -14,6 +14,7 @@ ${REL_VER_DATE}
 - **Improved empty scripts tab experience**: The "scripts" tab on CI jobs would show an empty block when scripts are not available. It will now show a descriptive message.
 - **Fixes CI and runSh jobs to allow special characters and spaces in JFrog Artifactory passwords**: CI and runSh jobs with [JFrog Artifactory integration](http://docs.shippable.com/platform/integration/jfrog-artifactoryKey/) would fail if spaces or certain special characters were present in the password. This bug has been fixed.
 
+
 ## Custom Nodes
 
 - **simple title**: brief description
@@ -30,6 +31,7 @@ ${REL_VER_DATE}
 
 - **Performance improvements on the Admin/Monitor/Job Status page**: Load time on the Admin/Monitor/Job Status page should now be noticeably faster on servers with a large number of jobs.
 - **Bug during server upgrade which prevents direct upgrade from version < 6.12.4 to v7.1.4**: A database migration introduced in v7.1.4 would cause an error during upgrades from Shippable Server versions prior to v6.12.4. This has been fixed in ${REL_VER}.
+- **Fix handling of deleted on-demand nodes in GCE**: On-demand nodes that no longer exist on GCE but are still present in the database would not get cleaned up. These entries are now deleted from the database if GCE reports a `404 (Not Found)` error.
 
 ## History
 
