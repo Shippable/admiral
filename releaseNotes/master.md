@@ -13,6 +13,7 @@ ${REL_VER_DATE}
 
 - **Improved empty scripts tab experience**: The "scripts" tab on CI jobs would show an empty block when scripts are not available. It will now show a descriptive message.
 - **Fixes CI and runSh jobs to allow special characters and spaces in JFrog Artifactory passwords**: CI and runSh jobs with [JFrog Artifactory integration](http://docs.shippable.com/platform/integration/jfrog-artifactoryKey/) would fail if spaces or certain special characters were present in the password. This bug has been fixed.
+- **Delete on-demand nodes from database if they are deleted from the cloud instance provider**: On-demand nodes, which were already deleted from the cloud instance provider, were not getting deleted since from the database if the cloud provider sent a `404`(`Not found`) status when trying to delete the node. This has been fixed.
 
 ## Custom Nodes
 
