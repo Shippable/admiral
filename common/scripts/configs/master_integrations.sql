@@ -349,7 +349,7 @@ do $$
     -- newRelicKey master integration
     if not exists (select 1 from "masterIntegrations" where "name" = 'newRelicKey' and "typeCode" = 5012) then
       insert into "masterIntegrations" ("id", "masterIntegrationId", "name", "displayName", "type", "isEnabled", "level", "typeCode", "createdBy", "updatedBy", "createdAt", "updatedAt")
-      values ('577de63321333398d11a1125', 95, 'newRelicKey', 'NewRelic', 'generic', true, 'generic', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-09-11', '2018-09-11');
+      values ('577de63321333398d11a1125', 95, 'newRelicKey', 'NewRelic', 'generic', true, 'account', 5012, '54188262bc4d591ba438d62a', '54188262bc4d591ba438d62a', '2018-09-11', '2018-09-11');
     end if;
 
     -- END adding master integrations
