@@ -33,6 +33,7 @@ ${REL_VER_DATE}
 - **Performance improvements on the Admin/Monitor/Job Status page**: Load time on the Admin/Monitor/Job Status page should now be noticeably faster on servers with a large number of jobs.
 - **Bug during server upgrade which prevents direct upgrade from version < 6.12.4 to v7.1.4**: A database migration introduced in v7.1.4 would cause an error during upgrades from Shippable Server versions prior to v6.12.4. This has been fixed in ${REL_VER}.
 - **Fix handling of deleted on-demand nodes in GCE**: On-demand nodes that no longer exist on GCE but are still present in the database would not get cleaned up. These entries are now deleted from the database if GCE reports a `404 (Not Found)` error.
+- **Log level of "ignoring webhook" messages reduced**: Production API containers' logs took a lot of space due to the noise created by the "ignoring webhook" warning logs. The log level for the same has been reduced from warning to verbose so that they don't show up on production API containers.
 
 ## History
 
