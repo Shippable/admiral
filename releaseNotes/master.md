@@ -9,6 +9,8 @@ ${REL_VER_DATE}
 - **Added SASL support for Freenode IRC**: Adding SASL support enables Freenode IRC servers to receive messages from a Shippable installation running on AWS infrastructure without any authentication failure.
 - **Updated AWS SDK**: We've updated the version of the AWS SDK used in managed deploy jobs to make newer AWS features available as "passthrough" `dockerOptions`.
 - **Updated some internal dependencies**: We've updated the versions of some of the dependencies we use internally. No noticeable changes are expected.
+- **Drydock update**: Updating all Shippable official images with latest stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
+    for [v7.2.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v724/) for details.
 
 ## Fixes
 
