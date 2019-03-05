@@ -11,7 +11,7 @@ ${REL_VER_DATE}
 - **Updated some internal dependencies**: We've updated the versions of some of the dependencies we use internally. No noticeable changes are expected.
 - **Drydock update**: Updating all Shippable official images with latest stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
     for [v7.2.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v724/) for details.
-- **Added Airbrake Integration**: Added ability to store Airbrake credentials which could be used with [shipctl notify](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/#notify) command for posting deployments to Airbrake. Refer to [documentation](http://docs.shippable.com/platform/integration/airBrakeKey/) for details.
+- **Added Airbrake Integration**: Added support for Airbrake integration which can be used with [shipctl notify](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/#notify) to post deployments to Airbrake. Refer to [documentation](http://docs.shippable.com/platform/integration/airBrakeKey/) for details.
 
 ## Fixes
 
