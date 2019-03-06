@@ -13,6 +13,7 @@ ${REL_VER_DATE}
     for [v7.2.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v724/) for details.
 - **Added Airbrake Integration**: Added support for Airbrake integration which can be used with [shipctl notify](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/#notify) to post deployments to Airbrake. Refer to [documentation](http://docs.shippable.com/platform/integration/airBrakeKey/) for details.
 - **Added tooltip for SPOG elements**: The full name of the object will be shown in a tooltip when hovering over it in the SPOG.
+- **Added NewRelic Integration**: Added support for NewRelic integration which can be used with [shipctl notify](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/#notify) to post deployments to NewRelic. Refer to [documentation](http://docs.shippable.com/platform/integration/newRelicKey/) for details.
 
 ## Fixes
 
