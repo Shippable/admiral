@@ -12,7 +12,7 @@ ${REL_VER_DATE}
 - **Drydock update**: Updating all Shippable official images with latest stable versions of [languages](http://docs.shippable.com/platform/runtime/machine-image/language-versions/), [cli's](http://docs.shippable.com/platform/runtime/machine-image/cli-versions/) and [services](http://docs.shippable.com/platform/runtime/machine-image/services-versions/). Refer to documentation
     for [v7.2.4](http://docs.shippable.com/platform/runtime/machine-image/ami-v724/) for details.
 - **Added Airbrake Integration**: Added support for Airbrake integration which can be used with [shipctl notify](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/#notify) to post deployments to Airbrake. Refer to [documentation](http://docs.shippable.com/platform/integration/airBrakeKey/) for details.
-
+- **Added on hover tooltip for SPOG**: Full name of the object will be shown in a tooltip on hovering over an object in SPOG. 
 ## Fixes
 
 - **Improved empty scripts tab experience**: The "scripts" tab on CI jobs would show an empty block when scripts are not available. It will now show a descriptive message.
