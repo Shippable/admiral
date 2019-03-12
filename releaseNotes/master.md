@@ -22,17 +22,7 @@ ${REL_VER_DATE}
 - **Improved dashboard search filter experience**: The search feature on the grid views in the dashboards would sometimes show unexpected results as it was filtering on properties that weren't visible in the columns. The search is now scoped to only filter on the visible fields.
 
 
-## Custom Nodes
-
-- **simple title**: brief description
-  - additional details or
-  - actions required
-
 ## Shippable Server
-
-### Features
-
-- **simple title**: brief description
 
 ### Fixes
 
