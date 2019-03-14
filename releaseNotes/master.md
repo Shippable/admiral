@@ -6,11 +6,7 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **simple title**: brief description. [link to docs](#).
-  - itemized
-  - list
-  - for details
-  - if necessary
+- **Bitbucket Sync Updated**: We've made some updates to how we synchronize Bitbucket accounts to accommodate the [removal of username from Bitbucket APIs](https://developer.atlassian.com/cloud/bitbucket/bitbucket-api-changes-gdpr/). Some names displayed may change slightly as the new Bitbucket settings become available.
 
 ## Fixes
 
