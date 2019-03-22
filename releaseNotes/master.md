@@ -10,9 +10,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **gcloudKey Deployment Errors**: We've fixed an error that occurred when trying to revoke gcloud credentials during managed deploy jobs.
 
 ## Custom Nodes
 
