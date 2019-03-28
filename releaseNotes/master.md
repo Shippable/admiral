@@ -6,11 +6,17 @@ ${REL_VER_DATE}
 
 ## Features
 
-- **Bitbucket Sync Updated**: We've made some updates to how we synchronize Bitbucket accounts to accommodate the [removal of username from Bitbucket APIs](https://developer.atlassian.com/cloud/bitbucket/bitbucket-api-changes-gdpr/). Some names displayed may change slightly as the new Bitbucket settings become available.
+- **simple title**: brief description. [link to docs](#).
+  - itemized
+  - list
+  - for details
+  - if necessary
 
 ## Fixes
 
-- **gcloudKey Deployment Errors**: We've fixed an error that occurred when trying to revoke gcloud credentials during managed deploy jobs.
+- **simple title**: brief description
+  - actions required
+  - or additional details
 
 ## Custom Nodes
 
