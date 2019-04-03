@@ -14,9 +14,7 @@ ${REL_VER_DATE}
 
 ## Fixes
 
-- **simple title**: brief description
-  - actions required
-  - or additional details
+- **Incorrect manifest classification**: fixed an error where a single manifest could be classified as both scalable and deployable.
 
 ## Custom Nodes
 
